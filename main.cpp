@@ -5,6 +5,8 @@
 
 #include "rtaudio/RtAudio.h"
 #include "callback.h"
+#include "synthgraph.h"
+#include "oscillator.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,20 +16,23 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
+    //initialize Gamma
+    gam::Sync::master().spu(44100);
+
     RtAudio dac;
 
-    // Determine the number of devices available
-    unsigned int devices = dac.getDeviceCount();
-    // Scan through devices for various capabilities
-    RtAudio::DeviceInfo info;
-    for ( unsigned int i=0; i<devices; i++ ) {
-      info = dac.getDeviceInfo( i );
-      if ( info.probed == true ) {
-        // Print, for example, the maximum number of output channels for each device
-        std::cout << "device = " << i;
-        std::cout << ": maximum output channels = " << info.outputChannels << "\n";
-      }
-    }
+//    // Determine the number of devices available
+//    unsigned int devices = dac.getDeviceCount();
+//    // Scan through devices for various capabilities
+//    RtAudio::DeviceInfo info;
+//    for ( unsigned int i=0; i<devices; i++ ) {
+//      info = dac.getDeviceInfo( i );
+//      if ( info.probed == true ) {
+//        // Print, for example, the maximum number of output channels for each device
+//        std::cout << "device = " << i;
+//        std::cout << ": maximum output channels = " << info.outputChannels << "\n";
+//      }
+//    }
 
 
     if ( dac.getDeviceCount() < 1 ) {
@@ -35,16 +40,22 @@ int main(int argc, char *argv[])
       exit( 0 );
     }
     RtAudio::StreamParameters parameters;
-    //temp workaround for my system, where default device is not correct, eventually need to allow user selection of audio device
+    //temp assignment for my system, eventually need to allow user selection of audio device
     parameters.deviceId = 6;//dac.getDefaultOutputDevice();
     parameters.nChannels = 2;
     parameters.firstChannel = 0;
     unsigned int sampleRate = 44100;
     unsigned int bufferFrames = 256; // 256 sample frames
-    double data[2];
+
+    son::Oscillator* osc = new son::Oscillator();
+    son::SynthGraph* graph = new son::SynthGraph(0, osc);
+    son::UserData uData;
+
+    uData.graph = graph;
+
     try {
       dac.openStream( &parameters, NULL, RTAUDIO_FLOAT64,
-                      sampleRate, &bufferFrames, &callback, (void *)&data );
+                      sampleRate, &bufferFrames, &son::callback, (void *)&uData );
       dac.startStream();
     }
     catch ( RtAudioError& e ) {

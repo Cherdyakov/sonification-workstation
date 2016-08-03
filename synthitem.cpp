@@ -1,7 +1,21 @@
 #include "synthitem.h"
 #include "Gamma.h"
 
-synthItem::synthItem(QObject *parent) : QObject(parent)
+namespace son {
+
+SynthItem::SynthItem(QObject *parent) : QObject(parent)
 {
 
 }
+
+float SynthItem::process()
+{
+    return qrand();
+}
+
+float SynthItem::process(float in)
+{
+    return in;
+}
+
+} //namespace son

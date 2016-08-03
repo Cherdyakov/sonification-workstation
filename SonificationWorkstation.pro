@@ -3,7 +3,9 @@ QT += qml quick
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    synthitem.cpp
+    synthitem.cpp \
+    synthgraph.cpp \
+    oscillator.cpp
 
 RESOURCES += qml.qrc
 
@@ -15,7 +17,10 @@ include(deployment.pri)
 
 HEADERS += \
     synthitem.h \
-    callback.h
+    callback.h \
+    synthgraph.h \
+    userdata.h \
+    oscillator.h
 
 # Gamma synthesis library
 LIBS += -L/home/sean/libs/Gamma-master/build/lib -lGamma

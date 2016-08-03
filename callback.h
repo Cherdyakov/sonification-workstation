@@ -4,25 +4,38 @@
 #endif // CALLBACK_H
 
 #include <QDebug>
+#include "userdata.h"
 
+
+namespace son {
 
 // Two-channel sawtooth wave generator.
 int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
-         double streamTime, RtAudioStreamStatus status, void *userData )
+              double streamTime, RtAudioStreamStatus status, void *data )
 {
-  unsigned int i, j;
-  double *buffer = (double *) outputBuffer;
-  double *lastValues = (double *) userData;
-  if ( status )
-    std::cout << "Stream underflow detected!" << std::endl;
-  // Write interleaved audio data.
-  for ( i=0; i<nBufferFrames; i++ ) {
-    for ( j=0; j<2; j++ ) {
-      *buffer++ = lastValues[j];
-      lastValues[j] += 0.005 * (j+1+(j*0.1));
-      if ( lastValues[j] >= 1.0 ) lastValues[j] -= 2.0;
+    double *buffer = (double *) outputBuffer;
+    UserData* uData = (UserData *) data;
+    SynthGraph* graph = uData->graph;
+
+
+    if ( status )
+        std::cout << "Stream underflow detected!" << std::endl;
+
+
+    // Write interleaved audio data.
+    for (unsigned int i=0; i < nBufferFrames; ++i) {
+
+        float s = graph->processGraph();
+        *buffer++ = s;
+        *buffer++ = s;
+
+        //test noise
+        //*buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+        //test mssg
+        //qDebug() << "running";
     }
-  }
-//  qDebug() << "callback running";
-  return 0;
+    return 0;
+
 }
+
+} //namespace son

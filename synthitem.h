@@ -2,16 +2,29 @@
 #define SYNTHITEM_H
 
 #include <QObject>
+#include <QDebug>
+#include "Gamma/Oscillator.h"
 
-class synthItem : public QObject
+namespace son {
+
+class SynthItem : public QObject
 {
     Q_OBJECT
 public:
-    explicit synthItem(QObject *parent = 0);
+    explicit SynthItem(QObject *parent = 0);
+
+    virtual float process();
+    virtual float process(float in);
+    QVector<SynthItem*> children;
 
 signals:
 
 public slots:
+
+private:
+
 };
+
+} //namespace son
 
 #endif // SYNTHITEM_H
