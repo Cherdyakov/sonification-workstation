@@ -13,6 +13,9 @@ namespace son {
 int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
               double streamTime, RtAudioStreamStatus status, void *data )
 {
+    Q_UNUSED(streamTime)
+    Q_UNUSED(inputBuffer)
+
     double *buffer = (double *) outputBuffer;
     UserData* uData = (UserData *) data;
     SynthGraph* graph = uData->graph;
@@ -26,13 +29,14 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     for (unsigned int i=0; i < nBufferFrames; ++i) {
 
         float s = graph->processGraph();
+        s *= 0.1;
         *buffer++ = s;
         *buffer++ = s;
 
         //test noise
         //*buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
         //test mssg
-        //qDebug() << "running";
+        //qDebug() << "callback";
     }
     return 0;
 

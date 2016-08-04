@@ -15,8 +15,26 @@ public:
 
 
 private:
+
+    QVector<double> data;
+
+    //for scaling the input
+//    double dataMin;
+//    double dataMax;
+//    float freqMin;
+//    float freqMax;
+
+    gam::WaveformType waveType;
+    gam::Sine<>* defaultGen;
+
     QVector<gam::Sine<>*> gens;
-    gam::Sine<>* gen;
+    QVector<son::Oscillator*> amods;
+    QVector<son::Oscillator*> fmods;
+
+    float visitFmods();
+    float visitAmods();
+    void setFreqs();
+    void setAmps();
 
 };
 

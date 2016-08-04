@@ -10,6 +10,7 @@ SynthItem::SynthItem(QObject *parent) : QObject(parent)
 
 float SynthItem::process()
 {
+
     return qrand();
 }
 

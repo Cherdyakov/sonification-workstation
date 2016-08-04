@@ -10,7 +10,6 @@ namespace son {
 
 typedef struct {
     SynthGraph* graph;
-    gam::Sine<>* gen;
 
 } UserData;
 

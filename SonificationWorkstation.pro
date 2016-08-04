@@ -20,7 +20,8 @@ HEADERS += \
     callback.h \
     synthgraph.h \
     userdata.h \
-    oscillator.h
+    oscillator.h \
+    enums.h
 
 # Gamma synthesis library
 LIBS += -L/home/sean/libs/Gamma-master/build/lib -lGamma
@@ -28,3 +29,5 @@ INCLUDEPATH += /home/sean/libs/Gamma-master/Gamma
 # RT Audio library
 LIBS += -L/home/sean/libs/rtaudio-4.1.2 -lrtaudio
 INCLUDEPATH += /home/sean/libs/rtaudio-4.1.2/include
+
+DISTFILES +=

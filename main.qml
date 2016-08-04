@@ -11,6 +11,16 @@ Item {
         width: 640
         height: 480
         title: qsTr("Sonification Workstation: Synthesis")
+
+//        Rectangle {
+//            color: "blue"
+//            anchors.fill: parent
+//        }
+
+        MainWindow {
+            visible: true
+            anchors.fill: parent
+        }
     }
 
     Window {

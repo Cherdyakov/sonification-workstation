@@ -15,13 +15,15 @@ public:
 
     virtual float process();
     virtual float process(float in);
-    QVector<SynthItem*> children;
+
 
 signals:
 
 public slots:
 
 private:
+    SynthItem* parent;
+    QVector<SynthItem*> children;
 
 };
 
