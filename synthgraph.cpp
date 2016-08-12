@@ -9,7 +9,10 @@ SynthGraph::SynthGraph(QObject *parent, SynthItem *rt) : QObject(parent)
 
 void SynthGraph::insertItem(SynthItem *node)
 {
-
+    if(root == NULL)
+    {
+        root = node;
+    }
 }
 
 float SynthGraph::processGraph()

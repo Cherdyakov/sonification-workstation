@@ -16,6 +16,16 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
+//    son::Oscillator* osc = new son::Oscillator();
+    son::SynthGraph* graph = new son::SynthGraph(0, osc);
+    son::UserData uData;
+
+    uData.graph = graph;
+
+
+    //connect signals and slots
+//    QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));
+
     //initialize Gamma
     gam::Sync::master().spu(44100);
 
@@ -47,11 +57,6 @@ int main(int argc, char *argv[])
     unsigned int sampleRate = 44100;
     unsigned int bufferFrames = 256; // 256 sample frames
 
-    son::Oscillator* osc = new son::Oscillator();
-    son::SynthGraph* graph = new son::SynthGraph(0, osc);
-    son::UserData uData;
-
-    uData.graph = graph;
 
     try {
       dac.openStream( &parameters, NULL, RTAUDIO_FLOAT64,

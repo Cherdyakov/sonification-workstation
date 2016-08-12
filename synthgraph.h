@@ -20,6 +20,7 @@ signals:
 
 public slots:
 
+
 private:
     SynthItem* root;
 
