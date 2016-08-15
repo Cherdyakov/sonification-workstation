@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QDebug>
 #include <QThread>
+#include <QQmlContext>
 
 #include "rtaudio/RtAudio.h"
 #include "callback.h"
@@ -16,11 +17,18 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
-//    son::Oscillator* osc = new son::Oscillator();
-    son::SynthGraph* graph = new son::SynthGraph(0, osc);
+
+    son::SynthGraph* graph = new son::SynthGraph();
     son::UserData uData;
 
+    qmlRegisterType<son::SynthGraph>("son.synthgraph", 1, 0, "SynthGraph");
+
     uData.graph = graph;
+
+    //PICK UP HERE WHEN YOU COME BACK
+    engine.rootContext()->setContextProperty("graph", graph);
+
+
 
 
     //connect signals and slots

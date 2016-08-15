@@ -8,6 +8,11 @@ Item {
     property string mainColor
     property string textColor
 
+    function create() {
+        created = true
+        graph.createItem(graph.OSCILLATOR)
+    }
+
     width: 64; height: 64
 
 

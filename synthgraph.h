@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVector>
 #include <synthitem.h>
+#include "oscillator.h"
 
 namespace son {
 
@@ -11,9 +12,18 @@ class SynthGraph : public QObject
 {
     Q_OBJECT
 public:
-    explicit SynthGraph(QObject *parent = 0, SynthItem* r = NULL);
 
-    void insertItem(SynthItem* node);
+    enum SynthItemType {
+        OSCILLATOR
+    };
+
+    Q_ENUM(SynthItemType)
+
+    explicit SynthGraph(QObject *parent = 0);
+
+    Q_INVOKABLE void createItem(SynthItemType type);
+    Q_INVOKABLE void insertItem(SynthItem* item);
+
     float processGraph();
 
 signals:

@@ -56,7 +56,7 @@ function endDrag(mouse)
         draggedItem.destroy();
         draggedItem = null;
     } else {
-        draggedItem.created = true;
+        draggedItem.create();
         draggedItem = null;
     }
 }
