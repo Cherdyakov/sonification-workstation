@@ -8,5 +8,6 @@
         <file>images/oscIcon.png</file>
         <file>PaletteItem.qml</file>
         <file>itemCreation.js</file>
+        <file>OutGUI.qml</file>
     </qresource>
 </RCC>

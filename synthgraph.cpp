@@ -5,16 +5,18 @@ namespace son {
 
 SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 {
+    root = NULL;
     //    root = rt;
 }
 
-void SynthGraph::createItem(SynthGraph::SynthItemType type)
+void SynthGraph::createItem(QObject* gui, int type)
 {
-    qDebug() << "createItem";
+    qDebug() << "createItem" << type;
 
     switch (type){
     case OSCILLATOR: {
         SynthItem* item = new Oscillator();
+        item->setMyGui(gui);
         insertItem(item);
         break;
     }

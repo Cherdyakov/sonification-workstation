@@ -14,6 +14,7 @@ class SynthGraph : public QObject
 public:
 
     enum SynthItemType {
+        OUT,
         OSCILLATOR
     };
 
@@ -21,7 +22,7 @@ public:
 
     explicit SynthGraph(QObject *parent = 0);
 
-    Q_INVOKABLE void createItem(SynthItemType type);
+    Q_INVOKABLE void createItem(QObject *gui, int type);
     Q_INVOKABLE void insertItem(SynthItem* item);
 
     float processGraph();

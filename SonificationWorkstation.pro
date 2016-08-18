@@ -23,6 +23,18 @@ HEADERS += \
     oscillator.h \
     enums.h
 
+##MBP
+## Gamma synthesis library
+#LIBS += -L/Users/Sean/libs/Gamma-master/build/lib -lGamma
+#INCLUDEPATH += /Users/Sean/libs/Gamma-master
+## RT Audio library
+#LIBS += -L/Users/Sean/libs/rtaudio-4.1.2 -lrtaudio
+#INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
+## Core Audio
+#DEFINES += __MACOSX_CORE__
+#INCLUDEPATH += /usr/local/include
+
+##Linux Desktop
 # Gamma synthesis library
 LIBS += -L/home/sean/libs/Gamma-master/build/lib -lGamma
 INCLUDEPATH += /home/sean/libs/Gamma-master/Gamma

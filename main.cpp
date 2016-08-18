@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     son::SynthGraph* graph = new son::SynthGraph();
     son::UserData uData;
 
-    qmlRegisterType<son::SynthGraph>("son.synthgraph", 1, 0, "SynthGraph");
+    qmlRegisterType<son::SynthGraph>("son.lib", 1, 0, "SynthGraph");
 
     uData.graph = graph;
 
