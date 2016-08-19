@@ -7,7 +7,11 @@ ApplicationWindow {
 
     id: synthWindow
 
+    // holds every item in the workspace for iterating
     property var synthItems: [dac]
+    // one of the synthItems in the workspace is in
+    //the process of being connected
+    property bool connecting: false
 
     width: 640
     height: 480
@@ -17,9 +21,9 @@ ApplicationWindow {
     menuBar: MenuBar {
         id: menuBar
         Menu {
-            title: "File"
+            title: qsTr("File")
             MenuItem {
-                text: "Exit"
+                text: qsTr("Exit")
                 onTriggered:  {
                     quit()
                     console.log("click")
@@ -65,6 +69,7 @@ ApplicationWindow {
         //synthItems are dropped and built into the
         //synthesis graph
         ScrollView {
+
             id: workspace
 
             anchors {
@@ -80,6 +85,14 @@ ApplicationWindow {
 
         }
 
+        MouseArea {
+            id: workspaceMouseArea
+            hoverEnabled: true
+            anchors.fill: workspace
+            onMouseXChanged: if(connecting) { canvas.requestPaint() }
+            onMouseYChanged: if(connecting) { canvas.requestPaint() }
+        }
+
         OutGUI {
             id: dac
             z: 100
@@ -90,7 +103,10 @@ ApplicationWindow {
                 bottomMargin: 8
             }
 
+        }
 
+        PatchManager {
+            id: patchManager
         }
 
         //canvas on which the connections are drawn
@@ -110,41 +126,38 @@ ApplicationWindow {
 
                 // get context to draw with
                 var ctx = getContext("2d")
-                //clear canvas
+                // clear canvas
                 ctx.clearRect(0, 0, canvas.width, canvas.height)
                 // setup the stroke
                 ctx.lineWidth = 4
-                ctx.strokeStyle = "blue"
+                ctx.strokeStyle = "chartreuse"
 
-                //iterate through all synth items
-                var count = synthItems.length
+                // iterate through all synth items
+                var count = patchManager.patches.length()
+                //                console.log(count)
                 for(var i = 0; i < count; i++)
                 {
-                    var parent = synthItems[i]
-                    //and draw connections from each parent to their children
-                    var childCount = parent.children.length
-                    for(var j = 0; j < childCount; j++)
-                    {
-                        var child = parent.children[j]
-                        // begin a new path to draw
-                        ctx.beginPath()
-                        // line start point
-                        var cord = parent.mapToItem(workspace, 0, 0)
-                        ctx.moveTo((cord.x + parent.width / 2), (cord.y + parent.height / 2))
-                        // line end point
-                        cord = child.mapToItem(workspace, 0, 0)
-                        ctx.lineTo((cord.x + child.width / 2), (cord.y + child.height / 2))
-                        // stroke using line width and stroke style
-                        ctx.stroke()
-                    }
+                    var patch = patchManager.patches[i]
+                    var x1 = patch.xBegin
+                    var y1 = patch.yBegin
+                    var x2 = patch.xEnd
+                    var y2 = patch.yEnd
+
+                    // begin a new path to draw
+                    ctx.beginPath()
+                    // line start point
+                    ctx.moveTo(x1,y1)
+                    // line end point
+                    ctx.lineTo(x2,y2)
+                    // stroke using line width and stroke style
+                    ctx.stroke()
                 }
-
-
-
             }
-        }
 
+
+
+        }
     }
 
-
 }
+

@@ -8,6 +8,7 @@ Item
     signal quit()
 
     SynthWindow {
+        id: synthWindow
     }
 
 //    DataWindow {

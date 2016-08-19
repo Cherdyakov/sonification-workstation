@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     catch ( RtAudioError& e ) {
       qDebug() << "error";
       e.printMessage();
-      exit( 0 );
+//      exit( 0 );
     }
 
 //    char input;

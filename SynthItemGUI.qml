@@ -1,4 +1,5 @@
-import QtQuick 2.0
+import QtQuick 2.7
+
 
 Item {
     id: root
@@ -7,29 +8,70 @@ Item {
     //OUT = 0
     //OSC = 1
     property bool created: false
+    property var inputs: new Array
+    property var outputs: new Array
     property string label: "SON"
     property string mainColor
     property string textColor
-    property var children: new Array
+    property alias patchOut: patchOut
+    property alias patchIn: patchIn
 
     function create() {
         created = true
         graph.createItem(this, type)
         synthWindow.synthItems.push(this)
-        dac.children.push(this)
+        dac.inputs.push(this)
         canvas.requestPaint()
     }
 
-    width: 64; height: 64
+    function acceptConnection(SynthItem) {
+        //or something...
+    }
+
+
+    width: 72; height: 64
 
     onXChanged: canvas.requestPaint()
     onYChanged: canvas.requestPaint()
 
+    FocusScope {
+        id: scope
+        anchors.fill: parent
+    }
+
+    PatchPoint {
+        id: patchIn
+        anchors {
+            top: root.top
+            bottom: root.bottom
+            left: root.left
+        }
+        state: "UNCONNECTED"
+    }
+
+    PatchPoint {
+        id: patchOut
+        anchors {
+            top: root.top
+            bottom: root.bottom
+            right: root.right
+        }
+        state: "UNCONNECTED"
+    }
+
+
     Rectangle {
         id: rect
         z: 200
-        anchors.fill: parent
-        radius: 10
+        anchors {
+            top: root.top
+            bottom: root.bottom
+            horizontalCenter: root.horizontalCenter
+        }
+
+        width: root.width * 0.8
+
+        radius: 0
         color: mainColor
         opacity: created ? 1 : 0.4
 
@@ -38,14 +80,17 @@ Item {
 
 
         MouseArea {
-            anchors.fill: parent
+            id: mouseArea
+
+            anchors.fill: rect
+
             drag.target: root
             drag.axis: Drag.XAndYAxis
             drag.minimumX: 0
             drag.minimumY: 0
 
-            onDoubleClicked: {
-
+            onClicked: {
+                scope.forceActiveFocus()
             }
 
         }
@@ -61,4 +106,15 @@ Item {
 
     }
 
+    Keys.onPressed: {
+        if (event.key == Qt.Key_Backspace || event.key == Qt.Key_Delete) {
+            console.log("Type: Back!")
+            var i = synthWindow.synthItems.indexOf(this)
+            synthWindow.synthItems.splice(i, 1)
+            this.destroy()
+            event.accepted = true;
+        }
+    }
+
 }
+
