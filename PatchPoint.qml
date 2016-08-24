@@ -4,18 +4,20 @@ import "patchCreation.js" as Script
 
 Rectangle {
 
-    property bool connecting: false
     id: patchPoint
+    property bool connecting: false
     state: "UNCONNECTED"
     z: 180
     radius: 8
     width: parent.width * 0.2
 
+
     states: [
         State {
             name: "UNCONNECTED"
             PropertyChanges {
-                target: patchPoint; color: "white"
+                target: patchPoint;
+                color: "white"
                 connecting: false
             }
         },
@@ -23,7 +25,8 @@ Rectangle {
         State {
             name: "CONNECTED"
             PropertyChanges {
-                target:patchPoint; color: "chartreuse"
+                target:patchPoint;
+                color: "chartreuse"
                 connecting: false
             }
         },
@@ -31,13 +34,10 @@ Rectangle {
         State {
             name: "CONNECTING"
             PropertyChanges {
-                target:patchPoint; color: "chartreuse"
+                target:patchPoint;
+                color: "chartreuse"
                 connecting: true
             }
-            PropertyChanges {
-                target: synthWindow; connecting: true
-            }
-
         }
     ]
 
@@ -47,12 +47,18 @@ Rectangle {
         anchors.fill: parent
 
         onClicked: {
-            patchPoint.state = "CONNECTING"
-            Script.createConnection()
+            state = "CONNECTING"
+            var patch = Script.createPatch()
+            console.log("patch returned: " + patch)
+            patch.start = patchPoint
+            patch.myCanvas = canvas
+            patchManager.patches.push(patch)
+            console.log(patchPoint.color)
 
         }
 
     }
+
 
 }
 

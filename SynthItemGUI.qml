@@ -2,6 +2,7 @@ import QtQuick 2.7
 
 
 Item {
+
     id: root
 
     property int type: -1
@@ -19,8 +20,6 @@ Item {
     function create() {
         created = true
         graph.createItem(this, type)
-        synthWindow.synthItems.push(this)
-        dac.inputs.push(this)
         canvas.requestPaint()
     }
 

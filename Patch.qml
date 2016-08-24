@@ -1,21 +1,40 @@
-import QtQuick 2.0
+import QtQuick 2.7
 
 Item {
+
     id: root
+    height: 30
+    width: 30
 
-    property double xBegin: 100
-    property double yBegin: 100
-    property double xEnd: 300
-    property double yEnd: 300
-    property string anchorColor
-    property PatchPoint patchBegin
-    property PatchPoint patchEnd
+    property Canvas myCanvas
+    property var start
+    property var end
 
+    Component.onCompleted: {
+        end = root
+    }
+
+    onXChanged: myCanvas.requestPaint()
+    onYChanged: myCanvas.requestPaint()
 
     Rectangle {
-        id: anchor
-        height: 12
-        width: 12
-        color: anchorColor
+        id: rect
+        color: "blue"
+        anchors.fill: root
+
+        MouseArea {
+            id: mouseArea
+
+            anchors.fill: rect
+
+            drag.target: root
+            drag.axis: Drag.XAndYAxis
+            drag.minimumX: 0
+            drag.minimumY: 0
+        }
+
     }
 }
+
+
+

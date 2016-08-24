@@ -2,23 +2,14 @@ var component;
 var patch;
 
 function createPatch() {
-    component = Qt.createComponent("Connection.qml");
-    if (component.status === Component.Ready)
-        finishCreation();
-    else
-        component.statusChanged.connect(finishCreation);
-}
+    component = Qt.createComponent("Patch.qml");
+    patch = component.createObject(canvas, {"x": workspaceMouseArea.mouseX,
+                                       "y": workspaceMouseArea.mouseY});
 
-function finishCreation() {
-    if (component.status === Component.Ready) {
-        patch = component.createObject(workspace, {"x": 100, "y": 100});
-        patchManager.patches.push(patch)
-        if (patch === null) {
-            // Error Handling
-            console.log("Error creating object");
-        }
-    } else if (component.status === Component.Error) {
-        // Error Handling
-        console.log("Error loading component:", component.errorString());
+    if( patch === null) {
+        console.log("Error creating patch");
     }
+
+//    console.log("patch created in js: " + patch)
+    return patch;
 }

@@ -10,7 +10,6 @@
         <file>itemCreation.js</file>
         <file>OutGUI.qml</file>
         <file>PatchPoint.qml</file>
-        <file>Test.qml</file>
         <file>PatchManager.qml</file>
         <file>Patch.qml</file>
         <file>patchCreation.js</file>

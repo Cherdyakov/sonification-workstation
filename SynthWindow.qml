@@ -12,6 +12,7 @@ ApplicationWindow {
     // one of the synthItems in the workspace is in
     //the process of being connected
     property bool connecting: false
+    property alias canvas: canvas
 
     width: 640
     height: 480
@@ -74,9 +75,9 @@ ApplicationWindow {
 
             anchors {
                 top: toolbox.bottom
-                left: parent.left
-                right: parent.right
-                bottom: parent.bottom
+                left: window.left
+                right: window.right
+                bottom: window.bottom
             }
 
             DropArea {
@@ -95,7 +96,6 @@ ApplicationWindow {
 
         OutGUI {
             id: dac
-            z: 100
             created: true
             anchors {
                 horizontalCenter: parent.horizontalCenter
@@ -114,12 +114,7 @@ ApplicationWindow {
             id: canvas
             z: 0
 
-            anchors {
-                top: workspace.top
-                bottom: workspace.bottom
-                left: workspace.left
-                right: workspace.right
-            }
+            anchors.fill: workspace
 
             onPaint: {
 
@@ -132,23 +127,27 @@ ApplicationWindow {
                 ctx.lineWidth = 4
                 ctx.strokeStyle = "chartreuse"
 
-                // iterate through all synth items
-                var count = patchManager.patches.length()
-                //                console.log(count)
+                // get each patch
+                var count = patchManager.patches.length
                 for(var i = 0; i < count; i++)
                 {
                     var patch = patchManager.patches[i]
-                    var x1 = patch.xBegin
-                    var y1 = patch.yBegin
-                    var x2 = patch.xEnd
-                    var y2 = patch.yEnd
+                    var patchPointCord = mapFromItem(patch.start.parent, patch.start.x, patch.start.y)
+                    var beginPoint = mapToItem(canvas, patchPointCord.x, patchPointCord.y)
+                    var beginX = beginPoint.x + patch.start.width / 1.6
+                    var beginY = beginPoint.y + patch.start.height / 2
+//                    console.log(patch.startPoint)
+
+                    var endX = patch.end.x + patch.end.width / 2
+                    var endY = patch.end.y + patch.end.height / 2
+
 
                     // begin a new path to draw
                     ctx.beginPath()
                     // line start point
-                    ctx.moveTo(x1,y1)
+                    ctx.moveTo(beginX,beginY)
                     // line end point
-                    ctx.lineTo(x2,y2)
+                    ctx.lineTo(endX,endY)
                     // stroke using line width and stroke style
                     ctx.stroke()
                 }
