@@ -13,5 +13,6 @@
         <file>PatchManager.qml</file>
         <file>Patch.qml</file>
         <file>patchCreation.js</file>
+        <file>DropZone.qml</file>
     </qresource>
 </RCC>

@@ -9,9 +9,7 @@ ApplicationWindow {
 
     // holds every item in the workspace for iterating
     property var synthItems: [dac]
-    // one of the synthItems in the workspace is in
-    //the process of being connected
-    property bool connecting: false
+    //canvas for drawing connections
     property alias canvas: canvas
 
     width: 640
@@ -39,7 +37,6 @@ ApplicationWindow {
     }
 
     Item {
-
         id: window
         anchors.fill: parent
 
@@ -70,7 +67,6 @@ ApplicationWindow {
         //synthItems are dropped and built into the
         //synthesis graph
         ScrollView {
-
             id: workspace
 
             anchors {
@@ -79,19 +75,14 @@ ApplicationWindow {
                 right: window.right
                 bottom: window.bottom
             }
-
-            DropArea {
-                anchors.fill: parent
-            }
-
         }
 
         MouseArea {
             id: workspaceMouseArea
             hoverEnabled: true
             anchors.fill: workspace
-            onMouseXChanged: if(connecting) { canvas.requestPaint() }
-            onMouseYChanged: if(connecting) { canvas.requestPaint() }
+            onMouseXChanged: if(patchManager.patch !== null) { canvas.requestPaint() }
+            onMouseYChanged: if(patchManager.patch !== null) { canvas.requestPaint() }
         }
 
         OutGUI {
@@ -102,7 +93,6 @@ ApplicationWindow {
                 bottom: parent.bottom
                 bottomMargin: 8
             }
-
         }
 
         PatchManager {
@@ -132,15 +122,13 @@ ApplicationWindow {
                 for(var i = 0; i < count; i++)
                 {
                     var patch = patchManager.patches[i]
-                    var patchPointCord = mapFromItem(patch.start.parent, patch.start.x, patch.start.y)
-                    var beginPoint = mapToItem(canvas, patchPointCord.x, patchPointCord.y)
-                    var beginX = beginPoint.x + patch.start.width / 1.6
-                    var beginY = beginPoint.y + patch.start.height / 2
-//                    console.log(patch.startPoint)
-
-                    var endX = patch.end.x + patch.end.width / 2
-                    var endY = patch.end.y + patch.end.height / 2
-
+                    var startPoint = mapFromItem(window, patch.start.x, patch.start.y)
+                    var beginX = startPoint.x + patch.start.width / 2
+                    var beginY = startPoint.y + patch.start.height / 2
+                    //                    console.log(patch.startPoint)
+                    var endPoint = mapFromItem(window, patch.end.x, patch.end.y)
+                    var endX = endPoint.x + patch.end.width / 2
+                    var endY = endPoint.y + patch.end.height / 2
 
                     // begin a new path to draw
                     ctx.beginPath()
@@ -151,6 +139,36 @@ ApplicationWindow {
                     // stroke using line width and stroke style
                     ctx.stroke()
                 }
+
+                console.log(patchManager.patch)
+                // in progress patches
+                if (patchManager.patch !== null)
+                {
+                    patch = patchManager.patch
+                    console.log("OnDraw: found patch in progress")
+
+                    if (patch.end === null)
+                    {
+                        console.log("OnDraw: found patch end null")
+                        startPoint = mapFromItem(window, patch.start.x, patch.start.y)
+                        beginX = startPoint.x + patch.start.width / 2
+                        beginY = startPoint.y + patch.start.height / 2
+
+                        endPoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY )
+                        endX = endPoint.x
+                        endY = endPoint.y
+
+                        // begin a new path to draw
+                        ctx.beginPath()
+                        // line start point
+                        ctx.moveTo(beginX,beginY)
+                        // line end point
+                        ctx.lineTo(endX,endY)
+                        // stroke using line width and stroke style
+                        ctx.stroke()
+                    }
+                }
+
             }
 
 

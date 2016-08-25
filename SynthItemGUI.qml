@@ -3,19 +3,22 @@ import QtQuick 2.7
 
 Item {
 
-    id: root
+    id: item
 
-    property int type: -1
-    //OUT = 0
-    //OSC = 1
+    property int type: -1 //OUT = 0, OSC = 1
     property bool created: false
     property var inputs: new Array
     property var outputs: new Array
     property string label: "SON"
     property string mainColor
     property string textColor
-    property alias patchOut: patchOut
-    property alias patchIn: patchIn
+    property PatchManager myManager: null
+
+    signal synthItemClicked(var i)
+
+//    Component.onCompleted: {
+//        synthItemClicked.connect
+//    }
 
     function create() {
         created = true
@@ -23,12 +26,7 @@ Item {
         canvas.requestPaint()
     }
 
-    function acceptConnection(SynthItem) {
-        //or something...
-    }
-
-
-    width: 72; height: 64
+    width: 64; height: 64
 
     onXChanged: canvas.requestPaint()
     onYChanged: canvas.requestPaint()
@@ -38,39 +36,14 @@ Item {
         anchors.fill: parent
     }
 
-    PatchPoint {
-        id: patchIn
-        anchors {
-            top: root.top
-            bottom: root.bottom
-            left: root.left
-        }
-        state: "UNCONNECTED"
-    }
-
-    PatchPoint {
-        id: patchOut
-        anchors {
-            top: root.top
-            bottom: root.bottom
-            right: root.right
-        }
-        state: "UNCONNECTED"
-    }
-
-
     Rectangle {
         id: rect
         z: 200
-        anchors {
-            top: root.top
-            bottom: root.bottom
-            horizontalCenter: root.horizontalCenter
-        }
+        anchors.fill: parent
 
-        width: root.width * 0.8
+        width: item.width * 0.8
 
-        radius: 0
+        radius: 100
         color: mainColor
         opacity: created ? 1 : 0.4
 
@@ -83,13 +56,19 @@ Item {
 
             anchors.fill: rect
 
-            drag.target: root
+            drag.target: item
             drag.axis: Drag.XAndYAxis
             drag.minimumX: 0
             drag.minimumY: 0
+            Drag.active: mouseArea.drag.active
+            Drag.hotSpot.x: 36
+            Drag.hotSpot.y: 32
+
+            onReleased: mouseArea.Drag.drop()
 
             onClicked: {
-                scope.forceActiveFocus()
+                console.log("Item: click!")
+                patchManager.setPatchPoint(item)
             }
 
         }

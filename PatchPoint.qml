@@ -18,25 +18,34 @@ Rectangle {
             PropertyChanges {
                 target: patchPoint;
                 color: "white"
-                connecting: false
+//                connecting: false
             }
         },
 
         State {
             name: "CONNECTED"
             PropertyChanges {
-                target:patchPoint;
+                target: patchPoint;
                 color: "chartreuse"
-                connecting: false
+//                connecting: false
             }
         },
 
         State {
             name: "CONNECTING"
             PropertyChanges {
-                target:patchPoint;
+                target: patchPoint;
                 color: "chartreuse"
-                connecting: true
+//                connecting: true
+            }
+        },
+
+        State {
+            name: "ENTERED"
+            PropertyChanges {
+                target: patchPoint;
+                color: "red"
+//                connecting: true
             }
         }
     ]
@@ -47,7 +56,7 @@ Rectangle {
         anchors.fill: parent
 
         onClicked: {
-            state = "CONNECTING"
+            patchPoint.state = "CONNECTING"
             var patch = Script.createPatch()
             console.log("patch returned: " + patch)
             patch.start = patchPoint
@@ -57,6 +66,15 @@ Rectangle {
 
         }
 
+    }
+
+    DropArea {
+        id: dropArea
+        anchors.fill: parent
+
+        onEntered: {
+            patchPoint.state = "ENTERED"
+        }
     }
 
 

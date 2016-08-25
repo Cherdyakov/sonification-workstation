@@ -11,29 +11,10 @@ Item {
     property var end
 
     Component.onCompleted: {
-        end = root
+        end = null
+        console.log("patch created")
     }
 
-    onXChanged: myCanvas.requestPaint()
-    onYChanged: myCanvas.requestPaint()
-
-    Rectangle {
-        id: rect
-        color: "blue"
-        anchors.fill: root
-
-        MouseArea {
-            id: mouseArea
-
-            anchors.fill: rect
-
-            drag.target: root
-            drag.axis: Drag.XAndYAxis
-            drag.minimumX: 0
-            drag.minimumY: 0
-        }
-
-    }
 }
 
 
