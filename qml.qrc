@@ -6,7 +6,6 @@
         <file>images/oscIcon.png</file>
         <file>PaletteItem.qml</file>
         <file>itemCreation.js</file>
-        <file>PatchPoint.qml</file>
         <file>PatchManager.qml</file>
         <file>Patch.qml</file>
         <file>patchCreation.js</file>

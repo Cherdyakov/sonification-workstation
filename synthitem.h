@@ -16,8 +16,8 @@ public:
     virtual float process();
     virtual float process(float in);
 
-    QObject *getMyGui() const;
-    void setMyGui(QObject *value);
+    QObject *getGui() const;
+    void setGui(QObject *value);
 
 signals:
 
@@ -26,7 +26,7 @@ public slots:
     void addChild(QObject* child);
 
 private:
-    QObject* myGui;
+    QObject* gui;
     SynthItem* parent;
     QVector<SynthItem*> children;
 

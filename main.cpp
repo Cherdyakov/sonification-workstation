@@ -21,14 +21,14 @@ int main(int argc, char *argv[])
     son::SynthGraph* graph = new son::SynthGraph();
     son::UserData uData;
 
-    qmlRegisterType<son::SynthGraph>("son.lib", 1, 0, "SynthGraph");
+    qmlRegisterType<son::SynthGraph>("son.asdf", 1, 0, "SynthGraph");
 
     uData.graph = graph;
 
     //PICK UP HERE WHEN YOU COME BACK
     engine.rootContext()->setContextProperty("graph", graph);
 
-    qmlRegisterType<son::SynthItem>("son.lib", 1, 0, "CppSynthItem");
+//    qmlRegisterType<son::SynthItem>("son.lib", 1, 0, "CppSynthItem");
 
 
 

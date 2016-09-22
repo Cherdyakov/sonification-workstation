@@ -19,14 +19,14 @@ float SynthItem::process(float in)
     return in;
 }
 
-QObject *SynthItem::getMyGui() const
+QObject *SynthItem::getGui() const
 {
-    return myGui;
+    return gui;
 }
 
-void SynthItem::setMyGui(QObject *value)
+void SynthItem::setGui(QObject *value)
 {
-    myGui = value;
+    gui = value;
     connectGui();
 }
 
@@ -48,9 +48,9 @@ void SynthItem::addChild(QObject *child)
 
 void SynthItem::connectGui()
 {
-    QObject::connect(myGui, SIGNAL(destroyed(QObject*)),
+    QObject::connect(gui, SIGNAL(destroyed(QObject*)),
                      this, SLOT(requestDelete()));
-    QObject::connect(myGui, SIGNAL(addChild(QObject*)),
+    QObject::connect(gui, SIGNAL(addChild(QObject*)),
                      this, SLOT(addChild(QObject*)));
 }
 

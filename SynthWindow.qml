@@ -11,6 +11,7 @@ ApplicationWindow {
     property var synthItems: [dac]
     //canvas for drawing connections
     property alias canvas: canvas
+    property bool patching: false
 
     width: 640
     height: 480
@@ -25,7 +26,7 @@ ApplicationWindow {
                 text: qsTr("Exit")
                 onTriggered:  {
                     quit()
-//                    console.log("click")
+                    //                    console.log("click")
                 }
 
             }
@@ -81,8 +82,8 @@ ApplicationWindow {
             id: workspaceMouseArea
             hoverEnabled: true
             anchors.fill: workspace
-            onMouseXChanged: if(patchManager.patch !== null) { canvas.requestPaint() }
-            onMouseYChanged: if(patchManager.patch !== null) { canvas.requestPaint() }
+            onMouseXChanged: if(patching) { canvas.requestPaint() }
+            onMouseYChanged: if(patching) { canvas.requestPaint() }
         }
 
         OUT {
@@ -118,41 +119,41 @@ ApplicationWindow {
                 ctx.strokeStyle = "chartreuse"
 
                 // get each patch
-                var count = patchManager.patches.length
-                for(var i = 0; i < count; i++)
+                var parentCount = synthItems.length
+                for(var i = 0; i < parentCount; i++)
                 {
-                    var patch = patchManager.patches[i]
-                    var startPoint = mapFromItem(window, patch.start.x, patch.start.y)
-                    var beginX = startPoint.x + patch.start.width / 2
-                    var beginY = startPoint.y + patch.start.height / 2
-                    //                    console.log(patch.startPoint)
-                    var endPoint = mapFromItem(window, patch.end.x, patch.end.y)
-                    var endX = endPoint.x + patch.end.width / 2
-                    var endY = endPoint.y + patch.end.height / 2
+                    var parent = synthItems[i]
 
-                    // begin a new path to draw
-                    ctx.beginPath()
-                    // line start point
-                    ctx.moveTo(beginX,beginY)
-                    // line end point
-                    ctx.lineTo(endX,endY)
-                    // stroke using line width and stroke style
-                    ctx.stroke()
-                }
+                    var childCount = parent.children.length
 
-//                console.log(patchManager.patch)
-                // in progress patches
-                if (patchManager.patch !== null)
-                {
-                    patch = patchManager.patch
-//                    console.log("OnDraw: found patch in progress")
-
-                    if (patch.end === null)
+                    for (var j = 0; j < childCount; j++)
                     {
-//                        console.log("OnDraw: found patch end null")
-                        startPoint = mapFromItem(window, patch.start.x, patch.start.y)
-                        beginX = startPoint.x + patch.start.width / 2
-                        beginY = startPoint.y + patch.start.height / 2
+                        var child = parent.children[j]
+
+                        var startPoint = mapFromItem(window, parent.x, parent.y)
+                        var beginX = startPoint.x + parent.width / 2
+                        var beginY = startPoint.y + parent.height / 2
+                        //                    console.log(patch.startPoint)
+                        var endPoint = mapFromItem(window, child.x, child.y)
+                        var endX = endPoint.x + child.width / 2
+                        var endY = endPoint.y + child.height / 2
+
+                        // begin a new path to draw
+                        ctx.beginPath()
+                        // line start point
+                        ctx.moveTo(beginX,beginY)
+                        // line end point
+                        ctx.lineTo(endX,endY)
+                        // stroke using line width and stroke style
+                        ctx.stroke()
+                    }
+
+                    if (parent.patching)
+                    {
+                        patching = true
+                        startPoint = mapFromItem(window, parent.x, parent.y)
+                        beginX = startPoint.x + parent.width / 2
+                        beginY = startPoint.y + parent.height / 2
 
                         endPoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY )
                         endX = endPoint.x
@@ -171,10 +172,8 @@ ApplicationWindow {
 
             }
 
-
-
         }
-    }
 
+    }
 }
 

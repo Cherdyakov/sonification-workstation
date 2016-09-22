@@ -1,10 +1,11 @@
 import QtQuick 2.7
 
-
 Item {
 
     id: item
 
+    property var children: []
+    property bool patching: false
     property int type: -1 //OUT = 0, OSC = 1
     property bool created: false
     property var inputs: new Array
@@ -12,18 +13,19 @@ Item {
     property string label: "SON"
     property string mainColor
     property string textColor
-//    property
+    property var implementation: null //the CPP implementation of this SynthItem
     property PatchManager myManager: null
 
     signal addChild(var i)
 
-    Component.onCompleted: {
 
+    Component.onCompleted: {
+        synthItems.push(this)
     }
 
     function create() {
         created = true
-        graph.createItem(this, type)
+        implementation =  graph.createItem(this, type)
         canvas.requestPaint()
     }
 
@@ -69,7 +71,13 @@ Item {
 
             onClicked: {
                 console.log("Item: click!")
-                patchManager.setPatchPoint(item)
+                if(patching) {
+                    patching = false
+                }
+                else
+                {
+                    patching = true
+                }
                 canvas.requestPaint()
                 scope.focus = true
             }

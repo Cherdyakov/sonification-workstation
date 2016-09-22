@@ -16,7 +16,7 @@ QObject* SynthGraph::createItem(QObject* gui, int type)
     switch (type){
     case OSCILLATOR: {
         SynthItem* item = new Oscillator();
-        item->setMyGui(gui);
+        item->setGui(gui);
         return item;
         break;
     }
