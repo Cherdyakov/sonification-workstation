@@ -12,13 +12,14 @@ Item {
     property string label: "SON"
     property string mainColor
     property string textColor
+//    property
     property PatchManager myManager: null
 
-    signal synthItemClicked(var i)
+    signal addChild(var i)
 
-//    Component.onCompleted: {
-//        synthItemClicked.connect
-//    }
+    Component.onCompleted: {
+
+    }
 
     function create() {
         created = true
@@ -69,6 +70,8 @@ Item {
             onClicked: {
                 console.log("Item: click!")
                 patchManager.setPatchPoint(item)
+                canvas.requestPaint()
+                scope.focus = true
             }
 
         }
@@ -85,7 +88,7 @@ Item {
     }
 
     Keys.onPressed: {
-        if (event.key == Qt.Key_Backspace || event.key == Qt.Key_Delete) {
+        if (event.key === Qt.Key_Backspace || event.key === Qt.Key_Delete) {
             console.log("Type: Back!")
             var i = synthWindow.synthItems.indexOf(this)
             synthWindow.synthItems.splice(i, 1)

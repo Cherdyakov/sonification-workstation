@@ -23,7 +23,7 @@ signals:
 
 public slots:
     void requestDelete();
-    void testSlot(const QString s);
+    void addChild(QObject* child);
 
 private:
     QObject* myGui;

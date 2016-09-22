@@ -5,6 +5,7 @@ CONFIG += c++11
 SOURCES += main.cpp \
     synthitem.cpp \
     synthgraph.cpp \
+    output.cpp \
     oscillator.cpp
 
 RESOURCES += qml.qrc
@@ -20,26 +21,27 @@ HEADERS += \
     callback.h \
     synthgraph.h \
     userdata.h \
-    oscillator.h \
-    enums.h
+    enums.h \
+    output.h \
+    oscillator.h
 
 ##MBP
 ## Gamma synthesis library
-#LIBS += -L/Users/Sean/libs/Gamma-master/build/lib -lGamma
-#INCLUDEPATH += /Users/Sean/libs/Gamma-master
-## RT Audio library
-#LIBS += -L/Users/Sean/libs/rtaudio-4.1.2 -lrtaudio
-#INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
-## Core Audio
-#DEFINES += __MACOSX_CORE__
-#INCLUDEPATH += /usr/local/include
+LIBS += -L/Users/Sean/libs/Gamma-master/build/lib -lGamma
+INCLUDEPATH += /Users/Sean/libs/Gamma-master/Gamma
+# RT Audio library
+LIBS += -L/Users/Sean/libs/rtaudio-4.1.2 -lrtaudio
+INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
+# Core Audio
+DEFINES += __MACOSX_CORE__
+INCLUDEPATH += /usr/local/include
 
 ##Linux Desktop
-# Gamma synthesis library
-LIBS += -L/home/sean/libs/Gamma-master/build/lib -lGamma
-INCLUDEPATH += /home/sean/libs/Gamma-master/Gamma
-# RT Audio library
-LIBS += -L/home/sean/libs/rtaudio-4.1.2 -lrtaudio
-INCLUDEPATH += /home/sean/libs/rtaudio-4.1.2/include
+## Gamma synthesis library
+#LIBS += -L/home/sean/libs/Gamma-master/build/lib -lGamma
+#INCLUDEPATH += /home/sean/libs/Gamma-master/Gamma
+## RT Audio library
+#LIBS += -L/home/sean/libs/rtaudio-4.1.2 -lrtaudio
+#INCLUDEPATH += /home/sean/libs/rtaudio-4.1.2/include
 
 DISTFILES +=

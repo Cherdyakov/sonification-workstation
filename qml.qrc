@@ -3,16 +3,15 @@
         <file>main.qml</file>
         <file>DataWindow.qml</file>
         <file>SynthWindow.qml</file>
-        <file>SynthItemGUI.qml</file>
-        <file>OscillatorGUI.qml</file>
         <file>images/oscIcon.png</file>
         <file>PaletteItem.qml</file>
         <file>itemCreation.js</file>
-        <file>OutGUI.qml</file>
         <file>PatchPoint.qml</file>
         <file>PatchManager.qml</file>
         <file>Patch.qml</file>
         <file>patchCreation.js</file>
-        <file>DropZone.qml</file>
+        <file>OSC.qml</file>
+        <file>OUT.qml</file>
+        <file>SynthItem.qml</file>
     </qresource>
 </RCC>

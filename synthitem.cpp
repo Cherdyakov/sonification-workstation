@@ -35,18 +35,23 @@ void SynthItem::requestDelete()
     qDebug() << "delete requested";
 }
 
-void SynthItem::testSlot(const QString s)
+void SynthItem::addChild(QObject *child)
 {
-    qDebug() << "from cpp: " << s;
+    SynthItem* item = static_cast<SynthItem*>(child);
+
+    if (!children.contains(item))
+    {
+        children.push_back(item);
+    }
+    qDebug() << "cpp: child added";
 }
 
 void SynthItem::connectGui()
 {
     QObject::connect(myGui, SIGNAL(destroyed(QObject*)),
                      this, SLOT(requestDelete()));
-
-    QObject::connect(myGui, SIGNAL(testSignal(QString)),
-                     this, SLOT(testSlot(QString)));
+    QObject::connect(myGui, SIGNAL(addChild(QObject*)),
+                     this, SLOT(addChild(QObject*)));
 }
 
 } //namespace son

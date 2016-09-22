@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
     //PICK UP HERE WHEN YOU COME BACK
     engine.rootContext()->setContextProperty("graph", graph);
 
+    qmlRegisterType<son::SynthItem>("son.lib", 1, 0, "CppSynthItem");
+
 
 
 

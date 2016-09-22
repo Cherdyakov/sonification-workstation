@@ -22,8 +22,8 @@ public:
 
     explicit SynthGraph(QObject *parent = 0);
 
-    Q_INVOKABLE void createItem(QObject *gui, int type);
-    Q_INVOKABLE void insertItem(SynthItem* item);
+    Q_INVOKABLE QObject* createItem(QObject *gui, int type);
+    Q_INVOKABLE void connect(SynthItem* parent, SynthItem* child);
 
     float processGraph();
 

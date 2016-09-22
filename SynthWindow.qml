@@ -25,7 +25,7 @@ ApplicationWindow {
                 text: qsTr("Exit")
                 onTriggered:  {
                     quit()
-                    console.log("click")
+//                    console.log("click")
                 }
 
             }
@@ -55,7 +55,7 @@ ApplicationWindow {
 
                 PaletteItem {
                     anchors.verticalCenter: parent.verticalCenter
-                    componentFile: "OscillatorGUI.qml"
+                    componentFile: "OSC.qml"
                     source: "images/oscIcon.png"
                     image: "images/oscIcon.png"
                 }
@@ -85,7 +85,7 @@ ApplicationWindow {
             onMouseYChanged: if(patchManager.patch !== null) { canvas.requestPaint() }
         }
 
-        OutGUI {
+        OUT {
             id: dac
             created: true
             anchors {
@@ -140,16 +140,16 @@ ApplicationWindow {
                     ctx.stroke()
                 }
 
-                console.log(patchManager.patch)
+//                console.log(patchManager.patch)
                 // in progress patches
                 if (patchManager.patch !== null)
                 {
                     patch = patchManager.patch
-                    console.log("OnDraw: found patch in progress")
+//                    console.log("OnDraw: found patch in progress")
 
                     if (patch.end === null)
                     {
-                        console.log("OnDraw: found patch end null")
+//                        console.log("OnDraw: found patch end null")
                         startPoint = mapFromItem(window, patch.start.x, patch.start.y)
                         beginX = startPoint.x + patch.start.width / 2
                         beginY = startPoint.y + patch.start.height / 2

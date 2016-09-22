@@ -9,7 +9,7 @@ SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
     //    root = rt;
 }
 
-void SynthGraph::createItem(QObject* gui, int type)
+QObject* SynthGraph::createItem(QObject* gui, int type)
 {
     qDebug() << "createItem" << type;
 
@@ -17,7 +17,7 @@ void SynthGraph::createItem(QObject* gui, int type)
     case OSCILLATOR: {
         SynthItem* item = new Oscillator();
         item->setMyGui(gui);
-        insertItem(item);
+        return item;
         break;
     }
     default:
@@ -26,14 +26,10 @@ void SynthGraph::createItem(QObject* gui, int type)
     }
 }
 
-void SynthGraph::insertItem(SynthItem *item)
+void SynthGraph::connect(SynthItem *parent, SynthItem* child)
 {
-    qDebug() << "insertItem";
+    qDebug() << "connect";
 
-    if(root == NULL)
-    {
-        root = item;
-    }
 }
 
 float SynthGraph::processGraph()

@@ -1,6 +1,6 @@
 import QtQuick 2.7
 
-SynthItemGUI {
+SynthItem {
     label: "OUT"
     type: 0 //OUT
     mainColor: "cadetblue"
