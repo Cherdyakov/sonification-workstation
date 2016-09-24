@@ -8,7 +8,6 @@
         <file>itemCreation.js</file>
         <file>PatchManager.qml</file>
         <file>Patch.qml</file>
-        <file>patchCreation.js</file>
         <file>OSC.qml</file>
         <file>OUT.qml</file>
         <file>SynthItem.qml</file>

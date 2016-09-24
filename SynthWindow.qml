@@ -11,7 +11,6 @@ ApplicationWindow {
     property var synthItems: [dac]
     //canvas for drawing connections
     property alias canvas: canvas
-    property bool patching: false
 
     width: 640
     height: 480
@@ -82,8 +81,8 @@ ApplicationWindow {
             id: workspaceMouseArea
             hoverEnabled: true
             anchors.fill: workspace
-            onMouseXChanged: if(patching) { canvas.requestPaint() }
-            onMouseYChanged: if(patching) { canvas.requestPaint() }
+            onMouseXChanged: if(patchManager.patchBegin) { canvas.requestPaint() }
+            onMouseYChanged: if(patchManager.patchBegin) { canvas.requestPaint() }
         }
 
         OUT {
@@ -148,10 +147,10 @@ ApplicationWindow {
                         ctx.stroke()
                     }
 
-                    if (parent.patching)
+                    if (patchManager.patchBegin)
                     {
-                        patching = true
-                        startPoint = mapFromItem(window, parent.x, parent.y)
+                        var beginning = patchManager.patchBegin
+                        startPoint = mapFromItem(window, beginning.x, beginning.y)
                         beginX = startPoint.x + parent.width / 2
                         beginY = startPoint.y + parent.height / 2
 

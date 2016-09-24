@@ -16,7 +16,7 @@ Item {
     property var implementation: null //the CPP implementation of this SynthItem
     property PatchManager myManager: null
 
-    signal addChild(var i)
+    signal clickedItem(var i)
 
 
     Component.onCompleted: {
@@ -71,13 +71,7 @@ Item {
 
             onClicked: {
                 console.log("Item: click!")
-                if(patching) {
-                    patching = false
-                }
-                else
-                {
-                    patching = true
-                }
+                patchManager.setPatchPoint(item)
                 canvas.requestPaint()
                 scope.focus = true
             }
@@ -101,6 +95,7 @@ Item {
             var i = synthWindow.synthItems.indexOf(this)
             synthWindow.synthItems.splice(i, 1)
             this.destroy()
+            canvas.requestPaint()
             event.accepted = true;
         }
     }

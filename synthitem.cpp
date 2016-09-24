@@ -50,8 +50,6 @@ void SynthItem::connectGui()
 {
     QObject::connect(gui, SIGNAL(destroyed(QObject*)),
                      this, SLOT(requestDelete()));
-    QObject::connect(gui, SIGNAL(addChild(QObject*)),
-                     this, SLOT(addChild(QObject*)));
 }
 
 } //namespace son
