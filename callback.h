@@ -20,6 +20,7 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     UserData* uData = (UserData *) data;
     SynthGraph* graph = uData->graph;
 
+//    qDebug() << "graphSize: " << graph->graphSize();
 
     if ( status )
         std::cout << "Stream underflow detected!" << std::endl;
@@ -34,9 +35,9 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
         *buffer++ = s;
 
         //test noise
-        //*buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+//        *buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
         //test mssg
-        //qDebug() << "callback";
+//        qDebug() << "callback";
     }
     return 0;
 

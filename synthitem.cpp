@@ -30,20 +30,24 @@ void SynthItem::setGui(QObject *value)
     connectGui();
 }
 
+int SynthItem::numChildren()
+{
+    //returns number of all child items
+}
+
 void SynthItem::requestDelete()
 {
     qDebug() << "delete requested";
 }
 
-void SynthItem::addChild(QObject *child)
+int SynthItem::addChild(QObject *child, int type)
 {
-    SynthItem* item = static_cast<SynthItem*>(child);
 
-    if (!children.contains(item))
-    {
-        children.push_back(item);
-    }
-    qDebug() << "cpp: child added";
+}
+
+int SynthItem::removeChild(QObject *child)
+{
+
 }
 
 void SynthItem::connectGui()

@@ -8,6 +8,55 @@ Oscillator::Oscillator()
     gens.push_back(defaultGen);
 }
 
+int Oscillator::addChild(QObject *child, int type)
+{
+    SynthItem* item = static_cast<SynthItem*>(child);
+
+    switch (type){
+    case AMOD: {
+        if(!amods.contains(item))
+        {
+            return 1; //already child
+        }
+        amods.push_back(item);
+        return 0;
+    }
+    case FMOD: {
+        if(!fmods.contains(item))
+        {
+            return 1; //already child
+        }
+        fmods.push_back(item);
+        return 0;
+    }
+    default:
+        return 2; //incompatible child type
+    }
+
+}
+
+int Oscillator::removeChild(QObject *child)
+{
+    SynthItem* item = static_cast<SynthItem*>(child);
+
+    int idx;
+
+    idx = amods.indexOf(item);
+    if(idx > -1)
+    {
+        amods.remove(idx);
+        return 0;
+    }
+    idx = fmods.indexOf(item);
+    if(idx > -1)
+    {
+        fmods.remove(idx);
+        return 0;
+    }
+
+    return 1; //no such child
+}
+
 float Oscillator::process()
 {
     //sample we will ultimately return
@@ -47,27 +96,27 @@ float Oscillator::process()
     return sample;
 }
 
-float Oscillator::visitFmods()
+float Oscillator::visitAmods()
 {
     float s = 0.0;
-    QVector<son::Oscillator*>::const_iterator i;
+    QVector<SynthItem*>::const_iterator i;
 
-    for (i = fmods.constBegin(); i != fmods.constEnd(); ++i)
+    for (i = amods.constBegin(); i != amods.constEnd(); ++i)
     {
-        son::Oscillator* gen = *i;
+        SynthItem* gen = *i;
         s += gen->process();
     }
     return s;
 }
 
-float Oscillator::visitAmods()
+float Oscillator::visitFmods()
 {
     float s = 0.0;
-    QVector<son::Oscillator*>::const_iterator i;
+    QVector<SynthItem*>::const_iterator i;
 
     for (i = fmods.constBegin(); i != fmods.constEnd(); ++i)
     {
-        son::Oscillator* gen = *i;
+        SynthItem* gen = *i;
         s += gen->process();
     }
     return s;

@@ -11,8 +11,9 @@ class Oscillator : public SynthItem
 public:
     Oscillator();
 
+    int addChild(QObject* child, int type);
+    int removeChild(QObject* child);
     float process();
-
 
 private:
 
@@ -28,8 +29,8 @@ private:
     gam::Sine<>* defaultGen;
 
     QVector<gam::Sine<>*> gens;
-    QVector<son::Oscillator*> amods;
-    QVector<son::Oscillator*> fmods;
+    QVector<SynthItem*> amods;
+    QVector<SynthItem*> fmods;
 
     float visitFmods();
     float visitAmods();

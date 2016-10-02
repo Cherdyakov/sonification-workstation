@@ -5,8 +5,7 @@ namespace son {
 
 SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 {
-    root = NULL;
-    //    root = rt;
+
 }
 
 QObject* SynthGraph::createItem(QObject* gui, int type)
@@ -14,6 +13,12 @@ QObject* SynthGraph::createItem(QObject* gui, int type)
     qDebug() << "createItem" << type;
 
     switch (type){
+    case OUT: {
+        SynthItem* item = new Output();
+        item->setGui(gui);
+        root.push_back(item);
+        break;
+    }
     case OSCILLATOR: {
         SynthItem* item = new Oscillator();
         item->setGui(gui);
@@ -36,12 +41,7 @@ float SynthGraph::processGraph()
 {
     float s = 0.0;
 
-    if(root == NULL)
-    {
-        return s;
-    }
-
-    s = root->process();
+//    s = root->process();
 
 
     //test noise
@@ -50,6 +50,11 @@ float SynthGraph::processGraph()
     //    qDebug() << "processGraph";
 
     return s;
+}
+
+int SynthGraph::graphSize()
+{
+    return root.count();
 }
 
 } //namespace son

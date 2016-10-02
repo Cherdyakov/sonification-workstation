@@ -118,41 +118,46 @@ ApplicationWindow {
                 ctx.strokeStyle = "chartreuse"
 
                 // get each patch
-                var parentCount = synthItems.length
-                for(var i = 0; i < parentCount; i++)
+                var itemCount = synthItems.length
+
+                for(var i = 0; i < itemCount; i++)
                 {
-                    var parent = synthItems[i]
+                    var parentItem = synthItems[i]
 
-                    var childCount = parent.children.length
-
-                    for (var j = 0; j < childCount; j++)
+                    if (parentItem.synthChildren)
                     {
-                        var child = parent.children[j]
+                        var numChildren = parentItem.synthChildren.length
 
-                        var startPoint = mapFromItem(window, parent.x, parent.y)
-                        var beginX = startPoint.x + parent.width / 2
-                        var beginY = startPoint.y + parent.height / 2
-                        //                    console.log(patch.startPoint)
-                        var endPoint = mapFromItem(window, child.x, child.y)
-                        var endX = endPoint.x + child.width / 2
-                        var endY = endPoint.y + child.height / 2
+                        for (var j = 0; j < numChildren; j++)
+                        {
+                            var childItem = parentItem.synthChildren[j]
 
-                        // begin a new path to draw
-                        ctx.beginPath()
-                        // line start point
-                        ctx.moveTo(beginX,beginY)
-                        // line end point
-                        ctx.lineTo(endX,endY)
-                        // stroke using line width and stroke style
-                        ctx.stroke()
+                            var startPoint = mapFromItem(window, parentItem.x, parentItem.y)
+                            var beginX = startPoint.x + parentItem.width / 2
+                            var beginY = startPoint.y + parentItem.height / 2
+                            //                    console.log(patch.startPoint)
+//                            console.log(child)
+                            var endPoint = mapFromItem(window, childItem.x, childItem.y)
+                            var endX = endPoint.x + childItem.width / 2
+                            var endY = endPoint.y + childItem.height / 2
+
+                            // begin a new path to draw
+                            ctx.beginPath()
+                            // line start point
+                            ctx.moveTo(beginX,beginY)
+                            // line end point
+                            ctx.lineTo(endX,endY)
+                            // stroke using line width and stroke style
+                            ctx.stroke()
+                        }
                     }
 
                     if (patchManager.patchBegin)
                     {
                         var beginning = patchManager.patchBegin
                         startPoint = mapFromItem(window, beginning.x, beginning.y)
-                        beginX = startPoint.x + parent.width / 2
-                        beginY = startPoint.y + parent.height / 2
+                        beginX = startPoint.x + beginning.width / 2
+                        beginY = startPoint.y + beginning.height / 2
 
                         endPoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY )
                         endX = endPoint.x

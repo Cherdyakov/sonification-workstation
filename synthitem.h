@@ -11,6 +11,16 @@ class SynthItem : public QObject
 {
     Q_OBJECT
 public:
+
+    enum ChildType {
+        IN,
+        AMOD,
+        FMOD,
+        PMOD
+    };
+
+    Q_ENUM(ChildType)
+
     explicit SynthItem(QObject *parent = 0);
 
     virtual float process();
@@ -19,16 +29,19 @@ public:
     QObject *getGui() const;
     void setGui(QObject *value);
 
+    int numChildren();
+
+    //funcions invoked by QML Gui
+    Q_INVOKABLE virtual int addChild(QObject *child, int type);
+    Q_INVOKABLE virtual int removeChild(QObject *child);
+
 signals:
 
 public slots:
     void requestDelete();
-    void addChild(QObject* child);
 
 private:
     QObject* gui;
-    SynthItem* parent;
-    QVector<SynthItem*> children;
 
     virtual void connectGui();
 

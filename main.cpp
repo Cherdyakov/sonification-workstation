@@ -11,6 +11,10 @@
 
 int main(int argc, char *argv[])
 {
+
+    qmlRegisterType<son::SynthGraph>("son.lib", 1, 0, "SynthGraph");
+    qmlRegisterType<son::SynthItem>("son.lib", 1, 0, "SynthItemImplementation");
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
@@ -21,16 +25,10 @@ int main(int argc, char *argv[])
     son::SynthGraph* graph = new son::SynthGraph();
     son::UserData uData;
 
-    qmlRegisterType<son::SynthGraph>("son.asdf", 1, 0, "SynthGraph");
-
     uData.graph = graph;
 
     //PICK UP HERE WHEN YOU COME BACK
     engine.rootContext()->setContextProperty("graph", graph);
-
-//    qmlRegisterType<son::SynthItem>("son.lib", 1, 0, "CppSynthItem");
-
-
 
 
     //connect signals and slots
@@ -40,6 +38,7 @@ int main(int argc, char *argv[])
     gam::Sync::master().spu(44100);
 
     RtAudio dac;
+    dac.showWarnings(true);
 
 //    // Determine the number of devices available
 //    unsigned int devices = dac.getDeviceCount();
@@ -59,17 +58,21 @@ int main(int argc, char *argv[])
       qDebug() << "\nNo audio devices found!\n";
       exit( 0 );
     }
-    RtAudio::StreamParameters parameters;
+    RtAudio::StreamParameters inParams, outParams;
     //temp assignment for my system, eventually need to allow user selection of audio device
-    parameters.deviceId = 6;//dac.getDefaultOutputDevice();
-    parameters.nChannels = 2;
-    parameters.firstChannel = 0;
+    inParams.deviceId = dac.getDefaultInputDevice();
+    inParams.nChannels = 2;
+    inParams.firstChannel = 0;
+    outParams.deviceId = dac.getDefaultOutputDevice();
+    outParams.nChannels = 2;
+    outParams.firstChannel = 0;
+
     unsigned int sampleRate = 44100;
-    unsigned int bufferFrames = 256; // 256 sample frames
+    unsigned int bufferFrames = 512; // 256 sample frames
 
 
     try {
-      dac.openStream( &parameters, NULL, RTAUDIO_FLOAT64,
+      dac.openStream( &outParams, &inParams, RTAUDIO_FLOAT64,
                       sampleRate, &bufferFrames, &son::callback, (void *)&uData );
       dac.startStream();
     }

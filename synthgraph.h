@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVector>
 #include <synthitem.h>
+#include <output.h>
 #include "oscillator.h"
 
 namespace son {
@@ -26,6 +27,7 @@ public:
     Q_INVOKABLE void connect(SynthItem* parent, SynthItem* child);
 
     float processGraph();
+    int graphSize();
 
 signals:
 
@@ -33,7 +35,7 @@ public slots:
 
 
 private:
-    SynthItem* root;
+    QVector<SynthItem*> root;
 
 };
 
