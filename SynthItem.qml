@@ -31,33 +31,40 @@ Item {
         canvas.requestPaint()
     }
 
-    function addChild(child)
+    function addChild(synthItem)
     {
         //add QML child to this item's synthChildren
-        synthChildren.push(child)
+        synthChildren.push(synthItem)
         //add child's implementation to the children
         //of this item's implementation
 //        implementation.addChild(child.implementation)
     }
 
-    function removeChild(child)
+    function removeChild(synthItem)
     {
         //remove the child implementation from the
         //children of this item's implementation
 //        implementation.removeChild(child.implementation)
         //remove the QML child from this item's children
-        var index = synthChildren.indexOf(child)
-        if(index > -1)
+        var idx = synthChildren.indexOf(synthItem)
+        if(idx > -1)
         {
-            console.log(synthChildren.length)
-            synthChildren.splice(index, 1)
-            console.log(synthChildren.length)
+            synthChildren.splice(idx, 1)
         }
     }
 
-    function addParent(parent)
+    function addParent(synthItem)
     {
-        synthParents.push(parent)
+        synthParents.push(synthItem)
+    }
+
+    function removeParent(synthItem)
+    {
+        var idx = synthParents.indexOf(synthItem)
+        if(idx > -1)
+        {
+            synthParents.splice(idx, 1)
+        }
     }
 
     width: 64; height: 64
@@ -153,8 +160,15 @@ Item {
 
             for(var i = 0; i < parentCount; i++)
             {
-                var synthParent = synthParents[i]
-                synthParent.removeChild(root)
+                var parentItem = synthParents[i]
+                parentItem.removeChild(root)
+            }
+
+            var childCount = synthChildren.length
+            for(var i = 0; i < childCount; i++)
+            {
+                var childItem = synthChildren[i]
+                childItem.removeParent(root)
             }
 
             var idx = synthWindow.synthItems.indexOf(root)
