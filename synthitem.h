@@ -34,6 +34,7 @@ public:
     //funcions invoked by QML Gui
     Q_INVOKABLE virtual void addChild(QObject *item, int type);
     Q_INVOKABLE virtual void removeChild(QObject *item);
+    Q_INVOKABLE void mute(bool mute);
 //    Q_INVOKABLE void addParent(QObject *item);
 //    Q_INVOKABLE void removeParent(QObject *item);
 
@@ -41,6 +42,9 @@ signals:
 
 public slots:
     void requestDelete();
+
+protected:
+    bool muted;
 
 private:
     QObject* gui;

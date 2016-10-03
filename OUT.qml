@@ -30,4 +30,13 @@ SynthItem {
             synthChildren.splice(idx, 1)
         }
     }
+
+    onMutedChanged: {
+        //mute children
+        for(var i = 0; i < synthChildren.length; ++i) {
+            var synthItem = synthChildren[i]
+            synthItem.muted = muted
+        }
+        canvas.requestPaint()
+    }
 }

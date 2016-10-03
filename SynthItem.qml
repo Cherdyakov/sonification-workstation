@@ -8,6 +8,7 @@ Item {
     property var synthChildren: []
     property var synthParents: []
     property bool patching: false
+    property bool muted: false
     property int type: -1 //OUT = 0, OSC = 1
     property bool created: false
     property var inputs: new Array
@@ -19,6 +20,20 @@ Item {
     property PatchManager myManager: null
 
     signal clickedItem(var i)
+
+    states: [
+        State {
+          name: "maximized"
+          PropertyChanges {
+              target: rect;
+              color: mainColor
+              radius: 100
+              border.color: textColor
+
+          }
+        }
+
+    ]
 
 
     Component.onCompleted: {
@@ -67,6 +82,18 @@ Item {
         }
     }
 
+    onMutedChanged: {
+        implementation.mute(muted)
+
+        //mute children
+        for(var i = 0; i < synthChildren.length; ++i) {
+            var synthItem = synthChildren[i]
+            synthItem.muted = muted
+        }
+        canvas.requestPaint()
+    }
+
+
     width: 64; height: 64
 
     onXChanged: canvas.requestPaint()
@@ -81,39 +108,14 @@ Item {
         id: rect
         z: 200
         anchors.fill: parent
-
-        width: root.width * 0.8
-
+        color: muted ? "dark gray" : mainColor
         radius: 100
-        color: mainColor
-        opacity: created ? 1 : 0.4
-
-        border.width: 0
         border.color: textColor
-
-        Text {
-            id: parentsLabel
-            text: "parents: " + synthParents.length
-            anchors {
-                left: rect.left
-                bottom: rect.top
-            }
-        }
-
-        Text {
-            id: childrenLabel
-            text: "children: "+ synthChildren.length
-            anchors {
-                left: rect.left
-                top: rect.bottom
-            }
-        }
-
-
-
+        opacity: created ? 1 : 0.4
 
         MouseArea {
             id: mouseArea
+            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
             anchors.fill: rect
 
@@ -128,12 +130,16 @@ Item {
             onReleased: mouseArea.Drag.drop()
 
             onClicked: {
-                console.log("Item: single click")
-                scope.focus = true
+                if(mouse.button & Qt.LeftButton) {
+                    scope.focus = true
+                }
+                if(mouse.button & Qt.RightButton) {
+
+                }
             }
 
             onDoubleClicked: {
-                console.log("Item: double click")
+//                console.log("Item: double click")
                 patchManager.setPatchPoint(root)
                 canvas.requestPaint()
                 scope.focus = true
@@ -176,7 +182,12 @@ Item {
 
             root.destroy()
             canvas.requestPaint()
-            event.accepted = true;
+            event.accepted = true
+        }
+
+        if (event.key === Qt.Key_M) {
+            muted = !muted
+            event.accepted = true
         }
     }
 

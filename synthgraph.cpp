@@ -55,13 +55,7 @@ float SynthGraph::processGraph()
 {
     float s = 0.0;
 
-    //generate sample
     QVector<SynthItem*>::const_iterator i;
-
-    if(graphRoot.count() > 1)
-    {
-        qDebug() << graphRoot.count();
-    }
 
     for (i = graphRoot.constBegin(); i != graphRoot.constEnd(); ++i) {
         SynthItem* item = *i;

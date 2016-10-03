@@ -59,6 +59,11 @@ float Oscillator::process()
 {
     //sample we will ultimately return
     float sample = 0.0;
+
+    if(muted)
+    {
+        return sample;
+    }
 //    //sample set by any connected amplitude modulators
 //    float amSample = 1.0;
 //    //sample set by any connected frequency modulators

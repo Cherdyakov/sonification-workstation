@@ -5,17 +5,22 @@ namespace son {
 
 SynthItem::SynthItem(QObject *parent) : QObject(parent)
 {
-
+    muted = false;
 }
 
 float SynthItem::process()
 {
     qDebug() << "base SynthItem process";
+    if(muted)
+    {
+        return 0.0;
+    }
     return ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
 }
 
 float SynthItem::process(float in)
 {
+    qDebug() << "base SynthItem process";
     return in;
 }
 
@@ -50,6 +55,14 @@ void SynthItem::removeChild(QObject *item)
 {
     qDebug() << "base removeChild called";
     return;
+}
+
+void SynthItem::mute(bool mute)
+{
+    if (muted != mute)
+    {
+        muted = mute;
+    }
 }
 
 //void SynthItem::addParent(QObject *item)
