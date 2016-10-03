@@ -24,7 +24,8 @@ public:
     explicit SynthGraph(QObject *parent = 0);
 
     Q_INVOKABLE QObject* createItem(QObject *gui, int type);
-    Q_INVOKABLE void connect(SynthItem* parent, SynthItem* child);
+    Q_INVOKABLE void addToRoot(SynthItem* synthItem);
+    Q_INVOKABLE void removeFromRoot(SynthItem* synthItem);
 
     float processGraph();
     int graphSize();
@@ -35,7 +36,7 @@ public slots:
 
 
 private:
-    QVector<SynthItem*> root;
+    QVector<SynthItem*> graphRoot;
 
 };
 

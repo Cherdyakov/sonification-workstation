@@ -12,6 +12,10 @@
 int main(int argc, char *argv[])
 {
 
+    son::UserData uData;
+    son::SynthGraph* graph = new son::SynthGraph();
+    uData.graph = graph;
+
     qmlRegisterType<son::SynthGraph>("son.lib", 1, 0, "SynthGraph");
     qmlRegisterType<son::SynthItem>("son.lib", 1, 0, "SynthItemImplementation");
 
@@ -19,16 +23,11 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    engine.rootContext()->setContextProperty("graph", graph);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
 
-    son::SynthGraph* graph = new son::SynthGraph();
-    son::UserData uData;
-
-    uData.graph = graph;
-
-    //PICK UP HERE WHEN YOU COME BACK
-    engine.rootContext()->setContextProperty("graph", graph);
 
 
     //connect signals and slots

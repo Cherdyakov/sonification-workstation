@@ -14,9 +14,6 @@ QObject* SynthGraph::createItem(QObject* gui, int type)
 
     switch (type){
     case OUT: {
-        SynthItem* item = new Output();
-        item->setGui(gui);
-        root.push_back(item);
         break;
     }
     case OSCILLATOR: {
@@ -31,21 +28,49 @@ QObject* SynthGraph::createItem(QObject* gui, int type)
     }
 }
 
-void SynthGraph::connect(SynthItem *parent, SynthItem* child)
+void SynthGraph::addToRoot(SynthItem *synthItem)
 {
-    qDebug() << "connect";
+    SynthItem* item = static_cast<SynthItem*>(synthItem);
+    if(!graphRoot.contains(item))
+    {
+        graphRoot.push_back(item);
+    }
+}
 
+void SynthGraph::removeFromRoot(SynthItem *synthItem)
+{
+    SynthItem* item = static_cast<SynthItem*>(synthItem);
+
+    int idx;
+
+    idx = graphRoot.indexOf(item);
+    if(idx > -1)
+    {
+        graphRoot.remove(idx);
+        return;
+    }
 }
 
 float SynthGraph::processGraph()
 {
     float s = 0.0;
 
-//    s = root->process();
+    //generate sample
+    QVector<SynthItem*>::const_iterator i;
+
+    if(graphRoot.count() > 1)
+    {
+        qDebug() << graphRoot.count();
+    }
+
+    for (i = graphRoot.constBegin(); i != graphRoot.constEnd(); ++i) {
+        SynthItem* item = *i;
+        s += item->process();
+    }
 
 
     //test noise
-    //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+//    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
     //test mssg
     //    qDebug() << "processGraph";
 
@@ -54,7 +79,7 @@ float SynthGraph::processGraph()
 
 int SynthGraph::graphSize()
 {
-    return root.count();
+    return graphRoot.count();
 }
 
 } //namespace son

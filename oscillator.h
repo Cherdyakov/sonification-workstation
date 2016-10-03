@@ -11,8 +11,8 @@ class Oscillator : public SynthItem
 public:
     Oscillator();
 
-    int addChild(QObject* child, int type);
-    int removeChild(QObject* child);
+    void addChild(QObject* child, int type);
+    void removeChild(QObject* child);
     float process();
 
 private:

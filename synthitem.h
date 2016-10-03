@@ -32,8 +32,10 @@ public:
     int numChildren();
 
     //funcions invoked by QML Gui
-    Q_INVOKABLE virtual int addChild(QObject *child, int type);
-    Q_INVOKABLE virtual int removeChild(QObject *child);
+    Q_INVOKABLE virtual void addChild(QObject *item, int type);
+    Q_INVOKABLE virtual void removeChild(QObject *item);
+//    Q_INVOKABLE void addParent(QObject *item);
+//    Q_INVOKABLE void removeParent(QObject *item);
 
 signals:
 
@@ -44,6 +46,9 @@ private:
     QObject* gui;
 
     virtual void connectGui();
+
+    QVector<SynthItem*> synthChildren;
+    QVector<SynthItem*> synthParents;
 
 };
 

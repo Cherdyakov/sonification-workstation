@@ -10,8 +10,8 @@ SynthItem::SynthItem(QObject *parent) : QObject(parent)
 
 float SynthItem::process()
 {
-
-    return qrand();
+    qDebug() << "base SynthItem process";
+    return ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
 }
 
 float SynthItem::process(float in)
@@ -40,15 +40,36 @@ void SynthItem::requestDelete()
     qDebug() << "delete requested";
 }
 
-int SynthItem::addChild(QObject *child, int type)
+void SynthItem::addChild(QObject *item, int type)
 {
-
+   qDebug() << "base addChild called";
+   return;
 }
 
-int SynthItem::removeChild(QObject *child)
+void SynthItem::removeChild(QObject *item)
 {
-
+    qDebug() << "base removeChild called";
+    return;
 }
+
+//void SynthItem::addParent(QObject *item)
+//{
+//    if(synthParents.contains(parent))
+//    {
+//        return;
+//    }
+//    synthParents.push_back(item);
+//}
+
+//void SynthItem::removeParent(QObject *item)
+//{
+//    int idx = synthParents.indexOf(item);
+
+//    if(idx > -1)
+//    {
+//        synthParents.remove(idx);
+//    }
+//}
 
 void SynthItem::connectGui()
 {

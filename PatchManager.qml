@@ -27,9 +27,9 @@ Item {
 //                patchEnd = item
                 //add endpoint to begin's children
                 console.log(item)
-                patchBegin.addChild(item)
+                patchBegin.addParent(item)
                 //add startpoint to end's parents
-                item.addParent(patchBegin)
+                item.addChild(patchBegin)
                 //stop patching
                 patchBegin = null
 //                patchEnd = null

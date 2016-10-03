@@ -17,6 +17,9 @@ ApplicationWindow {
     visible: true
     title: qsTr("Sonification Workstation: Synthesis")
 
+    Component.onCompleted: {
+    }
+
     menuBar: MenuBar {
         id: menuBar
         Menu {

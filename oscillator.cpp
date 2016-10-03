@@ -8,7 +8,7 @@ Oscillator::Oscillator()
     gens.push_back(defaultGen);
 }
 
-int Oscillator::addChild(QObject *child, int type)
+void Oscillator::addChild(QObject *child, int type)
 {
     SynthItem* item = static_cast<SynthItem*>(child);
 
@@ -16,26 +16,26 @@ int Oscillator::addChild(QObject *child, int type)
     case AMOD: {
         if(!amods.contains(item))
         {
-            return 1; //already child
+            return; //already child
         }
         amods.push_back(item);
-        return 0;
+        break;
     }
     case FMOD: {
         if(!fmods.contains(item))
         {
-            return 1; //already child
+            return; //already child
         }
         fmods.push_back(item);
-        return 0;
+        break;
     }
     default:
-        return 2; //incompatible child type
+        break; //incompatible child type
     }
 
 }
 
-int Oscillator::removeChild(QObject *child)
+void Oscillator::removeChild(QObject *child)
 {
     SynthItem* item = static_cast<SynthItem*>(child);
 
@@ -45,34 +45,32 @@ int Oscillator::removeChild(QObject *child)
     if(idx > -1)
     {
         amods.remove(idx);
-        return 0;
+        return;
     }
+
     idx = fmods.indexOf(item);
     if(idx > -1)
     {
         fmods.remove(idx);
-        return 0;
-    }
-
-    return 1; //no such child
+    } //no such child
 }
 
 float Oscillator::process()
 {
     //sample we will ultimately return
     float sample = 0.0;
-    //sample set by any connected amplitude modulators
-    float amSample = 1.0;
-    //sample set by any connected frequency modulators
-    float fmSample = 1.0;
+//    //sample set by any connected amplitude modulators
+//    float amSample = 1.0;
+//    //sample set by any connected frequency modulators
+//    float fmSample = 1.0;
 
-    //check fmods
-    if(!fmods.isEmpty())
-        fmSample = visitFmods();
+//    //check fmods
+//    if(!fmods.isEmpty())
+//        fmSample = visitFmods();
 
-    //check amods
-    if(!amods.isEmpty())
-        amSample = visitAmods();
+//    //check amods
+//    if(!amods.isEmpty())
+//        amSample = visitAmods();
 
     //set freqs
 
@@ -92,6 +90,11 @@ float Oscillator::process()
     //    sample = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
     //test mssg
     //qDebug() << "processOscillator";
+
+    //test noise
+//    sample = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+
+
 
     return sample;
 }

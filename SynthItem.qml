@@ -37,14 +37,14 @@ Item {
         synthChildren.push(synthItem)
         //add child's implementation to the children
         //of this item's implementation
-//        implementation.addChild(child.implementation)
+        implementation.addChild(synthItem.implementation, synthItem.type)
     }
 
     function removeChild(synthItem)
     {
         //remove the child implementation from the
         //children of this item's implementation
-//        implementation.removeChild(child.implementation)
+        implementation.removeChild(synthItem.implementation)
         //remove the QML child from this item's children
         var idx = synthChildren.indexOf(synthItem)
         if(idx > -1)
