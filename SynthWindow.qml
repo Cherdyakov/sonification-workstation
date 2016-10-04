@@ -8,7 +8,7 @@ ApplicationWindow {
     id: synthWindow
 
     // holds every item in the workspace for iterating
-    property var synthItems: [dac]
+    property var synthItems: []
     //canvas for drawing connections
     property alias canvas: canvas
 
@@ -91,6 +91,7 @@ ApplicationWindow {
         OUT {
             id: dac
             created: true
+            z: 200
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 bottom: parent.bottom

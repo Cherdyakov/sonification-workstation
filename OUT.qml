@@ -11,16 +11,16 @@ SynthItem {
         canvas.requestPaint()
     }
 
-    function addChild(synthItem)
-    {
+    function addChild(synthItem) {
+        console.log("OUT add")
+
         //add QML child to this item's synthChildren
         synthChildren.push(synthItem)
         //add child's implementation to root of the synth graph
         graph.addToRoot(synthItem.implementation)
     }
 
-    function removeChild(synthItem)
-    {
+    function removeChild(synthItem) {
         //remove from the root of the synthgraph
         graph.removeFromRoot(synthItem.implementation)
         //remove the QML child from this item's children
@@ -31,7 +31,8 @@ SynthItem {
         }
     }
 
-    onMutedChanged: {
+    function mute() {
+        console.log("OUT mute")
         //mute children
         for(var i = 0; i < synthChildren.length; ++i) {
             var synthItem = synthChildren[i]

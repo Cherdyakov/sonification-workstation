@@ -21,24 +21,35 @@ Item {
 
     signal clickedItem(var i)
 
-    states: [
-        State {
-          name: "maximized"
-          PropertyChanges {
-              target: rect;
-              color: mainColor
-              radius: 100
-              border.color: textColor
-
-          }
-        }
-
-    ]
-
+    width: 64; height: 64
 
     Component.onCompleted: {
         synthItems.push(this)
     }
+
+    onMutedChanged: {
+        mute()
+    }
+    onXChanged: canvas.requestPaint()
+    onYChanged: canvas.requestPaint()
+
+    states: [
+        State {
+            name: "maximized"
+            PropertyChanges {
+                target: rect;
+                radius: 100
+
+            }
+            PropertyChanges {
+                target: root;
+                width: 200
+                height: 100
+
+            }
+        }
+
+    ]
 
     function create() {
         created = true
@@ -46,17 +57,16 @@ Item {
         canvas.requestPaint()
     }
 
-    function addChild(synthItem)
-    {
+    function addChild(synthItem) {
+        console.log("base add")
         //add QML child to this item's synthChildren
         synthChildren.push(synthItem)
         //add child's implementation to the children
         //of this item's implementation
-        implementation.addChild(synthItem.implementation, synthItem.type)
+//        implementation.addChild(synthItem.implementation, synthItem.type)
     }
 
-    function removeChild(synthItem)
-    {
+    function removeChild(synthItem) {
         //remove the child implementation from the
         //children of this item's implementation
         implementation.removeChild(synthItem.implementation)
@@ -68,13 +78,11 @@ Item {
         }
     }
 
-    function addParent(synthItem)
-    {
+    function addParent(synthItem) {
         synthParents.push(synthItem)
     }
 
-    function removeParent(synthItem)
-    {
+    function removeParent(synthItem) {
         var idx = synthParents.indexOf(synthItem)
         if(idx > -1)
         {
@@ -82,7 +90,9 @@ Item {
         }
     }
 
-    onMutedChanged: {
+    function mute() {
+        console.log("base mute")
+        //mute cpp counterpart
         implementation.mute(muted)
 
         //mute children
@@ -94,11 +104,6 @@ Item {
     }
 
 
-    width: 64; height: 64
-
-    onXChanged: canvas.requestPaint()
-    onYChanged: canvas.requestPaint()
-
     FocusScope {
         id: scope
         anchors.fill: parent
@@ -108,9 +113,9 @@ Item {
         id: rect
         z: 200
         anchors.fill: parent
-        color: muted ? "dark gray" : mainColor
+        color: muted ? "darkgray" : mainColor
         radius: 100
-        border.color: textColor
+        border.color: scope.focus ? "orange" : textColor
         opacity: created ? 1 : 0.4
 
         MouseArea {
@@ -127,19 +132,32 @@ Item {
             Drag.hotSpot.x: 36
             Drag.hotSpot.y: 32
 
-            onReleased: mouseArea.Drag.drop()
+            onReleased: {
+                mouseArea.Drag.drop()
+            }
 
             onClicked: {
+                //left clicked
                 if(mouse.button & Qt.LeftButton) {
                     scope.focus = true
                 }
+                //right clicked
                 if(mouse.button & Qt.RightButton) {
 
+                    switch(state) {
+                    case "":
+                        state = "maximized"
+                        break
+                    case "maximized":
+                        state = ""
+                        break
+                    }
+                    scope.focus = true
                 }
             }
 
             onDoubleClicked: {
-//                console.log("Item: double click")
+                //                console.log("Item: double click")
                 patchManager.setPatchPoint(root)
                 canvas.requestPaint()
                 scope.focus = true
@@ -171,7 +189,7 @@ Item {
             }
 
             var childCount = synthChildren.length
-            for(var i = 0; i < childCount; i++)
+            for(i = 0; i < childCount; i++)
             {
                 var childItem = synthChildren[i]
                 childItem.removeParent(root)
@@ -181,6 +199,9 @@ Item {
             synthWindow.synthItems.splice(idx, 1)
 
             root.destroy()
+
+            console.log(synthWindow.synthItems.length)
+
             canvas.requestPaint()
             event.accepted = true
         }
