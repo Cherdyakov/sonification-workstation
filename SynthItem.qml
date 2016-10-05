@@ -25,6 +25,7 @@ Item {
 
     Component.onCompleted: {
         synthItems.push(this)
+        root.parent = workspace
     }
 
     onMutedChanged: {
@@ -34,18 +35,29 @@ Item {
     onYChanged: canvas.requestPaint()
 
     states: [
-        State {
-            name: "maximized"
-            PropertyChanges {
-                target: rect;
-                radius: 100
 
-            }
+        State {
+            name: "MAXIMIZED"
             PropertyChanges {
                 target: root;
                 width: 200
                 height: 100
+            }
+            PropertyChanges {
+                target: rect;
+                radius: 10
 
+            }
+        }
+
+    ]
+
+    transitions: [
+        Transition {
+            PropertyAnimation {
+                properties: "width,height,radius,x,y";
+                easing.type: Easing.InOutQuad;
+                duration: 80
             }
         }
 
@@ -63,7 +75,7 @@ Item {
         synthChildren.push(synthItem)
         //add child's implementation to the children
         //of this item's implementation
-//        implementation.addChild(synthItem.implementation, synthItem.type)
+        //        implementation.addChild(synthItem.implementation, synthItem.type)
     }
 
     function removeChild(synthItem) {
@@ -100,6 +112,29 @@ Item {
             var synthItem = synthChildren[i]
             synthItem.muted = muted
         }
+        canvas.requestPaint()
+    }
+
+    function deleteThis() {
+        for(var i = 0; i < synthParents.length; i++)
+        {
+            var parentItem = synthParents[i]
+            parentItem.removeChild(root)
+        }
+
+        for(i = 0; i < synthChildren.length; i++)
+        {
+            var childItem = synthChildren[i]
+            childItem.removeParent(root)
+        }
+
+        var idx = synthWindow.synthItems.indexOf(root)
+        synthWindow.synthItems.splice(idx, 1)
+
+        root.destroy()
+
+        console.log(synthWindow.synthItems.length)
+
         canvas.requestPaint()
     }
 
@@ -143,13 +178,12 @@ Item {
                 }
                 //right clicked
                 if(mouse.button & Qt.RightButton) {
-
-                    switch(state) {
+                    switch(root.state) {
                     case "":
-                        state = "maximized"
+                        root.state = "MAXIMIZED"
                         break
-                    case "maximized":
-                        state = ""
+                    case "MAXIMIZED":
+                        root.state = ""
                         break
                     }
                     scope.focus = true
@@ -178,31 +212,7 @@ Item {
 
     Keys.onPressed: {
         if (event.key === Qt.Key_Backspace || event.key === Qt.Key_Delete) {
-            console.log("Type: del")
-
-            var parentCount = synthParents.length
-
-            for(var i = 0; i < parentCount; i++)
-            {
-                var parentItem = synthParents[i]
-                parentItem.removeChild(root)
-            }
-
-            var childCount = synthChildren.length
-            for(i = 0; i < childCount; i++)
-            {
-                var childItem = synthChildren[i]
-                childItem.removeParent(root)
-            }
-
-            var idx = synthWindow.synthItems.indexOf(root)
-            synthWindow.synthItems.splice(idx, 1)
-
-            root.destroy()
-
-            console.log(synthWindow.synthItems.length)
-
-            canvas.requestPaint()
+            deleteThis()
             event.accepted = true
         }
 

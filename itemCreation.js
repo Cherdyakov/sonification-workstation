@@ -52,7 +52,9 @@ function endDrag(mouse)
     if (draggedItem == null)
         return;
 
-    if (draggedItem.y < toolbox.height) { //Don't drop it in the toolbox
+    if (draggedItem.y < toolbox.height ||
+            draggedItem.y > (workspace.height - draggedItem.height) ||
+            draggedItem.x > (workspace.width)) { //Don't drop it in the toolbox
         draggedItem.destroy();
         draggedItem = null;
     } else {

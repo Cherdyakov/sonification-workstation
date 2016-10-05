@@ -1,6 +1,7 @@
 import QtQuick 2.7
 
 SynthItem {
+    id: root
     label: "OUT"
     type: 0 //OUT
     mainColor: "cadetblue"
@@ -34,10 +35,28 @@ SynthItem {
     function mute() {
         console.log("OUT mute")
         //mute children
-        for(var i = 0; i < synthChildren.length; ++i) {
+        for(var i = 0; i < synthChildren.length; i++) {
             var synthItem = synthChildren[i]
             synthItem.muted = muted
         }
+        canvas.requestPaint()
+    }
+
+    function deleteThis() {
+        for(var i = 0; i < synthChildren.length; i++)
+        {
+            var childItem = synthChildren[i]
+            childItem.removeParent(root)
+            graph.removeFromRoot(childItem.implementation)
+        }
+
+        var idx = synthWindow.synthItems.indexOf(root)
+        synthWindow.synthItems.splice(idx, 1)
+
+        root.destroy()
+
+        console.log(synthWindow.synthItems.length)
+
         canvas.requestPaint()
     }
 }
