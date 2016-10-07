@@ -25,7 +25,8 @@ Item {
 
     Component.onCompleted: {
         synthItems.push(this)
-        root.parent = workspace
+        this.parent = workspace.contentItem
+        console.log(this.parent.id)
     }
 
     onMutedChanged: {

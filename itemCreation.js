@@ -5,7 +5,7 @@ var posnInWindow;
 
 function startDrag(mouse)
 {
-    posnInWindow = paletteItem.mapToItem(window, 0, 0);
+    posnInWindow = paletteItem.mapToItem(workspace.contentItem, 0, 0);
     startingMouse = { x: mouse.x, y: mouse.y }
     loadComponent();
 }
@@ -52,9 +52,7 @@ function endDrag(mouse)
     if (draggedItem == null)
         return;
 
-    if (draggedItem.y < toolbox.height ||
-            draggedItem.y > (workspace.height - draggedItem.height) ||
-            draggedItem.x > (workspace.width)) { //Don't drop it in the toolbox
+    if (draggedItem.y < 0 || draggedItem.x < 0) { //Don't drop it in the toolbox
         draggedItem.destroy();
         draggedItem = null;
     } else {
