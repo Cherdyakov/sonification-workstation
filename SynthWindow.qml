@@ -19,6 +19,7 @@ ApplicationWindow {
     title: qsTr("Sonification Workstation: Synthesis")
 
     Component.onCompleted: {
+        dac.parent = workspace.contentItem
     }
 
     menuBar: MenuBar {
@@ -90,7 +91,6 @@ ApplicationWindow {
                 x: 0
                 y: 0
             }
-
         }
 
         MouseArea {
@@ -176,6 +176,14 @@ ApplicationWindow {
             }
         }
 
+
+        OUT {
+            type: 0
+            id: dac
+            created: true
+            x: 400
+            y: 400
+        }
 
         PatchManager {
             id: patchManager

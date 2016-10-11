@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import son.lib 1.0
+import SonLib 1.0
 
 Item {
 
@@ -17,7 +17,9 @@ Item {
     property string mainColor
     property string textColor
     property SynthItemImplementation implementation: null //the CPP implementation of this SynthItem
-    property PatchManager myManager: null
+
+    property alias radius: rect.radius
+    property SynthItemEditor editor: null
 
     signal clickedItem(var i)
 
@@ -34,20 +36,24 @@ Item {
     }
     onXChanged: canvas.requestPaint()
     onYChanged: canvas.requestPaint()
+    onWidthChanged: canvas.requestPaint()
 
     states: [
 
         State {
             name: "MAXIMIZED"
             PropertyChanges {
-                target: root;
+                target: root
                 width: 200
                 height: 100
             }
             PropertyChanges {
-                target: rect;
+                target: rect
                 radius: 10
-
+            }
+            PropertyChanges {
+                target: editor
+                opacity: 1
             }
         }
 
@@ -76,7 +82,7 @@ Item {
         synthChildren.push(synthItem)
         //add child's implementation to the children
         //of this item's implementation
-        //        implementation.addChild(synthItem.implementation, synthItem.type)
+                implementation.addChild(synthItem.implementation, synthItem.type)
     }
 
     function removeChild(synthItem) {
@@ -187,12 +193,12 @@ Item {
                         root.state = ""
                         break
                     }
+                    console.log("editor:" + editor)
                     scope.focus = true
                 }
             }
 
             onDoubleClicked: {
-                //                console.log("Item: double click")
                 patchManager.setPatchPoint(root)
                 canvas.requestPaint()
                 scope.focus = true
@@ -208,7 +214,6 @@ Item {
                 centerIn: parent
             }
         }
-
     }
 
     Keys.onPressed: {

@@ -14,16 +14,15 @@ class SynthGraph : public QObject
     Q_OBJECT
 public:
 
-    enum SynthItemType {
+    enum SYNTH_ITEM_TYPE {
         OUT,
         OSCILLATOR
     };
-
-    Q_ENUM(SynthItemType)
+    Q_ENUMS(SYNTH_ITEM_TYPE)
 
     explicit SynthGraph(QObject *parent = 0);
 
-    Q_INVOKABLE QObject* createItem(QObject *gui, int type);
+    Q_INVOKABLE QObject* createItem(QObject *gui, SYNTH_ITEM_TYPE type);
     Q_INVOKABLE void addToRoot(SynthItem* synthItem);
     Q_INVOKABLE void removeFromRoot(SynthItem* synthItem);
 

@@ -16,8 +16,8 @@ int main(int argc, char *argv[])
     son::SynthGraph* graph = new son::SynthGraph();
     uData.graph = graph;
 
-    qmlRegisterType<son::SynthGraph>("son.lib", 1, 0, "SynthGraph");
-    qmlRegisterType<son::SynthItem>("son.lib", 1, 0, "SynthItemImplementation");
+    qmlRegisterType<son::SynthGraph>("SonLib", 1, 0, "SynthGraph");
+    qmlRegisterType<son::SynthItem>("SonLib", 1, 0, "SynthItemImplementation");
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);

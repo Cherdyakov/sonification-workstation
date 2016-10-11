@@ -8,9 +8,9 @@ SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 
 }
 
-QObject* SynthGraph::createItem(QObject* gui, int type)
+QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
 {
-    qDebug() << "createItem" << type;
+//    qDebug() << "createItem" << type;
 
     switch (type){
     case OUT: {

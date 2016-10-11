@@ -45,7 +45,7 @@ void SynthItem::requestDelete()
     qDebug() << "delete requested";
 }
 
-void SynthItem::addChild(QObject *item, int type)
+void SynthItem::addChild(QObject *item, CHILD_TYPE type)
 {
    qDebug() << "base addChild called";
    return;

@@ -21,7 +21,6 @@ HEADERS += \
     callback.h \
     synthgraph.h \
     userdata.h \
-    enums.h \
     output.h \
     oscillator.h
 

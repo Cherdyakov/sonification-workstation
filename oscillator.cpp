@@ -8,7 +8,7 @@ Oscillator::Oscillator()
     gens.push_back(defaultGen);
 }
 
-void Oscillator::addChild(QObject *child, int type)
+void Oscillator::addChild(QObject *child, int    type)
 {
     SynthItem* item = static_cast<SynthItem*>(child);
 
