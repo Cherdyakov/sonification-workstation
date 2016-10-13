@@ -5,6 +5,9 @@ import "Style.js" as Style
 
 Rectangle {
     id: rect
+
+    property alias color: rect.color
+
     z: 300
     height: childrenRect.height + Style.editorMargin
     width: childrenRect.width + Style.editorMargin

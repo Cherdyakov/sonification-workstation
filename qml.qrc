@@ -20,5 +20,6 @@
         <file>Editor.qml</file>
         <file>EditorFixedParam.qml</file>
         <file>EditorLayout.qml</file>
+        <file>EditorTitle.qml</file>
     </qresource>
 </RCC>

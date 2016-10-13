@@ -1,11 +1,12 @@
 import QtQuick 2.7
+import "Style.js" as Style
 
 SynthItem {
     id: root
     label: "OUT"
     type: 0 //OUT
-    mainColor: "cadetblue"
-    textColor: "white"
+    mainColor: Style.outColor
+    textColor: Style.itemTextColor
 
     function create() {
         created = true

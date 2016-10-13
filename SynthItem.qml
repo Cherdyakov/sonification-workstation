@@ -172,6 +172,7 @@ Item {
         color: muted ? "darkgray" : mainColor
         radius: Style.itemMinRadius
         border.color: scope.focus ? "orange" : textColor
+        border.width: 4
         opacity: created ? 1 : 0.4
 
         MouseArea {

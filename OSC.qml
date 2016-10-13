@@ -8,8 +8,8 @@ SynthItem {
     id: root
     label: "OSC"
     type: SynthGraph.OSCILLATOR
-    mainColor: "blue"
-    textColor: "white"
+    mainColor: Style.oscColor
+    textColor: Style.itemTextColor
 
     Component.onCompleted: {
 
@@ -17,6 +17,7 @@ SynthItem {
 
     Editor {
         id: editor
+        color: mainColor
 
         property int waveform: SynthItemImplementation.SINE
         property bool fixedFrequency: true
@@ -37,6 +38,7 @@ SynthItem {
 
         EditorLayout {
             id: layout
+            title: label
 
             EditorWaveform {
                 onWaveformChanged: {
