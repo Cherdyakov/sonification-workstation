@@ -1,6 +1,7 @@
 #ifndef OSCILLATOR_H
 #define OSCILLATOR_H
 
+#include <QObject>
 #include "synthitem.h"
 #include "Gamma/Oscillator.h"
 
@@ -8,12 +9,13 @@ namespace son {
 
 class Oscillator : public SynthItem
 {
+    Q_OBJECT
 public:
     Oscillator();
-
+    float process();
     void addChild(QObject* child, int type);
     void removeChild(QObject* child);
-    float process();
+    Q_INVOKABLE void setWaveform(WAVEFORM type);
 
 private:
 
@@ -25,7 +27,7 @@ private:
 //    float freqMin;
 //    float freqMax;
 
-    gam::WaveformType waveType;
+    WAVEFORM waveform;
     gam::Sine<>* defaultGen;
 
     QVector<gam::Sine<>*> gens;

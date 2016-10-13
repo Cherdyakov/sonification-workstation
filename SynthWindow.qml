@@ -72,8 +72,8 @@ ApplicationWindow {
             clip: true
             z: 100
             boundsBehavior: Flickable.DragAndOvershootBounds
-            contentHeight: contentItem.childrenRect.height
-            contentWidth: contentItem.childrenRect.width
+            contentHeight: contentItem.childrenRect.height + 20
+            contentWidth: contentItem.childrenRect.width + 20
 
             onContentXChanged: canvas.requestPaint()
             onContentYChanged: canvas.requestPaint()
@@ -176,13 +176,12 @@ ApplicationWindow {
             }
         }
 
-
         OUT {
             type: 0
             id: dac
             created: true
-            x: 400
-            y: 400
+            x: 500 - dac.width / 2
+            y: 500
         }
 
         PatchManager {

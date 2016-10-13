@@ -17,7 +17,4 @@ Item  {
         radius: radius
     }
 
-    ColumnLayout {
-        id: layout
-    }
 }

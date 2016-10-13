@@ -8,7 +8,7 @@ Oscillator::Oscillator()
     gens.push_back(defaultGen);
 }
 
-void Oscillator::addChild(QObject *child, int    type)
+void Oscillator::addChild(QObject *child, int type)
 {
     SynthItem* item = static_cast<SynthItem*>(child);
 
@@ -53,6 +53,14 @@ void Oscillator::removeChild(QObject *child)
     {
         fmods.remove(idx);
     } //no such child
+}
+
+void Oscillator::setWaveform(SynthItem::WAVEFORM type)
+{
+    if (waveform != type) {
+        waveform = type;
+        qDebug() << "cpp: waveform changed to " << waveform;
+    }
 }
 
 float Oscillator::process()
@@ -145,7 +153,5 @@ void Oscillator::setAmps()
 {
 
 }
-
-
 
 }

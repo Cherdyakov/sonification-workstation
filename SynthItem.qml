@@ -19,7 +19,6 @@ Item {
     property SynthItemImplementation implementation: null //the CPP implementation of this SynthItem
 
     property alias radius: rect.radius
-    property SynthItemEditor editor: null
 
     signal clickedItem(var i)
 
@@ -28,7 +27,6 @@ Item {
     Component.onCompleted: {
         synthItems.push(this)
         this.parent = workspace.contentItem
-        console.log(this.parent.id)
     }
 
     onMutedChanged: {
@@ -44,7 +42,7 @@ Item {
             name: "MAXIMIZED"
             PropertyChanges {
                 target: root
-                width: 200
+                width: 220
                 height: 100
             }
             PropertyChanges {

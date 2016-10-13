@@ -11,5 +11,6 @@
         <file>SynthItem.qml</file>
         <file>OSC.qml</file>
         <file>SynthItemEditor.qml</file>
+        <file>OSCeditor.qml</file>
     </qresource>
 </RCC>

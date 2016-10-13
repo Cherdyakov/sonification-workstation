@@ -23,8 +23,7 @@ public:
     enum WAVEFORM {
         SINE,
         SAW,
-        SQUARE,
-        TRIANGLE
+        SQUARE
     };
     Q_ENUMS(WAVEFORM)
 
