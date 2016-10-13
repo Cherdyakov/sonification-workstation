@@ -5,6 +5,7 @@ namespace son {
 Oscillator::Oscillator()
 {
     defaultGen = new gam::Sine<>(440);
+    fixedFreq = true;
     gens.push_back(defaultGen);
 }
 
@@ -60,6 +61,20 @@ void Oscillator::setWaveform(SynthItem::WAVEFORM type)
     if (waveform != type) {
         waveform = type;
         qDebug() << "cpp: waveform changed to " << waveform;
+    }
+}
+
+void Oscillator::setFixedFreq(bool fixed)
+{
+    if (fixedFreq != fixed) {
+        fixedFreq = fixed;
+    }
+}
+
+void Oscillator::setFreq(double inFreq)
+{
+    if (freq != inFreq) {
+        freq = inFreq;
     }
 }
 

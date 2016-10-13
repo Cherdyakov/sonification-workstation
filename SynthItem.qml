@@ -60,9 +60,23 @@ Item {
     transitions: [
         Transition {
             PropertyAnimation {
-                properties: "width,height,radius,x,y";
-                easing.type: Easing.InOutQuad;
+                properties: "width,height,radius,x,y"
+                easing.type: Easing.InOutQuad
                 duration: 80
+            }
+            PropertyAnimation {
+                properties: "opacity"
+                from: ""
+                to: "MAXIMIZED"
+                easing.type: Easing.InQuint
+                duration: 140
+            }
+            PropertyAnimation {
+                properties: "opacity"
+                from: "MAXIMIZED"
+                to: ""
+                easing.type: Easing.OutQuint
+                duration: 10
             }
         }
 
@@ -191,7 +205,6 @@ Item {
                         root.state = ""
                         break
                     }
-                    console.log("editor:" + editor)
                     scope.focus = true
                 }
             }

@@ -10,7 +10,6 @@
         <file>OUT.qml</file>
         <file>SynthItem.qml</file>
         <file>OSC.qml</file>
-        <file>SynthItemEditor.qml</file>
-        <file>OSCeditor.qml</file>
+        <file>Style.js</file>
     </qresource>
 </RCC>

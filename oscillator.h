@@ -15,11 +15,18 @@ public:
     float process();
     void addChild(QObject* child, int type);
     void removeChild(QObject* child);
+
+    //UI invokable functions for setting parameters
     Q_INVOKABLE void setWaveform(WAVEFORM type);
+    Q_INVOKABLE void setFixedFreq(bool fixed);
+    Q_INVOKABLE void setFreq(double inFreq);
 
 private:
 
     QVector<double> data;
+
+    bool fixedFreq;
+    double freq;
 
     //for scaling the input
 //    double dataMin;
