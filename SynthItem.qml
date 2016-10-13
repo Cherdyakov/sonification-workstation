@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import SonLib 1.0
+import "Style.js" as Style
 
 Item {
 
@@ -42,12 +43,12 @@ Item {
             name: "MAXIMIZED"
             PropertyChanges {
                 target: root
-                width: 220
-                height: 100
+                width: editor.childrenRect.width + 10
+                height: editor.childrenRect.height + 10
             }
             PropertyChanges {
                 target: rect
-                radius: 10
+                radius: Style.itemMaxRadius
             }
             PropertyChanges {
                 target: editor
@@ -69,7 +70,7 @@ Item {
                 from: ""
                 to: "MAXIMIZED"
                 easing.type: Easing.InQuint
-                duration: 140
+                duration: 160
             }
             PropertyAnimation {
                 properties: "opacity"
@@ -165,10 +166,10 @@ Item {
 
     Rectangle {
         id: rect
-        z: 200
+        z: Style.itemZ
         anchors.fill: parent
         color: muted ? "darkgray" : mainColor
-        radius: 100
+        radius: Style.itemMinRadius
         border.color: scope.focus ? "orange" : textColor
         opacity: created ? 1 : 0.4
 

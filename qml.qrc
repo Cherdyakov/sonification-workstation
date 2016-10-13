@@ -11,5 +11,14 @@
         <file>SynthItem.qml</file>
         <file>OSC.qml</file>
         <file>Style.js</file>
+        <file>EditorLabel.qml</file>
+        <file>EditorSpinBox.qml</file>
+        <file>EditorComboBox.qml</file>
+        <file>EditorDoubleSpinBox.qml</file>
+        <file>EditorFrequency.qml</file>
+        <file>EditorWaveform.qml</file>
+        <file>EditorLayout.qml</file>
+        <file>Editor.qml</file>
+        <file>EditorFixedParam.qml</file>
     </qresource>
 </RCC>

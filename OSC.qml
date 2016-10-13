@@ -15,88 +15,51 @@ SynthItem {
 
     }
 
-    Rectangle {
+    Editor {
         id: editor
-        z: 300
-        height: parent.height - 12
-        width: parent.width - 12
-        radius: parent.radius - 4
-        anchors.centerIn: parent
-        color: Style.testColor//"white"
-        opacity: 0
 
         property int waveform: SynthItemImplementation.SINE
-        property bool fixedFreq: true
-        property double freq: 440
+        property bool fixedFrequency: true
+        property double frequency: 440
         property var dataRows: []
 
         onWaveformChanged: {
             implementation.setWaveform(waveform)
         }
 
-        onFixedFreqChanged: {
-            implementation.setFixedFreq(fixedFreq)
+        onFixedFrequencyChanged: {
+            implementation.setFixedFreq(fixedFrequency)
         }
 
-        onFreqChanged: {
-            implementation.setFreq(freq)
+        onFrequencyChanged: {
+            implementation.setFreq(frequency)
         }
 
-        ColumnLayout {
+        EditorLayout {
             id: layout
-            anchors.centerIn: parent
-            Layout.maximumWidth: parent.width - 10
 
-            RowLayout {
-                id: waveformLayout
-                Label {
-                    text: "Waveform: "
-                }
-                ComboBox {
-
-                    id: waveformComboBox
-                    model: ["Sine", "Saw", "Square"]
-
-                    onCurrentIndexChanged: {
-                        if (editor.waveform !== currentIndex) {
-                            editor.waveform = currentIndex
-                        }
+            EditorWaveform {
+                onWaveformChanged: {
+                    if (editor.waveform != form) {
+                        editor.waveform = form
                     }
                 }
             }
 
-            RowLayout {
-                id: freqLayout
-                Label {
-                    text: "Frequency: "
-                }
-                SpinBox {
-                    id: spinbox
-                    editable: true
-                    from: 0
-                    value: 44000
-                    to: 100 * 20000
-                    stepSize: 1
-                    anchors.centerIn: parent
-
-                    property int decimals: 2
-                    property real realValue: value / 100
-
-                    validator: DoubleValidator {
-                        bottom: Math.min(spinbox.from, spinbox.to)
-                        top:  Math.max(spinbox.from, spinbox.to)
-                    }
-
-                    textFromValue: function(value, locale) {
-                        return Number(value / 100).toLocaleString(locale, 'f', spinbox.decimals)
-                    }
-
-                    valueFromText: function(text, locale) {
-                        return Number.fromLocaleString(locale, text) * 100
+            EditorFrequency {
+                onFrequencyChanged: {
+                    if (editor.frequency != freq) {
+                        editor.frequency = freq
                     }
                 }
+            }
 
-
+            EditorFixedParam {
+                onFixedChanged: {
+                    if (editor.fixedFrequency != fixed) {
+                        editor.fixedFrequency = fixed
+                    }
+                }
             }
 
             RowLayout {
@@ -104,7 +67,6 @@ SynthItem {
             }
 
         }
-
     }
 
 }
