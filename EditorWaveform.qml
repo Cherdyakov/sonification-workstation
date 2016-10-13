@@ -7,19 +7,21 @@ RowLayout {
     id: root
     Layout.maximumHeight: Style.editorRowHeight
 
+    property alias text: label.text
+
     signal waveformChanged(int form)
 
     EditorLabel {
         id: label
         text: "Waveform: "
         Layout.maximumHeight: Style.editorRowHeight
-        Layout.preferredWidth: Style.editorLabelWidth
+        Layout.fillWidth: true
     }
     EditorComboBox {
         id: comboBox
         model: ["Sine", "Saw", "Square"]
         Layout.maximumHeight: Style.editorRowHeight
-        Layout.preferredWidth: Style.editorControlWidth
+        Layout.maximumWidth: Style.editorControlWidth
 
         onCurrentIndexChanged: waveformChanged(comboBox.currentIndex)
     }

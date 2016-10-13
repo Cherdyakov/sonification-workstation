@@ -6,11 +6,13 @@ import "Style.js" as Style
 Rectangle {
     id: rect
     z: 300
-    height: childrenRect.height
-    width: childrenRect.width
+    height: childrenRect.height + Style.editorMargin
+    width: childrenRect.width + Style.editorMargin
     radius: Style.editorRadius
     anchors.centerIn: parent
     color: Style.editorBackgroundColor
     opacity: 0
+
+    enabled: false
 
 }

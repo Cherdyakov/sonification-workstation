@@ -43,8 +43,8 @@ Item {
             name: "MAXIMIZED"
             PropertyChanges {
                 target: root
-                width: editor.childrenRect.width + 10
-                height: editor.childrenRect.height + 10
+                width: editor.width + Style.editorMargin
+                height: editor.height + Style.editorMargin
             }
             PropertyChanges {
                 target: rect
@@ -53,6 +53,7 @@ Item {
             PropertyChanges {
                 target: editor
                 opacity: 1
+                enabled: true
             }
         }
 

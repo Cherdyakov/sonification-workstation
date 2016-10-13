@@ -7,6 +7,8 @@ RowLayout {
     id: root
     Layout.maximumHeight: Style.editorRowHeight
 
+    property alias text: label.text
+
     signal fixedChanged(bool fixed)
 
     EditorLabel {

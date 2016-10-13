@@ -55,6 +55,7 @@ SynthItem {
             }
 
             EditorFixedParam {
+                text: "Fixed Frequency: "
                 onFixedChanged: {
                     if (editor.fixedFrequency != fixed) {
                         editor.fixedFrequency = fixed

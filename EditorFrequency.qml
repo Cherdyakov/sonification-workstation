@@ -7,17 +7,21 @@ RowLayout {
     id: root
     Layout.maximumHeight: Style.editorRowHeight
 
+    property alias text: label.text
+
     signal frequencyChanged(double freq)
 
     EditorLabel {
         id: label
         text: "Frequency: "
         Layout.maximumHeight: Style.editorRowHeight
+        Layout.fillWidth: true
     }
 
     EditorDoubleSpinBox {
         id: spinBox
         Layout.maximumHeight: Style.editorRowHeight
+        Layout.preferredWidth: Style.editorControlWidth
         onValueChanged: frequencyChanged(spinBox.value)
     }
 

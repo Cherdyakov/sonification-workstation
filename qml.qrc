@@ -17,8 +17,8 @@
         <file>EditorDoubleSpinBox.qml</file>
         <file>EditorFrequency.qml</file>
         <file>EditorWaveform.qml</file>
-        <file>EditorLayout.qml</file>
         <file>Editor.qml</file>
         <file>EditorFixedParam.qml</file>
+        <file>EditorLayout.qml</file>
     </qresource>
 </RCC>

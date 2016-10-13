@@ -9,6 +9,7 @@ SpinBox {
     value: 44000
     to: 100 * 20000
     stepSize: 1
+    font.pointSize: Style.editorFontSize
 
     property int decimals: 2
     property real realValue: value / 100
