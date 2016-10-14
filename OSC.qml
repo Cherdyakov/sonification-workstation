@@ -12,15 +12,21 @@ SynthItem {
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
-
     }
 
     Editor {
+
         id: editor
         property int waveform: SynthItemImplementation.SINE
         property bool fixedFrequency: true
         property double frequency: 440
         property var dataRows: []
+
+        Component.onCompleted: {
+            waveformEditor.comboBox.currentIndex = waveform
+            frequencyEditor.spinBox.value = frequency * 100
+            fixedEditor.checkBox.checked = fixedFrequency
+        }
 
         onWaveformChanged: {
             implementation.setWaveform(waveform)
@@ -39,6 +45,7 @@ SynthItem {
             title: label
 
             EditorWaveform {
+                id: waveformEditor
                 onWaveformChanged: {
                     if (editor.waveform != form) {
                         editor.waveform = form
@@ -47,15 +54,17 @@ SynthItem {
             }
 
             EditorFrequency {
+                id: frequencyEditor
                 onFrequencyChanged: {
                     if (editor.frequency != freq) {
-                        editor.frequency = freq
+                        editor.frequency = freq / 100
                     }
                 }
             }
 
             EditorFixedParam {
-                text: "Fixed Frequency: "
+                id: fixedEditor
+                label.text: "Fixed Frequency: "
                 onFixedChanged: {
                     if (editor.fixedFrequency != fixed) {
                         editor.fixedFrequency = fixed

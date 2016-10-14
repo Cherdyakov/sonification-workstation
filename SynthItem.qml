@@ -186,7 +186,7 @@ Item {
             drag.minimumX: 0
             drag.minimumY: 0
             Drag.active: mouseArea.drag.active
-            Drag.hotSpot.x: 36
+            Drag.hotSpot.x: 32
             Drag.hotSpot.y: 32
 
             onReleased: {

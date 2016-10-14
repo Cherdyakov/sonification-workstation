@@ -16,4 +16,8 @@ Rectangle {
 
     enabled: false
 
+    function initialize() {
+        //override this
+    }
+
 }

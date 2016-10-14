@@ -7,7 +7,8 @@ RowLayout {
     id: root
     Layout.maximumHeight: Style.editorRowHeight
 
-    property alias text: label.text
+    property alias label: label
+    property alias comboBox: comboBox
 
     signal waveformChanged(int form)
 

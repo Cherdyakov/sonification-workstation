@@ -4,11 +4,11 @@ import "Style.js" as Style
 
 SpinBox {
     id: spinbox
+//    value: 44000
     editable: true
-    from: 0
-    value: 44000
-    to: 100 * 20000
-    stepSize: 1
+    from: -2000000
+    to: 2000000
+    stepSize: 100
     font.pointSize: Style.editorFontSize
 
     property int decimals: 2
@@ -26,4 +26,5 @@ SpinBox {
     valueFromText: function(text, locale) {
         return Number.fromLocaleString(locale, text) * 100
     }
+
 }
