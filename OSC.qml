@@ -38,6 +38,7 @@ SynthItem {
 
         onFrequencyChanged: {
             implementation.setFreq(frequency)
+            console.log(frequency)
         }
 
         EditorLayout {

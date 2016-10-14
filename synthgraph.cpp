@@ -12,19 +12,24 @@ QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
 {
 //    qDebug() << "createItem" << type;
 
+    SynthItem* item;
+
     switch (type){
     case OUT: {
+        item = NULL;
+        return item;
         break;
     }
     case OSCILLATOR: {
-        SynthItem* item = new Oscillator();
+        item = new Oscillator();
         item->setGui(gui);
         return item;
         break;
     }
     default:
+        item = NULL;
+        return item;
         break;
-
     }
 }
 

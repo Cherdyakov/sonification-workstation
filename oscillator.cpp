@@ -5,8 +5,8 @@ namespace son {
 Oscillator::Oscillator()
 {
     defaultGen = new gam::Sine<>(440);
-    fixedFreq = true;
     gens.push_back(defaultGen);
+    freq = 440;
 }
 
 void Oscillator::addChild(QObject *child, int type)
@@ -60,7 +60,7 @@ void Oscillator::setWaveform(SynthItem::WAVEFORM type)
 {
     if (waveform != type) {
         waveform = type;
-        qDebug() << "cpp: waveform changed to " << waveform;
+        qDebug() << "cpp: waveform is " << waveform;
     }
 }
 
@@ -69,6 +69,7 @@ void Oscillator::setFixedFreq(bool fixed)
     if (fixedFreq != fixed) {
         fixedFreq = fixed;
     }
+    qDebug() << "cpp: fixedFreq is " << fixedFreq;
 }
 
 void Oscillator::setFreq(double inFreq)
@@ -76,6 +77,7 @@ void Oscillator::setFreq(double inFreq)
     if (freq != inFreq) {
         freq = inFreq;
     }
+    qDebug() << "cpp: freq is " << freq;
 }
 
 float Oscillator::process()
@@ -100,9 +102,9 @@ float Oscillator::process()
 //    if(!amods.isEmpty())
 //        amSample = visitAmods();
 
-    //set freqs
+    //set frequencies
+    setFreqs();
 
-    //set amps
 
     //generate sample
     QVector<gam::Sine<>*>::const_iterator i;
@@ -155,18 +157,13 @@ float Oscillator::visitFmods()
 
 void Oscillator::setFreqs()
 {
-    float f = 440;
+    float f = freq;
     QVector<gam::Sine<>*>::const_iterator i;
 
     for (i = gens.constBegin(); i != gens.constEnd(); ++i) {
         gam::Sine<>* sine = *i;
         sine->freq(f);
     }
-}
-
-void Oscillator::setAmps()
-{
-
 }
 
 }

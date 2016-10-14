@@ -24,7 +24,7 @@ HEADERS += \
     output.h \
     oscillator.h
 
-##MBP
+##My MBP
 ## Gamma synthesis library
 LIBS += -L/Users/Sean/libs/Gamma-master/build/lib -lGamma
 INCLUDEPATH += /Users/Sean/libs/Gamma-master/Gamma
@@ -35,7 +35,7 @@ INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
 DEFINES += __MACOSX_CORE__
 INCLUDEPATH += /usr/local/include
 
-##Linux Desktop
+##My Linux Desktop
 ## Gamma synthesis library
 #LIBS += -L/home/sean/libs/Gamma-master/build/lib -lGamma
 #INCLUDEPATH += /home/sean/libs/Gamma-master/Gamma

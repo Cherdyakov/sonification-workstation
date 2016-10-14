@@ -13,6 +13,7 @@ class Oscillator : public SynthItem
 public:
     Oscillator();
     float process();
+    using SynthItem::addChild;
     void addChild(QObject* child, int type);
     void removeChild(QObject* child);
 
@@ -44,7 +45,6 @@ private:
     float visitFmods();
     float visitAmods();
     void setFreqs();
-    void setAmps();
 
 };
 

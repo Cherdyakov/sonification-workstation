@@ -30,7 +30,6 @@ function createItem() {
     if (itemComponent.status === Component.Ready && draggedItem == null) {
         //creates an object instance of this component with the given parent and properties
         draggedItem = itemComponent.createObject(window, {"image": paletteItem.image, "x": posnInWindow.x, "y": posnInWindow.y, "z": 3});
-        // make sure created item is above the ground layer
     } else if (itemComponent.status === Component.Error) {
         draggedItem = null;
         console.log("error creating component");
