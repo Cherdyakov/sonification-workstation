@@ -169,7 +169,7 @@ Item {
         id: rect
         z: Style.itemZ
         anchors.fill: parent
-        color: muted ? "darkgray" : mainColor
+        color: muted ? Style.itemMuteColor : mainColor
         radius: Style.itemMinRadius
         border.color: scope.focus ? "orange" : textColor
         border.width: 4

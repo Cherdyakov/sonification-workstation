@@ -17,8 +17,6 @@ SynthItem {
 
     Editor {
         id: editor
-        color: mainColor
-
         property int waveform: SynthItemImplementation.SINE
         property bool fixedFrequency: true
         property double frequency: 440

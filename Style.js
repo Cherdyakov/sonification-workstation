@@ -10,6 +10,7 @@ var canvasZ = 100
 var itemMinRadius = 40
 var itemMaxRadius = 10
 var itemTextColor = "white"
+var itemMuteColor = "dark gray"
 
 //SynthItem.qml editor style
 var editorTitleSize = 12
