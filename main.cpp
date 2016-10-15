@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QDebug>
 #include <QThread>
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<son::SynthItem>("SonLib", 1, 0, "SynthItemImplementation");
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
 
