@@ -14,7 +14,7 @@ RowLayout {
 
     EditorLabel {
         id: label
-        text: "Frequency: "
+        text: qsTr("Frequency: ")
         Layout.maximumHeight: Style.editorRowHeight
         Layout.fillWidth: true
     }

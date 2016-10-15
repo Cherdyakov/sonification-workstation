@@ -3,7 +3,7 @@ import "Style.js" as Style
 
 SynthItem {
     id: root
-    label: "OUT"
+    label: qsTr("OUT")
     type: 0 //OUT
     mainColor: Style.outColor
     textColor: Style.itemTextColor

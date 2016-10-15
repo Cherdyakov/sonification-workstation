@@ -22,6 +22,12 @@ ApplicationWindow {
         dac.parent = workspace.contentItem
     }
 
+    DataWindow {
+        id: dataWindow
+        width: 800
+        height: 600
+    }
+
     menuBar: MenuBar {
         id: menuBar
         Menu {
@@ -56,7 +62,7 @@ ApplicationWindow {
             Row {
                 id: palette
                 anchors.centerIn: parent
-                spacing: 8
+                spacing: 12
 
                 PaletteItem {
                     anchors.verticalCenter: parent.verticalCenter
@@ -187,8 +193,8 @@ ApplicationWindow {
             type: 0
             id: dac
             created: true
-            x: 500 - dac.width / 2
-            y: 500
+            x: 400
+            y: 400
         }
 
         PatchManager {

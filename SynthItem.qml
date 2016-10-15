@@ -96,7 +96,7 @@ Item {
         synthChildren.push(synthItem)
         //add child's implementation to the children
         //of this item's implementation
-                implementation.addChild(synthItem.implementation, synthItem.type)
+        implementation.addChild(synthItem.implementation, synthItem.type)
     }
 
     function removeChild(synthItem) {
@@ -200,24 +200,23 @@ Item {
                 }
                 //right clicked
                 if(mouse.button & Qt.RightButton) {
-                    switch(root.state) {
-                    case "":
-                        root.state = "MAXIMIZED"
-                        break
-                    case "MAXIMIZED":
-                        root.state = ""
-                        break
-                    }
+                    patchManager.setPatchPoint(root)
+                    canvas.requestPaint()
                     scope.focus = true
                 }
             }
 
             onDoubleClicked: {
-                patchManager.setPatchPoint(root)
-                canvas.requestPaint()
+                switch(root.state) {
+                case "":
+                    root.state = "MAXIMIZED"
+                    break
+                case "MAXIMIZED":
+                    root.state = ""
+                    break
+                }
                 scope.focus = true
             }
-
         }
 
         Text {

@@ -6,7 +6,7 @@ import "Style.js" as Style
 
 SynthItem {
     id: root
-    label: "OSC"
+    label: qsTr("OSC")
     type: SynthGraph.OSCILLATOR
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
@@ -65,7 +65,7 @@ SynthItem {
 
             EditorFixedParam {
                 id: fixedEditor
-                label.text: "Fixed Frequency: "
+                label.text: qsTr("Fixed Frequency: ")
                 onFixedChanged: {
                     if (editor.fixedFrequency != fixed) {
                         editor.fixedFrequency = fixed

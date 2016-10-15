@@ -11,7 +11,7 @@ ColumnLayout {
 
     Text {
         id: title
-        text: "ITEM"
+        text: qsTr("ITEM")
         font.pointSize: Style.editorTitleSize
         color: Style.itemTextColor
         Layout.alignment: Layout.Center

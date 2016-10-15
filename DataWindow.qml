@@ -12,9 +12,9 @@ ApplicationWindow {
 
     menuBar: MenuBar {
         Menu {
-            title: "File"
+            title: qsTr("File")
             MenuItem {
-                text: "Exit"
+                text: qsTr("Exit")
                 onTriggered: quit()
             }
         }

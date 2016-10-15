@@ -14,7 +14,7 @@ RowLayout {
 
     EditorLabel {
         id: label
-        text: "Fixed: "
+        text: qsTr("Fixed: ")
         Layout.maximumHeight: Style.editorRowHeight
         Layout.preferredWidth: Style.editorLabelWidth
         Layout.fillWidth: true

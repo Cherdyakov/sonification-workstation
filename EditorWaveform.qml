@@ -14,13 +14,13 @@ RowLayout {
 
     EditorLabel {
         id: label
-        text: "Waveform: "
+        text: qsTr("Waveform: ")
         Layout.maximumHeight: Style.editorRowHeight
         Layout.fillWidth: true
     }
     EditorComboBox {
         id: comboBox
-        model: ["Sine", "Saw", "Square"]
+        model: [qsTr("Sine"), qsTr("Saw"), qsTr("Square")]
         Layout.maximumHeight: Style.editorRowHeight
         Layout.maximumWidth: Style.editorControlWidth
 
