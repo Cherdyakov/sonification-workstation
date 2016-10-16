@@ -5,6 +5,7 @@
 #include <QQmlContext>
 
 #include "rtaudio/RtAudio.h"
+#include "osc/OscOutboundPacketStream.h"
 #include "callback.h"
 #include "synthgraph.h"
 #include "oscillator.h"
