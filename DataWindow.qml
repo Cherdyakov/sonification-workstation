@@ -28,10 +28,8 @@ ApplicationWindow {
         Tab {
             title: qsTr("Table View")
             TableView {
-                id: table
                 anchors.fill: parent
-
-
+                model: dataModel
             }
         }
         Tab {
@@ -49,7 +47,6 @@ ApplicationWindow {
             }
         }
     }
-
 
 
     statusBar: StatusBar {

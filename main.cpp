@@ -5,10 +5,10 @@
 #include <QQmlContext>
 
 #include "rtaudio/RtAudio.h"
-#include "osc/OscOutboundPacketStream.h"
 #include "callback.h"
 #include "synthgraph.h"
-#include "oscillator.h"
+#include "filereader.h"
+#include "tablemodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +16,17 @@ int main(int argc, char *argv[])
     son::UserData uData;
     son::SynthGraph* graph = new son::SynthGraph();
     uData.graph = graph;
+
+    TableModel model;
+
+    model.m_data.push_back(1);
+    model.m_data.push_back(2);
+    model.m_data.push_back(3);
+    model.m_data.push_back(4);
+    model.m_data.push_back(5);
+
+//    model.m_data.push_back(8);
+//    model.width = 1;
 
     qmlRegisterType<son::SynthGraph>("SonLib", 1, 0, "SynthGraph");
     qmlRegisterType<son::SynthItem>("SonLib", 1, 0, "SynthItemImplementation");
@@ -25,9 +36,14 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    engine.rootContext()->setContextProperty("dataModel", &model);
     engine.rootContext()->setContextProperty("graph", graph);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
+
+//    FileReader* reader = new FileReader();
+
+//    reader->readCSV();
 
 
 

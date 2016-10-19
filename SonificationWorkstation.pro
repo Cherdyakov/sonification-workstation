@@ -6,7 +6,10 @@ SOURCES += main.cpp \
     synthitem.cpp \
     synthgraph.cpp \
     output.cpp \
-    oscillator.cpp
+    oscillator.cpp \
+    parsercsv.cpp \
+    filereader.cpp \
+    tablemodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -22,7 +25,10 @@ HEADERS += \
     synthgraph.h \
     userdata.h \
     output.h \
-    oscillator.h
+    oscillator.h \
+    parsercsv.h \
+    filereader.h \
+    tablemodel.h
 
 ##My MBP
 ## Gamma synthesis library
@@ -32,8 +38,8 @@ INCLUDEPATH += /Users/Sean/libs/Gamma-master/Gamma
 LIBS += -L/Users/Sean/libs/rtaudio-4.1.2 -lrtaudio
 INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
 # oscpack
-LIBS += -L/Users/Sean/libs/oscpack_1_1_0/oscpack/lib -loscpack
-INCLUDEPATH += /Users/Sean/libs/oscpack_1_1_0/oscpack/include
+#LIBS += -L/Users/Sean/libs/oscpack_1_1_0/oscpack/lib -loscpack
+#INCLUDEPATH += /Users/Sean/libs/oscpack_1_1_0/oscpack/include
 # Core Audio
 DEFINES += __MACOSX_CORE__
 INCLUDEPATH += /usr/local/include
