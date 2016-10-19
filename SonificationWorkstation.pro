@@ -2,7 +2,9 @@ QT += qml quick widgets
 
 CONFIG += c++11
 
-SOURCES += main.cpp \
+SOURCES += \
+    mainwindow.cpp \
+    main.cpp \
     synthitem.cpp \
     synthgraph.cpp \
     output.cpp \
@@ -13,6 +15,8 @@ SOURCES += main.cpp \
 
 RESOURCES += qml.qrc
 
+TEMPLATE = app
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
@@ -20,6 +24,7 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
+    mainwindow.h \
     synthitem.h \
     callback.h \
     synthgraph.h \
@@ -29,6 +34,9 @@ HEADERS += \
     parsercsv.h \
     filereader.h \
     tablemodel.h
+
+FORMS += \
+    mainwindow.ui
 
 ##My MBP
 ## Gamma synthesis library

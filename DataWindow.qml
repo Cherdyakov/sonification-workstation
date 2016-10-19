@@ -29,7 +29,6 @@ ApplicationWindow {
             title: qsTr("Table View")
             TableView {
                 anchors.fill: parent
-                model: dataModel
             }
         }
         Tab {

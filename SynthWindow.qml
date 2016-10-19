@@ -22,12 +22,6 @@ ApplicationWindow {
         dac.parent = workspace.contentItem
     }
 
-    DataWindow {
-        id: dataWindow
-        width: 800
-        height: 600
-    }
-
     menuBar: MenuBar {
         id: menuBar
         Menu {
