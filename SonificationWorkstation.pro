@@ -1,4 +1,4 @@
-QT += qml quick widgets
+QT += qml quick widgets charts
 
 CONFIG += c++11
 
@@ -11,7 +11,8 @@ SOURCES += \
     oscillator.cpp \
     parsercsv.cpp \
     filereader.cpp \
-    tablemodel.cpp
+    tablemodel.cpp \
+    synthwindow.cpp
 
 RESOURCES += qml.qrc
 
@@ -33,10 +34,12 @@ HEADERS += \
     oscillator.h \
     parsercsv.h \
     filereader.h \
-    tablemodel.h
+    tablemodel.h \
+    synthwindow.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    synthwindow.ui
 
 ##My MBP
 ## Gamma synthesis library

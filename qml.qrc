@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>DataWindow.qml</file>
         <file>SynthWindow.qml</file>
         <file>images/oscIcon.png</file>
         <file>PaletteItem.qml</file>

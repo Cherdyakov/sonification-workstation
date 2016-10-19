@@ -5,6 +5,7 @@
 #include <QQuickView>
 
 #include "mainwindow.h"
+#include "synthwindow.h"
 #include "rtaudio/RtAudio.h"
 #include "callback.h"
 #include "synthgraph.h"
@@ -24,20 +25,19 @@ int main(int argc, char *argv[])
 
     QQuickView* view = new QQuickView;
     view->rootContext()->setContextProperty("graph", graph);
-    MainWindow w;
-    w.setView(view);
-    w.show();
+
+    MainWindow main_window;
+    SynthWindow synth_window;
+
+    synth_window.setView(view);
+    main_window.show();
+    synth_window.show();
 
 
 
     //    FileReader* reader = new FileReader();
 
     //    reader->readCSV();
-
-
-
-    //connect signals and slots
-    //    QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));
 
     //initialize Gamma
     gam::Sync::master().spu(44100);

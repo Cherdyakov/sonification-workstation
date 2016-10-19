@@ -2,7 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QQuickView>
+#include <QTableView>
+#include <QtCharts>
+
+using namespace QtCharts;
 
 namespace Ui {
 class MainWindow;
@@ -16,12 +19,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    QQuickView *getView() const;
-    void setView(QQuickView *value);
-
 private:
     Ui::MainWindow *ui;
-    QQuickView* view;
+
+    QTableView* table;
+
 };
 
 #endif // MAINWINDOW_H

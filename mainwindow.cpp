@@ -6,7 +6,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Sonification Workstation");
 
+    table = new QTableView;
+
+    QStandardItemModel *model = new QStandardItemModel(2,3,this); //2 Rows and 3 Columns
+    model->setHorizontalHeaderItem(0, new QStandardItem(QString("Column1 Header")));
+    model->setHorizontalHeaderItem(1, new QStandardItem(QString("Column2 Header")));
+    model->setHorizontalHeaderItem(2, new QStandardItem(QString("Column3 Header")));
+
+    table->setModel(model);
+
+    ui->verticalLayout->insertWidget(0, table);
 }
 
 MainWindow::~MainWindow()
@@ -14,15 +25,3 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-QQuickView *MainWindow::getView() const
-{
-    return view;
-}
-
-void MainWindow::setView(QQuickView *inView)
-{
-    view = inView;
-    QWidget *container = QWidget::createWindowContainer(view, this);
-    view->setSource(QUrl("qrc:/main.qml")); // Fetch this url by right clicking on your resource file.
-    ui->verticalLayout->addWidget(container);
-}
