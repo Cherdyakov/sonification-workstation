@@ -5,7 +5,7 @@
 #include <QQuickView>
 #include <QMenuBar>
 
-#include "filereader.h"
+#include "csvreader.h"
 
 namespace Ui {
 class SynthWindow;

@@ -4,8 +4,9 @@
 #include <QMainWindow>
 #include <QTableView>
 #include <QtCharts>
+#include <QAction>
 
-#include "filereader.h"
+#include "csvreader.h"
 
 using namespace QtCharts;
 
@@ -23,20 +24,25 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QStandardItemModel* model;
     QTableView* table;
     QMenuBar* menuBar;
-    FileReader* reader;
+    CsvReader* csvReader;
+
+    //file functions
+    void importCSV(QString filename);
 
     //convenience functions to crete and populate menus
     void createActions();
     void createMenus();
     //menus and actions
     QMenu *fileMenu;
-    QAction* openCSVAct;
+    QAction* importCSVAct;
 
 private slots:
     void quit();
-    void openCSV();
+    void importCSV();
+    void importJSON();
 
 };
 

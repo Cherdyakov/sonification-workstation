@@ -10,9 +10,9 @@ SOURCES += \
     output.cpp \
     oscillator.cpp \
     parsercsv.cpp \
-    filereader.cpp \
     tablemodel.cpp \
-    synthwindow.cpp
+    synthwindow.cpp \
+    csvreader.cpp
 
 RESOURCES += qml.qrc
 
@@ -33,9 +33,9 @@ HEADERS += \
     output.h \
     oscillator.h \
     parsercsv.h \
-    filereader.h \
     tablemodel.h \
-    synthwindow.h
+    synthwindow.h \
+    csvreader.h
 
 FORMS += \
     mainwindow.ui \

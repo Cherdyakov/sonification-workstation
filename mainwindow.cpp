@@ -9,16 +9,10 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Sonification Workstation");
 
     table = new QTableView;
-
-    QStandardItemModel *model = new QStandardItemModel(2,3,this); //2 Rows and 3 Columns
-    model->setHorizontalHeaderItem(0, new QStandardItem(QString("Column1 Header")));
-    model->setHorizontalHeaderItem(1, new QStandardItem(QString("Column2 Header")));
-    model->setHorizontalHeaderItem(2, new QStandardItem(QString("Column3 Header")));
-
+    model = new QStandardItemModel(0,8,this);
+    csvReader = new CsvReader();
     table->setModel(model);
 
-
-    reader = new FileReader();
     menuBar = new QMenuBar(0);
     createActions();
     createMenus();
@@ -31,18 +25,31 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
 void MainWindow::createActions()
 {
-    openCSVAct = new QAction(tr("&Open CSV"), this);
-    openCSVAct->setShortcuts(QKeySequence::Open);
-    openCSVAct->setStatusTip(tr("Open a CSV file"));
-    connect(openCSVAct, &QAction::triggered, this, &MainWindow::openCSV);
+    importCSVAct = new QAction(tr("&Import CSV"), this);
+    importCSVAct->setShortcuts(QKeySequence::Open);
+    importCSVAct->setStatusTip(tr("Loads a CSV file into the Data Window"));
+    connect(importCSVAct, SIGNAL(triggered(bool)), this, SLOT(importCSV()));
 }
 
 void MainWindow::createMenus()
 {
     fileMenu = menuBar->addMenu(tr("&File"));
-    fileMenu->addAction(openCSVAct);
+    fileMenu->addAction(importCSVAct);
+}
+
+void MainWindow::importCSV()
+{
+    QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), "/home", ("csv File(*.csv)"));
+    csvReader->readCSV(fileName, model);
+
+}
+
+void MainWindow::importJSON()
+{
+    qDebug() << "JSON IMPORT NOT IMPLEMENTED";
 }
 
 void MainWindow::quit()
@@ -50,8 +57,4 @@ void MainWindow::quit()
     QApplication::quit();
 }
 
-void MainWindow::openCSV()
-{
-    QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), "/home", ("csv File(*.csv)"));
-    reader->readCSV(fileName);
-}
+

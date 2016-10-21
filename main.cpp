@@ -9,7 +9,6 @@
 #include "rtaudio/RtAudio.h"
 #include "callback.h"
 #include "synthgraph.h"
-#include "filereader.h"
 #include "tablemodel.h"
 
 int main(int argc, char *argv[])
