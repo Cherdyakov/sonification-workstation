@@ -7,6 +7,7 @@
 #include <QAction>
 
 #include "csvreader.h"
+#include "horizontalproxymodel.h"
 
 using namespace QtCharts;
 
@@ -25,6 +26,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QStandardItemModel* model;
+    HorizontalProxyModel* horizontalModel;
     QTableView* table;
     QMenuBar* menuBar;
     CsvReader* csvReader;
@@ -44,6 +46,7 @@ private slots:
     void importCSV();
     void importJSON();
 
+    void on_orientationComboBox_currentIndexChanged(const QString &orientation);
 };
 
 #endif // MAINWINDOW_H

@@ -9,10 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Sonification Workstation");
 
     table = new QTableView;
-    model = new QStandardItemModel(0,8,this);
+    model = new QStandardItemModel(20,8,this);
+    horizontalModel = new HorizontalProxyModel(this);
+    horizontalModel->setSourceModel(model);
     csvReader = new CsvReader();
     table->setModel(model);
-
     menuBar = new QMenuBar(0);
     createActions();
     createMenus();
@@ -42,9 +43,9 @@ void MainWindow::createMenus()
 
 void MainWindow::importCSV()
 {
+    model->clear();
     QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), "/home", ("csv File(*.csv)"));
     csvReader->readCSV(fileName, model);
-
 }
 
 void MainWindow::importJSON()
@@ -57,4 +58,15 @@ void MainWindow::quit()
     QApplication::quit();
 }
 
+void MainWindow::on_orientationComboBox_currentIndexChanged(const QString &orientation)
+{
+    if(orientation == "Vertical") {
+        if (table->model() == model) {
+            return;
+        }
+        table->setModel(model);
+        return;
+    }
+    table->setModel(horizontalModel);
 
+}

@@ -67,7 +67,13 @@ void CsvReader::checkString(QString &temp, QStandardItemModel* model, QChar char
             temp.remove( QRegExp("\"$") );
         }
         //FIXME: will possibly fail if there are 4 or more reapeating double quotes
-        temp.replace("\"\"", "\"");
+//        temp.replace("\"\"", "\"");
+        bool isDouble = false;
+        temp.toDouble(&isDouble);
+        if(!isDouble)
+        {
+            temp = "NaN";
+        }
         QStandardItem *item = new QStandardItem(temp);
         standardItemList.append(item);
         if (character != QChar(',')) {

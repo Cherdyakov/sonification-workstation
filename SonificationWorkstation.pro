@@ -12,7 +12,8 @@ SOURCES += \
     parsercsv.cpp \
     tablemodel.cpp \
     synthwindow.cpp \
-    csvreader.cpp
+    csvreader.cpp \
+    horizontalproxymodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -35,7 +36,8 @@ HEADERS += \
     parsercsv.h \
     tablemodel.h \
     synthwindow.h \
-    csvreader.h
+    csvreader.h \
+    horizontalproxymodel.h
 
 FORMS += \
     mainwindow.ui \
