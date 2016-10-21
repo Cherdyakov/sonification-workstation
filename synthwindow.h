@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QQuickView>
+#include <QMenuBar>
+
+#include "filereader.h"
 
 namespace Ui {
 class SynthWindow;
@@ -22,6 +25,7 @@ public:
 private:
     Ui::SynthWindow *ui;
     QQuickView* view;
+
 };
 
 #endif // SYNTHWINDOW_H

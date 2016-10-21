@@ -34,11 +34,6 @@ int main(int argc, char *argv[])
     synth_window.show();
 
 
-
-    //    FileReader* reader = new FileReader();
-
-    //    reader->readCSV();
-
     //initialize Gamma
     gam::Sync::master().spu(44100);
 

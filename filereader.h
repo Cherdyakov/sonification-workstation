@@ -12,7 +12,7 @@ class FileReader : public QObject
 public:
     FileReader();
 
-    void readCSV();
+    void readCSV(QString filename);
     void writeCSV(QString filename);
 
 };

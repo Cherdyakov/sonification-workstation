@@ -7,6 +7,7 @@ SynthWindow::SynthWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("Sonification Workstation: Synthesis");
+
 }
 
 SynthWindow::~SynthWindow()
@@ -26,3 +27,4 @@ void SynthWindow::setView(QQuickView *inView)
     view->setSource(QUrl("qrc:/main.qml")); // Fetch this url by right clicking on your resource file.
     ui->verticalLayout->addWidget(container);
 }
+

@@ -17,6 +17,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     table->setModel(model);
 
+
+    reader = new FileReader();
+    menuBar = new QMenuBar(0);
+    createActions();
+    createMenus();
+
     ui->verticalLayout->insertWidget(0, table);
 }
 
@@ -25,3 +31,27 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::createActions()
+{
+    openCSVAct = new QAction(tr("&Open CSV"), this);
+    openCSVAct->setShortcuts(QKeySequence::Open);
+    openCSVAct->setStatusTip(tr("Open a CSV file"));
+    connect(openCSVAct, &QAction::triggered, this, &MainWindow::openCSV);
+}
+
+void MainWindow::createMenus()
+{
+    fileMenu = menuBar->addMenu(tr("&File"));
+    fileMenu->addAction(openCSVAct);
+}
+
+void MainWindow::quit()
+{
+    QApplication::quit();
+}
+
+void MainWindow::openCSV()
+{
+    QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), "/home", ("csv File(*.csv)"));
+    reader->readCSV(fileName);
+}

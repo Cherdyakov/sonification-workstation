@@ -5,6 +5,8 @@
 #include <QTableView>
 #include <QtCharts>
 
+#include "filereader.h"
+
 using namespace QtCharts;
 
 namespace Ui {
@@ -21,8 +23,20 @@ public:
 
 private:
     Ui::MainWindow *ui;
-
     QTableView* table;
+    QMenuBar* menuBar;
+    FileReader* reader;
+
+    //convenience functions to crete and populate menus
+    void createActions();
+    void createMenus();
+    //menus and actions
+    QMenu *fileMenu;
+    QAction* openCSVAct;
+
+private slots:
+    void quit();
+    void openCSV();
 
 };
 

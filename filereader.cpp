@@ -5,10 +5,8 @@ FileReader::FileReader()
 
 }
 
-void FileReader::readCSV()
+void FileReader::readCSV(QString fileName)
 {
-
-    QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), "/home", ("csv File(*.csv)"));
     QString data;
     QFile importedCSV(fileName);
     QStringList rowOfData;
