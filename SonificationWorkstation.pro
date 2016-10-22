@@ -9,7 +9,6 @@ SOURCES += \
     synthgraph.cpp \
     output.cpp \
     oscillator.cpp \
-    parsercsv.cpp \
     tablemodel.cpp \
     synthwindow.cpp \
     csvreader.cpp \
@@ -33,7 +32,6 @@ HEADERS += \
     userdata.h \
     output.h \
     oscillator.h \
-    parsercsv.h \
     tablemodel.h \
     synthwindow.h \
     csvreader.h \

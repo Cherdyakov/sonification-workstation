@@ -23,7 +23,8 @@ ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <QTextStream>
 #include <QDebug>
 #include <QString>
-#include <QStandardItemModel>
+
+#include "tablemodel.h"
 
 namespace Ui {
 class CsvReader;
@@ -37,13 +38,15 @@ public:
     explicit CsvReader();
     ~CsvReader();
 
-    void readCSV(QString fileName, QStandardItemModel* m = 0);
+    void readCSV(QString fileName, TableModel* model);
 
 private:
-    void checkString(QString &temp, QStandardItemModel* model, QChar character = 0);
+    void checkString(QString &temp, TableModel* model, QChar character = 0);
 
+    int width;
     QList<QStringList> csv;
     QList<QStandardItem*> standardItemList;
+    QVector<double> rowValues;
 
 };
 

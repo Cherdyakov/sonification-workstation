@@ -26,7 +26,7 @@ CsvReader::~CsvReader()
 
 }
 
-void CsvReader::readCSV(QString fileName, QStandardItemModel *m)
+void CsvReader::readCSV(QString fileName, TableModel *m)
 {
     if(m == NULL)
     {
@@ -36,6 +36,7 @@ void CsvReader::readCSV(QString fileName, QStandardItemModel *m)
 
     QFile file (fileName);
     if (file.open(QIODevice::ReadOnly)) {
+        width = -1;
         QString data = file.readAll();
         data.remove( QRegExp("\r") ); //remove all ocurrences of CR (Carriage Return)
         QString temp;
@@ -57,7 +58,7 @@ void CsvReader::readCSV(QString fileName, QStandardItemModel *m)
     }
 }
 
-void CsvReader::checkString(QString &temp, QStandardItemModel* model, QChar character)
+void CsvReader::checkString(QString &temp, TableModel* model, QChar character)
 {
     if(temp.count("\"")%2 == 0) {
         //if (temp.size() == 0 && character != ',') //problem with line endings
@@ -69,16 +70,15 @@ void CsvReader::checkString(QString &temp, QStandardItemModel* model, QChar char
         //FIXME: will possibly fail if there are 4 or more reapeating double quotes
 //        temp.replace("\"\"", "\"");
         bool isDouble = false;
-        temp.toDouble(&isDouble);
+        double value = temp.toDouble(&isDouble);
         if(!isDouble)
         {
             temp = "NaN";
         }
-        QStandardItem *item = new QStandardItem(temp);
-        standardItemList.append(item);
+        rowValues.append(value);
         if (character != QChar(',')) {
-            model->appendRow(standardItemList);
-            standardItemList.clear();
+            model->appendRow(rowValues);
+            rowValues.clear();
         }
         temp.clear();
     } else {

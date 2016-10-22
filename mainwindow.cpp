@@ -9,7 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Sonification Workstation");
 
     table = new QTableView;
-    model = new QStandardItemModel(20,8,this);
+    model = new TableModel();
+    model->setDataVector(&sonificationData);
     horizontalModel = new HorizontalProxyModel(this);
     horizontalModel->setSourceModel(model);
     csvReader = new CsvReader();
@@ -43,7 +44,7 @@ void MainWindow::createMenus()
 
 void MainWindow::importCSV()
 {
-    model->clear();
+//    model->clear();
     QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), "/home", ("csv File(*.csv)"));
     csvReader->readCSV(fileName, model);
 }

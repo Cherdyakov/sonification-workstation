@@ -48,7 +48,7 @@ QVariant HorizontalProxyModel::headerData(int section, Qt::Orientation orientati
 
 QVariant HorizontalProxyModel::data(const QModelIndex &index) const
 {
-    return sourceModel() ? sourceModel()->data(this->index(index.column(), index.row())) : 0;
+    return sourceModel() ? sourceModel()->data(sourceModel()->index(index.column(), index.row())) : 0;
 }
 
 

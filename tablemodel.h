@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <QStandardItem>
 
-
 class TableModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -16,11 +15,17 @@ public:
     Q_INVOKABLE virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     Q_INVOKABLE virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 //    Q_INVOKABLE virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    QVector<double> m_data;
-    int width;
-    int height;
+
+
+    void setDataVector(QVector<double> *data);
+    void appendRow(QVector<double> row);
+    int getWidth() const;
+    void setWidth(int value);
 
 private:
+
+    int width;
+    QVector<double>* m_data;
 
 
 };

@@ -7,6 +7,7 @@
 #include <QAction>
 
 #include "csvreader.h"
+#include "tablemodel.h"
 #include "horizontalproxymodel.h"
 
 using namespace QtCharts;
@@ -25,16 +26,19 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QStandardItemModel* model;
+    TableModel* model;
     HorizontalProxyModel* horizontalModel;
     QTableView* table;
     QMenuBar* menuBar;
     CsvReader* csvReader;
 
+    //the data store
+    QVector<double> sonificationData;
+
     //file functions
     void importCSV(QString filename);
 
-    //convenience functions to crete and populate menus
+    //convenience functions to create and populate menus
     void createActions();
     void createMenus();
     //menus and actions
