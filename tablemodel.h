@@ -19,6 +19,7 @@ public:
 
     void setDataVector(QVector<double> *data);
     void appendRow(QVector<double> row);
+    void clear();
     int getWidth() const;
     void setWidth(int value);
 

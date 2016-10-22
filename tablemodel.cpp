@@ -64,6 +64,11 @@ void TableModel::appendRow(QVector<double> row)
 
 }
 
+void TableModel::clear()
+{
+    m_data->clear();
+}
+
 int TableModel::getWidth() const
 {
     return width;

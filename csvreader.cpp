@@ -26,9 +26,9 @@ CsvReader::~CsvReader()
 
 }
 
-void CsvReader::readCSV(QString fileName, TableModel *m)
+void CsvReader::readCSV(QString fileName, TableModel *model)
 {
-    if(m == NULL)
+    if(model == NULL)
     {
         qDebug() << "CsvReader: null model";
         return;
@@ -36,6 +36,7 @@ void CsvReader::readCSV(QString fileName, TableModel *m)
 
     QFile file (fileName);
     if (file.open(QIODevice::ReadOnly)) {
+        model->clear();
         width = -1;
         QString data = file.readAll();
         data.remove( QRegExp("\r") ); //remove all ocurrences of CR (Carriage Return)
@@ -45,12 +46,12 @@ void CsvReader::readCSV(QString fileName, TableModel *m)
         while (!textStream.atEnd()) {
             textStream >> character;
             if (character == ',') {
-                checkString(temp, m, character);
+                checkString(temp, model, character);
             } else if (character == '\n') {
-                checkString(temp, m, character);
+                checkString(temp, model, character);
             } else if (textStream.atEnd()) {
                 temp.append(character);
-                checkString(temp, m);
+                checkString(temp, model);
             } else {
                 temp.append(character);
             }
