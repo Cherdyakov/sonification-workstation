@@ -65,24 +65,27 @@ MainWindow::~MainWindow()
 void MainWindow::plot()
 {
     QChart* chart = new QChart();
-    QSplineSeries *series = new QSplineSeries;
-    for (int i = 0; i < model->columnCount(); i++) {
-        QPointF p;
-        p.setX(i);
-        p.setY(sonificationData[i]);
-        *series << p;
-    }
-    chart->addSeries(series);
-    QSplineSeries *series2 = new QSplineSeries;
-    for (int i = 0; i < model->columnCount(); i++) {
-        QPointF p;
-        p.setX(i);
-        p.setY(sonificationData[i] * 1.2);
-        *series2 << p;
-    }
-    chart->addSeries(series2);
+    QList<QSplineSeries*> series;
 
-    chart->legend()->hide();
+    for (int i = 0; i < model->rowCount(); i++)
+    {
+        series.push_back(new QSplineSeries());
+        for (int j = 0; j < model->columnCount(); ++j)
+        {
+            int idx = (model->columnCount() * i + j);
+            QPointF p;
+            p.setX(j);
+            p.setY(sonificationData[idx]);
+            series[i]->operator << (p);
+        }
+    }
+
+    for (int i = 0; i < series.count(); ++i)
+    {
+        chart->addSeries(series[i]);
+    }
+
+//    chart->legend()->hide();
     chart->createDefaultAxes();
     chart->setTitle("LINES!!!!");
     chartView->setChart(chart);
