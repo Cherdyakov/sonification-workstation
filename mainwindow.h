@@ -5,6 +5,8 @@
 #include <QTableView>
 #include <QtCharts>
 #include <QAction>
+#include <QTabWidget>
+#include <QLayout>
 
 #include "csvreader.h"
 #include "tablemodel.h"
@@ -25,18 +27,27 @@ public:
     ~MainWindow();
 
 private:
+    QWidget* tableTab;
+    QWidget* chartTab;
+    QLayout* tableTabLayout;
+    QLayout* chartTabLayout;
     Ui::MainWindow *ui;
     TableModel* model;
     HorizontalProxyModel* horizontalModel;
-    QTableView* table;
+    QTableView* tableView;
     QMenuBar* menuBar;
     CsvReader* csvReader;
+    QChartView* chartView;
+    QTabWidget* tabWidget;
+    QVBoxLayout* windowLayout;
 
     //the data store
     QVector<double> sonificationData;
 
     //file functions
     void importCSV(QString filename);
+    //plotting functions
+    void plot();
 
     //convenience functions to create and populate menus
     void createActions();
