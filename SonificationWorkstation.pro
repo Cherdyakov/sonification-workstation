@@ -12,7 +12,8 @@ SOURCES += \
     tablemodel.cpp \
     synthwindow.cpp \
     csvreader.cpp \
-    horizontalproxymodel.cpp
+    horizontalproxymodel.cpp \
+    scatterview.cpp
 
 RESOURCES += qml.qrc
 
@@ -35,7 +36,8 @@ HEADERS += \
     tablemodel.h \
     synthwindow.h \
     csvreader.h \
-    horizontalproxymodel.h
+    horizontalproxymodel.h \
+    scatterview.h
 
 FORMS += \
     mainwindow.ui \

@@ -8,6 +8,7 @@
 #include <QTabWidget>
 #include <QLayout>
 
+#include "scatterview.h"
 #include "csvreader.h"
 #include "tablemodel.h"
 #include "horizontalproxymodel.h"
@@ -27,19 +28,36 @@ public:
     ~MainWindow();
 
 private:
-    QWidget* tableTab;
-    QWidget* chartTab;
-    QLayout* tableTabLayout;
-    QLayout* chartTabLayout;
+
     Ui::MainWindow *ui;
+    //the model
     TableModel* model;
     HorizontalProxyModel* horizontalModel;
-    QTableView* tableView;
-    QMenuBar* menuBar;
-    CsvReader* csvReader;
-    QChartView* chartView;
+    bool horizontal;
+    //Tab widget and tabs
     QTabWidget* tabWidget;
+    QWidget* tableTab;
+    QWidget* chartTab;
+    QWidget* scatterTab;
+    //Tab widget layouts
+    QLayout* tableTabLayout;
+    QLayout* chartTabLayout;
+    QLayout* scatterTabLayout;
+    //transpot stuff
+    QWidget* transport;
+    QLayout* transportLayout;
+    //Main graphical widgets
+    QTableView* tableView;
+    ScatterView* scatterView;
+    QChartView* chartView;
+
+    //main window stuff
+    QMenuBar* menuBar;
     QVBoxLayout* windowLayout;
+    QPushButton* orientationButton;
+
+    //data importing
+    CsvReader* csvReader;
 
     //the data store
     QVector<double> sonificationData;
@@ -49,6 +67,9 @@ private:
     //plotting functions
     void plot();
 
+    //convencience function for connecting ui to slots
+    void connectUi();
+
     //convenience functions to create and populate menus
     void createActions();
     void createMenus();
@@ -56,12 +77,18 @@ private:
     QMenu *fileMenu;
     QAction* importCSVAct;
 
+    //does necessary work to invert the axes of the table and
+    //plots, for iterating row-wise intead of column-wise
+    void setOrientation(bool horizontal);
+
+
 private slots:
     void quit();
     void importCSV();
     void importJSON();
+    void on_orientationButtonTriggered();
 
-    void on_orientationComboBox_currentIndexChanged(const QString &orientation);
+
 };
 
 #endif // MAINWINDOW_H
