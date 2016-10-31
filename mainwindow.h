@@ -9,6 +9,7 @@
 #include <QLayout>
 
 #include "scatterview.h"
+#include "lineview.h"
 #include "csvreader.h"
 #include "tablemodel.h"
 #include "horizontalproxymodel.h"
@@ -37,11 +38,11 @@ private:
     //Tab widget and tabs
     QTabWidget* tabWidget;
     QWidget* tableTab;
-    QWidget* chartTab;
+    QWidget* lineTab;
     QWidget* scatterTab;
     //Tab widget layouts
     QLayout* tableTabLayout;
-    QLayout* chartTabLayout;
+    QLayout* lineTabLayout;
     QLayout* scatterTabLayout;
     //transport stuff
     QWidget* transport;
@@ -49,8 +50,7 @@ private:
     //Main graphical widgets
     QTableView* tableView;
     ScatterView* scatterView;
-    QChartView* chartView;
-    QHXYModelMapper* chartMapper;
+    LineView* lineView;
 
     //main window stuff
     QMenuBar* menuBar;

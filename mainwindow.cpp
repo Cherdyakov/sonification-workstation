@@ -29,9 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
     tableView->setModel(model);
 
     //create line chart view
-    chartView = new QChartView;
-    chartView->setRenderHint(QPainter::Antialiasing);
-    chartView->setFrameShape(QFrame::Box);
+    lineView = new LineView;
+    lineView->setRenderHint(QPainter::Antialiasing);
+    lineView->setFrameShape(QFrame::Box);
 
     //scatter plot view
     scatterView = new ScatterView;
@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     tabWidget->setStyleSheet("QTabWidget::pane { border: 0; }");
     //tabs
     tableTab = new QWidget;
-    chartTab = new QWidget;
+    lineTab = new QWidget;
     scatterTab = new QWidget;
     ///////////////////////
     //add layouts to tabs//
@@ -57,9 +57,9 @@ MainWindow::MainWindow(QWidget *parent) :
     tableTabLayout->setMargin(4);
     tableTab->setLayout(tableTabLayout);
     //line chart
-    chartTabLayout = new QVBoxLayout;    
-    chartTabLayout->setMargin(4);
-    chartTab->setLayout(chartTabLayout);
+    lineTabLayout = new QVBoxLayout;
+    lineTabLayout->setMargin(4);
+    lineTab->setLayout(lineTabLayout);
     //scatter plot
     scatterTabLayout = new QVBoxLayout;
     scatterTabLayout->setMargin(4);
@@ -67,10 +67,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //insert tabs into QTabWidget
     tabWidget->addTab(tableTab, "Table");
-    tabWidget->addTab(chartTab, "Line");
+    tabWidget->addTab(lineTab, "Line");
     tabWidget->addTab(scatterTab, "Scatter");
     tableTabLayout->addWidget(tableView);
-    chartTabLayout->addWidget(chartView);
+    lineTabLayout->addWidget(lineView);
     scatterTabLayout->addWidget(scatterView);
 
     //////////////////////
@@ -106,30 +106,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::plot(QAbstractItemModel* m)
 {
-    QChart* chart = new QChart;
-
-    for(int row = 0; row < m->rowCount(); ++row)
-    {
-
-        QLineSeries *series = new QLineSeries;
-        QHXYModelMapper* mapper = new QHXYModelMapper;
-        QString name = "Row " + QString::number(row);
-
-        series->setName(name);
-        mapper->setModel(m);
-        mapper->setSeries(series);
-        mapper->setColumnCount(m->columnCount());
-        mapper->setXRow(row);
-        mapper->setYRow(row);
-
-        chart->addSeries(series);
-
-    }
-    chart->createDefaultAxes();
-    QChart* oldChart = chartView->chart();
-    chartView->setChart(chart);
-    oldChart->deleteLater();
-
+    lineView->setModel(m);
     scatterView->setModel(m);
 }
 
