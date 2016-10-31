@@ -33,6 +33,11 @@ MainWindow::MainWindow(QWidget *parent) :
     chartView->setRenderHint(QPainter::Antialiasing);
     chartView->setFrameShape(QFrame::Box);
 
+    //scatter plot view
+    scatterView = new ScatterView;
+    scatterView->setRenderHint(QPainter::Antialiasing);
+    scatterView->setFrameShape(QFrame::Box);
+
     //main window layout
     QWidget* window = new QWidget;
     windowLayout = new QVBoxLayout(this);
@@ -44,20 +49,29 @@ MainWindow::MainWindow(QWidget *parent) :
     tableTab = new QWidget;
     chartTab = new QWidget;
     scatterTab = new QWidget;
-    //add layout to tabs
+    ///////////////////////
+    //add layouts to tabs//
+    ///////////////////////
+    //table
     tableTabLayout = new QVBoxLayout;
     tableTabLayout->setMargin(4);
     tableTab->setLayout(tableTabLayout);
+    //line chart
     chartTabLayout = new QVBoxLayout;    
     chartTabLayout->setMargin(4);
     chartTab->setLayout(chartTabLayout);
+    //scatter plot
     scatterTabLayout = new QVBoxLayout;
+    scatterTabLayout->setMargin(4);
+    scatterTab->setLayout(scatterTabLayout);
+
     //insert tabs into QTabWidget
     tabWidget->addTab(tableTab, "Table");
     tabWidget->addTab(chartTab, "Line");
     tabWidget->addTab(scatterTab, "Scatter");
     tableTabLayout->addWidget(tableView);
     chartTabLayout->addWidget(chartView);
+    scatterTabLayout->addWidget(scatterView);
 
     //////////////////////
     //Transport section //
@@ -115,6 +129,8 @@ void MainWindow::plot(QAbstractItemModel* m)
     QChart* oldChart = chartView->chart();
     chartView->setChart(chart);
     oldChart->deleteLater();
+
+    scatterView->setModel(m);
 }
 
 void MainWindow::connectUi()

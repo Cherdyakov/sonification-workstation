@@ -51,7 +51,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 //{
 //    if (index.isValid() && role == Qt::EditRole) {
 //        m_data[index.row()].replace(index.column(), value.toDouble());
-//        emit dataChanged(index, index);
+//        dataChanged(index, index);
 //        return true;
 //    }
 //    return false;
@@ -60,11 +60,11 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 void TableModel::appendRow(QVector<double> row)
 {
     emit layoutAboutToBeChanged();
-    emit beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     m_data.append(row);
 
-    emit endInsertRows();
+    endInsertRows();
     emit layoutChanged();
 }
 

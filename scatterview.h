@@ -20,16 +20,15 @@ public:
     ~ScatterView();
     void mouseMoveEvent(QMouseEvent* event);
 
-    void setModel(TableModel *m);
+    void setModel(QAbstractItemModel *m);
 
 private slots:
     void handleMouseMoved(const QPointF &point);
 
 private:
-    QScatterSeries* scatter;
-    QHXYModelMapper* mapper;
-    TableModel* model;
-    QChart* chart;
+
+    QAbstractItemModel* model;
+
 };
 
 #endif // CHARTVIEW_H
