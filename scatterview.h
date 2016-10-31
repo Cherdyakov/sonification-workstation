@@ -5,6 +5,7 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QScatterSeries>
 #include <QHXYModelMapper>
+#include <QPen>
 #include <qmath.h>
 
 #include "tablemodel.h"
@@ -26,7 +27,15 @@ private slots:
 
 private:
 
+    QChart* scatterChart;
+    QHXYModelMapper* mapper;
     QAbstractItemModel* model;
+    QScatterSeries* scatterSeries;
+    QScatterSeries* triggeredSeries;
+    QPen* scatterPen;
+    QPen* triggeredPen;
+
+    void triggerPoint(QPointF point);
 
 };
 

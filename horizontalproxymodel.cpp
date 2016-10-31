@@ -35,7 +35,6 @@ QModelIndex HorizontalProxyModel::parent(const QModelIndex &) const
 
 int HorizontalProxyModel::rowCount(const QModelIndex &) const
 {
-    qDebug() << "proxy rowCount";
     if(!sourceModel())
     {
         return 0;
@@ -45,7 +44,6 @@ int HorizontalProxyModel::rowCount(const QModelIndex &) const
 
 int HorizontalProxyModel::columnCount(const QModelIndex &) const
 {
-    qDebug() << "proxy colCount";
     if(!sourceModel())
     {
         return 0;
