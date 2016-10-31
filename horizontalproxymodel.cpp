@@ -1,4 +1,5 @@
 #include "horizontalproxymodel.h"
+#include <qdebug.h>
 
 HorizontalProxyModel::HorizontalProxyModel(QObject *parent) : QAbstractProxyModel(parent)
 {
@@ -6,15 +7,19 @@ HorizontalProxyModel::HorizontalProxyModel(QObject *parent) : QAbstractProxyMode
 
 QModelIndex HorizontalProxyModel::mapToSource(const QModelIndex &proxyIndex) const
 {
-    if (sourceModel()) {
-        return sourceModel()->index(proxyIndex.column(), proxyIndex.row());
-    } else {
+    if (!sourceModel())
+    {
         return QModelIndex();
     }
+    return sourceModel()->index(proxyIndex.column(), proxyIndex.row());
 }
 
 QModelIndex HorizontalProxyModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
+    if(!sourceModel())
+    {
+        return QModelIndex();
+    }
     return index(sourceIndex.column(), sourceIndex.row());
 }
 
@@ -30,25 +35,41 @@ QModelIndex HorizontalProxyModel::parent(const QModelIndex &) const
 
 int HorizontalProxyModel::rowCount(const QModelIndex &) const
 {
-    return sourceModel() ? sourceModel()->columnCount() : 0;
+    qDebug() << "proxy rowCount";
+    if(!sourceModel())
+    {
+        return 0;
+    }
+    return sourceModel()->columnCount();
 }
 
 int HorizontalProxyModel::columnCount(const QModelIndex &) const
 {
-    return sourceModel() ? sourceModel()->rowCount() : 0;
+    qDebug() << "proxy colCount";
+    if(!sourceModel())
+    {
+        return 0;
+    }
+    return sourceModel()->rowCount();
 }
 
 QVariant HorizontalProxyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (!sourceModel()) { return QVariant(); }
-    Qt::Orientation new_orientation = orientation == Qt::Horizontal ?
-                Qt::Vertical : Qt::Horizontal;
-    return sourceModel() ? sourceModel()->headerData(section, new_orientation, role) : 0;
+    if (!sourceModel())
+    {
+        return 0;
+    }
+    Qt::Orientation new_orientation = orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal;
+    return sourceModel()->headerData(section, new_orientation, role);
 }
 
-QVariant HorizontalProxyModel::data(const QModelIndex &index) const
+QVariant HorizontalProxyModel::data(const QModelIndex &proxyIndex, int role) const
 {
-    return sourceModel() ? sourceModel()->data(sourceModel()->index(index.column(), index.row())) : 0;
+    if(role != Qt::DisplayRole)
+    {
+        return QVariant();
+    }
+    return sourceModel()->data(sourceModel()->index(proxyIndex.column(), proxyIndex.row()));
 }
 
 

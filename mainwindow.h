@@ -43,13 +43,14 @@ private:
     QLayout* tableTabLayout;
     QLayout* chartTabLayout;
     QLayout* scatterTabLayout;
-    //transpot stuff
+    //transport stuff
     QWidget* transport;
     QLayout* transportLayout;
     //Main graphical widgets
     QTableView* tableView;
     ScatterView* scatterView;
     QChartView* chartView;
+    QHXYModelMapper* chartMapper;
 
     //main window stuff
     QMenuBar* menuBar;
@@ -59,13 +60,10 @@ private:
     //data importing
     CsvReader* csvReader;
 
-    //the data store
-    QVector<double> sonificationData;
-
     //file functions
     void importCSV(QString filename);
     //plotting functions
-    void plot();
+    void plot(QAbstractItemModel *model);
 
     //convencience function for connecting ui to slots
     void connectUi();

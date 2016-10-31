@@ -8,6 +8,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Sonification Workstation");
 
+    //csvReader for importing data into our model
+    csvReader = new CsvReader;
+
     menuBar = new QMenuBar(0);
     createActions();
     createMenus();
@@ -15,11 +18,25 @@ MainWindow::MainWindow(QWidget *parent) :
     //initialize
     horizontal = false;
 
+    ///////////////////
+    //set data models//
+    ///////////////////
+    //for table
+    model = new TableModel(0);
+    tableView = new QTableView;
+    horizontalModel = new HorizontalProxyModel;
+    horizontalModel->setSourceModel(model);
+    tableView->setModel(model);
+
+    //create line chart view
+    chartView = new QChartView;
+    chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setFrameShape(QFrame::Box);
+
     //main window layout
     QWidget* window = new QWidget;
     windowLayout = new QVBoxLayout(this);
     window->setLayout(windowLayout);
-    this->setLayout(windowLayout);
     //tabbed view
     tabWidget = new QTabWidget;
     tabWidget->setStyleSheet("QTabWidget::pane { border: 0; }");
@@ -29,28 +46,18 @@ MainWindow::MainWindow(QWidget *parent) :
     scatterTab = new QWidget;
     //add layout to tabs
     tableTabLayout = new QVBoxLayout;
-    chartTabLayout = new QVBoxLayout;
-    scatterTabLayout = new QVBoxLayout;
     tableTabLayout->setMargin(4);
-    chartTabLayout->setMargin(4);
-    scatterTabLayout->setMargin(4);
     tableTab->setLayout(tableTabLayout);
+    chartTabLayout = new QVBoxLayout;    
+    chartTabLayout->setMargin(4);
     chartTab->setLayout(chartTabLayout);
-    scatterTab->setLayout(scatterTabLayout);
-    //create views to insert into tab layouts
-    tableView = new QTableView;
-    chartView = new QChartView;
-    scatterView = new ScatterView;
-    chartView->setFrameShape(QFrame::Box);
-    scatterView->setFrameShape(QFrame::Box);
-    //insert into the tab layouts
-    tableTabLayout->addWidget(tableView);
-    chartTabLayout->addWidget(chartView);
-    scatterTabLayout->addWidget(scatterView);
+    scatterTabLayout = new QVBoxLayout;
     //insert tabs into QTabWidget
     tabWidget->addTab(tableTab, "Table");
     tabWidget->addTab(chartTab, "Line");
     tabWidget->addTab(scatterTab, "Scatter");
+    tableTabLayout->addWidget(tableView);
+    chartTabLayout->addWidget(chartView);
 
     //////////////////////
     //Transport section //
@@ -71,17 +78,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //make windowLayout our central widget
     this->setCentralWidget(window);
 
-    ///////////////////
-    //set data models//
-    ///////////////////
-    model = new TableModel;
-    model->setDataVector(&sonificationData);
-    horizontalModel = new HorizontalProxyModel(this);
-    horizontalModel->setSourceModel(model);
-    tableView->setModel(model);
-    scatterView->setModel(model);
-    //csvReader for importing data into our model
-    csvReader = new CsvReader;
 
     //connect ui signals/slots
     connectUi();
@@ -94,43 +90,31 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::plot()
+void MainWindow::plot(QAbstractItemModel* m)
 {
+    QChart* chart = new QChart;
 
-    QChart* chart;
-    if(chartView->chart())
+    for(int row = 0; row < m->rowCount(); ++row)
     {
-        chart = chartView->chart();
-    }
-    else {
-        chart = new QChart;
-    }
-    QList<QSplineSeries*> series;
 
-    for (int i = 0; i < model->rowCount(); i++)
-    {
-        series.push_back(new QSplineSeries());
-        for (int j = 0; j < model->columnCount(); ++j)
-        {
-            int idx = (model->columnCount() * i + j);
-            QPointF p;
-            p.setX(j);
-            p.setY(sonificationData[idx]);
-            series[i]->operator << (p);
-        }
-    }
+        QLineSeries *series = new QLineSeries;
+        QHXYModelMapper* mapper = new QHXYModelMapper;
+        QString name = "Row " + QString::number(row);
 
-    for (int i = 0; i < series.count(); ++i)
-    {
-        chart->addSeries(series[i]);
-    }
+        series->setName(name);
+        mapper->setModel(m);
+        mapper->setSeries(series);
+        mapper->setColumnCount(m->columnCount());
+        mapper->setXRow(row);
+        mapper->setYRow(row);
 
-    chart->setAnimationOptions(QChart::AllAnimations);
-    chart->legend()->hide();
+        chart->addSeries(series);
+
+    }
     chart->createDefaultAxes();
-    chart->setTitle("LINES!!!!");
+    QChart* oldChart = chartView->chart();
     chartView->setChart(chart);
-
+    oldChart->deleteLater();
 }
 
 void MainWindow::connectUi()
@@ -155,16 +139,17 @@ void MainWindow::createMenus()
 
 
 
-void MainWindow::setOrientation(bool horiz)
+void MainWindow::setOrientation(bool isHorizontal)
 {
-    if(horiz)
+    if(isHorizontal)
     {
         tableView->setModel(horizontalModel);
-
+        plot(horizontalModel);
     }
     else
     {
         tableView->setModel(model);
+        plot(model);
     }
 }
 
@@ -178,7 +163,7 @@ void MainWindow::importCSV()
         horizontal = false;
         setOrientation(horizontal);
     }
-    plot();
+    plot(model);
 }
 
 void MainWindow::importJSON()

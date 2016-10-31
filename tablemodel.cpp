@@ -1,82 +1,80 @@
 #include "tablemodel.h"
 
-TableModel::TableModel()
+TableModel::TableModel(QObject *parent) :
+    QAbstractTableModel(parent)
 {
-    width = 0;
+
 }
 
 int TableModel::rowCount(const QModelIndex &parent) const
 {
-    int count;
-    if(width == 0)
-    {
-        count = 0;
-    }
-    else
-    {
-        count = m_data->count() / width;
-    }
-    qDebug() << "tablemodel rowCount: " << count;
-    return count;
+    Q_UNUSED(parent)
+    return m_data.count();
 }
 
 int TableModel::columnCount(const QModelIndex &parent) const
 {
-    qDebug() << "tablemodel: colCount " << width;
-    return width;
+    Q_UNUSED(parent)
+    if(m_data.count() < 1)
+    {
+        return 0;
+    }
+    return m_data[0].count();
+}
+
+QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role != Qt::DisplayRole)
+        return QVariant();
+
+    if (orientation == Qt::Horizontal) {
+        if (section % 2 == 0)
+            return "x";
+        else
+            return "y";
+    } else {
+        return QString("%1").arg(section + 1);
+    }
 }
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
-    qDebug() << "tablemodel: data";
-    if (role == Qt::DisplayRole)
+//    qDebug() << "index: " << index.row() << "," << index.column();
+    if (role != Qt::DisplayRole)
     {
-        int idx = index.row() * width + index.column();
-        return (*m_data)[idx];
+        return QVariant();
     }
-    return QVariant();
+    return m_data[index.row()].at(index.column());
 }
 
-void TableModel::setDataVector(QVector<double> *data)
-{
-    m_data = data;
-}
+//bool TableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+//{
+//    if (index.isValid() && role == Qt::EditRole) {
+//        m_data[index.row()].replace(index.column(), value.toDouble());
+//        emit dataChanged(index, index);
+//        return true;
+//    }
+//    return false;
+//}
 
 void TableModel::appendRow(QVector<double> row)
 {
-    if(!m_data)
-    {
-        qDebug() << "invalid m_data";
-        return;
-    }
-
     emit layoutAboutToBeChanged();
     emit beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    for(int i = 0; i < row.count(); ++i)
-    {
-        m_data->push_back(row[i]);
-    }
-    width = row.count();
+
+    m_data.append(row);
+
     emit endInsertRows();
     emit layoutChanged();
-
-    qDebug() << (*m_data);
-
 }
 
 void TableModel::clear()
 {
-    m_data->clear();
-}
-
-int TableModel::getWidth() const
-{
-    return width;
-}
-
-void TableModel::setWidth(int value)
-{
-    width = value;
+    for(int i = 0; i < m_data.count(); ++i)
+    {
+        m_data[i].clear();
+    }
+    m_data.clear();
 }
 
 //QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
