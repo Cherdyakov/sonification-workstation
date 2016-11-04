@@ -20,7 +20,7 @@ public:
     ScatterView(QWidget* parent = 0);
     ~ScatterView();
     void mouseMoveEvent(QMouseEvent* event);
-    void setModel(QAbstractItemModel *m);
+    void setModel(QAbstractItemModel *m, int xRow = 0, int yRow = 1);
 
 private slots:
     void handleMouseMoved(const QPointF &point);
@@ -34,6 +34,7 @@ private:
     QScatterSeries* triggeredSeries;
     QPen* scatterPen;
     QPen* triggeredPen;
+    QHash<QString, int>* hashTable;
 
     void triggerPoint(QPointF point);
 
