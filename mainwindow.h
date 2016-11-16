@@ -13,6 +13,8 @@
 #include "csvreader.h"
 #include "tablemodel.h"
 #include "horizontalproxymodel.h"
+#include "ringbuffer.h"
+#include "sequencer.h"
 
 using namespace QtCharts;
 
@@ -27,6 +29,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    void setRingBuffer(son::RingBuffer* buffer);
 
 private:
 
@@ -49,13 +53,18 @@ private:
     QLayout* transportLayout;
     //Main graphical widgets
     QTableView* tableView;
-    ScatterView* scatterView;
+    son::ScatterView* scatterView;
     LineView* lineView;
 
     //main window stuff
     QMenuBar* menuBar;
     QVBoxLayout* windowLayout;
     QPushButton* orientationButton;
+
+    //for sending data to the audio callback
+
+    son::RingBuffer* ringBuffer;
+    son::Sequencer* sequencer;
 
     //data importing
     CsvReader* csvReader;

@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     lineView->setFrameShape(QFrame::Box);
 
     //scatter plot view
-    scatterView = new ScatterView;
+    scatterView = new son::ScatterView;
     scatterView->setRenderHint(QPainter::Antialiasing);
     scatterView->setFrameShape(QFrame::Box);
 
@@ -92,6 +92,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //make windowLayout our central widget
     this->setCentralWidget(window);
 
+    //sequencer
+    sequencer = new son::Sequencer;
+    scatterView->setSequencer(sequencer);
 
     //connect ui signals/slots
     connectUi();
@@ -102,6 +105,12 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setRingBuffer(son::RingBuffer *buffer)
+{
+    ringBuffer = buffer;
+    sequencer->setRingBuffer(ringBuffer);
 }
 
 void MainWindow::plot(QAbstractItemModel* m)
@@ -157,6 +166,7 @@ void MainWindow::importCSV()
         setOrientation(horizontal);
     }
     plot(model);
+    ringBuffer->reset();
 }
 
 void MainWindow::importJSON()

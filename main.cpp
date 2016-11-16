@@ -10,11 +10,15 @@
 #include "callback.h"
 #include "synthgraph.h"
 #include "tablemodel.h"
+#include "ringbuffer.h"
 
 int main(int argc, char *argv[])
 {
     son::UserData uData;
+    son::RingBuffer ringBuffer(100);
+
     son::SynthGraph* graph = new son::SynthGraph();
+    graph->setRingBuffer(&ringBuffer);
     uData.graph = graph;
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -26,6 +30,7 @@ int main(int argc, char *argv[])
     view->rootContext()->setContextProperty("graph", graph);
 
     MainWindow main_window;
+    main_window.setRingBuffer(&ringBuffer);
     SynthWindow synth_window;
 
     synth_window.setView(view);

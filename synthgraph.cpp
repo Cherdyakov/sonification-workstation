@@ -81,4 +81,9 @@ int SynthGraph::graphSize()
     return graphRoot.count();
 }
 
+void SynthGraph::setRingBuffer(RingBuffer *buffer)
+{
+    ringBuffer = buffer;
+}
+
 } //namespace son

@@ -14,7 +14,9 @@ SOURCES += \
     csvreader.cpp \
     horizontalproxymodel.cpp \
     scatterview.cpp \
-    lineview.cpp
+    lineview.cpp \
+    ringbuffer.cpp \
+    sequencer.cpp
 
 RESOURCES += qml.qrc
 
@@ -39,7 +41,9 @@ HEADERS += \
     csvreader.h \
     horizontalproxymodel.h \
     scatterview.h \
-    lineview.h
+    lineview.h \
+    ringbuffer.h \
+    sequencer.h
 
 FORMS += \
     mainwindow.ui \

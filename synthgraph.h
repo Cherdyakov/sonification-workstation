@@ -6,6 +6,7 @@
 #include <synthitem.h>
 #include <output.h>
 #include "oscillator.h"
+#include "ringbuffer.h"
 
 namespace son {
 
@@ -28,6 +29,7 @@ public:
 
     float processGraph();
     int graphSize();
+    void setRingBuffer(RingBuffer* buffer);
 
 signals:
 
@@ -36,6 +38,7 @@ public slots:
 
 private:
     QVector<SynthItem*> graphRoot;
+    RingBuffer* ringBuffer;
 
 };
 

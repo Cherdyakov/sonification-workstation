@@ -3,6 +3,9 @@
 
 QT_CHARTS_USE_NAMESPACE
 
+
+namespace son {
+
 ScatterView::ScatterView(QWidget *parent)
     : QChartView(new QChart(), parent)
 {
@@ -40,11 +43,10 @@ void ScatterView::mouseMoveEvent(QMouseEvent* event)
     handleMouseMoved(chartPoint);
 }
 
-
 void ScatterView::handleMouseMoved(const QPointF &point)
 {
     QPointF mousePoint = point;
-    qreal distance(0.3); //distance from mouse to point in chart axes
+    qreal distance(0.2); //distance from mouse to point in chart axes
     foreach (QPointF currentPoint, scatterSeries->points()) { //re-implement w/vectorPoints
         qreal currentDistance = qSqrt((currentPoint.x() - mousePoint.x())
                                       * (currentPoint.x() - mousePoint.x())
@@ -71,7 +73,13 @@ void ScatterView::triggerPoint(QPointF point)
             QModelIndex index = model->index(row, column);
             colValues.append(model->data(index).toDouble());
         }
-        qDebug() << colValues;
+        if(sequencer == NULL)
+        {
+            qDebug() << "null sequencer";
+            return;
+        }
+
+        sequencer->enqueue(&colValues);
     }
 }
 
@@ -120,5 +128,12 @@ void ScatterView::setModel(QAbstractItemModel *m, int xRow, int yRow)
     oldChart->deleteLater();
 
     scatterSeries = series;
+
+}
+
+void ScatterView::setSequencer(Sequencer* const seq)
+{
+    sequencer = seq;
+}
 
 }
