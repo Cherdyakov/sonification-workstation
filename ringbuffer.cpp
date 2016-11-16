@@ -22,25 +22,27 @@ void RingBuffer::reset()
     head = 0;
 }
 
-bool RingBuffer::push(const QVector<double>* item)
+bool RingBuffer::push(QVector<double> item)
 {
 
     //buffer size at max
     if(full())
     {
+        qDebug() << "ringbuffer: full!";
         return false;
     }
     if(head > array.count() - 1)
     {
         head = 0;
     }
+//    qDebug() << "ringbuffer: " << *item;
     array[head] = item;
     head++;
     currentSize++;
     return true;
 }
 
-const QVector<double>* RingBuffer::pop()
+QVector<double>* RingBuffer::pop()
 {
     //bounds check
     if(tail > array.count() - 1)
@@ -53,7 +55,7 @@ const QVector<double>* RingBuffer::pop()
         return NULL;
     }
     //tail behind head, data avail
-    const QVector<double>* data = array[tail];
+    QVector<double>* data = &array[tail];
     tail++;
     currentSize--;
     return data;

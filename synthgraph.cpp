@@ -10,7 +10,7 @@ SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 
 QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
 {
-//    qDebug() << "createItem" << type;
+    //    qDebug() << "createItem" << type;
 
     SynthItem* item;
 
@@ -60,6 +60,13 @@ float SynthGraph::processGraph()
 {
     float s = 0.0;
 
+    dataColumn = retrieveDataColumn();
+
+    if(dataColumn)
+    {
+        qDebug() << "graph: " << *dataColumn;
+    }
+
     QVector<SynthItem*>::const_iterator i;
 
     for (i = graphRoot.constBegin(); i != graphRoot.constEnd(); ++i) {
@@ -69,11 +76,23 @@ float SynthGraph::processGraph()
 
 
     //test noise
-//    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+    //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
     //test mssg
     //    qDebug() << "processGraph";
 
     return s;
+}
+
+QVector<double>* SynthGraph::retrieveDataColumn()
+{
+    if(ringBuffer)
+    {
+        QVector<double>* col;
+        col = ringBuffer->pop();
+        return col;
+    }
+
+    return NULL;
 }
 
 int SynthGraph::graphSize()

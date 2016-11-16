@@ -75,11 +75,11 @@ void ScatterView::triggerPoint(QPointF point)
         }
         if(sequencer == NULL)
         {
-            qDebug() << "null sequencer";
+            qDebug() << "scatterview: null sequencer";
             return;
         }
 
-        sequencer->enqueue(&colValues);
+        sequencer->enqueue(colValues);
     }
 }
 

@@ -17,8 +17,8 @@ public:
 
     void reset();
 
-    bool push(const QVector<double>* item);
-    const QVector<double>* pop();
+    bool push(QVector<double> item);
+    QVector<double>* pop();
 
     bool empty() const;
     bool full() const;
@@ -30,7 +30,7 @@ private:
     QAtomicInteger<unsigned int> head;
     QAtomicInteger<unsigned int> tail;
 
-    QVector<const QVector<double>*> array;
+    QVector<QVector<double>> array;
 
 };
 

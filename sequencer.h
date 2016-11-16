@@ -14,9 +14,11 @@ class Sequencer
 public:
     Sequencer();
 
-    bool enqueue(const QVector<double> *data);
-    bool enqueue(QVector<double> *data, unsigned int delta);
+    bool enqueue(QVector<double> data);
+    bool enqueue(QVector<double> data, unsigned int delta);
     void setRingBuffer(RingBuffer* buffer);
+    //every sample, for keeping time
+    void tick();
 
 
 private:
