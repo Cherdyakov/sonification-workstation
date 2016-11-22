@@ -31,9 +31,10 @@ int main(int argc, char *argv[])
 
     MainWindow main_window;
     main_window.setRingBuffer(&ringBuffer);
+    main_window.setSynthGraph(graph);
     SynthWindow synth_window;
-
     synth_window.setView(view);
+
     main_window.show();
     synth_window.show();
 

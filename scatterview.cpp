@@ -67,11 +67,11 @@ void ScatterView::triggerPoint(QPointF point)
     for(int i = 0; i < columns.count(); ++i)
     {
         int column = columns[i];
-        QVector<double> colValues;
+        QVector<double> colData;
         for(int row = 0; row < model->rowCount(); ++row)
         {
-            QModelIndex index = model->index(row, column);
-            colValues.append(model->data(index).toDouble());
+            QModelIndex idx = model->index(row, column);
+            colData.append(model->data(idx).toDouble());
         }
         if(sequencer == NULL)
         {
@@ -79,7 +79,7 @@ void ScatterView::triggerPoint(QPointF point)
             return;
         }
 
-        sequencer->enqueue(colValues);
+        sequencer->enqueue(colData);
     }
 }
 

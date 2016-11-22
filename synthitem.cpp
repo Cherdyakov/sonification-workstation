@@ -35,6 +35,11 @@ void SynthItem::setGui(QObject *value)
     connectGui();
 }
 
+void SynthItem::setDataColumn(QVector<double> *col)
+{
+    dataColumn = col;
+}
+
 int SynthItem::numChildren()
 {
     //returns number of all child items

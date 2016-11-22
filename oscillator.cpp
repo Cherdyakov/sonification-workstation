@@ -56,6 +56,11 @@ void Oscillator::removeChild(QObject *child)
     } //no such child
 }
 
+void Oscillator::setDataColumn(QVector<double> *data)
+{
+    dataColumn = data;
+}
+
 void Oscillator::setWaveform(SynthItem::WAVEFORM type)
 {
     if (waveform != type) {

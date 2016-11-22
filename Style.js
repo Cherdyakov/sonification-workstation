@@ -23,6 +23,7 @@ var editorLabelWidth = 70
 var editorControlWidth = 150
 var editorMargin = 8
 var editorRadius = 6
+var editorTextInputColor = "white"
 
 //SynthItem derived class styles
 var oscColor = "light blue"

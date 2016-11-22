@@ -13,12 +13,12 @@ namespace son
 class RingBuffer
 {
 public:
-    RingBuffer(int size);
+    RingBuffer(int size = 100);
 
     void reset();
 
     bool push(QVector<double> item);
-    QVector<double>* pop();
+    QVector<double> pop();
 
     bool empty() const;
     bool full() const;
@@ -30,7 +30,7 @@ private:
     QAtomicInteger<unsigned int> head;
     QAtomicInteger<unsigned int> tail;
 
-    QVector<QVector<double>> array;
+    QVector<QVector<double>>* array;
 
 };
 

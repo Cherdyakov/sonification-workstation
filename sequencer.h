@@ -1,6 +1,8 @@
 #ifndef SEQUENCER_H
 #define SEQUENCER_H
 
+#include <QObject>
+#include <QTimer>
 #include <QVector>
 #include <QDebug>
 
@@ -9,22 +11,38 @@
 namespace son
 {
 
-class Sequencer
+class Sequencer : public QObject
 {
+    Q_OBJECT
+
 public:
     Sequencer();
 
     bool enqueue(QVector<double> data);
     bool enqueue(QVector<double> data, unsigned int delta);
     void setRingBuffer(RingBuffer* buffer);
-    //every sample, for keeping time
-    void tick();
+
+    void setPaused(bool pause);
+    void setStepSize(int step);
+    void setSpeed(double speed);
 
 
 private:
-    double speed;
+
+
+    QTimer* timer;
     RingBuffer* ringBuffer;
 
+    bool paused;
+    int stepsPerSecond;
+
+private slots:
+
+    void step();
+
+signals:
+
+    void stepped();
 
 
 };

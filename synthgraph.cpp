@@ -23,6 +23,7 @@ QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
     case OSCILLATOR: {
         item = new Oscillator();
         item->setGui(gui);
+        item->setDataColumn(&dataColumn);
         return item;
         break;
     }
@@ -60,12 +61,7 @@ float SynthGraph::processGraph()
 {
     float s = 0.0;
 
-    dataColumn = retrieveDataColumn();
-
-    if(dataColumn)
-    {
-        qDebug() << "graph: " << *dataColumn;
-    }
+    retrieveData();
 
     QVector<SynthItem*>::const_iterator i;
 
@@ -83,18 +79,6 @@ float SynthGraph::processGraph()
     return s;
 }
 
-QVector<double>* SynthGraph::retrieveDataColumn()
-{
-    if(ringBuffer)
-    {
-        QVector<double>* col;
-        col = ringBuffer->pop();
-        return col;
-    }
-
-    return NULL;
-}
-
 int SynthGraph::graphSize()
 {
     return graphRoot.count();
@@ -103,6 +87,16 @@ int SynthGraph::graphSize()
 void SynthGraph::setRingBuffer(RingBuffer *buffer)
 {
     ringBuffer = buffer;
+}
+
+void SynthGraph::retrieveData()
+{
+
+    if(!ringBuffer->empty())
+    {
+        dataColumn = ringBuffer->pop();
+        qDebug() << "graph: retrieveData: " << dataColumn;
+    }
 }
 
 } //namespace son

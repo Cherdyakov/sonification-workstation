@@ -16,6 +16,7 @@ public:
     using SynthItem::addChild;
     void addChild(QObject* child, int type);
     void removeChild(QObject* child);
+    void setDataColumn(QVector<double>* data);
 
     //UI invokable functions for setting parameters
     Q_INVOKABLE void setWaveform(WAVEFORM type);
@@ -24,7 +25,8 @@ public:
 
 private:
 
-    QVector<double> data;
+    QVector<double>* dataColumn;
+
 
     bool fixedFreq;
     double freq;

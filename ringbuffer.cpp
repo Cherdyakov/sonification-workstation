@@ -5,13 +5,12 @@ namespace son
 
 RingBuffer::RingBuffer(int size)
 { 
-
     head = 0;
     tail = 0;
     currentSize = 0;
     capacity = size;
-    array.resize(size);
-
+    array = new QVector<QVector<double>>;
+    array->resize(capacity);
 }
 
 void RingBuffer::reset()
@@ -20,6 +19,8 @@ void RingBuffer::reset()
     head = 0;
     tail = 0;
     head = 0;
+    array->clear();
+    array->resize(capacity);
 }
 
 bool RingBuffer::push(QVector<double> item)
@@ -31,31 +32,32 @@ bool RingBuffer::push(QVector<double> item)
         qDebug() << "ringbuffer: full!";
         return false;
     }
-    if(head > array.count() - 1)
+    if(head > array->count() - 1)
     {
         head = 0;
     }
-//    qDebug() << "ringbuffer: " << *item;
-    array[head] = item;
+
+    array->insert(head, item);
     head++;
     currentSize++;
     return true;
 }
 
-QVector<double>* RingBuffer::pop()
+QVector<double> RingBuffer::pop()
 {
+    QVector<double> data;
     //bounds check
-    if(tail > array.count() - 1)
+    if(tail > array->count() - 1)
     {
         tail = 0;
     }
     //tail has reached head
     if(empty())
     {
-        return NULL;
+        return data;
     }
     //tail behind head, data avail
-    QVector<double>* data = &array[tail];
+    data = array->at(tail);
     tail++;
     currentSize--;
     return data;

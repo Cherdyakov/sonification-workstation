@@ -34,6 +34,7 @@ public:
 
     QObject *getGui() const;
     void setGui(QObject *value);
+    void setDataColumn(QVector<double>* col);
 
     int numChildren();
 
@@ -57,6 +58,7 @@ private:
 
     virtual void connectGui();
 
+    QVector<double>* dataColumn;
     QVector<SynthItem*> synthChildren;
     QVector<SynthItem*> synthParents;
 

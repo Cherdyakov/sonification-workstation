@@ -8,6 +8,8 @@
 #include <QTabWidget>
 #include <QLayout>
 
+#include <atomic>
+
 #include "scatterview.h"
 #include "lineview.h"
 #include "csvreader.h"
@@ -15,6 +17,7 @@
 #include "horizontalproxymodel.h"
 #include "ringbuffer.h"
 #include "sequencer.h"
+#include "synthgraph.h"
 
 using namespace QtCharts;
 
@@ -31,10 +34,13 @@ public:
     ~MainWindow();
 
     void setRingBuffer(son::RingBuffer* buffer);
+    void setSynthGraph(son::SynthGraph* graph);
 
 private:
 
     Ui::MainWindow *ui;
+    //synth graph
+    son::SynthGraph* synthGraph;
     //the model
     TableModel* model;
     HorizontalProxyModel* horizontalModel;
@@ -51,6 +57,9 @@ private:
     //transport stuff
     QWidget* transport;
     QLayout* transportLayout;
+    QPushButton* orientationButton;
+    QPushButton* playButton;
+    bool paused;
     //Main graphical widgets
     QTableView* tableView;
     son::ScatterView* scatterView;
@@ -59,10 +68,8 @@ private:
     //main window stuff
     QMenuBar* menuBar;
     QVBoxLayout* windowLayout;
-    QPushButton* orientationButton;
 
-    //for sending data to the audio callback
-
+    //for getting data to the audio callback
     son::RingBuffer* ringBuffer;
     son::Sequencer* sequencer;
 
@@ -74,8 +81,9 @@ private:
     //plotting functions
     void plot(QAbstractItemModel *model);
 
-    //convencience function for connecting ui to slots
+    //convencience functions for connecting signals and slots
     void connectUi();
+    void connectSequencer();
 
     //convenience functions to create and populate menus
     void createActions();
@@ -87,14 +95,18 @@ private:
     //does necessary work to invert the axes of the table and
     //plots, for iterating row-wise intead of column-wise
     void setOrientation(bool horizontal);
+    void setPause(bool pause);
+
 
 
 private slots:
     void quit();
     void importCSV();
     void importJSON();
-    void on_orientationButtonTriggered();
 
+    //ui slots
+    void on_orientationButtonTriggered();
+    void on_playButtonTriggered();
 
 };
 

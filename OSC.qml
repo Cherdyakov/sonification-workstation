@@ -73,6 +73,16 @@ SynthItem {
                 }
             }
 
+            EditorMapper {
+                id: frequencyMapper
+                label.text: qsTr("Frequency Source: ")
+                onMappingsChanged:
+                {
+                    //something
+                }
+
+            }
+
             RowLayout {
                 id: dataLayout
             }

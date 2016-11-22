@@ -6,7 +6,6 @@
 #include <QDebug>
 #include "userdata.h"
 
-
 namespace son {
 
 // Two-channel sawtooth wave generator.
@@ -16,8 +15,8 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     Q_UNUSED(streamTime)
     Q_UNUSED(inputBuffer)
 
-    double *buffer = (double *) outputBuffer;
     UserData* uData = (UserData *) data;
+    double *buffer = (double *) outputBuffer;
     SynthGraph* graph = uData->graph;
 
 //    qDebug() << "graphSize: " << graph->graphSize();

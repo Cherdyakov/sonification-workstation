@@ -76,13 +76,16 @@ MainWindow::MainWindow(QWidget *parent) :
     //////////////////////
     //Transport section //
     //////////////////////
+    paused = true;
     //transport item
     transport = new QWidget;
     //transport layout
     transportLayout = new QVBoxLayout;
     //transport controls
     orientationButton = new QPushButton("Invert Axes");
+    playButton = new QPushButton("Play");
     transportLayout->addWidget(orientationButton);
+    transportLayout->addWidget(playButton);
     //set layout of transport
     transport->setLayout(transportLayout);
     //inset tab widget into window layout
@@ -95,10 +98,13 @@ MainWindow::MainWindow(QWidget *parent) :
     //sequencer
     sequencer = new son::Sequencer;
     scatterView->setSequencer(sequencer);
+    lineView->setSequencer(sequencer);
+
+    //connect non ui singals/slots
+    connectSequencer();
 
     //connect ui signals/slots
     connectUi();
-
 
 }
 
@@ -113,6 +119,11 @@ void MainWindow::setRingBuffer(son::RingBuffer *buffer)
     sequencer->setRingBuffer(ringBuffer);
 }
 
+void MainWindow::setSynthGraph(son::SynthGraph *graph)
+{
+    synthGraph = graph;
+}
+
 void MainWindow::plot(QAbstractItemModel* m)
 {
     lineView->setModel(m);
@@ -121,7 +132,13 @@ void MainWindow::plot(QAbstractItemModel* m)
 
 void MainWindow::connectUi()
 {
-    connect(orientationButton, SIGNAL(released()),this, SLOT (on_orientationButtonTriggered()));
+    connect(orientationButton, SIGNAL(released()),this, SLOT(on_orientationButtonTriggered()));
+    connect(playButton, SIGNAL(released()),this, SLOT(on_playButtonTriggered()));
+}
+
+void MainWindow::connectSequencer()
+{
+    connect(sequencer, SIGNAL(stepped()),lineView,SLOT(step()));
 }
 
 
@@ -155,6 +172,20 @@ void MainWindow::setOrientation(bool isHorizontal)
     }
 }
 
+void MainWindow::setPause(bool pause)
+{
+    if(pause)
+    {
+        playButton->setText("Play");
+        sequencer->setPaused(pause);
+    }
+    else
+    {
+        playButton->setText("Pause");
+        sequencer->setPaused(pause);
+    }
+}
+
 void MainWindow::importCSV()
 {
     //    model->clear();
@@ -178,6 +209,13 @@ void MainWindow::on_orientationButtonTriggered()
 {
     horizontal = !horizontal;
     setOrientation(horizontal);
+}
+
+void MainWindow::on_playButtonTriggered()
+{
+    paused = !paused;
+    setPause(paused);
+
 }
 
 void MainWindow::quit()

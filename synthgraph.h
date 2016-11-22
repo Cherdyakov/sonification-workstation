@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <synthitem.h>
 #include <output.h>
+#include <atomic>
+
 #include "oscillator.h"
 #include "ringbuffer.h"
 
@@ -29,7 +31,7 @@ public:
     Q_INVOKABLE void removeFromRoot(SynthItem* synthItem);
 
     float processGraph();
-    QVector<double> *retrieveDataColumn();
+    QVector<double> retrieveDataColumn();
     int graphSize();
     void setRingBuffer(RingBuffer* buffer);
 
@@ -40,8 +42,11 @@ public slots:
 
 private:
     QVector<SynthItem*> graphRoot;
-    QVector<double>* dataColumn;
+    QVector<double> dataColumn;
     RingBuffer* ringBuffer;
+
+    void retrieveData();
+
 
 };
 
