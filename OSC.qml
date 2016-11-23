@@ -20,7 +20,8 @@ SynthItem {
         property int waveform: SynthItemImplementation.SINE
         property bool fixedFrequency: true
         property double frequency: 440
-        property var dataRows: []
+
+        signal onRowsChanged(var rows)
 
         Component.onCompleted: {
             waveformEditor.comboBox.currentIndex = waveform
@@ -78,9 +79,8 @@ SynthItem {
                 label.text: qsTr("Frequency Source: ")
                 onMappingsChanged:
                 {
-                    //something
+                    root.mappedRows = mappings
                 }
-
             }
 
             RowLayout {

@@ -8,6 +8,7 @@ Item {
 
     property var synthChildren: []
     property var synthParents: []
+    property var mappedRows: []
     property bool patching: false
     property bool muted: false
     property int type: -1 //OUT = 0, OSC = 1

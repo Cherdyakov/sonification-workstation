@@ -39,6 +39,8 @@ RowLayout {
 
                 text = getStringRange(parsedInput)
 
+                mappingsChanged(parsedInput)
+
             }
         }
     }
@@ -120,19 +122,21 @@ RowLayout {
         for (var i = 0; i < array.length; i++) {
             rstart = array[i]
             rend = rstart
-            while (array[i + 1] - array[i] == 1) {
+            while (array[i + 1] - array[i] === 1) {
                 rend = array[i + 1] // increment the index if the numbers sequential
                 i++
             }
             if(rstart === rend) {
+                //start = end, one number
                 if(i < array.length - 1) {
-                    ranges = ranges + rstart + '-'
+                    ranges = ranges + rstart + ','
                 }
                 else {
                     ranges = ranges + rstart
                 }
             }
             else {
+                //start != end, is a range
                 if(i < array.length - 1) {
                     ranges = ranges + rstart + '-' + rend + ','
                 }

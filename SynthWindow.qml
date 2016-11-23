@@ -9,6 +9,8 @@ ApplicationWindow {
 
     // holds every item in the workspace for iterating
     property var synthItems: []
+    // holds row numbers for the rows that have been mapped
+    property var mappedRows: []
     //canvas for drawing connections
     property alias canvas: canvas
     property alias workspace: workspace
