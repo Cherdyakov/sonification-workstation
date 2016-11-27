@@ -4,7 +4,8 @@ namespace son {
 
 Oscillator::Oscillator()
 {
-    defaultGen = new gam::Sine<>(440);
+    waveform = SINE;
+    gam::Sine<>* defaultGen = new gam::Sine<>(440);
     gens.push_back(defaultGen);
     freq = 440;
 }
@@ -56,11 +57,6 @@ void Oscillator::removeChild(QObject *child)
     } //no such child
 }
 
-void Oscillator::setDataColumn(QVector<double> *data)
-{
-    dataColumn = data;
-}
-
 void Oscillator::setWaveform(SynthItem::WAVEFORM type)
 {
     if (waveform != type) {
@@ -69,20 +65,61 @@ void Oscillator::setWaveform(SynthItem::WAVEFORM type)
     }
 }
 
-void Oscillator::setFixedFreq(bool fixed)
-{
-    if (fixedFreq != fixed) {
-        fixedFreq = fixed;
-    }
-    qDebug() << "cpp: fixedFreq is " << fixedFreq;
-}
-
 void Oscillator::setFreq(double inFreq)
 {
     if (freq != inFreq) {
         freq = inFreq;
     }
     qDebug() << "cpp: freq is " << freq;
+}
+
+bool Oscillator::setIndexes(QVector<int> idxs)
+{
+    if(idxs.count() > dataColumn->count()) {
+        return false;
+    }
+    for(int i = 0; i < idxs.count(); i++) {
+        if(idxs[i] > dataColumn->count());
+        return false;
+    }
+
+    muted = true;
+    dataIndexes = idxs;
+    qDebug() << "cpp dataIndexes: " << dataIndexes;
+
+    resize(dataIndexes.count());
+
+    muted = false;
+}
+
+void Oscillator::resize(int size)
+{
+    while(gens.count() > size)
+    {
+        gens.push_back(newGen(waveform));
+        return;
+    }
+    while(gens.count() < size)
+    {
+        gens.removeLast();
+    }
+
+}
+
+gam::AccumPhase<> *Oscillator::newGen(SynthItem::WAVEFORM type)
+{
+    switch (type) {
+    case SINE:
+        return new gam::Sine<>;
+        break;
+    case SAW:
+        return new gam::Saw<>;
+        break;
+    case SQUARE:
+        return new gam::Square<>;
+    default:
+        break;
+    }
 }
 
 float Oscillator::process()
@@ -94,29 +131,51 @@ float Oscillator::process()
     {
         return sample;
     }
-//    //sample set by any connected amplitude modulators
-//    float amSample = 1.0;
-//    //sample set by any connected frequency modulators
-//    float fmSample = 1.0;
+    //    //sample set by any connected amplitude modulators
+    //    float amSample = 1.0;
+    //    //sample set by any connected frequency modulators
+    //    float fmSample = 1.0;
 
-//    //check fmods
-//    if(!fmods.isEmpty())
-//        fmSample = visitFmods();
+    //    //check fmods
+    //    if(!fmods.isEmpty())
+    //        fmSample = visitFmods();
 
-//    //check amods
-//    if(!amods.isEmpty())
-//        amSample = visitAmods();
+    //    //check amods
+    //    if(!amods.isEmpty())
+    //        amSample = visitAmods();
 
     //set frequencies
     setFreqs();
 
 
     //generate sample
-    QVector<gam::Sine<>*>::const_iterator i;
+    for (int i = 0; i < gens.count(); ++i) {
 
-    for (i = gens.constBegin(); i != gens.constEnd(); ++i) {
-        gam::Sine<>* sine = *i;
-        sample += sine->operator ()();
+        switch (waveform) {
+        case SINE:
+        {
+            gam::Sine<>* gen = static_cast<gam::Sine<>*>(gens[i]);
+            sample += gen->operator ()();
+            break;
+        }
+        case SAW:
+        {
+            gam::Saw<>* gen = static_cast<gam::Saw<>*>(gens[i]);
+            sample += gen->operator ()();
+            break;
+        }
+        case SQUARE:
+        {
+            gam::Square<>* gen = static_cast<gam::Square<>*>(gens[i]);
+            sample += gen->operator ()();
+            break;
+        }
+        default:
+            break;
+        }
+
+        return sample;
+
     }
 
     //return sample
@@ -127,7 +186,7 @@ float Oscillator::process()
     //qDebug() << "processOscillator";
 
     //test noise
-//    sample = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+    //    sample = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
 
 
 
@@ -162,13 +221,21 @@ float Oscillator::visitFmods()
 
 void Oscillator::setFreqs()
 {
-    float f = freq;
-    QVector<gam::Sine<>*>::const_iterator i;
-
-    for (i = gens.constBegin(); i != gens.constEnd(); ++i) {
-        gam::Sine<>* sine = *i;
-        sine->freq(f);
+    if (dataIndexes.count() < 1) //no data mappings, use fixed freq
+    {
+        for (int i = 0; i < gens.count(); ++i) {
+            gens[i]->freq(freq);
+        }
     }
+    else //map each indexed value from the data row to the freq of a generator
+    {
+        for (int i = 0; i < gens.count(); ++i) {
+            double f = dataColumn->at(dataIndexes[i]);
+            gens[i]->freq(f);
+        }
+    }
+
+
 }
 
 }

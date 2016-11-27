@@ -21,8 +21,6 @@ SynthItem {
         property bool fixedFrequency: true
         property double frequency: 440
 
-        signal onRowsChanged(var rows)
-
         Component.onCompleted: {
             waveformEditor.comboBox.currentIndex = waveform
             frequencyEditor.spinBox.value = frequency * 100
@@ -80,6 +78,7 @@ SynthItem {
                 onMappingsChanged:
                 {
                     root.mappedRows = mappings
+                    implementation.setIndexes(root.mappedRows)
                 }
             }
 

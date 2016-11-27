@@ -36,6 +36,8 @@ public:
     void setRingBuffer(son::RingBuffer* buffer);
     void setSynthGraph(son::SynthGraph* graph);
 
+    Q_INVOKABLE int getCurrentRowCount();
+
 private:
 
     Ui::MainWindow *ui;
@@ -107,6 +109,8 @@ private slots:
     //ui slots
     void on_orientationButtonTriggered();
     void on_playButtonTriggered();
+
+signals:
 
 };
 

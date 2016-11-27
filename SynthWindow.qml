@@ -14,8 +14,10 @@ ApplicationWindow {
     //canvas for drawing connections
     property alias canvas: canvas
     property alias workspace: workspace
+    //number of rows in current model
+    property int rowCount: 0
 
-    width: 800
+    width: 8
     height: 600
     visible: true
     title: qsTr("Sonification Workstation: Synthesis")

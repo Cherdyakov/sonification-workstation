@@ -52,13 +52,14 @@ public slots:
 
 protected:
     bool muted;
+    QVector<double>* dataColumn;
+
 
 private:
     QObject* gui;
 
     virtual void connectGui();
 
-    QVector<double>* dataColumn;
     QVector<SynthItem*> synthChildren;
     QVector<SynthItem*> synthParents;
 

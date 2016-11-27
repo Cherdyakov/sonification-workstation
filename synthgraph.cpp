@@ -17,21 +17,19 @@ QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
     switch (type){
     case OUT: {
         item = NULL;
-        return item;
         break;
     }
     case OSCILLATOR: {
         item = new Oscillator();
         item->setGui(gui);
         item->setDataColumn(&dataColumn);
-        return item;
         break;
     }
     default:
         item = NULL;
-        return item;
         break;
     }
+    return item;
 }
 
 void SynthGraph::addToRoot(SynthItem *synthItem)

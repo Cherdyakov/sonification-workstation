@@ -25,13 +25,16 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     qmlRegisterType<son::SynthGraph>("SonLib", 1, 0, "SynthGraph");
     qmlRegisterType<son::SynthItem>("SonLib", 1, 0, "SynthItemImplementation");
-
-    QQuickView* view = new QQuickView;
-    view->rootContext()->setContextProperty("graph", graph);
+    qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
 
     MainWindow main_window;
     main_window.setRingBuffer(&ringBuffer);
     main_window.setSynthGraph(graph);
+
+    QQuickView* view = new QQuickView;
+    view->rootContext()->setContextProperty("mainWindow", &main_window);
+    view->rootContext()->setContextProperty("graph", graph);
+
     SynthWindow synth_window;
     synth_window.setView(view);
 

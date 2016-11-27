@@ -91,8 +91,6 @@ void LineView::step()
         return;
     }
 
-    qDebug() << "lineView: step";
-
     QVector<double> colData;
     for(int row = 0; row < model->rowCount(); ++row)
     {

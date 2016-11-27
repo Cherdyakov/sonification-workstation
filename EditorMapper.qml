@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import "Style.js" as Style
+import MainWindow 1.0
 
 RowLayout {
     id: root
@@ -10,6 +11,7 @@ RowLayout {
     property string parameterName: "none"
     property alias label: label
     property alias textInput: textInput
+    property int rowMax: 0
 
     signal mappingsChanged(var mappings)
 
@@ -34,12 +36,15 @@ RowLayout {
             {
                 var inString = text
                 var parsedInput = getNumbers(inString)
+                rowMax = mainWindow.getCurrentRowCount()
+                console.log("rowMax: " + rowMax)
+                console.log("parsed: " + parsedInput)
+                var validInput = parsedInput.filter(filterMax)
+                console.log("validated: " + validInput)
 
-                console.log(parsedInput)
+                text = getStringRange(validInput)
 
-                text = getStringRange(parsedInput)
-
-                mappingsChanged(parsedInput)
+                mappingsChanged(validInput)
 
             }
         }
@@ -104,9 +109,13 @@ RowLayout {
 
     function filterInt(value) {
         if(/^(\-|\+)?([0-9]+|Infinity)$/.test(value)) {
-            return (Number(value) > 0);
+            return (Number(value) > 0)
         }
-        return NaN;
+        return NaN
+    }
+
+    function filterMax(value) {
+        return (value <= rowMax)
     }
 
     //let's get this one out as well

@@ -124,6 +124,14 @@ void MainWindow::setSynthGraph(son::SynthGraph *graph)
     synthGraph = graph;
 }
 
+int MainWindow::getCurrentRowCount()
+{
+    if(horizontal) {
+        return horizontalModel->rowCount();
+    }
+    return model->rowCount();
+}
+
 void MainWindow::plot(QAbstractItemModel* m)
 {
     lineView->setModel(m);

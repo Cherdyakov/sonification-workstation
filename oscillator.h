@@ -16,19 +16,17 @@ public:
     using SynthItem::addChild;
     void addChild(QObject* child, int type);
     void removeChild(QObject* child);
-    void setDataColumn(QVector<double>* data);
+    void setDataColumn(QVector<double>* col);
 
     //UI invokable functions for setting parameters
     Q_INVOKABLE void setWaveform(WAVEFORM type);
-    Q_INVOKABLE void setFixedFreq(bool fixed);
     Q_INVOKABLE void setFreq(double inFreq);
+    Q_INVOKABLE bool setIndexes(QVector<int> idxs);
 
 private:
 
-    QVector<double>* dataColumn;
+    QVector<int> dataIndexes;
 
-
-    bool fixedFreq;
     double freq;
 
     //for scaling the input
@@ -38,11 +36,14 @@ private:
 //    float freqMax;
 
     WAVEFORM waveform;
-    gam::Sine<>* defaultGen;
 
-    QVector<gam::Sine<>*> gens;
+    QVector<gam::AccumPhase<>*> gens;
+
     QVector<SynthItem*> amods;
     QVector<SynthItem*> fmods;
+
+    void resize(int size);
+    gam::AccumPhase<>* newGen(WAVEFORM type);
 
     float visitFmods();
     float visitAmods();
