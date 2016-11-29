@@ -21,8 +21,6 @@ ScatterView::ScatterView(QWidget *parent)
     //    triggeredPen->setColor(Qt::blue);
     //    triggeredPen->setWidth(4);
     //    triggeredSeries->setPen(*triggeredPen);
-
-
 }
 
 ScatterView::~ScatterView()

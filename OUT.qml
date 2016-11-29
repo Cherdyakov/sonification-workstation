@@ -51,12 +51,12 @@ SynthItem {
             graph.removeFromRoot(childItem.implementation)
         }
 
-        var idx = synthWindow.synthItems.indexOf(root)
-        synthWindow.synthItems.splice(idx, 1)
+        var idx = synthItems.indexOf(root)
+        synthItems.splice(idx, 1)
 
         root.destroy()
 
-        console.log(synthWindow.synthItems.length)
+        console.log(synthItems.length)
 
         canvas.requestPaint()
     }

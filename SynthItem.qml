@@ -32,6 +32,8 @@ Item {
         this.parent = workspace.contentItem
     }
 
+    onActiveFocusChanged: console.log(activeFocus)
+
     onMutedChanged: {
         mute()
     }
@@ -151,20 +153,14 @@ Item {
             childItem.removeParent(root)
         }
 
-        var idx = synthWindow.synthItems.indexOf(root)
-        synthWindow.synthItems.splice(idx, 1)
+        var idx = synthItems.indexOf(root)
+        synthItems.splice(idx, 1)
 
         root.destroy()
 
-        console.log(synthWindow.synthItems.length)
+        console.log(synthItems.length)
 
         canvas.requestPaint()
-    }
-
-
-    FocusScope {
-        id: scope
-        anchors.fill: parent
     }
 
     Rectangle {
@@ -173,7 +169,7 @@ Item {
         anchors.fill: parent
         color: muted ? Style.itemMuteColor : mainColor
         radius: Style.itemMinRadius
-        border.color: scope.focus ? "orange" : textColor
+        border.color: root.activeFocus ? "orange" : textColor
         border.width: 4
         opacity: created ? 1 : 0.4
 
@@ -198,13 +194,13 @@ Item {
             onClicked: {
                 //left clicked
                 if(mouse.button & Qt.LeftButton) {
-                    scope.focus = true
+                    root.forceActiveFocus()
                 }
                 //right clicked
                 if(mouse.button & Qt.RightButton) {
                     patchManager.setPatchPoint(root)
                     canvas.requestPaint()
-                    scope.focus = true
+                    root.forceActiveFocus()
                 }
             }
 
@@ -217,7 +213,7 @@ Item {
                     root.state = ""
                     break
                 }
-                scope.focus = true
+                root.forceActiveFocus()
             }
         }
 

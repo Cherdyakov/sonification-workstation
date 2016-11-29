@@ -32,20 +32,28 @@ RowLayout {
             id: textInput
             anchors.fill: parent
             inputMethodHints: Qt.ImhFormattedNumbersOnly
-            onAccepted:
+//            onActiveFocusChanged: console.log(activeFocus)
+            onEditingFinished:
             {
-                var inString = text
-                var parsedInput = getNumbers(inString)
-                rowMax = mainWindow.getCurrentRowCount()
-                console.log("rowMax: " + rowMax)
-                console.log("parsed: " + parsedInput)
-                var validInput = parsedInput.filter(filterMax)
-                console.log("validated: " + validInput)
+//                var inString = text
+//                var parsedInput = getNumbers(inString)
+//                rowMax = mainWindow.getCurrentRowCount()
+//                console.log("rowMax: " + rowMax)
+//                console.log("parsed: " + parsedInput)
+//                var validInput = parsedInput.filter(filterMax)
+//                console.log("validated: " + validInput)
 
-                text = getStringRange(validInput)
+//                text = getStringRange(validInput)
 
-                mappingsChanged(validInput)
+//                mappingsChanged(validInput)
+            }
 
+            MouseArea {
+                anchors.fill: textInput
+                onClicked: {
+                    textInput.forceActiveFocus()
+                    console.log("clicked")
+                }
             }
         }
     }
@@ -64,7 +72,7 @@ RowLayout {
             entry = entry.trim()
             //test entry is positive integer
             if (filterInt(entry)) {
-                    nums.push(+entry)
+                nums.push(+entry)
             } else {
 
                 //if not a number, probably it had the - and not being a negative number
@@ -103,7 +111,6 @@ RowLayout {
         })
         //and finally, sort
         nums.sort(sorterFunction)
-
         return nums
     }
 
