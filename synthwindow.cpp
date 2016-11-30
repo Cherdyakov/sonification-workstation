@@ -28,3 +28,15 @@ void SynthWindow::setView(QQuickView *inView)
     ui->verticalLayout->addWidget(container);
 }
 
+bool SynthWindow::event(QEvent *event)
+{
+    if (event->type() == QEvent::ActivationChange) {
+        if(view->isActive()) {
+            window()->activateWindow();
+            return true;
+        }
+    }
+    // Make sure the rest of events are handled
+    return QWidget::event(event);
+}
+

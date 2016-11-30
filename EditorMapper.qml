@@ -32,20 +32,20 @@ RowLayout {
             id: textInput
             anchors.fill: parent
             inputMethodHints: Qt.ImhFormattedNumbersOnly
-//            onActiveFocusChanged: console.log(activeFocus)
+            onActiveFocusChanged: console.log(activeFocus)
             onEditingFinished:
             {
-//                var inString = text
-//                var parsedInput = getNumbers(inString)
-//                rowMax = mainWindow.getCurrentRowCount()
-//                console.log("rowMax: " + rowMax)
-//                console.log("parsed: " + parsedInput)
-//                var validInput = parsedInput.filter(filterMax)
-//                console.log("validated: " + validInput)
+                var inString = text
+                var parsedInput = getNumbers(inString)
+                rowMax = mainWindow.getCurrentRowCount()
+                console.log("rowMax: " + rowMax)
+                console.log("parsed: " + parsedInput)
+                var validInput = parsedInput.filter(filterMax)
+                console.log("validated: " + validInput)
 
-//                text = getStringRange(validInput)
+                text = getStringRange(validInput)
 
-//                mappingsChanged(validInput)
+                mappingsChanged(validInput)
             }
 
             MouseArea {

@@ -21,6 +21,7 @@ public:
 
     QQuickView *getView() const;
     void setView(QQuickView *value);
+    bool event(QEvent *event);
 
 private:
     Ui::SynthWindow *ui;
