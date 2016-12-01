@@ -30,7 +30,9 @@ void SynthWindow::setView(QQuickView *inView)
 
 bool SynthWindow::event(QEvent *event)
 {
-    if (event->type() == QEvent::ActivationChange) {
+    qDebug() << "Event: " << event;
+    if (event->type() == QEvent::ActivationChange ||
+        event->type() == QEvent::WindowUnblocked) {
         if(view->isActive()) {
             window()->activateWindow();
             return true;
