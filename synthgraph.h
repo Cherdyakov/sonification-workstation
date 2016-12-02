@@ -31,7 +31,6 @@ public:
     Q_INVOKABLE void removeFromRoot(SynthItem* synthItem);
 
     float processGraph();
-    QVector<double> retrieveDataColumn();
     int graphSize();
     void setRingBuffer(RingBuffer* buffer);
 

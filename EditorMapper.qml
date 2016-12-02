@@ -31,6 +31,8 @@ RowLayout {
         TextInput {
             id: textInput
             anchors.fill: parent
+            font.pixelSize: 14
+
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             onActiveFocusChanged: console.log(activeFocus)
             onEditingFinished:

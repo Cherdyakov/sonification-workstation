@@ -10,6 +10,7 @@ namespace son {
 class Oscillator : public SynthItem
 {
     Q_OBJECT
+
 public:
     Oscillator();
     float process();

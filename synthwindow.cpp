@@ -30,14 +30,14 @@ void SynthWindow::setView(QQuickView *inView)
 
 bool SynthWindow::event(QEvent *event)
 {
-    qDebug() << "Event: " << event;
-    if (event->type() == QEvent::ActivationChange ||
-        event->type() == QEvent::WindowUnblocked) {
-        if(view->isActive()) {
-            window()->activateWindow();
-            return true;
-        }
-    }
+    //for broken keyboard focus on OSX
+//    if (event->type() == QEvent::ActivationChange ||
+//        event->type() == QEvent::WindowUnblocked) {
+//        if(view->isActive()) {
+//            window()->activateWindow();
+//            return true;
+//        }
+//    }
     // Make sure the rest of events are handled
     return QWidget::event(event);
 }

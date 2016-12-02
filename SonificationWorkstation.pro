@@ -46,29 +46,28 @@ HEADERS += \
     sequencer.h
 
 FORMS += \
-    mainwindow.ui \
     synthwindow.ui
 
 ##My MBP
 ## Gamma synthesis library
-LIBS += -L/Users/Sean/libs/Gamma-master/build/lib -lGamma
-INCLUDEPATH += /Users/Sean/libs/Gamma-master/Gamma
-# RT Audio library
-LIBS += -L/Users/Sean/libs/rtaudio-4.1.2 -lrtaudio
-INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
-# oscpack
-#LIBS += -L/Users/Sean/libs/oscpack_1_1_0/oscpack/lib -loscpack
-#INCLUDEPATH += /Users/Sean/libs/oscpack_1_1_0/oscpack/include
-# Core Audio
-DEFINES += __MACOSX_CORE__
-INCLUDEPATH += /usr/local/include
-
-##My Linux Desktop
-## Gamma synthesis library
-#LIBS += -L/home/sean/libs/Gamma-master/build/lib -lGamma
-#INCLUDEPATH += /home/sean/libs/Gamma-master/Gamma
+#LIBS += -L/Users/Sean/libs/Gamma-master/build/lib -lGamma
+#INCLUDEPATH += /Users/Sean/libs/Gamma-master/Gamma
 ## RT Audio library
-#LIBS += -L/home/sean/libs/rtaudio-4.1.2 -lrtaudio
-#INCLUDEPATH += /home/sean/libs/rtaudio-4.1.2/include
+#LIBS += -L/Users/Sean/libs/rtaudio-4.1.2 -lrtaudio
+#INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
+## oscpack
+##LIBS += -L/Users/Sean/libs/oscpack_1_1_0/oscpack/lib -loscpack
+##INCLUDEPATH += /Users/Sean/libs/oscpack_1_1_0/oscpack/include
+## Core Audio
+#DEFINES += __MACOSX_CORE__
+#INCLUDEPATH += /usr/local/include
+
+#My Linux Desktop
+# Gamma synthesis library
+LIBS += -L/home/sean/CodeLibs/Gamma-master/build/lib -lGamma
+INCLUDEPATH += /home/sean/CodeLibs/Gamma-master/Gamma
+# RT Audio library
+LIBS += -L/home/sean/lCodeLibsibs/rtaudio-4.1.2 -lrtaudio
+INCLUDEPATH += /home/sean/CodeLibs/rtaudio-4.1.2/include
 
 DISTFILES +=

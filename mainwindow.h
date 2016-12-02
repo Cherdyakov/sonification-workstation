@@ -21,10 +21,6 @@
 
 using namespace QtCharts;
 
-namespace Ui {
-class MainWindow;
-}
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -40,7 +36,6 @@ public:
 
 private:
 
-    Ui::MainWindow *ui;
     //synth graph
     son::SynthGraph* synthGraph;
     //the model
@@ -68,7 +63,7 @@ private:
     LineView* lineView;
 
     //main window stuff
-    QMenuBar* menuBar;
+//    QMenuBar* menuBar; //Mac Shared MenuBar
     QVBoxLayout* windowLayout;
 
     //for getting data to the audio callback
@@ -93,6 +88,7 @@ private:
     //menus and actions
     QMenu *fileMenu;
     QAction* importCSVAct;
+//    QAction*
 
     //does necessary work to invert the axes of the table and
     //plots, for iterating row-wise intead of column-wise

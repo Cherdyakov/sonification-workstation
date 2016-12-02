@@ -75,13 +75,6 @@ void Oscillator::setFreq(double inFreq)
 
 bool Oscillator::setIndexes(QVector<int> idxs)
 {
-    if(idxs.count() > dataColumn->count()) {
-        return false;
-    }
-    for(int i = 0; i < idxs.count(); i++) {
-        if(idxs[i] > dataColumn->count());
-        return false;
-    }
 
     muted = true;
     dataIndexes = idxs;

@@ -77,8 +77,13 @@ SynthItem {
                 label.text: qsTr("Frequency Source: ")
                 onMappingsChanged:
                 {
-                    root.mappedRows = mappings
-                    implementation.setIndexes(root.mappedRows)
+                    if(root.mappedRows !== mappings) {
+                        console.log("inside")
+                        root.mappedRows = mappings
+                        implementation.setIndexes(root.mappedRows)
+                    }
+                    console.log(root.mappedRows)
+                    console.log(mappings)
                 }
             }
 

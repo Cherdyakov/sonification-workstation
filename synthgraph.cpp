@@ -93,7 +93,6 @@ void SynthGraph::retrieveData()
     if(!ringBuffer->empty())
     {
         dataColumn = ringBuffer->pop();
-        qDebug() << "graph: retrieveData: " << dataColumn;
     }
 }
 

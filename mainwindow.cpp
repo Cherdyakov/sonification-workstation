@@ -2,16 +2,14 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent)
 {
-    ui->setupUi(this);
     this->setWindowTitle("Sonification Workstation");
 
     //csvReader for importing data into our model
     csvReader = new CsvReader;
 
-    menuBar = new QMenuBar(0);
+    //    menuBar = new QMenuBar(0);  //Mac shared menubar
     createActions();
     createMenus();
 
@@ -40,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //main window layout
     QWidget* window = new QWidget;
-    windowLayout = new QVBoxLayout(this);
+    windowLayout = new QVBoxLayout();
     window->setLayout(windowLayout);
     //tabbed view
     tabWidget = new QTabWidget;
@@ -110,7 +108,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
 }
 
 void MainWindow::setRingBuffer(son::RingBuffer *buffer)
@@ -160,11 +157,27 @@ void MainWindow::createActions()
 
 void MainWindow::createMenus()
 {
-    fileMenu = menuBar->addMenu(tr("&File"));
-    fileMenu->addAction(importCSVAct);
+    ////////////////
+    //Menu actions//
+    ////////////////
+
+    //importing files
+    QAction* csvAct = new QAction(tr("Import CSV"), this);
+    csvAct->setShortcut(QKeySequence::Open);
+    csvAct->setStatusTip(tr("Read CSV file into Data Window"));
+    connect(csvAct, SIGNAL(triggered(bool)), this, SLOT(importCSV()));
+
+    //quit application
+    QAction* quitAct = new QAction(tr("Quit"), this);
+    quitAct->setShortcut(QKeySequence::Quit);
+    quitAct->setStatusTip(tr("Quit") + " " + tr("Sonification Workstation"));
+    connect(quitAct, SIGNAL(triggered(bool)), this, SLOT(quit()));
+
+    //Create and populate the menus
+    QMenu* fileMenu = menuBar()->addMenu(tr("File"));
+    fileMenu->addAction(csvAct);
+    fileMenu->addAction(quitAct);
 }
-
-
 
 void MainWindow::setOrientation(bool isHorizontal)
 {
