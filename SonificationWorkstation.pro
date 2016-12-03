@@ -45,8 +45,7 @@ HEADERS += \
     ringbuffer.h \
     sequencer.h
 
-FORMS += \
-    synthwindow.ui
+FORMS +=
 
 ##My MBP
 ## Gamma synthesis library

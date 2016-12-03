@@ -7,6 +7,8 @@
 #include <QAction>
 #include <QTabWidget>
 #include <QLayout>
+#include <QQmlContext>
+#include <QQuickView>
 
 #include <atomic>
 
@@ -31,13 +33,15 @@ public:
 
     void setRingBuffer(son::RingBuffer* buffer);
     void setSynthGraph(son::SynthGraph* graph);
+    son::SynthGraph* getSynthGraph();
 
     Q_INVOKABLE int getCurrentRowCount();
 
 private:
 
-    //synth graph
+    //synthesis classes
     son::SynthGraph* synthGraph;
+    son::RingBuffer* ringBuf;
     //the model
     TableModel* model;
     HorizontalProxyModel* horizontalModel;
@@ -62,9 +66,6 @@ private:
     son::ScatterView* scatterView;
     LineView* lineView;
 
-    //main window stuff
-//    QMenuBar* menuBar; //Mac Shared MenuBar
-    QVBoxLayout* windowLayout;
 
     //for getting data to the audio callback
     son::RingBuffer* ringBuffer;

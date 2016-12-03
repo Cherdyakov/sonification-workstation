@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QThread>
 #include <QQmlContext>
-#include <QQuickView>
 
 #include "mainwindow.h"
 #include "synthwindow.h"
@@ -14,12 +13,6 @@
 
 int main(int argc, char *argv[])
 {
-    son::UserData uData;
-    son::RingBuffer ringBuffer(100);
-
-    son::SynthGraph* graph = new son::SynthGraph();
-    graph->setRingBuffer(&ringBuffer);
-    uData.graph = graph;
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
@@ -28,18 +21,11 @@ int main(int argc, char *argv[])
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
 
     MainWindow main_window;
-    main_window.setRingBuffer(&ringBuffer);
-    main_window.setSynthGraph(graph);
+    son::UserData uData;
+    uData.graph = main_window.getSynthGraph();
 
-    QQuickView* view = new QQuickView;
-    view->rootContext()->setContextProperty("mainWindow", &main_window);
-    view->rootContext()->setContextProperty("graph", graph);
-
-    SynthWindow synth_window;
-    synth_window.setView(view);
 
     main_window.show();
-    synth_window.show();
 
 
     //initialize Gamma

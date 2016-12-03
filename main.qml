@@ -23,7 +23,7 @@ Rectangle
 
         height: 70
         color: "gray"
-        anchors { right: parent.right; top: parent.top; left: parent.left}
+        anchors { right: parent.right; top: parent.top; left: parent.left }
 
         Row {
             id: palette
@@ -70,6 +70,7 @@ Rectangle
             x: 0
             y: 0
         }
+
     }
 
     MouseArea {
@@ -155,12 +156,13 @@ Rectangle
         }
     }
 
+    //Audio output (root of synthGraph)
     OUT {
         type: 0
         id: dac
         created: true
-        x: 400
-        y: 400
+        x: workspace.width / 2 - dac.width / 2
+        y: workspace.height - 100
     }
 
     PatchManager {

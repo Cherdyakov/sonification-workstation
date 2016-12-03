@@ -7,13 +7,9 @@
 
 #include "csvreader.h"
 
-namespace Ui {
-class SynthWindow;
-}
-
 class SynthWindow : public QMainWindow
 {
-    Q_OBJECT
+
 
 public:
     explicit SynthWindow(QWidget *parent = 0);
@@ -24,7 +20,6 @@ public:
     bool event(QEvent *event);
 
 private:
-    Ui::SynthWindow *ui;
     QQuickView* view;
 
 };

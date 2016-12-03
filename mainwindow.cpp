@@ -4,12 +4,13 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    //title and size window
     this->setWindowTitle("Sonification Workstation");
+    resize(QDesktopWidget().availableGeometry(this).size() * 0.9);
 
     //csvReader for importing data into our model
     csvReader = new CsvReader;
 
-    //    menuBar = new QMenuBar(0);  //Mac shared menubar
     createActions();
     createMenus();
 
@@ -37,9 +38,13 @@ MainWindow::MainWindow(QWidget *parent) :
     scatterView->setFrameShape(QFrame::Box);
 
     //main window layout
-    QWidget* window = new QWidget;
-    windowLayout = new QVBoxLayout();
-    window->setLayout(windowLayout);
+    QWidget* mainWidget = new QWidget;
+    QHBoxLayout* mainLayout = new QHBoxLayout(this);
+    mainWidget->setLayout(mainLayout);
+    //data layout
+    QVBoxLayout* dataLayout = new QVBoxLayout(this);
+    QVBoxLayout* synthLayout = new QVBoxLayout(this);
+
     //tabbed view
     tabWidget = new QTabWidget;
     tabWidget->setStyleSheet("QTabWidget::pane { border: 0; }");
@@ -80,18 +85,52 @@ MainWindow::MainWindow(QWidget *parent) :
     //transport layout
     transportLayout = new QVBoxLayout;
     //transport controls
-    orientationButton = new QPushButton("Invert Axes");
-    playButton = new QPushButton("Play");
+    orientationButton = new QPushButton(tr("Invert Axes"));
+    playButton = new QPushButton(tr("Play"));
     transportLayout->addWidget(orientationButton);
     transportLayout->addWidget(playButton);
     //set layout of transport
     transport->setLayout(transportLayout);
+
+    //synthesis graph
+    ringBuf = new son::RingBuffer();
+    synthGraph = new son::SynthGraph();
+    synthGraph->setRingBuffer(ringBuf);
+
+    ////////////
+    //QML View//
+    ////////////
+    QQuickView* quickView = new QQuickView;
+    quickView->rootContext()->setContextProperty("mainWindow", this);
+    quickView->rootContext()->setContextProperty("graph", synthGraph);
+    QWidget *container = QWidget::createWindowContainer(quickView, this);
+
+    //insert quickView into synthWindow layout
+    synthLayout->addWidget(container);
     //inset tab widget into window layout
-    windowLayout->addWidget(tabWidget);
+    dataLayout->addWidget(tabWidget);
     //insert transport into window layout
-    windowLayout->addWidget(transport);
+    dataLayout->addWidget(transport);
+
+    QSplitter* splitter = new QSplitter(this);
+    QWidget* leftSide = new QWidget;
+    QWidget* rightSide = new QWidget;
+    leftSide->setLayout(dataLayout);
+    rightSide->setLayout(synthLayout);
+    splitter->addWidget(leftSide);
+    splitter->addWidget(rightSide);
+    splitter->setCollapsible(0, false);
+    splitter->setCollapsible(1, false);
+    mainLayout->addWidget(splitter);
+
     //make windowLayout our central widget
-    this->setCentralWidget(window);
+    this->setCentralWidget(mainWidget);
+
+    QList<int> sizes;
+    sizes.append(0.6 * sizeHint().height());
+    sizes.append(0.4 * sizeHint().height());
+    splitter->setSizes(sizes);
+    quickView->setSource(QUrl("qrc:/main.qml"));
 
     //sequencer
     sequencer = new son::Sequencer;
@@ -120,6 +159,12 @@ void MainWindow::setSynthGraph(son::SynthGraph *graph)
 {
     synthGraph = graph;
 }
+
+son::SynthGraph *MainWindow::getSynthGraph()
+{
+    return synthGraph;
+}
+
 
 int MainWindow::getCurrentRowCount()
 {
