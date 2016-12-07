@@ -15,10 +15,9 @@ RingBuffer::RingBuffer(int size)
 
 void RingBuffer::reset()
 {
-    currentSize = 0;
     head = 0;
     tail = 0;
-    head = 0;
+    currentSize = 0;
     array->clear();
     array->resize(capacity);
 }

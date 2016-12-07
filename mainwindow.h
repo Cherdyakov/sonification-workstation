@@ -34,6 +34,7 @@ public:
     void setRingBuffer(son::RingBuffer* buffer);
     void setSynthGraph(son::SynthGraph* graph);
     son::SynthGraph* getSynthGraph();
+    son::Sequencer* getSequencer();
 
     Q_INVOKABLE int getCurrentRowCount();
 
@@ -41,7 +42,6 @@ private:
 
     //synthesis classes
     son::SynthGraph* synthGraph;
-    son::RingBuffer* ringBuf;
     //the model
     TableModel* model;
     HorizontalProxyModel* horizontalModel;

@@ -11,6 +11,9 @@
 #include "tablemodel.h"
 #include "ringbuffer.h"
 
+const int SR = 44100;
+const int BUF_SIZE= 512;
+
 int main(int argc, char *argv[])
 {
 
@@ -23,13 +26,14 @@ int main(int argc, char *argv[])
     MainWindow main_window;
     son::UserData uData;
     uData.graph = main_window.getSynthGraph();
+    uData.seq = main_window.getSequencer();
 
 
     main_window.show();
 
 
     //initialize Gamma
-    gam::Sync::master().spu(44100);
+    gam::Sync::master().spu(SR);
 
     RtAudio dac;
     dac.showWarnings(true);
@@ -61,8 +65,8 @@ int main(int argc, char *argv[])
     outParams.nChannels = 2;
     outParams.firstChannel = 0;
 
-    unsigned int sampleRate = 44100;
-    unsigned int bufferFrames = 512; // 256 sample frames
+    unsigned int sampleRate = SR;
+    unsigned int bufferFrames = BUF_SIZE;
 
 
     try {

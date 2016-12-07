@@ -78,12 +78,12 @@ SynthItem {
                 onMappingsChanged:
                 {
                     if(root.mappedRows !== mappings) {
-                        console.log("inside")
                         root.mappedRows = mappings
-                        implementation.setIndexes(root.mappedRows)
+                        var implementationMappings = mappings.map( function(value) {
+                            return value - 1;
+                        } )
+                        implementation.setIndexes(implementationMappings)
                     }
-                    console.log(root.mappedRows)
-                    console.log(mappings)
                 }
             }
 

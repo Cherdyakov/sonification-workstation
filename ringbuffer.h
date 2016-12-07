@@ -5,8 +5,6 @@
 #include <QDebug>
 #include <QAtomicInteger>
 
-#include "atomic"
-
 namespace son
 {
 

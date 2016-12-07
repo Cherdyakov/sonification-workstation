@@ -5,7 +5,7 @@ namespace son {
 
 SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 {
-
+    paused = true;
 }
 
 QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
@@ -59,6 +59,10 @@ float SynthGraph::processGraph()
 {
     float s = 0.0;
 
+    if(paused) {
+        return s;
+    }
+
     retrieveData();
 
     QVector<SynthItem*>::const_iterator i;
@@ -87,12 +91,20 @@ void SynthGraph::setRingBuffer(RingBuffer *buffer)
     ringBuffer = buffer;
 }
 
+void SynthGraph::pause(bool p)
+{
+    if(paused != p) {
+        paused = p;
+    }
+}
+
 void SynthGraph::retrieveData()
 {
 
     if(!ringBuffer->empty())
     {
         dataColumn = ringBuffer->pop();
+        qDebug() << "Graph: data: " << dataColumn;
     }
 }
 

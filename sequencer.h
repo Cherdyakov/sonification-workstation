@@ -24,21 +24,22 @@ public:
 
     void setPaused(bool pause);
     void setStepSize(int step);
-    void setSpeed(double speed);
+    void setSpeed(int speed);
+    void tick();
 
 
 private:
 
-
-    QTimer* timer;
     RingBuffer* ringBuffer;
 
-    bool paused;
-    int stepsPerSecond;
+    std::atomic<bool> paused;
+    std::atomic<int> stepsPerSecond;
+    int ticksPerStep;
+    int counter;
+    void step();
 
 private slots:
 
-    void step();
 
 signals:
 

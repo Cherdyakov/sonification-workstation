@@ -6,10 +6,8 @@ namespace son {
 Sequencer::Sequencer()
 {
     paused = true;
-    timer = new QTimer(this);
-    setSpeed(1.0);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(step()));
-    timer->start();
+    counter = 0;
+    setSpeed(1);
 }
 
 bool Sequencer::enqueue(QVector<double> data)
@@ -36,20 +34,26 @@ void Sequencer::setPaused(bool pause)
     }
 }
 
-void Sequencer::setSpeed(double s)
+void Sequencer::tick()
 {
-    double speed = 1000.0 / s;
-    timer->setInterval(speed);
+    if(paused) {
+        return;
+    }
+    counter++;
+    if(counter > ticksPerStep) {
+        step();
+        counter = 0;
+    }
 }
 
 void Sequencer::step()
 {
-    if(paused)
-    {
-        return;
-    }
-    emit stepped();
+    emit(stepped());
+}
 
+void Sequencer::setSpeed(int stepsPerSec)
+{
+    ticksPerStep = 44100 / stepsPerSec;
 }
 
 }

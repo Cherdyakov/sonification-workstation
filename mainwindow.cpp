@@ -92,10 +92,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //set layout of transport
     transport->setLayout(transportLayout);
 
-    //synthesis graph
-    ringBuf = new son::RingBuffer();
+    //synthesis graph and data queue
+    ringBuffer = new son::RingBuffer();
     synthGraph = new son::SynthGraph();
-    synthGraph->setRingBuffer(ringBuf);
+    synthGraph->setRingBuffer(ringBuffer);
 
     ////////////
     //QML View//
@@ -134,6 +134,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //sequencer
     sequencer = new son::Sequencer;
+    sequencer->setRingBuffer(ringBuffer);
     scatterView->setSequencer(sequencer);
     lineView->setSequencer(sequencer);
 
@@ -163,6 +164,11 @@ void MainWindow::setSynthGraph(son::SynthGraph *graph)
 son::SynthGraph *MainWindow::getSynthGraph()
 {
     return synthGraph;
+}
+
+son::Sequencer *MainWindow::getSequencer()
+{
+    return sequencer;
 }
 
 
@@ -254,7 +260,7 @@ void MainWindow::setPause(bool pause)
 
 void MainWindow::importCSV()
 {
-    //    model->clear();
+    model->clear();
     QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), "/home", ("csv File(*.csv)"));
     csvReader->readCSV(fileName, model);
     if(horizontal)
@@ -281,7 +287,7 @@ void MainWindow::on_playButtonTriggered()
 {
     paused = !paused;
     setPause(paused);
-
+    synthGraph->pause(paused);
 }
 
 void MainWindow::quit()

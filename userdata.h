@@ -12,6 +12,7 @@ namespace son {
 
 typedef struct {
     SynthGraph* graph;
+    Sequencer* seq;
 
 } UserData;
 

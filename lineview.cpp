@@ -4,6 +4,7 @@ LineView::LineView(QWidget* parent)
     : QChartView(new QChart(), parent)
 {
     playhead = 0;
+    model = NULL;
 }
 
 LineView::~LineView()

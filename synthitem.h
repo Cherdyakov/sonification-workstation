@@ -31,10 +31,11 @@ public:
 
     virtual float process();
     virtual float process(float in);
+    virtual void setDataColumn(QVector<double>* col);
+
 
     QObject *getGui() const;
     void setGui(QObject *value);
-    void setDataColumn(QVector<double>* col);
 
     int numChildren();
 

@@ -57,6 +57,20 @@ void Oscillator::removeChild(QObject *child)
     } //no such child
 }
 
+void Oscillator::setDataColumn(QVector<double> *col)
+{
+    dataColumn = col;
+
+    for(int i = 0; i < amods.count(); i++) {
+        son::SynthItem* item = amods[i];
+        item->setDataColumn(col);
+    }
+    for(int i = 0; i < fmods.count(); i++) {
+        son::SynthItem* item = fmods[i];
+        item->setDataColumn(col);
+    }
+}
+
 void Oscillator::setWaveform(SynthItem::WAVEFORM type)
 {
     if (waveform != type) {
@@ -87,15 +101,17 @@ bool Oscillator::setIndexes(QVector<int> idxs)
 
 void Oscillator::resize(int size)
 {
-    while(gens.count() > size)
+    while(gens.count() < size)
     {
         gens.push_back(newGen(waveform));
+        qDebug() << "oscillator: gens: " << gens.count();
         return;
     }
-    while(gens.count() < size)
+    while(gens.count() > size)
     {
         gens.removeLast();
     }
+    qDebug() << "oscillator: gens: " << gens.count();
 
 }
 
@@ -103,13 +119,13 @@ gam::AccumPhase<> *Oscillator::newGen(SynthItem::WAVEFORM type)
 {
     switch (type) {
     case SINE:
-        return new gam::Sine<>;
+        return new gam::Sine<>(440);
         break;
     case SAW:
-        return new gam::Saw<>;
+        return new gam::Saw<>(440);
         break;
     case SQUARE:
-        return new gam::Square<>;
+        return new gam::Square<>(440);
     default:
         break;
     }
@@ -140,7 +156,6 @@ float Oscillator::process()
     //set frequencies
     setFreqs();
 
-
     //generate sample
     for (int i = 0; i < gens.count(); ++i) {
 
@@ -166,12 +181,7 @@ float Oscillator::process()
         default:
             break;
         }
-
-        return sample;
-
     }
-
-    //return sample
 
     //test noise
     //    sample = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
@@ -181,9 +191,7 @@ float Oscillator::process()
     //test noise
     //    sample = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
 
-
-
-    return sample;
+    return sample / gens.count();
 }
 
 float Oscillator::visitAmods()

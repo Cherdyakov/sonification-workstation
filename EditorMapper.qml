@@ -40,10 +40,7 @@ RowLayout {
                 var inString = text
                 var parsedInput = getNumbers(inString)
                 rowMax = mainWindow.getCurrentRowCount()
-                console.log("rowMax: " + rowMax)
-                console.log("parsed: " + parsedInput)
                 var validInput = parsedInput.filter(filterMax)
-                console.log("validated: " + validInput)
 
                 text = getStringRange(validInput)
 

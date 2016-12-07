@@ -33,6 +33,7 @@ public:
     float processGraph();
     int graphSize();
     void setRingBuffer(RingBuffer* buffer);
+    void pause(bool p);
 
 signals:
 
@@ -43,6 +44,7 @@ private:
     QVector<SynthItem*> graphRoot;
     QVector<double> dataColumn;
     RingBuffer* ringBuffer;
+    std::atomic<bool> paused;
 
     void retrieveData();
 
