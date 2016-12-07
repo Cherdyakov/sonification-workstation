@@ -109,6 +109,7 @@ private slots:
     void pauseSlot(bool p);
 
 signals:
+    void dimensionsChanged();
 
 };
 

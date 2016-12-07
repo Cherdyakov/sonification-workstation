@@ -238,9 +238,9 @@ void MainWindow::setOrientation()
         tableView->setModel(model);
         plot(model);
     }
-    //QML re-validates indexes
-    //QML updates implementations
-    // Validate playhead pos
+
+    //QML notified, updates indexes
+    emit dimensionsChanged();
 
     if(!paused) {
         start();
@@ -260,6 +260,7 @@ void MainWindow::importCSV()
         setOrientation();
     }
     plot(model);
+    emit dimensionsChanged();
 }
 
 void MainWindow::importJSON()

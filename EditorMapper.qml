@@ -15,6 +15,14 @@ RowLayout {
 
     signal mappingsChanged(var mappings)
 
+    Connections {
+        //when dimensions of data change
+        target: mainWindow
+        onDimensionsChanged: {
+            revalidate();
+        }
+    }
+
     EditorLabel {
         id: label
         text: qsTr("Source: ")
@@ -22,6 +30,7 @@ RowLayout {
         Layout.preferredWidth: Style.editorLabelWidth
         Layout.fillWidth: true
     }
+
     Rectangle {
         id: textInputRect
         color: Style.editorTextInputColor
@@ -55,6 +64,18 @@ RowLayout {
                 }
             }
         }
+    }
+
+    function revalidate()
+    {
+        var inString = textInput.text
+        var parsedInput = getNumbers(inString)
+        rowMax = mainWindow.getCurrentRowCount()
+        var validInput = parsedInput.filter(filterMax)
+
+        textInput.text = getStringRange(validInput)
+
+        mappingsChanged(validInput)
     }
 
     function getNumbers(stringNumbers)

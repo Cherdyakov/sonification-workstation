@@ -89,18 +89,25 @@ void Oscillator::setFreq(double inFreq)
 
 bool Oscillator::setIndexes(QVector<int> idxs)
 {
-
-    muted = true;
+    bool m = muted;
+    if(!muted) {
+        muted = true;
+    }
     dataIndexes = idxs;
     qDebug() << "cpp dataIndexes: " << dataIndexes;
 
     resize(dataIndexes.count());
 
-    muted = false;
+    muted = m;
 }
 
 void Oscillator::resize(int size)
 {
+    bool m = muted;
+    if(!muted) {
+        muted = true;
+    }
+
     while(gens.count() < size)
     {
         gens.push_back(newGen(waveform));
@@ -111,7 +118,8 @@ void Oscillator::resize(int size)
     {
         gens.removeLast();
     }
-    qDebug() << "oscillator: gens: " << gens.count();
+
+    muted = m;
 
 }
 
@@ -230,7 +238,9 @@ void Oscillator::setFreqs()
     }
     else //map each indexed value from the data row to the freq of a generator
     {
-        for (int i = 0; i < gens.count() && i < dataIndexes.count(); ++i) {
+        for (int i = 0; (i < gens.count()) &&
+             (i < dataIndexes.count()) &&
+             (i < dataColumn->count()); ++i) {
             double f = dataColumn->at(dataIndexes[i]);
             gens[i]->freq(f);
         }
