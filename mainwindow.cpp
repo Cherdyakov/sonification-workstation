@@ -79,18 +79,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //////////////////////
     //Transport section //
     //////////////////////
-    paused = true;
-    //transport item
-    transport = new QWidget;
-    //transport layout
-    transportLayout = new QVBoxLayout;
-    //transport controls
-    orientationButton = new QPushButton(tr("Invert Axes"));
-    playButton = new QPushButton(tr("Play"));
-    transportLayout->addWidget(orientationButton);
-    transportLayout->addWidget(playButton);
-    //set layout of transport
-    transport->setLayout(transportLayout);
+    son::Transport* transport = new son::Transport(this);
+    connect(transport, SIGNAL(orientationChanged(bool)),this, SLOT(orientationSlot(bool)));
+    connect(transport, SIGNAL(pauseChanged(bool)),this, SLOT(pauseSlot(bool)));
 
     //synthesis graph and data queue
     ringBuffer = new son::RingBuffer();
@@ -141,9 +132,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //connect non ui singals/slots
     connectSequencer();
 
-    //connect ui signals/slots
-    connectUi();
-
 }
 
 MainWindow::~MainWindow()
@@ -180,16 +168,22 @@ int MainWindow::getCurrentRowCount()
     return model->rowCount();
 }
 
+void MainWindow::start()
+{
+    sequencer->start();
+    synthGraph->setMuted(false);
+}
+
+void MainWindow::stop()
+{
+    synthGraph->setMuted(true);
+    sequencer->stop();
+}
+
 void MainWindow::plot(QAbstractItemModel* m)
 {
     lineView->setModel(m);
     scatterView->setModel(m);
-}
-
-void MainWindow::connectUi()
-{
-    connect(orientationButton, SIGNAL(released()),this, SLOT(on_orientationButtonTriggered()));
-    connect(playButton, SIGNAL(released()),this, SLOT(on_playButtonTriggered()));
 }
 
 void MainWindow::connectSequencer()
@@ -230,9 +224,11 @@ void MainWindow::createMenus()
     fileMenu->addAction(quitAct);
 }
 
-void MainWindow::setOrientation(bool isHorizontal)
+void MainWindow::setOrientation()
 {
-    if(isHorizontal)
+    stop();
+
+    if(horizontal)
     {
         tableView->setModel(horizontalModel);
         plot(horizontalModel);
@@ -242,34 +238,28 @@ void MainWindow::setOrientation(bool isHorizontal)
         tableView->setModel(model);
         plot(model);
     }
-}
+    //QML re-validates indexes
+    //QML updates implementations
+    // Validate playhead pos
 
-void MainWindow::setPause(bool pause)
-{
-    if(pause)
-    {
-        playButton->setText("Play");
-        sequencer->setPaused(pause);
-    }
-    else
-    {
-        playButton->setText("Pause");
-        sequencer->setPaused(pause);
+    if(!paused) {
+        start();
     }
 }
 
 void MainWindow::importCSV()
 {
     model->clear();
-    QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), "/home", ("csv File(*.csv)"));
+    QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+    QString documents = docDirs[0];
+    QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), documents, ("csv File(*.csv)"));
     csvReader->readCSV(fileName, model);
     if(horizontal)
     {
         horizontal = false;
-        setOrientation(horizontal);
+        setOrientation();
     }
     plot(model);
-    ringBuffer->reset();
 }
 
 void MainWindow::importJSON()
@@ -277,17 +267,21 @@ void MainWindow::importJSON()
     qDebug() << "JSON IMPORT NOT IMPLEMENTED";
 }
 
-void MainWindow::on_orientationButtonTriggered()
+void MainWindow::orientationSlot(bool h)
 {
-    horizontal = !horizontal;
-    setOrientation(horizontal);
+    horizontal = h;
+    setOrientation();
 }
 
-void MainWindow::on_playButtonTriggered()
+void MainWindow::pauseSlot(bool p)
 {
-    paused = !paused;
-    setPause(paused);
-    synthGraph->pause(paused);
+    paused = p;
+    if(paused) {
+        stop();
+    }
+    else {
+        start();
+    }
 }
 
 void MainWindow::quit()

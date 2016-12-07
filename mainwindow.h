@@ -20,6 +20,7 @@
 #include "ringbuffer.h"
 #include "sequencer.h"
 #include "synthgraph.h"
+#include "transport.h"
 
 using namespace QtCharts;
 
@@ -39,6 +40,9 @@ public:
     Q_INVOKABLE int getCurrentRowCount();
 
 private:
+
+    void start();
+    void stop();
 
     //synthesis classes
     son::SynthGraph* synthGraph;
@@ -80,7 +84,6 @@ private:
     void plot(QAbstractItemModel *model);
 
     //convencience functions for connecting signals and slots
-    void connectUi();
     void connectSequencer();
 
     //convenience functions to create and populate menus
@@ -93,9 +96,7 @@ private:
 
     //does necessary work to invert the axes of the table and
     //plots, for iterating row-wise intead of column-wise
-    void setOrientation(bool horizontal);
-    void setPause(bool pause);
-
+    void setOrientation();
 
 
 private slots:
@@ -104,8 +105,8 @@ private slots:
     void importJSON();
 
     //ui slots
-    void on_orientationButtonTriggered();
-    void on_playButtonTriggered();
+    void orientationSlot(bool h);
+    void pauseSlot(bool p);
 
 signals:
 

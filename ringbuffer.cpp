@@ -1,7 +1,6 @@
 #include "ringbuffer.h"
 
-namespace son
-{
+using namespace son;
 
 RingBuffer::RingBuffer(int size)
 { 
@@ -70,6 +69,4 @@ bool RingBuffer::empty() const
 bool RingBuffer::full() const
 {
     return(currentSize == capacity);
-}
-
 }

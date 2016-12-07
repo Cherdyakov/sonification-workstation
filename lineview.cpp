@@ -74,6 +74,10 @@ void LineView::setModel(QAbstractItemModel *m)
     QChart* oldChart = this->chart();
     this->setChart(chart);
     oldChart->deleteLater();
+    //check playhead within bounds of new model
+    if(playhead > model->columnCount() - 1) {
+        playhead = 0;
+    }
 
 }
 
@@ -113,3 +117,4 @@ void LineView::step()
 
     sequencer->enqueue(colData);
 }
+

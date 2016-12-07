@@ -5,7 +5,7 @@ namespace son {
 
 SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 {
-    paused = true;
+    muted = true;
 }
 
 QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
@@ -59,7 +59,7 @@ float SynthGraph::processGraph()
 {
     float s = 0.0;
 
-    if(paused) {
+    if(muted) {
         return s;
     }
 
@@ -91,11 +91,16 @@ void SynthGraph::setRingBuffer(RingBuffer *buffer)
     ringBuffer = buffer;
 }
 
-void SynthGraph::pause(bool p)
+void SynthGraph::setMuted(bool m)
 {
-    if(paused != p) {
-        paused = p;
+    if(muted != m) {
+        muted = m;
     }
+}
+
+bool SynthGraph::getMuted()
+{
+    return muted;
 }
 
 void SynthGraph::retrieveData()

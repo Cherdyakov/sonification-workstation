@@ -26,14 +26,6 @@ void Sequencer::setRingBuffer(son::RingBuffer *buffer)
     ringBuffer = buffer;
 }
 
-void Sequencer::setPaused(bool pause)
-{
-    if(paused != pause)
-    {
-        paused = pause;
-    }
-}
-
 void Sequencer::tick()
 {
     if(paused) {
@@ -49,6 +41,18 @@ void Sequencer::tick()
 void Sequencer::step()
 {
     emit(stepped());
+}
+
+void Sequencer::start()
+{
+    ringBuffer->reset();
+    step();
+    paused = false;
+}
+
+void Sequencer::stop()
+{
+    paused = true;
 }
 
 void Sequencer::setSpeed(int stepsPerSec)

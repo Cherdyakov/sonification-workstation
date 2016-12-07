@@ -7,8 +7,10 @@
 
 namespace son
 {
+class RingBuffer;
+}
 
-class RingBuffer
+class son::RingBuffer
 {
 public:
     RingBuffer(int size = 100);
@@ -31,8 +33,6 @@ private:
     QVector<QVector<double>>* array;
 
 };
-
-}
 
 #endif // RINGBUFFER_H
 

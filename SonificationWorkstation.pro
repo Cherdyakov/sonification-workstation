@@ -10,13 +10,13 @@ SOURCES += \
     output.cpp \
     oscillator.cpp \
     tablemodel.cpp \
-    synthwindow.cpp \
     csvreader.cpp \
     horizontalproxymodel.cpp \
     scatterview.cpp \
     lineview.cpp \
     ringbuffer.cpp \
-    sequencer.cpp
+    sequencer.cpp \
+    transport.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,13 +37,13 @@ HEADERS += \
     output.h \
     oscillator.h \
     tablemodel.h \
-    synthwindow.h \
     csvreader.h \
     horizontalproxymodel.h \
     scatterview.h \
     lineview.h \
     ringbuffer.h \
-    sequencer.h
+    sequencer.h \
+    transport.h
 
 FORMS +=
 

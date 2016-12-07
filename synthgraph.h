@@ -33,7 +33,8 @@ public:
     float processGraph();
     int graphSize();
     void setRingBuffer(RingBuffer* buffer);
-    void pause(bool p);
+    void setMuted(bool m);
+    bool getMuted();
 
 signals:
 
@@ -44,7 +45,7 @@ private:
     QVector<SynthItem*> graphRoot;
     QVector<double> dataColumn;
     RingBuffer* ringBuffer;
-    std::atomic<bool> paused;
+    std::atomic<bool> muted;
 
     void retrieveData();
 

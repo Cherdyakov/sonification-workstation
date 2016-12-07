@@ -4,7 +4,6 @@
 #include <QQmlContext>
 
 #include "mainwindow.h"
-#include "synthwindow.h"
 #include "rtaudio/RtAudio.h"
 #include "callback.h"
 #include "synthgraph.h"

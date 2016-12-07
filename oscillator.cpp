@@ -230,7 +230,7 @@ void Oscillator::setFreqs()
     }
     else //map each indexed value from the data row to the freq of a generator
     {
-        for (int i = 0; i < gens.count(); ++i) {
+        for (int i = 0; i < gens.count() && i < dataIndexes.count(); ++i) {
             double f = dataColumn->at(dataIndexes[i]);
             gens[i]->freq(f);
         }

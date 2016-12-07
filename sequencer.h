@@ -22,10 +22,11 @@ public:
     bool enqueue(QVector<double> data, unsigned int delta);
     void setRingBuffer(RingBuffer* buffer);
 
-    void setPaused(bool pause);
     void setStepSize(int step);
     void setSpeed(int speed);
     void tick();
+    void start();
+    void stop();
 
 
 private:
@@ -37,6 +38,7 @@ private:
     int ticksPerStep;
     int counter;
     void step();
+
 
 private slots:
 
