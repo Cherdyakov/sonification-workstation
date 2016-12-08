@@ -247,12 +247,32 @@ void MainWindow::setOrientation()
     }
 }
 
+//void MainWindow::changeEvent(QEvent *event)
+//{
+//    if(event->type() == QEvent::ActivationChange) {
+//        if(this->isActiveWindow()) {
+//            window()->activateWindow();
+//        }
+//    }
+//}
+
+bool MainWindow::event(QEvent *event)
+{
+    if(event->type() == QEvent::WindowUnblocked || event->type() == QEvent::ActivationChange) {
+        if(this->isActiveWindow()) {
+            window()->activateWindow();
+            return true;
+        }
+    }
+    return QWidget::event(event);
+}
+
 void MainWindow::importCSV()
 {
     model->clear();
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
-    QString fileName = QFileDialog::getOpenFileName(0, ("Open File"), documents, ("csv File(*.csv)"));
+    QString fileName = QFileDialog::getOpenFileName(this, ("Open File"), documents, ("csv File(*.csv)"));
     csvReader->readCSV(fileName, model);
     if(horizontal)
     {

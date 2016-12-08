@@ -98,6 +98,9 @@ private:
     //plots, for iterating row-wise intead of column-wise
     void setOrientation();
 
+//    void changeEvent(QEvent* event);
+    bool event(QEvent *event);
+
 
 private slots:
     void quit();

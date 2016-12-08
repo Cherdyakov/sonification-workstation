@@ -47,19 +47,19 @@ HEADERS += \
 
 FORMS +=
 
-##My MBP
-## Gamma synthesis library
-#LIBS += -L/Users/Sean/libs/Gamma-master/build/lib -lGamma
-#INCLUDEPATH += /Users/Sean/libs/Gamma-master/Gamma
-## RT Audio library
-#LIBS += -L/Users/Sean/libs/rtaudio-4.1.2 -lrtaudio
-#INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
-## oscpack
-##LIBS += -L/Users/Sean/libs/oscpack_1_1_0/oscpack/lib -loscpack
-##INCLUDEPATH += /Users/Sean/libs/oscpack_1_1_0/oscpack/include
-## Core Audio
-#DEFINES += __MACOSX_CORE__
-#INCLUDEPATH += /usr/local/include
+#My MBP
+# Gamma synthesis library
+LIBS += -L/Users/Sean/libs/Gamma-master/build/lib -lGamma
+INCLUDEPATH += /Users/Sean/libs/Gamma-master/Gamma
+# RT Audio library
+LIBS += -L/Users/Sean/libs/rtaudio-4.1.2 -lrtaudio
+INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
+# oscpack
+#LIBS += -L/Users/Sean/libs/oscpack_1_1_0/oscpack/lib -loscpack
+#INCLUDEPATH += /Users/Sean/libs/oscpack_1_1_0/oscpack/include
+# Core Audio
+DEFINES += __MACOSX_CORE__
+INCLUDEPATH += /usr/local/include
 
 #My Linux Desktop
 # Gamma synthesis library
