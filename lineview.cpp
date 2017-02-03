@@ -1,5 +1,7 @@
 #include "lineview.h"
 
+namespace son {
+
 LineView::LineView(QWidget* parent)
     : QChartView(new QChart(), parent)
 {
@@ -89,32 +91,35 @@ void LineView::setSequencer(son::Sequencer *s)
     }
 }
 
-void LineView::step()
+QVector<double> LineView::getCurrentColumn()
 {
+    QVector<double> colData;
+
     if(!model)
     {
-        return;
+        return colData;
     }
 
-    QVector<double> colData;
+    if(playhead > model->columnCount() - 1)
+    {
+        playhead -= model->columnCount();
+    }
+
     for(int row = 0; row < model->rowCount(); ++row)
     {
         QModelIndex idx = model->index(row, playhead);
         colData.push_back(model->data(idx).toDouble());
     }
 
-    playhead++;
-    if(playhead > model->columnCount() - 1)
-    {
-        playhead = 0;
-    }
+    qDebug() << "LineView:GetColumn: " << colData;
 
-    if(sequencer == NULL)
-    {
-        qDebug() << "LineView: null sequencer";
-        return;
-    }
-
-    sequencer->enqueue(colData);
+    return colData;
 }
+
+void LineView::advancePlayhead(int steps)
+{
+    playhead += steps;
+}
+
+} //namespace son
 

@@ -25,6 +25,12 @@ QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
         item->setDataColumn(&dataColumn);
         break;
     }
+    case AUDIFIER: {
+        item = new Audifier();
+        item->setGui(gui);
+        item->setDataColumn(&dataColumn);
+        break;
+    }
     default:
         item = NULL;
         break;
@@ -72,11 +78,13 @@ float SynthGraph::processGraph()
         s += item->process();
     }
 
-
     //test noise
-    //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
-    //test mssg
-    //    qDebug() << "processGraph";
+    {
+        //test noise
+        //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+        //test mssg
+        //    qDebug() << "processGraph";
+    }
 
     return s;
 }
@@ -109,7 +117,6 @@ void SynthGraph::retrieveData()
     if(!ringBuffer->empty())
     {
         dataColumn = ringBuffer->pop();
-        qDebug() << "Graph: data: " << dataColumn;
     }
 }
 

@@ -68,7 +68,7 @@ private:
     //Main graphical widgets
     QTableView* tableView;
     son::ScatterView* scatterView;
-    LineView* lineView;
+    son::LineView* lineView;
 
 
     //for getting data to the audio callback
@@ -98,7 +98,8 @@ private:
     //plots, for iterating row-wise intead of column-wise
     void setOrientation();
 
-//    void changeEvent(QEvent* event);
+
+    //workaround for QuickView focus bug on OSX
     bool event(QEvent *event);
 
 
@@ -110,9 +111,10 @@ private slots:
     //ui slots
     void orientationSlot(bool h);
     void pauseSlot(bool p);
+    void speedSlot(int s);
 
 signals:
-    void dimensionsChanged();
+    void dimensionsChanged(int rowCount);
 
 };
 

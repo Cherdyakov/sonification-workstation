@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QQmlContext>
+#include <samplerate.h>
 
 #include "mainwindow.h"
 #include "rtaudio/RtAudio.h"
@@ -35,7 +36,7 @@ int main(int argc, char *argv[])
     gam::Sync::master().spu(SR);
 
     RtAudio dac;
-    dac.showWarnings(true);
+    dac.showWarnings(false);
 
     //    // Determine the number of devices available
     //    unsigned int devices = dac.getDeviceCount();

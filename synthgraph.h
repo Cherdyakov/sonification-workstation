@@ -9,6 +9,7 @@
 #include <atomic>
 
 #include "oscillator.h"
+#include "audifier.h"
 #include "ringbuffer.h"
 
 namespace son {
@@ -20,7 +21,8 @@ public:
 
     enum SYNTH_ITEM_TYPE {
         OUT,
-        OSCILLATOR
+        OSCILLATOR,
+        AUDIFIER
     };
     Q_ENUMS(SYNTH_ITEM_TYPE)
 

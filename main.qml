@@ -42,6 +42,13 @@ Rectangle
                 source: "images/oscIcon.png"
                 image: "images/oscIcon.png"
             }
+
+            PaletteItem {
+                anchors.verticalCenter: parent.verticalCenter
+                componentFile: "AUD.qml"
+                source: "images/oscIcon.png"
+                image: "images/oscIcon.png"
+            }
         }
     }
 

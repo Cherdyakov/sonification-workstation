@@ -28,3 +28,4 @@ var editorTextInputColor = "white"
 //SynthItem derived class styles
 var oscColor = "light blue"
 var outColor = "cadetblue"
+var audColor = "light green"

@@ -43,7 +43,11 @@ void CsvReader::readCSV(QString fileName, TableModel *model)
         QString temp;
         QChar character;
         QTextStream textStream(&data);
+        unsigned int counter = 0;
         while (!textStream.atEnd()) {
+            if(counter++ % 100 == 0) {
+                qDebug() << "processing: " << counter;
+            }
             textStream >> character;
             if (character == ',') {
                 checkString(temp, model, character);

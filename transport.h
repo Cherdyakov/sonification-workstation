@@ -4,6 +4,10 @@
 #include <QWidget>
 #include <QLayout>
 #include <QPushButton>
+#include <QDial>
+#include <QSpinBox>
+#include <QLabel>
+#include <QDebug>
 
 namespace son {
 class Transport;
@@ -19,16 +23,24 @@ private:
     void connectUI();
     bool horizontal;
     bool paused;
+    double stepsSecond;
     QPushButton* pauseButton;
     QPushButton* orientationButton;
+    QDial* speedDial;
+    QSpinBox* speedBox;
 
 signals:
     void orientationChanged(bool flipped);
     void pauseChanged(bool paused);
+    void speedChanged(int stepsPerSecond);
 
 public slots:
+
+private slots:
     void on_orientationButtonReleased();
     void on_pauseButtonReleased();
+    void on_speedDialValueChanged(int s);
+    void on_speedChanged(int stepsPerSecond);
 };
 
 #endif // TRANSPORT_H

@@ -27,7 +27,7 @@ bool RingBuffer::push(QVector<double> item)
     //buffer size at max
     if(full())
     {
-        qDebug() << "ringbuffer: full!";
+//        qDebug() << "ringbuffer: full!";
         return false;
     }
     if(head > array->count() - 1)

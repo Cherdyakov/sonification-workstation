@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     tableView->setModel(model);
 
     //create line chart view
-    lineView = new LineView;
+    lineView = new son::LineView;
     lineView->setRenderHint(QPainter::Antialiasing);
     lineView->setFrameShape(QFrame::Box);
 
@@ -82,6 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     son::Transport* transport = new son::Transport(this);
     connect(transport, SIGNAL(orientationChanged(bool)),this, SLOT(orientationSlot(bool)));
     connect(transport, SIGNAL(pauseChanged(bool)),this, SLOT(pauseSlot(bool)));
+    connect(transport, SIGNAL(speedChanged(int)),this, SLOT(speedSlot(int)));
 
     //synthesis graph and data queue
     ringBuffer = new son::RingBuffer();
@@ -128,6 +129,7 @@ MainWindow::MainWindow(QWidget *parent) :
     sequencer->setRingBuffer(ringBuffer);
     scatterView->setSequencer(sequencer);
     lineView->setSequencer(sequencer);
+    sequencer->setLineView(lineView);
 
     //connect non ui singals/slots
     connectSequencer();
@@ -183,12 +185,12 @@ void MainWindow::stop()
 void MainWindow::plot(QAbstractItemModel* m)
 {
     lineView->setModel(m);
-    scatterView->setModel(m);
+//    scatterView->setModel(m);
 }
 
 void MainWindow::connectSequencer()
 {
-    connect(sequencer, SIGNAL(stepped()),lineView,SLOT(step()));
+    connect(this, SIGNAL(dimensionsChanged(int)), sequencer, SLOT(dimensionsChanged(int)));
 }
 
 
@@ -231,30 +233,23 @@ void MainWindow::setOrientation()
     if(horizontal)
     {
         tableView->setModel(horizontalModel);
+        sequencer->init(horizontalModel->rowCount());
         plot(horizontalModel);
     }
     else
     {
         tableView->setModel(model);
+        sequencer->init(model->rowCount());
         plot(model);
     }
 
     //QML notified, updates indexes
-    emit dimensionsChanged();
+    emit dimensionsChanged(getCurrentRowCount());
 
     if(!paused) {
         start();
     }
 }
-
-//void MainWindow::changeEvent(QEvent *event)
-//{
-//    if(event->type() == QEvent::ActivationChange) {
-//        if(this->isActiveWindow()) {
-//            window()->activateWindow();
-//        }
-//    }
-//}
 
 bool MainWindow::event(QEvent *event)
 {
@@ -269,6 +264,7 @@ bool MainWindow::event(QEvent *event)
 
 void MainWindow::importCSV()
 {
+    stop();
     model->clear();
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
@@ -280,7 +276,12 @@ void MainWindow::importCSV()
         setOrientation();
     }
     plot(model);
-    emit dimensionsChanged();
+    emit dimensionsChanged(getCurrentRowCount());
+
+//    if(!paused)
+//    {
+//        start();
+//    }
 }
 
 void MainWindow::importJSON()
@@ -303,6 +304,12 @@ void MainWindow::pauseSlot(bool p)
     else {
         start();
     }
+}
+
+void MainWindow::speedSlot(int s)
+{
+    sequencer->setSpeed(s);
+    qDebug() << "mWindow: " << s;
 }
 
 void MainWindow::quit()

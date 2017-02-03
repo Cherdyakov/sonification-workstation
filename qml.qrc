@@ -19,5 +19,6 @@
         <file>EditorFixedParam.qml</file>
         <file>EditorLayout.qml</file>
         <file>EditorMapper.qml</file>
+        <file>AUD.qml</file>
     </qresource>
 </RCC>

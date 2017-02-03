@@ -44,7 +44,7 @@ void ScatterView::mouseMoveEvent(QMouseEvent* event)
 void ScatterView::handleMouseMoved(const QPointF &point)
 {
     QPointF mousePoint = point;
-    qreal distance(0.2); //distance from mouse to point in chart axes
+    qreal distance(200); //distance from mouse to point in chart axes
     foreach (QPointF currentPoint, scatterSeries->points()) { //re-implement w/vectorPoints
         qreal currentDistance = qSqrt((currentPoint.x() - mousePoint.x())
                                       * (currentPoint.x() - mousePoint.x())

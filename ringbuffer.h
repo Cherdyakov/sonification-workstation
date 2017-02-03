@@ -13,7 +13,7 @@ class RingBuffer;
 class son::RingBuffer
 {
 public:
-    RingBuffer(int size = 100);
+    RingBuffer(int size = 2048);
 
     void reset();
 

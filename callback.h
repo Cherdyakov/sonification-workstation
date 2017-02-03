@@ -18,9 +18,6 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     UserData* uData = (UserData *) data;
     double *buffer = (double *) outputBuffer;
     SynthGraph* graph = uData->graph;
-    Sequencer* sequencer = uData->seq;
-
-//    qDebug() << "graphSize: " << graph->graphSize();
 
     if ( status )
         std::cout << "Stream underflow detected!" << std::endl;
@@ -29,11 +26,12 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     // Write interleaved audio data.
     for (unsigned int i=0; i < nBufferFrames; ++i) {
 
-        sequencer->tick();
         float s = graph->processGraph();
         s *= 0.1;
         *buffer++ = s;
         *buffer++ = s;
+
+//        qDebug() << s;
 
         //test noise
 //        *buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;

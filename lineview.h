@@ -7,9 +7,15 @@
 #include <QtCharts/QScatterSeries>
 #include <QHXYModelMapper>
 #include <QSplineSeries>
+#include <QDebug>
 #include <qmath.h>
 
 #include "sequencer.h"
+
+namespace son {
+
+//forward dec
+class Sequencer;
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -22,21 +28,24 @@ public:
     ~LineView();
     void mouseMoveEvent(QMouseEvent* event);
     void setModel(QAbstractItemModel *m);
-    void setSequencer(son::Sequencer* s);
+    void setSequencer(Sequencer *s);
+    QVector<double> getCurrentColumn();
+    void advancePlayhead(int steps);
 
 public slots:
-
-    void step();
 
 private slots:
     void handleMouseMoved(const QPointF &point);
 
 private:
 
-    int playhead;
+    std::atomic<int> playhead;
     QAbstractItemModel* model;
     son::Sequencer* sequencer;
 
 };
 
+} //namespace son
+
 #endif // LINEVIEW_H
+
