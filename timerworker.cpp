@@ -1,4 +1,5 @@
 #include "timerworker.h"
+#include <QDebug>
 
 TimerWorker::TimerWorker(QObject *parent) : QObject(parent)
 {
@@ -9,6 +10,7 @@ TimerWorker::TimerWorker(QObject *parent) : QObject(parent)
 
 void TimerWorker::update()
 {
+    qDebug() << "timeout";
     emit timeout();
 }
 

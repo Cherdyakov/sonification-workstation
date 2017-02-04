@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     gam::Sync::master().spu(SR);
 
     RtAudio dac;
-    dac.showWarnings(false);
+    dac.showWarnings(true);
 
     //    // Determine the number of devices available
     //    unsigned int devices = dac.getDeviceCount();
@@ -79,7 +79,6 @@ int main(int argc, char *argv[])
         e.printMessage();
         //      exit( 0 );
     }
-
 
     return a.exec();
 }

@@ -80,9 +80,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Transport section //
     //////////////////////
     son::Transport* transport = new son::Transport(this);
-    connect(transport, SIGNAL(orientationChanged(bool)),this, SLOT(orientationSlot(bool)));
-    connect(transport, SIGNAL(pauseChanged(bool)),this, SLOT(pauseSlot(bool)));
-    connect(transport, SIGNAL(speedChanged(int)),this, SLOT(speedSlot(int)));
+
 
     //synthesis graph and data queue
     ringBuffer = new son::RingBuffer();
@@ -132,12 +130,16 @@ MainWindow::MainWindow(QWidget *parent) :
     sequencer->setLineView(lineView);
 
     //connect non ui singals/slots
-    connectSequencer();
+    connect(transport, SIGNAL(speedChanged(int)),sequencer, SLOT(setSpeed(int)));
+    connect(this, SIGNAL(dimensionsChanged(int)), sequencer, SLOT(dimensionsChanged(int)));
+    connect(transport, SIGNAL(orientationChanged(bool)),this, SLOT(orientationSlot(bool)));
+    connect(transport, SIGNAL(pauseChanged(bool)),this, SLOT(pauseSlot(bool)));
 
 }
 
 MainWindow::~MainWindow()
 {
+
 }
 
 void MainWindow::setRingBuffer(son::RingBuffer *buffer)
@@ -188,12 +190,6 @@ void MainWindow::plot(QAbstractItemModel* m)
 //    scatterView->setModel(m);
 }
 
-void MainWindow::connectSequencer()
-{
-    connect(this, SIGNAL(dimensionsChanged(int)), sequencer, SLOT(dimensionsChanged(int)));
-}
-
-
 void MainWindow::createActions()
 {
     importCSVAct = new QAction(tr("&Import CSV"), this);
@@ -233,13 +229,11 @@ void MainWindow::setOrientation()
     if(horizontal)
     {
         tableView->setModel(horizontalModel);
-        sequencer->init(horizontalModel->rowCount());
         plot(horizontalModel);
     }
     else
     {
         tableView->setModel(model);
-        sequencer->init(model->rowCount());
         plot(model);
     }
 
@@ -251,16 +245,16 @@ void MainWindow::setOrientation()
     }
 }
 
-bool MainWindow::event(QEvent *event)
-{
-    if(event->type() == QEvent::WindowUnblocked || event->type() == QEvent::ActivationChange) {
-        if(this->isActiveWindow()) {
-            window()->activateWindow();
-            return true;
-        }
-    }
-    return QWidget::event(event);
-}
+//bool MainWindow::event(QEvent *event)
+//{
+//    if(event->type() == QEvent::WindowUnblocked || event->type() == QEvent::ActivationChange) {
+//        if(this->isActiveWindow()) {
+//            window()->activateWindow();
+//            return true;
+//        }
+//    }
+//    return QWidget::event(event);
+//}
 
 void MainWindow::importCSV()
 {
@@ -306,11 +300,11 @@ void MainWindow::pauseSlot(bool p)
     }
 }
 
-void MainWindow::speedSlot(int s)
-{
-    sequencer->setSpeed(s);
-    qDebug() << "mWindow: " << s;
-}
+//void MainWindow::speedSlot(int s)
+//{
+//    sequencer->setSpeed(s);
+//    qDebug() << "mWindow: " << s;
+//}
 
 void MainWindow::quit()
 {

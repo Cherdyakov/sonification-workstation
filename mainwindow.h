@@ -83,9 +83,6 @@ private:
     //plotting functions
     void plot(QAbstractItemModel *model);
 
-    //convencience functions for connecting signals and slots
-    void connectSequencer();
-
     //convenience functions to create and populate menus
     void createActions();
     void createMenus();
@@ -100,7 +97,7 @@ private:
 
 
     //workaround for QuickView focus bug on OSX
-    bool event(QEvent *event);
+//    bool event(QEvent *event);
 
 
 private slots:
@@ -111,7 +108,6 @@ private slots:
     //ui slots
     void orientationSlot(bool h);
     void pauseSlot(bool p);
-    void speedSlot(int s);
 
 signals:
     void dimensionsChanged(int rowCount);

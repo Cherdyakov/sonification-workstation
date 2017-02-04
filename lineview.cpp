@@ -111,7 +111,7 @@ QVector<double> LineView::getCurrentColumn()
         colData.push_back(model->data(idx).toDouble());
     }
 
-    qDebug() << "LineView:GetColumn: " << colData;
+//    qDebug() << "LineView:GetColumn: " << colData;
 
     return colData;
 }

@@ -8,7 +8,6 @@
 
 namespace son {
 
-// Two-channel sawtooth wave generator.
 int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
               double streamTime, RtAudioStreamStatus status, void *data )
 {
@@ -18,6 +17,7 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     UserData* uData = (UserData *) data;
     double *buffer = (double *) outputBuffer;
     SynthGraph* graph = uData->graph;
+//    Sequencer* sequencer = uData->seq;
 
     if ( status )
         std::cout << "Stream underflow detected!" << std::endl;
@@ -31,13 +31,16 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
         *buffer++ = s;
         *buffer++ = s;
 
-//        qDebug() << s;
-
         //test noise
 //        *buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
         //test mssg
 //        qDebug() << "callback";
     }
+
+//    qDebug() << "cb: " << qrand();
+
+//    sequencer->fillRingBuffer();
+
     return 0;
 
 }

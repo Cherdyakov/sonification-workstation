@@ -113,11 +113,12 @@ bool SynthGraph::getMuted()
 
 void SynthGraph::retrieveData()
 {
-
-    if(!ringBuffer->empty())
+    if(ringBuffer->empty())
     {
-        dataColumn = ringBuffer->pop();
+        return;
     }
+    dataColumn = ringBuffer->pop();
+//    qDebug() << "graph: " << dataColumn;
 }
 
 } //namespace son
