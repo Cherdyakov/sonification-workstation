@@ -11,14 +11,13 @@ Sequencer::Sequencer()
     readyFlag = false;
     numRows = 0;
 
-    //src init
+    //src related
+    src = NULL;
+    src_uData = NULL;
+    src_writeBuffer = NULL;
     src_buf_idx = src_buf_max = 0;
     src_type = SRC_ZERO_ORDER_HOLD;
-    src_uData.channels = 0;
-    src_uData.inFrames = 64;
     src_cb = &src_input_callback;
-    src_error = 0;
-    src = NULL;
 
     //buffering timer
     timer = new QTimer;
@@ -42,24 +41,46 @@ void Sequencer::setRingBuffer(son::RingBuffer *buffer)
 void Sequencer::setLineView(LineView *view)
 {
     lineView = view;
-    src_uData.lineView = lineView;
 }
 
 
-SRC_STATE* Sequencer::src_init()
+void Sequencer::src_init()
 {
-    SRC_STATE* state;
-
-    state = src_callback_new(src_cb,
-                             src_type,
-                             src_uData.channels,
-                             &src_error,
-                             &src_uData);
-    if(src_error)
+    //create new uData for src
+    if(src_uData)
     {
-        qDebug() << src_strerror(src_error);
+        delete[] src_uData->writeBuffer;
+        delete src_uData;
     }
-    return state;
+    //initialize uData for current numRows
+    src_uData = new src_cb_data;
+    src_uData->lineView = lineView;
+    src_uData->channels = numRows;
+    src_uData->src_error = 0;
+    src_uData->framesToWrite = SRC_OUTFRAMES;
+    src_uData->writeBuffer = new float[SRC_OUTFRAMES * numRows]();
+
+    src = src_callback_new(src_cb,
+                           src_type,
+                           src_uData->channels,
+                           &src_uData->src_error,
+                           src_uData);
+
+    //reallocate src_writeBuffer
+    if(src_writeBuffer)
+    {
+        delete[] src_writeBuffer;
+    }
+    src_writeBuffer = new float[SRC_OUTFRAMES * numRows]();
+
+    if(!src)
+    {
+        qDebug() << "Could not init src: " << src_strerror(src_uData->src_error);
+    }
+    if(src_uData->src_error)
+    {
+        qDebug() << src_strerror(src_uData->src_error);
+    }
 }
 
 void Sequencer::dimensionsChanged(int rowCount)
@@ -67,16 +88,7 @@ void Sequencer::dimensionsChanged(int rowCount)
     if(numRows != rowCount)
     {
         numRows = rowCount;
-        src_uData.channels = numRows;
-        if(src)
-        {
-            src = src_delete(src);
-        }
-        src = src_init();
-        if(!src)
-        {
-            qDebug() << "Could not init src: " << src_strerror(src_error);
-        }
+        src_init();
     }
 }
 
@@ -94,36 +106,31 @@ void Sequencer::stop()
 void Sequencer::setSpeed(int stepsPerSec)
 {
     src_ratio = 44100.0/(double)stepsPerSec;
+    //    src_ratio = 128.0;
 }
 
 void Sequencer::fillRingBuffer()
 {
-//    ringBufferMutex.tryLock();
-
     if(ringBuffer->full() || paused)
     {
         return;
     }
-    moveData();
-
-//    ringBufferMutex.unlock();
-}
-
-void Sequencer::moveData()
-{
-
     if(src_buf_idx > src_buf_max - 1)
     {
         src_buf_idx = 0;
         src_buf_max = resampleData();
     }
+    moveData();
+}
 
+void Sequencer::moveData()
+{
     while(src_buf_idx < src_buf_max && !ringBuffer->full())
     {
         QVector<double> col;
         for(int i = 0; i < numRows; ++i)
         {
-            col.push_back(src_outData[src_buf_idx * numRows + i]);
+            col.push_back(src_uData->writeBuffer[src_buf_idx * numRows + i]);
         }
         if((ringBuffer->push(col)))
         {
@@ -135,10 +142,13 @@ void Sequencer::moveData()
 long Sequencer::resampleData()
 {
     long samplesGenerated = 0;
-    samplesGenerated = src_callback_read(src, src_ratio, SRC_BLOCKSIZE, src_outData);
-    if(src_error)
+    samplesGenerated = src_callback_read(src,
+                                         1,
+                                         src_uData->framesToWrite,
+                                         src_writeBuffer);
+    if(src_uData->src_error)
     {
-        qDebug() << src_strerror(src_error);
+        qDebug() << src_strerror(src_uData->src_error);
     }
     return samplesGenerated;
 }
@@ -148,17 +158,20 @@ long Sequencer::src_input_callback(void *cb_data, float **audio)
     QVector<double> col;
     long colsRead = 0;
     src_cb_data* uData = static_cast<src_cb_data*>(cb_data);
+    *audio = &(uData->writeBuffer[0]);
 
-    col = uData->lineView->getCurrentColumn();
-
-    for(int i = 0; i < uData->channels; ++i)
+    for(int frame = 0; frame < uData->framesToWrite; ++frame)
     {
-        uData->buffer[i] = (float)(col[i]);
+        col = uData->lineView->getCurrentColumn();
+
+        for(int channel = 0; channel < uData->channels; ++channel)
+        {
+            uData->writeBuffer[frame * uData->channels + channel] = (float)(col[channel]);
+        }
+        colsRead++;
     }
 
-    colsRead++;
-    *audio = &(uData->buffer[0]);
-    uData->lineView->advancePlayhead(colsRead);
+    uData->lineView->advancePlayhead(1);
     return colsRead;
 }
 

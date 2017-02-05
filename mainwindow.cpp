@@ -300,11 +300,11 @@ void MainWindow::pauseSlot(bool p)
     }
 }
 
-//void MainWindow::speedSlot(int s)
-//{
-//    sequencer->setSpeed(s);
-//    qDebug() << "mWindow: " << s;
-//}
+void MainWindow::speedSlot(int stepsPerSec)
+{
+    sequencer->setSpeed(stepsPerSec);
+    qDebug() << "mWindow: " << stepsPerSec;
+}
 
 void MainWindow::quit()
 {

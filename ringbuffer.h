@@ -18,17 +18,17 @@ public:
     void reset();
 
     bool push(QVector<double> item);
-    QVector<double> pop();
+    bool pop(QVector<double>* item);
 
     bool empty() const;
     bool full() const;
 
 private:
 
-    QAtomicInteger<unsigned int> currentSize;
-    QAtomicInteger<unsigned int> capacity;
-    QAtomicInteger<unsigned int> head;
-    QAtomicInteger<unsigned int> tail;
+    QAtomicInteger<int> currentSize;
+    QAtomicInteger<int> capacity;
+    QAtomicInteger<int> head;
+    QAtomicInteger<int> tail;
 
     QVector<QVector<double>>* array;
 

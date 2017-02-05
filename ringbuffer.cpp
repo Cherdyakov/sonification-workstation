@@ -21,27 +21,27 @@ void RingBuffer::reset()
 
 bool RingBuffer::push(QVector<double> item)
 {
-
-    //buffer size at max
-    if(full())
-    {
-//        qDebug() << "ringbuffer: full!";
-        return false;
-    }
+    //values written all the way to end
     if(head > capacity - 1)
     {
         head = 0;
     }
 
-    array->insert(head, item);
+    //buffer size at max
+    if(full())
+    {
+        return false;
+    }
+
+    array->replace(head, item);
+
     head++;
     currentSize++;
     return true;
 }
 
-QVector<double> RingBuffer::pop()
+bool RingBuffer::pop(QVector<double> *item)
 {
-    QVector<double> data;
     //bounds check
     if(tail > capacity - 1)
     {
@@ -50,18 +50,18 @@ QVector<double> RingBuffer::pop()
     //tail has reached head
     if(empty())
     {
-        return data;
+        return false;
     }
     //tail behind head, data avail
-    data = array->at(tail);
+    *item = array->at(tail);
     tail++;
     currentSize--;
-    return data;
+    return true;
 }
 
 bool RingBuffer::empty() const
 {
-    return(tail == head);
+    return(currentSize == 0);
 }
 
 bool RingBuffer::full() const

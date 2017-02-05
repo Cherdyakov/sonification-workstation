@@ -104,6 +104,7 @@ private slots:
     void quit();
     void importCSV();
     void importJSON();
+    void speedSlot(int stepsPerSec);
 
     //ui slots
     void orientationSlot(bool h);

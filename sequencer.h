@@ -12,8 +12,7 @@
 #include "lineview.h"
 #include "timerworker.h"
 
-#define SRC_BLOCKSIZE 128
-#define SRC_OUTSIZE 256
+#define SRC_OUTFRAMES 2048//frames to write from src every call
 
 namespace son
 {
@@ -24,8 +23,9 @@ class LineView;
 typedef struct {
     LineView* lineView;
     int channels;
-    long inFrames;
-    float buffer[SRC_OUTSIZE];
+    long framesToWrite;
+    float* writeBuffer;
+    int src_error;
 } src_cb_data;
 
 class Sequencer : public QObject
@@ -52,8 +52,6 @@ private:
     LineView* lineView;
     QTimer* timer;
 
-
-    QMutex ringBufferMutex;
     std::atomic<bool> paused;
     std::atomic<int> stepsPerSecond;
     std::atomic<int> ticksPerStep;
@@ -63,17 +61,16 @@ private:
     void moveData(); //move converted data to the ringBuffer
 
 
-    std::atomic<double> src_ratio;
+    double src_ratio;
     int src_buf_idx;
     int src_buf_max;
-    SRC_STATE *src_init();
+    void src_init();
     long src_numFrames;
     int src_type;
-    int src_error;
     SRC_STATE* src;
-    src_cb_data src_uData;
+    src_cb_data* src_uData;
     src_callback_t src_cb; //pointer to src_callback func
-    float src_outData [SRC_OUTSIZE];
+    float* src_writeBuffer;
 
     static long src_input_callback(void* cb_data, float** audio); //src_callback func
 
