@@ -45,7 +45,7 @@ void CsvReader::readCSV(QString fileName, TableModel *model)
         QTextStream textStream(&data);
         unsigned int counter = 0;
         while (!textStream.atEnd()) {
-            if(counter++ % 100 == 0) {
+            if(counter++ % 100000 == 0) {
                 qDebug() << "processing: " << counter;
             }
             textStream >> character;

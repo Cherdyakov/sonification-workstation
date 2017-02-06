@@ -114,23 +114,23 @@ bool SynthGraph::getMuted()
 void SynthGraph::retrieveData()
 {
     static bool empty = false; //for triggering testing mssg
+    static unsigned int numSamples;
 
     if(ringBuffer->empty())
     {
-        if(!empty)
-        {
-            empty = true;
-            qDebug() << "graph: ringbuffer empty!";
-        }
+
+        qDebug() << "graph: ringbuffer empty!";
+
         return;
     }
     QVector<double> col;
     empty = false;
     if(ringBuffer->pop(&col))
     {
+        numSamples++;
         dataColumn = col;
     }
-//    qDebug() << "graph: " << dataColumn;
+    //    qDebug() << "graph: " << dataColumn;
 }
 
 } //namespace son

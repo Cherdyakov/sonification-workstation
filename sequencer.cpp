@@ -58,20 +58,13 @@ void Sequencer::src_init()
     src_uData->channels = numRows;
     src_uData->src_error = 0;
     src_uData->framesToWrite = SRC_OUTFRAMES;
-    src_uData->writeBuffer = new float[SRC_OUTFRAMES * numRows]();
+    src_uData->writeBuffer = new float[SRC_OUTFRAMES * 4 * numRows]();
 
     src = src_callback_new(src_cb,
                            src_type,
                            src_uData->channels,
                            &src_uData->src_error,
                            src_uData);
-
-    //reallocate src_writeBuffer
-    if(src_writeBuffer)
-    {
-        delete[] src_writeBuffer;
-    }
-    src_writeBuffer = new float[SRC_OUTFRAMES * numRows]();
 
     if(!src)
     {
@@ -81,6 +74,13 @@ void Sequencer::src_init()
     {
         qDebug() << src_strerror(src_uData->src_error);
     }
+
+    //reallocate src_writeBuffer
+    if(src_writeBuffer)
+    {
+        delete[] src_writeBuffer;
+    }
+    src_writeBuffer = new float[2048]();
 }
 
 void Sequencer::dimensionsChanged(int rowCount)
@@ -115,35 +115,43 @@ void Sequencer::fillRingBuffer()
     {
         return;
     }
-    if(src_buf_idx > src_buf_max - 1)
-    {
-        src_buf_idx = 0;
-        src_buf_max = resampleData();
-    }
+//    if(src_buf_idx > src_buf_max - 1)
+//    {
+//        src_buf_idx = 0;
+//        src_buf_max = resampleData();
+//    }
     moveData();
 }
 
 void Sequencer::moveData()
 {
-    while(src_buf_idx < src_buf_max && !ringBuffer->full())
+    QVector<double> col = lineView->getCurrentColumn();
+    bool success = ringBuffer->push(col);
+
+    if(success)
     {
-        QVector<double> col;
-        for(int i = 0; i < numRows; ++i)
-        {
-            col.push_back(src_uData->writeBuffer[src_buf_idx * numRows + i]);
-        }
-        if((ringBuffer->push(col)))
-        {
-            src_buf_idx += numRows;
-        }
+        lineView->advancePlayhead(1);
     }
+
+//    while(src_buf_idx < src_buf_max && !ringBuffer->full())
+//    {
+//        QVector<double> col;
+//        for(int i = 0; i < numRows; ++i)
+//        {
+//            col.push_back(src_uData->writeBuffer[src_buf_idx * numRows + i]);
+//        }
+//        if((ringBuffer->push(col)))
+//        {
+//            src_buf_idx += numRows;
+//        }
+//    }
 }
 
 long Sequencer::resampleData()
 {
     long samplesGenerated = 0;
     samplesGenerated = src_callback_read(src,
-                                         1,
+                                         1,//src_ratio fails > 256
                                          src_uData->framesToWrite,
                                          src_writeBuffer);
     if(src_uData->src_error)
@@ -169,9 +177,9 @@ long Sequencer::src_input_callback(void *cb_data, float **audio)
             uData->writeBuffer[frame * uData->channels + channel] = (float)(col[channel]);
         }
         colsRead++;
+        uData->lineView->advancePlayhead(colsRead);
     }
 
-    uData->lineView->advancePlayhead(1);
     return colsRead;
 }
 

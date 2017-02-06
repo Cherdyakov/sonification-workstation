@@ -102,7 +102,7 @@ QVector<double> LineView::getCurrentColumn()
 
     if(playhead > model->columnCount() - 1)
     {
-        playhead -= model->columnCount();
+        playhead = 0;
     }
 
     for(int row = 0; row < model->rowCount(); ++row)
@@ -112,6 +112,9 @@ QVector<double> LineView::getCurrentColumn()
     }
 
 //    qDebug() << "LineView:GetColumn: " << colData;
+
+//    playhead++;
+//    qDebug() << "lineview: " << playhead;
 
     return colData;
 }
