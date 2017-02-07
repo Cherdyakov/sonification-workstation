@@ -1,9 +1,8 @@
 #ifndef RINGBUFFER_H
 #define RINGBUFFER_H
 
-#include <QVector>
-#include <QDebug>
-#include <QAtomicInteger>
+#include <atomic>
+#include <vector>
 
 namespace son
 {
@@ -13,24 +12,25 @@ class RingBuffer;
 class son::RingBuffer
 {
 public:
-    RingBuffer(int size = 2048);
+    RingBuffer(int cap = 2048, int ch = 0);
 
     void reset();
 
-    bool push(QVector<double> item);
-    bool pop(QVector<double>* item);
+    bool push(std::vector<double> dataItem);
+    bool pop(std::vector<double> *dataItem);
 
     bool empty() const;
     bool full() const;
 
 private:
 
-    QAtomicInteger<int> currentSize;
-    QAtomicInteger<int> capacity;
-    QAtomicInteger<int> head;
-    QAtomicInteger<int> tail;
+    std::atomic<int> currentSize;
+    std::atomic<int> capacity;
+    std::atomic<int> channels;
+    std::atomic<int> head;
+    std::atomic<int> tail;
 
-    QVector<QVector<double>>* array;
+    std::vector<double> array;
 
 };
 

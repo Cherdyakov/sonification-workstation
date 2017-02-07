@@ -11,7 +11,7 @@ float Audifier::process()
 {
     float s = 0.0;
 
-    s = (dataColumn->at(0) / 1000000000.0);
+    s = (dataItem->at(0) / 1000000000.0);
 
 //    for(int i = 0; i < dataIndexes.count(); i++) {
 ////        qDebug() << dataColumn->at(dataIndexes[i]);
@@ -54,13 +54,13 @@ void Audifier::removeChild(QObject *child)
     }
 }
 
-void Audifier::setDataColumn(QVector<double> *col)
+void Audifier::setDataColumn(std::vector<double> *col)
 {
-    dataColumn = col;
+    dataItem = col;
 
     for(int i = 0; i < amods.count(); i++) {
         son::SynthItem* item = amods[i];
-        item->setDataColumn(col);
+        item->setDataItem(col);
     }
 }
 

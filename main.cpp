@@ -11,8 +11,8 @@
 #include "tablemodel.h"
 #include "ringbuffer.h"
 
-const int SR = 44100;
-const int BUF_SIZE= 512;
+#define SR 44100
+#define BLOCK_SIZE 512
 
 int main(int argc, char *argv[])
 {
@@ -26,8 +26,6 @@ int main(int argc, char *argv[])
     MainWindow main_window;
     son::UserData uData;
     uData.graph = main_window.getSynthGraph();
-    uData.seq = main_window.getSequencer();
-
 
     main_window.show();
 
@@ -66,7 +64,7 @@ int main(int argc, char *argv[])
     outParams.firstChannel = 0;
 
     unsigned int sampleRate = SR;
-    unsigned int bufferFrames = BUF_SIZE;
+    unsigned int bufferFrames = BLOCK_SIZE;
 
 
     try {

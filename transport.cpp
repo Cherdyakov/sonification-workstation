@@ -4,12 +4,12 @@ using namespace son;
 
 Transport::Transport(QWidget *parent) : QWidget(parent)
 {
+    dataHeight = dataWidth = dataDepth = 0;
     paused = true;
     horizontal = false;
     //transport layout
     QHBoxLayout* transportLayout = new QHBoxLayout;
     //transport controls
-    orientationButton = new QPushButton(tr("Invert Axes"));
     pauseButton = new QPushButton(tr("Play"));
     speedDial = new QDial;
     speedBox = new QSpinBox;
@@ -19,26 +19,25 @@ Transport::Transport(QWidget *parent) : QWidget(parent)
     speedLabel->setText("Steps per second:");
     speedBox->setValue(1);
     speedBox->setMaximum(44100);
-    transportLayout->addWidget(orientationButton);
+    speedBox->setMinimum(0);
     transportLayout->addWidget(pauseButton);
     transportLayout->addWidget(speedLabel);
     transportLayout->addWidget(speedBox);
     //set layout of transport
     this->setLayout(transportLayout);
-
-    //connect signals
-    connect(orientationButton, SIGNAL(released()), this, SLOT(on_orientationButtonReleased()));
-    connect(pauseButton, SIGNAL(released()), this, SLOT(on_pauseButtonReleased()));
-    connect(speedBox, SIGNAL(valueChanged(int)), this, SLOT(on_speedChanged(int)));
 }
 
-void Transport::on_orientationButtonReleased()
+void Transport::on_dataDimensionsChanged(int h, int w, int d)
 {
-    horizontal = !horizontal;
-    emit orientationChanged(horizontal);
+    if(dataHeight != h)
+        dataHeight = h;
+    if(dataWidth != w)
+        dataWidth = w;
+    if(dataDepth != d)
+        dataDepth = d;
 }
 
-void Transport::on_pauseButtonReleased()
+void Transport::on_pauseButton_released()
 {
     paused = !paused;
     if(paused) {
@@ -50,14 +49,13 @@ void Transport::on_pauseButtonReleased()
     emit pauseChanged(paused);
 }
 
-void Transport::on_speedDialValueChanged(int s)
+void Transport::on_speedBox_valueChanged(int s)
 {
-    emit speedChanged(s);
-}
-
-void Transport::on_speedChanged(int stepsPerSecond)
-{
-    emit speedChanged(stepsPerSecond);
+    if(stepsPerSecond != s)
+    {
+        stepsPerSecond = s;
+        synthGraph->setSpeed(stepsPerSecond);
+    }
 }
 
 

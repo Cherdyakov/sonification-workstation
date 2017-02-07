@@ -1,15 +1,15 @@
 #include "ringbuffer.h"
 
-using namespace son;
+namespace son {
 
-RingBuffer::RingBuffer(int size)
+RingBuffer::RingBuffer(int cap, int ch)
 { 
     head = 0;
     tail = 0;
     currentSize = 0;
-    capacity = size;
-    array = new QVector<QVector<double>>;
-    array->resize(capacity);
+    capacity = cap;
+    channels = ch;
+    array.resize(capacity * channels);
 }
 
 void RingBuffer::reset()
@@ -19,7 +19,7 @@ void RingBuffer::reset()
     currentSize = 0;
 }
 
-bool RingBuffer::push(QVector<double> item)
+bool RingBuffer::push(std::vector<double> dataItem)
 {
     //values written all the way to end
     if(head > capacity - 1)
@@ -33,27 +33,34 @@ bool RingBuffer::push(QVector<double> item)
         return false;
     }
 
-    array->replace(head, item);
+    for(int i = 0; i < channels; i++)
+    {
+        array[(head * channels) + i] = dataItem[i];
+    }
 
     head++;
     currentSize++;
     return true;
 }
 
-bool RingBuffer::pop(QVector<double> *item)
+bool RingBuffer::pop(std::vector<double> *dataItem)
 {
     //bounds check
     if(tail > capacity - 1)
     {
         tail = 0;
     }
-    //tail has reached head
+    //tail has caught up to head
     if(empty())
     {
         return false;
     }
-    //tail behind head, data avail
-    *item = array->at(tail);
+
+    for(int i = 0; i < channels; i++)
+    {
+        (*dataItem)[i] = array[(tail * channels) + i];
+    }
+
     tail++;
     currentSize--;
     return true;
@@ -67,4 +74,6 @@ bool RingBuffer::empty() const
 bool RingBuffer::full() const
 {
     return(currentSize == capacity);
+}
+
 }

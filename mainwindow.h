@@ -14,13 +14,9 @@
 
 #include "scatterview.h"
 #include "lineview.h"
-#include "csvreader.h"
-#include "tablemodel.h"
-#include "horizontalproxymodel.h"
-#include "ringbuffer.h"
-#include "sequencer.h"
 #include "synthgraph.h"
 #include "transport.h"
+#include "filereader.h"
 
 using namespace QtCharts;
 
@@ -32,23 +28,23 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void setRingBuffer(son::RingBuffer* buffer);
-    void setSynthGraph(son::SynthGraph* graph);
     son::SynthGraph* getSynthGraph();
-    son::Sequencer* getSequencer();
 
-    Q_INVOKABLE int getCurrentRowCount();
+    Q_INVOKABLE int getDataItemSize();
 
 private:
 
     void start();
     void stop();
+    void plot();
+
+    QList<int> dataDimensions;
+
+    std::vector<double>* dataset;
 
     //synthesis classes
     son::SynthGraph* synthGraph;
     //the model
-    TableModel* model;
-    HorizontalProxyModel* horizontalModel;
     bool horizontal;
     //Tab widget and tabs
     QTabWidget* tabWidget;
@@ -75,43 +71,22 @@ private:
     son::RingBuffer* ringBuffer;
     son::Sequencer* sequencer;
 
-    //data importing
-    CsvReader* csvReader;
-
-    //file functions
-    void importCSV(QString filename);
-    //plotting functions
-    void plot(QAbstractItemModel *model);
-
     //convenience functions to create and populate menus
     void createActions();
     void createMenus();
     //menus and actions
     QMenu *fileMenu;
     QAction* importCSVAct;
-//    QAction*
-
-    //does necessary work to invert the axes of the table and
-    //plots, for iterating row-wise intead of column-wise
-    void setOrientation();
-
-
-    //workaround for QuickView focus bug on OSX
-//    bool event(QEvent *event);
-
 
 private slots:
     void quit();
-    void importCSV();
-    void importJSON();
-    void speedSlot(int stepsPerSec);
+    void openDataset();
 
     //ui slots
-    void orientationSlot(bool h);
     void pauseSlot(bool p);
 
 signals:
-    void dimensionsChanged(int rowCount);
+    void dataDimensionsChanged(int height, int width);
 
 };
 

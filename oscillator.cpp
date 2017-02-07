@@ -57,17 +57,17 @@ void Oscillator::removeChild(QObject *child)
     } //no such child
 }
 
-void Oscillator::setDataColumn(QVector<double> *col)
+void Oscillator::setDataItem(std::vector<double> *newData)
 {
-    dataColumn = col;
+    dataItem = newData;
 
     for(int i = 0; i < amods.count(); i++) {
         son::SynthItem* item = amods[i];
-        item->setDataColumn(col);
+        item->setDataItem(newData);
     }
     for(int i = 0; i < fmods.count(); i++) {
         son::SynthItem* item = fmods[i];
-        item->setDataColumn(col);
+        item->setDataItem(newData);
     }
 }
 
@@ -240,8 +240,8 @@ void Oscillator::setFreqs()
     {
         for (int i = 0; (i < gens.count()) &&
              (i < dataIndexes.count()) &&
-             (i < dataColumn->count()); ++i) {
-            double f = dataColumn->at(dataIndexes[i]);
+             (i < dataItem->size()); ++i) {
+            double f = dataItem->at(dataIndexes[i]);
             gens[i]->freq(f);
         }
     }

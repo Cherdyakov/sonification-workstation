@@ -31,7 +31,7 @@ public:
 
     virtual float process();
     virtual float process(float in);
-    virtual void setDataColumn(QVector<double>* col);
+    virtual void setDataItem(std::vector<double>* item);
 
 
     QObject *getGui() const;
@@ -53,7 +53,7 @@ public slots:
 
 protected:
     bool muted;
-    QVector<double>* dataColumn;
+    std::vector<double>* dataItem;
 
 
 private:

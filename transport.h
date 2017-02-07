@@ -9,6 +9,8 @@
 #include <QLabel>
 #include <QDebug>
 
+#include "synthgraph.h"
+
 namespace son {
 class Transport;
 }
@@ -20,27 +22,26 @@ public:
     explicit Transport(QWidget *parent = 0);
 
 private:
-    void connectUI();
+    int dataHeight;
+    int dataWidth;
+    int dataDepth;
     bool horizontal;
     bool paused;
-    double stepsSecond;
+    int stepsPerSecond;
     QPushButton* pauseButton;
-    QPushButton* orientationButton;
     QDial* speedDial;
     QSpinBox* speedBox;
+    son::SynthGraph* synthGraph;
 
 signals:
-    void orientationChanged(bool flipped);
     void pauseChanged(bool paused);
-    void speedChanged(int stepsPerSecond);
 
 public slots:
+    void on_dataDimensionsChanged(int h, int w, int d);
 
 private slots:
-    void on_orientationButtonReleased();
-    void on_pauseButtonReleased();
-    void on_speedDialValueChanged(int s);
-    void on_speedChanged(int stepsPerSecond);
+    void on_pauseButton_released();
+    void on_speedBox_valueChanged(int s);
 };
 
 #endif // TRANSPORT_H

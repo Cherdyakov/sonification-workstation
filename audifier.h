@@ -17,7 +17,7 @@ public:
     using SynthItem::addChild;
     void addChild(QObject *child, CHILD_TYPE type);
     void removeChild(QObject* child);
-    void setDataColumn(QVector<double>* col);
+    void setDataColumn(std::vector<double> *col);
 
     //UI invokable functions for seting parameter
     Q_INVOKABLE bool setIndexes(QVector<int> idxs);

@@ -10,8 +10,6 @@
 #include <QDebug>
 #include <qmath.h>
 
-#include "sequencer.h"
-
 namespace son {
 
 //forward dec

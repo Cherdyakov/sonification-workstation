@@ -8,24 +8,18 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.9);
 
-    //csvReader for importing data into our model
-    csvReader = new CsvReader;
-
     createActions();
     createMenus();
 
-    //initialize
-    horizontal = false;
+    //initialize dataset
+    dataDimensions = QList<int>({0,0});
+    dataset = new std::vector<double>();
 
     ///////////////////
     //set data models//
     ///////////////////
     //for table
-    model = new TableModel(0);
     tableView = new QTableView;
-    horizontalModel = new HorizontalProxyModel;
-    horizontalModel->setSourceModel(model);
-    tableView->setModel(model);
 
     //create line chart view
     lineView = new son::LineView;
@@ -83,9 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //synthesis graph and data queue
-    ringBuffer = new son::RingBuffer();
-    synthGraph = new son::SynthGraph();
-    synthGraph->setRingBuffer(ringBuffer);
+    synthGraph = new son::SynthGraph;
 
     ////////////
     //QML View//
@@ -122,17 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
     splitter->setSizes(sizes);
     quickView->setSource(QUrl("qrc:/main.qml"));
 
-    //sequencer
-    sequencer = new son::Sequencer;
-    sequencer->setRingBuffer(ringBuffer);
-    scatterView->setSequencer(sequencer);
-    lineView->setSequencer(sequencer);
-    sequencer->setLineView(lineView);
-
     //connect non ui singals/slots
-    connect(transport, SIGNAL(speedChanged(int)),sequencer, SLOT(setSpeed(int)));
-    connect(this, SIGNAL(dimensionsChanged(int)), sequencer, SLOT(dimensionsChanged(int)));
-    connect(transport, SIGNAL(orientationChanged(bool)),this, SLOT(orientationSlot(bool)));
     connect(transport, SIGNAL(pauseChanged(bool)),this, SLOT(pauseSlot(bool)));
 
 }
@@ -142,60 +124,37 @@ MainWindow::~MainWindow()
 
 }
 
-void MainWindow::setRingBuffer(son::RingBuffer *buffer)
-{
-    ringBuffer = buffer;
-    sequencer->setRingBuffer(ringBuffer);
-}
-
-void MainWindow::setSynthGraph(son::SynthGraph *graph)
-{
-    synthGraph = graph;
-}
-
 son::SynthGraph *MainWindow::getSynthGraph()
 {
     return synthGraph;
 }
 
-son::Sequencer *MainWindow::getSequencer()
+int MainWindow::getDataItemSize()
 {
-    return sequencer;
-}
-
-
-int MainWindow::getCurrentRowCount()
-{
-    if(horizontal) {
-        return horizontalModel->rowCount();
-    }
-    return model->rowCount();
+    return dataDimensions[0];
 }
 
 void MainWindow::start()
 {
-    sequencer->start();
-    synthGraph->setMuted(false);
+    synthGraph->pause(false);
 }
 
 void MainWindow::stop()
 {
-    synthGraph->setMuted(true);
-    sequencer->stop();
+    synthGraph->pause(true);
 }
 
-void MainWindow::plot(QAbstractItemModel* m)
+void MainWindow::plot()
 {
-    lineView->setModel(m);
-//    scatterView->setModel(m);
+    qDebug() << (*dataset);
 }
 
 void MainWindow::createActions()
 {
-    importCSVAct = new QAction(tr("&Import CSV"), this);
-    importCSVAct->setShortcuts(QKeySequence::Open);
-    importCSVAct->setStatusTip(tr("Loads a CSV file into the Data Window"));
-    connect(importCSVAct, SIGNAL(triggered(bool)), this, SLOT(importCSV()));
+    QAction* openDatasetAction = new QAction(tr("&Open Dataset"), this);
+    openDatasetAction->setShortcuts(QKeySequence::Open);
+    openDatasetAction->setStatusTip(tr("Loads a CSV file into the Data Window"));
+    connect(openDatasetAction, SIGNAL(triggered(bool)), this, SLOT(openDataset()));
 }
 
 void MainWindow::createMenus()
@@ -205,10 +164,10 @@ void MainWindow::createMenus()
     ////////////////
 
     //importing files
-    QAction* csvAct = new QAction(tr("Import CSV"), this);
-    csvAct->setShortcut(QKeySequence::Open);
-    csvAct->setStatusTip(tr("Read CSV file into Data Window"));
-    connect(csvAct, SIGNAL(triggered(bool)), this, SLOT(importCSV()));
+    QAction* openDataAct = new QAction(tr("Open Dataset"), this);
+    openDataAct->setShortcut(QKeySequence::Open);
+    openDataAct->setStatusTip(tr("Read CSV file into Data Window"));
+    connect(openDataAct, SIGNAL(triggered(bool)), this, SLOT(openDataset()));
 
     //quit application
     QAction* quitAct = new QAction(tr("Quit"), this);
@@ -218,75 +177,8 @@ void MainWindow::createMenus()
 
     //Create and populate the menus
     QMenu* fileMenu = menuBar()->addMenu(tr("File"));
-    fileMenu->addAction(csvAct);
+    fileMenu->addAction(openDataAct);
     fileMenu->addAction(quitAct);
-}
-
-void MainWindow::setOrientation()
-{
-    stop();
-
-    if(horizontal)
-    {
-        tableView->setModel(horizontalModel);
-        plot(horizontalModel);
-    }
-    else
-    {
-        tableView->setModel(model);
-        plot(model);
-    }
-
-    //QML notified, updates indexes
-    emit dimensionsChanged(getCurrentRowCount());
-
-    if(!paused) {
-        start();
-    }
-}
-
-//bool MainWindow::event(QEvent *event)
-//{
-//    if(event->type() == QEvent::WindowUnblocked || event->type() == QEvent::ActivationChange) {
-//        if(this->isActiveWindow()) {
-//            window()->activateWindow();
-//            return true;
-//        }
-//    }
-//    return QWidget::event(event);
-//}
-
-void MainWindow::importCSV()
-{
-    stop();
-    model->clear();
-    QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
-    QString documents = docDirs[0];
-    QString fileName = QFileDialog::getOpenFileName(this, ("Open File"), documents, ("csv File(*.csv)"));
-    csvReader->readCSV(fileName, model);
-    if(horizontal)
-    {
-        horizontal = false;
-        setOrientation();
-    }
-    plot(model);
-    emit dimensionsChanged(getCurrentRowCount());
-
-//    if(!paused)
-//    {
-//        start();
-//    }
-}
-
-void MainWindow::importJSON()
-{
-    qDebug() << "JSON IMPORT NOT IMPLEMENTED";
-}
-
-void MainWindow::orientationSlot(bool h)
-{
-    horizontal = h;
-    setOrientation();
 }
 
 void MainWindow::pauseSlot(bool p)
@@ -300,13 +192,30 @@ void MainWindow::pauseSlot(bool p)
     }
 }
 
-void MainWindow::speedSlot(int stepsPerSec)
-{
-    sequencer->setSpeed(stepsPerSec);
-    qDebug() << "mWindow: " << stepsPerSec;
-}
-
 void MainWindow::quit()
 {
     QApplication::quit();
+}
+
+void MainWindow::openDataset()
+{
+    emit stop();
+    QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+    QString documents = docDirs[0];
+    QString fileName = QFileDialog::getOpenFileName(this, tr(("Open Dataset")), documents, ("csv File(*.csv)"));
+
+    if(fileName.isEmpty())
+        return;
+
+    FileReader* reader = new FileReader;
+
+    QList<int> dims = reader->readCSV(fileName, dataset);
+
+    if(dataDimensions != dims)
+    {
+        dataDimensions = dims;
+        emit dataDimensionsChanged(dataDimensions[0], dataDimensions[1]);
+    }
+
+    plot();
 }

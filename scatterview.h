@@ -9,7 +9,6 @@
 #include <qmath.h>
 
 #include "tablemodel.h"
-#include "sequencer.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -24,7 +23,6 @@ public:
     ~ScatterView();
     void mouseMoveEvent(QMouseEvent* event);
     void setModel(QAbstractItemModel *m, int xRow = 0, int yRow = 1);
-    void setSequencer(Sequencer * const seq);
 
 private slots:
     void handleMouseMoved(const QPointF &point);
@@ -39,10 +37,10 @@ private:
     QPen* scatterPen;
     QPen* triggeredPen;
     QHash<QString, int>* hashTable;
-
-    Sequencer* sequencer;
-
     void triggerPoint(QPointF point);
+
+signals:
+    void dataItemTriggered(int dataIndex);
 
 };
 

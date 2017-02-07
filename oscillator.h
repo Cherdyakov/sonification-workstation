@@ -19,7 +19,7 @@ public:
     using SynthItem::addChild;
     void addChild(QObject* child, int type);
     void removeChild(QObject* child);
-    void setDataColumn(QVector<double>* col);
+    void setDataItem(std::vector<double> *newData);
 
     //UI invokable functions for setting parameters
     Q_INVOKABLE void setWaveform(WAVEFORM type);

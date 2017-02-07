@@ -9,16 +9,14 @@ SOURCES += \
     synthgraph.cpp \
     output.cpp \
     oscillator.cpp \
-    tablemodel.cpp \
-    csvreader.cpp \
-    horizontalproxymodel.cpp \
     scatterview.cpp \
     lineview.cpp \
     ringbuffer.cpp \
-    sequencer.cpp \
     transport.cpp \
     audifier.cpp \
-    timerworker.cpp
+    timerworker.cpp \
+    resampler.cpp \
+    filereader.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,16 +36,14 @@ HEADERS += \
     userdata.h \
     output.h \
     oscillator.h \
-    tablemodel.h \
-    csvreader.h \
-    horizontalproxymodel.h \
     scatterview.h \
     lineview.h \
     ringbuffer.h \
-    sequencer.h \
     transport.h \
     audifier.h \
-    timerworker.h
+    timerworker.h \
+    resampler.h \
+    filereader.h
 
 FORMS +=
 
@@ -75,5 +71,8 @@ INCLUDEPATH += /home/sean/CodeLibs/rtaudio-4.1.2/include
 # Secret Rabbit Code
 LIBS += -L/home/sean/CodeLibs/libsamplerate-0.1.9 -lsamplerate
 INCLUDEPATH += /home/sean/CodeLibs/libsamplerate-0.1.9
+# qtcsv
+LIBS += -L/home/sean/CodeLibs/qtcsv-master -lqtcsv
+INCLUDEPATH += /home/sean/CodeLibs/qtcsv-master/include
 
 DISTFILES +=

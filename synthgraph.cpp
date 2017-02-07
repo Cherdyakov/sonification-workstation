@@ -5,7 +5,12 @@ namespace son {
 
 SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 {
-    muted = true;
+    paused = true;
+    ringBuffer = NULL;
+    ringBufferSize = 2048;
+    blockSize = 512;
+    audioRate = 44100;
+    dataDimensions = 0;
 }
 
 QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
@@ -22,13 +27,13 @@ QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
     case OSCILLATOR: {
         item = new Oscillator();
         item->setGui(gui);
-        item->setDataColumn(&dataColumn);
+        item->setDataItem(&dataItem);
         break;
     }
     case AUDIFIER: {
         item = new Audifier();
         item->setGui(gui);
-        item->setDataColumn(&dataColumn);
+        item->setDataItem(&dataItem);
         break;
     }
     default:
@@ -65,7 +70,7 @@ float SynthGraph::processGraph()
 {
     float s = 0.0;
 
-    if(muted) {
+    if(paused) {
         return s;
     }
 
@@ -78,7 +83,7 @@ float SynthGraph::processGraph()
         s += item->process();
     }
 
-    //test noise
+    //Test Noise
     {
         //test noise
         //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
@@ -94,41 +99,54 @@ int SynthGraph::graphSize()
     return graphRoot.count();
 }
 
-void SynthGraph::setRingBuffer(RingBuffer *buffer)
+void SynthGraph::pause(bool p)
 {
-    ringBuffer = buffer;
-}
-
-void SynthGraph::setMuted(bool m)
-{
-    if(muted != m) {
-        muted = m;
+    if(paused != p) {
+        paused = p;
     }
 }
 
-bool SynthGraph::getMuted()
+void SynthGraph::setDimensions(int dimensions)
 {
-    return muted;
+    if(dataDimensions != dimensions)
+    {
+        dataDimensions = dimensions;
+    }
+}
+
+void SynthGraph::setSpeed(int s)
+{
+    if(speed != s)
+    {
+        //speed is data samples to use per second
+        speed = s;
+        srcRatio = audioRate / (double)speed;
+    }
+}
+
+void SynthGraph::ringBufferInit(int capacity, int channels)
+{
+    if(ringBuffer)
+    {
+        delete ringBuffer;
+        ringBuffer = NULL;
+    }
+    ringBuffer = new RingBuffer(capacity, channels);
 }
 
 void SynthGraph::retrieveData()
 {
-    static bool empty = false; //for triggering testing mssg
     static unsigned int numSamples;
 
     if(ringBuffer->empty())
     {
-
         qDebug() << "graph: ringbuffer empty!";
-
         return;
     }
-    QVector<double> col;
-    empty = false;
-    if(ringBuffer->pop(&col))
+
+    if(ringBuffer->pop(&dataItem))
     {
-        numSamples++;
-        dataColumn = col;
+        *itemsRead++;
     }
     //    qDebug() << "graph: " << dataColumn;
 }

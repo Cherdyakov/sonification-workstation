@@ -59,25 +59,11 @@ void ScatterView::handleMouseMoved(const QPointF &point)
 void ScatterView::triggerPoint(QPointF point)
 {
     QString key = QString::number(point.x()) + QString::number(point.y());
-
     QList<int> columns = hashTable->values(key);
 
     for(int i = 0; i < columns.count(); ++i)
     {
-        int column = columns[i];
-        QVector<double> colData;
-        for(int row = 0; row < model->rowCount(); ++row)
-        {
-            QModelIndex idx = model->index(row, column);
-            colData.append(model->data(idx).toDouble());
-        }
-        if(sequencer == NULL)
-        {
-            qDebug() << "scatterview: null sequencer";
-            return;
-        }
-
-        sequencer->enqueue(colData);
+        emit dataItemTriggered(columns[i]);
     }
 }
 
@@ -127,11 +113,6 @@ void ScatterView::setModel(QAbstractItemModel *m, int xRow, int yRow)
 
     scatterSeries = series;
 
-}
-
-void ScatterView::setSequencer(Sequencer* const seq)
-{
-    sequencer = seq;
 }
 
 }

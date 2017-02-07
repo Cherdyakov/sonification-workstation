@@ -18,7 +18,7 @@ RowLayout {
     Connections {
         //when dimensions of data change
         target: mainWindow
-        onDimensionsChanged: {
+        onDataDimensionsChanged: {
             revalidate();
         }
     }
@@ -48,7 +48,7 @@ RowLayout {
             {
                 var inString = text
                 var parsedInput = getNumbers(inString)
-                rowMax = mainWindow.getCurrentRowCount()
+                rowMax = mainWindow.getDataItemSize()
                 var validInput = parsedInput.filter(filterMax)
 
                 text = getStringRange(validInput)

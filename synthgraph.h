@@ -11,6 +11,7 @@
 #include "oscillator.h"
 #include "audifier.h"
 #include "ringbuffer.h"
+#include "resampler.h"
 
 namespace son {
 
@@ -28,15 +29,22 @@ public:
 
     explicit SynthGraph(QObject *parent = 0);
 
+    //QML invokable functions for adding SynthItems to the graph
     Q_INVOKABLE QObject* createItem(QObject *gui, SYNTH_ITEM_TYPE type);
     Q_INVOKABLE void addToRoot(SynthItem* synthItem);
     Q_INVOKABLE void removeFromRoot(SynthItem* synthItem);
 
     float processGraph();
     int graphSize();
-    void setRingBuffer(RingBuffer* buffer);
-    void setMuted(bool m);
-    bool getMuted();
+    void pause(bool m);
+    //for playhead implementation outside class
+    std::atomic<unsigned int>* itemsRead;
+
+    //push to RingBuffer
+    bool enqueue(float* data);
+
+    void setDimensions(int dimensions);
+    void setSpeed(int s);
 
 signals:
 
@@ -44,11 +52,20 @@ public slots:
 
 
 private:
+    int ringBufferSize;
+    int blockSize;
+    int dataDimensions;
+    int audioRate;
     QVector<SynthItem*> graphRoot;
-    QVector<double> dataColumn;
+    std::vector<double> dataItem;
+    float* srcOutBuffer;
     RingBuffer* ringBuffer;
-    std::atomic<bool> muted;
+    Resampler* src;
+    std::atomic<bool> paused;
+    std::atomic<double> srcRatio;
+    std::atomic<int> speed;
 
+    void ringBufferInit(int size, int channels);
     void retrieveData();
 
 
