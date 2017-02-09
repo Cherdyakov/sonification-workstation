@@ -8,7 +8,6 @@
 #include "rtaudio/RtAudio.h"
 #include "callback.h"
 #include "synthgraph.h"
-#include "tablemodel.h"
 #include "ringbuffer.h"
 
 #define SR 44100

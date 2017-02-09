@@ -21,15 +21,16 @@ MainWindow::MainWindow(QWidget *parent) :
     //for table
     tableView = new QTableView;
 
-    //create line chart view
-    lineView = new son::LineView;
-    lineView->setRenderHint(QPainter::Antialiasing);
-    lineView->setFrameShape(QFrame::Box);
+    ///////////////////////
+    //QCustomPlot Setup  //
+    ///////////////////////
 
-    //scatter plot view
-    scatterView = new son::ScatterView;
-    scatterView->setRenderHint(QPainter::Antialiasing);
-    scatterView->setFrameShape(QFrame::Box);
+    customPlot = new QCustomPlot;
+    QCP::Interactions qcpInteractions;
+    qcpInteractions |= QCP::iRangeDrag;
+    qcpInteractions |= QCP::iRangeZoom;
+    qcpInteractions |= QCP::iSelectPlottables;
+    customPlot->setInteractions(qcpInteractions);
 
     //main window layout
     QWidget* mainWidget = new QWidget;
@@ -49,10 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ///////////////////////
     //add layouts to tabs//
     ///////////////////////
-    //table
-    tableTabLayout = new QVBoxLayout;
-    tableTabLayout->setMargin(4);
-    tableTab->setLayout(tableTabLayout);
+
     //line chart
     lineTabLayout = new QVBoxLayout;
     lineTabLayout->setMargin(4);
@@ -65,10 +63,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //insert tabs into QTabWidget
     tabWidget->addTab(tableTab, "Table");
     tabWidget->addTab(lineTab, "Line");
-    tabWidget->addTab(scatterTab, "Scatter");
-    tableTabLayout->addWidget(tableView);
-    lineTabLayout->addWidget(lineView);
-    scatterTabLayout->addWidget(scatterView);
+//    tabWidget->addTab(scatterTab, "Scatter");
+//    tableTabLayout->addWidget(tableView);
+    lineTabLayout->addWidget(customPlot);
+//    scatterTabLayout->addWidget(scatterView);
 
     //////////////////////
     //Transport section //
@@ -146,7 +144,30 @@ void MainWindow::stop()
 
 void MainWindow::plot()
 {
-    qDebug() << (*dataset);
+    QVector<double> plotVec = QVector<double>::fromStdVector((*dataset));
+    qDebug() << "Done converting vector to QVector: " << QTime::currentTime();
+
+    QVector<double> xValues(plotVec.count());
+    for(int i = 0; i < xValues.count(); i++)
+    {
+        xValues[i] = i;
+    }
+    qDebug() << "Done populating range QVector: " << QTime::currentTime();
+
+    customPlot->addGraph();
+    customPlot->graph(0)->setData(xValues, plotVec);
+    customPlot->graph(0)->rescaleAxes();
+    customPlot->replot();
+    QCPRange xRange = customPlot->xAxis->range();
+    QCPRange yRange = customPlot->yAxis->range();
+    customPlot->xAxis->setRangeLower(xRange.lower);
+    customPlot->xAxis->setRangeUpper(xRange.upper);
+    customPlot->yAxis->setRangeLower(yRange.lower);
+    customPlot->yAxis->setRangeUpper(yRange.upper);
+
+    qDebug() << "Done plotting: " << plotVec.count() << " elements. " << QTime::currentTime();
+
+
 }
 
 void MainWindow::createActions()

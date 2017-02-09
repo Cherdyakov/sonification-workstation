@@ -70,48 +70,48 @@ void ScatterView::triggerPoint(QPointF point)
 void ScatterView::setModel(QAbstractItemModel *m, int xRow, int yRow)
 {
 
-    model = m;
-    QScatterSeries* series = new QScatterSeries();
-    QChart* scatterChart = new QChart;
-    hashTable->clear();
+//    model = m;
+//    QScatterSeries* series = new QScatterSeries();
+//    QChart* scatterChart = new QChart;
+//    hashTable->clear();
 
-    if(xRow > model->rowCount())
-    {
-        xRow = model->rowCount();
-    }
-    if(yRow > model->rowCount())
-    {
-        yRow = model->rowCount();
-    }
+//    if(xRow > model->rowCount())
+//    {
+//        xRow = model->rowCount();
+//    }
+//    if(yRow > model->rowCount())
+//    {
+//        yRow = model->rowCount();
+//    }
 
-    //plot and hash a column of data
-    for(int column = 0; column < model->columnCount(); ++column)
-    {
-        QPointF point;
-        //x value is from xRow position in the column
-        QModelIndex xIndex = model->index(xRow, column);
-        //y value is from yRow position in the column
-        QModelIndex yIndex = model->index(yRow, column);
-        double xVal = model->data(xIndex).toDouble();
-        double yVal = model->data(yIndex).toDouble();
-        point.setX(xVal);
-        point.setY(yVal);
-        //map the point to the column it came from
-        //for recall when this point is triggered
-        QString key = QString::number(xVal) + QString::number(yVal);
-        hashTable->insert(key, column);
-        //add it to the chart series
-        series->append(point);
-    }
+//    //plot and hash a column of data
+//    for(int column = 0; column < model->columnCount(); ++column)
+//    {
+//        QPointF point;
+//        //x value is from xRow position in the column
+//        QModelIndex xIndex = model->index(xRow, column);
+//        //y value is from yRow position in the column
+//        QModelIndex yIndex = model->index(yRow, column);
+//        double xVal = model->data(xIndex).toDouble();
+//        double yVal = model->data(yIndex).toDouble();
+//        point.setX(xVal);
+//        point.setY(yVal);
+//        //map the point to the column it came from
+//        //for recall when this point is triggered
+//        QString key = QString::number(xVal) + QString::number(yVal);
+//        hashTable->insert(key, column);
+//        //add it to the chart series
+//        series->append(point);
+//    }
 
-    scatterChart->addSeries(series);
-    scatterChart->createDefaultAxes();
+//    scatterChart->addSeries(series);
+//    scatterChart->createDefaultAxes();
 
-    QChart* oldChart = this->chart();
-    this->setChart(scatterChart);
-    oldChart->deleteLater();
+//    QChart* oldChart = this->chart();
+//    this->setChart(scatterChart);
+//    oldChart->deleteLater();
 
-    scatterSeries = series;
+//    scatterSeries = series;
 
 }
 

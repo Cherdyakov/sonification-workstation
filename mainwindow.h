@@ -12,11 +12,12 @@
 
 #include <atomic>
 
-#include "scatterview.h"
-#include "lineview.h"
+//#include "scatterview.h"
+//#include "lineview.h"
 #include "synthgraph.h"
 #include "transport.h"
 #include "filereader.h"
+#include "qcustomplot.h"
 
 using namespace QtCharts;
 
@@ -41,11 +42,8 @@ private:
     QList<int> dataDimensions;
 
     std::vector<double>* dataset;
-
-    //synthesis classes
     son::SynthGraph* synthGraph;
-    //the model
-    bool horizontal;
+
     //Tab widget and tabs
     QTabWidget* tabWidget;
     QWidget* tableTab;
@@ -63,13 +61,7 @@ private:
     bool paused;
     //Main graphical widgets
     QTableView* tableView;
-    son::ScatterView* scatterView;
-    son::LineView* lineView;
-
-
-    //for getting data to the audio callback
-    son::RingBuffer* ringBuffer;
-    son::Sequencer* sequencer;
+    QCustomPlot* customPlot;
 
     //convenience functions to create and populate menus
     void createActions();

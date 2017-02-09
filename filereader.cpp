@@ -1,4 +1,5 @@
 #include "filereader.h"
+#include <QTime>
 
 FileReader::FileReader(QObject *parent) : QObject(parent)
 {
@@ -7,6 +8,8 @@ FileReader::FileReader(QObject *parent) : QObject(parent)
 
 QList<int> FileReader::readCSV(QString filename, std::vector<double> *array)
 {
+    qDebug() << "Reading file: " << QTime::currentTime();
+
 
     QList<QStringList> readData = QtCSV::Reader::readToList(filename);
 
@@ -28,12 +31,13 @@ QList<int> FileReader::readCSV(QString filename, std::vector<double> *array)
             else
             {
                 qDebug() << "FileReader: CSV import failed, bad value: " << temp;
-                array->clear();
+//                array->clear();
                 height = width = 0;
             }
         }
     }
 
+    qDebug() << "Done reading file: " << QTime::currentTime();
     return QList<int>({height, width});
 }
 

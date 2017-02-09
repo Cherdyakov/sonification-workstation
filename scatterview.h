@@ -8,8 +8,6 @@
 #include <QPen>
 #include <qmath.h>
 
-#include "tablemodel.h"
-
 QT_CHARTS_USE_NAMESPACE
 
 namespace son {

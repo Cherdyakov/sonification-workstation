@@ -1,4 +1,4 @@
-QT += qml quick widgets charts
+QT += qml quick widgets charts printsupport
 
 CONFIG += c++11
 
@@ -16,7 +16,8 @@ SOURCES += \
     audifier.cpp \
     timerworker.cpp \
     resampler.cpp \
-    filereader.cpp
+    filereader.cpp \
+    ../../../CodeLibs/qcustomplot/qcustomplot.cpp
 
 RESOURCES += qml.qrc
 
@@ -43,7 +44,8 @@ HEADERS += \
     audifier.h \
     timerworker.h \
     resampler.h \
-    filereader.h
+    filereader.h \
+    ../../../CodeLibs/qcustomplot/qcustomplot.h
 
 FORMS +=
 
@@ -74,5 +76,7 @@ INCLUDEPATH += /home/sean/CodeLibs/libsamplerate-0.1.9
 # qtcsv
 LIBS += -L/home/sean/CodeLibs/qtcsv-master -lqtcsv
 INCLUDEPATH += /home/sean/CodeLibs/qtcsv-master/include
+# qcustomplot
+INCLUDEPATH += /home/sean/CodeLibs/qcustomplot
 
 DISTFILES +=
