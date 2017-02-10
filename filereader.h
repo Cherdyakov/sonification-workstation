@@ -9,6 +9,7 @@
 class FileReader : public QObject
 {
     Q_OBJECT
+
 public:
     explicit FileReader(QObject *parent = 0);
     QList<int> readCSV(QString filename, std::vector<double>* array);

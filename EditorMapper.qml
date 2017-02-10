@@ -70,7 +70,7 @@ RowLayout {
     {
         var inString = textInput.text
         var parsedInput = getNumbers(inString)
-        rowMax = mainWindow.getCurrentRowCount()
+        rowMax = mainWindow.getDataItemSize()
         var validInput = parsedInput.filter(filterMax)
 
         textInput.text = getStringRange(validInput)

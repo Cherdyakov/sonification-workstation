@@ -38,7 +38,7 @@ QList<int> FileReader::readCSV(QString filename, std::vector<double> *array)
     }
 
     qDebug() << "Done reading file: " << QTime::currentTime();
-    return QList<int>({height, width});
+    return QList<int>({width, height});
 }
 
 QList<int> FileReader::readJSON(QString filename, std::vector<double> *array)

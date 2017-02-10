@@ -17,7 +17,8 @@ SOURCES += \
     timerworker.cpp \
     resampler.cpp \
     filereader.cpp \
-    ../../../CodeLibs/qcustomplot/qcustomplot.cpp
+    ../../../CodeLibs/qcustomplot/qcustomplot.cpp \
+    plotter.cpp
 
 RESOURCES += qml.qrc
 
@@ -45,7 +46,8 @@ HEADERS += \
     timerworker.h \
     resampler.h \
     filereader.h \
-    ../../../CodeLibs/qcustomplot/qcustomplot.h
+    ../../../CodeLibs/qcustomplot/qcustomplot.h \
+    plotter.h
 
 FORMS +=
 

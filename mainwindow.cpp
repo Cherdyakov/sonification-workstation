@@ -12,7 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
     createMenus();
 
     //initialize dataset
-    dataDimensions = QList<int>({0,0});
+    height = 0;
+    width = 0;
     dataset = new std::vector<double>();
 
     ///////////////////
@@ -22,15 +23,17 @@ MainWindow::MainWindow(QWidget *parent) :
     tableView = new QTableView;
 
     ///////////////////////
-    //QCustomPlot Setup  //
+    //Qplotter Setup  //
     ///////////////////////
 
-    customPlot = new QCustomPlot;
+    plotter = new Plotter;
     QCP::Interactions qcpInteractions;
     qcpInteractions |= QCP::iRangeDrag;
     qcpInteractions |= QCP::iRangeZoom;
     qcpInteractions |= QCP::iSelectPlottables;
-    customPlot->setInteractions(qcpInteractions);
+    plotter->setInteractions(qcpInteractions);
+    plotter->axisRect()->setRangeDrag(Qt::Horizontal);
+    plotter->axisRect()->setRangeZoom(Qt::Horizontal);
 
     //main window layout
     QWidget* mainWidget = new QWidget;
@@ -63,10 +66,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //insert tabs into QTabWidget
     tabWidget->addTab(tableTab, "Table");
     tabWidget->addTab(lineTab, "Line");
-//    tabWidget->addTab(scatterTab, "Scatter");
-//    tableTabLayout->addWidget(tableView);
-    lineTabLayout->addWidget(customPlot);
-//    scatterTabLayout->addWidget(scatterView);
+    //    tabWidget->addTab(scatterTab, "Scatter");
+    //    tableTabLayout->addWidget(tableView);
+    lineTabLayout->addWidget(plotter);
+    //    scatterTabLayout->addWidget(scatterView);
 
     //////////////////////
     //Transport section //
@@ -129,7 +132,7 @@ son::SynthGraph *MainWindow::getSynthGraph()
 
 int MainWindow::getDataItemSize()
 {
-    return dataDimensions[0];
+    return height;
 }
 
 void MainWindow::start()
@@ -144,30 +147,9 @@ void MainWindow::stop()
 
 void MainWindow::plot()
 {
-    QVector<double> plotVec = QVector<double>::fromStdVector((*dataset));
-    qDebug() << "Done converting vector to QVector: " << QTime::currentTime();
+    plotter->plot(dataset, width, height);
 
-    QVector<double> xValues(plotVec.count());
-    for(int i = 0; i < xValues.count(); i++)
-    {
-        xValues[i] = i;
-    }
-    qDebug() << "Done populating range QVector: " << QTime::currentTime();
-
-    customPlot->addGraph();
-    customPlot->graph(0)->setData(xValues, plotVec);
-    customPlot->graph(0)->rescaleAxes();
-    customPlot->replot();
-    QCPRange xRange = customPlot->xAxis->range();
-    QCPRange yRange = customPlot->yAxis->range();
-    customPlot->xAxis->setRangeLower(xRange.lower);
-    customPlot->xAxis->setRangeUpper(xRange.upper);
-    customPlot->yAxis->setRangeLower(yRange.lower);
-    customPlot->yAxis->setRangeUpper(yRange.upper);
-
-    qDebug() << "Done plotting: " << plotVec.count() << " elements. " << QTime::currentTime();
-
-
+    qDebug() << "Done plotting: " << height * width << " elements. " << QTime::currentTime();
 }
 
 void MainWindow::createActions()
@@ -231,11 +213,20 @@ void MainWindow::openDataset()
     FileReader* reader = new FileReader;
 
     QList<int> dims = reader->readCSV(fileName, dataset);
-
-    if(dataDimensions != dims)
+    bool dimsChanged = false;
+    if(height != dims[0])
     {
-        dataDimensions = dims;
-        emit dataDimensionsChanged(dataDimensions[0], dataDimensions[1]);
+        height = dims[0];
+        dimsChanged = true;
+    }
+    if(width != dims[1])
+    {
+        width = dims[1];
+        dimsChanged = true;
+    }
+    if(dimsChanged)
+    {
+        emit dataDimensionsChanged(height, width);
     }
 
     plot();

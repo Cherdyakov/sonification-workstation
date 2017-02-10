@@ -18,6 +18,7 @@
 #include "transport.h"
 #include "filereader.h"
 #include "qcustomplot.h"
+#include "plotter.h"
 
 using namespace QtCharts;
 
@@ -39,7 +40,8 @@ private:
     void stop();
     void plot();
 
-    QList<int> dataDimensions;
+    int height;
+    int width;
 
     std::vector<double>* dataset;
     son::SynthGraph* synthGraph;
@@ -61,7 +63,7 @@ private:
     bool paused;
     //Main graphical widgets
     QTableView* tableView;
-    QCustomPlot* customPlot;
+    Plotter* plotter;
 
     //convenience functions to create and populate menus
     void createActions();
