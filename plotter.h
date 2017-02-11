@@ -18,7 +18,11 @@ private:
     //to areas that are plotted (not empty space)
     QCPRange xBounds;
     QCPRange yBounds;
-    void rangeBounder(QCPAxis * const axis, const QCPRange &newRange, const QCPRange &bounds);
+
+    void rangeBounder(QCPAxis * const axis, const QCPRange &newRange, const QCPRange &bounds);\
+
+    //For setting pen color in graphs
+    QStringList* kellyColors;
 
 private slots:
     void on_xRangeChanged(const QCPRange &newRange);

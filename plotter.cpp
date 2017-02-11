@@ -4,10 +4,21 @@ Plotter::Plotter()
 {
     connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
     connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
+
+    // The kelly colors.
+    // Kelly's paper: http://www.iscc.org/pdf/PC54_1724_001.pdf
+    // Values handily copied from here:
+    // https://gist.github.com/ollieglass/f6ddd781eeae1d24e391265432297538
+    kellyColors = new QStringList {
+            "#F3C300", "#875692", "#F38400", "#A1CAF1", "#BE0032",
+            "#C2B280", "#848482", "#008856", "#E68FAC", "#0067A5",
+            "#F99379", "#604E97", "#F6A600", "#B3446C", "#DCD300",
+            "#882D17", "#8DB600", "#654522", "#E25822", "#2B3D26" };
 }
 
 void Plotter::plot(std::vector<double> *array, int width, int height)
 {
+    clearGraphs();
     QVector<double> xTicks(width);
     std::iota(xTicks.begin(), xTicks.end(), 0);
 
@@ -20,6 +31,13 @@ void Plotter::plot(std::vector<double> *array, int width, int height)
         }
         addGraph();
         graph(i)->setData(xTicks, row);
+
+        QColor color;
+        color.setNamedColor((*kellyColors)[i % 20]);
+        QPen pen(color);
+        int style = ((i / 20) % 5) + 1;
+        pen.setStyle(static_cast<Qt::PenStyle>(style));
+        graph(i)->setPen(pen);
     }
     rescaleAxes();
     replot();
