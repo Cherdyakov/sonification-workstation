@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include "qcustomplot.h"
+#include "playhead.h"
 
 class Plotter : public QCustomPlot
 {
@@ -19,14 +20,21 @@ private:
     QCPRange xBounds;
     QCPRange yBounds;
 
+    void resizeEvent(QResizeEvent* event);
+
     void rangeBounder(QCPAxis * const axis, const QCPRange &newRange, const QCPRange &bounds);\
 
     //For setting pen color in graphs
     QStringList* kellyColors;
 
+    //Playhead widget overlays parent (this)
+    PlayHead* playhead;
+    void resizePlayhead();
+
 private slots:
     void on_xRangeChanged(const QCPRange &newRange);
     void on_yRangeChanged(const QCPRange &newRange);
+
 };
 
 #endif // PLOTTER_H

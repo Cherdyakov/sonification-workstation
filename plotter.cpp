@@ -14,6 +14,10 @@ Plotter::Plotter()
             "#C2B280", "#848482", "#008856", "#E68FAC", "#0067A5",
             "#F99379", "#604E97", "#F6A600", "#B3446C", "#DCD300",
             "#882D17", "#8DB600", "#654522", "#E25822", "#2B3D26" };
+
+    playhead = new PlayHead(this);
+    playhead->show();
+
 }
 
 void Plotter::plot(std::vector<double> *array, int width, int height)
@@ -29,21 +33,30 @@ void Plotter::plot(std::vector<double> *array, int width, int height)
         {
             row[j] = (*array)[i * width + j];
         }
-        addGraph();
-        graph(i)->setData(xTicks, row);
+        QCPGraph* graph = addGraph();
+        graph->setData(xTicks, row);
+        graph->setSelectable(QCP::stNone);
 
+        QPen pen;
         QColor color;
         color.setNamedColor((*kellyColors)[i % 20]);
-        QPen pen(color);
+        pen.setColor(color);
         int style = ((i / 20) % 5) + 1;
         pen.setStyle(static_cast<Qt::PenStyle>(style));
-        graph(i)->setPen(pen);
+        pen.setWidth(0);
+        graph->setPen(pen);
     }
     rescaleAxes();
     replot();
 
     xBounds = xAxis->range();
     yBounds = yAxis->range();
+}
+
+void Plotter::resizeEvent(QResizeEvent *event)
+{
+    QCustomPlot::resizeEvent(event);
+    resizePlayhead();
 }
 
 void Plotter::rangeBounder(QCPAxis * const axis, const QCPRange &newRange, const QCPRange &bounds)
@@ -66,6 +79,14 @@ void Plotter::rangeBounder(QCPAxis * const axis, const QCPRange &newRange, const
         fixedRange.lower = lowerBound;
       axis->setRange(fixedRange);
     }
+}
+
+void Plotter::resizePlayhead()
+{
+    QSize plotSize = axisRect()->size();
+    QPoint topLeft = axisRect()->topLeft();
+    QRect rect(topLeft, plotSize);
+    playhead->setGeometry(rect);
 }
 
 void Plotter::on_xRangeChanged(const QCPRange &newRange)

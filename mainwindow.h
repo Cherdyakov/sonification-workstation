@@ -64,6 +64,7 @@ private:
     //Main graphical widgets
     QTableView* tableView;
     Plotter* plotter;
+    PlayHead* playhead;
 
     //convenience functions to create and populate menus
     void createActions();

@@ -18,7 +18,8 @@ SOURCES += \
     resampler.cpp \
     filereader.cpp \
     ../../../CodeLibs/qcustomplot/qcustomplot.cpp \
-    plotter.cpp
+    plotter.cpp \
+    playhead.cpp
 
 RESOURCES += qml.qrc
 
@@ -47,7 +48,8 @@ HEADERS += \
     resampler.h \
     filereader.h \
     ../../../CodeLibs/qcustomplot/qcustomplot.h \
-    plotter.h
+    plotter.h \
+    playhead.h
 
 FORMS +=
 

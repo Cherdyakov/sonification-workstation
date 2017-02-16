@@ -16,11 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     width = 0;
     dataset = new std::vector<double>();
 
-    ///////////////////
-    //set data models//
-    ///////////////////
-    //for table
-    tableView = new QTableView;
 
     ///////////////////////
     //Qplotter Setup  //
@@ -44,37 +39,38 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout* synthLayout = new QVBoxLayout(this);
 
     //tabbed view
-    tabWidget = new QTabWidget;
-    tabWidget->setStyleSheet("QTabWidget::pane { border: 0; }");
+//    tabWidget = new QTabWidget;
+//    tabWidget->setStyleSheet("QTabWidget::pane { border: 0; }");
     //tabs
-    tableTab = new QWidget;
-    lineTab = new QWidget;
-    scatterTab = new QWidget;
+//    tableTab = new QWidget;
+//    lineTab = new QWidget;
+//    scatterTab = new QWidget;
     ///////////////////////
     //add layouts to tabs//
     ///////////////////////
 
     //line chart
-    lineTabLayout = new QVBoxLayout;
-    lineTabLayout->setMargin(4);
-    lineTab->setLayout(lineTabLayout);
+//    lineTabLayout = new QVBoxLayout;
+//    lineTabLayout->setMargin(4);
+//    lineTab->setLayout(lineTabLayout);
     //scatter plot
-    scatterTabLayout = new QVBoxLayout;
-    scatterTabLayout->setMargin(4);
-    scatterTab->setLayout(scatterTabLayout);
+//    scatterTabLayout = new QVBoxLayout;
+//    scatterTabLayout->setMargin(4);
+//    scatterTab->setLayout(scatterTabLayout);
 
     //insert tabs into QTabWidget
-    tabWidget->addTab(tableTab, "Table");
-    tabWidget->addTab(lineTab, "Line");
+//    tabWidget->addTab(tableTab, "Table");
+//    tabWidget->addTab(lineTab, "Line");
     //    tabWidget->addTab(scatterTab, "Scatter");
     //    tableTabLayout->addWidget(tableView);
-    lineTabLayout->addWidget(plotter);
+//    lineTabLayout->addWidget(plotter);
     //    scatterTabLayout->addWidget(scatterView);
 
     //////////////////////
     //Transport section //
     //////////////////////
     son::Transport* transport = new son::Transport(this);
+    transport->setMaximumHeight(40);
 
 
     //synthesis graph and data queue
@@ -91,7 +87,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //insert quickView into synthWindow layout
     synthLayout->addWidget(container);
     //inset tab widget into window layout
-    dataLayout->addWidget(tabWidget);
+    dataLayout->addWidget(plotter);
     //insert transport into window layout
     dataLayout->addWidget(transport);
 
@@ -117,6 +113,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //connect non ui singals/slots
     connect(transport, SIGNAL(pauseChanged(bool)),this, SLOT(pauseSlot(bool)));
+
+
 
 }
 
