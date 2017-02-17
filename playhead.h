@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <QTimer>
 #include "playhead.h"
 
 class PlayHead : public QWidget
@@ -16,6 +17,8 @@ protected:
 
 private:
 
+    bool isPaused;
+    bool blink;
     int playheadPos;
     int loopStart;
     int loopEnd;
@@ -24,6 +27,8 @@ private:
     QPen* loopMarkerPen;
     QBrush* loopAreaBrush;
 
+
+
 protected:
     void paintEvent(QPaintEvent*);
 
@@ -31,6 +36,8 @@ protected:
 signals:
 
 public slots:
+    void blinker();
+    void on_isPausedChanged(bool pause);
     void on_playheadChanged(int pos);
     void on_loopMarkersChanged(int start, int end);
 

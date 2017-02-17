@@ -9,10 +9,27 @@ PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
     loopMarkerPen = new QPen(Qt::darkGray, 2, Qt::SolidLine);
     loopAreaBrush = new QBrush(QColor(128, 128, 255, 64));
 
+    // for blinking cursor when paused
+    // other events (such as playhead position change)
+    // will cause their own repaint, so this can be
+    // relatively slow
+    QTimer* blinkTimer = new QTimer(this);
+    connect(blinkTimer, SIGNAL(timeout()), this, SLOT(blinker()));
+    blinkTimer->start(720);
+
+    isPaused = true;
     loopStart = 300;
     loopEnd = 800;
     playheadPos = 450;
 
+}
+
+// connect to QTimer
+// blinks the playhead when paused
+void PlayHead::blinker()
+{
+    blink = !blink;
+    repaint();
 }
 
 void PlayHead::paintEvent(QPaintEvent *event)
@@ -22,14 +39,33 @@ void PlayHead::paintEvent(QPaintEvent *event)
     int lineLength = this->height();
 
     QPainter painter(this);
-    painter.setPen(QPen(Qt::black, 2, Qt::SolidLine));
-    painter.drawLine(playheadPos, 0, playheadPos, lineLength);
+    if(isPaused)
+    {
+        if(blink)
+        {
+            painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+            painter.drawLine(playheadPos, 0, playheadPos, lineLength);
+        }
+    }
+    else
+    {
+        painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        painter.drawLine(playheadPos, 0, playheadPos, lineLength);
+    }
     if(loopStart != loopEnd)
     {
-        painter.setPen(QPen(Qt::darkGray, 1, Qt::SolidLine));
+        painter.setPen(QPen(Qt::darkGray,01, Qt::SolidLine));
         painter.drawLine(loopStart, 0, loopStart, lineLength);
         painter.drawLine(loopEnd, 0, loopEnd, lineLength);
         painter.fillRect(loopStart, 0, loopEnd - loopStart, lineLength, QBrush(QColor(128, 128, 255, 64)));
+    }
+}
+
+void PlayHead::on_isPausedChanged(bool pause)
+{
+    if(isPaused != pause)
+    {
+        isPaused = pause;
     }
 }
 
