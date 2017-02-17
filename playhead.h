@@ -16,9 +16,13 @@ protected:
 
 private:
 
-    int top;
-    int bottom;
-    int pos;
+    int playheadPos;
+    int loopStart;
+    int loopEnd;
+
+    QPen* playheadPen;
+    QPen* loopMarkerPen;
+    QBrush* loopAreaBrush;
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -27,6 +31,10 @@ protected:
 signals:
 
 public slots:
+    void on_playheadChanged(int pos);
+    void on_loopMarkersChanged(int start, int end);
+
+
 };
 
 #endif // PLAYHEAD_H
