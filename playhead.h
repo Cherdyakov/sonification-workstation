@@ -16,10 +16,12 @@ protected:
 
 private:
 
-    QPainter* painter;
     int top;
     int bottom;
     int pos;
+
+protected:
+    void paintEvent(QPaintEvent*);
 
 
 signals:
