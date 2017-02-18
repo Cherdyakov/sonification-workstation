@@ -8,12 +8,12 @@ PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
     blinkTimer->start(720);
 
     isPaused = true;
-    loopA = 1.0;
-    loopB = 1.0;
-    cursorPos = 1.0;
+    loopBegin = 0.0;
+    loopEnd = 0.0;
+    cursorPos = 0.0;
 
-    connect(this, SIGNAL(cursorPosChanged(int)), this, SLOT(on_cursorPosChanged(int)));
-
+    xMin = 0.0;
+    xMax = 5.0;
 }
 
 void PlayHead::setCursorPos(double pos)
@@ -29,19 +29,19 @@ void PlayHead::setCursorPos(double pos)
 
 void PlayHead::setLoopBegin(double start)
 {
-    if(loopA != start)
+    if(loopBegin != start)
     {
-        loopA = start;
-        emit loopPointsChanged(loopA, loopB);
+        loopBegin = start;
+        emit loopPointsChanged(loopBegin, loopEnd);
     }
 }
 
 void PlayHead::setLoopEnd(double end)
 {
-    if(loopB != end)
+    if(loopEnd != end)
     {
-        loopB = end;
-        emit loopPointsChanged(loopA, loopB);
+        loopEnd = end;
+        emit loopPointsChanged(loopBegin, loopEnd);
         repaint();
     }
 }
@@ -54,16 +54,22 @@ void PlayHead::setIsPaused(bool paused)
     }
 }
 
-int PlayHead::posToPixel(double pos)
+int PlayHead::valToPixel(double val)
 {
     int pixelPos;
-    pixelPos = (int)(pos * geometry().width());
+    double relVal;
+    relVal = (val - xMin) / (xMax - xMin);
+    pixelPos = relVal * width();
+    return pixelPos;
 }
 
-double PlayHead::pixelToPos(int pixel)
+double PlayHead::pixelToVal(int pixel)
 {
-    double pos;
-    pos = (pixel) / (double)(geometry().width());
+    double relVal;
+    double absVal;
+    relVal = (pixel) / (double)(geometry().width());
+    absVal = (relVal * (xMax - xMin)) + xMin;
+    return absVal;
 }
 
 // connect to QTimer
@@ -79,12 +85,12 @@ void PlayHead::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
 
     int lineLength = this->height();
-    int loopStartPixel = posToPixel(loopA);
-    int loopEndPixel = posToPixel(loopB);
+    int loopStartPixel = valToPixel(loopBegin);
+    int loopEndPixel = valToPixel(loopEnd);
 
     QPainter painter(this);
     // Draw loop area first
-    if(loopA != loopB)
+    if(loopBegin != loopEnd)
     {
         painter.setPen(QPen(Qt::darkGray,01, Qt::SolidLine));
         painter.drawLine(loopStartPixel, 0, loopStartPixel, lineLength);
@@ -94,7 +100,7 @@ void PlayHead::paintEvent(QPaintEvent *event)
     // Cursor goes over loop area
     if(!isPaused || blink)
     {
-        int cursorPosPixel = posToPixel(cursorPos);
+        int cursorPosPixel = valToPixel(cursorPos);
         painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
         painter.drawLine(cursorPosPixel, 0, cursorPosPixel, lineLength);
     }
@@ -121,6 +127,21 @@ void PlayHead::on_loopPointsChanged(double begin, double end)
     setLoopEnd(end);
 }
 
+void PlayHead::on_xRangeChanged(QCPRange range)
+{
+    double min = range.lower;
+    double max = range.upper;
+
+    if(xMin != min)
+    {
+        xMin = min;
+    }
+    if(xMax != max)
+    {
+        xMax = max;
+    }
+}
+
 void PlayHead::mousePressEvent(QMouseEvent *e)
 {
     Qt::MouseButton button = e->button();
@@ -128,13 +149,13 @@ void PlayHead::mousePressEvent(QMouseEvent *e)
     switch (button) {
     case Qt::LeftButton:
     {
-        double pos = pixelToPos(e->pos().x());
+        double pos = pixelToVal(e->pos().x());
         setCursorPos(pos);
         break;
     }
     case Qt::RightButton:
     {
-        double pos = pixelToPos(e->pos().x());
+        double pos = pixelToVal(e->pos().x());
         setLoopBegin(pos);
         setLoopEnd(pos);
         break;
@@ -148,14 +169,14 @@ void PlayHead::mouseMoveEvent(QMouseEvent *e)
 {
     if(e->buttons() & Qt::RightButton)
     {
-        double pos = pixelToPos(e->pos().x());
+        double pos = pixelToVal(e->pos().x());
         setLoopEnd(pos);
     }
 }
 
 void PlayHead::mouseReleaseEvent(QMouseEvent *e)
 {
-
+    Q_UNUSED(e);
 }
 
 

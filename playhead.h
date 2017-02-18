@@ -7,6 +7,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include "playhead.h"
+#include "qcustomplot.h"
 
 class PlayHead : public QWidget
 {
@@ -22,8 +23,11 @@ private:
     bool isPaused;
     bool blink;
     double cursorPos;
-    double loopA;
-    double loopB;
+    double loopBegin;
+    double loopEnd;
+
+    double xMin;
+    double xMax;
 
     QPoint clickedPoint;
 
@@ -34,8 +38,8 @@ private:
 
     // for going back and forth between fractional
     // and screen pixel values for PlayHead positions
-    int posToPixel(double pos);
-    double pixelToPos(int pixel);
+    int valToPixel(double val);
+    double pixelToVal(int pixel);
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -51,6 +55,7 @@ public slots:
     void on_isPausedChanged(bool pause);
     void on_cursorPosChanged(double pos);
     void on_loopPointsChanged(double begin, double end);
+    void on_xRangeChanged(QCPRange range);
 
 private slots:
     void blinker();

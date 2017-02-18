@@ -2,9 +2,6 @@
 
 Plotter::Plotter()
 {
-    connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
-    connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
-
     // Only selections are via playhead
     // Plot elements are not, themselves, selected
     setSelectionRectMode(QCP::srmNone);
@@ -23,6 +20,9 @@ Plotter::Plotter()
     playhead = new PlayHead(this);
     playhead->show();
 
+    connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
+    connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
+    connect(xAxis, SIGNAL(rangeChanged(QCPRange)), playhead, SLOT(on_xRangeChanged(QCPRange)));
 }
 
 void Plotter::plot(std::vector<double> *array, int width, int height)
