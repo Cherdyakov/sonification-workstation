@@ -5,6 +5,10 @@ Plotter::Plotter()
     connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
     connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
 
+    // Only selections are via playhead
+    // Plot elements are not, themselves, selected
+    setSelectionRectMode(QCP::srmNone);
+
     // The kelly colors.
     // Kelly's paper: http://www.iscc.org/pdf/PC54_1724_001.pdf
     // Values handily copied from here:
@@ -15,6 +19,7 @@ Plotter::Plotter()
             "#F99379", "#604E97", "#F6A600", "#B3446C", "#DCD300",
             "#882D17", "#8DB600", "#654522", "#E25822", "#2B3D26" };
 
+    // Draws the playhead,loop points, loop shading
     playhead = new PlayHead(this);
     playhead->show();
 

@@ -9,8 +9,6 @@ SOURCES += \
     synthgraph.cpp \
     output.cpp \
     oscillator.cpp \
-    scatterview.cpp \
-    lineview.cpp \
     ringbuffer.cpp \
     transport.cpp \
     audifier.cpp \
@@ -39,8 +37,6 @@ HEADERS += \
     userdata.h \
     output.h \
     oscillator.h \
-    scatterview.h \
-    lineview.h \
     ringbuffer.h \
     transport.h \
     audifier.h \

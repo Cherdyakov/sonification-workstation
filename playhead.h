@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QPainter>
 #include <QTimer>
+#include <QMouseEvent>
+#include <QDebug>
 #include "playhead.h"
 
 class PlayHead : public QWidget
@@ -19,28 +21,34 @@ private:
 
     bool isPaused;
     bool blink;
-    int playheadPos;
+    int cursorPos;
     int loopStart;
     int loopEnd;
 
-    QPen* playheadPen;
-    QPen* loopMarkerPen;
-    QBrush* loopAreaBrush;
+    QPoint clickedPoint;
 
-
+    void setCursorPos(int pos);
+    void setLoopBegin(int start);
+    void setLoopEnd(int end);
+    void setIsPaused(bool paused);
 
 protected:
     void paintEvent(QPaintEvent*);
-
+    void mousePressEvent(QMouseEvent* e);
+    void mouseMoveEvent(QMouseEvent* e);
+    void mouseReleaseEvent(QMouseEvent* e);
 
 signals:
+    void cursorPosChanged(int pos);
+    void loopPointsChanged(int begin, int end);
 
 public slots:
-    void blinker();
     void on_isPausedChanged(bool pause);
-    void on_playheadChanged(int pos);
-    void on_loopMarkersChanged(int start, int end);
+    void on_cursorPosChanged(int pos);
+    void on_loopPointsChanged(int begin, int end);
 
+private slots:
+    void blinker();
 
 };
 

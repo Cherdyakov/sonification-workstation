@@ -2,26 +2,58 @@
 
 PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
 {
-    setAttribute(Qt::WA_NoSystemBackground);
-    setAttribute(Qt::WA_TransparentForMouseEvents);
-
-    playheadPen = new QPen(Qt::black, 4, Qt::SolidLine);
-    loopMarkerPen = new QPen(Qt::darkGray, 2, Qt::SolidLine);
-    loopAreaBrush = new QBrush(QColor(128, 128, 255, 64));
+    //    setAttribute(Qt::WA_NoSystemBackground);
 
     // for blinking cursor when paused
-    // other events (such as playhead position change)
-    // will cause their own repaint, so this can be
-    // relatively slow
     QTimer* blinkTimer = new QTimer(this);
     connect(blinkTimer, SIGNAL(timeout()), this, SLOT(blinker()));
     blinkTimer->start(720);
 
     isPaused = true;
-    loopStart = 300;
-    loopEnd = 800;
-    playheadPos = 450;
+    loopStart = 1;
+    loopEnd = 1;
+    cursorPos = 1;
 
+    connect(this, SIGNAL(cursorPosChanged(int)), this, SLOT(on_cursorPosChanged(int)));
+
+}
+
+void PlayHead::setCursorPos(int pos)
+{
+    if(cursorPos != pos)
+    {
+        cursorPos = pos;
+        blink = true;
+        repaint();
+        emit cursorPosChanged(cursorPos);
+    }
+}
+
+void PlayHead::setLoopBegin(int start)
+{
+    if(loopStart != start)
+    {
+        loopStart = start;
+        emit loopPointsChanged(loopStart, loopEnd);
+    }
+}
+
+void PlayHead::setLoopEnd(int end)
+{
+    if(loopEnd != end)
+    {
+        loopEnd = end;
+        emit loopPointsChanged(loopStart, loopEnd);
+        repaint();
+    }
+}
+
+void PlayHead::setIsPaused(bool paused)
+{
+    if(isPaused != paused)
+    {
+        isPaused = paused;
+    }
 }
 
 // connect to QTimer
@@ -44,20 +76,20 @@ void PlayHead::paintEvent(QPaintEvent *event)
         if(blink)
         {
             painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
-            painter.drawLine(playheadPos, 0, playheadPos, lineLength);
+            painter.drawLine(cursorPos, 0, cursorPos, lineLength);
         }
     }
     else
     {
         painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
-        painter.drawLine(playheadPos, 0, playheadPos, lineLength);
+        painter.drawLine(cursorPos, 0, cursorPos, lineLength);
     }
     if(loopStart != loopEnd)
     {
         painter.setPen(QPen(Qt::darkGray,01, Qt::SolidLine));
         painter.drawLine(loopStart, 0, loopStart, lineLength);
         painter.drawLine(loopEnd, 0, loopEnd, lineLength);
-        painter.fillRect(loopStart, 0, loopEnd - loopStart, lineLength, QBrush(QColor(128, 128, 255, 64)));
+        painter.fillRect(loopStart, 0, loopEnd - loopStart, lineLength, QBrush(QColor(128, 128, 255, 32)));
     }
 }
 
@@ -69,22 +101,20 @@ void PlayHead::on_isPausedChanged(bool pause)
     }
 }
 
-void PlayHead::on_playheadChanged(int pos)
+// when changed from another class
+void PlayHead::on_cursorPosChanged(int pos)
 {
-    if(playheadPos != pos)
-    {
-        playheadPos = pos;
-        repaint();
-    }
+    setCursorPos(pos);
 }
 
-void PlayHead::on_loopMarkersChanged(int start, int end)
+// when changed from another class;
+void PlayHead::on_loopPointsChanged(int begin, int end)
 {
     bool dirty = false;
 
-    if(loopStart != start)
+    if(loopStart != begin)
     {
-        loopStart = start;
+        loopStart = begin;
         dirty = true;
     }
     if(loopEnd != end)
@@ -98,3 +128,43 @@ void PlayHead::on_loopMarkersChanged(int start, int end)
     }
 
 }
+
+void PlayHead::mousePressEvent(QMouseEvent *e)
+{
+    clickedPoint = e->pos();
+
+    Qt::MouseButton button = e->button();
+
+    switch (button) {
+    case Qt::LeftButton:
+    {
+        int x = e->pos().x();
+        setCursorPos(x);
+        break;
+    }
+    case Qt::RightButton:
+    {
+        int x = e->pos().x();
+        setLoopBegin(x);
+        setLoopEnd(x);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void PlayHead::mouseMoveEvent(QMouseEvent *e)
+{
+    if(e->buttons() & Qt::RightButton)
+    {
+        setLoopEnd(e->pos().x());
+    }
+}
+
+void PlayHead::mouseReleaseEvent(QMouseEvent *e)
+{
+
+}
+
+
