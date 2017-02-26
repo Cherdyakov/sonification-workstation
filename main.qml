@@ -10,11 +10,19 @@ Rectangle
     color: "light grey"
     anchors.fill: parent
 
+    property int dataHeight: 0
     // holds every item in the workspace for iterating
     property var synthItems: []
     //canvas for drawing connections
     property alias canvas: canvas
     property alias workspace: workspace
+
+    Connections {
+        target: fileReader
+        onQmlDatasetChanged: {
+            dataHeight = height
+        }
+    }
 
     // top panel
     Rectangle {

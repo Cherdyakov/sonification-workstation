@@ -6,16 +6,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     //title and size window
     this->setWindowTitle("Sonification Workstation");
-    resize(QDesktopWidget().availableGeometry(this).size() * 0.9);
+    resize(QDesktopWidget().availableGeometry(this).size() * 0.875);
 
     createActions();
     createMenus();
-
-    //initialize dataset
-    height = 0;
-    width = 0;
-    dataset = new std::vector<double>();
-
 
     ///////////////////////
     //Qplotter Setup  //
@@ -66,22 +60,27 @@ MainWindow::MainWindow(QWidget *parent) :
 //    lineTabLayout->addWidget(plotter);
     //    scatterTabLayout->addWidget(scatterView);
 
+
+    //synthesis graph
+    synthGraph = new son::SynthGraph;
+
     //////////////////////
     //Transport section //
     //////////////////////
-    son::Transport* transport = new son::Transport(this);
+    Transport* transport = new Transport(this);
+    transport->setSynthGraph(synthGraph);
     transport->setMaximumHeight(40);
 
-
-    //synthesis graph and data queue
-    synthGraph = new son::SynthGraph;
+    fileReader = new FileReader;
 
     ////////////
     //QML View//
     ////////////
     QQuickView* quickView = new QQuickView;
-    quickView->rootContext()->setContextProperty("mainWindow", this);
     quickView->rootContext()->setContextProperty("graph", synthGraph);
+    quickView->rootContext()->setContextProperty("fileReader", fileReader);
+    quickView->setSource(QUrl("qrc:/main.qml"));
+
     QWidget *container = QWidget::createWindowContainer(quickView, this);
 
     //insert quickView into synthWindow layout
@@ -109,13 +108,12 @@ MainWindow::MainWindow(QWidget *parent) :
     sizes.append(0.6 * sizeHint().height());
     sizes.append(0.4 * sizeHint().height());
     splitter->setSizes(sizes);
-    quickView->setSource(QUrl("qrc:/main.qml"));
 
-    //connect non ui singals/slots
-    connect(transport, SIGNAL(pauseChanged(bool)),this, SLOT(pauseSlot(bool)));
-
-
-
+    /* connect non-ui slots and signals */
+    connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
+            transport, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
+    connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
+            plotter, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
 }
 
 MainWindow::~MainWindow()
@@ -126,28 +124,6 @@ MainWindow::~MainWindow()
 son::SynthGraph *MainWindow::getSynthGraph()
 {
     return synthGraph;
-}
-
-int MainWindow::getDataItemSize()
-{
-    return height;
-}
-
-void MainWindow::start()
-{
-    synthGraph->pause(false);
-}
-
-void MainWindow::stop()
-{
-    synthGraph->pause(true);
-}
-
-void MainWindow::plot()
-{
-    plotter->plot(dataset, width, height);
-
-    qDebug() << "Done plotting: " << height * width << " elements. " << QTime::currentTime();
 }
 
 void MainWindow::createActions()
@@ -182,17 +158,6 @@ void MainWindow::createMenus()
     fileMenu->addAction(quitAct);
 }
 
-void MainWindow::pauseSlot(bool p)
-{
-    paused = p;
-    if(paused) {
-        stop();
-    }
-    else {
-        start();
-    }
-}
-
 void MainWindow::quit()
 {
     QApplication::quit();
@@ -200,32 +165,13 @@ void MainWindow::quit()
 
 void MainWindow::openDataset()
 {
-    emit stop();
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
     QString fileName = QFileDialog::getOpenFileName(this, tr(("Open Dataset")), documents, ("csv File(*.csv)"));
 
     if(fileName.isEmpty())
+    {
         return;
-
-    FileReader* reader = new FileReader;
-
-    QList<int> dims = reader->readCSV(fileName, dataset);
-    bool dimsChanged = false;
-    if(height != dims[0])
-    {
-        height = dims[0];
-        dimsChanged = true;
     }
-    if(width != dims[1])
-    {
-        width = dims[1];
-        dimsChanged = true;
-    }
-    if(dimsChanged)
-    {
-        emit dataDimensionsChanged(height, width);
-    }
-
-    plot();
+    fileReader->readCSV(fileName, &dataset);
 }

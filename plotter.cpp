@@ -25,16 +25,16 @@ Plotter::Plotter()
     connect(xAxis, SIGNAL(rangeChanged(QCPRange)), playhead, SLOT(on_xRangeChanged(QCPRange)));
 }
 
-void Plotter::plot(std::vector<double> *array, int width, int height)
+void Plotter::plot(std::vector<double> *array, uint height, uint width)
 {
     clearGraphs();
     QVector<double> xTicks(width);
     std::iota(xTicks.begin(), xTicks.end(), 0);
 
-    for(int i = 0; i < height; i++)
+    for(uint i = 0; i < height; i++)
     {
         QVector<double> row(width);
-        for(int j = 0; j < width; j++)
+        for(uint j = 0; j < width; j++)
         {
             row[j] = (*array)[i * width + j];
         }
@@ -53,6 +53,7 @@ void Plotter::plot(std::vector<double> *array, int width, int height)
     }
     rescaleAxes();
     replot();
+    resizePlayhead();
 
     xBounds = xAxis->range();
     yBounds = yAxis->range();
@@ -64,6 +65,7 @@ void Plotter::resizeEvent(QResizeEvent *event)
     resizePlayhead();
 }
 
+// prevents zooming or panning to invalid areas along x axis
 void Plotter::rangeBounder(QCPAxis * const axis, const QCPRange &newRange, const QCPRange &bounds)
 {
     double lowerBound = bounds.lower;
@@ -92,6 +94,11 @@ void Plotter::resizePlayhead()
     QPoint topLeft = axisRect()->topLeft();
     QRect rect(topLeft, plotSize);
     playhead->setGeometry(rect);
+}
+
+void Plotter::on_datasetChanged(std::vector<double> *data, uint height, uint width)
+{
+    plot(data, height, width);
 }
 
 void Plotter::on_xRangeChanged(const QCPRange &newRange)

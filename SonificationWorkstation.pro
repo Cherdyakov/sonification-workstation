@@ -13,7 +13,6 @@ SOURCES += \
     transport.cpp \
     audifier.cpp \
     timerworker.cpp \
-    resampler.cpp \
     filereader.cpp \
     ../../../CodeLibs/qcustomplot/qcustomplot.cpp \
     plotter.cpp \
@@ -41,7 +40,6 @@ HEADERS += \
     transport.h \
     audifier.h \
     timerworker.h \
-    resampler.h \
     filereader.h \
     ../../../CodeLibs/qcustomplot/qcustomplot.h \
     plotter.h \

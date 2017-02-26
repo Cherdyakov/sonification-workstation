@@ -6,17 +6,20 @@ namespace son {
 SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 {
     paused = true;
+    looping = false;
     ringBuffer = NULL;
     ringBufferSize = 2048;
     blockSize = 512;
-    audioRate = 44100;
-    dataDimensions = 0;
+    sr = 44100;
+    dataWidth = 0;
+    dataHeight = 0;
+    playheadIdx = 0;
+    mu = 0.0;
+    speed = 1.0;
 }
 
 QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
 {
-    //    qDebug() << "createItem" << type;
-
     SynthItem* item;
 
     switch (type){
@@ -27,13 +30,13 @@ QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
     case OSCILLATOR: {
         item = new Oscillator();
         item->setGui(gui);
-        item->setDataItem(&dataItem);
+        item->setDataItem(&currentData);
         break;
     }
     case AUDIFIER: {
         item = new Audifier();
         item->setGui(gui);
-        item->setDataItem(&dataItem);
+        item->setDataItem(&currentData);
         break;
     }
     default:
@@ -66,7 +69,7 @@ void SynthGraph::removeFromRoot(SynthItem *synthItem)
     }
 }
 
-float SynthGraph::processGraph()
+double SynthGraph::processGraph()
 {
     float s = 0.0;
 
@@ -74,7 +77,17 @@ float SynthGraph::processGraph()
         return s;
     }
 
-    retrieveData();
+    // updating playheadIdx
+    if(mu >= 1.0)
+    {
+        mu -= 1.0;
+        playheadIdx++;
+        if(playheadIdx > (dataWidth - 1))
+        {
+            playheadIdx = 0;
+        }
+        retrieveData();
+    }
 
     QVector<SynthItem*>::const_iterator i;
 
@@ -83,13 +96,11 @@ float SynthGraph::processGraph()
         s += item->process();
     }
 
+    // advancing playhead
+    mu += (speed / sr);
+
     //Test Noise
-    {
-        //test noise
-        //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
-        //test mssg
-        //    qDebug() << "processGraph";
-    }
+//    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
 
     return s;
 }
@@ -101,26 +112,53 @@ int SynthGraph::graphSize()
 
 void SynthGraph::pause(bool p)
 {
-    if(paused != p) {
-        paused = p;
+    if(!p)
+    {
+        retrieveData();
     }
+    paused = p;
 }
 
-void SynthGraph::setDimensions(int dimensions)
+void SynthGraph::loop(bool l)
 {
-    if(dataDimensions != dimensions)
-    {
-        dataDimensions = dimensions;
-    }
+    looping = l;
 }
 
-void SynthGraph::setSpeed(int s)
+void SynthGraph::setPos(double p)
 {
-    if(speed != s)
+    playheadIdx = (int)p;
+    mu = (p - playheadIdx);
+}
+
+double SynthGraph::getPos()
+{
+    double pos = ((double)playheadIdx + mu);
+    return pos;
+}
+
+void SynthGraph::setLoopPoints(unsigned int begin, unsigned int end)
+{
+    loopBegin = begin;
+    loopEnd = end;
+}
+
+void SynthGraph::setSpeed(double s)
+{
+    speed = s;
+}
+
+void SynthGraph::setData(std::vector<double> *d, unsigned int height, unsigned int width)
+{
+    data = d;
+    dataWidth = width;
+    currentData.clear();
+    playheadIdx = 0;
+    mu = 0.0;
+
+    if(dataHeight != height)
     {
-        //speed is data samples to use per second
-        speed = s;
-        srcRatio = audioRate / (double)speed;
+        dataHeight = height;
+        currentData.resize(dataHeight);
     }
 }
 
@@ -136,19 +174,11 @@ void SynthGraph::ringBufferInit(int capacity, int channels)
 
 void SynthGraph::retrieveData()
 {
-    static unsigned int numSamples;
-
-    if(ringBuffer->empty())
+    for(unsigned int i = 0; i < dataHeight; i++)
     {
-        qDebug() << "graph: ringbuffer empty!";
-        return;
+        unsigned int idx = ((dataWidth * i) + playheadIdx);
+        currentData[i] = (*data)[idx];
     }
-
-    if(ringBuffer->pop(&dataItem))
-    {
-        *itemsRead++;
-    }
-    //    qDebug() << "graph: " << dataColumn;
 }
 
 } //namespace son

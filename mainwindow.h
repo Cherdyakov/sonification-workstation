@@ -32,19 +32,11 @@ public:
 
     son::SynthGraph* getSynthGraph();
 
-    Q_INVOKABLE int getDataItemSize();
-
 private:
 
-    void start();
-    void stop();
-    void plot();
-
-    int height;
-    int width;
-
-    std::vector<double>* dataset;
+    std::vector<double> dataset;
     son::SynthGraph* synthGraph;
+    FileReader* fileReader;
 
     //Tab widget and tabs
     QTabWidget* tabWidget;
@@ -60,11 +52,9 @@ private:
     QLayout* transportLayout;
     QPushButton* orientationButton;
     QPushButton* playButton;
-    bool paused;
     //Main graphical widgets
     QTableView* tableView;
     Plotter* plotter;
-    PlayHead* playhead;
 
     //convenience functions to create and populate menus
     void createActions();
@@ -77,11 +67,7 @@ private slots:
     void quit();
     void openDataset();
 
-    //ui slots
-    void pauseSlot(bool p);
-
 signals:
-    void dataDimensionsChanged(int height, int width);
 
 };
 

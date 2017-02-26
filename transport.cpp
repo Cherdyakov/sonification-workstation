@@ -1,55 +1,44 @@
 #include "transport.h"
 
-using namespace son;
-
 Transport::Transport(QWidget *parent) : QWidget(parent)
 {
-    dataHeight = dataWidth = dataDepth = 0;
     paused = true;
-    horizontal = false;
     //transport layout
     QHBoxLayout* transportLayout = new QHBoxLayout;
     //transport controls
     pauseButton = new QPushButton(tr("Play"));
     speedDial = new QDial;
-    speedBox = new QSpinBox;
+    speedBox = new QDoubleSpinBox;
     QLabel* speedLabel = new QLabel;
 
 
     speedLabel->setText("Steps per second:");
-    speedBox->setValue(1);
+    speedBox->setValue(1.0);
     speedBox->setMaximum(44100);
-    speedBox->setMinimum(0);
+    speedBox->setMinimum(0.0);
     transportLayout->addWidget(pauseButton);
     transportLayout->addWidget(speedLabel);
     transportLayout->addWidget(speedBox);
     //set layout of transport
     this->setLayout(transportLayout);
-}
 
-void Transport::on_dataDimensionsChanged(int h, int w, int d)
-{
-    if(dataHeight != h)
-        dataHeight = h;
-    if(dataWidth != w)
-        dataWidth = w;
-    if(dataDepth != d)
-        dataDepth = d;
+    connect(pauseButton, SIGNAL(released()), this, SLOT(on_pauseButton_released()));
 }
 
 void Transport::on_pauseButton_released()
 {
     paused = !paused;
+    synthGraph->pause(paused);
+
     if(paused) {
         pauseButton->setText("Play");
     }
     else {
         pauseButton->setText("Pause");
     }
-    emit pauseChanged(paused);
 }
 
-void Transport::on_speedBox_valueChanged(int s)
+void Transport::on_speedBox_valueChanged(double s)
 {
     if(stepsPerSecond != s)
     {
@@ -58,5 +47,12 @@ void Transport::on_speedBox_valueChanged(int s)
     }
 }
 
+void Transport::setSynthGraph(son::SynthGraph *graph)
+{
+    synthGraph = graph;
+}
 
-
+void Transport::on_datasetChanged(std::vector<double> *data, uint height, uint width)
+{
+    synthGraph->setData(data, height, width);
+}

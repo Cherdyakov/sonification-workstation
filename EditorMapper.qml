@@ -2,7 +2,6 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import "Style.js" as Style
-import MainWindow 1.0
 
 RowLayout {
     id: root
@@ -11,17 +10,8 @@ RowLayout {
     property string parameterName: "none"
     property alias label: label
     property alias textInput: textInput
-    property int rowMax: 0
 
     signal mappingsChanged(var mappings)
-
-    Connections {
-        //when dimensions of data change
-        target: mainWindow
-        onDataDimensionsChanged: {
-            revalidate();
-        }
-    }
 
     EditorLabel {
         id: label
@@ -48,7 +38,6 @@ RowLayout {
             {
                 var inString = text
                 var parsedInput = getNumbers(inString)
-                rowMax = mainWindow.getDataItemSize()
                 var validInput = parsedInput.filter(filterMax)
 
                 text = getStringRange(validInput)
@@ -70,7 +59,6 @@ RowLayout {
     {
         var inString = textInput.text
         var parsedInput = getNumbers(inString)
-        rowMax = mainWindow.getDataItemSize()
         var validInput = parsedInput.filter(filterMax)
 
         textInput.text = getStringRange(validInput)
@@ -142,7 +130,7 @@ RowLayout {
     }
 
     function filterMax(value) {
-        return (value <= rowMax)
+        return (value <= dataHeight)
     }
 
     //let's get this one out as well

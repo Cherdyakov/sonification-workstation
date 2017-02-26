@@ -59,7 +59,7 @@ int PlayHead::valToPixel(double val)
     int pixelPos;
     double relVal;
     relVal = (val - xMin) / (xMax - xMin);
-    pixelPos = relVal * width();
+    pixelPos = relVal * width() + 1;
     return pixelPos;
 }
 
@@ -67,7 +67,7 @@ double PlayHead::pixelToVal(int pixel)
 {
     double relVal;
     double absVal;
-    relVal = (pixel) / (double)(geometry().width());
+    relVal = (pixel - 1) / (double)(geometry().width());
     absVal = (relVal * (xMax - xMin)) + xMin;
     return absVal;
 }
@@ -92,7 +92,7 @@ void PlayHead::paintEvent(QPaintEvent *event)
     // Draw loop area first
     if(loopBegin != loopEnd)
     {
-        painter.setPen(QPen(Qt::darkGray,01, Qt::SolidLine));
+        painter.setPen(QPen(Qt::darkGray, 0, Qt::SolidLine));
         painter.drawLine(loopStartPixel, 0, loopStartPixel, lineLength);
         painter.drawLine(loopEndPixel, 0, loopEndPixel, lineLength);
         painter.fillRect(loopStartPixel, 0, loopEndPixel - loopStartPixel, lineLength, QBrush(QColor(128, 128, 255, 32)));

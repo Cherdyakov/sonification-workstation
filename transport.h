@@ -11,37 +11,30 @@
 
 #include "synthgraph.h"
 
-namespace son {
-class Transport;
-}
-
-class son::Transport : public QWidget
+class Transport : public QWidget
 {
     Q_OBJECT
 public:
     explicit Transport(QWidget *parent = 0);
+    void setSynthGraph(son::SynthGraph* graph);
 
 private:
-    int dataHeight;
-    int dataWidth;
-    int dataDepth;
-    bool horizontal;
+
     bool paused;
-    int stepsPerSecond;
+    double stepsPerSecond;
     QPushButton* pauseButton;
     QDial* speedDial;
-    QSpinBox* speedBox;
+    QDoubleSpinBox* speedBox;
     son::SynthGraph* synthGraph;
 
 signals:
-    void pauseChanged(bool paused);
 
 public slots:
-    void on_dataDimensionsChanged(int h, int w, int d);
+    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
 
 private slots:
     void on_pauseButton_released();
-    void on_speedBox_valueChanged(int s);
+    void on_speedBox_valueChanged(double s);
 };
 
 #endif // TRANSPORT_H

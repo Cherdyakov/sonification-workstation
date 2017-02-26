@@ -9,6 +9,7 @@
 #include "callback.h"
 #include "synthgraph.h"
 #include "ringbuffer.h"
+#include "filereader.h"
 
 #define SR 44100
 #define BLOCK_SIZE 512
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
     gam::Sync::master().spu(SR);
 
     RtAudio dac;
-    dac.showWarnings(true);
+//    dac.showWarnings(true);
 
     //    // Determine the number of devices available
     //    unsigned int devices = dac.getDeviceCount();

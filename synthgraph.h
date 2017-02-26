@@ -11,7 +11,6 @@
 #include "oscillator.h"
 #include "audifier.h"
 #include "ringbuffer.h"
-#include "resampler.h"
 
 namespace son {
 
@@ -34,40 +33,41 @@ public:
     Q_INVOKABLE void addToRoot(SynthItem* synthItem);
     Q_INVOKABLE void removeFromRoot(SynthItem* synthItem);
 
-    float processGraph();
+    double processGraph();
     int graphSize();
-    void pause(bool m);
-    //for playhead implementation outside class
-    std::atomic<unsigned int>* itemsRead;
+
+    // functions for controlling playback
+    void pause(bool p);
+    void loop(bool l);
+    void setPos(double p);
+    double getPos();
+    void setLoopPoints(unsigned int begin, unsigned int end);
+    void setSpeed(double s);
+    void setData(std::vector<double>* d, unsigned int height, unsigned int width);
 
     //push to RingBuffer
     bool enqueue(float* data);
 
-    void setDimensions(int dimensions);
-    void setSpeed(int s);
-
-signals:
-
-public slots:
-
-
 private:
-    int ringBufferSize;
-    int blockSize;
-    int dataDimensions;
-    int audioRate;
+    unsigned int ringBufferSize;
+    unsigned int blockSize;
+    unsigned int dataHeight;
+    unsigned int dataWidth;
+    unsigned int sr;
+    unsigned int loopBegin;
+    unsigned int loopEnd;
     QVector<SynthItem*> graphRoot;
-    std::vector<double> dataItem;
+    std::vector<double> currentData;
+    std::vector<double>* data;
     float* srcOutBuffer;
     RingBuffer* ringBuffer;
-    Resampler* src;
     std::atomic<bool> paused;
-    std::atomic<double> srcRatio;
-    std::atomic<int> speed;
-
+    bool looping;
+    std::atomic<double> speed;
+    std::atomic<unsigned int> playheadIdx;
+    double mu;
     void ringBufferInit(int size, int channels);
     void retrieveData();
-
 
 };
 

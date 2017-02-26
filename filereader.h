@@ -12,13 +12,13 @@ class FileReader : public QObject
 
 public:
     explicit FileReader(QObject *parent = 0);
-    QList<int> readCSV(QString filename, std::vector<double>* array);
-    QList<int> readJSON(QString filename, std::vector<double>* array);
+    void readCSV(QString filename, std::vector<double>* array);
 
 private:
 
 signals:
-    void dataDimensionsChanged(int h, int w, int d);
+    void datasetChanged(std::vector<double>* data, uint height, uint width);
+    void qmlDatasetChanged(uint height, uint width);
 
 public slots:
 };

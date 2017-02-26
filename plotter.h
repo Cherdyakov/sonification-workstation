@@ -12,7 +12,7 @@ class Plotter : public QCustomPlot
 
 public:
     Plotter();
-    void plot(std::vector<double>* array, int width, int height);
+    void plot(std::vector<double>* array, uint height, uint width);
 
 private:
     // These will limit our zoom and drag ops
@@ -32,6 +32,9 @@ private:
     PlayHead* playhead;
     void resizePlayhead();
     bool isSettingLoop;
+
+public slots:
+    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
 
 private slots:
     void on_xRangeChanged(const QCPRange &newRange);

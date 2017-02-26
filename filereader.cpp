@@ -6,20 +6,19 @@ FileReader::FileReader(QObject *parent) : QObject(parent)
 
 }
 
-QList<int> FileReader::readCSV(QString filename, std::vector<double> *array)
+void FileReader::readCSV(QString filename, std::vector<double> *array)
 {
     qDebug() << "Reading file: " << QTime::currentTime();
 
-
     QList<QStringList> readData = QtCSV::Reader::readToList(filename);
 
-    int height = readData[0].count();   // == rows in CSV
-    int width = readData.count();       // == columns in CSV
+    uint height = readData.count();   // == rows in CSV
+    uint width = readData[0].count(); // == columns in CSV
 
-    for(int i = 0; i < readData.count(); i++)
+    for(uint i = 0; i < height; i++)
     {
         QStringList rowData = readData[i];
-        for (int j = 0; j < rowData.count(); j++)
+        for (uint j = 0; j < width; j++)
         {
             QString temp = rowData[j];
             bool isDouble = false;
@@ -31,19 +30,13 @@ QList<int> FileReader::readCSV(QString filename, std::vector<double> *array)
             else
             {
                 qDebug() << "FileReader: CSV import failed, bad value: " << temp;
-//                array->clear();
                 height = width = 0;
             }
         }
     }
 
     qDebug() << "Done reading file: " << QTime::currentTime();
-    return QList<int>({width, height});
-}
 
-QList<int> FileReader::readJSON(QString filename, std::vector<double> *array)
-{
-    Q_UNUSED(filename);
-    Q_UNUSED(array);
-    qDebug() << "JSON import not implemented";
+    emit datasetChanged(array,height, width);
+    emit qmlDatasetChanged(height, width);
 }
