@@ -8,6 +8,7 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QDebug>
+#include <QTimer>
 
 #include "synthgraph.h"
 
@@ -27,12 +28,16 @@ private:
     QDoubleSpinBox* speedBox;
     son::SynthGraph* synthGraph;
 
+
 signals:
+    void cursorPosChanged(double pos);
+    void pausedChanged(bool pause);
 
 public slots:
     void on_datasetChanged(std::vector<double> *data, uint height, uint width);
 
 private slots:
+    void updateCursorPos();
     void on_pauseButton_released();
     void on_speedBox_valueChanged(double s);
 };

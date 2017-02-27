@@ -7,6 +7,7 @@
 #include <synthitem.h>
 #include <output.h>
 #include <atomic>
+#include <mutex>
 
 #include "oscillator.h"
 #include "audifier.h"
@@ -61,14 +62,15 @@ private:
     std::vector<double>* data;
     float* srcOutBuffer;
     RingBuffer* ringBuffer;
-    std::atomic<bool> paused;
+    bool paused;
     bool looping;
-    std::atomic<double> speed;
-    std::atomic<unsigned int> playheadIdx;
+    double speed;
+    unsigned int currentIdx;
     double mu;
+    std::atomic<double> returnPos;
     void ringBufferInit(int size, int channels);
     void retrieveData();
-
+    void calculateReturnPos();
 };
 
 } //namespace son

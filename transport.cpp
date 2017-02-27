@@ -3,6 +3,12 @@
 Transport::Transport(QWidget *parent) : QWidget(parent)
 {
     paused = true;
+
+    // for refreshing the playhead position
+    QTimer* posTimer = new QTimer(this);
+    connect(posTimer, SIGNAL(timeout()), this, SLOT(updateCursorPos()));
+    posTimer->start(10);
+
     //transport layout
     QHBoxLayout* transportLayout = new QHBoxLayout;
     //transport controls
@@ -10,7 +16,6 @@ Transport::Transport(QWidget *parent) : QWidget(parent)
     speedDial = new QDial;
     speedBox = new QDoubleSpinBox;
     QLabel* speedLabel = new QLabel;
-
 
     speedLabel->setText("Steps per second:");
     speedBox->setValue(1.0);
@@ -29,6 +34,7 @@ void Transport::on_pauseButton_released()
 {
     paused = !paused;
     synthGraph->pause(paused);
+    emit pausedChanged(paused);
 
     if(paused) {
         pauseButton->setText("Play");
@@ -50,6 +56,12 @@ void Transport::on_speedBox_valueChanged(double s)
 void Transport::setSynthGraph(son::SynthGraph *graph)
 {
     synthGraph = graph;
+}
+
+void Transport::updateCursorPos()
+{
+    double pos = synthGraph->getPos();
+    emit cursorPosChanged(pos);
 }
 
 void Transport::on_datasetChanged(std::vector<double> *data, uint height, uint width)

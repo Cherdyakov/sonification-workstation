@@ -24,6 +24,11 @@ MainWindow::MainWindow(QWidget *parent) :
     plotter->axisRect()->setRangeDrag(Qt::Horizontal);
     plotter->axisRect()->setRangeZoom(Qt::Horizontal);
 
+    // Draws the playhead,loop points, loop shading
+    PlayHead* playHead = new PlayHead(plotter);
+    plotter->setPlayHead(playHead);
+    playHead->show();
+
     //main window layout
     QWidget* mainWidget = new QWidget;
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
@@ -114,6 +119,13 @@ MainWindow::MainWindow(QWidget *parent) :
             transport, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
             plotter, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
+    connect(transport, SIGNAL(cursorPosChanged(double)),
+            playHead, SLOT(on_cursorMoved(double)));
+    connect(plotter->xAxis, SIGNAL(rangeChanged(QCPRange)),
+            playHead, SLOT(on_xRangeChanged(QCPRange)));
+    connect(transport, SIGNAL(pausedChanged(bool)),
+            playHead, SLOT(on_pausedChanged(bool)));
+
 }
 
 MainWindow::~MainWindow()

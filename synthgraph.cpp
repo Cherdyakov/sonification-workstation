@@ -13,9 +13,10 @@ SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
     sr = 44100;
     dataWidth = 0;
     dataHeight = 0;
-    playheadIdx = 0;
+    currentIdx = 0;
     mu = 0.0;
     speed = 1.0;
+    returnPos = 0.0;
 }
 
 QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
@@ -77,14 +78,14 @@ double SynthGraph::processGraph()
         return s;
     }
 
-    // updating playheadIdx
+    // updating playheadPos
     if(mu >= 1.0)
     {
         mu -= 1.0;
-        playheadIdx++;
-        if(playheadIdx > (dataWidth - 1))
+        currentIdx++;
+        if((currentIdx + 1) > (dataWidth))
         {
-            playheadIdx = 0;
+            currentIdx = 0;
         }
         retrieveData();
     }
@@ -96,11 +97,12 @@ double SynthGraph::processGraph()
         s += item->process();
     }
 
-    // advancing playhead
+    // advancing index
     mu += (speed / sr);
+    calculateReturnPos();
 
     //Test Noise
-//    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+    //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
 
     return s;
 }
@@ -126,14 +128,8 @@ void SynthGraph::loop(bool l)
 
 void SynthGraph::setPos(double p)
 {
-    playheadIdx = (int)p;
-    mu = (p - playheadIdx);
-}
-
-double SynthGraph::getPos()
-{
-    double pos = ((double)playheadIdx + mu);
-    return pos;
+    currentIdx = (int)p;
+    mu = (p - currentIdx);
 }
 
 void SynthGraph::setLoopPoints(unsigned int begin, unsigned int end)
@@ -152,7 +148,7 @@ void SynthGraph::setData(std::vector<double> *d, unsigned int height, unsigned i
     data = d;
     dataWidth = width;
     currentData.clear();
-    playheadIdx = 0;
+    currentIdx = 0;
     mu = 0.0;
 
     if(dataHeight != height)
@@ -176,9 +172,20 @@ void SynthGraph::retrieveData()
 {
     for(unsigned int i = 0; i < dataHeight; i++)
     {
-        unsigned int idx = ((dataWidth * i) + playheadIdx);
+        unsigned int idx = ((dataWidth * i) + currentIdx);
         currentData[i] = (*data)[idx];
     }
+}
+
+double SynthGraph::getPos()
+{
+    return returnPos;
+}
+
+void SynthGraph::calculateReturnPos()
+{
+    double pos = ((double)currentIdx + mu);
+    returnPos.store(pos, std::memory_order_relaxed);
 }
 
 } //namespace son

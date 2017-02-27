@@ -20,7 +20,7 @@ protected:
 
 private:
 
-    bool isPaused;
+    bool paused;
     bool blink;
     double cursorPos;
     double loopBegin;
@@ -34,7 +34,7 @@ private:
     void setCursorPos(double pos);
     void setLoopBegin(double start);
     void setLoopEnd(double end);
-    void setIsPaused(bool paused);
+    void setPaused(bool paused);
 
     // for going back and forth between fractional
     // and screen pixel values for PlayHead positions
@@ -52,8 +52,8 @@ signals:
     void loopPointsChanged(double begin, double end);
 
 public slots:
-    void on_isPausedChanged(bool pause);
-    void on_cursorPosChanged(double pos);
+    void on_pausedChanged(bool pause);
+    void on_cursorMoved(double pos);
     void on_loopPointsChanged(double begin, double end);
     void on_xRangeChanged(QCPRange range);
 

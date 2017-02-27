@@ -16,13 +16,8 @@ Plotter::Plotter()
             "#F99379", "#604E97", "#F6A600", "#B3446C", "#DCD300",
             "#882D17", "#8DB600", "#654522", "#E25822", "#2B3D26" };
 
-    // Draws the playhead,loop points, loop shading
-    playhead = new PlayHead(this);
-    playhead->show();
-
     connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
     connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
-    connect(xAxis, SIGNAL(rangeChanged(QCPRange)), playhead, SLOT(on_xRangeChanged(QCPRange)));
 }
 
 void Plotter::plot(std::vector<double> *array, uint height, uint width)
@@ -53,16 +48,21 @@ void Plotter::plot(std::vector<double> *array, uint height, uint width)
     }
     rescaleAxes();
     replot();
-    resizePlayhead();
+    resizePlayHead();
 
     xBounds = xAxis->range();
     yBounds = yAxis->range();
 }
 
+void Plotter::setPlayHead(PlayHead *p)
+{
+    playHead = p;
+}
+
 void Plotter::resizeEvent(QResizeEvent *event)
 {
     QCustomPlot::resizeEvent(event);
-    resizePlayhead();
+    resizePlayHead();
 }
 
 // prevents zooming or panning to invalid areas along x axis
@@ -88,12 +88,12 @@ void Plotter::rangeBounder(QCPAxis * const axis, const QCPRange &newRange, const
     }
 }
 
-void Plotter::resizePlayhead()
+void Plotter::resizePlayHead()
 {
     QSize plotSize = axisRect()->size();
     QPoint topLeft = axisRect()->topLeft();
     QRect rect(topLeft, plotSize);
-    playhead->setGeometry(rect);
+    playHead->setGeometry(rect);
 }
 
 void Plotter::on_datasetChanged(std::vector<double> *data, uint height, uint width)

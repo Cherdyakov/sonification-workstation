@@ -7,7 +7,7 @@ PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
     connect(blinkTimer, SIGNAL(timeout()), this, SLOT(blinker()));
     blinkTimer->start(720);
 
-    isPaused = true;
+    paused = true;
     loopBegin = 0.0;
     loopEnd = 0.0;
     cursorPos = 0.0;
@@ -21,7 +21,6 @@ void PlayHead::setCursorPos(double pos)
     if(cursorPos != pos)
     {
         cursorPos = pos;
-        blink = true;
         repaint();
         emit cursorPosChanged(cursorPos);
     }
@@ -46,11 +45,11 @@ void PlayHead::setLoopEnd(double end)
     }
 }
 
-void PlayHead::setIsPaused(bool paused)
+void PlayHead::setPaused(bool paused)
 {
-    if(isPaused != paused)
+    if(paused != paused)
     {
-        isPaused = paused;
+        paused = paused;
     }
 }
 
@@ -59,7 +58,7 @@ int PlayHead::valToPixel(double val)
     int pixelPos;
     double relVal;
     relVal = (val - xMin) / (xMax - xMin);
-    pixelPos = relVal * width() + 1;
+    pixelPos = (relVal * (width() - 1)) + 1;
     return pixelPos;
 }
 
@@ -67,13 +66,13 @@ double PlayHead::pixelToVal(int pixel)
 {
     double relVal;
     double absVal;
-    relVal = (pixel - 1) / (double)(geometry().width());
+    relVal = (pixel) / (double)(geometry().width() - 1);
     absVal = (relVal * (xMax - xMin)) + xMin;
     return absVal;
 }
 
 // connect to QTimer
-// blinks the playhead when paused
+// blinks the cursor when paused
 void PlayHead::blinker()
 {
     blink = !blink;
@@ -98,7 +97,7 @@ void PlayHead::paintEvent(QPaintEvent *event)
         painter.fillRect(loopStartPixel, 0, loopEndPixel - loopStartPixel, lineLength, QBrush(QColor(128, 128, 255, 32)));
     }
     // Cursor goes over loop area
-    if(!isPaused || blink)
+    if(!paused || blink)
     {
         int cursorPosPixel = valToPixel(cursorPos);
         painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
@@ -106,18 +105,14 @@ void PlayHead::paintEvent(QPaintEvent *event)
     }
 }
 
-void PlayHead::on_isPausedChanged(bool pause)
+void PlayHead::on_pausedChanged(bool pause)
 {
-    if(isPaused != pause)
-    {
-        isPaused = pause;
-    }
+    paused = pause;
 }
 
-// when changed from another class
-void PlayHead::on_cursorPosChanged(double pos)
+void PlayHead::on_cursorMoved(double pos)
 {
-    setCursorPos(pos);
+    setCursorPos((int)pos);
 }
 
 // when changed from another class;
@@ -150,6 +145,7 @@ void PlayHead::mousePressEvent(QMouseEvent *e)
     case Qt::LeftButton:
     {
         double pos = pixelToVal(e->pos().x());
+        blink = true;
         setCursorPos(pos);
         break;
     }
