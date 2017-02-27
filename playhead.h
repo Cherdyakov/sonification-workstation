@@ -32,7 +32,7 @@ private:
     QPoint clickedPoint;
 
     void setCursorPos(double pos);
-    void setLoopBegin(double start);
+    void setLoopBegin(double begin);
     void setLoopEnd(double end);
     void setPaused(bool paused);
 
@@ -49,12 +49,12 @@ protected:
 
 signals:
     void cursorPosChanged(double pos);
-    void loopPointsChanged(double begin, double end);
+    void loopBeginChanged(double begin);
+    void loopEndChanged(double end);
 
 public slots:
     void on_pausedChanged(bool pause);
     void on_cursorMoved(double pos);
-    void on_loopPointsChanged(double begin, double end);
     void on_xRangeChanged(QCPRange range);
 
 private slots:

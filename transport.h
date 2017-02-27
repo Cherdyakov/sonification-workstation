@@ -38,6 +38,7 @@ public slots:
 
 private slots:
     void updateCursorPos();
+    void on_cursorPosChanged(double pos);
     void on_pauseButton_released();
     void on_speedBox_valueChanged(double s);
 };

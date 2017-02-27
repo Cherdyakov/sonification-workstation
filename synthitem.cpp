@@ -70,25 +70,6 @@ void SynthItem::mute(bool mute)
     }
 }
 
-//void SynthItem::addParent(QObject *item)
-//{
-//    if(synthParents.contains(parent))
-//    {
-//        return;
-//    }
-//    synthParents.push_back(item);
-//}
-
-//void SynthItem::removeParent(QObject *item)
-//{
-//    int idx = synthParents.indexOf(item);
-
-//    if(idx > -1)
-//    {
-//        synthParents.remove(idx);
-//    }
-//}
-
 void SynthItem::connectGui()
 {
     QObject::connect(gui, SIGNAL(destroyed(QObject*)),

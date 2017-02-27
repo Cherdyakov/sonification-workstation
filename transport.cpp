@@ -27,7 +27,10 @@ Transport::Transport(QWidget *parent) : QWidget(parent)
     //set layout of transport
     this->setLayout(transportLayout);
 
-    connect(pauseButton, SIGNAL(released()), this, SLOT(on_pauseButton_released()));
+    connect(pauseButton, SIGNAL(released()),
+            this, SLOT(on_pauseButton_released()));
+    connect(speedBox, SIGNAL(valueChanged(double)),
+            this,SLOT(on_speedBox_valueChanged(double)));
 }
 
 void Transport::on_pauseButton_released()
@@ -62,6 +65,11 @@ void Transport::updateCursorPos()
 {
     double pos = synthGraph->getPos();
     emit cursorPosChanged(pos);
+}
+
+void Transport::on_cursorPosChanged(double pos)
+{
+    synthGraph->setPos(pos);
 }
 
 void Transport::on_datasetChanged(std::vector<double> *data, uint height, uint width)

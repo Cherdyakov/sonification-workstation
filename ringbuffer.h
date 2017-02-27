@@ -2,22 +2,20 @@
 #define RINGBUFFER_H
 
 #include <atomic>
-#include <vector>
+#include "synthcommand.h"
 
 namespace son
 {
-class RingBuffer;
-}
 
-class son::RingBuffer
+class RingBuffer
 {
 public:
-    RingBuffer(int cap = 2048, int ch = 0);
+    RingBuffer(int cap = 512);
 
     void reset();
 
-    bool push(std::vector<double> dataItem);
-    bool pop(std::vector<double> *dataItem);
+    bool push(SynthCommand* command);
+    bool pop(SynthCommand* command);
 
     bool empty() const;
     bool full() const;
@@ -26,13 +24,13 @@ private:
 
     std::atomic<int> currentSize;
     std::atomic<int> capacity;
-    std::atomic<int> channels;
     std::atomic<int> head;
     std::atomic<int> tail;
-
-    std::vector<double> array;
+    std::vector<SynthCommand> array;
 
 };
+
+} //namespace son
 
 #endif // RINGBUFFER_H
 

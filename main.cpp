@@ -66,7 +66,6 @@ int main(int argc, char *argv[])
     unsigned int sampleRate = SR;
     unsigned int bufferFrames = BLOCK_SIZE;
 
-
     try {
         dac.openStream( &outParams, &inParams, RTAUDIO_FLOAT64,
                         sampleRate, &bufferFrames, &son::callback, (void *)&uData );

@@ -2,14 +2,13 @@
 
 namespace son {
 
-RingBuffer::RingBuffer(int cap, int ch)
+RingBuffer::RingBuffer(int cap)
 { 
     head = 0;
     tail = 0;
     currentSize = 0;
     capacity = cap;
-    channels = ch;
-    array.resize(capacity * channels);
+    array.resize(capacity);
 }
 
 void RingBuffer::reset()
@@ -19,7 +18,7 @@ void RingBuffer::reset()
     currentSize = 0;
 }
 
-bool RingBuffer::push(std::vector<double> dataItem)
+bool RingBuffer::push(SynthCommand* command)
 {
     //values written all the way to end
     if(head > capacity - 1)
@@ -33,17 +32,14 @@ bool RingBuffer::push(std::vector<double> dataItem)
         return false;
     }
 
-    for(int i = 0; i < channels; i++)
-    {
-        array[(head * channels) + i] = dataItem[i];
-    }
+    array[head] = *command;
 
     head++;
     currentSize++;
     return true;
 }
 
-bool RingBuffer::pop(std::vector<double> *dataItem)
+bool RingBuffer::pop(SynthCommand* command)
 {
     //bounds check
     if(tail > capacity - 1)
@@ -56,10 +52,7 @@ bool RingBuffer::pop(std::vector<double> *dataItem)
         return false;
     }
 
-    for(int i = 0; i < channels; i++)
-    {
-        (*dataItem)[i] = array[(tail * channels) + i];
-    }
+    *command = array[tail];
 
     tail++;
     currentSize--;

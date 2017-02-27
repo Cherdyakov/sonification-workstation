@@ -43,7 +43,8 @@ HEADERS += \
     filereader.h \
     ../../../CodeLibs/qcustomplot/qcustomplot.h \
     plotter.h \
-    playhead.h
+    playhead.h \
+    synthcommand.h
 
 FORMS +=
 

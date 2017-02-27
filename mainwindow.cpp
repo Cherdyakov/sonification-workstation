@@ -125,6 +125,8 @@ MainWindow::MainWindow(QWidget *parent) :
             playHead, SLOT(on_xRangeChanged(QCPRange)));
     connect(transport, SIGNAL(pausedChanged(bool)),
             playHead, SLOT(on_pausedChanged(bool)));
+    connect(playHead, SIGNAL(cursorPosChanged(double)),
+            transport, SLOT(on_cursorPosChanged(double)));
 
 }
 

@@ -12,6 +12,7 @@
 #include "oscillator.h"
 #include "audifier.h"
 #include "ringbuffer.h"
+#include "synthcommand.h"
 
 namespace son {
 
@@ -29,7 +30,7 @@ public:
 
     explicit SynthGraph(QObject *parent = 0);
 
-    //QML invokable functions for adding SynthItems to the graph
+    // QML invokable functions for adding SynthItems to the graph
     Q_INVOKABLE QObject* createItem(QObject *gui, SYNTH_ITEM_TYPE type);
     Q_INVOKABLE void addToRoot(SynthItem* synthItem);
     Q_INVOKABLE void removeFromRoot(SynthItem* synthItem);
@@ -38,18 +39,24 @@ public:
     int graphSize();
 
     // functions for controlling playback
-    void pause(bool p);
-    void loop(bool l);
-    void setPos(double p);
-    double getPos();
-    void setLoopPoints(unsigned int begin, unsigned int end);
+    void pause(bool p);   
+    void setPos(double pos);
     void setSpeed(double s);
+    void loop(bool l);
+    void setLoopBegin(unsigned int begin);
+    void setLoopEnd(unsigned int end);
     void setData(std::vector<double>* d, unsigned int height, unsigned int width);
 
-    //push to RingBuffer
+    // for polling state from outside
+    // (i.e. GUI)
+    double getPos();
+
+    // push to RingBuffer
     bool enqueue(float* data);
 
 private:
+
+    float masterVolume;
     unsigned int ringBufferSize;
     unsigned int blockSize;
     unsigned int dataHeight;
@@ -57,22 +64,28 @@ private:
     unsigned int sr;
     unsigned int loopBegin;
     unsigned int loopEnd;
+
+    // to return when state is polled
+    // from outside (i.e. GUI)
+    std::atomic<double> returnPos;
+
     QVector<SynthItem*> graphRoot;
     std::vector<double> currentData;
     std::vector<double>* data;
     float* srcOutBuffer;
     RingBuffer* ringBuffer;
+    bool dataStale;
     bool paused;
     bool looping;
     double speed;
     unsigned int currentIdx;
     double mu;
-    std::atomic<double> returnPos;
-    void ringBufferInit(int size, int channels);
     void retrieveData();
+    void retrieveCommands();
     void calculateReturnPos();
+
 };
 
-} //namespace son
+} // namespace son
 
 #endif // SYNTHGRAPH_H

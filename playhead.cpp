@@ -22,16 +22,15 @@ void PlayHead::setCursorPos(double pos)
     {
         cursorPos = pos;
         repaint();
-        emit cursorPosChanged(cursorPos);
     }
 }
 
-void PlayHead::setLoopBegin(double start)
+void PlayHead::setLoopBegin(double begin)
 {
-    if(loopBegin != start)
+    if(loopBegin != begin)
     {
-        loopBegin = start;
-        emit loopPointsChanged(loopBegin, loopEnd);
+        loopBegin = begin;
+        emit loopBeginChanged(begin);
     }
 }
 
@@ -40,7 +39,7 @@ void PlayHead::setLoopEnd(double end)
     if(loopEnd != end)
     {
         loopEnd = end;
-        emit loopPointsChanged(loopBegin, loopEnd);
+        emit loopEndChanged(loopEnd);
         repaint();
     }
 }
@@ -112,14 +111,7 @@ void PlayHead::on_pausedChanged(bool pause)
 
 void PlayHead::on_cursorMoved(double pos)
 {
-    setCursorPos((int)pos);
-}
-
-// when changed from another class;
-void PlayHead::on_loopPointsChanged(double begin, double end)
-{
-    setLoopBegin(begin);
-    setLoopEnd(end);
+    setCursorPos(pos);
 }
 
 void PlayHead::on_xRangeChanged(QCPRange range)
@@ -146,7 +138,10 @@ void PlayHead::mousePressEvent(QMouseEvent *e)
     {
         double pos = pixelToVal(e->pos().x());
         blink = true;
-        setCursorPos(pos);
+        // let SynthGraph move cursor and
+        // wait for position to update
+        // the cursorMoved signal
+        emit cursorPosChanged(pos);
         break;
     }
     case Qt::RightButton:

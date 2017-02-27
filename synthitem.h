@@ -52,7 +52,7 @@ public slots:
     void requestDelete();
 
 protected:
-    bool muted;
+    std::atomic<bool> muted;
     std::vector<double>* dataItem;
 
 

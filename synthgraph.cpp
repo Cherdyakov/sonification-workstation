@@ -7,6 +7,7 @@ SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 {
     paused = true;
     looping = false;
+    dataStale = false;
     ringBuffer = NULL;
     ringBufferSize = 2048;
     blockSize = 512;
@@ -17,6 +18,7 @@ SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
     mu = 0.0;
     speed = 1.0;
     returnPos = 0.0;
+    masterVolume = 1.0;
 }
 
 QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
@@ -74,7 +76,9 @@ double SynthGraph::processGraph()
 {
     float s = 0.0;
 
-    if(paused) {
+    if(paused)
+    {
+        calculateReturnPos();
         return s;
     }
 
@@ -87,7 +91,13 @@ double SynthGraph::processGraph()
         {
             currentIdx = 0;
         }
+        dataStale = true;
+    }
+
+    if(dataStale)
+    {
         retrieveData();
+        dataStale = false;
     }
 
     QVector<SynthItem*>::const_iterator i;
@@ -104,7 +114,7 @@ double SynthGraph::processGraph()
     //Test Noise
     //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
 
-    return s;
+    return s * masterVolume;
 }
 
 int SynthGraph::graphSize()
@@ -114,11 +124,14 @@ int SynthGraph::graphSize()
 
 void SynthGraph::pause(bool p)
 {
-    if(!p)
+    if(paused != p)
     {
-        retrieveData();
+        if(!p)
+        {
+            dataStale = true;
+        }
+        paused = p;
     }
-    paused = p;
 }
 
 void SynthGraph::loop(bool l)
@@ -126,16 +139,15 @@ void SynthGraph::loop(bool l)
     looping = l;
 }
 
-void SynthGraph::setPos(double p)
+void SynthGraph::setPos(double pos)
 {
-    currentIdx = (int)p;
-    mu = (p - currentIdx);
-}
-
-void SynthGraph::setLoopPoints(unsigned int begin, unsigned int end)
-{
-    loopBegin = begin;
-    loopEnd = end;
+    unsigned int newIdx = (int)pos;
+    if(currentIdx != newIdx)
+    {
+        dataStale = true;
+        currentIdx = newIdx;
+    }
+    mu = (pos - currentIdx);
 }
 
 void SynthGraph::setSpeed(double s)
@@ -158,16 +170,6 @@ void SynthGraph::setData(std::vector<double> *d, unsigned int height, unsigned i
     }
 }
 
-void SynthGraph::ringBufferInit(int capacity, int channels)
-{
-    if(ringBuffer)
-    {
-        delete ringBuffer;
-        ringBuffer = NULL;
-    }
-    ringBuffer = new RingBuffer(capacity, channels);
-}
-
 void SynthGraph::retrieveData()
 {
     for(unsigned int i = 0; i < dataHeight; i++)
@@ -175,6 +177,11 @@ void SynthGraph::retrieveData()
         unsigned int idx = ((dataWidth * i) + currentIdx);
         currentData[i] = (*data)[idx];
     }
+}
+
+void SynthGraph::retrieveCommands()
+{
+    SynthCommand command;
 }
 
 double SynthGraph::getPos()
