@@ -17,7 +17,7 @@ enum SynthCommandType {
 
 typedef struct {
 
-    SynthCommandType command;
+    SynthCommandType type;
     bool paused;
     double pos;
     double speed;

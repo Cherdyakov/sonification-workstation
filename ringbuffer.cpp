@@ -18,7 +18,7 @@ void RingBuffer::reset()
     currentSize = 0;
 }
 
-bool RingBuffer::push(SynthCommand* command)
+bool RingBuffer::push(SynthCommand command)
 {
     //values written all the way to end
     if(head > capacity - 1)
@@ -32,7 +32,7 @@ bool RingBuffer::push(SynthCommand* command)
         return false;
     }
 
-    array[head] = *command;
+    array[head] = command;
 
     head++;
     currentSize++;

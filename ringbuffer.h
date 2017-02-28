@@ -14,7 +14,7 @@ public:
 
     void reset();
 
-    bool push(SynthCommand* command);
+    bool push(SynthCommand command);
     bool pop(SynthCommand* command);
 
     bool empty() const;

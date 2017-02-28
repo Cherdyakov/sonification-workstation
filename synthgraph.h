@@ -39,8 +39,8 @@ public:
     int graphSize();
 
     // functions for controlling playback
-    void pause(bool p);   
-    void setPos(double pos);
+    void pause(bool p);
+    void setPos(double p);
     void setSpeed(double s);
     void loop(bool l);
     void setLoopBegin(unsigned int begin);
@@ -50,9 +50,6 @@ public:
     // for polling state from outside
     // (i.e. GUI)
     double getPos();
-
-    // push to RingBuffer
-    bool enqueue(float* data);
 
 private:
 
@@ -65,15 +62,16 @@ private:
     unsigned int loopBegin;
     unsigned int loopEnd;
 
-    // to return when state is polled
+    // to return when current playback
+    // location is polled
     // from outside (i.e. GUI)
     std::atomic<double> returnPos;
 
+    SynthCommand currentCommand;
     QVector<SynthItem*> graphRoot;
-    std::vector<double> currentData;
     std::vector<double>* data;
-    float* srcOutBuffer;
-    RingBuffer* ringBuffer;
+    std::vector<double> currentData;
+    RingBuffer commandBuffer;
     bool dataStale;
     bool paused;
     bool looping;
@@ -82,6 +80,7 @@ private:
     double mu;
     void retrieveData();
     void retrieveCommands();
+    void processCommand(SynthCommand command);
     void calculateReturnPos();
 
 };
