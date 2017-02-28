@@ -34,10 +34,8 @@ private:
     void resizePlayHead();
     bool isSettingLoop;
 
-public slots:
-    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
-
 private slots:
+    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
     void on_xRangeChanged(const QCPRange &newRange);
     void on_yRangeChanged(const QCPRange &newRange);
 

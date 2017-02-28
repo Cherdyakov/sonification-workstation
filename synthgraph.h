@@ -39,12 +39,11 @@ public:
     int graphSize();
 
     // functions for controlling playback
-    void pause(bool p);
-    void setPos(double p);
-    void setSpeed(double s);
-    void loop(bool l);
-    void setLoopBegin(unsigned int begin);
-    void setLoopEnd(unsigned int end);
+    void pause(bool pause);
+    void setPos(double pos);
+    void setSpeed(double speed);
+    void setLooping(bool looping);
+    void setLoopPoints(double begin, double end);
     void setData(std::vector<double>* d, unsigned int height, unsigned int width);
 
     // for polling state from outside
@@ -59,8 +58,8 @@ private:
     unsigned int dataHeight;
     unsigned int dataWidth;
     unsigned int sr;
-    unsigned int loopBegin;
-    unsigned int loopEnd;
+    double loopBegin;
+    double loopEnd;
 
     // to return when current playback
     // location is polled

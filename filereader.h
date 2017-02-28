@@ -20,7 +20,8 @@ signals:
     void datasetChanged(std::vector<double>* data, uint height, uint width);
     void qmlDatasetChanged(uint height, uint width);
 
-public slots:
+private slots:
+
 };
 
 #endif // FILEREADER_H

@@ -3,6 +3,7 @@
 Transport::Transport(QWidget *parent) : QWidget(parent)
 {
     paused = true;
+    looping = false;
 
     // for refreshing the playhead position
     QTimer* posTimer = new QTimer(this);
@@ -16,11 +17,13 @@ Transport::Transport(QWidget *parent) : QWidget(parent)
     speedDial = new QDial;
     speedBox = new QDoubleSpinBox;
     QLabel* speedLabel = new QLabel;
+    loopButton = new QPushButton(tr("Looping: OFF"));
 
     speedLabel->setText("Steps per second:");
     speedBox->setValue(1.0);
     speedBox->setMaximum(44100);
     speedBox->setMinimum(0.0);
+    transportLayout->addWidget(loopButton);
     transportLayout->addWidget(pauseButton);
     transportLayout->addWidget(speedLabel);
     transportLayout->addWidget(speedBox);
@@ -29,6 +32,8 @@ Transport::Transport(QWidget *parent) : QWidget(parent)
 
     connect(pauseButton, SIGNAL(released()),
             this, SLOT(on_pauseButton_released()));
+    connect(loopButton, SIGNAL(released()),
+            this, SLOT(on_loopButton_released()));
     connect(speedBox, SIGNAL(valueChanged(double)),
             this,SLOT(on_speedBox_valueChanged(double)));
 }
@@ -40,20 +45,38 @@ void Transport::on_pauseButton_released()
     emit pausedChanged(paused);
 
     if(paused) {
-        pauseButton->setText("Play");
+        pauseButton->setText(tr("Play"));
     }
     else {
-        pauseButton->setText("Pause");
+        pauseButton->setText(tr("Pause"));
     }
 }
 
-void Transport::on_speedBox_valueChanged(double s)
+void Transport::on_loopButton_released()
 {
-    if(stepsPerSecond != s)
+    looping = !looping;
+    synthGraph->setLooping(looping);
+
+    if(looping) {
+        loopButton->setText(tr("Looping: ON"));
+    }
+    else {
+        loopButton->setText(tr("Looping: OFF"));
+    }
+}
+
+void Transport::on_speedBox_valueChanged(double speed)
+{
+    if(stepsPerSecond != speed)
     {
-        stepsPerSecond = s;
+        stepsPerSecond = speed;
         synthGraph->setSpeed(stepsPerSecond);
     }
+}
+
+void Transport::on_loopPointsChanged(double begin, double end)
+{
+    synthGraph->setLoopPoints(begin, end);
 }
 
 void Transport::setSynthGraph(son::SynthGraph *graph)

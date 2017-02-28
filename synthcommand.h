@@ -10,8 +10,7 @@ enum SynthCommandType {
     POSITION,
     SPEED,
     LOOP,
-    LOOP_BEGIN,
-    LOOP_END,
+    LOOP_POINTS,
     DATA
 };
 
@@ -21,7 +20,7 @@ typedef struct {
     bool paused;
     double pos;
     double speed;
-    bool loop;
+    bool looping;
     double loopBegin;
     double loopEnd;
     std::vector<double>* data;

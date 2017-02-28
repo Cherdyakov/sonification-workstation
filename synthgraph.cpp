@@ -40,11 +40,26 @@ double SynthGraph::processGraph()
     {
         mu -= 1.0;
         currentIdx++;
+
         if((currentIdx + 1) > (dataWidth))
         {
             currentIdx = 0;
         }
         dataStale = true;
+    }
+
+    if(looping && (loopBegin != loopEnd))
+    {
+        if(((double)currentIdx + mu) > loopEnd)
+        {
+            currentIdx = (int)loopBegin;
+            mu = (loopBegin - currentIdx);
+        }
+        else if(((double)currentIdx + mu) < loopBegin)
+        {
+            currentIdx = (int)loopBegin;
+            mu = (loopBegin - currentIdx);
+        }
     }
 
     if(dataStale)
@@ -61,8 +76,8 @@ double SynthGraph::processGraph()
     }
 
     // advancing index
-    mu += (speed / sr);
     calculateReturnPos();
+    mu += (speed / sr);
 
     //Test Noise
     //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
@@ -126,32 +141,44 @@ int SynthGraph::graphSize()
     return graphRoot.count();
 }
 
-void SynthGraph::pause(bool p)
+void SynthGraph::pause(bool pause)
 {
     SynthCommand command;
     command.type = SynthCommandType::PAUSE;
-    command.paused = p;
+    command.paused = pause;
     commandBuffer.push(command);
 }
 
-void SynthGraph::loop(bool l)
+void SynthGraph::setLooping(bool looping)
 {
-    looping = l;
+    SynthCommand command;
+    command.type = SynthCommandType::LOOP;
+    command.looping = looping;
+    commandBuffer.push(command);
 }
 
-void SynthGraph::setPos(double p)
+void SynthGraph::setLoopPoints(double begin, double end)
+{
+    SynthCommand command;
+    command.type = SynthCommandType::LOOP_POINTS;
+    command.loopBegin = begin;
+    command.loopEnd = end;
+    commandBuffer.push(command);
+}
+
+void SynthGraph::setPos(double pos)
 {
     SynthCommand command;
     command.type = SynthCommandType::POSITION;
-    command.pos = p;
+    command.pos = pos;
     commandBuffer.push(command);
 }
 
-void SynthGraph::setSpeed(double s)
+void SynthGraph::setSpeed(double speed)
 {
     SynthCommand command;
     command.type = SynthCommandType::SPEED;
-    command.speed = s;
+    command.speed = speed;
     commandBuffer.push(command);
 }
 
@@ -222,6 +249,19 @@ void SynthGraph::processCommand(SynthCommand command)
     case SynthCommandType::SPEED:
     {
         speed = command.speed;
+    }
+        break;
+
+    case SynthCommandType::LOOP:
+    {
+        looping = command.looping;
+    }
+        break;
+
+    case SynthCommandType::LOOP_POINTS:
+    {
+        loopBegin = command.loopBegin;
+        loopEnd = command.loopEnd;
     }
         break;
 

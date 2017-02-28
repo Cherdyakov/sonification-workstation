@@ -22,8 +22,10 @@ public:
 private:
 
     bool paused;
+    bool looping;
     double stepsPerSecond;
     QPushButton* pauseButton;
+    QPushButton* loopButton;
     QDial* speedDial;
     QDoubleSpinBox* speedBox;
     son::SynthGraph* synthGraph;
@@ -33,14 +35,14 @@ signals:
     void cursorPosChanged(double pos);
     void pausedChanged(bool pause);
 
-public slots:
-    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
-
 private slots:
+    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
     void updateCursorPos();
     void on_cursorPosChanged(double pos);
     void on_pauseButton_released();
-    void on_speedBox_valueChanged(double s);
+    void on_loopButton_released();
+    void on_speedBox_valueChanged(double speed);
+    void on_loopPointsChanged(double begin, double end);
 };
 
 #endif // TRANSPORT_H

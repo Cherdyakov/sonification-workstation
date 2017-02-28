@@ -23,8 +23,8 @@ private:
     bool paused;
     bool blink;
     double cursorPos;
-    double loopBegin;
-    double loopEnd;
+    double loopA;
+    double loopB;
 
     double xMin;
     double xMax;
@@ -32,8 +32,8 @@ private:
     QPoint clickedPoint;
 
     void setCursorPos(double pos);
-    void setLoopBegin(double begin);
-    void setLoopEnd(double end);
+    void setLoopA(double a);
+    void setLoopB(double b);
     void setPaused(bool paused);
 
     // for going back and forth between fractional
@@ -49,16 +49,13 @@ protected:
 
 signals:
     void cursorPosChanged(double pos);
-    void loopBeginChanged(double begin);
-    void loopEndChanged(double end);
-
-public slots:
-    void on_pausedChanged(bool pause);
-    void on_cursorMoved(double pos);
-    void on_xRangeChanged(QCPRange range);
+    void loopPointsChanged(double a, double b);
 
 private slots:
     void blinker();
+    void on_pausedChanged(bool pause);
+    void on_cursorMoved(double pos);
+    void on_xRangeChanged(QCPRange range);
 
 };
 
