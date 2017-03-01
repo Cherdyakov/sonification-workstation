@@ -44,7 +44,7 @@ public:
     void setSpeed(double speed);
     void setLooping(bool looping);
     void setLoopPoints(double begin, double end);
-    void setData(std::vector<double>* d, unsigned int height, unsigned int width);
+    void setData(std::vector<double>* data, unsigned int height, unsigned int width);
 
     // for polling state from outside
     // (i.e. GUI)

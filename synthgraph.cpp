@@ -182,19 +182,14 @@ void SynthGraph::setSpeed(double speed)
     commandBuffer.push(command);
 }
 
-void SynthGraph::setData(std::vector<double> *d, unsigned int height, unsigned int width)
+void SynthGraph::setData(std::vector<double> *data, unsigned int height, unsigned int width)
 {
-    data = d;
-    dataWidth = width;
-    currentData.clear();
-    currentIdx = 0;
-    mu = 0.0;
-
-    if(dataHeight != height)
-    {
-        dataHeight = height;
-        currentData.resize(dataHeight);
-    }
+    SynthCommand command;
+    command.type = SynthCommandType::DATA;
+    command.data = data;
+    command.height = height;
+    command.width = width;
+    commandBuffer.push(command);
 }
 
 void SynthGraph::retrieveData()
@@ -264,6 +259,23 @@ void SynthGraph::processCommand(SynthCommand command)
         loopEnd = command.loopEnd;
     }
         break;
+    case SynthCommandType::DATA:
+    {
+        data = command.data;
+        dataWidth = command.width;
+        currentData.clear();
+        currentIdx = 0;
+        mu = 0.0;
+        calculateReturnPos();
+
+        if(dataHeight != command.height)
+        {
+            dataHeight = command.height;
+            currentData.resize(dataHeight);
+        }
+    }
+        break;
+
 
     default:
         break;
