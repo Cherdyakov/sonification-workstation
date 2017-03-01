@@ -10,6 +10,10 @@ void FileReader::readCSV(QString filename, std::vector<double> *array)
 {
     qDebug() << "Reading file: " << QTime::currentTime();
 
+    if(array->size() > 0) {
+        array->clear();
+    }
+
     QList<QStringList> readData = QtCSV::Reader::readToList(filename);
 
     uint height = readData.count();   // == rows in CSV

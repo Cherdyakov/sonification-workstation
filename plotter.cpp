@@ -5,8 +5,15 @@ Plotter::Plotter()
     // Only selections are via playhead
     // Plot elements are not, themselves, selected
     setSelectionRectMode(QCP::srmNone);
+    QCP::Interactions qcpInteractions;
+    qcpInteractions |= QCP::iRangeDrag;
+    qcpInteractions |= QCP::iRangeZoom;
+    qcpInteractions |= QCP::iSelectPlottables;
+    setInteractions(qcpInteractions);
+//    axisRect()->setRangeDrag(Qt::Horizontal);
+//    axisRect()->setRangeZoom(Qt::Horizontal);
 
-    // The kelly colors.
+    // The Kelly colors.
     // Kelly's paper: http://www.iscc.org/pdf/PC54_1724_001.pdf
     // Values handily copied from here:
     // https://gist.github.com/ollieglass/f6ddd781eeae1d24e391265432297538
@@ -23,6 +30,7 @@ Plotter::Plotter()
 void Plotter::plot(std::vector<double> *array, uint height, uint width)
 {
     clearGraphs();
+
     QVector<double> xTicks(width);
     std::iota(xTicks.begin(), xTicks.end(), 0);
 
@@ -46,10 +54,16 @@ void Plotter::plot(std::vector<double> *array, uint height, uint width)
         pen.setWidth(0);
         graph->setPen(pen);
     }
+
+    // release bounds so replot can fit the new data
+    xBounds.upper = xAxis->range().maxRange;
+    xBounds.lower = -(xAxis->range().maxRange);
+    yBounds.upper = yAxis->range().maxRange;
+    yBounds.lower = -(yAxis->range().maxRange);
     rescaleAxes();
     replot();
     resizePlayHead();
-
+    // set bounds based on new data
     xBounds = xAxis->range();
     yBounds = yAxis->range();
 }

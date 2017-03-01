@@ -8,7 +8,7 @@ Transport::Transport(QWidget *parent) : QWidget(parent)
     // for refreshing the playhead position
     QTimer* posTimer = new QTimer(this);
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updateCursorPos()));
-    posTimer->start(10);
+    posTimer->start(33);
 
     //transport layout
     QHBoxLayout* transportLayout = new QHBoxLayout;

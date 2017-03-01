@@ -16,13 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ///////////////////////
 
     plotter = new Plotter;
-    QCP::Interactions qcpInteractions;
-    qcpInteractions |= QCP::iRangeDrag;
-    qcpInteractions |= QCP::iRangeZoom;
-    qcpInteractions |= QCP::iSelectPlottables;
-    plotter->setInteractions(qcpInteractions);
-    plotter->axisRect()->setRangeDrag(Qt::Horizontal);
-    plotter->axisRect()->setRangeZoom(Qt::Horizontal);
 
     // Draws the playhead,loop points, loop shading
     PlayHead* playHead = new PlayHead(plotter);
@@ -189,5 +182,6 @@ void MainWindow::openDataset()
     {
         return;
     }
+    dataset.clear();
     fileReader->readCSV(fileName, &dataset);
 }

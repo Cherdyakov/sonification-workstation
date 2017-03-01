@@ -261,6 +261,7 @@ void SynthGraph::processCommand(SynthCommand command)
         break;
     case SynthCommandType::DATA:
     {
+        paused = true   ;
         data = command.data;
         dataWidth = command.width;
         currentData.clear();
