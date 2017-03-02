@@ -47,7 +47,7 @@ int SynthItem::numChildren()
 
 void SynthItem::requestDelete()
 {
-    qDebug() << "delete requested";
+    qDebug() << "synthitem.cpp: unimplemented delete requested";
 }
 
 void SynthItem::addChild(QObject *item, CHILD_TYPE type)

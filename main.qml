@@ -129,8 +129,6 @@ Rectangle
                         var startPoint = mapFromItem(workspace.contentItem, parentItem.x, parentItem.y)
                         var beginX = startPoint.x + parentItem.width / 2
                         var beginY = startPoint.y + parentItem.height / 2
-                        //                    console.log(patch.startPoint)
-                        //                            console.log(child)
                         var endPoint = mapFromItem(workspace.contentItem, childItem.x, childItem.y)
                         var endX = endPoint.x + childItem.width / 2
                         var endY = endPoint.y + childItem.height / 2

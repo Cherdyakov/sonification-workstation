@@ -33,37 +33,28 @@ RowLayout {
             font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
-            onActiveFocusChanged: console.log(activeFocus)
             onEditingFinished:
             {
-                var inString = text
-                var parsedInput = getNumbers(inString)
-                var validInput = parsedInput.filter(filterMax)
-
-                text = getStringRange(validInput)
-
-                mappingsChanged(validInput)
+                validateMappings()
             }
 
             MouseArea {
                 anchors.fill: textInput
                 onClicked: {
                     textInput.forceActiveFocus()
-                    console.log("clicked")
                 }
             }
         }
     }
 
-    function revalidate()
+    function validateMappings()
     {
         var inString = textInput.text
         var parsedInput = getNumbers(inString)
-        var validInput = parsedInput.filter(filterMax)
 
-        textInput.text = getStringRange(validInput)
+        textInput.text = getStringRange(parsedInput)
 
-        mappingsChanged(validInput)
+        mappingsChanged(parsedInput)
     }
 
     function getNumbers(stringNumbers)
@@ -101,6 +92,15 @@ RowLayout {
                     low = low ^ high
                     high = low ^ high
                     low = low ^ high
+                }
+
+                if (high > dataHeight)
+                {
+                    high = dataHeight
+                }
+                if (low < 1)
+                {
+                    low = 1
                 }
 
                 //from low, we push up to high

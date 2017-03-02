@@ -32,8 +32,6 @@ Item {
         this.parent = workspace.contentItem
     }
 
-    onActiveFocusChanged: console.log(activeFocus)
-
     onMutedChanged: {
         mute()
     }
@@ -95,7 +93,6 @@ Item {
     }
 
     function addChild(synthItem) {
-        console.log("base add")
         //add QML child to this item's synthChildren
         synthChildren.push(synthItem)
         //add child's implementation to the children
@@ -128,7 +125,6 @@ Item {
     }
 
     function mute() {
-        console.log("base mute")
         //mute cpp counterpart
         implementation.mute(muted)
 
@@ -157,8 +153,6 @@ Item {
         synthItems.splice(idx, 1)
 
         root.destroy()
-
-        console.log(synthItems.length)
 
         canvas.requestPaint()
     }

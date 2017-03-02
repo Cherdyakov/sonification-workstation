@@ -111,8 +111,6 @@ void Oscillator::resize(int size)
     while(gens.count() < size)
     {
         gens.push_back(newGen(waveform));
-        qDebug() << "oscillator: gens: " << gens.count();
-        return;
     }
     while(gens.count() > size)
     {

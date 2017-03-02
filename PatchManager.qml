@@ -7,13 +7,11 @@ Item {
 //    property var patchEnd: null
 
     function setPatchPoint(item) {
-        console.log("PatchMgr: Signal Received")
 
         //not currently patching, start one
         if(patchBegin === null) {
             patchBegin = item
 //            patchEnd = null
-            console.log(item)
         }
         else {
             //clicked on same item, cancel patching
@@ -26,7 +24,6 @@ Item {
                 //as patch endpoint
 //                patchEnd = item
                 //add endpoint to begin's children
-                console.log(item)
                 patchBegin.addParent(item)
                 //add startpoint to end's parents
                 item.addChild(patchBegin)

@@ -14,8 +14,6 @@ SynthItem {
     }
 
     function addChild(synthItem) {
-        console.log("OUT add")
-
         //add QML child to this item's synthChildren
         synthChildren.push(synthItem)
         //add child's implementation to root of the synth graph

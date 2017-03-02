@@ -7,6 +7,8 @@ SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
 {
     paused = true;
     looping = false;
+    loopBegin = 0.0;
+    loopEnd = 0.0;
     dataStale = false;
     ringBufferSize = 2048;
     blockSize = 512;
@@ -54,11 +56,13 @@ double SynthGraph::processGraph()
         {
             currentIdx = (int)loopBegin;
             mu = (loopBegin - currentIdx);
+            dataStale = true;
         }
         else if(((double)currentIdx + mu) < loopBegin)
         {
             currentIdx = (int)loopBegin;
             mu = (loopBegin - currentIdx);
+            dataStale = true;
         }
     }
 
