@@ -13,6 +13,13 @@ RowLayout {
 
     signal mappingsChanged(var mappings)
 
+    Connections {
+        target: fileReader
+        onQmlDatasetChanged: {
+            validateMappings()
+        }
+    }
+
     EditorLabel {
         id: label
         text: qsTr("Source: ")
@@ -51,10 +58,9 @@ RowLayout {
     {
         var inString = textInput.text
         var parsedInput = getNumbers(inString)
-
-        textInput.text = getStringRange(parsedInput)
-
-        mappingsChanged(parsedInput)
+        var clampedInput = parsedInput.filter(filterMax)
+        textInput.text = getStringRange(clampedInput)
+        mappingsChanged(clampedInput)
     }
 
     function getNumbers(stringNumbers)
@@ -72,7 +78,9 @@ RowLayout {
             //test entry is positive integer
             if (filterInt(entry)) {
                 nums.push(+entry)
-            } else {
+            }
+            else
+            {
 
                 //if not a number, probably it had the - and not being a negative number
                 //only here do we split after we determined that the entry isn't a number
@@ -98,6 +106,7 @@ RowLayout {
                 {
                     high = dataHeight
                 }
+
                 if (low < 1)
                 {
                     low = 1

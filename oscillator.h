@@ -6,10 +6,8 @@
 #include "Gamma/Oscillator.h"
 
 namespace son {
-class Oscillator;
-}
 
-class son::Oscillator : public SynthItem
+class Oscillator : public SynthItem
 {
     Q_OBJECT
 
@@ -53,5 +51,7 @@ private:
     void setFreqs();
 
 };
+
+} // namespace son
 
 #endif // OSCILLATOR_H

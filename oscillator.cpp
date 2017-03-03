@@ -94,7 +94,6 @@ bool Oscillator::setIndexes(QVector<int> idxs)
         muted = true;
     }
     dataIndexes = idxs;
-    qDebug() << "cpp dataIndexes: " << dataIndexes;
 
     resize(dataIndexes.count());
 
@@ -243,8 +242,6 @@ void Oscillator::setFreqs()
             gens[i]->freq(f);
         }
     }
-
-
 }
 
 }
