@@ -5,7 +5,7 @@
 
 namespace son {
 
-enum SynthCommandType {
+enum class SynthCommandType {
     PAUSE,
     POSITION,
     SPEED,

@@ -4,6 +4,8 @@
 #include <QObject>
 #include "synthitem.h"
 #include "Gamma/Oscillator.h"
+#include "ringbuffer.h"
+#include "oscillatorcommand.h"
 
 namespace son {
 
@@ -25,6 +27,8 @@ public:
     Q_INVOKABLE bool setIndexes(QVector<int> idxs);
 
 private:
+
+    RingBuffer<OscillatorCommand> commandBuffer;
 
     QVector<int> dataIndexes;
 

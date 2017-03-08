@@ -12,7 +12,7 @@ class SynthItem : public QObject
     Q_OBJECT
 public:
 
-    enum CHILD_TYPE {
+    enum class CHILD_TYPE {
         IN,
         AMOD,
         FMOD,
@@ -20,7 +20,7 @@ public:
     };
     Q_ENUMS(CHILD_TYPE)
 
-    enum WAVEFORM {
+    enum class WAVEFORM {
         SINE,
         SAW,
         SQUARE

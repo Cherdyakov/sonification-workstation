@@ -43,7 +43,9 @@ HEADERS += \
     ../../../CodeLibs/qcustomplot/qcustomplot.h \
     plotter.h \
     playhead.h \
-    synthcommand.h
+    synthcommand.h \
+    oscillatorcommand.h \
+    enums.h
 
 FORMS +=
 
