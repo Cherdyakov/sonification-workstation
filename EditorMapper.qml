@@ -7,7 +7,6 @@ RowLayout {
     id: root
     Layout.maximumHeight: Style.editorRowHeight
 
-    property string parameterName: "none"
     property alias label: label
     property alias textInput: textInput
 

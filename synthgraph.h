@@ -70,7 +70,7 @@ private:
     QVector<SynthItem*> graphRoot;
     std::vector<double>* data;
     std::vector<double> currentData;
-    RingBuffer commandBuffer;
+    RingBuffer<SynthCommand> commandBuffer;
     bool dataStale;
     bool paused;
     bool looping;

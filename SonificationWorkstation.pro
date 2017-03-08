@@ -9,7 +9,6 @@ SOURCES += \
     synthgraph.cpp \
     output.cpp \
     oscillator.cpp \
-    ringbuffer.cpp \
     transport.cpp \
     audifier.cpp \
     timerworker.cpp \
