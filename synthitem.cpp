@@ -50,14 +50,17 @@ void SynthItem::requestDelete()
     qDebug() << "synthitem.cpp: unimplemented delete requested";
 }
 
-void SynthItem::addChild(QObject *item, CHILD_TYPE type)
+void SynthItem::addChild(QObject *item, SON_CHILD_TYPE type)
 {
+    (void)item;
+    (void)type;
    qDebug() << "base addChild called";
    return;
 }
 
 void SynthItem::removeChild(QObject *item)
 {
+    (void)item;
     qDebug() << "base removeChild called";
     return;
 }

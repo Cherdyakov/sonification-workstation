@@ -15,12 +15,12 @@ public:
     Audifier();
     float process();
     using SynthItem::addChild;
-    void addChild(QObject *child, CHILD_TYPE type);
+    void addChild(QObject *child, SON_CHILD_TYPE type);
     void removeChild(QObject* child);
     void setDataColumn(std::vector<double> *col);
 
     //UI invokable functions for seting parameter
-    Q_INVOKABLE bool setIndexes(QVector<int> idxs);
+    Q_INVOKABLE void setIndexes(QVector<int> idxs);
 
 private:
 

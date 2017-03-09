@@ -6,24 +6,25 @@
 
 namespace son {
 
-enum class OscillatorCommandType {
+enum class SON_OSC_COMMAND_TYPE {
     DATA,
     INDEXES,
     WAVEFORM,
     FREQ,
-    FIXED_FREQ,
+    FIXED_FREQS,
     ADD_CHILD,
     REMOVE_CHILD,
 };
 
 typedef struct {
-    OscillatorCommandType type;
+    SON_OSC_COMMAND_TYPE type;
     std::vector<double>* data;
     std::vector<int> indexes;
-    SynthItem::WAVEFORM waveform;
+    SynthItem::SON_WAVEFORM waveform;
     int freq;
-    bool fixedFreq;
+    bool fixedFreqs;
     SynthItem* child;
+    SynthItem::SON_CHILD_TYPE childType;
 } OscillatorCommand;
 
 }

@@ -4,134 +4,217 @@ namespace son {
 
 Oscillator::Oscillator()
 {
-    waveform = SINE;
+    waveform = SON_WAVEFORM::SINE;
     gam::Sine<>* defaultGen = new gam::Sine<>(440);
     gens.push_back(defaultGen);
     freq = 440;
+    fixedFreqs = true;
 }
 
-void Oscillator::addChild(QObject *child, int type)
+void Oscillator::setDataItem(std::vector<double> *data)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::DATA;
+    command.data = data;
+    commandBuffer.push(command);
+}
+
+void Oscillator::setWaveform(SON_WAVEFORM waveform)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::WAVEFORM;
+    command.waveform = waveform;
+    commandBuffer.push(command);
+}
+
+void Oscillator::setFreq(double freq)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::FREQ;
+    command.freq = freq;
+    commandBuffer.push(command);
+}
+
+void Oscillator::setFixedFreqs(bool fixed)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::FIXED_FREQS;
+    command.fixedFreqs = fixed;
+    commandBuffer.push(command);
+}
+
+void Oscillator::setIndexes(std::vector<int> indexes)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::INDEXES;
+    command.indexes = indexes;
+    commandBuffer.push(command);
+}
+
+void Oscillator::processAddChild(SynthItem *child, SON_CHILD_TYPE type)
 {
     SynthItem* item = static_cast<SynthItem*>(child);
 
     switch (type){
-    case AMOD: {
-        if(!amods.contains(item))
-        {
-            return; //already child
+    case SON_CHILD_TYPE::AMOD:
+    {
+        if(std::find(amods.begin(), amods.end(), item) != amods.end()) {
+            return;
+        } else {
+            amods.push_back(item);
         }
-        amods.push_back(item);
         break;
     }
-    case FMOD: {
-        if(!fmods.contains(item))
-        {
-            return; //already child
+    case SON_CHILD_TYPE::FMOD:
+    {
+        if(std::find(fmods.begin(), fmods.end(), item) != fmods.end()) {
+            return;
+        } else {
+            fmods.push_back(item);
         }
-        fmods.push_back(item);
         break;
     }
     default:
         break; //incompatible child type
     }
-
 }
 
-void Oscillator::removeChild(QObject *child)
+void Oscillator::processRemoveChild(SynthItem *child)
 {
-    SynthItem* item = static_cast<SynthItem*>(child);
-
-    int idx;
-
-    idx = amods.indexOf(item);
-    if(idx > -1)
-    {
-        amods.remove(idx);
-        return;
-    }
-
-    idx = fmods.indexOf(item);
-    if(idx > -1)
-    {
-        fmods.remove(idx);
-    } //no such child
+    amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
+    fmods.erase(std::remove(fmods.begin(), fmods.end(), child), fmods.end());
 }
 
-void Oscillator::setDataItem(std::vector<double> *newData)
+void Oscillator::processSetDataItem(std::vector<double> *data)
 {
-    dataItem = newData;
+    dataItem = data;
 
-    for(int i = 0; i < amods.count(); i++) {
+    for(unsigned int i = 0; i < amods.size(); i++) {
         son::SynthItem* item = amods[i];
-        item->setDataItem(newData);
+        item->setDataItem(data);
     }
-    for(int i = 0; i < fmods.count(); i++) {
+    for(unsigned int i = 0; i < fmods.size(); i++) {
         son::SynthItem* item = fmods[i];
-        item->setDataItem(newData);
+        item->setDataItem(data);
     }
 }
 
-void Oscillator::setWaveform(SynthItem::WAVEFORM type)
+void Oscillator::processSetWaveform(SON_WAVEFORM waveType)
 {
-    if (waveform != type) {
-        waveform = type;
-        qDebug() << "cpp: waveform is " << waveform;
+    if (waveform != waveType) {
+        waveform = waveType;
     }
 }
 
-void Oscillator::setFreq(double inFreq)
+void Oscillator::processSetFreq(double inFreq)
 {
     if (freq != inFreq) {
         freq = inFreq;
     }
-    qDebug() << "cpp: freq is " << freq;
 }
 
-bool Oscillator::setIndexes(QVector<int> idxs)
+void Oscillator::processSetFixedFreqs(bool fixed)
+{
+    fixedFreqs = fixed;
+}
+
+void Oscillator::processSetIndexes(std::vector<int> indexes)
 {
     bool m = muted;
     if(!muted) {
         muted = true;
     }
-    dataIndexes = idxs;
+    dataIndexes = indexes;
 
-    resize(dataIndexes.count());
+    resize(dataIndexes.size());
 
     muted = m;
 }
 
-void Oscillator::resize(int size)
+void Oscillator::processCommand(OscillatorCommand command)
+{
+    SON_OSC_COMMAND_TYPE type = command.type;
+
+    switch (type) {
+    case SON_OSC_COMMAND_TYPE::ADD_CHILD:
+    {
+        SynthItem* child = command.child;
+        SON_CHILD_TYPE type = command.childType;
+        processAddChild(child, type);
+    }
+        break;
+    case SON_OSC_COMMAND_TYPE::DATA:
+    {
+        std::vector<double>* data = command.data;
+        processSetDataItem(data);
+    }
+        break;
+    case SON_OSC_COMMAND_TYPE::FIXED_FREQS:
+    {
+        bool fixedFreqs = command.fixedFreqs;
+        processSetFixedFreqs(fixedFreqs);
+    }
+        break;
+    case SON_OSC_COMMAND_TYPE::FREQ:
+    {
+        double freq = command.freq;
+        processSetFreq(freq);
+    }
+        break;
+    case SON_OSC_COMMAND_TYPE::INDEXES:
+    {
+
+    }
+        break;
+    case SON_OSC_COMMAND_TYPE::REMOVE_CHILD:
+    {
+
+    }
+        break;
+    case SON_OSC_COMMAND_TYPE::WAVEFORM:
+    {
+
+    }
+        break;
+
+    default:
+        break;
+    }
+}
+
+void Oscillator::resize(unsigned int size)
 {
     bool m = muted;
     if(!muted) {
         muted = true;
     }
 
-    while(gens.count() < size)
+    while(gens.size() < size)
     {
         gens.push_back(newGen(waveform));
     }
-    while(gens.count() > size)
+    while(gens.size() > size)
     {
-        gens.removeLast();
+        gens.pop_back();
     }
 
     muted = m;
 
 }
 
-gam::AccumPhase<> *Oscillator::newGen(SynthItem::WAVEFORM type)
+gam::AccumPhase<> *Oscillator::newGen(SON_WAVEFORM type)
 {
     switch (type) {
-    case SINE:
+    case SON_WAVEFORM::SINE:
         return new gam::Sine<>(440);
         break;
-    case SAW:
+    case SON_WAVEFORM::SAW:
         return new gam::Saw<>(440);
         break;
-    case SQUARE:
+    case SON_WAVEFORM::SQUARE:
         return new gam::Square<>(440);
     default:
+        return NULL;
         break;
     }
 }
@@ -162,22 +245,22 @@ float Oscillator::process()
     setFreqs();
 
     //generate sample
-    for (int i = 0; i < gens.count(); ++i) {
+    for (unsigned int i = 0; i < gens.size(); ++i) {
 
         switch (waveform) {
-        case SINE:
+        case SON_WAVEFORM::SINE:
         {
             gam::Sine<>* gen = static_cast<gam::Sine<>*>(gens[i]);
             sample += gen->operator ()();
             break;
         }
-        case SAW:
+        case SON_WAVEFORM::SAW:
         {
             gam::Saw<>* gen = static_cast<gam::Saw<>*>(gens[i]);
             sample += gen->operator ()();
             break;
         }
-        case SQUARE:
+        case SON_WAVEFORM::SQUARE:
         {
             gam::Square<>* gen = static_cast<gam::Square<>*>(gens[i]);
             sample += gen->operator ()();
@@ -196,17 +279,15 @@ float Oscillator::process()
     //test noise
     //    sample = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
 
-    return sample / gens.count();
+    return sample / gens.size();
 }
 
 float Oscillator::visitAmods()
 {
     float s = 0.0;
-    QVector<SynthItem*>::const_iterator i;
-
-    for (i = amods.constBegin(); i != amods.constEnd(); ++i)
+    for (unsigned int i = 0; i < amods.size(); ++i)
     {
-        SynthItem* gen = *i;
+        SynthItem* gen = amods[i];
         s += gen->process();
     }
     return s;
@@ -215,11 +296,9 @@ float Oscillator::visitAmods()
 float Oscillator::visitFmods()
 {
     float s = 0.0;
-    QVector<SynthItem*>::const_iterator i;
-
-    for (i = fmods.constBegin(); i != fmods.constEnd(); ++i)
+    for (unsigned int i = 0; i < fmods.size(); ++i)
     {
-        SynthItem* gen = *i;
+        SynthItem* gen = fmods[i];
         s += gen->process();
     }
     return s;
@@ -227,21 +306,25 @@ float Oscillator::visitFmods()
 
 void Oscillator::setFreqs()
 {
-    if (dataIndexes.count() < 1) //no data mappings, use fixed freq
+    if (dataIndexes.size() < 1) //no data mappings, use fixed freq
     {
-        for (int i = 0; i < gens.count(); ++i) {
+        for (unsigned int i = 0; i < gens.size(); ++i) {
             gens[i]->freq(freq);
         }
     }
     else //map each indexed value from the data row to the freq of a generator
     {
-        for (int i = 0; (i < gens.count()) &&
-             (i < dataIndexes.count()) &&
+        for (unsigned int i = 0; (i < gens.size()) &&
+             (i < dataIndexes.size()) &&
              (i < dataItem->size()); ++i) {
             double f = dataItem->at(dataIndexes[i]);
             gens[i]->freq(f);
         }
     }
+
 }
 
 }
+
+// clipboard
+

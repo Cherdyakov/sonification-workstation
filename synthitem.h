@@ -12,20 +12,18 @@ class SynthItem : public QObject
     Q_OBJECT
 public:
 
-    enum class CHILD_TYPE {
+    enum class SON_CHILD_TYPE {
         IN,
         AMOD,
         FMOD,
         PMOD
     };
-    Q_ENUMS(CHILD_TYPE)
 
-    enum class WAVEFORM {
+    enum class SON_WAVEFORM {
         SINE,
         SAW,
         SQUARE
     };
-    Q_ENUMS(WAVEFORM)
 
     explicit SynthItem(QObject *parent = 0);
 
@@ -40,11 +38,9 @@ public:
     int numChildren();
 
     //funcions invoked by QML Gui
-    Q_INVOKABLE virtual void addChild(QObject *item, CHILD_TYPE type);
+    Q_INVOKABLE virtual void addChild(QObject *item, SON_CHILD_TYPE type);
     Q_INVOKABLE virtual void removeChild(QObject *item);
     Q_INVOKABLE void mute(bool mute);
-//    Q_INVOKABLE void addParent(QObject *item);
-//    Q_INVOKABLE void removeParent(QObject *item);
 
 signals:
 

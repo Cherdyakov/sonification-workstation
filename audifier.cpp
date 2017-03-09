@@ -22,12 +22,12 @@ float Audifier::process()
     return s;
 }
 
-void Audifier::addChild(QObject *child, SynthItem::CHILD_TYPE type)
+void Audifier::addChild(QObject *child, SON_CHILD_TYPE type)
 {
     SynthItem* item = static_cast<SynthItem*>(child);
 
     switch (type){
-    case AMOD: {
+    case SON_CHILD_TYPE::AMOD: {
         if(!amods.contains(item))
         {
             return; //already child
@@ -64,7 +64,7 @@ void Audifier::setDataColumn(std::vector<double> *col)
     }
 }
 
-bool Audifier::setIndexes(QVector<int> idxs)
+void Audifier::setIndexes(QVector<int> idxs)
 {
     bool m = muted;
     if(!muted) {

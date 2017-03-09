@@ -2,8 +2,7 @@
 #define RingBuffer_H
 
 #include <atomic>
-#include "synthcommand.h"
-
+#include <vector>
 
 namespace son
 {
@@ -16,8 +15,8 @@ public:
 
     void reset();
 
-    bool push(T command);
-    bool pop(T* command);
+    bool push(T item);
+    bool pop(T* item);
 
     bool empty() const;
     bool full() const;
@@ -28,7 +27,7 @@ private:
     std::atomic<int> capacity;
     std::atomic<int> head;
     std::atomic<int> tail;
-    std::vector<SynthCommand> array;
+    std::vector<T> array;
 
 };
 
@@ -52,7 +51,7 @@ void RingBuffer<T>::reset()
 }
 
 template<class T>
-bool RingBuffer<T>::push(T command)
+bool RingBuffer<T>::push(T item)
 {
     //values written all the way to end
     if(head > capacity - 1)
@@ -66,7 +65,7 @@ bool RingBuffer<T>::push(T command)
         return false;
     }
 
-    array[head] = command;
+    array[head] = item;
 
     head++;
     currentSize++;
@@ -74,7 +73,7 @@ bool RingBuffer<T>::push(T command)
 }
 
 template<class T>
-bool RingBuffer<T>::pop(T* command)
+bool RingBuffer<T>::pop(T* item)
 {
     //bounds check
     if(tail > capacity - 1)
@@ -87,7 +86,7 @@ bool RingBuffer<T>::pop(T* command)
         return false;
     }
 
-    *command = array[tail];
+    *item = array[tail];
 
     tail++;
     currentSize--;

@@ -1,7 +1,8 @@
 #ifndef OSCILLATOR_H
 #define OSCILLATOR_H
 
-#include <QObject>
+#include <algorithm>
+
 #include "synthitem.h"
 #include "Gamma/Oscillator.h"
 #include "ringbuffer.h"
@@ -11,27 +12,35 @@ namespace son {
 
 class Oscillator : public SynthItem
 {
-    Q_OBJECT
 
 public:
     Oscillator();
     float process();
     using SynthItem::addChild;
-    void addChild(QObject* child, int type);
-    void removeChild(QObject* child);
-    void setDataItem(std::vector<double> *newData);
-
-    //UI invokable functions for setting parameters
-    Q_INVOKABLE void setWaveform(WAVEFORM type);
-    Q_INVOKABLE void setFreq(double inFreq);
-    Q_INVOKABLE bool setIndexes(QVector<int> idxs);
+    void addChild(SynthItem* child, SON_CHILD_TYPE type);
+    void removeChild(SynthItem* child);
+    void setDataItem(std::vector<double> *data);
+    void setWaveform(SON_WAVEFORM waveform);
+    void setFreq(double freq);
+    void setFixedFreqs(bool fixed);
+    void setIndexes(std::vector<int> indexes);
 
 private:
 
+    void processAddChild(SynthItem* child, SON_CHILD_TYPE type);
+    void processRemoveChild(SynthItem* child);
+    void processSetDataItem(std::vector<double> *data);
+    void processSetWaveform(SON_WAVEFORM waveType);
+    void processSetFreq(double inFreq);
+    void processSetFixedFreqs(bool fixed);
+    void processSetIndexes(std::vector<int> indexes);
+
+    void processCommand(OscillatorCommand command);
     RingBuffer<OscillatorCommand> commandBuffer;
 
-    QVector<int> dataIndexes;
+    std::vector<int> dataIndexes;
 
+    bool fixedFreqs;
     double freq;
 
     //for scaling the input
@@ -40,15 +49,15 @@ private:
 //    float freqMin;
 //    float freqMax;
 
-    WAVEFORM waveform;
+    SON_WAVEFORM waveform;
 
-    QVector<gam::AccumPhase<>*> gens;
+    std::vector<gam::AccumPhase<>*> gens;
 
-    QVector<SynthItem*> amods;
-    QVector<SynthItem*> fmods;
+    std::vector<SynthItem*> amods;
+    std::vector<SynthItem*> fmods;
 
-    void resize(int size);
-    gam::AccumPhase<>* newGen(WAVEFORM type);
+    void resize(unsigned int size);
+    gam::AccumPhase<>* newGen(SON_WAVEFORM type);
 
     float visitFmods();
     float visitAmods();
