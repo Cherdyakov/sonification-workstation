@@ -4,10 +4,11 @@
 #include <QQmlContext>
 #include <samplerate.h>
 
+#include "qtsynthitem.h"
 #include "mainwindow.h"
 #include "rtaudio/RtAudio.h"
 #include "callback.h"
-#include "synthgraph.h"
+#include "qtsynthgraph.h"
 #include "ringbuffer.h"
 #include "filereader.h"
 
@@ -19,12 +20,12 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
-    qmlRegisterType<son::SynthGraph>("SonLib", 1, 0, "SynthGraph");
-    qmlRegisterType<son::SynthItem>("SonLib", 1, 0, "SynthItemImplementation");
+    qmlRegisterType<QtSynthGraph>("SonLib", 1, 0, "SynthGraph");
+    qmlRegisterType<QtSynthItem>("SonLib", 1, 0, "SynthItemImplementation");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
 
     MainWindow main_window;
-    son::UserData uData;
+    UserData uData;
     uData.graph = main_window.getSynthGraph();
 
     main_window.show();

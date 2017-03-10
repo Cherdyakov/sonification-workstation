@@ -79,7 +79,7 @@ void Transport::on_loopPointsChanged(double begin, double end)
     synthGraph->setLoopPoints(begin, end);
 }
 
-void Transport::setSynthGraph(son::SynthGraph *graph)
+void Transport::setSynthGraph(QtSynthGraph *graph)
 {
     synthGraph = graph;
 }

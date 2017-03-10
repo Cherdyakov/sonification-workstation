@@ -15,11 +15,10 @@ class Oscillator : public SynthItem
 
 public:
     Oscillator();
-    float process();
-    using SynthItem::addChild;
-    void addChild(SynthItem* child, SON_CHILD_TYPE type);
-    void removeChild(SynthItem* child);
-    void setDataItem(std::vector<double> *data);
+    float process() override;
+    void addChild(SynthItem* child, SON_CHILD_TYPE type) override;
+    void removeChild(SynthItem* child) override;
+    void setDataItem(std::vector<double> *data) override;
     void setWaveform(SON_WAVEFORM waveform);
     void setFreq(double freq);
     void setFixedFreqs(bool fixed);
@@ -37,8 +36,6 @@ private:
 
     void processCommand(OscillatorCommand command);
     RingBuffer<OscillatorCommand> commandBuffer;
-
-    std::vector<int> dataIndexes;
 
     bool fixedFreqs;
     double freq;

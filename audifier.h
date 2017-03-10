@@ -1,33 +1,29 @@
 #ifndef AUDIFIER_H
 #define AUDIFIER_H
 
-#include <QObject>
+#include <algorithm>
 
 #include "synthitem.h"
 
 namespace son {
 
-class Audifier : public son::SynthItem
+class Audifier : public SynthItem
 {
-    Q_OBJECT
 
 public:
     Audifier();
-    float process();
-    using SynthItem::addChild;
-    void addChild(QObject *child, SON_CHILD_TYPE type);
-    void removeChild(QObject* child);
-    void setDataColumn(std::vector<double> *col);
-
-    //UI invokable functions for seting parameter
-    Q_INVOKABLE void setIndexes(QVector<int> idxs);
+    float process() override;
+    void addChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type) override;
+    void removeChild(SynthItem* child) override;
+    void setDataItem(std::vector<double> *data) override;
+    void setIndexes(std::vector<int> indexes) override;
 
 private:
 
-    QVector<int> dataIndexes;
-
-    QVector<SynthItem*> amods;
+    std::vector<int> dataIndexes;
+    std::vector<SynthItem*> amods;
     float visitAmods();
+    void resize(unsigned int size);
 
 };
 

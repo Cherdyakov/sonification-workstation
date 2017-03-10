@@ -1,14 +1,11 @@
 #ifndef SYNTHGRAPH_H
 #define SYNTHGRAPH_H
 
-#include <QObject>
-#include <QVector>
-#include <QDebug>
-#include <synthitem.h>
 #include <output.h>
 #include <atomic>
 #include <mutex>
 
+#include "synthitem.h"
 #include "oscillator.h"
 #include "audifier.h"
 #include "ringbuffer.h"
@@ -16,26 +13,18 @@
 
 namespace son {
 
-class SynthGraph : public QObject
+class SynthGraph
 {
-    Q_OBJECT
+
 public:
 
-    enum SYNTH_ITEM_TYPE {
-        OUT,
-        OSCILLATOR,
-        AUDIFIER
-    };
-    Q_ENUMS(SYNTH_ITEM_TYPE)
+    explicit SynthGraph();
 
-    explicit SynthGraph(QObject *parent = 0);
+    SynthItem *createItem(SynthItem::SON_ITEM_TYPE type);
+    void addToRoot(SynthItem* child);
+    void removeFromRoot(SynthItem* child);
 
-    // QML invokable functions for adding SynthItems to the graph
-    Q_INVOKABLE QObject* createItem(QObject *gui, SYNTH_ITEM_TYPE type);
-    Q_INVOKABLE void addToRoot(SynthItem* synthItem);
-    Q_INVOKABLE void removeFromRoot(SynthItem* synthItem);
-
-    double processGraph();
+    float processGraph();
     int graphSize();
 
     // functions for controlling playback
@@ -52,6 +41,10 @@ public:
 
 private:
 
+    void processPause(bool pause);
+    void processSetPos(double pos);
+    void processSetData(std::vector<double>* inData, unsigned int height, unsigned int width);
+
     float masterVolume;
     unsigned int ringBufferSize;
     unsigned int blockSize;
@@ -67,7 +60,7 @@ private:
     std::atomic<double> returnPos;
 
     SynthCommand currentCommand;
-    QVector<SynthItem*> graphRoot;
+    std::vector<SynthItem*> graphRoot;
     std::vector<double>* data;
     std::vector<double> currentData;
     RingBuffer<SynthCommand> commandBuffer;

@@ -14,7 +14,7 @@
 
 //#include "scatterview.h"
 //#include "lineview.h"
-#include "synthgraph.h"
+#include "qtsynthgraph.h"
 #include "transport.h"
 #include "filereader.h"
 #include "qcustomplot.h"
@@ -30,12 +30,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    son::SynthGraph* getSynthGraph();
+    QtSynthGraph* getSynthGraph();
 
 private:
 
     std::vector<double> dataset;
-    son::SynthGraph* synthGraph;
+    QtSynthGraph* synthGraph;
     FileReader* fileReader;
 
     //Tab widget and tabs

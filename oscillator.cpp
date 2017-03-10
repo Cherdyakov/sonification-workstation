@@ -51,6 +51,24 @@ void Oscillator::setIndexes(std::vector<int> indexes)
     commandBuffer.push(command);
 }
 
+
+void Oscillator::addChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::ADD_CHILD;
+    command.child = child;
+    command.childType = type;
+    commandBuffer.push(command);
+}
+
+void Oscillator::removeChild(SynthItem *child)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::ADD_CHILD;
+    command.child = child;
+    commandBuffer.push(command);
+}
+
 void Oscillator::processAddChild(SynthItem *child, SON_CHILD_TYPE type)
 {
     SynthItem* item = static_cast<SynthItem*>(child);
@@ -138,42 +156,37 @@ void Oscillator::processCommand(OscillatorCommand command)
     switch (type) {
     case SON_OSC_COMMAND_TYPE::ADD_CHILD:
     {
-        SynthItem* child = command.child;
-        SON_CHILD_TYPE type = command.childType;
-        processAddChild(child, type);
+        processAddChild(command.child, command.childType);
     }
         break;
     case SON_OSC_COMMAND_TYPE::DATA:
     {
-        std::vector<double>* data = command.data;
-        processSetDataItem(data);
+        processSetDataItem(command.data);
     }
         break;
     case SON_OSC_COMMAND_TYPE::FIXED_FREQS:
     {
-        bool fixedFreqs = command.fixedFreqs;
-        processSetFixedFreqs(fixedFreqs);
+        processSetFixedFreqs(command.fixedFreqs);
     }
         break;
     case SON_OSC_COMMAND_TYPE::FREQ:
     {
-        double freq = command.freq;
-        processSetFreq(freq);
+        processSetFreq(command.freq);
     }
         break;
     case SON_OSC_COMMAND_TYPE::INDEXES:
     {
-
+        processSetIndexes(command.indexes);
     }
         break;
     case SON_OSC_COMMAND_TYPE::REMOVE_CHILD:
     {
-
+        processRemoveChild(command.child);
     }
         break;
     case SON_OSC_COMMAND_TYPE::WAVEFORM:
     {
-
+        processSetWaveform(command.waveform);
     }
         break;
 
@@ -270,15 +283,6 @@ float Oscillator::process()
             break;
         }
     }
-
-    //test noise
-    //    sample = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
-    //test mssg
-    //qDebug() << "processOscillator";
-
-    //test noise
-    //    sample = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
-
     return sample / gens.size();
 }
 

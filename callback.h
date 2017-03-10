@@ -16,7 +16,7 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
     UserData* uData = (UserData *) data;
     double *buffer = (double *) outputBuffer;
-    SynthGraph* graph = uData->graph;
+    QtSynthGraph* graph = uData->graph;
 //    Sequencer* sequencer = uData->seq;
 
     if ( status )

@@ -14,9 +14,9 @@ public:
     float process();
 
 private:
-    QVector<SynthItem*> ins;
-    QVector<SynthItem*> amods;
-    QVector<SynthItem*> pmods;
+    std::vector<SynthItem*> ins;
+    std::vector<SynthItem*> amods;
+    std::vector<SynthItem*> pmods;
 
     float visitAmods();
 

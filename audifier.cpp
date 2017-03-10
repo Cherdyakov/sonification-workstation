@@ -22,17 +22,16 @@ float Audifier::process()
     return s;
 }
 
-void Audifier::addChild(QObject *child, SON_CHILD_TYPE type)
+void Audifier::addChild(SynthItem *child, SON_CHILD_TYPE type)
 {
-    SynthItem* item = static_cast<SynthItem*>(child);
 
     switch (type){
     case SON_CHILD_TYPE::AMOD: {
-        if(!amods.contains(item))
-        {
-            return; //already child
+        if(std::find(amods.begin(), amods.end(), child) != amods.end()) {
+            return;
+        } else {
+            amods.push_back(child);
         }
-        amods.push_back(item);
         break;
     }
     default:
@@ -40,38 +39,29 @@ void Audifier::addChild(QObject *child, SON_CHILD_TYPE type)
     }
 }
 
-void Audifier::removeChild(QObject *child)
+void Audifier::removeChild(SynthItem *child)
 {
-    SynthItem* item = static_cast<SynthItem*>(child);
-
-    int idx;
-
-    idx = amods.indexOf(item);
-    if(idx > -1)
-    {
-        amods.remove(idx);
-        return;
-    }
+    amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
 }
 
-void Audifier::setDataColumn(std::vector<double> *col)
+void Audifier::setDataItem(std::vector<double> *data)
 {
-    dataItem = col;
-
-    for(int i = 0; i < amods.count(); i++) {
+    dataItem = data;
+    for(unsigned int i = 0; i < amods.size(); i++) {
         son::SynthItem* item = amods[i];
-        item->setDataItem(col);
+        item->setDataItem(data);
     }
 }
 
-void Audifier::setIndexes(QVector<int> idxs)
+void Audifier::setIndexes(std::vector<int> indexes)
 {
     bool m = muted;
     if(!muted) {
         muted = true;
     }
-    dataIndexes = idxs;
-    qDebug() << "aud dataIndexes: " << dataIndexes;
+    dataIndexes = indexes;
+
+    resize(dataIndexes.size());
 
     muted = m;
 }
@@ -79,14 +69,17 @@ void Audifier::setIndexes(QVector<int> idxs)
 float Audifier::visitAmods()
 {
     float s = 0.0;
-    QVector<SynthItem*>::const_iterator i;
-
-    for (i = amods.constBegin(); i != amods.constEnd(); ++i)
+    for (unsigned int i = 0; i < amods.size(); ++i)
     {
-        SynthItem* gen = *i;
+        SynthItem* gen = amods[i];
         s += gen->process();
     }
     return s;
+}
+
+void Audifier::resize(unsigned int size)
+{
+    // resize
 }
 
 }

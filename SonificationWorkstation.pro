@@ -15,7 +15,10 @@ SOURCES += \
     filereader.cpp \
     ../../../CodeLibs/qcustomplot/qcustomplot.cpp \
     plotter.cpp \
-    playhead.cpp
+    playhead.cpp \
+    qtoscillator.cpp \
+    qtsynthitem.cpp \
+    qtsynthgraph.cpp
 
 RESOURCES += qml.qrc
 
@@ -45,7 +48,10 @@ HEADERS += \
     playhead.h \
     synthcommand.h \
     oscillatorcommand.h \
-    enums.h
+    enums.h \
+    qtoscillator.h \
+    qtsynthitem.h \
+    qtsynthgraph.h
 
 FORMS +=
 

@@ -3,12 +3,9 @@
 
 #endif // USERDATA_H
 
-#include "synthgraph.h"
-
-namespace son {
+#include "qtsynthgraph.h"
 
 typedef struct {
-    SynthGraph* graph;
+    QtSynthGraph* graph;
 } UserData;
 
-} //namespace son

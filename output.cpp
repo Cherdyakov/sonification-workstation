@@ -16,8 +16,10 @@ float Output::process()
     float amSample = 0.0;
 
     //check amods
-    if(!amods.isEmpty())
+    if(amods.size() != 0)
+    {
         amSample = visitAmods();
+    }
 
     //generate sample
 
@@ -27,12 +29,11 @@ float Output::process()
 float Output::visitAmods()
 {
     float s = 0.0;
-    QVector<SynthItem*>::const_iterator i;
 
-    for (i = amods.constBegin(); i != amods.constEnd(); ++i)
+    for (int i = 0; i < amods.size(); i++)
     {
-        SynthItem* gen = *i;
-        s += gen->process();
+        SynthItem* item = amods[i];
+        s += item->process();
     }
     return s;
 }

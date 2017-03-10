@@ -30,37 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout* dataLayout = new QVBoxLayout(this);
     QVBoxLayout* synthLayout = new QVBoxLayout(this);
 
-    //tabbed view
-//    tabWidget = new QTabWidget;
-//    tabWidget->setStyleSheet("QTabWidget::pane { border: 0; }");
-    //tabs
-//    tableTab = new QWidget;
-//    lineTab = new QWidget;
-//    scatterTab = new QWidget;
-    ///////////////////////
-    //add layouts to tabs//
-    ///////////////////////
-
-    //line chart
-//    lineTabLayout = new QVBoxLayout;
-//    lineTabLayout->setMargin(4);
-//    lineTab->setLayout(lineTabLayout);
-    //scatter plot
-//    scatterTabLayout = new QVBoxLayout;
-//    scatterTabLayout->setMargin(4);
-//    scatterTab->setLayout(scatterTabLayout);
-
-    //insert tabs into QTabWidget
-//    tabWidget->addTab(tableTab, "Table");
-//    tabWidget->addTab(lineTab, "Line");
-    //    tabWidget->addTab(scatterTab, "Scatter");
-    //    tableTabLayout->addWidget(tableView);
-//    lineTabLayout->addWidget(plotter);
-    //    scatterTabLayout->addWidget(scatterView);
-
-
     //synthesis graph
-    synthGraph = new son::SynthGraph;
+    synthGraph = new QtSynthGraph;
 
     //////////////////////
     //Transport section //
@@ -130,7 +101,7 @@ MainWindow::~MainWindow()
 
 }
 
-son::SynthGraph *MainWindow::getSynthGraph()
+QtSynthGraph *MainWindow::getSynthGraph()
 {
     return synthGraph;
 }

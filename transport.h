@@ -10,14 +10,14 @@
 #include <QDebug>
 #include <QTimer>
 
-#include "synthgraph.h"
+#include "qtsynthgraph.h"
 
 class Transport : public QWidget
 {
     Q_OBJECT
 public:
     explicit Transport(QWidget *parent = 0);
-    void setSynthGraph(son::SynthGraph* graph);
+    void setSynthGraph(QtSynthGraph* graph);
 
 private:
 
@@ -28,7 +28,7 @@ private:
     QPushButton* loopButton;
     QDial* speedDial;
     QDoubleSpinBox* speedBox;
-    son::SynthGraph* synthGraph;
+    QtSynthGraph* synthGraph;
 
 
 signals:

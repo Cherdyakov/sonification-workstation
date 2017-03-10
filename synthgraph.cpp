@@ -1,9 +1,8 @@
 #include "synthgraph.h"
-#include <QDebug>
 
 namespace son {
 
-SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
+SynthGraph::SynthGraph()
 {
     paused = true;
     looping = false;
@@ -22,7 +21,7 @@ SynthGraph::SynthGraph(QObject *parent) : QObject(parent)
     masterVolume = 1.0;
 }
 
-double SynthGraph::processGraph()
+float SynthGraph::processGraph()
 {
     float s = 0.0;
 
@@ -72,10 +71,10 @@ double SynthGraph::processGraph()
         dataStale = false;
     }
 
-    QVector<SynthItem*>::const_iterator i;
+    std::vector<SynthItem*>::const_iterator i;
 
-    for (i = graphRoot.constBegin(); i != graphRoot.constEnd(); ++i) {
-        SynthItem* item = *i;
+    for (int i = 0; i < graphRoot.size(); ++i) {
+        SynthItem* item = graphRoot[i];
         s += item->process();
     }
 
@@ -83,30 +82,28 @@ double SynthGraph::processGraph()
     calculateReturnPos();
     mu += (speed / sr);
 
-    //Test Noise
-    //    s = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
-
     return s * masterVolume;
 }
 
-QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
+SynthItem* SynthGraph::createItem(SynthItem::SON_ITEM_TYPE type)
 {
     SynthItem* item;
 
     switch (type){
-    case OUT: {
+    case SynthItem::SON_ITEM_TYPE::OUT:
+    {
         item = NULL;
         break;
     }
-    case OSCILLATOR: {
+    case SynthItem::SON_ITEM_TYPE::OSCILLATOR:
+    {
         item = new Oscillator();
-        item->setGui(gui);
         item->setDataItem(&currentData);
         break;
     }
-    case AUDIFIER: {
+    case SynthItem::SON_ITEM_TYPE::AUDIFIER:
+    {
         item = new Audifier();
-        item->setGui(gui);
         item->setDataItem(&currentData);
         break;
     }
@@ -117,32 +114,23 @@ QObject* SynthGraph::createItem(QObject* gui, SYNTH_ITEM_TYPE type)
     return item;
 }
 
-void SynthGraph::addToRoot(SynthItem *synthItem)
+void SynthGraph::addToRoot(SynthItem *child)
 {
-    SynthItem* item = static_cast<SynthItem*>(synthItem);
-    if(!graphRoot.contains(item))
-    {
-        graphRoot.push_back(item);
+    if(std::find(graphRoot.begin(), graphRoot.end(), child) != graphRoot.end()) {
+        return;
+    } else {
+        graphRoot.push_back(child);
     }
 }
 
-void SynthGraph::removeFromRoot(SynthItem *synthItem)
+void SynthGraph::removeFromRoot(SynthItem *child)
 {
-    SynthItem* item = static_cast<SynthItem*>(synthItem);
-
-    int idx;
-
-    idx = graphRoot.indexOf(item);
-    if(idx > -1)
-    {
-        graphRoot.remove(idx);
-        return;
-    }
+    graphRoot.erase(std::remove(graphRoot.begin(), graphRoot.end(), child), graphRoot.end());
 }
 
 int SynthGraph::graphSize()
 {
-    return graphRoot.count();
+    return graphRoot.size();
 }
 
 void SynthGraph::pause(bool pause)
@@ -220,28 +208,13 @@ void SynthGraph::processCommand(SynthCommand command)
     switch (type) {
     case SynthCommandType::PAUSE:
     {
-        bool p = command.paused;
-        if(paused != p)
-        {
-            if(!p)
-            {
-                dataStale = true;
-            }
-            paused = p;
-        }
+        processPause(command.paused);
     }
         break;
 
     case SynthCommandType::POSITION:
     {
-        double pos = command.pos;
-        unsigned int newIdx = (int)pos;
-        if(currentIdx != newIdx)
-        {
-            dataStale = true;
-            currentIdx = newIdx;
-        }
-        mu = (pos - currentIdx);
+        processSetPos(command.pos);
     }
         break;
 
@@ -265,19 +238,7 @@ void SynthGraph::processCommand(SynthCommand command)
         break;
     case SynthCommandType::DATA:
     {
-        paused = true   ;
-        data = command.data;
-        dataWidth = command.width;
-        currentData.clear();
-        currentIdx = 0;
-        mu = 0.0;
-        calculateReturnPos();
-
-        if(dataHeight != command.height)
-        {
-            dataHeight = command.height;
-            currentData.resize(dataHeight);
-        }
+        processSetData(command.data, command.height, command.width);
     }
         break;
 
@@ -290,6 +251,46 @@ void SynthGraph::processCommand(SynthCommand command)
 double SynthGraph::getPos()
 {
     return returnPos;
+}
+
+void SynthGraph::processPause(bool pause)
+{
+    if(paused != pause)
+    {
+        if(!pause)
+        {
+            dataStale = true;
+        }
+        paused = pause;
+    }
+}
+
+void SynthGraph::processSetPos(double pos)
+{
+    unsigned int newIdx = (int)pos;
+    if(currentIdx != newIdx)
+    {
+        dataStale = true;
+        currentIdx = newIdx;
+    }
+    mu = (pos - currentIdx);
+}
+
+void SynthGraph::processSetData(std::vector<double> *inData, unsigned int height, unsigned int width)
+{
+    paused = true;
+    data = inData;
+    dataWidth = width;
+    currentData.clear();
+    currentIdx = 0;
+    mu = 0.0;
+    calculateReturnPos();
+
+    if(dataHeight != height)
+    {
+        dataHeight = height;
+        currentData.resize(dataHeight);
+    }
 }
 
 void SynthGraph::calculateReturnPos()
