@@ -16,13 +16,16 @@ class Oscillator : public SynthItem
 public:
     Oscillator();
     float process() override;
+    float process(float in) override;
     void addChild(SynthItem* child, SON_CHILD_TYPE type) override;
     void removeChild(SynthItem* child) override;
     void setDataItem(std::vector<double> *data) override;
+    void setIndexes(std::vector<int> indexes) override;
+    void mute(bool mute) override;
+
     void setWaveform(SON_WAVEFORM waveform);
     void setFreq(double freq);
     void setFixedFreqs(bool fixed);
-    void setIndexes(std::vector<int> indexes);
 
 private:
 

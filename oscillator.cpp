@@ -51,6 +51,14 @@ void Oscillator::setIndexes(std::vector<int> indexes)
     commandBuffer.push(command);
 }
 
+void Oscillator::mute(bool mute)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::MUTE;
+    command.mute = mute;
+    commandBuffer.push(command);
+}
+
 
 void Oscillator::addChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type)
 {

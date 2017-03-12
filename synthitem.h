@@ -26,18 +26,18 @@ public:
 
     explicit SynthItem();
 
-    virtual float process();
-    virtual float process(float in);
-    virtual void setDataItem(std::vector<double>* data);
-    virtual void addChild(SynthItem *item, SON_CHILD_TYPE type);
-    virtual void removeChild(SynthItem *item);
-    virtual void mute(bool mute);
-    virtual void setIndexes(std::vector<int> indexes);
+    // pure virtual functions
+    virtual void setDataItem(std::vector<double>* data) = 0;
+    virtual float process() = 0;
+    virtual float process(float in) = 0;
+    virtual void addChild(SynthItem *item, SON_CHILD_TYPE type) = 0;
+    virtual void removeChild(SynthItem *item) = 0;
+    virtual void mute(bool mute) = 0;
+    virtual void setIndexes(std::vector<int> indexes) = 0;
 
 protected:
     bool muted;
     std::vector<double>* dataItem;
-    std::vector<int> dataIndexes;
 
 };
 

@@ -14,6 +14,7 @@ enum class SON_OSC_COMMAND_TYPE {
     FIXED_FREQS,
     ADD_CHILD,
     REMOVE_CHILD,
+    MUTE
 };
 
 typedef struct {
@@ -25,6 +26,7 @@ typedef struct {
     bool fixedFreqs;
     SynthItem* child;
     SynthItem::SON_CHILD_TYPE childType;
+    bool mute;
 } OscillatorCommand;
 
 }
