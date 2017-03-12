@@ -34,7 +34,7 @@ QtSynthItem* QtSynthGraph::createItem(ITEM_TYPE type)
     case AUDIFIER:
     {
         item = synthGraph.createItem((SynthGraph::SON_ITEM_TYPE)type);
-//        qtItem = new QtAudifier(item);
+        qtItem = new QtAudifier(item);
         break;
     }
     default:

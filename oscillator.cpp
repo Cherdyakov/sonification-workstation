@@ -157,6 +157,11 @@ void Oscillator::processSetIndexes(std::vector<int> indexes)
     muted = m;
 }
 
+void Oscillator::processMute(bool mute)
+{
+    muted = mute;
+}
+
 void Oscillator::retrieveCommands()
 {
     while(commandBuffer.pop(&currentCommand))
@@ -173,39 +178,43 @@ void Oscillator::processCommand(OscillatorCommand command)
     case SON_OSC_COMMAND_TYPE::ADD_CHILD:
     {
         processAddChild(command.child, command.childType);
-    }
         break;
+    }
     case SON_OSC_COMMAND_TYPE::DATA:
     {
         processSetDataItem(command.data);
-    }
         break;
+    }
     case SON_OSC_COMMAND_TYPE::FIXED_FREQS:
     {
         processSetFixedFreqs(command.fixedFreqs);
-    }
         break;
+    }
     case SON_OSC_COMMAND_TYPE::FREQ:
     {
         processSetFreq(command.freq);
-    }
         break;
+    }
     case SON_OSC_COMMAND_TYPE::INDEXES:
     {
         processSetIndexes(command.indexes);
-    }
         break;
+    }
     case SON_OSC_COMMAND_TYPE::REMOVE_CHILD:
     {
         processRemoveChild(command.child);
-    }
         break;
+    }
     case SON_OSC_COMMAND_TYPE::WAVEFORM:
     {
         processSetWaveform(command.waveform);
-    }
         break;
-
+    }
+    case SON_OSC_COMMAND_TYPE::MUTE:
+    {
+        processMute(command.mute);
+        break;
+    }
     default:
         break;
     }
@@ -304,6 +313,11 @@ float Oscillator::process()
         }
     }
     return sample / gens.size();
+}
+
+float Oscillator::process(float in)
+{
+    return in;
 }
 
 float Oscillator::visitAmods()

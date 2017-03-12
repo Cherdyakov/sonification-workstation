@@ -51,7 +51,8 @@ HEADERS += \
     enums.h \
     qtoscillator.h \
     qtsynthitem.h \
-    qtsynthgraph.h
+    qtsynthgraph.h \
+    audifiercommand.h
 
 FORMS +=
 

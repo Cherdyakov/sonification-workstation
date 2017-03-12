@@ -29,6 +29,14 @@ public:
 
 private:
 
+    // command buffering and parsing stuff
+    OscillatorCommand currentCommand;
+    void retrieveCommands();
+    void processCommand(OscillatorCommand command);
+    RingBuffer<OscillatorCommand> commandBuffer;
+
+    // actually implementing the commands on callback
+    // side of the command buffer
     void processAddChild(SynthItem* child, SON_CHILD_TYPE type);
     void processRemoveChild(SynthItem* child);
     void processSetDataItem(std::vector<double> *data);
@@ -36,11 +44,7 @@ private:
     void processSetFreq(double inFreq);
     void processSetFixedFreqs(bool fixed);
     void processSetIndexes(std::vector<int> indexes);
-
-    OscillatorCommand currentCommand;
-    void retrieveCommands();
-    void processCommand(OscillatorCommand command);
-    RingBuffer<OscillatorCommand> commandBuffer;
+    void processMute(bool mute);
 
     bool fixedFreqs;
     double freq;
@@ -60,6 +64,7 @@ private:
 
     void resize(unsigned int size);
     gam::AccumPhase<>* newGen(SON_WAVEFORM type);
+    std::vector<int> dataIndexes;
 
     float visitFmods();
     float visitAmods();
