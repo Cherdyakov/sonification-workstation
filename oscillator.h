@@ -34,6 +34,8 @@ private:
     void processSetFixedFreqs(bool fixed);
     void processSetIndexes(std::vector<int> indexes);
 
+    OscillatorCommand currentCommand;
+    void retrieveCommands();
     void processCommand(OscillatorCommand command);
     RingBuffer<OscillatorCommand> commandBuffer;
 

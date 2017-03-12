@@ -4,17 +4,27 @@
 #include <QObject>
 
 #include "synthgraph.h"
+#include "qtsynthitem.h"
+#include "qtoscillator.h"
 
 using namespace son;
 
 class QtSynthGraph : public QObject
 {
     Q_OBJECT
+    Q_ENUMS(ITEM_TYPE)
 public:
+
+    enum ITEM_TYPE {
+        OUT,
+        OSCILLATOR,
+        AUDIFIER
+    };
+
     explicit QtSynthGraph(QObject *parent = 0);
-    Q_INVOKABLE SynthItem *createItem(SynthItem::SON_ITEM_TYPE type);
-    Q_INVOKABLE void addToRoot(SynthItem* synthItem);
-    Q_INVOKABLE void removeFromRoot(SynthItem* synthItem);
+    Q_INVOKABLE QtSynthItem* createItem(ITEM_TYPE type);
+    Q_INVOKABLE void addToRoot(QtSynthItem* qtSynthItem);
+    Q_INVOKABLE void removeFromRoot(QtSynthItem* qtSynthItem);
 
     float processGraph();
     int graphSize();

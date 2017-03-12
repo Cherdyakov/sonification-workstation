@@ -5,7 +5,7 @@
 #include <atomic>
 #include <mutex>
 
-#include "synthitem.h"
+#include "qtsynthitem.h"
 #include "oscillator.h"
 #include "audifier.h"
 #include "ringbuffer.h"
@@ -18,9 +18,15 @@ class SynthGraph
 
 public:
 
+    enum SON_ITEM_TYPE {
+        OUT,
+        OSCILLATOR,
+        AUDIFIER
+    };
+
     explicit SynthGraph();
 
-    SynthItem *createItem(SynthItem::SON_ITEM_TYPE type);
+    SynthItem *createItem(SON_ITEM_TYPE type);
     void addToRoot(SynthItem* child);
     void removeFromRoot(SynthItem* child);
 

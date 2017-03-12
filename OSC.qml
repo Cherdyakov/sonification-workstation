@@ -7,17 +7,18 @@ import "Style.js" as Style
 SynthItem {
     id: root
     label: qsTr("OSC")
-    type: SynthGraph.OSCILLATOR
+    type: QtSynthGraph.OSCILLATOR
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
+        console.log("OSC Created")
     }
 
     Editor {
 
         id: editor
-        property int waveform: SynthItemImplementation.SINE
+        property int waveform: QtSynthItem.SINE
         property bool fixedFrequency: true
         property double frequency: 440
 
@@ -32,7 +33,7 @@ SynthItem {
         }
 
         onFixedFrequencyChanged: {
-            implementation.setFixedFreq(fixedFrequency)
+            implementation.setFixedFreqs(fixedFrequency)
         }
 
         onFrequencyChanged: {

@@ -5,20 +5,42 @@ QtSynthGraph::QtSynthGraph(QObject *parent) : QObject(parent)
 
 }
 
-SynthItem *QtSynthGraph::createItem(SynthItem::SON_ITEM_TYPE type)
+void QtSynthGraph::addToRoot(QtSynthItem *qtSynthItem)
 {
-    SynthItem* item = synthGraph.createItem(type);
-    return item;
+    synthGraph.addToRoot(qtSynthItem->implementation());
 }
 
-void QtSynthGraph::addToRoot(SynthItem *synthItem)
+void QtSynthGraph::removeFromRoot(QtSynthItem *qtSynthItem)
 {
-    synthGraph.addToRoot(synthItem);
+    synthGraph.removeFromRoot(qtSynthItem->implementation());
 }
 
-void QtSynthGraph::removeFromRoot(SynthItem *synthItem)
+QtSynthItem* QtSynthGraph::createItem(ITEM_TYPE type)
 {
-    synthGraph.removeFromRoot(synthItem);
+    SynthItem* item = NULL;
+    QtSynthItem* qtItem = NULL;
+
+    switch (type){
+    case ITEM_TYPE::OUT:
+    {
+        break;
+    }
+    case OSCILLATOR:
+    {
+        item = synthGraph.createItem((SynthGraph::SON_ITEM_TYPE)type);
+        qtItem = new QtOscillator(item);
+        break;
+    }
+    case AUDIFIER:
+    {
+        item = synthGraph.createItem((SynthGraph::SON_ITEM_TYPE)type);
+//        qtItem = new QtAudifier(item);
+        break;
+    }
+    default:
+        break;
+    }
+    return qtItem;
 }
 
 float QtSynthGraph::processGraph()

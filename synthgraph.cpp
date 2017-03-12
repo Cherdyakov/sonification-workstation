@@ -73,7 +73,7 @@ float SynthGraph::processGraph()
 
     std::vector<SynthItem*>::const_iterator i;
 
-    for (int i = 0; i < graphRoot.size(); ++i) {
+    for (unsigned int i = 0; i < graphRoot.size(); ++i) {
         SynthItem* item = graphRoot[i];
         s += item->process();
     }
@@ -85,23 +85,23 @@ float SynthGraph::processGraph()
     return s * masterVolume;
 }
 
-SynthItem* SynthGraph::createItem(SynthItem::SON_ITEM_TYPE type)
+SynthItem* SynthGraph::createItem(SON_ITEM_TYPE type)
 {
     SynthItem* item;
 
     switch (type){
-    case SynthItem::SON_ITEM_TYPE::OUT:
+    case OUT:
     {
         item = NULL;
         break;
     }
-    case SynthItem::SON_ITEM_TYPE::OSCILLATOR:
+    case OSCILLATOR:
     {
         item = new Oscillator();
         item->setDataItem(&currentData);
         break;
     }
-    case SynthItem::SON_ITEM_TYPE::AUDIFIER:
+    case AUDIFIER:
     {
         item = new Audifier();
         item->setDataItem(&currentData);

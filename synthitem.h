@@ -11,20 +11,14 @@ class SynthItem
 
 public:
 
-    enum class SON_ITEM_TYPE {
-        OUT,
-        OSCILLATOR,
-        AUDIFIER
-    };
-
-    enum class SON_CHILD_TYPE {
+    enum SON_CHILD_TYPE {
         IN,
         AMOD,
         FMOD,
         PMOD
     };
 
-    enum class SON_WAVEFORM {
+    enum SON_WAVEFORM {
         SINE,
         SAW,
         SQUARE

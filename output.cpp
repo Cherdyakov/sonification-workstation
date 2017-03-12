@@ -30,7 +30,7 @@ float Output::visitAmods()
 {
     float s = 0.0;
 
-    for (int i = 0; i < amods.size(); i++)
+    for (unsigned int i = 0; i < amods.size(); i++)
     {
         SynthItem* item = amods[i];
         s += item->process();

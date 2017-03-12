@@ -2,26 +2,29 @@
 #define QTOSCILLATOR_H
 
 #include <QObject>
+#include "qtsynthitem.h"
 #include "oscillator.h"
 
 using namespace son;
 
-class QtOscillator : public QObject
+class QtOscillator : public QtSynthItem
 {
     Q_OBJECT
 public:
-    explicit QtOscillator(QObject *parent = 0);
-    void addChild(SynthItem* child, SynthItem::SON_CHILD_TYPE type);
-    void removeChild(SynthItem* child);
+
+    explicit QtOscillator(SynthItem* item = 0, QObject *parent = 0);
+    void addChild(QtSynthItem* child, CHILD_TYPE type);
+    void removeChild(QtSynthItem* child);
     void setDataItem(std::vector<double> *data);
 
-    Q_INVOKABLE void setWaveform(SynthItem::SON_WAVEFORM waveform);
+    Q_INVOKABLE void setWaveform(WAVEFORM waveform);
     Q_INVOKABLE void setFreq(double freq);
     Q_INVOKABLE void setFixedFreqs(bool fixed);
-    Q_INVOKABLE void setIndexes(std::vector<int> indexes);
+    Q_INVOKABLE void setIndexes(QVector<int> indexes);
 
 private:
-    Oscillator oscillator;
+    Oscillator* oscillator;
+
 signals:
 
 public slots:

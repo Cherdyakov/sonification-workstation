@@ -149,6 +149,14 @@ void Oscillator::processSetIndexes(std::vector<int> indexes)
     muted = m;
 }
 
+void Oscillator::retrieveCommands()
+{
+    while(commandBuffer.pop(&currentCommand))
+    {
+        processCommand(currentCommand);
+    }
+}
+
 void Oscillator::processCommand(OscillatorCommand command)
 {
     SON_OSC_COMMAND_TYPE type = command.type;
@@ -234,8 +242,12 @@ gam::AccumPhase<> *Oscillator::newGen(SON_WAVEFORM type)
 
 float Oscillator::process()
 {
-    //sample we will ultimately return
     float sample = 0.0;
+
+    if(!commandBuffer.empty())
+    {
+        retrieveCommands();
+    }
 
     if(muted)
     {

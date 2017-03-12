@@ -19,8 +19,7 @@ Item {
     property string label: "SON"
     property string mainColor
     property string textColor
-    property SynthItemImplementation implementation: null //the CPP implementation of this SynthItem
-
+    property QtSynthItem implementation: null //the CPP implementation of this SynthItem
     property alias radius: rect.radius
 
     signal clickedItem(var i)
@@ -88,7 +87,7 @@ Item {
 
     function create() {
         created = true
-        implementation =  graph.createItem(this, type)
+        implementation = graph.createItem(type)
         canvas.requestPaint()
     }
 
