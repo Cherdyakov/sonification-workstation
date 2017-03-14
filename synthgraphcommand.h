@@ -1,11 +1,9 @@
-#ifndef SYNTHCOMMAND_H
-#define SYNTHCOMMAND_H
-
-#include <vector>
+#ifndef SYNTHGRAPHCOMMAND_H
+#define SYNTHGRAPHCOMMAND_H
 
 namespace son {
 
-enum class SynthCommandType {
+enum class SynthGraphCommandType {
     PAUSE,
     POSITION,
     SPEED,
@@ -16,7 +14,7 @@ enum class SynthCommandType {
 
 typedef struct {
 
-    SynthCommandType type;
+    SynthGraphCommandType type;
     bool paused;
     double pos;
     double speed;
@@ -27,8 +25,8 @@ typedef struct {
     unsigned int height;
     unsigned int width;
 
-} SynthCommand;
+} SynthGraphCommand;
 
 } //namespace son
 
-#endif // SYNTHCOMMAND_H
+#endif // SYNTHGRAPHCOMMAND_H

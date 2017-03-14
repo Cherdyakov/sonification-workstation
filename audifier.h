@@ -4,8 +4,8 @@
 #include <algorithm>
 
 #include "synthitem.h"
-#include "audifiercommand.h"
 #include "ringbuffer.h"
+#include "audifiercommand.h"
 
 namespace son {
 
@@ -43,6 +43,6 @@ private:
 
 };
 
-}
+} // namespace son
 
 #endif // AUDIFIER_H

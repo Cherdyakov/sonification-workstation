@@ -18,31 +18,23 @@ public:
     explicit QtSynthItem(QObject *parent = 0);
 
     enum CHILD_TYPE {
-        IN,
+        IN = (int)SynthItem::SON_CHILD_TYPE::IN,
         AMOD,
         FMOD,
         PMOD
     };
 
     enum WAVEFORM {
-        SINE,
+        SINE = (int)SynthItem::SON_WAVEFORM::SINE,
         SAW,
         SQUARE
     };
 
-//    typedef SynthItem::SON_ITEM_TYPE ITEM_TYPE;
-//    typedef SynthItem::SON_CHILD_TYPE CHILD_TYPE;
-//    typedef SynthItem::SON_WAVEFORM WAVEFORM;
-//    qRegisterMetaType<QtSynthItem::ITEM_TYPE>("QtSynthItem::ITEM_TYPE")`
-
     virtual SynthItem* implementation();
-    virtual float process();
-    virtual float process(float in);
-    virtual void setDataItem(QVector<double>* data);
     Q_INVOKABLE virtual void addChild(QtSynthItem *child, CHILD_TYPE type);
     Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
     Q_INVOKABLE virtual void mute(bool mute);
-    Q_INVOKABLE virtual void setIndexes(QVector<int> indexes);
+    Q_INVOKABLE virtual void setIndexes(QVector<int> indexes, QString parameter);
 
 protected:
     SynthItem* synthItem;

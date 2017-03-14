@@ -1,6 +1,7 @@
 #ifndef AUDIFIERCOMMAND_H
 #define AUDIFIERCOMMAND_H
 
+#include <vector>
 #include "synthitem.h"
 
 namespace son {

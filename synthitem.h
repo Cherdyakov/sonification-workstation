@@ -38,6 +38,7 @@ public:
 protected:
     bool muted;
     std::vector<double>* dataItem;
+    SynthItem* synthItem;
 
 };
 

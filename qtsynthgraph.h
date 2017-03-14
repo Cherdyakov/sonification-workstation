@@ -6,6 +6,7 @@
 #include "synthgraph.h"
 #include "qtsynthitem.h"
 #include "qtoscillator.h"
+#include "qtaudifier.h"
 
 using namespace son;
 

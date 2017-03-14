@@ -18,7 +18,8 @@ SOURCES += \
     playhead.cpp \
     qtoscillator.cpp \
     qtsynthitem.cpp \
-    qtsynthgraph.cpp
+    qtsynthgraph.cpp \
+    qtaudifier.cpp
 
 RESOURCES += qml.qrc
 
@@ -46,13 +47,14 @@ HEADERS += \
     ../../../CodeLibs/qcustomplot/qcustomplot.h \
     plotter.h \
     playhead.h \
-    synthcommand.h \
-    oscillatorcommand.h \
     enums.h \
     qtoscillator.h \
     qtsynthitem.h \
     qtsynthgraph.h \
-    audifiercommand.h
+    audifiercommand.h \
+    qtaudifier.h \
+    synthitemcommand.h \
+    synthgraphcommand.h
 
 FORMS +=
 
