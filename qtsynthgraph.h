@@ -5,22 +5,13 @@
 
 #include "synthgraph.h"
 #include "qtsynthitem.h"
-#include "qtoscillator.h"
-#include "qtaudifier.h"
 
 using namespace son;
 
 class QtSynthGraph : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(ITEM_TYPE)
 public:
-
-    enum ITEM_TYPE {
-        OUT,
-        OSCILLATOR,
-        AUDIFIER
-    };
 
     explicit QtSynthGraph(QObject *parent = 0);
     Q_INVOKABLE QtSynthItem* createItem(ITEM_TYPE type);

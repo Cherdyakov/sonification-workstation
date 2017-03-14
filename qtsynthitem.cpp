@@ -14,21 +14,20 @@ SynthItem *QtSynthItem::implementation()
 
 void QtSynthItem::addChild(QtSynthItem *child, CHILD_TYPE type)
 {
-    (void)child;
-    (void)type;
+    synthItem->addChild(child, type);
 }
 
 void QtSynthItem::removeChild(QtSynthItem *child)
 {
-    (void)child;
+    synthItem->removeChild(child);
 }
 
 void QtSynthItem::mute(bool mute)
 {
-    (void)mute;
+    synthItem->mute(mute);
 }
 
 void QtSynthItem::setIndexes(QVector<int> indexes)
 {
-    (void)indexes;
+    synthItem->setIndexes(indexes);
 }

@@ -48,7 +48,6 @@ HEADERS += \
     plotter.h \
     playhead.h \
     enums.h \
-    qtoscillator.h \
     qtsynthitem.h \
     qtsynthgraph.h \
     audifiercommand.h \

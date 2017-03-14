@@ -21,7 +21,6 @@ typedef struct {
     SYNTH_ITEM_COMMAND_TYPE type;
     std::vector<double>* data;
     SynthItem* child;
-    SynthItem::SON_CHILD_TYPE childType;
     std::vector<int> paramIndexes;
     std::string paramName;
     std::vector<double> paramValues;
