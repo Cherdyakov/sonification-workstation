@@ -9,7 +9,6 @@
 #include "oscillator.h"
 #include "audifier.h"
 #include "ringbuffer.h"
-#include "synthcommand.h"
 
 namespace son {
 
@@ -18,15 +17,38 @@ class SynthGraph
 
 public:
 
-    enum SON_ITEM_TYPE {
+    enum class ITEM_TYPE {
         OUT,
         OSCILLATOR,
         AUDIFIER
     };
 
+    enum class SynthGraphCommandType {
+        PAUSE,
+        POSITION,
+        SPEED,
+        LOOP,
+        LOOP_POINTS,
+        DATA
+    };
+
+    typedef struct {
+
+        SynthGraphCommandType type;
+        bool paused;
+        double pos;
+        double speed;
+        bool looping;
+        double loopBegin;
+        double loopEnd;
+        std::vector<double>* data;
+        unsigned int height;
+        unsigned int width;
+    } SynthGraphCommand;
+
     explicit SynthGraph();
 
-    SynthItem *createItem(SON_ITEM_TYPE type);
+    SynthItem *createItem(ITEM_TYPE type);
     void addToRoot(SynthItem* child);
     void removeFromRoot(SynthItem* child);
 
@@ -65,11 +87,11 @@ private:
     // from outside (i.e. GUI)
     std::atomic<double> returnPos;
 
-    SynthCommand currentCommand;
+    SynthGraphCommand currentCommand;
     std::vector<SynthItem*> graphRoot;
     std::vector<double>* data;
     std::vector<double> currentData;
-    RingBuffer<SynthCommand> commandBuffer;
+    RingBuffer<SynthGraphCommand> commandBuffer;
     bool dataStale;
     bool paused;
     bool looping;
@@ -78,7 +100,7 @@ private:
     double mu;
     void retrieveData();
     void retrieveCommands();
-    void processCommand(SynthCommand command);
+    void processCommand(SynthGraphCommand command);
     void calculateReturnPos();
 
 };

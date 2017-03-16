@@ -6,19 +6,19 @@ SynthItem::SynthItem()
 {
     muted = false;
     dataItem = NULL;
-    type = SYNTH_ITEM_TYPE::NONE;
+    myType = ITEM_TYPE::NONE;
 }
 
-SynthItem::SYNTH_ITEM_TYPE SynthItem::type()
+SynthItem::ITEM_TYPE SynthItem::type()
 {
-    return type;
+    return myType;
 }
 
 void SynthItem::mute(bool mute)
 {
     SynthItemCommand command;
     command.type = SYNTH_ITEM_COMMAND_TYPE::MUTE;
-    command.mute = mute;
+    command.boolData = mute;
     commandBuffer.push(command);
 }
 
@@ -26,7 +26,7 @@ void SynthItem::setParameterIndexes(std::vector<int> indexes, std::__cxx11::stri
 {
     SynthItemCommand command;
     command.type = SYNTH_ITEM_COMMAND_TYPE::PARAM_INDEXES;
-    command.paramIndexes = indexes;
+    command.intVec = indexes;
     command.paramName = param;
     commandBuffer.push(command);
 }
@@ -48,11 +48,12 @@ void SynthItem::removeChild(SynthItem *child)
     commandBuffer.push(command);
 }
 
-void SynthItem::addChild(SynthItem *child)
+void SynthItem::addChild(SynthItem *child, CHILD_TYPE type)
 {
     SynthItemCommand command;
     command.type = SYNTH_ITEM_COMMAND_TYPE::ADD_CHILD;
     command.child = child;
+    command.childType = type;
     commandBuffer.push(command);
 }
 
@@ -89,22 +90,22 @@ void SynthItem::parseCommand(SynthItemCommand command)
     switch (type) {
     case SYNTH_ITEM_COMMAND_TYPE::DATA:
     {
-        processSetDataItem(command.data);
+        processSetDataItem((std::vector<double>*)command.ptr);
         break;
     }
     case SYNTH_ITEM_COMMAND_TYPE::ADD_CHILD:
     {
-        processAddChild(command.child);
+        processAddChild((SynthItem*)command.ptr, (CHILD_TYPE)command.intsData[0]);
         break;
     }
     case SYNTH_ITEM_COMMAND_TYPE::REMOVE_CHILD:
     {
-        processRemoveChild(command.child);
+        processRemoveChild((SynthItem*)command.ptr);
         break;
     }
     case SYNTH_ITEM_COMMAND_TYPE::MUTE:
     {
-        processMute(command.mute);
+        processMute(command.boolData);
         break;
     }
     case SYNTH_ITEM_COMMAND_TYPE::DELETE:
@@ -121,12 +122,13 @@ void SynthItem::processSetDataItem(std::vector<double> *data)
     dataItem = data;
 }
 
-void SynthItem::processAddChild(SynthItem *child)
+void SynthItem::processAddChild(SynthItem *child, CHILD_TYPE type)
 {
-    if(std::find(children.begin(), children.end(), item) != children.end()) {
+    if(std::find(children.begin(), children.end(), child) != children.end()) {
         return;
     } else {
         children.push_back(child);
+        (void)type;
     }
 }
 

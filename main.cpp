@@ -5,7 +5,6 @@
 #include <samplerate.h>
 
 #include "qtsynthitem.h"
-#include "qtoscillator.h"
 #include "mainwindow.h"
 #include "rtaudio/RtAudio.h"
 #include "callback.h"

@@ -51,9 +51,7 @@ HEADERS += \
     qtsynthitem.h \
     qtsynthgraph.h \
     audifiercommand.h \
-    qtaudifier.h \
-    synthitemcommand.h \
-    synthgraphcommand.h
+    qtaudifier.h
 
 FORMS +=
 

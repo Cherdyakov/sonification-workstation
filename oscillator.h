@@ -12,7 +12,8 @@ namespace son {
 class Oscillator : public SynthItem
 {
 
-    const std::string FREQS = "freqs";
+    const std::string kFrequency = "frequency";
+    const std::string kWaveform = "waveform";
 
 public:
     Oscillator();
@@ -35,7 +36,11 @@ private:
     void resize(unsigned int size);
     gam::AccumPhase<>* newGen(WAVEFORM type);
 
-    float visitChildren();
+    void visitChildren();
+    float fmSample;
+    float amSample;
+    std::vector<SynthItem*> amChildren;
+    std::vector<SynthItem*> fmChildren;
     void setFreqs();
 
 };

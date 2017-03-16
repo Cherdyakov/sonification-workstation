@@ -13,8 +13,14 @@ class QtSynthGraph : public QObject
     Q_OBJECT
 public:
 
+    enum SON_ITEM_TYPE {
+        OUT = (int)SynthGraph::ITEM_TYPE::OUT,
+        OSCILLATOR,
+        AUDIFIER
+    };
+
     explicit QtSynthGraph(QObject *parent = 0);
-    Q_INVOKABLE QtSynthItem* createItem(ITEM_TYPE type);
+    Q_INVOKABLE QtSynthItem* createItem(SON_ITEM_TYPE type);
     Q_INVOKABLE void addToRoot(QtSynthItem* qtSynthItem);
     Q_INVOKABLE void removeFromRoot(QtSynthItem* qtSynthItem);
 

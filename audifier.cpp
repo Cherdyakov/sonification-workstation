@@ -110,7 +110,7 @@ void Audifier::processCommand(AudifierCommand command)
     }
 }
 
-void Audifier::processAddChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type)
+void Audifier::processAddChild(SynthItem *child, CHILD_TYPE type)
 {
     switch (type){
     case SON_CHILD_TYPE::AMOD: {

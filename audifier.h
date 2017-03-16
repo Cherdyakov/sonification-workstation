@@ -16,11 +16,6 @@ public:
     Audifier();
     float process() override;
     float process(float in) override;
-    void addChild(SynthItem* child, SON_CHILD_TYPE type) override;
-    void removeChild(SynthItem* child) override;
-    void setDataItem(std::vector<double> *data) override;
-    void setIndexes(std::vector<int> indexes) override;
-    void mute(bool mute) override;
 
 private:
 
@@ -30,7 +25,7 @@ private:
     void processCommand(AudifierCommand command);
     RingBuffer<AudifierCommand> commandBuffer;
 
-    void processAddChild(SynthItem* child, SON_CHILD_TYPE type);
+    void processAddChild(SynthItem* child, CHILD_TYPE type);
     void processRemoveChild(SynthItem* child);
     void processSetDataItem(std::vector<double> *data);
     void processSetIndexes(std::vector<int> indexes);

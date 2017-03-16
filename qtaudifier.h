@@ -11,7 +11,7 @@ class QtAudifier : public QtSynthItem
 public:
     explicit QtAudifier(SynthItem *item, QObject *parent = 0);
 
-    void addChild(QtSynthItem* child, CHILD_TYPE type) override;
+    void addChild(QtSynthItem* child, SON_CHILD_TYPE type) override;
     void removeChild(QtSynthItem* child) override;
 
     Q_INVOKABLE void setIndexes(QVector<int> indexes);

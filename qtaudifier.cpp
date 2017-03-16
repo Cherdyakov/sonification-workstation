@@ -5,7 +5,7 @@ QtAudifier::QtAudifier(SynthItem *item, QObject *parent) : QtSynthItem(parent)
     synthItem = item;
 }
 
-void QtAudifier::addChild(QtSynthItem *child, QtSynthItem::CHILD_TYPE type)
+void QtAudifier::addChild(QtSynthItem *child, QtSynthItem::SON_CHILD_TYPE type)
 {
     audifier = dynamic_cast<Audifier*>(item);
     audifier->addChild(child->implementation(), (SynthItem::SON_CHILD_TYPE)type);

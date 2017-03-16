@@ -19,7 +19,7 @@ typedef struct {
     std::vector<double>* data;
     std::vector<int> indexes;
     SynthItem* child;
-    SynthItem::SON_CHILD_TYPE childType;
+    SynthItem::CHILD_TYPE childType;
     bool mute;
 } AudifierCommand;
 

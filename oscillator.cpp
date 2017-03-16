@@ -8,69 +8,8 @@ Oscillator::Oscillator()
     gam::Sine<>* defaultGen = new gam::Sine<>(440);
     gens.push_back(defaultGen);
     freqValues.push_back(440.0);
-    freqsFixed = true;
+    freqFixed = true;
 }
-
-void Oscillator::parseCommand(SynthItemCommand command)
-{
-    SYNTH_ITEM_COMMAND_TYPE type = command.type;
-
-    switch (type) {
-
-    case SYNTH_ITEM_COMMAND_TYPE::PARAM_FIXED:
-    {
-        processSetParameterFixed(command.paramFixed, command.paramName);
-        break;
-    }
-    case SYNTH_ITEM_COMMAND_TYPE::PARAM_INDEXES:
-    {
-        processSetParameterIndexes(command.paramIndexes, command.paramName);
-        break;
-    }
-    case SYNTH_ITEM_COMMAND_TYPE::PARAM_VALUES:
-    {
-        processSetParameterValues(command.paramValues, command.paramName);
-        break;
-    }
-    default:
-        SynthItem::parseCommand(command);
-        break;
-    }
-}
-
-void Oscillator::processSetWaveform(WAVEFORM waveType)
-{
-    if (waveform != waveType) {
-        waveform = waveType;
-    }
-}
-
-void Oscillator::processSetFreq(double inFreq)
-{
-    if (freq != inFreq) {
-        freq = inFreq;
-    }
-}
-
-void Oscillator::processSetFixedFreqs(bool fixed)
-{
-    freqFixed = fixed;
-}
-
-void Oscillator::processSetIndexes(std::vector<int> indexes)
-{
-    bool m = muted;
-    if(!muted) {
-        muted = true;
-    }
-    dataIndexes = indexes;
-
-    resize(dataIndexes.size());
-
-    muted = m;
-}
-
-
 
 void Oscillator::resize(unsigned int size)
 {
@@ -169,7 +108,7 @@ float Oscillator::process()
 
 void Oscillator::processSetParameterIndexes(std::vector<int> indexes, std::__cxx11::string param)
 {
-    if(param = FREQS)
+    if(param == kFrequency)
     {
         freqIndexes = indexes;
     }
@@ -177,37 +116,46 @@ void Oscillator::processSetParameterIndexes(std::vector<int> indexes, std::__cxx
 
 void Oscillator::processSetParameterValues(std::vector<double> values, std::__cxx11::string param)
 {
-    if(param = FREQS)
+    if(param == kFrequency)
     {
         freqValues = values;
+    }
+    if(param == kWaveform)
+    {
+        if(wave)
     }
 }
 
 void Oscillator::processSetParameterFixed(bool fixed, std::__cxx11::string param)
 {
-    if(param = FREQS)
+    if(param == kFrequency)
     {
         freqFixed = fixed;
     }
 }
 
-float Oscillator::visitChildren()
+void Oscillator::visitChildren()
 {
-    float s = 0.0;
-    for (unsigned int i = 0; i < children.size(); ++i)
+    amSample = 0.0;
+    fmSample = 0.0;
+    for (unsigned int i = 0; i < fmChildren.size(); ++i)
     {
-        SynthItem* gen = children[i];
-        s += gen->process();
+        SynthItem* gen = fmChildren[i];
+        fmSample += gen->process();
     }
-    return s;
+    for (unsigned int i = 0; i < amChildren.size(); ++i)
+    {
+        SynthItem* gen = amChildren[i];
+        amSample += gen->process();
+    }
 }
 
 void Oscillator::setFreqs()
 {
-    if (dataIndexes.size() < 1) //no data mappings, use fixed freq
+    if (freqIndexes.size() < 1) //no data mappings, use fixed freq
     {
         for (unsigned int i = 0; i < gens.size(); ++i) {
-            gens[i]->freq(freq);
+            gens[i]->(freq);
         }
     }
     else //map each indexed value from the data row to the freq of a generator

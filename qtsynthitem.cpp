@@ -12,7 +12,7 @@ SynthItem *QtSynthItem::implementation()
     return synthItem;
 }
 
-void QtSynthItem::addChild(QtSynthItem *child, CHILD_TYPE type)
+void QtSynthItem::addChild(QtSynthItem *child, SON_CHILD_TYPE type)
 {
     synthItem->addChild(child, type);
 }
