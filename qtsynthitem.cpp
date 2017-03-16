@@ -14,16 +14,12 @@ SynthItem *QtSynthItem::implementation()
 
 float QtSynthItem::process()
 {
-    float s = 0;
-    s = synthItem->process();
-    return s;
+    return synthItem->process();
 }
 
 float QtSynthItem::process(float in)
 {
-    float s = 0;
-    s = synthItem->process(in);
-    return s;
+    return synthItem->process(in);
 }
 
 void QtSynthItem::setDataItem(QVector<double> *data)

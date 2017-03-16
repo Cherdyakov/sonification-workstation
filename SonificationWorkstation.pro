@@ -18,7 +18,8 @@ SOURCES += \
     playhead.cpp \
     qtoscillator.cpp \
     qtsynthitem.cpp \
-    qtsynthgraph.cpp
+    qtsynthgraph.cpp \
+    qtaudifier.cpp
 
 RESOURCES += qml.qrc
 
@@ -52,7 +53,8 @@ HEADERS += \
     qtoscillator.h \
     qtsynthitem.h \
     qtsynthgraph.h \
-    audifiercommand.h
+    audifiercommand.h \
+    qtaudifier.h
 
 FORMS +=
 
