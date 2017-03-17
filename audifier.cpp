@@ -21,16 +21,14 @@ float Audifier::process()
     }
     if(dataItem)
     {
-        sample = (dataItem->at(0) / 1000000000.0);
+        for(unsigned int i = 0; i < dataIndexes.size(); i++)
+        {
+            sample += (dataItem->at(dataIndexes[i]) / 1000000000.0);
+        }
     }
 
-//    for(int i = 0; i < dataIndexes.count(); i++) {
-////        qDebug() << dataColumn->at(dataIndexes[i]);
-//        s = (dataColumn->at(dataIndexes[i]) / 32800.0) * 0.2;
-//    }
-
     //visit amods eventually goes here
-    return sample;
+    return sample /  dataIndexes.size();
 }
 
 float Audifier::process(float in)
@@ -43,6 +41,7 @@ void Audifier::addChild(SynthItem *child, SON_CHILD_TYPE type)
     AudifierCommand command;
     command.type = SON_AUD_COMMAND_TYPE::ADD_CHILD;
     command.child = child;
+    command.childType = type;
     commandBuffer.push(command);
 }
 
@@ -159,8 +158,6 @@ void Audifier::processSetIndexes(std::vector<int> indexes)
     }
     dataIndexes = indexes;
 
-    resize(dataIndexes.size());
-
     muted = m;
 }
 
@@ -178,11 +175,6 @@ float Audifier::visitAmods()
         s += gen->process();
     }
     return s;
-}
-
-void Audifier::resize(unsigned int size)
-{
-    // resize
 }
 
 }

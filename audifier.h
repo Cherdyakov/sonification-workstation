@@ -39,7 +39,6 @@ private:
     std::vector<int> dataIndexes;
     std::vector<SynthItem*> amods;
     float visitAmods();
-    void resize(unsigned int size);
 
 };
 
