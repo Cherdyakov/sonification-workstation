@@ -9,9 +9,20 @@ Audifier::Audifier()
 
 float Audifier::process()
 {
-    float s = 0.0;
+    float sample = 0.0;
 
-    s = (dataItem->at(0) / 1000000000.0);
+    if(!commandBuffer.empty())
+    {
+        retrieveCommands();
+    }
+    if(muted)
+    {
+        return sample;
+    }
+    if(dataItem)
+    {
+        sample = (dataItem->at(0) / 1000000000.0);
+    }
 
 //    for(int i = 0; i < dataIndexes.count(); i++) {
 ////        qDebug() << dataColumn->at(dataIndexes[i]);
@@ -19,7 +30,7 @@ float Audifier::process()
 //    }
 
     //visit amods eventually goes here
-    return s;
+    return sample;
 }
 
 float Audifier::process(float in)
