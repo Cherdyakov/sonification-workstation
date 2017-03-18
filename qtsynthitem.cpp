@@ -38,6 +38,16 @@ void QtSynthItem::removeChild(QtSynthItem *child)
     synthItem->removeChild(child->implementation());
 }
 
+void QtSynthItem::addParent(QtSynthItem *parent)
+{
+    synthItem->addParent(parent->implementation());
+}
+
+void QtSynthItem::removeParent(QtSynthItem *parent)
+{
+    synthItem->removeParent(parent->implementation());
+}
+
 void QtSynthItem::mute(bool mute)
 {
     synthItem->mute(mute);

@@ -41,6 +41,8 @@ public:
     virtual void setDataItem(QVector<double>* data);
     Q_INVOKABLE virtual void addChild(QtSynthItem *child, CHILD_TYPE type);
     Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
+    Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
+    Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void mute(bool mute);
     Q_INVOKABLE virtual void setIndexes(QVector<int> indexes);
 
