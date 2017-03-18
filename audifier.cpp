@@ -40,8 +40,7 @@ void Audifier::addChild(SynthItem *child, SON_CHILD_TYPE type)
 {
     AudifierCommand command;
     command.type = SON_AUD_COMMAND_TYPE::ADD_CHILD;
-    command.child = child;
-    command.childType = type;
+    command.item = child;
     commandBuffer.push(command);
 }
 
@@ -49,7 +48,23 @@ void Audifier::removeChild(SynthItem *child)
 {
     AudifierCommand command;
     command.type = SON_AUD_COMMAND_TYPE::REMOVE_CHILD;
-    command.child = child;
+    command.item = child;
+    commandBuffer.push(command);
+}
+
+void Audifier::addParent(SynthItem *parent)
+{
+    AudifierCommand command;
+    command.type = SON_AUD_COMMAND_TYPE::ADD_PARENT;
+    command.item = parent;
+    commandBuffer.push(command);
+}
+
+void Audifier::removeParent(SynthItem *parent)
+{
+    AudifierCommand command;
+    command.type = SON_AUD_COMMAND_TYPE::REMOVE_PARENT;
+    command.item = parent;
     commandBuffer.push(command);
 }
 
@@ -92,7 +107,7 @@ void Audifier::processCommand(AudifierCommand command)
     switch (type) {
     case SON_AUD_COMMAND_TYPE::ADD_CHILD:
     {
-        processAddChild(command.child, command.childType);
+        processAddChild(command.item, command.itemType);
         break;
     }
     case SON_AUD_COMMAND_TYPE::DATA:
@@ -107,7 +122,7 @@ void Audifier::processCommand(AudifierCommand command)
     }
     case SON_AUD_COMMAND_TYPE::REMOVE_CHILD:
     {
-        processRemoveChild(command.child);
+        processRemoveChild(command.item);
         break;
     }
     case SON_AUD_COMMAND_TYPE::MUTE:
@@ -139,6 +154,20 @@ void Audifier::processAddChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type)
 void Audifier::processRemoveChild(SynthItem *child)
 {
     amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
+}
+
+void Audifier::processAddParent(SynthItem *parent)
+{
+    if(std::find(parents.begin(), parents.end(), parent) != parents.end()) {
+        return;
+    } else {
+        parents.push_back(parent);
+    }
+}
+
+void Audifier::processRemoveParent(SynthItem *parent)
+{
+    parents.erase(std::remove(parents.begin(), parents.end(), parent), parents.end());
 }
 
 void Audifier::processSetDataItem(std::vector<double> *data)

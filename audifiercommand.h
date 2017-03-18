@@ -10,6 +10,8 @@ enum class SON_AUD_COMMAND_TYPE {
     INDEXES,
     ADD_CHILD,
     REMOVE_CHILD,
+    ADD_PARENT,
+    REMOVE_PARENT,
     MUTE
 };
 
@@ -17,8 +19,8 @@ typedef struct {
     SON_AUD_COMMAND_TYPE type;
     std::vector<double>* data;
     std::vector<int> indexes;
-    SynthItem* child;
-    SynthItem::SON_CHILD_TYPE childType;
+    SynthItem* item;
+    SynthItem::SON_CHILD_TYPE itemType;
     bool mute;
 } AudifierCommand;
 

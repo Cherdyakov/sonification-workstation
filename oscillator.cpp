@@ -64,8 +64,7 @@ void Oscillator::addChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type)
 {
     OscillatorCommand command;
     command.type = SON_OSC_COMMAND_TYPE::ADD_CHILD;
-    command.child = child;
-    command.childType = type;
+    command.item = child;
     commandBuffer.push(command);
 }
 
@@ -73,30 +72,44 @@ void Oscillator::removeChild(SynthItem *child)
 {
     OscillatorCommand command;
     command.type = SON_OSC_COMMAND_TYPE::ADD_CHILD;
-    command.child = child;
+    command.item = child;
+    commandBuffer.push(command);
+}
+
+void Oscillator::addParent(SynthItem *parent)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::ADD_PARENT;
+    command.item = parent;
+    commandBuffer.push(command);
+}
+
+void Oscillator::removeParent(SynthItem *parent)
+{
+    OscillatorCommand command;
+    command.type = SON_OSC_COMMAND_TYPE::REMOVE_PARENT;
+    command.item = parent;
     commandBuffer.push(command);
 }
 
 void Oscillator::processAddChild(SynthItem *child, SON_CHILD_TYPE type)
 {
-    SynthItem* item = static_cast<SynthItem*>(child);
-
     switch (type){
     case SON_CHILD_TYPE::AMOD:
     {
-        if(std::find(amods.begin(), amods.end(), item) != amods.end()) {
+        if(std::find(amods.begin(), amods.end(), child) != amods.end()) {
             return;
         } else {
-            amods.push_back(item);
+            amods.push_back(child);
         }
         break;
     }
     case SON_CHILD_TYPE::FMOD:
     {
-        if(std::find(fmods.begin(), fmods.end(), item) != fmods.end()) {
+        if(std::find(fmods.begin(), fmods.end(), child) != fmods.end()) {
             return;
         } else {
-            fmods.push_back(item);
+            fmods.push_back(child);
         }
         break;
     }
@@ -109,6 +122,20 @@ void Oscillator::processRemoveChild(SynthItem *child)
 {
     amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
     fmods.erase(std::remove(fmods.begin(), fmods.end(), child), fmods.end());
+}
+
+void Oscillator::processAddParent(SynthItem *parent)
+{
+    if(std::find(parents.begin(), parents.end(), parent) != parents.end()) {
+        return;
+    } else {
+        parents.push_back(parent);
+    }
+}
+
+void Oscillator::processRemoveParent(SynthItem *parent)
+{
+    parents.erase(std::remove(parents.begin(), parents.end(), parent), parents.end());
 }
 
 void Oscillator::processSetDataItem(std::vector<double> *data)
@@ -177,7 +204,7 @@ void Oscillator::processCommand(OscillatorCommand command)
     switch (type) {
     case SON_OSC_COMMAND_TYPE::ADD_CHILD:
     {
-        processAddChild(command.child, command.childType);
+        processAddChild(command.item, command.itemType);
         break;
     }
     case SON_OSC_COMMAND_TYPE::DATA:
@@ -202,7 +229,7 @@ void Oscillator::processCommand(OscillatorCommand command)
     }
     case SON_OSC_COMMAND_TYPE::REMOVE_CHILD:
     {
-        processRemoveChild(command.child);
+        processRemoveChild(command.item);
         break;
     }
     case SON_OSC_COMMAND_TYPE::WAVEFORM:

@@ -14,6 +14,8 @@ enum class SON_OSC_COMMAND_TYPE {
     FIXED_FREQS,
     ADD_CHILD,
     REMOVE_CHILD,
+    ADD_PARENT,
+    REMOVE_PARENT,
     MUTE
 };
 
@@ -24,8 +26,8 @@ typedef struct {
     SynthItem::SON_WAVEFORM waveform;
     int freq;
     bool fixedFreqs;
-    SynthItem* child;
-    SynthItem::SON_CHILD_TYPE childType;
+    SynthItem* item;
+    SynthItem::SON_CHILD_TYPE itemType;
     bool mute;
 } OscillatorCommand;
 

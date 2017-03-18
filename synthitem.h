@@ -32,12 +32,15 @@ public:
     virtual float process(float in) = 0;
     virtual void addChild(SynthItem *item, SON_CHILD_TYPE type) = 0;
     virtual void removeChild(SynthItem *item) = 0;
+    virtual void addParent(SynthItem* parent) = 0;
+    virtual void removeParent(SynthItem* parent) = 0;
     virtual void mute(bool mute) = 0;
     virtual void setIndexes(std::vector<int> indexes) = 0;
 
 protected:
     bool muted;
     std::vector<double>* dataItem;
+    std::vector<SynthItem*> parents;
 
 };
 
