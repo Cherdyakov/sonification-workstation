@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     //title and size window
     this->setWindowTitle("Sonification Workstation");
-    resize(QDesktopWidget().availableGeometry(this).size() * 0.875);
+    resize(QDesktopWidget().availableGeometry(this).size() * 0.95);
 
     createActions();
     createMenus();
@@ -74,8 +74,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setCentralWidget(mainWidget);
 
     QList<int> sizes;
-    sizes.append(0.6 * sizeHint().height());
-    sizes.append(0.4 * sizeHint().height());
+    sizes.append(this->width() * 0.65);
+    sizes.append(this->width() * 0.35);
     splitter->setSizes(sizes);
 
     /* connect non-ui slots and signals */
