@@ -19,8 +19,6 @@ public:
     float process(float in) override;
     void addChild(SynthItem* child, SON_CHILD_TYPE type) override;
     void removeChild(SynthItem* child) override;
-    void addParent(SynthItem* parent) override;
-    void removeParent(SynthItem* parent) override;
     void setDataItem(std::vector<double> *data) override;
     void setIndexes(std::vector<int> indexes) override;
     void mute(bool mute) override;
@@ -41,8 +39,6 @@ private:
     // side of the command buffer
     void processAddChild(SynthItem* child, SON_CHILD_TYPE type);
     void processRemoveChild(SynthItem* child);
-    void processAddParent(SynthItem* parent);
-    void processRemoveParent(SynthItem* parent);
     void processSetDataItem(std::vector<double> *data);
     void processSetWaveform(SON_WAVEFORM waveType);
     void processSetFreq(double inFreq);

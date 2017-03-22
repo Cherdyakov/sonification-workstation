@@ -52,22 +52,6 @@ void Audifier::removeChild(SynthItem *child)
     commandBuffer.push(command);
 }
 
-void Audifier::addParent(SynthItem *parent)
-{
-    AudifierCommand command;
-    command.type = SON_AUD_COMMAND_TYPE::ADD_PARENT;
-    command.item = parent;
-    commandBuffer.push(command);
-}
-
-void Audifier::removeParent(SynthItem *parent)
-{
-    AudifierCommand command;
-    command.type = SON_AUD_COMMAND_TYPE::REMOVE_PARENT;
-    command.item = parent;
-    commandBuffer.push(command);
-}
-
 void Audifier::setDataItem(std::vector<double> *data)
 {
     AudifierCommand command;
@@ -154,20 +138,6 @@ void Audifier::processAddChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type)
 void Audifier::processRemoveChild(SynthItem *child)
 {
     amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
-}
-
-void Audifier::processAddParent(SynthItem *parent)
-{
-    if(std::find(parents.begin(), parents.end(), parent) != parents.end()) {
-        return;
-    } else {
-        parents.push_back(parent);
-    }
-}
-
-void Audifier::processRemoveParent(SynthItem *parent)
-{
-    parents.erase(std::remove(parents.begin(), parents.end(), parent), parents.end());
 }
 
 void Audifier::processSetDataItem(std::vector<double> *data)

@@ -40,21 +40,33 @@ void QtSynthItem::removeChild(QtSynthItem *child)
 
 void QtSynthItem::addParent(QtSynthItem *parent)
 {
+    if(!parent || !synthItem)
+        return;
+
     synthItem->addParent(parent->implementation());
 }
 
 void QtSynthItem::removeParent(QtSynthItem *parent)
 {
+    if(!parent || !synthItem)
+        return;
+
     synthItem->removeParent(parent->implementation());
 }
 
 void QtSynthItem::mute(bool mute)
 {
+    if(!synthItem)
+        return;
+
     synthItem->mute(mute);
 }
 
 void QtSynthItem::setIndexes(QVector<int> indexes)
 {
+    if(!synthItem)
+        return;
+
     std::vector<int> vec = indexes.toStdVector();
     synthItem->setIndexes(vec);
 }

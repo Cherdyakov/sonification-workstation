@@ -3,6 +3,8 @@
 
 #include "Gamma/Oscillator.h"
 #include <atomic>
+#include <vector>
+#include <algorithm>
 
 namespace son {
 
@@ -25,6 +27,8 @@ public:
     };
 
     explicit SynthItem();
+    virtual void addParent(SynthItem* parent);
+    virtual void removeParent(SynthItem* parent);
 
     // pure virtual functions
     virtual void setDataItem(std::vector<double>* data) = 0;
@@ -32,8 +36,6 @@ public:
     virtual float process(float in) = 0;
     virtual void addChild(SynthItem *item, SON_CHILD_TYPE type) = 0;
     virtual void removeChild(SynthItem *item) = 0;
-    virtual void addParent(SynthItem* parent) = 0;
-    virtual void removeParent(SynthItem* parent) = 0;
     virtual void mute(bool mute) = 0;
     virtual void setIndexes(std::vector<int> indexes) = 0;
 

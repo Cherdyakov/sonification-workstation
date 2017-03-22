@@ -112,10 +112,18 @@ Item {
     }
 
     function addParent(synthItem) {
+        //add QML parent to this item's synthParents
         synthParents.push(synthItem)
+        //add parent's implementation to the parents
+        //in this item's implementation
+        implementation.addParent(synthItem.implementation)
     }
 
     function removeParent(synthItem) {
+        //remove parent's implementation from
+        //this implementation's parent's
+        implementation.removeParent(synthItem);
+        //remove parent from this item's synthParents
         var idx = synthParents.indexOf(synthItem)
         if(idx > -1)
         {
