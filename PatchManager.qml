@@ -9,7 +9,9 @@ Item {
 
         //not currently patching, start one
         if(patchBegin === null) {
-            patchBegin = item
+            if(item.type !== 0) { //item is OUT, cannot have parent
+                patchBegin = item
+            }
         }
         else {
             //clicked on same item, cancel patching
@@ -26,8 +28,5 @@ Item {
                 patchBegin = null
             }
         }
-
     }
-
-
 }
