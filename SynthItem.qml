@@ -92,6 +92,8 @@ Item {
     }
 
     function addChild(synthItem) {
+        if(implementation == null)
+            return
         //add QML child to this item's synthChildren
         synthChildren.push(synthItem)
         //add child's implementation to the children
@@ -100,6 +102,8 @@ Item {
     }
 
     function removeChild(synthItem) {
+        if(implementation == null)
+            return
         //remove the child implementation from the
         //children of this item's implementation
         implementation.removeChild(synthItem.implementation)
@@ -112,6 +116,8 @@ Item {
     }
 
     function addParent(synthItem) {
+        if(implementation == null)
+            return
         //add QML parent to this item's synthParents
         synthParents.push(synthItem)
         //add parent's implementation to the parents
@@ -120,6 +126,8 @@ Item {
     }
 
     function removeParent(synthItem) {
+        if(implementation == null)
+            return
         //remove parent's implementation from
         //this implementation's parent's
         implementation.removeParent(synthItem);
@@ -132,6 +140,8 @@ Item {
     }
 
     function mute() {
+        if(implementation == null)
+            return
         //mute cpp counterpart
         implementation.mute(muted)
 
@@ -206,6 +216,10 @@ Item {
             }
 
             onDoubleClicked: {
+                if(type === 0) { // item is OUT, has no editor
+                    return
+                }
+
                 switch(root.state) {
                 case "":
                     root.state = "MAXIMIZED"
