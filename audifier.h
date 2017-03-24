@@ -17,7 +17,6 @@ public:
     float process(float in) override;
     void addChild(SynthItem* child, CHILD_TYPE type) override;
     void removeChild(SynthItem* child) override;
-    void setDataItem(std::vector<double> *data) override;
     void setIndexes(std::vector<int> indexes) override;
 
 private:
@@ -27,7 +26,6 @@ private:
 
     void processAddChild(SynthItem* child, CHILD_TYPE type);
     void processRemoveChild(SynthItem* child);
-    void processSetDataItem(std::vector<double> *data);
     void processSetIndexes(std::vector<int> indexes);
 
     std::vector<int> dataIndexes;

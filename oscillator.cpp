@@ -11,14 +11,6 @@ Oscillator::Oscillator()
     fixedFreqs = true;
 }
 
-void Oscillator::setDataItem(std::vector<double> *data)
-{
-    SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::DATA;
-    command.data = data;
-    commandBuffer.push(command);
-}
-
 void Oscillator::setWaveform(WAVEFORM waveform)
 {
     SynthItemCommand command;
@@ -50,15 +42,6 @@ void Oscillator::setIndexes(std::vector<int> indexes)
     command.indexes = indexes;
     commandBuffer.push(command);
 }
-
-void Oscillator::mute(bool mute)
-{
-    SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::MUTE;
-    command.mute = mute;
-    commandBuffer.push(command);
-}
-
 
 void Oscillator::addChild(SynthItem *child, SynthItem::CHILD_TYPE type)
 {
@@ -107,20 +90,6 @@ void Oscillator::processRemoveChild(SynthItem *child)
 {
     amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
     fmods.erase(std::remove(fmods.begin(), fmods.end(), child), fmods.end());
-}
-
-void Oscillator::processSetDataItem(std::vector<double> *data)
-{
-    dataItem = data;
-
-    for(unsigned int i = 0; i < amods.size(); i++) {
-        son::SynthItem* item = amods[i];
-        item->setDataItem(data);
-    }
-    for(unsigned int i = 0; i < fmods.size(); i++) {
-        son::SynthItem* item = fmods[i];
-        item->setDataItem(data);
-    }
 }
 
 void Oscillator::processSetWaveform(WAVEFORM waveType)
@@ -175,11 +144,6 @@ void Oscillator::processCommand(SynthItemCommand command)
         processAddChild(command.item, command.childType);
         break;
     }
-    case ITEM_COMMAND_TYPE::DATA:
-    {
-        processSetDataItem(command.data);
-        break;
-    }
     case ITEM_COMMAND_TYPE::FIXED_FREQS:
     {
         processSetFixedFreqs(command.fixedFreqs);
@@ -205,12 +169,8 @@ void Oscillator::processCommand(SynthItemCommand command)
         processSetWaveform(command.waveform);
         break;
     }
-    case ITEM_COMMAND_TYPE::MUTE:
-    {
-        processMute(command.mute);
-        break;
-    }
     default:
+        SynthItem::processCommand(command);
         break;
     }
 }

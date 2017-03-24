@@ -19,9 +19,7 @@ public:
     float process(float in) override;
     void addChild(SynthItem* child, CHILD_TYPE type) override;
     void removeChild(SynthItem* child) override;
-    void setDataItem(std::vector<double> *data) override;
     void setIndexes(std::vector<int> indexes) override;
-    void mute(bool mute) override;
 
     void setWaveform(WAVEFORM waveform);
     void setFreq(double freq);
@@ -36,7 +34,6 @@ private:
     // side of the command buffer
     void processAddChild(SynthItem* child, CHILD_TYPE type);
     void processRemoveChild(SynthItem* child);
-    void processSetDataItem(std::vector<double> *data);
     void processSetWaveform(WAVEFORM waveType);
     void processSetFreq(double inFreq);
     void processSetFixedFreqs(bool fixed);

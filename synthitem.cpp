@@ -33,6 +33,37 @@ void SynthItem::retrieveCommands()
     }
 }
 
+void SynthItem::processCommand(SynthItem::SynthItemCommand command)
+{
+    ITEM_COMMAND_TYPE type = command.type;
+
+    switch (type) {
+
+    case ITEM_COMMAND_TYPE::DATA:
+    {
+        processSetDataItem(command.data);
+        break;
+    }
+    case ITEM_COMMAND_TYPE::ADD_PARENT:
+    {
+        processAddParent(command.item);
+        break;
+    }
+    case ITEM_COMMAND_TYPE::REMOVE_PARENT:
+    {
+        processRemoveParent(command.item);
+        break;
+    }
+    case ITEM_COMMAND_TYPE::MUTE:
+    {
+        processMute(command.mute);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 void SynthItem::processMute(bool mute)
 {
     muted = mute;
@@ -58,6 +89,11 @@ void SynthItem::processAddParent(SynthItem *parent)
     }
 }
 
+void SynthItem::processSetDataItem(std::vector<double> *data)
+{
+    dataItem = data;
+}
+
 void SynthItem::addParent(SynthItem *parent)
 {
     SynthItemCommand command;
@@ -68,7 +104,10 @@ void SynthItem::addParent(SynthItem *parent)
 
 void SynthItem::setDataItem(std::vector<double> *data)
 {
-    dataItem = data;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::DATA;
+    command.data = data;
+    commandBuffer.push(command);
 }
 
 } //namespace son

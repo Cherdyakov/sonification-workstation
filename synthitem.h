@@ -60,12 +60,12 @@ public:
     } SynthItemCommand;
 
     explicit SynthItem();
+    virtual void setDataItem(std::vector<double>* data);
     virtual void addParent(SynthItem* parent);
     virtual void removeParent(SynthItem* parent);
     virtual void mute(bool mute);
 
     // pure virtual functions
-    virtual void setDataItem(std::vector<double>* data) = 0;
     virtual float process() = 0;
     virtual float process(float in) = 0;
     virtual void addChild(SynthItem *item, CHILD_TYPE type) = 0;
@@ -81,10 +81,11 @@ protected:
     SynthItemCommand currentCommand;
     RingBuffer<SynthItemCommand> commandBuffer;
     virtual void retrieveCommands();
-    virtual void processCommand(SynthItemCommand command) = 0;
+    virtual void processCommand(SynthItemCommand command);
     virtual void processMute(bool mute);
     virtual void processRemoveParent(SynthItem* parent);
     virtual void processAddParent(SynthItem* parent);
+    virtual void processSetDataItem(std::vector<double>* data);
 
 };
 
