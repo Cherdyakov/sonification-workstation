@@ -27,13 +27,13 @@ QtSynthItem* QtSynthGraph::createItem(ITEM_TYPE type)
     }
     case OSCILLATOR:
     {
-        item = synthGraph.createItem((SynthGraph::SON_ITEM_TYPE)type);
+        item = synthGraph.createItem((SynthItem::ITEM_TYPE)type);
         qtItem = new QtOscillator(item);
         break;
     }
     case AUDIFIER:
     {
-        item = synthGraph.createItem((SynthGraph::SON_ITEM_TYPE)type);
+        item = synthGraph.createItem((SynthItem::ITEM_TYPE)type);
         qtItem = new QtAudifier(item);
         break;
     }

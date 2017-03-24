@@ -85,23 +85,23 @@ float SynthGraph::processGraph()
     return s * masterVolume;
 }
 
-SynthItem* SynthGraph::createItem(SON_ITEM_TYPE type)
+SynthItem* SynthGraph::createItem(SynthItem::ITEM_TYPE type)
 {
     SynthItem* item;
 
     switch (type){
-    case OUT:
+    case SynthItem::ITEM_TYPE::OUT:
     {
         item = NULL;
         break;
     }
-    case OSCILLATOR:
+    case SynthItem::ITEM_TYPE::OSCILLATOR:
     {
         item = new Oscillator();
         item->setDataItem(&currentData);
         break;
     }
-    case AUDIFIER:
+    case SynthItem::ITEM_TYPE::AUDIFIER:
     {
         item = new Audifier();
         item->setDataItem(&currentData);
@@ -135,24 +135,24 @@ int SynthGraph::graphSize()
 
 void SynthGraph::pause(bool pause)
 {
-    SynthCommand command;
-    command.type = SynthCommandType::PAUSE;
+    SynthGraphCommand command;
+    command.type = GRAPH_COMMAND_TYPE::PAUSE;
     command.paused = pause;
     commandBuffer.push(command);
 }
 
 void SynthGraph::setLooping(bool looping)
 {
-    SynthCommand command;
-    command.type = SynthCommandType::LOOP;
+    SynthGraphCommand command;
+    command.type = GRAPH_COMMAND_TYPE::LOOP;
     command.looping = looping;
     commandBuffer.push(command);
 }
 
 void SynthGraph::setLoopPoints(double begin, double end)
 {
-    SynthCommand command;
-    command.type = SynthCommandType::LOOP_POINTS;
+    SynthGraphCommand command;
+    command.type = GRAPH_COMMAND_TYPE::LOOP_POINTS;
     command.loopBegin = begin;
     command.loopEnd = end;
     commandBuffer.push(command);
@@ -160,24 +160,24 @@ void SynthGraph::setLoopPoints(double begin, double end)
 
 void SynthGraph::setPos(double pos)
 {
-    SynthCommand command;
-    command.type = SynthCommandType::POSITION;
+    SynthGraphCommand command;
+    command.type = GRAPH_COMMAND_TYPE::POSITION;
     command.pos = pos;
     commandBuffer.push(command);
 }
 
 void SynthGraph::setSpeed(double speed)
 {
-    SynthCommand command;
-    command.type = SynthCommandType::SPEED;
+    SynthGraphCommand command;
+    command.type = GRAPH_COMMAND_TYPE::SPEED;
     command.speed = speed;
     commandBuffer.push(command);
 }
 
 void SynthGraph::setData(std::vector<double> *data, unsigned int height, unsigned int width)
 {
-    SynthCommand command;
-    command.type = SynthCommandType::DATA;
+    SynthGraphCommand command;
+    command.type = GRAPH_COMMAND_TYPE::DATA;
     command.data = data;
     command.height = height;
     command.width = width;
@@ -201,42 +201,42 @@ void SynthGraph::retrieveCommands()
     }
 }
 
-void SynthGraph::processCommand(SynthCommand command)
+void SynthGraph::processCommand(SynthGraphCommand command)
 {
-    SynthCommandType type = command.type;
+    GRAPH_COMMAND_TYPE type = command.type;
 
     switch (type) {
-    case SynthCommandType::PAUSE:
+    case GRAPH_COMMAND_TYPE::PAUSE:
     {
         processPause(command.paused);
     }
         break;
 
-    case SynthCommandType::POSITION:
+    case GRAPH_COMMAND_TYPE::POSITION:
     {
         processSetPos(command.pos);
     }
         break;
 
-    case SynthCommandType::SPEED:
+    case GRAPH_COMMAND_TYPE::SPEED:
     {
         speed = command.speed;
     }
         break;
 
-    case SynthCommandType::LOOP:
+    case GRAPH_COMMAND_TYPE::LOOP:
     {
         looping = command.looping;
     }
         break;
 
-    case SynthCommandType::LOOP_POINTS:
+    case GRAPH_COMMAND_TYPE::LOOP_POINTS:
     {
         loopBegin = command.loopBegin;
         loopEnd = command.loopEnd;
     }
         break;
-    case SynthCommandType::DATA:
+    case GRAPH_COMMAND_TYPE::DATA:
     {
         processSetData(command.data, command.height, command.width);
     }

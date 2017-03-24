@@ -11,13 +11,34 @@ SynthItem::SynthItem()
 
 void SynthItem::removeParent(SynthItem *parent)
 {
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::REMOVE_PARENT;
+    command.item = parent;
+    commandBuffer.push(command);
+}
+
+void SynthItem::retrieveCommands()
+{
+    while(commandBuffer.pop(&currentCommand))
+    {
+        processCommand(currentCommand);
+    }
+}
+
+void SynthItem::processMute(bool mute)
+{
+    muted = mute;
+}
+
+void SynthItem::processRemoveParent(SynthItem *parent)
+{
     if(parent)
     {
         parents.erase(std::remove(parents.begin(), parents.end(), parent), parents.end());
     }
 }
 
-void SynthItem::addParent(SynthItem *parent)
+void SynthItem::processAddParent(SynthItem *parent)
 {
     if(parent)
     {
@@ -27,6 +48,14 @@ void SynthItem::addParent(SynthItem *parent)
             parents.push_back(parent);
         }
     }
+}
+
+void SynthItem::addParent(SynthItem *parent)
+{
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::ADD_PARENT;
+    command.item = parent;
+    commandBuffer.push(command);
 }
 
 void SynthItem::setDataItem(std::vector<double> *data)

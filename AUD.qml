@@ -28,7 +28,7 @@ SynthItem {
 
             EditorMapper {
                 id: audificationMapper
-                label.text: qsTr("Audification Source: ")
+                label.text: qsTr("Amplitude Source: ")
                 onMappingsChanged:
                 {
                     if(root.mappedRows !== mappings) {

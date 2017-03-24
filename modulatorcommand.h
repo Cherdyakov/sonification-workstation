@@ -1,12 +1,12 @@
-#ifndef OSCILLATORCOMMAND_H
-#define OSCILLATORCOMMAND_H
+#ifndef MODULATORCOMMAND_H
+#define MODULATORCOMMAND_H
 
 #include <vector>
 #include "synthitem.h"
 
 namespace son {
 
-enum class SON_OSC_COMMAND_TYPE {
+enum class SON_MOD_COMMAND_TYPE {
     DATA,
     INDEXES,
     WAVEFORM,
@@ -16,21 +16,22 @@ enum class SON_OSC_COMMAND_TYPE {
     REMOVE_CHILD,
     ADD_PARENT,
     REMOVE_PARENT,
+    MOD_TYPE,
     MUTE
 };
 
 typedef struct {
-    SON_OSC_COMMAND_TYPE type;
+    SON_MOD_COMMAND_TYPE type;
     std::vector<double>* data;
     std::vector<int> indexes;
-    SynthItem::SON_WAVEFORM waveform;
+    SynthItem::WAVEFORM waveform;
     int freq;
     bool fixedFreqs;
     SynthItem* item;
-    SynthItem::SON_CHILD_TYPE itemType;
+    SynthItem::CHILD_TYPE itemType;
     bool mute;
-} OscillatorCommand;
+} ModulatorCommand;
 
 }
 
-#endif // OSCILLATORCOMMAND_H
+#endif // MODULATORCOMMAND_H

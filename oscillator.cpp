@@ -4,7 +4,7 @@ namespace son {
 
 Oscillator::Oscillator()
 {
-    waveform = SON_WAVEFORM::SINE;
+    waveform = WAVEFORM::SINE;
     gam::Sine<>* defaultGen = new gam::Sine<>(440);
     gens.push_back(defaultGen);
     freq = 440;
@@ -13,57 +13,57 @@ Oscillator::Oscillator()
 
 void Oscillator::setDataItem(std::vector<double> *data)
 {
-    OscillatorCommand command;
-    command.type = SON_OSC_COMMAND_TYPE::DATA;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::DATA;
     command.data = data;
     commandBuffer.push(command);
 }
 
-void Oscillator::setWaveform(SON_WAVEFORM waveform)
+void Oscillator::setWaveform(WAVEFORM waveform)
 {
-    OscillatorCommand command;
-    command.type = SON_OSC_COMMAND_TYPE::WAVEFORM;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::WAVEFORM;
     command.waveform = waveform;
     commandBuffer.push(command);
 }
 
 void Oscillator::setFreq(double freq)
 {
-    OscillatorCommand command;
-    command.type = SON_OSC_COMMAND_TYPE::FREQ;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::FREQ;
     command.freq = freq;
     commandBuffer.push(command);
 }
 
 void Oscillator::setFixedFreqs(bool fixed)
 {
-    OscillatorCommand command;
-    command.type = SON_OSC_COMMAND_TYPE::FIXED_FREQS;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::FIXED_FREQS;
     command.fixedFreqs = fixed;
     commandBuffer.push(command);
 }
 
 void Oscillator::setIndexes(std::vector<int> indexes)
 {
-    OscillatorCommand command;
-    command.type = SON_OSC_COMMAND_TYPE::INDEXES;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::INDEXES;
     command.indexes = indexes;
     commandBuffer.push(command);
 }
 
 void Oscillator::mute(bool mute)
 {
-    OscillatorCommand command;
-    command.type = SON_OSC_COMMAND_TYPE::MUTE;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::MUTE;
     command.mute = mute;
     commandBuffer.push(command);
 }
 
 
-void Oscillator::addChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type)
+void Oscillator::addChild(SynthItem *child, SynthItem::CHILD_TYPE type)
 {
-    OscillatorCommand command;
-    command.type = SON_OSC_COMMAND_TYPE::ADD_CHILD;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
     command.item = child;
     command.itemType = type;
     commandBuffer.push(command);
@@ -71,16 +71,16 @@ void Oscillator::addChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type)
 
 void Oscillator::removeChild(SynthItem *child)
 {
-    OscillatorCommand command;
-    command.type = SON_OSC_COMMAND_TYPE::ADD_CHILD;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
     command.item = child;
     commandBuffer.push(command);
 }
 
-void Oscillator::processAddChild(SynthItem *child, SON_CHILD_TYPE type)
+void Oscillator::processAddChild(SynthItem *child, CHILD_TYPE type)
 {
     switch (type){
-    case SON_CHILD_TYPE::AMOD:
+    case CHILD_TYPE::AMOD:
     {
         if(std::find(amods.begin(), amods.end(), child) != amods.end()) {
             return;
@@ -89,7 +89,7 @@ void Oscillator::processAddChild(SynthItem *child, SON_CHILD_TYPE type)
         }
         break;
     }
-    case SON_CHILD_TYPE::FMOD:
+    case CHILD_TYPE::FMOD:
     {
         if(std::find(fmods.begin(), fmods.end(), child) != fmods.end()) {
             return;
@@ -123,7 +123,7 @@ void Oscillator::processSetDataItem(std::vector<double> *data)
     }
 }
 
-void Oscillator::processSetWaveform(SON_WAVEFORM waveType)
+void Oscillator::processSetWaveform(WAVEFORM waveType)
 {
     resize(0);
     if (waveform != waveType) {
@@ -165,60 +165,47 @@ void Oscillator::processSetIndexes(std::vector<int> indexes)
     muted = m;
 }
 
-void Oscillator::processMute(bool mute)
+void Oscillator::processCommand(SynthItemCommand command)
 {
-    muted = mute;
-}
-
-void Oscillator::retrieveCommands()
-{
-    while(commandBuffer.pop(&currentCommand))
-    {
-        processCommand(currentCommand);
-    }
-}
-
-void Oscillator::processCommand(OscillatorCommand command)
-{
-    SON_OSC_COMMAND_TYPE type = command.type;
+    ITEM_COMMAND_TYPE type = command.type;
 
     switch (type) {
-    case SON_OSC_COMMAND_TYPE::ADD_CHILD:
+    case ITEM_COMMAND_TYPE::ADD_CHILD:
     {
         processAddChild(command.item, command.itemType);
         break;
     }
-    case SON_OSC_COMMAND_TYPE::DATA:
+    case ITEM_COMMAND_TYPE::DATA:
     {
         processSetDataItem(command.data);
         break;
     }
-    case SON_OSC_COMMAND_TYPE::FIXED_FREQS:
+    case ITEM_COMMAND_TYPE::FIXED_FREQS:
     {
         processSetFixedFreqs(command.fixedFreqs);
         break;
     }
-    case SON_OSC_COMMAND_TYPE::FREQ:
+    case ITEM_COMMAND_TYPE::FREQ:
     {
         processSetFreq(command.freq);
         break;
     }
-    case SON_OSC_COMMAND_TYPE::INDEXES:
+    case ITEM_COMMAND_TYPE::INDEXES:
     {
         processSetIndexes(command.indexes);
         break;
     }
-    case SON_OSC_COMMAND_TYPE::REMOVE_CHILD:
+    case ITEM_COMMAND_TYPE::REMOVE_CHILD:
     {
         processRemoveChild(command.item);
         break;
     }
-    case SON_OSC_COMMAND_TYPE::WAVEFORM:
+    case ITEM_COMMAND_TYPE::WAVEFORM:
     {
         processSetWaveform(command.waveform);
         break;
     }
-    case SON_OSC_COMMAND_TYPE::MUTE:
+    case ITEM_COMMAND_TYPE::MUTE:
     {
         processMute(command.mute);
         break;
@@ -248,16 +235,16 @@ void Oscillator::resize(unsigned int size)
 
 }
 
-gam::AccumPhase<> *Oscillator::newGen(SON_WAVEFORM type)
+gam::AccumPhase<> *Oscillator::newGen(WAVEFORM type)
 {
     switch (type) {
-    case SON_WAVEFORM::SINE:
+    case WAVEFORM::SINE:
         return new gam::Sine<>(440);
         break;
-    case SON_WAVEFORM::SAW:
+    case WAVEFORM::SAW:
         return new gam::Saw<>(440);
         break;
-    case SON_WAVEFORM::SQUARE:
+    case WAVEFORM::SQUARE:
         return new gam::Square<>(440);
     default:
         return NULL;
@@ -298,19 +285,19 @@ float Oscillator::process()
     for (unsigned int i = 0; i < gens.size(); ++i) {
 
         switch (waveform) {
-        case SON_WAVEFORM::SINE:
+        case WAVEFORM::SINE:
         {
             gam::Sine<>* gen = static_cast<gam::Sine<>*>(gens[i]);
             sample += gen->operator ()();
             break;
         }
-        case SON_WAVEFORM::SAW:
+        case WAVEFORM::SAW:
         {
             gam::Saw<>* gen = static_cast<gam::Saw<>*>(gens[i]);
             sample += gen->operator ()();
             break;
         }
-        case SON_WAVEFORM::SQUARE:
+        case WAVEFORM::SQUARE:
         {
             gam::Square<>* gen = static_cast<gam::Square<>*>(gens[i]);
             sample += gen->operator ()();

@@ -36,80 +36,64 @@ float Audifier::process(float in)
     return in;
 }
 
-void Audifier::addChild(SynthItem *child, SON_CHILD_TYPE type)
+void Audifier::addChild(SynthItem *child, CHILD_TYPE type)
 {
-    AudifierCommand command;
-    command.type = SON_AUD_COMMAND_TYPE::ADD_CHILD;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
     command.item = child;
     commandBuffer.push(command);
 }
 
 void Audifier::removeChild(SynthItem *child)
 {
-    AudifierCommand command;
-    command.type = SON_AUD_COMMAND_TYPE::REMOVE_CHILD;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::REMOVE_CHILD;
     command.item = child;
     commandBuffer.push(command);
 }
 
 void Audifier::setDataItem(std::vector<double> *data)
 {
-    AudifierCommand command;
-    command.type = SON_AUD_COMMAND_TYPE::DATA;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::DATA;
     command.data = data;
     commandBuffer.push(command);
 }
 
 void Audifier::setIndexes(std::vector<int> indexes)
 {
-    AudifierCommand command;
-    command.type = SON_AUD_COMMAND_TYPE::INDEXES;
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::INDEXES;
     command.indexes = indexes;
     commandBuffer.push(command);
 }
 
-void Audifier::mute(bool mute)
+void Audifier::processCommand(SynthItemCommand command)
 {
-    AudifierCommand command;
-    command.type = SON_AUD_COMMAND_TYPE::MUTE;
-    command.mute = mute;
-    commandBuffer.push(command);
-}
-
-void Audifier::retrieveCommands()
-{
-    while(commandBuffer.pop(&currentCommand))
-    {
-        processCommand(currentCommand);
-    }
-}
-
-void Audifier::processCommand(AudifierCommand command)
-{
-    SON_AUD_COMMAND_TYPE type = command.type;
+    ITEM_COMMAND_TYPE type = command.type;
 
     switch (type) {
-    case SON_AUD_COMMAND_TYPE::ADD_CHILD:
+    case ITEM_COMMAND_TYPE::ADD_CHILD:
     {
         processAddChild(command.item, command.itemType);
         break;
     }
-    case SON_AUD_COMMAND_TYPE::DATA:
+    case ITEM_COMMAND_TYPE::DATA:
     {
         processSetDataItem(command.data);
         break;
     }
-    case SON_AUD_COMMAND_TYPE::INDEXES:
+    case ITEM_COMMAND_TYPE::INDEXES:
     {
         processSetIndexes(command.indexes);
         break;
     }
-    case SON_AUD_COMMAND_TYPE::REMOVE_CHILD:
+    case ITEM_COMMAND_TYPE::REMOVE_CHILD:
     {
         processRemoveChild(command.item);
         break;
     }
-    case SON_AUD_COMMAND_TYPE::MUTE:
+    case ITEM_COMMAND_TYPE::MUTE:
     {
         processMute(command.mute);
         break;
@@ -119,10 +103,10 @@ void Audifier::processCommand(AudifierCommand command)
     }
 }
 
-void Audifier::processAddChild(SynthItem *child, SynthItem::SON_CHILD_TYPE type)
+void Audifier::processAddChild(SynthItem *child, SynthItem::CHILD_TYPE type)
 {
     switch (type){
-    case SON_CHILD_TYPE::AMOD: {
+    case CHILD_TYPE::AMOD: {
         if(std::find(amods.begin(), amods.end(), child) != amods.end()) {
             return;
         } else {
@@ -158,11 +142,6 @@ void Audifier::processSetIndexes(std::vector<int> indexes)
     dataIndexes = indexes;
 
     muted = m;
-}
-
-void Audifier::processMute(bool mute)
-{
-    muted = mute;
 }
 
 float Audifier::visitAmods()

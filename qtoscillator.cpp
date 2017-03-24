@@ -10,7 +10,7 @@ QtOscillator::QtOscillator(SynthItem *item, QObject *parent) : QtSynthItem(paren
 
 void QtOscillator::setWaveform(WAVEFORM waveform)
 {
-    oscillator->setWaveform((SynthItem::SON_WAVEFORM)waveform);
+    oscillator->setWaveform((SynthItem::WAVEFORM)waveform);
 }
 
 void QtOscillator::setFreq(double freq)
