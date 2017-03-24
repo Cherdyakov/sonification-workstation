@@ -17,6 +17,14 @@ void SynthItem::removeParent(SynthItem *parent)
     commandBuffer.push(command);
 }
 
+void SynthItem::mute(bool mute)
+{
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::MUTE;
+    command.mute = mute;
+    commandBuffer.push(command);
+}
+
 void SynthItem::retrieveCommands()
 {
     while(commandBuffer.pop(&currentCommand))

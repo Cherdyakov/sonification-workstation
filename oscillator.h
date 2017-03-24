@@ -27,9 +27,10 @@ public:
     void setFreq(double freq);
     void setFixedFreqs(bool fixed);
 
-private:
+protected:
+    virtual void processCommand(SynthItemCommand command) override;
 
-    void processCommand(SynthItemCommand command);
+private:
 
     // actually implementing the commands on callback
     // side of the command buffer

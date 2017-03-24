@@ -65,7 +65,7 @@ void Oscillator::addChild(SynthItem *child, SynthItem::CHILD_TYPE type)
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
     command.item = child;
-    command.itemType = type;
+    command.childType = type;
     commandBuffer.push(command);
 }
 
@@ -172,7 +172,7 @@ void Oscillator::processCommand(SynthItemCommand command)
     switch (type) {
     case ITEM_COMMAND_TYPE::ADD_CHILD:
     {
-        processAddChild(command.item, command.itemType);
+        processAddChild(command.item, command.childType);
         break;
     }
     case ITEM_COMMAND_TYPE::DATA:

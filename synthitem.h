@@ -55,7 +55,7 @@ public:
         int freq;
         bool fixedFreqs;
         SynthItem* item;
-        CHILD_TYPE itemType;
+        CHILD_TYPE childType;
         bool mute;
     } SynthItemCommand;
 

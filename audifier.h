@@ -29,7 +29,6 @@ private:
     void processRemoveChild(SynthItem* child);
     void processSetDataItem(std::vector<double> *data);
     void processSetIndexes(std::vector<int> indexes);
-    void processMute(bool mute);
 
     std::vector<int> dataIndexes;
     std::vector<SynthItem*> amods;

@@ -10,15 +10,13 @@ class Modulator : public Oscillator
 {
 public:
     Modulator();
-
-    float process() override;
-
     void setModType(CHILD_TYPE modType);
+
+protected:
+    virtual void processCommand(SynthItemCommand command) override;
 
 private:
     CHILD_TYPE modType;
-
-
     void processSetModType(CHILD_TYPE modType);
 
 };
