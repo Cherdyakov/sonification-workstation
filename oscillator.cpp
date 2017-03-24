@@ -125,8 +125,18 @@ void Oscillator::processSetDataItem(std::vector<double> *data)
 
 void Oscillator::processSetWaveform(SON_WAVEFORM waveType)
 {
+    resize(0);
     if (waveform != waveType) {
         waveform = waveType;
+    }
+    // Data mappings exist, resize to fit them
+    if(dataIndexes.size() > 0)
+    {
+        resize(dataIndexes.size());
+    }
+    else // No data mappings, just default oscillator
+    {
+        resize(1);
     }
 }
 
