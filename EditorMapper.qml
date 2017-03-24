@@ -31,6 +31,7 @@ ColumnLayout {
         id: textInputRect
         color: Style.editorTextInputColor
         height:Style.editorRowHeight
+        width: Style.editorRowWidth
         Layout.fillWidth: true
 
         TextInput {
