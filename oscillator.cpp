@@ -342,7 +342,7 @@ float Oscillator::visitFmods()
 
 void Oscillator::setFreqs()
 {
-    if (dataIndexes.size() < 1) //no data mappings, use fixed freq
+    if ((dataIndexes.size() < 1) || (fixedFreqs == true)) //no data mappings, use fixed freq
     {
         for (unsigned int i = 0; i < gens.size(); ++i) {
             gens[i]->freq(freq);

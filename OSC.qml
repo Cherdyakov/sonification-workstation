@@ -54,23 +54,27 @@ SynthItem {
                 }
             }
 
-            EditorFrequency {
-                id: frequencyEditor
-                onFrequencyChanged: {
-                    if (editor.frequency != freq) {
-                        editor.frequency = freq / 100
-                    }
-                }
-            }
+            RowLayout {
 
-            EditorFixedParam {
-                id: fixedEditor
-                label.text: qsTr("Fixed Frequency: ")
-                onFixedChanged: {
-                    if (editor.fixedFrequency != fixed) {
-                        editor.fixedFrequency = fixed
+                EditorFrequency {
+                    id: frequencyEditor
+                    onFrequencyChanged: {
+                        if (editor.frequency != freq) {
+                            editor.frequency = freq / 100
+                        }
                     }
                 }
+
+                EditorFixedParam {
+                    id: fixedEditor
+                    label.text: qsTr("Fixed: ")
+                    onFixedChanged: {
+                        if (editor.fixedFrequency != fixed) {
+                            editor.fixedFrequency = fixed
+                        }
+                    }
+                }
+
             }
 
             EditorMapper {
@@ -86,10 +90,6 @@ SynthItem {
                         implementation.setIndexes(implementationMappings)
                     }
                 }
-            }
-
-            RowLayout {
-                id: dataLayout
             }
 
         }

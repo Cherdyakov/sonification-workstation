@@ -3,9 +3,9 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import "Style.js" as Style
 
-RowLayout {
+ColumnLayout {
     id: root
-    Layout.maximumHeight: Style.editorRowHeight
+    Layout.maximumHeight: Style.editorRowHeight * 2
 
     property alias label: label
     property alias textInput: textInput
@@ -31,7 +31,7 @@ RowLayout {
         id: textInputRect
         color: Style.editorTextInputColor
         height:Style.editorRowHeight
-        width: Style.editorControlWidth
+        Layout.fillWidth: true
 
         TextInput {
             id: textInput
@@ -100,17 +100,14 @@ RowLayout {
                     high = low ^ high
                     low = low ^ high
                 }
-
                 if (high > dataHeight)
                 {
                     high = dataHeight
                 }
-
                 if (low < 1)
                 {
                     low = 1
                 }
-
                 //from low, we push up to high
                 if (low > 0)
                 {

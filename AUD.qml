@@ -40,11 +40,6 @@ SynthItem {
                     }
                 }
             }
-
-            RowLayout {
-                id: dataLayout
-            }
-
         }
     }
 

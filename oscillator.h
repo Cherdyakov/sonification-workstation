@@ -15,6 +15,7 @@ class Oscillator : public SynthItem
 
 public:
     Oscillator();
+
     float process() override;
     float process(float in) override;
     void addChild(SynthItem* child, SON_CHILD_TYPE type) override;

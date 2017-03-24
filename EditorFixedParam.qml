@@ -3,9 +3,9 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import "Style.js" as Style
 
-RowLayout {
+ColumnLayout {
     id: root
-    Layout.maximumHeight: Style.editorRowHeight
+    Layout.maximumHeight: Style.editorRowHeight * 2
 
     property alias label: label
     property alias checkBox: checkBox
@@ -15,15 +15,10 @@ RowLayout {
     EditorLabel {
         id: label
         text: qsTr("Fixed: ")
-        Layout.maximumHeight: Style.editorRowHeight
-        Layout.preferredWidth: Style.editorLabelWidth
-        Layout.fillWidth: true
+        height: Style.editorRowHeight
     }
     CheckBox {
         id: checkBox
-        height: Style.editorRowHeight
-        Layout.maximumHeight: Style.editorRowHeight
-
         onCheckedChanged: fixedChanged(checkBox.checked)
     }
 }

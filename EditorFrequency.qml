@@ -3,9 +3,9 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import "Style.js" as Style
 
-RowLayout {
+ColumnLayout {
     id: root
-    Layout.maximumHeight: Style.editorRowHeight
+    Layout.maximumHeight: Style.editorRowHeight * 2
 
     property alias label: label
     property alias spinBox: spinBox
