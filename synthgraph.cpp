@@ -295,6 +295,7 @@ void SynthGraph::processSetData(std::vector<double> *inData, unsigned int height
 
 void SynthGraph::calculateReturnPos()
 {
+    // FIXME not on every callback
     double pos = ((double)currentIdx + mu);
     returnPos.store(pos, std::memory_order_relaxed);
 }

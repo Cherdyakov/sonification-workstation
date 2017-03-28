@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QDebug>
-
-#include "qtcsv/reader.h"
+#include <QFile>
+#include <QString>
 
 class FileReader : public QObject
 {

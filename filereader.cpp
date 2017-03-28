@@ -14,27 +14,43 @@ void FileReader::readCSV(QString filename, std::vector<double> *array)
         array->clear();
     }
 
-    QList<QStringList> readData = QtCSV::Reader::readToList(filename);
+    QFile file(filename);
+    if (!file.open(QFile::ReadOnly)) {
+        qDebug() << file.errorString();
+        return;
+    }
 
-    uint height = readData.count();   // == rows in CSV
-    uint width = readData[0].count(); // == columns in CSV
+    QTextStream inFile(&file);
+
+    QList<QStringList> readData;
+        while (!inFile.atEnd()) {
+            QString line = inFile.readLine();
+            readData.append(line.split(","));
+        }
+
+    uint height = static_cast<uint>(readData.count());   // == rows in CSV
+    uint width = static_cast<uint>(readData[0].count()); // == columns in CSV
+
+    array->resize(width*height);
+    uint index = 0;
 
     for(uint i = 0; i < height; i++)
     {
-        QStringList rowData = readData[i];
+        QStringList rowData = readData[static_cast<int>(i)];
         for (uint j = 0; j < width; j++)
         {
-            QString temp = rowData[j];
             bool isDouble = false;
+            QString temp = rowData[static_cast<int>(j)];
             double value = temp.toDouble(&isDouble);
             if(isDouble)
             {
-                array->push_back(value);
+                array->at(index++) = value;
             }
             else
             {
-                qDebug() << "FileReader: CSV import failed, bad value: " << temp;
-                height = width = 0;
+                qDebug() << "FileReader: bad value. row: "
+                         << i << "col: " << j;
+                array->at(index++) = 0;
             }
         }
     }

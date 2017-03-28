@@ -82,9 +82,6 @@ INCLUDEPATH += /home/sean/CodeLibs/rtaudio-4.1.2/include
 # Secret Rabbit Code
 LIBS += -L/home/sean/CodeLibs/libsamplerate-0.1.9 -lsamplerate
 INCLUDEPATH += /home/sean/CodeLibs/libsamplerate-0.1.9
-# qtcsv
-LIBS += -L/home/sean/CodeLibs/qtcsv-master -lqtcsv
-INCLUDEPATH += /home/sean/CodeLibs/qtcsv-master/include
 # qcustomplot
 INCLUDEPATH += /home/sean/CodeLibs/qcustomplot
 
