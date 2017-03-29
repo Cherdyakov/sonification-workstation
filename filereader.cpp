@@ -23,13 +23,44 @@ void FileReader::readCSV(QString filename, std::vector<double> *array)
     QTextStream inFile(&file);
 
     QList<QStringList> readData;
-        while (!inFile.atEnd()) {
-            QString line = inFile.readLine();
-            readData.append(line.split(","));
-        }
+    while (!inFile.atEnd()) {
+        QString line = inFile.readLine();
+        readData.append(line.split(","));
+    }
 
     uint height = static_cast<uint>(readData.count());   // == rows in CSV
     uint width = static_cast<uint>(readData[0].count()); // == columns in CSV
+
+    // Check if rows are of equal length
+    bool unEven = false;
+    for(QStringList list : readData)
+    {
+        uint currentCount = static_cast<uint>(list.count());
+        if(currentCount != width)
+        {
+            unEven = true;
+            if(width < currentCount)
+            {
+                width = currentCount;
+            }
+        }
+    }
+    // Some rows were shorter than others
+    // force data to have equal width rows
+    if(unEven)
+    {
+        for(uint i = 0; i < height; i++)
+        {
+            QStringList* list = &readData[static_cast<int>(i)];
+            uint currentCount = static_cast<uint>(list->count());
+
+            while(currentCount < width)
+            {
+                list->append("0");
+                currentCount++;
+            }
+        }
+    }
 
     array->resize(width*height);
     uint index = 0;
