@@ -54,10 +54,14 @@ void FileReader::readCSV(QString filename, std::vector<double> *array)
             QStringList* list = &readData[static_cast<int>(i)];
             uint currentCount = static_cast<uint>(list->count());
 
-            while(currentCount < width)
+            if(currentCount < width)
             {
-                list->append("0");
-                currentCount++;
+                qDebug() << "Row " << i << "is too short.  Padding with 0";
+                while(currentCount < width)
+                {
+                    list->append("0");
+                    currentCount++;
+                }
             }
         }
     }
