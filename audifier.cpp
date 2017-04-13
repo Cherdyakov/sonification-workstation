@@ -23,7 +23,7 @@ float Audifier::process()
     {
         for(unsigned int i = 0; i < dataIndexes.size(); i++)
         {
-            sample += (dataItem->at(dataIndexes[i]) / 1000000000.0);
+            sample += (dataItem->at(static_cast<unsigned int>(dataIndexes[i])) / 1000000000.0);
         }
     }
 

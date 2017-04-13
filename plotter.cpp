@@ -11,7 +11,8 @@ Plotter::Plotter()
     qcpInteractions |= QCP::iSelectPlottables;
     setInteractions(qcpInteractions);
 //    axisRect()->setRangeDrag(Qt::Horizontal);
-//    axisRect()->setRangeZoom(Qt::Horizontal);
+//    axisRect()->setRangeZoom(Qt::Horizontal)
+
 
     // The Kelly colors.
     // Kelly's paper: http://www.iscc.org/pdf/PC54_1724_001.pdf
@@ -31,15 +32,15 @@ void Plotter::plot(std::vector<double> *array, uint height, uint width)
 {
     clearGraphs();
 
-    QVector<double> xTicks(width);
+    QVector<double> xTicks(static_cast<int>(width));
     std::iota(xTicks.begin(), xTicks.end(), 0);
 
     for(uint i = 0; i < height; i++)
     {
-        QVector<double> row(width);
+        QVector<double> row(static_cast<int>(width));
         for(uint j = 0; j < width; j++)
         {
-            row[j] = (*array)[i * width + j];
+            row[static_cast<int>(j)] = (*array)[i * width + j];
         }
         QCPGraph* graph = addGraph();
         graph->setData(xTicks, row);
@@ -55,6 +56,9 @@ void Plotter::plot(std::vector<double> *array, uint height, uint width)
         graph->setPen(pen);
     }
 
+    // Show Legend
+    legend->setVisible(true);
+    legend->setMaximumSize(400, 140);
     // release bounds so replot can fit the new data
     xBounds.upper = xAxis->range().maxRange;
     xBounds.lower = -(xAxis->range().maxRange);

@@ -53,10 +53,9 @@ public:
         std::vector<int> indexes;
         WAVEFORM waveform;
         int freq;
-        bool fixedFreqs;
+        bool boolVal;
         SynthItem* item;
         CHILD_TYPE childType;
-        bool mute;
     } SynthItemCommand;
 
     explicit SynthItem();

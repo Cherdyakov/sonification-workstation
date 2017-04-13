@@ -31,7 +31,7 @@ void Oscillator::setFixedFreqs(bool fixed)
 {
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::FIXED_FREQS;
-    command.fixedFreqs = fixed;
+    command.boolVal = fixed;
     commandBuffer.push(command);
 }
 
@@ -146,7 +146,7 @@ void Oscillator::processCommand(SynthItemCommand command)
     }
     case ITEM_COMMAND_TYPE::FIXED_FREQS:
     {
-        processSetFixedFreqs(command.fixedFreqs);
+        processSetFixedFreqs(command.boolVal);
         break;
     }
     case ITEM_COMMAND_TYPE::FREQ:

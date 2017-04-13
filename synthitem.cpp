@@ -21,7 +21,7 @@ void SynthItem::mute(bool mute)
 {
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::MUTE;
-    command.mute = mute;
+    command.boolVal = mute;
     commandBuffer.push(command);
 }
 
@@ -56,7 +56,7 @@ void SynthItem::processCommand(SynthItem::SynthItemCommand command)
     }
     case ITEM_COMMAND_TYPE::MUTE:
     {
-        processMute(command.mute);
+        processMute(command.boolVal);
         break;
     }
     default:
