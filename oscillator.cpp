@@ -94,18 +94,18 @@ void Oscillator::processRemoveChild(SynthItem *child)
 
 void Oscillator::processSetWaveform(WAVEFORM waveType)
 {
-    resize(0);
     if (waveform != waveType) {
+        resize(0);
         waveform = waveType;
-    }
-    // Data mappings exist, resize to fit them
-    if(dataIndexes.size() > 0)
-    {
-        resize(dataIndexes.size());
-    }
-    else // No data mappings, just default oscillator
-    {
-        resize(1);
+        // Data mappings exist, resize to fit them
+        if(dataIndexes.size() > 0)
+        {
+            resize(dataIndexes.size());
+        }
+        else // No data mappings, just default oscillator
+        {
+            resize(1);
+        }
     }
 }
 
@@ -299,6 +299,7 @@ float Oscillator::visitFmods()
 
 void Oscillator::setFreqs()
 {
+
     if ((dataIndexes.size() < 1) || (fixedFreqs == true)) //no data mappings, use fixed freq
     {
         for (unsigned int i = 0; i < gens.size(); ++i) {

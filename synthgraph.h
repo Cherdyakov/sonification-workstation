@@ -22,17 +22,15 @@ public:
         SPEED,
         LOOP,
         LOOP_POINTS,
+        INTERPOLATE,
         DATA
     };
 
     typedef struct {
         GRAPH_COMMAND_TYPE type;
-        bool paused;
-        double pos;
-        double speed;
-        bool looping;
-        double loopBegin;
-        double loopEnd;
+        double doubleVal;
+        bool boolVal;
+        double doubleVal2;
         std::vector<double>* data;
         unsigned int height;
         unsigned int width;
@@ -54,6 +52,7 @@ public:
     void setLooping(bool looping);
     void setLoopPoints(double begin, double end);
     void setData(std::vector<double>* data, unsigned int height, unsigned int width);
+    void setInterpolate(bool interpolate);
 
     // for polling state from outside
     // (i.e. GUI)
@@ -64,6 +63,7 @@ private:
     void processPause(bool pause);
     void processSetPos(double pos);
     void processSetData(std::vector<double>* inData, unsigned int height, unsigned int width);
+    void processSetInterpolate(bool interpolate);
 
     float masterVolume;
     unsigned int ringBufferSize;
@@ -87,6 +87,7 @@ private:
     bool dataStale;
     bool paused;
     bool looping;
+    bool interpolate;
     double speed;
     unsigned int currentIdx;
     double mu;

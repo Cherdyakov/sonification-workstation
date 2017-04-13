@@ -19,6 +19,7 @@ SynthGraph::SynthGraph()
     speed = 1.0;
     returnPos = 0.0;
     masterVolume = 1.0;
+    interpolate = false;
 }
 
 float SynthGraph::processGraph()
@@ -63,6 +64,11 @@ float SynthGraph::processGraph()
             mu = (loopBegin - currentIdx);
             dataStale = true;
         }
+    }
+
+    if(interpolate)
+    {
+        dataStale = true;
     }
 
     if(dataStale)
@@ -137,7 +143,7 @@ void SynthGraph::pause(bool pause)
 {
     SynthGraphCommand command;
     command.type = GRAPH_COMMAND_TYPE::PAUSE;
-    command.paused = pause;
+    command.boolVal = pause;
     commandBuffer.push(command);
 }
 
@@ -145,7 +151,7 @@ void SynthGraph::setLooping(bool looping)
 {
     SynthGraphCommand command;
     command.type = GRAPH_COMMAND_TYPE::LOOP;
-    command.looping = looping;
+    command.boolVal = looping;
     commandBuffer.push(command);
 }
 
@@ -153,8 +159,8 @@ void SynthGraph::setLoopPoints(double begin, double end)
 {
     SynthGraphCommand command;
     command.type = GRAPH_COMMAND_TYPE::LOOP_POINTS;
-    command.loopBegin = begin;
-    command.loopEnd = end;
+    command.doubleVal = begin;
+    command.doubleVal2 = end;
     commandBuffer.push(command);
 }
 
@@ -162,7 +168,7 @@ void SynthGraph::setPos(double pos)
 {
     SynthGraphCommand command;
     command.type = GRAPH_COMMAND_TYPE::POSITION;
-    command.pos = pos;
+    command.doubleVal = pos;
     commandBuffer.push(command);
 }
 
@@ -170,7 +176,7 @@ void SynthGraph::setSpeed(double speed)
 {
     SynthGraphCommand command;
     command.type = GRAPH_COMMAND_TYPE::SPEED;
-    command.speed = speed;
+    command.doubleVal = speed;
     commandBuffer.push(command);
 }
 
@@ -184,12 +190,36 @@ void SynthGraph::setData(std::vector<double> *data, unsigned int height, unsigne
     commandBuffer.push(command);
 }
 
+void SynthGraph::setInterpolate(bool interpolate)
+{
+    SynthGraphCommand command;
+    command.type = GRAPH_COMMAND_TYPE::INTERPOLATE;
+    command.boolVal = interpolate;
+    commandBuffer.push(command);
+}
+
 void SynthGraph::retrieveData()
 {
-    for(unsigned int i = 0; i < dataHeight; i++)
+    if(interpolate)
     {
-        unsigned int idx = ((dataWidth * i) + currentIdx);
-        currentData[i] = (*data)[idx];
+        for(unsigned int i = 0; i < dataHeight; i++)
+        {
+            unsigned int idx = ((dataWidth * i) + currentIdx);
+            unsigned int nextIdx = idx + 1;
+            if(nextIdx > (dataWidth * i) + (dataWidth - 1)) {
+                nextIdx -= dataWidth;
+            }
+            double val = (*data)[idx];
+            double valNext = (*data)[nextIdx];
+            currentData[i] = ((1 - mu) * val) + (mu * valNext);
+        }
+    }
+    else {
+        for(unsigned int i = 0; i < dataHeight; i++)
+        {
+            unsigned int idx = ((dataWidth * i) + currentIdx);
+            currentData[i] = (*data)[idx];
+        }
     }
 }
 
@@ -208,32 +238,32 @@ void SynthGraph::processCommand(SynthGraphCommand command)
     switch (type) {
     case GRAPH_COMMAND_TYPE::PAUSE:
     {
-        processPause(command.paused);
+        processPause(command.boolVal);
     }
         break;
 
     case GRAPH_COMMAND_TYPE::POSITION:
     {
-        processSetPos(command.pos);
+        processSetPos(command.doubleVal);
     }
         break;
 
     case GRAPH_COMMAND_TYPE::SPEED:
     {
-        speed = command.speed;
+        speed = command.doubleVal;
     }
         break;
 
     case GRAPH_COMMAND_TYPE::LOOP:
     {
-        looping = command.looping;
+        looping = command.boolVal;
     }
         break;
 
     case GRAPH_COMMAND_TYPE::LOOP_POINTS:
     {
-        loopBegin = command.loopBegin;
-        loopEnd = command.loopEnd;
+        loopBegin = command.doubleVal;
+        loopEnd = command.doubleVal2;
     }
         break;
     case GRAPH_COMMAND_TYPE::DATA:
@@ -291,6 +321,11 @@ void SynthGraph::processSetData(std::vector<double> *inData, unsigned int height
         dataHeight = height;
         currentData.resize(dataHeight);
     }
+}
+
+void SynthGraph::processSetInterpolate(bool interpolate)
+{
+    this->interpolate = interpolate;
 }
 
 void SynthGraph::calculateReturnPos()

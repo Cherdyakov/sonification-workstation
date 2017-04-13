@@ -41,6 +41,7 @@ void Audifier::addChild(SynthItem *child, CHILD_TYPE type)
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
     command.item = child;
+    command.childType = type;
     commandBuffer.push(command);
 }
 

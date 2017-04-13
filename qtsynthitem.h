@@ -30,11 +30,6 @@ public:
         SQUARE
     };
 
-//    typedef SynthItem::SON_ITEM_TYPE ITEM_TYPE;
-//    typedef SynthItem::SON_CHILD_TYPE CHILD_TYPE;
-//    typedef SynthItem::SON_WAVEFORM WAVEFORM;
-//    qRegisterMetaType<QtSynthItem::ITEM_TYPE>("QtSynthItem::ITEM_TYPE")`
-
     virtual SynthItem* implementation();
     virtual float process();
     virtual float process(float in);

@@ -36,6 +36,7 @@ public:
     void setLooping(bool looping);
     void setLoopPoints(double begin, double end);
     void setData(std::vector<double>* data, unsigned int height, unsigned int width);
+    void setInterpolate(bool interpolate);
 
     // for polling state from outside
     // (i.e. GUI)

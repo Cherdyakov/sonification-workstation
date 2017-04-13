@@ -15,6 +15,11 @@ void QtSynthGraph::removeFromRoot(QtSynthItem *qtSynthItem)
     synthGraph.removeFromRoot(qtSynthItem->implementation());
 }
 
+void QtSynthGraph::setInterpolate(bool interpolate)
+{
+    synthGraph.setInterpolate(interpolate);
+}
+
 QtSynthItem* QtSynthGraph::createItem(ITEM_TYPE type)
 {
     SynthItem* item = NULL;
