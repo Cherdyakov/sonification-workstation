@@ -239,40 +239,38 @@ void SynthGraph::processCommand(SynthGraphCommand command)
     case GRAPH_COMMAND_TYPE::PAUSE:
     {
         processPause(command.boolVal);
-    }
         break;
-
+    }
     case GRAPH_COMMAND_TYPE::POSITION:
     {
         processSetPos(command.doubleVal);
-    }
         break;
-
+    }
     case GRAPH_COMMAND_TYPE::SPEED:
     {
         speed = command.doubleVal;
-    }
         break;
-
+    }
     case GRAPH_COMMAND_TYPE::LOOP:
     {
         looping = command.boolVal;
-    }
         break;
-
+    }
     case GRAPH_COMMAND_TYPE::LOOP_POINTS:
     {
         loopBegin = command.doubleVal;
         loopEnd = command.doubleVal2;
-    }
         break;
+    }
     case GRAPH_COMMAND_TYPE::DATA:
     {
         processSetData(command.data, command.height, command.width);
-    }
         break;
-
-
+    }
+    case GRAPH_COMMAND_TYPE::INTERPOLATE:
+    {
+        processSetInterpolate(command.boolVal);
+    }
     default:
         break;
     }

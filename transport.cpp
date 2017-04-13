@@ -18,8 +18,9 @@ Transport::Transport(QWidget *parent) : QWidget(parent)
     speedBox = new QDoubleSpinBox;
     QLabel* speedLabel = new QLabel;
     loopButton = new QPushButton(tr("Looping: OFF"));
+    interpolateBox = new QCheckBox(tr("Interpolation"));
 
-    speedLabel->setText("Steps per second:");
+    speedLabel->setText(tr("Steps per second:"));
     speedBox->setValue(1.0);
     speedBox->setMaximum(44100);
     speedBox->setMinimum(0.0);
@@ -27,6 +28,7 @@ Transport::Transport(QWidget *parent) : QWidget(parent)
     transportLayout->addWidget(pauseButton);
     transportLayout->addWidget(speedLabel);
     transportLayout->addWidget(speedBox);
+    transportLayout->addWidget(interpolateBox);
     //set layout of transport
     this->setLayout(transportLayout);
 
@@ -36,6 +38,8 @@ Transport::Transport(QWidget *parent) : QWidget(parent)
             this, SLOT(on_loopButton_released()));
     connect(speedBox, SIGNAL(valueChanged(double)),
             this,SLOT(on_speedBox_valueChanged(double)));
+    connect(interpolateBox, SIGNAL(stateChanged(int)),
+            this, SLOT(on_interpolateBox_stateChanged(int)));
 }
 
 void Transport::on_pauseButton_released()
@@ -77,6 +81,14 @@ void Transport::on_speedBox_valueChanged(double speed)
 void Transport::on_loopPointsChanged(double begin, double end)
 {
     synthGraph->setLoopPoints(begin, end);
+}
+
+void Transport::on_interpolateBox_stateChanged(int state)
+{
+    if(interpolate != state) {
+        interpolate = state;
+        synthGraph->setInterpolate(interpolate);
+    }
 }
 
 void Transport::setSynthGraph(QtSynthGraph *graph)

@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QDebug>
 #include <QTimer>
+#include <QCheckBox>
 
 #include "qtsynthgraph.h"
 
@@ -23,9 +24,11 @@ private:
 
     bool paused;
     bool looping;
+    bool interpolate;
     double stepsPerSecond;
     QPushButton* pauseButton;
     QPushButton* loopButton;
+    QCheckBox* interpolateBox;
     QDial* speedDial;
     QDoubleSpinBox* speedBox;
     QtSynthGraph* synthGraph;
@@ -43,6 +46,7 @@ private slots:
     void on_loopButton_released();
     void on_speedBox_valueChanged(double speed);
     void on_loopPointsChanged(double begin, double end);
+    void on_interpolateBox_stateChanged(int state);
 };
 
 #endif // TRANSPORT_H
