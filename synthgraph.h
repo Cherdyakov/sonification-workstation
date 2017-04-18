@@ -32,6 +32,8 @@ public:
         bool boolVal;
         double doubleVal2;
         std::vector<double>* data;
+        std::vector<double>* mins;
+        std::vector<double>* maxes;
         unsigned int height;
         unsigned int width;
     } SynthGraphCommand;
@@ -62,7 +64,7 @@ private:
 
     void processPause(bool pause);
     void processSetPos(double pos);
-    void processSetData(std::vector<double>* inData, unsigned int height, unsigned int width);
+    void processSetData(std::vector<double>* data, unsigned int height, unsigned int width);
     void processSetInterpolate(bool interpolate);
 
     float masterVolume;
@@ -83,6 +85,8 @@ private:
     std::vector<SynthItem*> graphRoot;
     std::vector<double>* data;
     std::vector<double> currentData;
+    std::vector<double> mins;
+    std::vector<double> maxes;
     RingBuffer<SynthGraphCommand> commandBuffer;
     bool dataStale;
     bool paused;
@@ -95,6 +99,7 @@ private:
     void retrieveCommands();
     void processCommand(SynthGraphCommand command);
     void calculateReturnPos();
+    void calculateMinMax();
 
 };
 

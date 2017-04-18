@@ -33,7 +33,6 @@ public:
     virtual SynthItem* implementation();
     virtual float process();
     virtual float process(float in);
-    virtual void setDataItem(QVector<double>* data);
     Q_INVOKABLE virtual void addChild(QtSynthItem *child, CHILD_TYPE type);
     Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);

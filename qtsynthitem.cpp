@@ -22,12 +22,6 @@ float QtSynthItem::process(float in)
     return synthItem->process(in);
 }
 
-void QtSynthItem::setDataItem(QVector<double> *data)
-{
-    std::vector<double> vec = data->toStdVector();
-    synthItem->setDataItem(&vec);
-}
-
 void QtSynthItem::addChild(QtSynthItem *child, CHILD_TYPE type)
 {
     synthItem->addChild(child->implementation(), (SynthItem::CHILD_TYPE)type);

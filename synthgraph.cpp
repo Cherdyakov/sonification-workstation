@@ -104,13 +104,13 @@ SynthItem* SynthGraph::createItem(SynthItem::ITEM_TYPE type)
     case SynthItem::ITEM_TYPE::OSCILLATOR:
     {
         item = new Oscillator();
-        item->setDataItem(&currentData);
+        item->setDataItem(&currentData, &mins, &maxes);
         break;
     }
     case SynthItem::ITEM_TYPE::AUDIFIER:
     {
         item = new Audifier();
-        item->setDataItem(&currentData);
+        item->setDataItem(&currentData, &mins, &maxes);
         break;
     }
     default:
@@ -304,21 +304,18 @@ void SynthGraph::processSetPos(double pos)
     mu = (pos - currentIdx);
 }
 
-void SynthGraph::processSetData(std::vector<double> *inData, unsigned int height, unsigned int width)
+void SynthGraph::processSetData(std::vector<double> *data, unsigned int height, unsigned int width)
 {
     paused = true;
-    data = inData;
+    this->data = data;
     dataWidth = width;
     currentData.clear();
     currentIdx = 0;
     mu = 0.0;
     calculateReturnPos();
-
-    if(dataHeight != height)
-    {
-        dataHeight = height;
-        currentData.resize(dataHeight);
-    }
+    dataHeight = height;
+    currentData.resize(dataHeight);
+    calculateMinMax();
 }
 
 void SynthGraph::processSetInterpolate(bool interpolate)
@@ -331,6 +328,36 @@ void SynthGraph::calculateReturnPos()
     // FIXME not on every callback
     double pos = ((double)currentIdx + mu);
     returnPos.store(pos, std::memory_order_relaxed);
+}
+
+void SynthGraph::calculateMinMax()
+{
+    double min;
+    double max;
+    mins.clear();
+    maxes.clear();
+    for(unsigned int i = 0; i < dataHeight; i++)
+    {
+        for(unsigned int j = 0; j < dataWidth; j++)
+        {
+            unsigned int idx = i * dataWidth + j;
+            double value = data->at(idx);
+            if(j == 0)
+            {
+                min = max = value;
+            }
+            else if(value < min)
+            {
+                min = value;
+            }
+            else if(value > max)
+            {
+                max = value;
+            }
+        }
+        mins.push_back(min);
+        maxes.push_back(max);
+    }
 }
 
 } //namespace son

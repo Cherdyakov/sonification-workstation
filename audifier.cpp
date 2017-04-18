@@ -23,11 +23,17 @@ float Audifier::process()
     {
         for(unsigned int i = 0; i < dataIndexes.size(); i++)
         {
-            sample += (dataItem->at(static_cast<unsigned int>(dataIndexes[i])) / 1000000000.0);
+            // Audifier always scales datasets to range -1.0 to 1.0
+            sample += scale((dataItem->at(static_cast<unsigned int>(dataIndexes[i]))),
+                            mins->at(i), maxes->at(i),
+                            -1.0, 1.0);
         }
     }
 
-    //visit amods eventually goes here
+    // visit amods eventually goes here
+
+    // divide by total number of datasets mapped (rows)
+    // to prevent clipping
     return sample /  dataIndexes.size();
 }
 

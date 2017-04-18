@@ -6,7 +6,10 @@ namespace son {
 SynthItem::SynthItem()
 {
     muted = false;
+    scaling = true;
     dataItem = NULL;
+    mins = NULL;
+    maxes = NULL;
 }
 
 void SynthItem::removeParent(SynthItem *parent)
@@ -41,7 +44,7 @@ void SynthItem::processCommand(SynthItem::SynthItemCommand command)
 
     case ITEM_COMMAND_TYPE::DATA:
     {
-        processSetDataItem(command.data);
+        processSetDataItem(command.data, command.mins, command.maxes);
         break;
     }
     case ITEM_COMMAND_TYPE::ADD_PARENT:
@@ -89,9 +92,13 @@ void SynthItem::processAddParent(SynthItem *parent)
     }
 }
 
-void SynthItem::processSetDataItem(std::vector<double> *data)
+void SynthItem::processSetDataItem(std::vector<double> *dataItem,
+                                   std::vector<double> *mins,
+                                   std::vector<double> *maxes)
 {
-    dataItem = data;
+    this->dataItem = dataItem;
+    this->mins = mins;
+    this->maxes = maxes;
 }
 
 void SynthItem::addParent(SynthItem *parent)
@@ -102,12 +109,25 @@ void SynthItem::addParent(SynthItem *parent)
     commandBuffer.push(command);
 }
 
-void SynthItem::setDataItem(std::vector<double> *data)
+void SynthItem::setDataItem(std::vector<double> *data,
+                            std::vector<double>* mins,
+                            std::vector<double>* maxes)
 {
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::DATA;
     command.data = data;
+    command.mins = mins;
+    command.maxes = maxes;
     commandBuffer.push(command);
+}
+
+// based on the Max "Scale" object
+// https://docs.cycling74.com/max7/maxobject/scale
+// default exp = 1 is linear
+double SynthItem::scale(double x, double in_low, double in_high,
+                        double out_low, double out_high, double exp)
+{
+    return ((x-in_low)/(in_high-in_low) == 0) ? out_low : (((x-in_low)/(in_high-in_low)) > 0) ? (out_low + (out_high-out_low) * pow(((x-in_low)/(in_high-in_low)),exp)) : ( out_low + (out_high-out_low) * -(pow((((-x+in_low)/(in_high-in_low))),exp)));
 }
 
 } //namespace son

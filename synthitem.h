@@ -50,6 +50,8 @@ public:
     typedef struct {
         ITEM_COMMAND_TYPE type;
         std::vector<double>* data;
+        std::vector<double>* mins;
+        std::vector<double>* maxes;
         std::vector<int> indexes;
         WAVEFORM waveform;
         int freq;
@@ -59,7 +61,9 @@ public:
     } SynthItemCommand;
 
     explicit SynthItem();
-    virtual void setDataItem(std::vector<double>* data);
+    virtual void setDataItem(std::vector<double>* data,
+                             std::vector<double>* mins,
+                             std::vector<double>* maxes);
     virtual void addParent(SynthItem* parent);
     virtual void removeParent(SynthItem* parent);
     virtual void mute(bool mute);
@@ -73,7 +77,10 @@ public:
 
 protected:
     bool muted;
+    bool scaling;
     std::vector<double>* dataItem;
+    std::vector<double>* mins;
+    std::vector<double>* maxes;
     std::vector<SynthItem*> parents;
 
     // Command buffer and parsing
@@ -84,8 +91,12 @@ protected:
     virtual void processMute(bool mute);
     virtual void processRemoveParent(SynthItem* parent);
     virtual void processAddParent(SynthItem* parent);
-    virtual void processSetDataItem(std::vector<double>* data);
+    virtual void processSetDataItem(std::vector<double>* dataItem,
+                                    std::vector<double> *mins,
+                                    std::vector<double> *maxes);
 
+    double scale(double x, double in_low, double in_high,
+                 double out_low, double out_high, double exp = 1);
 };
 
 } //namespace son
