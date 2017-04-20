@@ -1,5 +1,7 @@
 #include "oscillator.h"
 
+#include <QDebug>
+
 namespace son {
 
 Oscillator::Oscillator()
@@ -7,8 +9,11 @@ Oscillator::Oscillator()
     waveform = WAVEFORM::SINE;
     gam::Sine<>* defaultGen = new gam::Sine<>(440);
     gens.push_back(defaultGen);
-    freq = 440;
-    fixedFreqs = true;
+    fixedFreq = 440;
+    useFixedFreq = true;
+    useFreqScaling = true;
+    freqScaleLow = 40;
+    freqScaleHigh = 16000;
 }
 
 void Oscillator::setWaveform(WAVEFORM waveform)
@@ -19,19 +24,41 @@ void Oscillator::setWaveform(WAVEFORM waveform)
     commandBuffer.push(command);
 }
 
-void Oscillator::setFreq(double freq)
+void Oscillator::setFixedFreq(double freq)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::FREQ;
-    command.freq = freq;
+    command.type = ITEM_COMMAND_TYPE::VALUE;
+    command.parameter = ITEM_PARAMETER::FREQUENCY;
+    command.doubles[0] = freq;
     commandBuffer.push(command);
 }
 
-void Oscillator::setFixedFreqs(bool fixed)
+void Oscillator::setUseFixedFreq(bool fixed)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::FIXED_FREQS;
+    command.type = ITEM_COMMAND_TYPE::FIXED;
+    command.parameter = ITEM_PARAMETER::FREQUENCY;
     command.boolVal = fixed;
+    commandBuffer.push(command);
+}
+
+void Oscillator::setUseFreqScaling(bool scaling)
+{
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::SCALING;
+    command.parameter = ITEM_PARAMETER::FREQUENCY;
+    command.boolVal = scaling;
+    commandBuffer.push(command);
+}
+
+void Oscillator::setFreqScalingVals(double low, double high, double exp)
+{
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::SCALE_VALS;
+    command.parameter = ITEM_PARAMETER::FREQUENCY;
+    command.doubles.push_back(low);
+    command.doubles.push_back(high);
+    command.doubles.push_back(exp);
     commandBuffer.push(command);
 }
 
@@ -39,11 +66,15 @@ void Oscillator::setIndexes(std::vector<int> indexes)
 {
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::INDEXES;
-    command.indexes = indexes;
+    command.parameter = ITEM_PARAMETER::FREQUENCY;
+    for(int i = 0; i < indexes.size(); i++)
+    {
+        command.ints.push_back(indexes[i]);
+    }
     commandBuffer.push(command);
 }
 
-void Oscillator::addChild(SynthItem *child, SynthItem::CHILD_TYPE type)
+void Oscillator::addChild(SynthItem *child, SynthItem::ITEM_CHILD_TYPE type)
 {
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
@@ -60,10 +91,10 @@ void Oscillator::removeChild(SynthItem *child)
     commandBuffer.push(command);
 }
 
-void Oscillator::processAddChild(SynthItem *child, CHILD_TYPE type)
+void Oscillator::processAddChild(SynthItem *child, ITEM_CHILD_TYPE type)
 {
     switch (type){
-    case CHILD_TYPE::AMOD:
+    case ITEM_CHILD_TYPE::AMOD:
     {
         if(std::find(amods.begin(), amods.end(), child) != amods.end()) {
             return;
@@ -72,7 +103,7 @@ void Oscillator::processAddChild(SynthItem *child, CHILD_TYPE type)
         }
         break;
     }
-    case CHILD_TYPE::FMOD:
+    case ITEM_CHILD_TYPE::FMOD:
     {
         if(std::find(fmods.begin(), fmods.end(), child) != fmods.end()) {
             return;
@@ -109,16 +140,16 @@ void Oscillator::processSetWaveform(WAVEFORM waveType)
     }
 }
 
-void Oscillator::processSetFreq(double inFreq)
+void Oscillator::processSetFixedFreq(double fixedFreq)
 {
-    if (freq != inFreq) {
-        freq = inFreq;
+    if (this->fixedFreq != fixedFreq) {
+        this->fixedFreq = fixedFreq;
     }
 }
 
-void Oscillator::processSetFixedFreqs(bool fixed)
+void Oscillator::processSetUseFixedFreq(bool useFixedFreq)
 {
-    fixedFreqs = fixed;
+    this->useFixedFreq = useFixedFreq;
 }
 
 void Oscillator::processSetIndexes(std::vector<int> indexes)
@@ -134,6 +165,19 @@ void Oscillator::processSetIndexes(std::vector<int> indexes)
     muted = m;
 }
 
+void Oscillator::processSetFreqScaling(bool useFreqScaling)
+{
+    this->useFreqScaling = useFreqScaling;
+}
+
+void Oscillator::processSetFreqScalingVals(double low, double high, double exp)
+{
+    qDebug() << "cpp scalingVals: " << low << " " << high << " " << exp;
+    freqScaleLow = low;
+    freqScaleHigh = high;
+    freqScaleExp = exp;
+}
+
 void Oscillator::processCommand(SynthItemCommand command)
 {
     ITEM_COMMAND_TYPE type = command.type;
@@ -144,19 +188,28 @@ void Oscillator::processCommand(SynthItemCommand command)
         processAddChild(command.item, command.childType);
         break;
     }
-    case ITEM_COMMAND_TYPE::FIXED_FREQS:
+    case ITEM_COMMAND_TYPE::FIXED:
     {
-        processSetFixedFreqs(command.boolVal);
+        if(command.parameter == ITEM_PARAMETER::FREQUENCY)
+        {
+            processSetUseFixedFreq(command.boolVal);
+        }
         break;
     }
-    case ITEM_COMMAND_TYPE::FREQ:
+    case ITEM_COMMAND_TYPE::VALUE:
     {
-        processSetFreq(command.freq);
+        if(command.parameter == ITEM_PARAMETER::FREQUENCY)
+        {
+            processSetFixedFreq(command.doubles[0]);
+        }
         break;
     }
     case ITEM_COMMAND_TYPE::INDEXES:
     {
-        processSetIndexes(command.indexes);
+        if(command.parameter == ITEM_PARAMETER::FREQUENCY)
+        {
+            processSetIndexes(command.ints);
+        }
         break;
     }
     case ITEM_COMMAND_TYPE::REMOVE_CHILD:
@@ -167,6 +220,24 @@ void Oscillator::processCommand(SynthItemCommand command)
     case ITEM_COMMAND_TYPE::WAVEFORM:
     {
         processSetWaveform(command.waveform);
+        break;
+    }
+    case ITEM_COMMAND_TYPE::SCALING:
+    {
+        if(command.parameter == ITEM_PARAMETER::FREQUENCY)
+        {
+            processSetFreqScaling(command.boolVal);
+        }
+        break;
+    }
+    case ITEM_COMMAND_TYPE::SCALE_VALS:
+    {
+        if(command.parameter == ITEM_PARAMETER::FREQUENCY)
+        {
+            processSetFreqScalingVals(command.doubles[0],
+                                      command.doubles[1],
+                                      command.doubles[2]);
+        }
         break;
     }
     default:
@@ -300,10 +371,10 @@ float Oscillator::visitFmods()
 void Oscillator::setFreqs()
 {
 
-    if ((dataIndexes.size() < 1) || (fixedFreqs == true)) //no data mappings, use fixed freq
+    if ((dataIndexes.size() < 1) || (useFixedFreq == true)) //no data mappings, use fixed freq
     {
         for (unsigned int i = 0; i < gens.size(); ++i) {
-            gens[i]->freq(freq);
+            gens[i]->freq(fixedFreq);
         }
     }
     else //map each indexed value from the data row to the freq of a generator
@@ -312,6 +383,11 @@ void Oscillator::setFreqs()
              (i < dataIndexes.size()) &&
              (i < dataItem->size()); ++i) {
             double f = dataItem->at(dataIndexes[i]);
+            if(useFreqScaling)
+            {
+                f = scale(f, mins->at(i), maxes->at(i),
+                          freqScaleLow, freqScaleHigh, freqScaleExp);
+            }
             gens[i]->freq(f);
         }
     }
@@ -319,6 +395,4 @@ void Oscillator::setFreqs()
 }
 
 }
-
-// clipboard
 

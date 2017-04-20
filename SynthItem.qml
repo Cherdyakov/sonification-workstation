@@ -23,6 +23,7 @@ Item {
     property alias radius: rect.radius
 
     signal clickedItem(var i)
+    signal implementationSet()
 
     width: 64; height: 64
 
@@ -88,6 +89,7 @@ Item {
     function create() {
         created = true
         implementation = graph.createItem(type)
+        implementationSet()
         canvas.requestPaint()
     }
 

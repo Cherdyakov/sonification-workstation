@@ -20,5 +20,6 @@
         <file>EditorLayout.qml</file>
         <file>EditorMapper.qml</file>
         <file>AUD.qml</file>
+        <file>EditorScaler.qml</file>
     </qresource>
 </RCC>

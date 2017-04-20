@@ -7,11 +7,12 @@ Modulator::Modulator()
 
 }
 
-void Modulator::setModType(SynthItem::CHILD_TYPE modType)
+void Modulator::setModType(SynthItem::ITEM_CHILD_TYPE childType)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::MOD_TYPE;
-    command.childType = modType;
+    command.type = ITEM_COMMAND_TYPE::VALUE;
+    command.parameter = ITEM_PARAMETER::MODULATION;
+    command.childType = childType;
     commandBuffer.push(command);
 }
 
@@ -20,9 +21,12 @@ void Modulator::processCommand(SynthItem::SynthItemCommand command)
     ITEM_COMMAND_TYPE type = command.type;
 
     switch (type) {
-    case ITEM_COMMAND_TYPE::MOD_TYPE:
+    case ITEM_COMMAND_TYPE::VALUE:
     {
-        processSetModType(command.childType);
+        if(command.parameter == ITEM_PARAMETER::MODULATION)
+        {
+            processSetModType(command.childType);
+        }
         break;
     }
     default:
@@ -31,7 +35,7 @@ void Modulator::processCommand(SynthItem::SynthItemCommand command)
     }
 }
 
-void Modulator::processSetModType(SynthItem::CHILD_TYPE modType)
+void Modulator::processSetModType(SynthItem::ITEM_CHILD_TYPE modType)
 {
 
 }

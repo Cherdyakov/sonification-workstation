@@ -26,17 +26,17 @@ public:
         DATA
     };
 
-    typedef struct {
+    struct SynthGraphCommand{
         GRAPH_COMMAND_TYPE type;
-        double doubleVal;
-        bool boolVal;
+        double doubleVal;       
         double doubleVal2;
+        bool boolVal;
         std::vector<double>* data;
         std::vector<double>* mins;
         std::vector<double>* maxes;
         unsigned int height;
         unsigned int width;
-    } SynthGraphCommand;
+    };
 
     explicit SynthGraph();
 

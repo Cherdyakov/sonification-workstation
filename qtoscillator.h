@@ -15,12 +15,13 @@ public:
     explicit QtOscillator(SynthItem* item = 0, QObject *parent = 0);
 
     Q_INVOKABLE void setWaveform(WAVEFORM waveform);
-    Q_INVOKABLE void setFreq(double freq);
-    Q_INVOKABLE void setFixedFreqs(bool fixed);
+    Q_INVOKABLE void setFixedFreq(double freq);
+    Q_INVOKABLE void setUseFixedFreq(bool fixed);
+    Q_INVOKABLE void setUseFreqScaling(bool scaling);
+    Q_INVOKABLE void setFreqScalingVals(double low, double high, double exp);
 
-private:
-    Oscillator* oscillator;
-
+    private:
+        Oscillator* oscillator;
 };
 
 #endif // QTOSCILLATOR_H

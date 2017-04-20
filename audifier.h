@@ -15,7 +15,7 @@ public:
     Audifier();
     float process() override;
     float process(float in) override;
-    void addChild(SynthItem* child, CHILD_TYPE type) override;
+    void addChild(SynthItem* child, ITEM_CHILD_TYPE type) override;
     void removeChild(SynthItem* child) override;
     void setIndexes(std::vector<int> indexes) override;
 
@@ -24,12 +24,10 @@ private:
     // command buffering and parsing stuff
     void processCommand(SynthItemCommand command);
 
-    void processAddChild(SynthItem* child, CHILD_TYPE type);
+    void processAddChild(SynthItem* child, ITEM_CHILD_TYPE type);
     void processRemoveChild(SynthItem* child);
     void processSetIndexes(std::vector<int> indexes);
 
-    std::vector<int> dataIndexes;
-    std::vector<SynthItem*> amods;
     float visitAmods();
 
 };

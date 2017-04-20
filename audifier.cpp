@@ -42,7 +42,7 @@ float Audifier::process(float in)
     return in;
 }
 
-void Audifier::addChild(SynthItem *child, CHILD_TYPE type)
+void Audifier::addChild(SynthItem *child, ITEM_CHILD_TYPE type)
 {
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
@@ -63,7 +63,8 @@ void Audifier::setIndexes(std::vector<int> indexes)
 {
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::INDEXES;
-    command.indexes = indexes;
+    command.parameter = ITEM_PARAMETER::AUDIFICATION;
+    command.ints = indexes;
     commandBuffer.push(command);
 }
 
@@ -84,7 +85,10 @@ void Audifier::processCommand(SynthItemCommand command)
     }
     case ITEM_COMMAND_TYPE::INDEXES:
     {
-        processSetIndexes(command.indexes);
+        if(command.parameter == ITEM_PARAMETER::AUDIFICATION)
+        {
+            processSetIndexes(command.ints);
+        }
         break;
     }
     default:
@@ -93,10 +97,10 @@ void Audifier::processCommand(SynthItemCommand command)
     }
 }
 
-void Audifier::processAddChild(SynthItem *child, SynthItem::CHILD_TYPE type)
+void Audifier::processAddChild(SynthItem *child, SynthItem::ITEM_CHILD_TYPE type)
 {
     switch (type){
-    case CHILD_TYPE::AMOD: {
+    case ITEM_CHILD_TYPE::AMOD: {
         if(std::find(amods.begin(), amods.end(), child) != amods.end()) {
             return;
         } else {

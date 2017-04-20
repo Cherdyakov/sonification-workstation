@@ -13,12 +13,22 @@ void QtOscillator::setWaveform(WAVEFORM waveform)
     oscillator->setWaveform((SynthItem::WAVEFORM)waveform);
 }
 
-void QtOscillator::setFreq(double freq)
+void QtOscillator::setFixedFreq(double freq)
 {
-    oscillator->setFreq(freq);
+    oscillator->setFixedFreq(freq);
 }
 
-void QtOscillator::setFixedFreqs(bool fixed)
+void QtOscillator::setUseFixedFreq(bool fixed)
 {
-    oscillator->setFixedFreqs(fixed);
+    oscillator->setUseFixedFreq(fixed);
+}
+
+void QtOscillator::setUseFreqScaling(bool scaling)
+{
+    oscillator->setUseFreqScaling(scaling);
+}
+
+void QtOscillator::setFreqScalingVals(double low, double high, double exp)
+{
+    oscillator->setFreqScalingVals(low, high, exp);
 }

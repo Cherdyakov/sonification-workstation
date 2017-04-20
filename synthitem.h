@@ -1,6 +1,8 @@
 #ifndef SYNTHITEM_H
 #define SYNTHITEM_H
 
+#define MAX_DIMENSIONS 128
+
 #include <atomic>
 #include <vector>
 #include <algorithm>
@@ -20,45 +22,64 @@ public:
         AUDIFIER
     };
 
-    enum class CHILD_TYPE {
-        IN,
+    enum class ITEM_CHILD_TYPE {
+        INPUT,
         AMOD,
         FMOD,
         PMOD
     };
 
+    enum class ITEM_PARAMETER {
+        FREQUENCY,
+        AUDIFICATION,
+        MODULATION
+    };
+
     enum class WAVEFORM {
         SINE,
         SAW,
-        SQUARE
+        SQUARE,
+        WHITE,
+        PINK
     };
 
     enum class ITEM_COMMAND_TYPE {
         DATA,
+        VALUE,
+        SCALING,
+        SCALE_VALS,
         INDEXES,
         WAVEFORM,
-        FREQ,
-        FIXED_FREQS,
+        FIXED,
         ADD_CHILD,
         REMOVE_CHILD,
         ADD_PARENT,
         REMOVE_PARENT,
-        MOD_TYPE,
         MUTE
     };
 
-    typedef struct {
+    struct SynthItemCommand {
         ITEM_COMMAND_TYPE type;
+        ITEM_PARAMETER parameter;
+        ITEM_CHILD_TYPE childType;
+        WAVEFORM waveform;
         std::vector<double>* data;
         std::vector<double>* mins;
         std::vector<double>* maxes;
-        std::vector<int> indexes;
-        WAVEFORM waveform;
-        int freq;
+        std::vector<double> doubles;
+        std::vector<int> ints;
         bool boolVal;
         SynthItem* item;
-        CHILD_TYPE childType;
-    } SynthItemCommand;
+        SynthItemCommand() {
+            // Reserve space equal to twice the largest number of scalable
+            // parameters (probably in ENV), for storing high and low
+            // scaleVals for every parameter.
+            doubles.reserve(20);
+            // Reserve space equal to max number of
+            // mappings, which are stored in int vector
+            ints.reserve(MAX_DIMENSIONS);
+        }
+    };
 
     explicit SynthItem();
     virtual void setDataItem(std::vector<double>* data,
@@ -71,17 +92,18 @@ public:
     // pure virtual functions
     virtual float process() = 0;
     virtual float process(float in) = 0;
-    virtual void addChild(SynthItem *item, CHILD_TYPE type) = 0;
+    virtual void addChild(SynthItem *item, ITEM_CHILD_TYPE type) = 0;
     virtual void removeChild(SynthItem *item) = 0;
     virtual void setIndexes(std::vector<int> indexes) = 0;
 
 protected:
     bool muted;
-    bool scaling;
     std::vector<double>* dataItem;
     std::vector<double>* mins;
     std::vector<double>* maxes;
-    std::vector<SynthItem*> parents;
+    std::vector<SynthItem*> parents; 
+    std::vector<SynthItem*> amods;
+    std::vector<int> dataIndexes;
 
     // Command buffer and parsing
     SynthItemCommand currentCommand;

@@ -28,7 +28,7 @@ typedef struct {
     int freq;
     bool fixedFreqs;
     SynthItem* item;
-    SynthItem::CHILD_TYPE itemType;
+    SynthItem::ITEM_CHILD_TYPE itemType;
     bool mute;
 } ModulatorCommand;
 

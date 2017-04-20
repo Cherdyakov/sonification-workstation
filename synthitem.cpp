@@ -6,7 +6,6 @@ namespace son {
 SynthItem::SynthItem()
 {
     muted = false;
-    scaling = true;
     dataItem = NULL;
     mins = NULL;
     maxes = NULL;

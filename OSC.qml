@@ -19,26 +19,33 @@ SynthItem {
 
         id: editor
         property int waveform: QtSynthItem.SINE
-        property bool fixedFrequency: true
-        property double frequency: 440
+        property bool useFixedFreq: true
+        property double fixedFreq: 440
+        property bool useFreqScaling: true
+        property double freqScaleLow: 40
+        property double freqScaleHigh: 16000
+        property double freqScaleExp: 1
 
         Component.onCompleted: {
             waveformEditor.comboBox.currentIndex = waveform
-            frequencyEditor.spinBox.value = frequency * 100
-            fixedEditor.checkBox.checked = fixedFrequency
+            frequencyEditor.spinBox.value = fixedFreq * 100
+            fixedEditor.checkBox.checked = useFixedFreq
+            frequencyScaler.lowSpinBox.value = freqScaleLow * 100
+            frequencyScaler.highSpinBox.value = freqScaleHigh * 100
+            frequencyScaler.expSpinBox.value = freqScaleExp * 100
+            frequencyScaler.checkBox.checked = useFreqScaling
         }
 
         onWaveformChanged: {
             implementation.setWaveform(waveform)
         }
 
-        onFixedFrequencyChanged: {
-            implementation.setFixedFreqs(fixedFrequency)
+        onUseFixedFreqChanged: {
+            implementation.setUseFixedFreq(useFixedFreq)
         }
 
-        onFrequencyChanged: {
-            implementation.setFreq(frequency)
-            console.log(frequency)
+        onFixedFreqChanged: {
+            implementation.setFixedFreq(fixedFreq)
         }
 
         EditorLayout {
@@ -59,8 +66,8 @@ SynthItem {
                 EditorFrequency {
                     id: frequencyEditor
                     onFrequencyChanged: {
-                        if (editor.frequency != freq) {
-                            editor.frequency = freq / 100
+                        if (editor.fixedFreq !== freq / 100) {
+                            editor.fixedFreq = freq / 100
                         }
                     }
                 }
@@ -69,8 +76,8 @@ SynthItem {
                     id: fixedEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.fixedFrequency != fixed) {
-                            editor.fixedFrequency = fixed
+                        if (editor.useFixedFreq != fixed) {
+                            editor.useFixedFreq = fixed
                         }
                     }
                 }
@@ -88,6 +95,45 @@ SynthItem {
                             return value - 1;
                         } )
                         implementation.setIndexes(implementationMappings)
+                    }
+                }
+            }
+
+            EditorScaler {
+                id: frequencyScaler
+                label.text: qsTr("Frequency Scaling: ")
+                lowLabel.text: qsTr("Frequency Low: ")
+                highLabel.text: qsTr("Frequency High: ")
+                onLowChanged:
+                {
+                    if(editor.freqScaleLow !== low / 100) {
+                        editor.freqScaleLow = low / 100
+                        implementation.setFreqScalingVals(editor.freqScaleLow,
+                                                          editor.freqScaleHigh,
+                                                          editor.freqScaleExp)
+                    }
+                }
+                onHighChanged:
+                {
+                    if(editor.freqScaleHigh !== high / 100) {
+                        editor.freqScaleHigh = high / 100
+                        implementation.setFreqScalingVals(editor.freqScaleLow,
+                                                          editor.freqScaleHigh,
+                                                          editor.freqScaleExp)                    }
+                }
+                onExponentChanged:
+                {
+                    if(editor.freqScaleExp !== exp / 100) {
+                        editor.freqScaleExp = exp / 100
+                        implementation.setFreqScalingVals(editor.freqScaleLow,
+                                                          editor.freqScaleHigh,
+                                                          editor.freqScaleExp)                    }
+                }
+                onUseScalingChanged:
+                {
+                    if(editor.useFreqScaling !== scaling) {
+                        editor.useFreqScaling = scaling
+                        implementation.setUseFreqScaling(editor.useFreqScaling)
                     }
                 }
             }

@@ -24,7 +24,7 @@ float QtSynthItem::process(float in)
 
 void QtSynthItem::addChild(QtSynthItem *child, CHILD_TYPE type)
 {
-    synthItem->addChild(child->implementation(), (SynthItem::CHILD_TYPE)type);
+    synthItem->addChild(child->implementation(), (SynthItem::ITEM_CHILD_TYPE)type);
 }
 
 void QtSynthItem::removeChild(QtSynthItem *child)
