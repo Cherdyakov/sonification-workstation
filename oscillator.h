@@ -17,10 +17,9 @@ public:
 
     float process() override;
     float process(float in) override;
-    void addChild(SynthItem* child, ITEM_CHILD_TYPE type) override;
+    bool addChild(SynthItem* child, ITEM_CHILD_TYPE childType) override;
     void removeChild(SynthItem* child) override;
     void setIndexes(std::vector<int> indexes) override;
-
     void setWaveform(WAVEFORM waveform);
     void setFixedFreq(double fixedFreq);
     void setUseFixedFreq(bool fixed);
@@ -28,15 +27,12 @@ public:
     void setFreqScalingVals(double low, double high, double exp);
 
 protected:
-    virtual void processCommand(SynthItemCommand command) override;
-
-private:
-
     // actually implementing the commands on callback
     // side of the command buffer
+    virtual void processCommand(SynthItemCommand command) override;
     void processAddChild(SynthItem* child, ITEM_CHILD_TYPE type);
     void processRemoveChild(SynthItem* child);
-    void processSetWaveform(WAVEFORM waveType);
+    virtual void processSetWaveform(WAVEFORM waveType);
     void processSetFixedFreq(double fixedFreq);
     void processSetUseFixedFreq(bool useFixedFreq);
     void processSetIndexes(std::vector<int> indexes);
@@ -54,16 +50,15 @@ private:
 
     WAVEFORM waveform;
 
-    std::vector<gam::AccumPhase<>*> gens;
-
     std::vector<SynthItem*> fmods;
 
+    float visitFmods();
+    virtual void setFreqs();
+
+private:
+    std::vector<gam::AccumPhase<>*> gens;
     void resize(unsigned int size);
     gam::AccumPhase<>* newGen(WAVEFORM type);
-
-    float visitFmods();
-    float visitAmods();
-    void setFreqs();
 
 };
 

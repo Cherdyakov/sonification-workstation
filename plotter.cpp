@@ -4,14 +4,14 @@ Plotter::Plotter()
 {
     // Only selections are via playhead
     // Plot elements are not, themselves, selected
-    setSelectionRectMode(QCP::srmNone);
+//    setSelectionRectMode(QCP::srmSelect);
     QCP::Interactions qcpInteractions;
     qcpInteractions |= QCP::iRangeDrag;
     qcpInteractions |= QCP::iRangeZoom;
     qcpInteractions |= QCP::iSelectPlottables;
     setInteractions(qcpInteractions);
 //    axisRect()->setRangeDrag(Qt::Horizontal);
-//    axisRect()->setRangeZoom(Qt::Horizontal)
+//    axisRect()->setRangeZoom(Qt::Horizontal);
 
 
     // The Kelly colors.

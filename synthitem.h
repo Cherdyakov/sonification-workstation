@@ -19,7 +19,8 @@ public:
     enum class ITEM_TYPE {
         OUT,
         OSCILLATOR,
-        AUDIFIER
+        AUDIFIER,
+        MODULATOR
     };
 
     enum class ITEM_CHILD_TYPE {
@@ -72,7 +73,7 @@ public:
         SynthItem* item;
         SynthItemCommand() {
             // Reserve space equal to twice the largest number of scalable
-            // parameters (probably in ENV), for storing high and low
+            // parameters in any SynthItem, for storing high and low
             // scaleVals for every parameter.
             doubles.reserve(20);
             // Reserve space equal to max number of
@@ -81,22 +82,27 @@ public:
         }
     };
 
+    ITEM_TYPE getType();
+
     explicit SynthItem();
     virtual void setDataItem(std::vector<double>* data,
                              std::vector<double>* mins,
                              std::vector<double>* maxes);
     virtual void addParent(SynthItem* parent);
+    virtual void removeChild(SynthItem *item);
     virtual void removeParent(SynthItem* parent);
     virtual void mute(bool mute);
 
     // pure virtual functions
     virtual float process() = 0;
     virtual float process(float in) = 0;
-    virtual void addChild(SynthItem *item, ITEM_CHILD_TYPE type) = 0;
-    virtual void removeChild(SynthItem *item) = 0;
+    virtual bool addChild(SynthItem *item, ITEM_CHILD_TYPE childType) = 0;
+
     virtual void setIndexes(std::vector<int> indexes) = 0;
 
 protected:
+    ITEM_TYPE myType;
+    std::vector<SynthItem::ITEM_CHILD_TYPE> acceptedChildTypes;
     bool muted;
     std::vector<double>* dataItem;
     std::vector<double>* mins;
@@ -113,9 +119,15 @@ protected:
     virtual void processMute(bool mute);
     virtual void processRemoveParent(SynthItem* parent);
     virtual void processAddParent(SynthItem* parent);
+    virtual void processAddChild(SynthItem* child, ITEM_CHILD_TYPE type) = 0;
+    virtual void processRemoveChild(SynthItem* child) = 0;
     virtual void processSetDataItem(std::vector<double>* dataItem,
                                     std::vector<double> *mins,
                                     std::vector<double> *maxes);
+
+    bool verifyChildType(SynthItem::ITEM_CHILD_TYPE childType);
+
+    float visitAmods();
 
     double scale(double x, double in_low, double in_high,
                  double out_low, double out_high, double exp = 1);

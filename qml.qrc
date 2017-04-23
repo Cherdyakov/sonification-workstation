@@ -21,5 +21,7 @@
         <file>EditorMapper.qml</file>
         <file>AUD.qml</file>
         <file>EditorScaler.qml</file>
+        <file>MOD.qml</file>
+        <file>EditorModulationType.qml</file>
     </qresource>
 </RCC>

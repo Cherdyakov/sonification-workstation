@@ -7,6 +7,7 @@
 
 #include "oscillator.h"
 #include "audifier.h"
+#include "modulator.h"
 #include "ringbuffer.h"
 
 namespace son {

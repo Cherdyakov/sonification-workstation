@@ -6,18 +6,20 @@ import "Style.js" as Style
 
 SynthItem {
     id: root
-    label: qsTr("OSC")
-    type: QtSynthGraph.OSCILLATOR
-    mainColor: Style.oscColor
+    label: qsTr("MOD")
+    type: QtSynthGraph.MODULATOR
+    mainColor: Style.modColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
+
     }
 
     Editor {
 
         id: editor
         property int waveform: QtSynthItem.SINE
+        property  int  modType: QtSynthItem.AMOD
         property bool useFixedFreq: true
         property double fixedFreq: 440
         property bool useFreqScaling: true
@@ -46,6 +48,7 @@ SynthItem {
         onFixedFreqChanged: {
             implementation.setFixedFreq(fixedFreq)
         }
+
 
         EditorLayout {
             id: layout

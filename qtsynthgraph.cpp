@@ -30,16 +30,22 @@ QtSynthItem* QtSynthGraph::createItem(ITEM_TYPE type)
     {
         break;
     }
-    case OSCILLATOR:
+    case ITEM_TYPE::OSCILLATOR:
     {
         item = synthGraph.createItem((SynthItem::ITEM_TYPE)type);
         qtItem = new QtOscillator(item);
         break;
     }
-    case AUDIFIER:
+    case ITEM_TYPE::AUDIFIER:
     {
         item = synthGraph.createItem((SynthItem::ITEM_TYPE)type);
         qtItem = new QtAudifier(item);
+        break;
+    }
+    case ITEM_TYPE::MODULATOR:
+    {
+        item = synthGraph.createItem((SynthItem::ITEM_TYPE)type);
+        qtItem = new QtModulator(item);
         break;
     }
     default:

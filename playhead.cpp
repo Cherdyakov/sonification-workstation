@@ -117,6 +117,7 @@ void PlayHead::mousePressEvent(QMouseEvent *e)
     switch (button) {
     case Qt::LeftButton:
     {
+
         double pos = pixelToVal(e->pos().x());
         blink = true;
         // let SynthGraph move cursor and

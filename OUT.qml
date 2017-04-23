@@ -32,7 +32,6 @@ SynthItem {
     }
 
     function mute() {
-        console.log("OUT mute")
         //mute children
         for(var i = 0; i < synthChildren.length; i++) {
             var synthItem = synthChildren[i]

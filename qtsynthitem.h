@@ -18,22 +18,24 @@ public:
     explicit QtSynthItem(QObject *parent = 0);
 
     enum CHILD_TYPE {
-        IN,
+        IN = (int)SynthItem::ITEM_CHILD_TYPE::INPUT,
         AMOD,
         FMOD,
         PMOD
     };
 
     enum WAVEFORM {
-        SINE,
+        SINE = (int)SynthItem::WAVEFORM::SINE,
         SAW,
-        SQUARE
+        SQUARE,
+        WHITE,
+        PINK
     };
 
     virtual SynthItem* implementation();
     virtual float process();
     virtual float process(float in);
-    Q_INVOKABLE virtual void addChild(QtSynthItem *child, CHILD_TYPE type);
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, CHILD_TYPE type);
     Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);

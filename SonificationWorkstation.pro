@@ -20,7 +20,8 @@ SOURCES += \
     qtsynthitem.cpp \
     qtsynthgraph.cpp \
     qtaudifier.cpp \
-    modulator.cpp
+    modulator.cpp \
+    qtmodulator.cpp
 
 RESOURCES += qml.qrc
 
@@ -54,7 +55,7 @@ HEADERS += \
     qtsynthgraph.h \
     qtaudifier.h \
     modulator.h \
-    modulatorcommand.h
+    qtmodulator.h
 
 FORMS +=
 

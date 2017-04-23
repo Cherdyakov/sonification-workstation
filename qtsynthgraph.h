@@ -6,6 +6,7 @@
 #include "synthgraph.h"
 #include "qtoscillator.h"
 #include "qtaudifier.h"
+#include "qtmodulator.h"
 
 using namespace son;
 
@@ -13,12 +14,18 @@ class QtSynthGraph : public QObject
 {
     Q_OBJECT
     Q_ENUMS(ITEM_TYPE)
+
 public:
 
+    // Q_ENUM analog of SynthItem::ITEM_TYPE, would logically
+    // reside in QtSynthItem.  However, to be accessed from QML
+    // Q_ENUM must be declared in same class as the Q_INVOKABLE
+    // functions that use it. See QTBUG-58454
     enum ITEM_TYPE {
-        OUT,
+        OUT = (int)SynthItem::ITEM_TYPE::OUT,
         OSCILLATOR,
-        AUDIFIER
+        AUDIFIER,
+        MODULATOR
     };
 
     explicit QtSynthGraph(QObject *parent = 0);

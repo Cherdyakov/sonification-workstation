@@ -4,7 +4,7 @@ namespace son {
 
 Audifier::Audifier()
 {
-
+    myType = ITEM_TYPE::AUDIFIER;
 }
 
 float Audifier::process()
@@ -42,13 +42,18 @@ float Audifier::process(float in)
     return in;
 }
 
-void Audifier::addChild(SynthItem *child, ITEM_CHILD_TYPE type)
+bool Audifier::addChild(SynthItem *child, ITEM_CHILD_TYPE childType)
 {
+    if(!verifyChildType(childType))
+    {
+        return false;
+    }
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
     command.item = child;
-    command.childType = type;
+    command.childType = childType;
     commandBuffer.push(command);
+    return true;
 }
 
 void Audifier::removeChild(SynthItem *child)

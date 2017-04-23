@@ -96,11 +96,14 @@ Item {
     function addChild(synthItem) {
         if(implementation == null)
             return
-        //add QML child to this item's synthChildren
-        synthChildren.push(synthItem)
         //add child's implementation to the children
         //of this item's implementation
-        implementation.addChild(synthItem.implementation, synthItem.type)
+        if(implementation.addChild(synthItem.implementation, synthItem.type))
+        {
+            //add QML child to this item's synthChildren
+            synthChildren.push(synthItem)
+            synthItem.addParent(this)
+        }
     }
 
     function removeChild(synthItem) {
@@ -122,9 +125,6 @@ Item {
             return
         //add QML parent to this item's synthParents
         synthParents.push(synthItem)
-        //add parent's implementation to the parents
-        //in this item's implementation
-        implementation.addParent(synthItem.implementation)
     }
 
     function removeParent(synthItem) {

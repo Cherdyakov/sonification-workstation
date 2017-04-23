@@ -20,8 +20,6 @@ Item {
             }
             else {
                 //clicked on second item
-                //add endpoint to begin's children
-                patchBegin.addParent(item)
                 //add startpoint to end's parents
                 item.addChild(patchBegin)
                 //stop patching

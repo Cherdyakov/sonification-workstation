@@ -6,14 +6,21 @@ namespace son {
 
 Oscillator::Oscillator()
 {
+    myType = ITEM_TYPE::OSCILLATOR;
     waveform = WAVEFORM::SINE;
-    gam::Sine<>* defaultGen = new gam::Sine<>(440);
-    gens.push_back(defaultGen);
     fixedFreq = 440;
     useFixedFreq = true;
     useFreqScaling = true;
     freqScaleLow = 40;
     freqScaleHigh = 16000;
+
+    acceptedChildTypes = {
+        ITEM_CHILD_TYPE::AMOD,
+        ITEM_CHILD_TYPE::FMOD
+    };
+
+    gam::Sine<>* defaultGen = new gam::Sine<>(fixedFreq);
+    gens.push_back(defaultGen);
 }
 
 void Oscillator::setWaveform(WAVEFORM waveform)
@@ -29,7 +36,7 @@ void Oscillator::setFixedFreq(double freq)
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::VALUE;
     command.parameter = ITEM_PARAMETER::FREQUENCY;
-    command.doubles[0] = freq;
+    command.doubles.push_back(freq);
     commandBuffer.push(command);
 }
 
@@ -67,20 +74,25 @@ void Oscillator::setIndexes(std::vector<int> indexes)
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::INDEXES;
     command.parameter = ITEM_PARAMETER::FREQUENCY;
-    for(int i = 0; i < indexes.size(); i++)
+    for(unsigned int i = 0; i < indexes.size(); i++)
     {
         command.ints.push_back(indexes[i]);
     }
     commandBuffer.push(command);
 }
 
-void Oscillator::addChild(SynthItem *child, SynthItem::ITEM_CHILD_TYPE type)
+bool Oscillator::addChild(SynthItem *child, SynthItem::ITEM_CHILD_TYPE childType)
 {
+    if(!verifyChildType(childType))
+    {
+        return false;
+    }
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
     command.item = child;
-    command.childType = type;
+    command.childType = childType;
     commandBuffer.push(command);
+    return true;
 }
 
 void Oscillator::removeChild(SynthItem *child)
@@ -115,6 +127,7 @@ void Oscillator::processAddChild(SynthItem *child, ITEM_CHILD_TYPE type)
     default:
         break; //incompatible child type
     }
+    child->addParent(this);
 }
 
 void Oscillator::processRemoveChild(SynthItem *child)
@@ -248,7 +261,7 @@ void Oscillator::processCommand(SynthItemCommand command)
 
 void Oscillator::resize(unsigned int size)
 {
-    bool m = muted;
+    bool wasMuted = muted;
     if(!muted) {
         muted = true;
     }
@@ -259,10 +272,12 @@ void Oscillator::resize(unsigned int size)
     }
     while(gens.size() > size)
     {
+        gam::AccumPhase<>* gen = gens[gens.size() - 1];
         gens.pop_back();
+        delete gen;
     }
 
-    muted = m;
+    muted = wasMuted;
 
 }
 
@@ -296,20 +311,8 @@ float Oscillator::process()
     {
         return sample;
     }
-    //    //sample set by any connected amplitude modulators
-    //    float amSample = 1.0;
-    //    //sample set by any connected frequency modulators
-    //    float fmSample = 1.0;
 
-    //    //check fmods
-    //    if(!fmods.isEmpty())
-    //        fmSample = visitFmods();
-
-    //    //check amods
-    //    if(!amods.isEmpty())
-    //        amSample = visitAmods();
-
-    //set frequencies
+    //set frequencies of generators
     setFreqs();
 
     //generate sample
@@ -338,23 +341,22 @@ float Oscillator::process()
             break;
         }
     }
-    return sample / gens.size();
+
+    sample /= gens.size();
+
+    //check amods
+    if(!amods.empty())
+    {
+        float amSample = visitAmods();
+        sample *= amSample;
+    }
+
+    return sample;
 }
 
 float Oscillator::process(float in)
 {
     return in;
-}
-
-float Oscillator::visitAmods()
-{
-    float s = 0.0;
-    for (unsigned int i = 0; i < amods.size(); ++i)
-    {
-        SynthItem* gen = amods[i];
-        s += gen->process();
-    }
-    return s;
 }
 
 float Oscillator::visitFmods()
@@ -370,11 +372,15 @@ float Oscillator::visitFmods()
 
 void Oscillator::setFreqs()
 {
+    float fmSample;
+    if(fmods.size() > 0) {
+        fmSample = visitFmods();
+    }
 
     if ((dataIndexes.size() < 1) || (useFixedFreq == true)) //no data mappings, use fixed freq
     {
         for (unsigned int i = 0; i < gens.size(); ++i) {
-            gens[i]->freq(fixedFreq);
+            gens[i]->freq(fixedFreq + fmSample);
         }
     }
     else //map each indexed value from the data row to the freq of a generator
@@ -382,13 +388,14 @@ void Oscillator::setFreqs()
         for (unsigned int i = 0; (i < gens.size()) &&
              (i < dataIndexes.size()) &&
              (i < dataItem->size()); ++i) {
-            double f = dataItem->at(dataIndexes[i]);
+            int idx = dataIndexes[i];
+            double freq = dataItem->at(idx);
             if(useFreqScaling)
             {
-                f = scale(f, mins->at(i), maxes->at(i),
+                freq = scale(freq, mins->at(idx), maxes->at(idx),
                           freqScaleLow, freqScaleHigh, freqScaleExp);
             }
-            gens[i]->freq(f);
+            gens[i]->freq(freq + fmSample);
         }
     }
 

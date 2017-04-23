@@ -22,9 +22,9 @@ float QtSynthItem::process(float in)
     return synthItem->process(in);
 }
 
-void QtSynthItem::addChild(QtSynthItem *child, CHILD_TYPE type)
+bool QtSynthItem::addChild(QtSynthItem *child, CHILD_TYPE type)
 {
-    synthItem->addChild(child->implementation(), (SynthItem::ITEM_CHILD_TYPE)type);
+    return synthItem->addChild(child->implementation(), (SynthItem::ITEM_CHILD_TYPE)type);
 }
 
 void QtSynthItem::removeChild(QtSynthItem *child)

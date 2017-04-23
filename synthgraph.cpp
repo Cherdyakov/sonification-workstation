@@ -113,6 +113,12 @@ SynthItem* SynthGraph::createItem(SynthItem::ITEM_TYPE type)
         item->setDataItem(&currentData, &mins, &maxes);
         break;
     }
+    case SynthItem::ITEM_TYPE::MODULATOR:
+    {
+        item = new Modulator();
+        item->setDataItem(&currentData, &mins, &maxes);
+        break;
+    }
     default:
         item = NULL;
         break;

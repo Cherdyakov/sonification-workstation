@@ -21,7 +21,6 @@ public:
     Q_INVOKABLE void setFreqScalingVals(double low, double high, double exp);
 
     private:
-        Oscillator* oscillator;
 };
 
 #endif // QTOSCILLATOR_H

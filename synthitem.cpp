@@ -3,6 +3,11 @@
 
 namespace son {
 
+SynthItem::ITEM_TYPE SynthItem::getType()
+{
+    return myType;
+}
+
 SynthItem::SynthItem()
 {
     muted = false;
@@ -35,7 +40,7 @@ void SynthItem::retrieveCommands()
     }
 }
 
-void SynthItem::processCommand(SynthItem::SynthItemCommand command)
+void SynthItem::processCommand(SynthItemCommand command)
 {
     ITEM_COMMAND_TYPE type = command.type;
 
@@ -100,11 +105,40 @@ void SynthItem::processSetDataItem(std::vector<double> *dataItem,
     this->maxes = maxes;
 }
 
+bool SynthItem::verifyChildType(SynthItem::ITEM_CHILD_TYPE childType)
+{
+    if(std::find(acceptedChildTypes.begin(), acceptedChildTypes.end(), childType) == acceptedChildTypes.end())
+    {
+        return false;
+    }
+    return true;
+}
+
+float SynthItem::visitAmods()
+{
+    float s = 0.0;
+    for (unsigned int i = 0; i < amods.size(); ++i)
+    {
+        SynthItem* gen = amods[i];
+        s += gen->process();
+    }
+    s /= amods.size();
+    return s;
+}
+
 void SynthItem::addParent(SynthItem *parent)
 {
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::ADD_PARENT;
     command.item = parent;
+    commandBuffer.push(command);
+}
+
+void SynthItem::removeChild(SynthItem *item)
+{
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::REMOVE_CHILD;
+    command.item = item;
     commandBuffer.push(command);
 }
 
