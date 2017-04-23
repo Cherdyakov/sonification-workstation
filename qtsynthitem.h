@@ -35,7 +35,7 @@ public:
     virtual SynthItem* implementation();
     virtual float process();
     virtual float process(float in);
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, CHILD_TYPE type);
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child);
     Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);

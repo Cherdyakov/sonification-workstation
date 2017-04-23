@@ -17,7 +17,6 @@ public:
 
     float process() override;
     float process(float in) override;
-    bool addChild(SynthItem* child, ITEM_CHILD_TYPE childType) override;
     void removeChild(SynthItem* child) override;
     void setIndexes(std::vector<int> indexes) override;
     void setWaveform(WAVEFORM waveform);

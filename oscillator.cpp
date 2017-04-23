@@ -81,20 +81,6 @@ void Oscillator::setIndexes(std::vector<int> indexes)
     commandBuffer.push(command);
 }
 
-bool Oscillator::addChild(SynthItem *child, SynthItem::ITEM_CHILD_TYPE childType)
-{
-    if(!verifyChildType(childType))
-    {
-        return false;
-    }
-    SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
-    command.item = child;
-    command.childType = childType;
-    commandBuffer.push(command);
-    return true;
-}
-
 void Oscillator::removeChild(SynthItem *child)
 {
     SynthItemCommand command;
@@ -372,7 +358,7 @@ float Oscillator::visitFmods()
 
 void Oscillator::setFreqs()
 {
-    float fmSample;
+    float fmSample = 0;
     if(fmods.size() > 0) {
         fmSample = visitFmods();
     }

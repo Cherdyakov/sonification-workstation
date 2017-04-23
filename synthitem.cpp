@@ -8,6 +8,11 @@ SynthItem::ITEM_TYPE SynthItem::getType()
     return myType;
 }
 
+SynthItem::ITEM_CHILD_TYPE SynthItem::getChildType()
+{
+    return myChildType;
+}
+
 SynthItem::SynthItem()
 {
     muted = false;
@@ -22,6 +27,20 @@ void SynthItem::removeParent(SynthItem *parent)
     command.type = ITEM_COMMAND_TYPE::REMOVE_PARENT;
     command.item = parent;
     commandBuffer.push(command);
+}
+
+bool SynthItem::addChild(SynthItem *child)
+{
+    if(!verifyChildType(child->getChildType()))
+    {
+        return false;
+    }
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
+    command.item = child;
+    command.childType = child->getChildType();
+    commandBuffer.push(command);
+    return true;
 }
 
 void SynthItem::mute(bool mute)

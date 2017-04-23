@@ -83,25 +83,27 @@ public:
     };
 
     ITEM_TYPE getType();
+    ITEM_CHILD_TYPE getChildType();
 
     explicit SynthItem();
     virtual void setDataItem(std::vector<double>* data,
                              std::vector<double>* mins,
                              std::vector<double>* maxes);
-    virtual void addParent(SynthItem* parent);
-    virtual void removeChild(SynthItem *item);
+    virtual void addParent(SynthItem* parent);    
     virtual void removeParent(SynthItem* parent);
+    virtual bool addChild(SynthItem *child);
+    virtual void removeChild(SynthItem *item);
     virtual void mute(bool mute);
 
     // pure virtual functions
     virtual float process() = 0;
     virtual float process(float in) = 0;
-    virtual bool addChild(SynthItem *item, ITEM_CHILD_TYPE childType) = 0;
 
     virtual void setIndexes(std::vector<int> indexes) = 0;
 
 protected:
     ITEM_TYPE myType;
+    ITEM_CHILD_TYPE myChildType;
     std::vector<SynthItem::ITEM_CHILD_TYPE> acceptedChildTypes;
     bool muted;
     std::vector<double>* dataItem;

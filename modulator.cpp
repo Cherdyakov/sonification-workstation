@@ -5,13 +5,15 @@ namespace son {
 Modulator::Modulator()
 {
     myType = ITEM_TYPE::MODULATOR;
-    modType = ITEM_CHILD_TYPE::AMOD;
+    myChildType = ITEM_CHILD_TYPE::AMOD;
     waveform = WAVEFORM::SINE;
+//    depth = 100;
     fixedFreq = 440;
     useFixedFreq = true;
     useFreqScaling = true;
     freqScaleLow = 40;
     freqScaleHigh = 16000;
+
     acceptedChildTypes = {
         ITEM_CHILD_TYPE::AMOD,
         ITEM_CHILD_TYPE::FMOD
@@ -63,16 +65,20 @@ float Modulator::process()
     }
 
     //check amods
-    if(!amods.empty())
-    {
-        float amSample = visitAmods();
-        sample *= amSample;
-    }
+//    if(!amods.empty())
+//    {
+//        float amSample = visitAmods();
+//        sample *= amSample;
+//    }
 
+//    if(myChildType == ITEM_CHILD_TYPE::FMOD)
+//    {
+//        sample *= depth;
+//    }
     return sample;
 }
 
-void Modulator::setModType(SynthItem::ITEM_CHILD_TYPE childType)
+void Modulator::setModType(ITEM_CHILD_TYPE childType)
 {
     SynthItemCommand command;
     command.type = ITEM_COMMAND_TYPE::VALUE;
@@ -81,7 +87,7 @@ void Modulator::setModType(SynthItem::ITEM_CHILD_TYPE childType)
     commandBuffer.push(command);
 }
 
-void Modulator::processCommand(SynthItem::SynthItemCommand command)
+void Modulator::processCommand(SynthItemCommand command)
 {
     ITEM_COMMAND_TYPE type = command.type;
 
@@ -91,6 +97,10 @@ void Modulator::processCommand(SynthItem::SynthItemCommand command)
         if(command.parameter == ITEM_PARAMETER::MODULATION)
         {
             processSetModType(command.childType);
+        }
+        else
+        {
+            Oscillator::processCommand(command);
         }
         break;
     }
@@ -128,7 +138,7 @@ void Modulator::processSetWaveform(WAVEFORM waveform)
 
 void Modulator::setFreqs()
 {
-    float fmSample;
+    float fmSample = 0;;
     if(fmods.size() > 0) {
         fmSample = visitFmods();
     }
@@ -150,14 +160,14 @@ void Modulator::setFreqs()
     }
 }
 
-void Modulator::processSetModType(SynthItem::ITEM_CHILD_TYPE modType)
+void Modulator::processSetModType(ITEM_CHILD_TYPE modType)
 {
-    this->modType = modType;
+    this->myChildType = modType;
     for(unsigned int i = 0; i < parents.size(); i++)
     {
         SynthItem* parent = parents[i];
         parent->removeChild(this);
-        parent->addChild(this, modType);
+        parent->addChild(this);
     }
 }
 

@@ -19,7 +19,7 @@ protected:
     virtual void setFreqs() override;
 
 private:
-    ITEM_CHILD_TYPE modType;
+    double depth;
     void processSetModType(ITEM_CHILD_TYPE childType);
     gam::AccumPhase<>* gen;
 

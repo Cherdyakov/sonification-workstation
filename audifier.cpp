@@ -42,20 +42,6 @@ float Audifier::process(float in)
     return in;
 }
 
-bool Audifier::addChild(SynthItem *child, ITEM_CHILD_TYPE childType)
-{
-    if(!verifyChildType(childType))
-    {
-        return false;
-    }
-    SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
-    command.item = child;
-    command.childType = childType;
-    commandBuffer.push(command);
-    return true;
-}
-
 void Audifier::removeChild(SynthItem *child)
 {
     SynthItemCommand command;
