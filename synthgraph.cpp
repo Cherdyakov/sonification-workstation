@@ -20,6 +20,10 @@ SynthGraph::SynthGraph()
     returnPos = 0.0;
     masterVolume = 1.0;
     interpolate = false;
+
+    acceptedChildTypes = {
+        SynthItem::ITEM_CHILD_TYPE::INPUT
+    };
 }
 
 float SynthGraph::processGraph()
@@ -126,13 +130,17 @@ SynthItem* SynthGraph::createItem(SynthItem::ITEM_TYPE type)
     return item;
 }
 
-void SynthGraph::addToRoot(SynthItem *child)
+bool SynthGraph::addToRoot(SynthItem *child)
 {
-    if(std::find(graphRoot.begin(), graphRoot.end(), child) != graphRoot.end()) {
-        return;
-    } else {
-        graphRoot.push_back(child);
+    if(!verifyChildType(child->getChildType()))
+    {
+        return false;
     }
+    if(std::find(graphRoot.begin(), graphRoot.end(), child) != graphRoot.end()) {
+        return false;
+    }
+    graphRoot.push_back(child);
+    return true;
 }
 
 void SynthGraph::removeFromRoot(SynthItem *child)
@@ -364,6 +372,15 @@ void SynthGraph::calculateMinMax()
         mins.push_back(min);
         maxes.push_back(max);
     }
+}
+
+bool SynthGraph::verifyChildType(SynthItem::ITEM_CHILD_TYPE childType)
+{
+    if(std::find(acceptedChildTypes.begin(), acceptedChildTypes.end(), childType) == acceptedChildTypes.end())
+    {
+        return false;
+    }
+    return true;
 }
 
 } //namespace son

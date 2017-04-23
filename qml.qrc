@@ -10,7 +10,6 @@
         <file>OSC.qml</file>
         <file>Style.js</file>
         <file>EditorLabel.qml</file>
-        <file>EditorSpinBox.qml</file>
         <file>EditorComboBox.qml</file>
         <file>EditorDoubleSpinBox.qml</file>
         <file>EditorFrequency.qml</file>
@@ -22,6 +21,6 @@
         <file>AUD.qml</file>
         <file>EditorScaler.qml</file>
         <file>MOD.qml</file>
-        <file>EditorModulationType.qml</file>
+        <file>EditorModulation.qml</file>
     </qresource>
 </RCC>

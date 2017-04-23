@@ -42,7 +42,7 @@ public:
     explicit SynthGraph();
 
     SynthItem *createItem(SynthItem::ITEM_TYPE type);
-    void addToRoot(SynthItem* child);
+    bool addToRoot(SynthItem* child);
     void removeFromRoot(SynthItem* child);
 
     float processGraph();
@@ -82,6 +82,7 @@ private:
     // from outside (i.e. GUI)
     std::atomic<double> returnPos;
 
+    std::vector<SynthItem::ITEM_CHILD_TYPE> acceptedChildTypes;
     SynthGraphCommand currentCommand;
     std::vector<SynthItem*> graphRoot;
     std::vector<double>* data;
@@ -101,6 +102,9 @@ private:
     void processCommand(SynthGraphCommand command);
     void calculateReturnPos();
     void calculateMinMax();
+
+    bool verifyChildType(SynthItem::ITEM_CHILD_TYPE childType);
+
 
 };
 

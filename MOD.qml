@@ -26,6 +26,7 @@ SynthItem {
         property double freqScaleLow: 40
         property double freqScaleHigh: 16000
         property double freqScaleExp: 1
+        property double depth: 100
 
         Component.onCompleted: {
             waveformEditor.comboBox.currentIndex = waveform
@@ -35,6 +36,8 @@ SynthItem {
             frequencyScaler.highSpinBox.value = freqScaleHigh * 100
             frequencyScaler.expSpinBox.value = freqScaleExp * 100
             frequencyScaler.checkBox.checked = useFreqScaling
+            modEditor.spinBox.value = depth
+            modEditor.comboBox.currentIndex = modType
         }
 
         onWaveformChanged: {
@@ -49,6 +52,13 @@ SynthItem {
             implementation.setFixedFreq(fixedFreq)
         }
 
+        onModTypeChanged: {
+            implementation.setModType(modType)
+        }
+
+        onDepthChanged: {
+            implementation.setDepth(depth)
+        }
 
         EditorLayout {
             id: layout
@@ -136,6 +146,20 @@ SynthItem {
                     if(editor.useFreqScaling !== scaling) {
                         editor.useFreqScaling = scaling
                         implementation.setUseFreqScaling(editor.useFreqScaling)
+                    }
+                }
+            }
+
+            EditorModulation {
+                id: modEditor
+                onModulationChanged: {
+                    if(editor.modType !== modulation) {
+                        editor.modType = modulation
+                    }
+                }
+                onDepthValueChanged:  {
+                    if(editor.depth !== depthValue) {
+                        editor.depth = depthValue
                     }
                 }
             }

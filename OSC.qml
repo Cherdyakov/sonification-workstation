@@ -54,7 +54,7 @@ SynthItem {
             EditorWaveform {
                 id: waveformEditor
                 onWaveformChanged: {
-                    if (editor.waveform != form) {
+                    if (editor.waveform !== form) {
                         editor.waveform = form
                     }
                 }

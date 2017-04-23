@@ -18,10 +18,10 @@ public:
     explicit QtSynthItem(QObject *parent = 0);
 
     enum CHILD_TYPE {
-        IN = (int)SynthItem::ITEM_CHILD_TYPE::INPUT,
-        AMOD,
+        AMOD = (int)SynthItem::ITEM_CHILD_TYPE::AMOD,
         FMOD,
-        PMOD
+        PMOD,
+        IN
     };
 
     enum WAVEFORM {

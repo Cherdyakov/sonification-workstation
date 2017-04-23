@@ -24,10 +24,10 @@ public:
     };
 
     enum class ITEM_CHILD_TYPE {
-        INPUT,
         AMOD,
         FMOD,
-        PMOD
+        PMOD,
+        INPUT
     };
 
     enum class ITEM_PARAMETER {

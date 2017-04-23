@@ -7,6 +7,7 @@ namespace son {
 Oscillator::Oscillator()
 {
     myType = ITEM_TYPE::OSCILLATOR;
+    myChildType = ITEM_CHILD_TYPE::INPUT;
     waveform = WAVEFORM::SINE;
     fixedFreq = 440;
     useFixedFreq = true;

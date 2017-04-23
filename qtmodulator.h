@@ -10,6 +10,7 @@ class QtModulator : public QtOscillator
 
 public:
     explicit QtModulator(SynthItem* item = 0, QObject *parent = 0);
+    Q_INVOKABLE void setModType(CHILD_TYPE childType);
 
 private:
     Modulator* modulator;
