@@ -7,8 +7,8 @@ Modulator::Modulator()
     myType = ITEM_TYPE::MODULATOR;
     myChildType = ITEM_CHILD_TYPE::AMOD;
     waveform = WAVEFORM::SINE;
-//    depth = 100;
-    fixedFreq = 440;
+    depth = 100;
+    fixedFreq = 1;
     useFixedFreq = true;
     useFreqScaling = true;
     freqScaleLow = 40;

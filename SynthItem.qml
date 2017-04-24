@@ -94,11 +94,11 @@ Item {
     }
 
     function addChild(synthItem) {
-        if(implementation == null)
+        if(implementation === null)
             return
         //add child's implementation to the children
         //of this item's implementation
-        if(implementation.addChild(synthItem.implementation, synthItem.type))
+        if(implementation.addChild(synthItem.implementation))
         {
             //add QML child to this item's synthChildren
             synthChildren.push(synthItem)
@@ -107,7 +107,7 @@ Item {
     }
 
     function removeChild(synthItem) {
-        if(implementation == null)
+        if(implementation === null)
             return
         //remove the child implementation from the
         //children of this item's implementation
@@ -121,18 +121,18 @@ Item {
     }
 
     function addParent(synthItem) {
-        if(implementation == null)
+        if(implementation === null)
             return
         //add QML parent to this item's synthParents
         synthParents.push(synthItem)
     }
 
     function removeParent(synthItem) {
-        if(implementation == null)
+        if(implementation === null)
             return
         //remove parent's implementation from
         //this implementation's parent's
-        implementation.removeParent(synthItem);
+        implementation.removeParent(synthItem.implementation);
         //remove parent from this item's synthParents
         var idx = synthParents.indexOf(synthItem)
         if(idx > -1)
@@ -142,7 +142,7 @@ Item {
     }
 
     function mute() {
-        if(implementation == null)
+        if(implementation === null)
             return
         //mute cpp counterpart
         implementation.mute(muted)
@@ -172,6 +172,7 @@ Item {
         synthItems.splice(idx, 1)
 
         root.destroy()
+        implementation.destroy()
 
         canvas.requestPaint()
     }

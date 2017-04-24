@@ -26,7 +26,7 @@ private:
     void processAddChild(SynthItem* child, ITEM_CHILD_TYPE type);
     void processRemoveChild(SynthItem* child);
     void processSetIndexes(std::vector<int> indexes);
-
+    void processDestroy() override;
     float visitAmods();
 
 };

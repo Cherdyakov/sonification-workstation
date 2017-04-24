@@ -21,7 +21,7 @@ SynthItem {
         property int waveform: QtSynthItem.SINE
         property  int  modType: QtSynthItem.AMOD
         property bool useFixedFreq: true
-        property double fixedFreq: 440
+        property double fixedFreq: 1
         property bool useFreqScaling: true
         property double freqScaleLow: 40
         property double freqScaleHigh: 16000

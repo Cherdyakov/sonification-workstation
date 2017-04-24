@@ -70,6 +70,26 @@ void Oscillator::setFreqScalingVals(double low, double high, double exp)
     commandBuffer.push(command);
 }
 
+void Oscillator::processDestroy()
+{
+    muted = true;
+
+    for(int i = 0; i < parents.size(); i++) {
+        SynthItem* parent = parents[i];
+        parent->removeChild(this);
+    }
+    for(int i = 0; i < amods.size(); i++) {
+        SynthItem* child = amods[i];
+        child->removeParent(this);
+    }
+    for(int i = 0; i < fmods.size(); i++) {
+        SynthItem* child = fmods[i];
+        child->removeParent(this);
+    }
+
+    delete this;
+}
+
 void Oscillator::setIndexes(std::vector<int> indexes)
 {
     SynthItemCommand command;

@@ -18,6 +18,7 @@ SynthItem {
         synthChildren.push(synthItem)
         //add child's implementation to root of the synth graph
         graph.addToRoot(synthItem.implementation)
+        synthItem.addParent(this)
     }
 
     function removeChild(synthItem) {

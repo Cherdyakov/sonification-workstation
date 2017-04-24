@@ -51,6 +51,13 @@ void SynthItem::mute(bool mute)
     commandBuffer.push(command);
 }
 
+void SynthItem::destroy()
+{
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::DESTROY;
+    commandBuffer.push(command);
+}
+
 void SynthItem::retrieveCommands()
 {
     while(commandBuffer.pop(&currentCommand))
@@ -83,6 +90,11 @@ void SynthItem::processCommand(SynthItemCommand command)
     case ITEM_COMMAND_TYPE::MUTE:
     {
         processMute(command.boolVal);
+        break;
+    }
+    case ITEM_COMMAND_TYPE::DESTROY:
+    {
+        processDestroy();
         break;
     }
     default:

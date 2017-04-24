@@ -37,6 +37,7 @@ protected:
     void processSetIndexes(std::vector<int> indexes);
     void processSetFreqScaling(bool useFreqScaling);
     void processSetFreqScalingVals(double low, double high, double exp);
+    virtual void processDestroy() override;
 
     bool useFixedFreq;
     double fixedFreq;

@@ -120,6 +120,22 @@ void Audifier::processSetIndexes(std::vector<int> indexes)
     muted = m;
 }
 
+void Audifier::processDestroy()
+{
+    muted = true;
+
+    for(unsigned int i = 0; i < parents.size(); i++) {
+        SynthItem* parent = parents[i];
+        parent->removeChild(this);
+    }
+    for(unsigned int i = 0; i < amods.size(); i++) {
+        SynthItem* child = amods[i];
+        child->removeParent(this);
+    }
+
+    delete this;
+}
+
 float Audifier::visitAmods()
 {
     float s = 0.0;
