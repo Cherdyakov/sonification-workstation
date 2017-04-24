@@ -33,7 +33,8 @@ public:
     enum class ITEM_PARAMETER {
         FREQUENCY,
         AUDIFICATION,
-        MODULATION
+        MODULATION,
+        DEPTH
     };
 
     enum class WAVEFORM {
@@ -46,7 +47,7 @@ public:
 
     enum class ITEM_COMMAND_TYPE {
         DATA,
-        VALUE,
+        PARAM,
         SCALING,
         SCALE_VALS,
         INDEXES,

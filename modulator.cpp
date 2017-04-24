@@ -39,27 +39,19 @@ float Modulator::process()
     //set frequency of generator
     setFreqs();
 
-    //generate sample
+    gam::Sine<>* g = static_cast<gam::Sine<>*>(gen);
 
+    //generate sample
     switch (waveform) {
     case WAVEFORM::SINE:
-    {
-        gam::Sine<>* g = static_cast<gam::Sine<>*>(gen);
         sample += g->operator ()();
         break;
-    }
     case WAVEFORM::SAW:
-    {
-        gam::Saw<>* g = static_cast<gam::Saw<>*>(gen);
         sample += g->operator ()();
         break;
-    }
     case WAVEFORM::SQUARE:
-    {
-        gam::Square<>* g = static_cast<gam::Square<>*>(gen);
         sample += g->operator ()();
         break;
-    }
     default:
         break;
     }
@@ -81,9 +73,18 @@ float Modulator::process()
 void Modulator::setModType(ITEM_CHILD_TYPE childType)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::VALUE;
+    command.type = ITEM_COMMAND_TYPE::PARAM;
     command.parameter = ITEM_PARAMETER::MODULATION;
     command.childType = childType;
+    commandBuffer.push(command);
+}
+
+void Modulator::setDepth(double depth)
+{
+    SynthItemCommand command;
+    command.type = ITEM_COMMAND_TYPE::PARAM;
+    command.parameter = ITEM_PARAMETER::DEPTH;
+    command.doubles.push_back(depth);
     commandBuffer.push(command);
 }
 
@@ -92,17 +93,19 @@ void Modulator::processCommand(SynthItemCommand command)
     ITEM_COMMAND_TYPE type = command.type;
 
     switch (type) {
-    case ITEM_COMMAND_TYPE::VALUE:
+    case ITEM_COMMAND_TYPE::PARAM:
     {
-        if(command.parameter == ITEM_PARAMETER::MODULATION)
-        {
+        switch (command.parameter) {
+        case ITEM_PARAMETER::MODULATION:
             processSetModType(command.childType);
-        }
-        else
-        {
+            break;
+        case ITEM_PARAMETER::DEPTH:
+            processSetDepth(command.doubles[0]);
+            break;
+        default:
             Oscillator::processCommand(command);
+            break;
         }
-        break;
     }
     default:
         Oscillator::processCommand(command);
@@ -134,6 +137,11 @@ void Modulator::processSetWaveform(WAVEFORM waveform)
         break;
     }
     muted = wasMuted;
+}
+
+void Modulator::processSetDepth(double depth)
+{
+    this->depth = depth;
 }
 
 void Modulator::setFreqs()
