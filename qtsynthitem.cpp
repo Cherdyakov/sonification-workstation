@@ -64,3 +64,8 @@ void QtSynthItem::setIndexes(QVector<int> indexes)
     std::vector<int> vec = indexes.toStdVector();
     synthItem->setIndexes(vec);
 }
+
+void QtSynthItem::deleteItem()
+{
+    synthItem->deleteItem();
+}

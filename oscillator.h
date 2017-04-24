@@ -29,15 +29,15 @@ protected:
     // actually implementing the commands on callback
     // side of the command buffer
     virtual void processCommand(SynthItemCommand command) override;
-    void processAddChild(SynthItem* child, ITEM_CHILD_TYPE type);
-    void processRemoveChild(SynthItem* child);
+    virtual void processAddChild(SynthItem* child) override;
+    virtual void processRemoveChild(SynthItem* child) override;
     virtual void processSetWaveform(WAVEFORM waveType);
     void processSetFixedFreq(double fixedFreq);
     void processSetUseFixedFreq(bool useFixedFreq);
-    void processSetIndexes(std::vector<int> indexes);
+    virtual void processSetIndexes(std::vector<int> indexes);
     void processSetFreqScaling(bool useFreqScaling);
     void processSetFreqScalingVals(double low, double high, double exp);
-    virtual void processDestroy() override;
+    virtual void processDeleteItem() override;
 
     bool useFixedFreq;
     double fixedFreq;

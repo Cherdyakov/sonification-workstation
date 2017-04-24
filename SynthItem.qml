@@ -156,6 +156,9 @@ Item {
     }
 
     function deleteThis() {
+
+        implementation.deleteItem()
+
         for(var i = 0; i < synthParents.length; i++)
         {
             var parentItem = synthParents[i]
@@ -172,8 +175,6 @@ Item {
         synthItems.splice(idx, 1)
 
         root.destroy()
-        implementation.destroy()
-
         canvas.requestPaint()
     }
 

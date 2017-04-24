@@ -65,16 +65,16 @@ float Modulator::process()
     }
 
     //check amods
-//    if(!amods.empty())
-//    {
-//        float amSample = visitAmods();
-//        sample *= amSample;
-//    }
+    if(!amods.empty())
+    {
+        float amSample = visitAmods();
+        sample *= amSample;
+    }
 
-//    if(myChildType == ITEM_CHILD_TYPE::FMOD)
-//    {
-//        sample *= depth;
-//    }
+    if(myChildType == ITEM_CHILD_TYPE::FMOD)
+    {
+        sample *= depth;
+    }
     return sample;
 }
 

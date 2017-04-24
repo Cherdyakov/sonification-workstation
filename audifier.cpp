@@ -66,7 +66,7 @@ void Audifier::processCommand(SynthItemCommand command)
     switch (type) {
     case ITEM_COMMAND_TYPE::ADD_CHILD:
     {
-        processAddChild(command.item, command.childType);
+        processAddChild(command.item);
         break;
     }
     case ITEM_COMMAND_TYPE::REMOVE_CHILD:
@@ -88,9 +88,9 @@ void Audifier::processCommand(SynthItemCommand command)
     }
 }
 
-void Audifier::processAddChild(SynthItem *child, SynthItem::ITEM_CHILD_TYPE type)
+void Audifier::processAddChild(SynthItem *child)
 {
-    switch (type){
+    switch (child->getChildType()){
     case ITEM_CHILD_TYPE::AMOD: {
         if(std::find(amods.begin(), amods.end(), child) != amods.end()) {
             return;
@@ -120,7 +120,7 @@ void Audifier::processSetIndexes(std::vector<int> indexes)
     muted = m;
 }
 
-void Audifier::processDestroy()
+void Audifier::processDeleteItem()
 {
     muted = true;
 

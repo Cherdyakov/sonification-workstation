@@ -29,5 +29,7 @@ void QtOscillator::setUseFreqScaling(bool scaling)
 
 void QtOscillator::setFreqScalingVals(double low, double high, double exp)
 {
-   dynamic_cast<Oscillator*>(synthItem)->setFreqScalingVals(low, high, exp);
+    dynamic_cast<Oscillator*>(synthItem)->setFreqScalingVals(low, high, exp);
 }
+
+

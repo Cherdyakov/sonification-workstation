@@ -51,10 +51,10 @@ void SynthItem::mute(bool mute)
     commandBuffer.push(command);
 }
 
-void SynthItem::destroy()
+void SynthItem::deleteItem()
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::DESTROY;
+    command.type = ITEM_COMMAND_TYPE::DELETE;
     commandBuffer.push(command);
 }
 
@@ -92,9 +92,9 @@ void SynthItem::processCommand(SynthItemCommand command)
         processMute(command.boolVal);
         break;
     }
-    case ITEM_COMMAND_TYPE::DESTROY:
+    case ITEM_COMMAND_TYPE::DELETE:
     {
-        processDestroy();
+        processDeleteItem();
         break;
     }
     default:

@@ -57,7 +57,7 @@ public:
         ADD_PARENT,
         REMOVE_PARENT,
         MUTE,
-        DESTROY
+        DELETE
     };
 
     struct SynthItemCommand {
@@ -103,7 +103,7 @@ public:
     virtual void setIndexes(std::vector<int> indexes) = 0;
 
     // helper for proper deletion
-    virtual void destroy();
+    virtual void deleteItem();
 
 protected:
     ITEM_TYPE myType;
@@ -125,12 +125,12 @@ protected:
     virtual void processMute(bool mute);
     virtual void processRemoveParent(SynthItem* parent);
     virtual void processAddParent(SynthItem* parent);
-    virtual void processAddChild(SynthItem* child, ITEM_CHILD_TYPE type) = 0;
+    virtual void processAddChild(SynthItem* child) = 0;
     virtual void processRemoveChild(SynthItem* child) = 0;
     virtual void processSetDataItem(std::vector<double>* dataItem,
                                     std::vector<double> *mins,
                                     std::vector<double> *maxes);
-    virtual void processDestroy() = 0;
+    virtual void processDeleteItem() = 0;
 
     bool verifyChildType(SynthItem::ITEM_CHILD_TYPE childType);
 

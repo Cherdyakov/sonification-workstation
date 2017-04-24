@@ -70,19 +70,19 @@ void Oscillator::setFreqScalingVals(double low, double high, double exp)
     commandBuffer.push(command);
 }
 
-void Oscillator::processDestroy()
+void Oscillator::processDeleteItem()
 {
     muted = true;
 
-    for(int i = 0; i < parents.size(); i++) {
+    for(unsigned int i = 0; i < parents.size(); i++) {
         SynthItem* parent = parents[i];
         parent->removeChild(this);
     }
-    for(int i = 0; i < amods.size(); i++) {
+    for(unsigned int i = 0; i < amods.size(); i++) {
         SynthItem* child = amods[i];
         child->removeParent(this);
     }
-    for(int i = 0; i < fmods.size(); i++) {
+    for(unsigned int i = 0; i < fmods.size(); i++) {
         SynthItem* child = fmods[i];
         child->removeParent(this);
     }
@@ -105,14 +105,14 @@ void Oscillator::setIndexes(std::vector<int> indexes)
 void Oscillator::removeChild(SynthItem *child)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
+    command.type = ITEM_COMMAND_TYPE::REMOVE_CHILD;
     command.item = child;
     commandBuffer.push(command);
 }
 
-void Oscillator::processAddChild(SynthItem *child, ITEM_CHILD_TYPE type)
+void Oscillator::processAddChild(SynthItem *child)
 {
-    switch (type){
+    switch (child->getChildType()){
     case ITEM_CHILD_TYPE::AMOD:
     {
         if(std::find(amods.begin(), amods.end(), child) != amods.end()) {
@@ -205,7 +205,7 @@ void Oscillator::processCommand(SynthItemCommand command)
     switch (type) {
     case ITEM_COMMAND_TYPE::ADD_CHILD:
     {
-        processAddChild(command.item, command.childType);
+        processAddChild(command.item);
         break;
     }
     case ITEM_COMMAND_TYPE::FIXED:
@@ -213,6 +213,10 @@ void Oscillator::processCommand(SynthItemCommand command)
         if(command.parameter == ITEM_PARAMETER::FREQUENCY)
         {
             processSetUseFixedFreq(command.boolVal);
+        }
+        else
+        {
+            SynthItem::processCommand(command);
         }
         break;
     }
@@ -222,6 +226,10 @@ void Oscillator::processCommand(SynthItemCommand command)
         {
             processSetFixedFreq(command.doubles[0]);
         }
+        else
+        {
+            SynthItem::processCommand(command);
+        }
         break;
     }
     case ITEM_COMMAND_TYPE::INDEXES:
@@ -229,6 +237,10 @@ void Oscillator::processCommand(SynthItemCommand command)
         if(command.parameter == ITEM_PARAMETER::FREQUENCY)
         {
             processSetIndexes(command.ints);
+        }
+        else
+        {
+            SynthItem::processCommand(command);
         }
         break;
     }
@@ -248,6 +260,10 @@ void Oscillator::processCommand(SynthItemCommand command)
         {
             processSetFreqScaling(command.boolVal);
         }
+        else
+        {
+            SynthItem::processCommand(command);
+        }
         break;
     }
     case ITEM_COMMAND_TYPE::SCALE_VALS:
@@ -257,6 +273,10 @@ void Oscillator::processCommand(SynthItemCommand command)
             processSetFreqScalingVals(command.doubles[0],
                                       command.doubles[1],
                                       command.doubles[2]);
+        }
+        else
+        {
+            SynthItem::processCommand(command);
         }
         break;
     }

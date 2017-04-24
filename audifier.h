@@ -23,10 +23,10 @@ private:
     // command buffering and parsing stuff
     void processCommand(SynthItemCommand command);
 
-    void processAddChild(SynthItem* child, ITEM_CHILD_TYPE type);
-    void processRemoveChild(SynthItem* child);
+    void processAddChild(SynthItem* child) override;
+    void processRemoveChild(SynthItem* child) override;
     void processSetIndexes(std::vector<int> indexes);
-    void processDestroy() override;
+    void processDeleteItem() override;
     float visitAmods();
 
 };
