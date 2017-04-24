@@ -65,8 +65,8 @@ SynthItem {
                 EditorFrequency {
                     id: frequencyEditor
                     onFrequencyChanged: {
-                        if (editor.fixedFreq !== freq / 100) {
-                            editor.fixedFreq = freq / 100
+                        if (editor.fixedFreq !== freq) {
+                            editor.fixedFreq = freq
                         }
                     }
                 }
@@ -105,8 +105,8 @@ SynthItem {
                 highLabel.text: qsTr("Frequency High: ")
                 onLowChanged:
                 {
-                    if(editor.freqScaleLow !== low / 100) {
-                        editor.freqScaleLow = low / 100
+                    if(editor.freqScaleLow !== low) {
+                        editor.freqScaleLow = low
                         implementation.setFreqScalingVals(editor.freqScaleLow,
                                                           editor.freqScaleHigh,
                                                           editor.freqScaleExp)
@@ -114,16 +114,16 @@ SynthItem {
                 }
                 onHighChanged:
                 {
-                    if(editor.freqScaleHigh !== high / 100) {
-                        editor.freqScaleHigh = high / 100
+                    if(editor.freqScaleHigh !== high) {
+                        editor.freqScaleHigh = high
                         implementation.setFreqScalingVals(editor.freqScaleLow,
                                                           editor.freqScaleHigh,
                                                           editor.freqScaleExp)                    }
                 }
                 onExponentChanged:
                 {
-                    if(editor.freqScaleExp !== exp / 100) {
-                        editor.freqScaleExp = exp / 100
+                    if(editor.freqScaleExp !== exp) {
+                        editor.freqScaleExp = exp
                         implementation.setFreqScalingVals(editor.freqScaleLow,
                                                           editor.freqScaleHigh,
                                                           editor.freqScaleExp)                    }

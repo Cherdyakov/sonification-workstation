@@ -53,7 +53,7 @@ ColumnLayout {
             id: lowSpinBox
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onValueChanged: lowChanged(lowSpinBox.value)
+            onValueChanged: lowChanged(lowSpinBox.value / 100)
         }
     }
     RowLayout {
@@ -68,7 +68,7 @@ ColumnLayout {
             id: highSpinBox
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onValueChanged: highChanged(highSpinBox.value)
+            onValueChanged: highChanged(highSpinBox.value / 100)
         }
     }
     RowLayout {
@@ -83,7 +83,7 @@ ColumnLayout {
             id: expSpinBox
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onValueChanged: exponentChanged(expSpinBox.value)
+            onValueChanged: exponentChanged(expSpinBox.value / 100)
         }
     }
 }

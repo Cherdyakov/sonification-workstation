@@ -23,7 +23,7 @@ ColumnLayout {
         id: spinBox
         Layout.maximumHeight: Style.editorRowHeight
         Layout.preferredWidth: Style.editorControlWidth
-        onValueChanged: frequencyChanged(spinBox.value)
+        onValueChanged: frequencyChanged(spinBox.value / 100)
     }
 
 }

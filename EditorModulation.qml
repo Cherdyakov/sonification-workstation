@@ -47,7 +47,7 @@ ColumnLayout {
             id: spinBox
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onValueChanged: depthValueChanged(spinBox.value)
+            onValueChanged: depthValueChanged(spinBox.value / 100)
         }
     }
 }
