@@ -3,20 +3,15 @@
 
 namespace son {
 
-SynthItem::ITEM_TYPE SynthItem::getType()
+SynthItem::ITEM SynthItem::getType()
 {
     return myType;
-}
-
-SynthItem::ITEM_CHILD_TYPE SynthItem::getChildType()
-{
-    return myChildType;
 }
 
 SynthItem::SynthItem()
 {
     muted = false;
-    dataItem = NULL;
+    data = NULL;
     mins = NULL;
     maxes = NULL;
 }
@@ -24,21 +19,21 @@ SynthItem::SynthItem()
 void SynthItem::removeParent(SynthItem *parent)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::REMOVE_PARENT;
+    command.type = COMMAND::REMOVE_PARENT;
     command.item = parent;
     commandBuffer.push(command);
 }
 
-bool SynthItem::addChild(SynthItem *child)
+bool SynthItem::addChild(SynthItem *child, PARAMETER parameter)
 {
-    if(!verifyChildType(child->getChildType()))
+    if(!verifyChildParameter(parameter))
     {
         return false;
     }
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::ADD_CHILD;
+    command.type = COMMAND::ADD_CHILD;
     command.item = child;
-    command.childType = child->getChildType();
+    command.parameter = parameter;
     commandBuffer.push(command);
     return true;
 }
@@ -46,7 +41,7 @@ bool SynthItem::addChild(SynthItem *child)
 void SynthItem::mute(bool mute)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::MUTE;
+    command.type = COMMAND::MUTE;
     command.boolVal = mute;
     commandBuffer.push(command);
 }
@@ -54,7 +49,7 @@ void SynthItem::mute(bool mute)
 void SynthItem::deleteItem()
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::DELETE;
+    command.type = COMMAND::DELETE;
     commandBuffer.push(command);
 }
 
@@ -68,31 +63,31 @@ void SynthItem::retrieveCommands()
 
 void SynthItem::processCommand(SynthItemCommand command)
 {
-    ITEM_COMMAND_TYPE type = command.type;
+    COMMAND type = command.type;
 
     switch (type) {
 
-    case ITEM_COMMAND_TYPE::DATA:
+    case COMMAND::DATA:
     {
         processSetDataItem(command.data, command.mins, command.maxes);
         break;
     }
-    case ITEM_COMMAND_TYPE::ADD_PARENT:
+    case COMMAND::ADD_PARENT:
     {
         processAddParent(command.item);
         break;
     }
-    case ITEM_COMMAND_TYPE::REMOVE_PARENT:
+    case COMMAND::REMOVE_PARENT:
     {
         processRemoveParent(command.item);
         break;
     }
-    case ITEM_COMMAND_TYPE::MUTE:
+    case COMMAND::MUTE:
     {
         processMute(command.boolVal);
         break;
     }
-    case ITEM_COMMAND_TYPE::DELETE:
+    case COMMAND::DELETE:
     {
         processDeleteItem();
         break;
@@ -117,13 +112,10 @@ void SynthItem::processRemoveParent(SynthItem *parent)
 
 void SynthItem::processAddParent(SynthItem *parent)
 {
-    if(parent)
-    {
-        if(std::find(parents.begin(), parents.end(), parent) != parents.end()) {
-            return;
-        } else {
-            parents.push_back(parent);
-        }
+    if(std::find(parents.begin(), parents.end(), parent) != parents.end()) {
+        return;
+    } else {
+        parents.push_back(parent);
     }
 }
 
@@ -131,36 +123,36 @@ void SynthItem::processSetDataItem(std::vector<double> *dataItem,
                                    std::vector<double> *mins,
                                    std::vector<double> *maxes)
 {
-    this->dataItem = dataItem;
+    this->data = dataItem;
     this->mins = mins;
     this->maxes = maxes;
 }
 
-bool SynthItem::verifyChildType(SynthItem::ITEM_CHILD_TYPE childType)
+bool SynthItem::verifyChildParameter(PARAMETER childParameter)
 {
-    if(std::find(acceptedChildTypes.begin(), acceptedChildTypes.end(), childType) == acceptedChildTypes.end())
+    if(std::find(acceptedChildren.begin(), acceptedChildren.end(), childParameter) == acceptedChildren.end())
     {
         return false;
     }
     return true;
 }
 
-float SynthItem::visitAmods()
+float SynthItem::visitChildren(std::vector<SynthItem*> children)
 {
     float s = 0.0;
-    for (unsigned int i = 0; i < amods.size(); ++i)
+    for (unsigned int i = 0; i < children.size(); ++i)
     {
-        SynthItem* gen = amods[i];
+        SynthItem* gen = children[i];
         s += gen->process();
     }
-    s /= amods.size();
+    s /= children.size();
     return s;
 }
 
 void SynthItem::addParent(SynthItem *parent)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::ADD_PARENT;
+    command.type = COMMAND::ADD_PARENT;
     command.item = parent;
     commandBuffer.push(command);
 }
@@ -168,21 +160,31 @@ void SynthItem::addParent(SynthItem *parent)
 void SynthItem::removeChild(SynthItem *item)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::REMOVE_CHILD;
+    command.type = COMMAND::REMOVE_CHILD;
     command.item = item;
     commandBuffer.push(command);
 }
 
-void SynthItem::setDataItem(std::vector<double> *data,
-                            std::vector<double>* mins,
-                            std::vector<double>* maxes)
+void SynthItem::setData(std::vector<double> *data,
+                        std::vector<double>* mins,
+                        std::vector<double>* maxes)
 {
     SynthItemCommand command;
-    command.type = ITEM_COMMAND_TYPE::DATA;
+    command.type = COMMAND::DATA;
     command.data = data;
     command.mins = mins;
     command.maxes = maxes;
     commandBuffer.push(command);
+}
+
+void SynthItem::setIndexes(std::vector<int> indexes, SynthItem::PARAMETER parameter)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::INDEXES;
+    command.parameter = parameter;
+    for (unsigned int i = 0; i < indexes.size(); i++) {
+        command.ints.push_back(indexes[i]);
+    }
 }
 
 // based on the Max "Scale" object

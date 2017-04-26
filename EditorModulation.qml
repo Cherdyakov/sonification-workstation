@@ -50,4 +50,5 @@ ColumnLayout {
             onValueChanged: depthValueChanged(spinBox.value / 100)
         }
     }
+
 }

@@ -120,7 +120,7 @@ void PlayHead::mousePressEvent(QMouseEvent *e)
 
         double pos = pixelToVal(e->pos().x());
         blink = true;
-        // let SynthGraph move cursor and
+        // let Transport move cursor and
         // wait for position to update
         // the cursorMoved signal
         emit cursorPosChanged(pos);

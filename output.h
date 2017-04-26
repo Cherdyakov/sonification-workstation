@@ -15,7 +15,7 @@ public:
 
 private:
     std::vector<SynthItem*> ins;
-    std::vector<SynthItem*> amods;
+    std::vector<SynthItem*> children;
     std::vector<SynthItem*> pmods;
 
     float visitAmods();

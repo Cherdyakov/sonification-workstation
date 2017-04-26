@@ -6,12 +6,27 @@ QtModulator::QtModulator(SynthItem *item, QObject *parent)
     synthItem = item;
 }
 
-void QtModulator::setModType(QtSynthItem::CHILD_TYPE childType)
+void QtModulator::setModulationParameter(PARAMETER parameter)
 {
-    static_cast<son::Modulator*>(synthItem)->setModType((SynthItem::ITEM_CHILD_TYPE)childType);
+    static_cast<son::Modulator*>(synthItem)->setModulationType((SynthItem::PARAMETER)parameter);
 }
 
 void QtModulator::setDepth(double depth)
 {
     static_cast<son::Modulator*>(synthItem)->setDepth(depth);
+}
+
+void QtModulator::setUseFixedDepth(bool fixed)
+{
+
+}
+
+void QtModulator::setUseDepthScaling(bool scaling)
+{
+
+}
+
+void QtModulator::setDepthScalingVals(double low, double high, double exp)
+{
+
 }

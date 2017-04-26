@@ -7,7 +7,7 @@ import "Style.js" as Style
 SynthItem {
     id: root
     label: qsTr("OSC")
-    type: QtSynthGraph.OSCILLATOR
+    type: QtTransport.OSCILLATOR
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 

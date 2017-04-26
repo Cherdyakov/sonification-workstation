@@ -16,7 +16,7 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
     UserData* uData = (UserData *) data;
     double *buffer = (double *) outputBuffer;
-    QtSynthGraph* graph = uData->graph;
+    QtTransport* graph = uData->graph;
 //    Sequencer* sequencer = uData->seq;
 
     if ( status )
@@ -26,7 +26,7 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     // Write interleaved audio data.
     for (unsigned int i=0; i < nBufferFrames; ++i) {
 
-        float s = graph->processGraph();
+        float s = graph->process();
         s *= 0.1;
         *buffer++ = s;
         *buffer++ = s;

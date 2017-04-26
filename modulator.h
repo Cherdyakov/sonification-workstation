@@ -11,18 +11,32 @@ public:
     Modulator();
 
     float process() override;
-    void setModType(ITEM_CHILD_TYPE childType);
+    void setModulationType(PARAMETER parameter);
     void setDepth(double depth);
+    void setUseFixedDepth(bool fixed);
+    void setUseDepthScaling(bool scaling);
+    void setDepthScalingVals(double low, double high, double exp);
 
 protected:
     void processCommand(SynthItemCommand command) override;
     virtual void processSetWaveform(WAVEFORM waveform) override;
     virtual void processSetDepth(double depth);
+    void processSetUseFixedDepth(bool fixed);
+    void processSetUseDepthScaling(bool scaling);
+    void processSetDepthScalingVals(double low, double high, double exp);
     virtual void setFreqs() override;
 
 private:
     double depth;
-    void processSetModType(ITEM_CHILD_TYPE childType);
+    bool useFixedDepth;
+
+    //for scaling the data to depth values
+    bool useDepthScaling;
+    double depthScaleLow;
+    double depthScaleHigh;
+    double depthScaleExp;
+
+    void processSetModType(PARAMETER parameter);
     gam::AccumPhase<>* gen;
 
 };

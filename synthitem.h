@@ -16,25 +16,19 @@ class SynthItem
 {
 public:
 
-    enum class ITEM_TYPE {
+    enum class ITEM {
         OUT,
         OSCILLATOR,
         AUDIFIER,
         MODULATOR
     };
 
-    enum class ITEM_CHILD_TYPE {
-        AMOD,
-        FMOD,
-        PMOD,
-        INPUT
-    };
-
-    enum class ITEM_PARAMETER {
+    enum class PARAMETER {
+        INPUT,
+        AMPLITUDE,
         FREQUENCY,
-        AUDIFICATION,
-        MODULATION,
-        DEPTH
+        DEPTH,
+        AUDIFICATION
     };
 
     enum class WAVEFORM {
@@ -45,26 +39,32 @@ public:
         PINK
     };
 
-    enum class ITEM_COMMAND_TYPE {
+    enum class COMMAND {
         DATA,
         PARAM,
         SCALING,
         SCALE_VALS,
         INDEXES,
         WAVEFORM,
+        MODULATION,
         FIXED,
         ADD_CHILD,
         REMOVE_CHILD,
         ADD_PARENT,
         REMOVE_PARENT,
         MUTE,
-        DELETE
+        DELETE,
+        PAUSE,
+        POSITION,
+        SPEED,
+        LOOP,
+        LOOP_POINTS,
+        INTERPOLATE
     };
 
     struct SynthItemCommand {
-        ITEM_COMMAND_TYPE type;
-        ITEM_PARAMETER parameter;
-        ITEM_CHILD_TYPE childType;
+        COMMAND type;
+        PARAMETER parameter;
         WAVEFORM waveform;
         std::vector<double>* data;
         std::vector<double>* mins;
@@ -84,58 +84,54 @@ public:
         }
     };
 
-    ITEM_TYPE getType();
-    ITEM_CHILD_TYPE getChildType();
+    ITEM getType();
 
     explicit SynthItem();
-    virtual void setDataItem(std::vector<double>* data,
+    virtual void setData(std::vector<double>* data,
                              std::vector<double>* mins,
-                             std::vector<double>* maxes);
+                             std::vector<double>* maxes);  
+    virtual void setIndexes(std::vector<int> indexes, PARAMETER parameter);
     virtual void addParent(SynthItem* parent);    
     virtual void removeParent(SynthItem* parent);
-    virtual bool addChild(SynthItem *child);
+    virtual bool addChild(SynthItem *child, PARAMETER parameter);
     virtual void removeChild(SynthItem *item);
     virtual void mute(bool mute);
 
-    // pure virtual functions
+    // pure virtual process function
     virtual float process() = 0;
-    virtual float process(float in) = 0;
-
-    virtual void setIndexes(std::vector<int> indexes) = 0;
 
     // helper for proper deletion
     virtual void deleteItem();
 
 protected:
-    ITEM_TYPE myType;
-    ITEM_CHILD_TYPE myChildType;
-    std::vector<SynthItem::ITEM_CHILD_TYPE> acceptedChildTypes;
+    ITEM myType;
+    std::vector<SynthItem::PARAMETER> acceptedChildren;
+    SynthItemCommand currentCommand;
     bool muted;
-    std::vector<double>* dataItem;
+    std::vector<double>* data;
     std::vector<double>* mins;
     std::vector<double>* maxes;
-    std::vector<SynthItem*> parents; 
+    std::vector<SynthItem*> parents;
     std::vector<SynthItem*> amods;
     std::vector<int> dataIndexes;
 
     // Command buffer and parsing
-    SynthItemCommand currentCommand;
     RingBuffer<SynthItemCommand> commandBuffer;
     virtual void retrieveCommands();
     virtual void processCommand(SynthItemCommand command);
     virtual void processMute(bool mute);
     virtual void processRemoveParent(SynthItem* parent);
     virtual void processAddParent(SynthItem* parent);
-    virtual void processAddChild(SynthItem* child) = 0;
+    virtual void processAddChild(SynthItem* child, PARAMETER parameter) = 0;
     virtual void processRemoveChild(SynthItem* child) = 0;
-    virtual void processSetDataItem(std::vector<double>* dataItem,
+    virtual void processSetDataItem(std::vector<double>* data,
                                     std::vector<double> *mins,
                                     std::vector<double> *maxes);
     virtual void processDeleteItem() = 0;
 
-    bool verifyChildType(SynthItem::ITEM_CHILD_TYPE childType);
+    bool verifyChildParameter(SynthItem::PARAMETER childParameter);
 
-    float visitAmods();
+    float visitChildren(std::vector<SynthItem*> children);
 
     double scale(double x, double in_low, double in_high,
                  double out_low, double out_high, double exp = 1);

@@ -16,7 +16,7 @@ float Output::process()
     float amSample = 0.0;
 
     //check amods
-    if(amods.size() != 0)
+    if(children.size() != 0)
     {
         amSample = visitAmods();
     }
@@ -30,9 +30,9 @@ float Output::visitAmods()
 {
     float s = 0.0;
 
-    for (unsigned int i = 0; i < amods.size(); i++)
+    for (unsigned int i = 0; i < children.size(); i++)
     {
-        SynthItem* item = amods[i];
+        SynthItem* item = children[i];
         s += item->process();
     }
     return s;

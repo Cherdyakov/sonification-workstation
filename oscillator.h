@@ -16,9 +16,7 @@ public:
     Oscillator();
 
     float process() override;
-    float process(float in) override;
     void removeChild(SynthItem* child) override;
-    void setIndexes(std::vector<int> indexes) override;
     void setWaveform(WAVEFORM waveform);
     void setFixedFreq(double fixedFreq);
     void setUseFixedFreq(bool fixed);
@@ -29,7 +27,7 @@ protected:
     // actually implementing the commands on callback
     // side of the command buffer
     virtual void processCommand(SynthItemCommand command) override;
-    virtual void processAddChild(SynthItem* child) override;
+    virtual void processAddChild(SynthItem* child, PARAMETER parameter) override;
     virtual void processRemoveChild(SynthItem* child) override;
     virtual void processSetWaveform(WAVEFORM waveType);
     void processSetFixedFreq(double fixedFreq);

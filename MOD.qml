@@ -7,7 +7,7 @@ import "Style.js" as Style
 SynthItem {
     id: root
     label: qsTr("MOD")
-    type: QtSynthGraph.MODULATOR
+    type: QtTransport.MODULATOR
     mainColor: Style.modColor
     textColor: Style.itemTextColor
 
@@ -27,6 +27,10 @@ SynthItem {
         property double freqScaleHigh: 16000
         property double freqScaleExp: 1
         property double depth: 100
+        property double depthScaleLow: 40
+        property double depthScaleHigh:16000
+        property double depthScaleExp:1
+        property  bool useDepthScaling: true
 
         Component.onCompleted: {
             waveformEditor.comboBox.currentIndex = waveform
@@ -160,6 +164,45 @@ SynthItem {
                 onDepthValueChanged:  {
                     if(editor.depth !== depthValue) {
                         editor.depth = depthValue
+                    }
+                }
+            }
+
+            EditorScaler {
+                id: depthScaler
+                label.text: qsTr("Depth Scaling: ")
+                lowLabel.text: qsTr("Depth Low: ")
+                highLabel.text: qsTr("Depth High: ")
+                onLowChanged:
+                {
+                    if(editor.depthScaleLow !== low) {
+                        editor.depthScaleLow = low
+                        implementation.setFreqScalingVals(editor.depthScaleLow,
+                                                          editor.depthScaleHigh,
+                                                          editor.depthScaleExp)
+                    }
+                }
+                onHighChanged:
+                {
+                    if(editor.depthScaleHigh !== high) {
+                        editor.depthScaleHigh = high
+                        implementation.setFreqScalingVals(editor.depthScaleLow,
+                                                          editor.depthScaleHigh,
+                                                          editor.depthScaleExp)                    }
+                }
+                onExponentChanged:
+                {
+                    if(editor.depthScaleExp !== exp) {
+                        editor.depthScaleExp = exp
+                        implementation.setFreqScalingVals(editor.depthScaleLow,
+                                                          editor.depthScaleHigh,
+                                                          editor.depthScaleExp)                    }
+                }
+                onUseScalingChanged:
+                {
+                    if(editor.useDepthScaling !== scaling) {
+                        editor.useDepthScaling = scaling
+                        implementation.setUseDepthScaling(editor.useDepthScaling)
                     }
                 }
             }

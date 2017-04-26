@@ -175,7 +175,7 @@ Rectangle
         }
     }
 
-    //Audio output (root of synthGraph)
+    //Audio output (root of transport)
     OUT {
         type: 0
         id: dac

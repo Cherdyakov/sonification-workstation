@@ -14,8 +14,8 @@
 
 //#include "scatterview.h"
 //#include "lineview.h"
-#include "qtsynthgraph.h"
-#include "transport.h"
+#include "qttransport.h"
+#include "transportwidget.h"
 #include "filereader.h"
 #include "qcustomplot.h"
 #include "plotter.h"
@@ -30,12 +30,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    QtSynthGraph* getSynthGraph();
+    QtTransport* getTransport();
 
 private:
 
     std::vector<double> dataset;
-    QtSynthGraph* synthGraph;
+    QtTransport* qtTransport;
     FileReader* fileReader;
 
     //Tab widget and tabs
@@ -48,7 +48,7 @@ private:
     QLayout* lineTabLayout;
     QLayout* scatterTabLayout;
     //transport stuff
-    QWidget* transport;
+    QWidget* transportWidget;
     QLayout* transportLayout;
     QPushButton* orientationButton;
     QPushButton* playButton;

@@ -9,7 +9,7 @@
 #include "mainwindow.h"
 #include "rtaudio/RtAudio.h"
 #include "callback.h"
-#include "qtsynthgraph.h"
+#include "qttransport.h"
 #include "ringbuffer.h"
 #include "filereader.h"
 
@@ -22,12 +22,12 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
     qmlRegisterType<QtSynthItem>("SonLib", 1, 0, "QtSynthItem");
-    qmlRegisterType<QtSynthGraph>("SonLib", 1, 0, "QtSynthGraph");
+    qmlRegisterType<TransportWidget>("SonLib", 1, 0, "QtTransport");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
 
     MainWindow main_window;
     UserData uData;
-    uData.graph = main_window.getSynthGraph();
+    uData.graph = main_window.getTransport();
 
     main_window.show();
 

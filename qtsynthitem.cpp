@@ -17,14 +17,9 @@ float QtSynthItem::process()
     return synthItem->process();
 }
 
-float QtSynthItem::process(float in)
+bool QtSynthItem::addChild(QtSynthItem *child, PARAMETER parameter)
 {
-    return synthItem->process(in);
-}
-
-bool QtSynthItem::addChild(QtSynthItem *child)
-{
-    return synthItem->addChild(child->implementation());
+    return synthItem->addChild(child->implementation(), (SynthItem::PARAMETER)parameter);
 }
 
 void QtSynthItem::removeChild(QtSynthItem *child)
@@ -56,13 +51,13 @@ void QtSynthItem::mute(bool mute)
     synthItem->mute(mute);
 }
 
-void QtSynthItem::setIndexes(QVector<int> indexes)
+void QtSynthItem::setIndexes(QVector<int> indexes, PARAMETER parameter)
 {
     if(!synthItem)
         return;
 
     std::vector<int> vec = indexes.toStdVector();
-    synthItem->setIndexes(vec);
+    synthItem->setIndexes(vec, (SynthItem::PARAMETER)parameter);
 }
 
 void QtSynthItem::deleteItem()

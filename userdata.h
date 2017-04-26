@@ -3,9 +3,9 @@
 
 #endif // USERDATA_H
 
-#include "qtsynthgraph.h"
+#include "qttransport.h"
 
 typedef struct {
-    QtSynthGraph* graph;
+    QtTransport* graph;
 } UserData;
 

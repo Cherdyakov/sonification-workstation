@@ -6,10 +6,8 @@ SOURCES += \
     mainwindow.cpp \
     main.cpp \
     synthitem.cpp \
-    synthgraph.cpp \
     output.cpp \
     oscillator.cpp \
-    transport.cpp \
     audifier.cpp \
     timerworker.cpp \
     filereader.cpp \
@@ -18,10 +16,12 @@ SOURCES += \
     playhead.cpp \
     qtoscillator.cpp \
     qtsynthitem.cpp \
-    qtsynthgraph.cpp \
     qtaudifier.cpp \
     modulator.cpp \
-    qtmodulator.cpp
+    qtmodulator.cpp \
+    transport.cpp \
+    transportwidget.cpp \
+    qttransport.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,12 +37,10 @@ HEADERS += \
     mainwindow.h \
     synthitem.h \
     callback.h \
-    synthgraph.h \
     userdata.h \
     output.h \
     oscillator.h \
     ringbuffer.h \
-    transport.h \
     audifier.h \
     timerworker.h \
     filereader.h \
@@ -52,10 +50,12 @@ HEADERS += \
     enums.h \
     qtoscillator.h \
     qtsynthitem.h \
-    qtsynthgraph.h \
     qtaudifier.h \
     modulator.h \
-    qtmodulator.h
+    qtmodulator.h \
+    transport.h \
+    transportwidget.h \
+    qttransport.h
 
 FORMS +=
 

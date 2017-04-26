@@ -7,7 +7,7 @@ import "Style.js" as Style
 SynthItem {
     id: root
     label: qsTr("AUD")
-    type: QtSynthGraph.AUDIFIER
+    type: QtTransport.AUDIFIER
     mainColor: Style.audColor
     textColor: Style.itemTextColor
 

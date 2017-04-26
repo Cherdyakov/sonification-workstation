@@ -10,18 +10,18 @@ using namespace son;
 class QtSynthItem : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(CHILD_TYPE)
+    Q_ENUMS(PARAMETER)
     Q_ENUMS(WAVEFORM)
-
 public:
 
     explicit QtSynthItem(QObject *parent = 0);
 
-    enum CHILD_TYPE {
-        AMOD = (int)SynthItem::ITEM_CHILD_TYPE::AMOD,
-        FMOD,
-        PMOD,
-        IN
+    enum PARAMETER {
+        INPUT = (int)SynthItem::PARAMETER::INPUT,
+        AMPLITUDE ,
+        FREQUENCY,
+        PAN,
+        AUDIFICATION
     };
 
     enum WAVEFORM {
@@ -34,13 +34,12 @@ public:
 
     virtual SynthItem* implementation();
     virtual float process();
-    virtual float process(float in);
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child);
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER parameter);
     Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void mute(bool mute);
-    Q_INVOKABLE virtual void setIndexes(QVector<int> indexes);
+    Q_INVOKABLE virtual void setIndexes(QVector<int> indexes, PARAMETER parameter);
     Q_INVOKABLE virtual void deleteItem();
 
 protected:

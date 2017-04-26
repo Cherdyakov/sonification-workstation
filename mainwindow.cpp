@@ -31,14 +31,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout* synthLayout = new QVBoxLayout(this);
 
     //synthesis graph
-    synthGraph = new QtSynthGraph;
+    qtTransport = new QtTransport;
 
     //////////////////////
     //Transport section //
     //////////////////////
-    Transport* transport = new Transport(this);
-    transport->setSynthGraph(synthGraph);
-    transport->setMaximumHeight(40);
+    TransportWidget* transportWidget = new TransportWidget(this);
+    transportWidget->setTransport(qtTransport);
+    transportWidget->setMaximumHeight(40);
 
     fileReader = new FileReader;
 
@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //QML View//
     ////////////
     QQuickView* quickView = new QQuickView;
-    quickView->rootContext()->setContextProperty("graph", synthGraph);
+    quickView->rootContext()->setContextProperty("graph", qtTransport);
     quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
 
@@ -57,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //inset tab widget into window layout
     dataLayout->addWidget(plotter);
     //insert transport into window layout
-    dataLayout->addWidget(transport);
+    dataLayout->addWidget(transportWidget);
 
     QSplitter* splitter = new QSplitter(this);
     QWidget* leftSide = new QWidget;
@@ -80,19 +80,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /* connect non-ui slots and signals */
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
-            transport, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
+            qtTransport, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
             plotter, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
-    connect(transport, SIGNAL(cursorPosChanged(double)),
+    connect(qtTransport, SIGNAL(cursorPosChanged(double)),
             playHead, SLOT(on_cursorMoved(double)));
     connect(plotter->xAxis, SIGNAL(rangeChanged(QCPRange)),
             playHead, SLOT(on_xRangeChanged(QCPRange)));
-    connect(transport, SIGNAL(pausedChanged(bool)),
+    connect(qtTransport, SIGNAL(pausedChanged(bool)),
             playHead, SLOT(on_pausedChanged(bool)));
     connect(playHead, SIGNAL(cursorPosChanged(double)),
-            transport, SLOT(on_cursorPosChanged(double)));
+            qtTransport, SLOT(on_cursorPosChanged(double)));
     connect(playHead, SIGNAL(loopPointsChanged(double,double)),
-            transport, SLOT(on_loopPointsChanged(double,double)));
+            qtTransport, SLOT(on_loopPointsChanged(double,double)));
 
 }
 
@@ -101,9 +101,9 @@ MainWindow::~MainWindow()
 
 }
 
-QtSynthGraph *MainWindow::getSynthGraph()
+QtTransport *MainWindow::getTransport()
 {
-    return synthGraph;
+    return qtTransport;
 }
 
 void MainWindow::createActions()
