@@ -37,7 +37,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //Transport section //
     //////////////////////
     TransportWidget* transportWidget = new TransportWidget(this);
-    transportWidget->setTransport(qtTransport);
     transportWidget->setMaximumHeight(40);
 
     fileReader = new FileReader;
@@ -80,17 +79,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /* connect non-ui slots and signals */
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
-            qtTransport, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
+            qtTransport, SLOT(on_dataChanged(std::vector<double>*,uint,uint)));
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
             plotter, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
-    connect(qtTransport, SIGNAL(cursorPosChanged(double)),
-            playHead, SLOT(on_cursorMoved(double)));
+    connect(playHead, SIGNAL(cursorPosChanged(double)),
+            qtTransport, SLOT(on_posChanged(double)));
     connect(plotter->xAxis, SIGNAL(rangeChanged(QCPRange)),
             playHead, SLOT(on_xRangeChanged(QCPRange)));
-    connect(qtTransport, SIGNAL(pausedChanged(bool)),
+    connect(transportWidget, SIGNAL(pausedChanged(bool)),
             playHead, SLOT(on_pausedChanged(bool)));
     connect(playHead, SIGNAL(cursorPosChanged(double)),
-            qtTransport, SLOT(on_cursorPosChanged(double)));
+            qtTransport, SLOT(on_posChanged(double)));
     connect(playHead, SIGNAL(loopPointsChanged(double,double)),
             qtTransport, SLOT(on_loopPointsChanged(double,double)));
 

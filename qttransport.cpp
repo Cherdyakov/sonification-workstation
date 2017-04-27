@@ -2,10 +2,13 @@
 
 QtTransport::QtTransport(QObject *parent) : QObject(parent)
 {
-
+    // for refreshing the playhead position
+    QTimer* posTimer = new QTimer(this);
+    connect(posTimer, SIGNAL(timeout()), this, SLOT(updateCursorPos()));
+    posTimer->start(33);
 }
 
-void QtTransport::setInterpolate(bool interpolate)
+void QtTransport::on_interpolateChanged(bool interpolate)
 {
     transport.setInterpolate(interpolate);
 }
@@ -58,32 +61,32 @@ int QtTransport::graphSize()
     return size;
 }
 
-void QtTransport::pause(bool pause)
+void QtTransport::on_pauseChanged(bool pause)
 {
     transport.pause(pause);
 }
 
-void QtTransport::setPos(double pos)
+void QtTransport::on_posChanged(double pos)
 {
     transport.setPos(pos);
 }
 
-void QtTransport::setSpeed(double speed)
+void QtTransport::on_speedChanged(double speed)
 {
     transport.setSpeed(speed);
 }
 
-void QtTransport::setLooping(bool looping)
+void QtTransport::on_loopingChanged(bool looping)
 {
     transport.setLooping(looping);
 }
 
-void QtTransport::setLoopPoints(double begin, double end)
+void QtTransport::on_loopPointsChanged(double begin, double end)
 {
     transport.setLoopPoints(begin, end);
 }
 
-void QtTransport::setData(std::vector<double> *data, unsigned int height, unsigned int width)
+void QtTransport::on_dataChanged(std::vector<double> *data, unsigned int height, unsigned int width)
 {
     transport.setData(data, height, width);
 }
@@ -93,4 +96,10 @@ double QtTransport::getPos()
     double pos;
     pos = transport.getPos();
     return pos;
+}
+
+void QtTransport::updateCursorPos()
+{
+    double pos = transport.getPos();
+    emit cursorPosChanged(pos);
 }

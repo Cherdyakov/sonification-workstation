@@ -1,5 +1,5 @@
-#ifndef TRANSPORT_H
-#define TRANSPORT_H
+#ifndef TRANSPORTWIDGET_H
+#define TRANSPORTWIDGET_H
 
 #include <QWidget>
 #include <QLayout>
@@ -35,18 +35,16 @@ private:
 
 
 signals:
-    void cursorPosChanged(double pos);
     void pausedChanged(bool pause);
+    void loopingChanged(bool loop);
+    void speedChanged(double speed);
+    void interpolateChanged(bool interpolate);
 
 private slots:
-    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
-    void updateCursorPos();
-    void on_cursorPosChanged(double pos);
     void on_pauseButton_released();
     void on_loopButton_released();
     void on_speedBox_valueChanged(double speed);
-    void on_loopPointsChanged(double begin, double end);
     void on_interpolateBox_stateChanged(int state);
 };
 
-#endif // TRANSPORT_H
+#endif // TRANSPORTWIDGET_H

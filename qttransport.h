@@ -7,6 +7,7 @@
 #include "qtoscillator.h"
 #include "qtaudifier.h"
 #include "qtmodulator.h"
+#include <QTimer>
 
 using namespace son;
 
@@ -29,14 +30,15 @@ public:
     float process();
     int graphSize();
 
-    // functions for controlling playback
-    void pause(bool pause);
-    void setPos(double pos);
-    void setSpeed(double speed);
-    void setLooping(bool looping);
-    void setLoopPoints(double begin, double end);
-    void setData(std::vector<double>* data, unsigned int height, unsigned int width);
-    void setInterpolate(bool interpolate);
+public slots:
+    // slots for controlling playback
+    void on_pauseChanged(bool on_pauseChanged);
+    void on_posChanged(double pos);
+    void on_speedChanged(double speed);
+    void on_loopingChanged(bool looping);
+    void on_loopPointsChanged(double begin, double end);
+    void on_dataChanged(std::vector<double>* data, unsigned int height, unsigned int width);
+    void on_interpolateChanged(bool interpolate);
 
     // for polling state from outside
     // (i.e. GUI)
@@ -46,8 +48,11 @@ private:
     Transport transport;
 
 signals:
+    void cursorPosChanged(double pos);
 
-public slots:
+private slots:
+    void updateCursorPos();
+
 };
 
 #endif // QTTRANSPORT_H

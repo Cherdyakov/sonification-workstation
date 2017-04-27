@@ -5,11 +5,6 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     paused = true;
     looping = false;
 
-    // for refreshing the playhead position
-    QTimer* posTimer = new QTimer(this);
-    connect(posTimer, SIGNAL(timeout()), this, SLOT(updateCursorPos()));
-    posTimer->start(33);
-
     //transport layout
     QHBoxLayout* transportLayout = new QHBoxLayout;
     //transport controls
@@ -45,7 +40,6 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 void TransportWidget::on_pauseButton_released()
 {
     paused = !paused;
-    qtTransport->pause(paused);
     emit pausedChanged(paused);
 
     if(paused) {
@@ -59,7 +53,7 @@ void TransportWidget::on_pauseButton_released()
 void TransportWidget::on_loopButton_released()
 {
     looping = !looping;
-    qtTransport->setLooping(looping);
+    qtTransport->on_loopingChanged(looping);
 
     if(looping) {
         loopButton->setText(tr("Looping: ON"));
@@ -74,40 +68,14 @@ void TransportWidget::on_speedBox_valueChanged(double speed)
     if(stepsPerSecond != speed)
     {
         stepsPerSecond = speed;
-        qtTransport->setSpeed(stepsPerSecond);
+        qtTransport->on_speedChanged(stepsPerSecond);
     }
-}
-
-void TransportWidget::on_loopPointsChanged(double begin, double end)
-{
-    qtTransport->setLoopPoints(begin, end);
 }
 
 void TransportWidget::on_interpolateBox_stateChanged(int state)
 {
     if(interpolate != state) {
         interpolate = state;
-        qtTransport->setInterpolate(interpolate);
+        qtTransport->on_interpolateChanged(interpolate);
     }
-}
-
-void TransportWidget::setTransport(QtTransport *qtTransport)
-{
-    this->qtTransport = qtTransport;
-}
-
-void TransportWidget::updateCursorPos()
-{
-    double pos = qtTransport->getPos();
-    emit cursorPosChanged(pos);
-}
-
-void TransportWidget::on_cursorPosChanged(double pos)
-{
-    qtTransport->setPos(pos);
-}
-
-void TransportWidget::on_datasetChanged(std::vector<double> *data, uint height, uint width)
-{
-    qtTransport->setData(data, height, width);
 }
