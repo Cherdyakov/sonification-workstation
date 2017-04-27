@@ -8,6 +8,7 @@ SynthItem {
     id: root
     label: qsTr("MOD")
     type: QtTransport.MODULATOR
+    childType: QtSynthItem.AMPLITUDE
     mainColor: Style.modColor
     textColor: Style.itemTextColor
 
@@ -19,7 +20,7 @@ SynthItem {
 
         id: editor
         property int waveform: QtSynthItem.SINE
-        property  int  modType: QtSynthItem.AMOD
+        property  int  modType: QtSynthItem.AMPLITUDE
         property bool useFixedFreq: true
         property double fixedFreq: 1
         property bool useFreqScaling: true
@@ -57,7 +58,10 @@ SynthItem {
         }
 
         onModTypeChanged: {
-            implementation.setModType(modType)
+            if(implementation !== null) {
+                root.childType = modType
+                implementation.setModulationParameter(modType)
+            }
         }
 
         onDepthChanged: {

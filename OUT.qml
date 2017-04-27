@@ -14,16 +14,17 @@ SynthItem {
     }
 
     function addChild(synthItem) {
-        //add QML child to this item's synthChildren
-        synthChildren.push(synthItem)
-        //add child's implementation to root of the synth graph
-        graph.addToRoot(synthItem.implementation)
-        synthItem.addParent(this)
+        if(transport.addChild(synthItem.implementation, synthItem.childType)) {
+            //add QML child to this item's synthChildren
+            synthChildren.push(synthItem)
+            //add child's implementation to root of the synth transport
+            synthItem.addParent(this)
+        }
     }
 
     function removeChild(synthItem) {
-        //remove from the root of the synthgraph
-        graph.removeFromRoot(synthItem.implementation)
+        //remove from the root of the synthtransport
+        transport.removeChild(synthItem.implementation)
         //remove the QML child from this item's children
         var idx = synthChildren.indexOf(synthItem)
         if(idx > -1)
@@ -46,7 +47,7 @@ SynthItem {
         {
             var childItem = synthChildren[i]
             childItem.removeParent(root)
-            graph.removeFromRoot(childItem.implementation)
+            transport.removeFromRoot(childItem.implementation)
         }
 
         var idx = synthItems.indexOf(root)

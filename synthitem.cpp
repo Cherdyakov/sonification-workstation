@@ -130,11 +130,8 @@ void SynthItem::processSetDataItem(std::vector<double> *dataItem,
 
 bool SynthItem::verifyChildParameter(PARAMETER childParameter)
 {
-    if(std::find(acceptedChildren.begin(), acceptedChildren.end(), childParameter) == acceptedChildren.end())
-    {
-        return false;
-    }
-    return true;
+    bool accept = (std::find(acceptedChildren.begin(), acceptedChildren.end(), childParameter) == acceptedChildren.end());
+    return accept;
 }
 
 float SynthItem::visitChildren(std::vector<SynthItem*> children)

@@ -22,12 +22,12 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
     qmlRegisterType<QtSynthItem>("SonLib", 1, 0, "QtSynthItem");
-    qmlRegisterType<TransportWidget>("SonLib", 1, 0, "QtTransport");
+    qmlRegisterType<QtTransport>("SonLib", 1, 0, "QtTransport");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
 
     MainWindow main_window;
     UserData uData;
-    uData.graph = main_window.getTransport();
+    uData.tranpsport = main_window.getTransport();
 
     main_window.show();
 

@@ -30,8 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout* dataLayout = new QVBoxLayout(this);
     QVBoxLayout* synthLayout = new QVBoxLayout(this);
 
-    //synthesis graph
-    qtTransport = new QtTransport;
+    //synthesis tree root, transport
+    Transport* transport = new Transport();
+    qtTransport = new QtTransport(transport);
 
     //////////////////////
     //Transport section //
@@ -45,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //QML View//
     ////////////
     QQuickView* quickView = new QQuickView;
-    quickView->rootContext()->setContextProperty("graph", qtTransport);
+    quickView->rootContext()->setContextProperty("transport", qtTransport);
     quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
 

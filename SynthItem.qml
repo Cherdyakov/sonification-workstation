@@ -13,6 +13,7 @@ Item {
     property bool patching: false
     property bool muted: false
     property int type: -1 //OUT = 0, OSC = 1
+    property int childType: -1 //INPUT = 0
     property bool created: false
     property var inputs: new Array
     property var outputs: new Array
@@ -20,6 +21,7 @@ Item {
     property string mainColor
     property string textColor
     property QtSynthItem implementation: null //the CPP implementation of this SynthItem
+
     property alias radius: rect.radius
 
     signal clickedItem(var i)
@@ -88,7 +90,7 @@ Item {
 
     function create() {
         created = true
-        implementation = graph.createItem(type)
+        implementation = transport.createItem(type)
         implementationSet()
         canvas.requestPaint()
     }
@@ -98,7 +100,7 @@ Item {
             return
         //add child's implementation to the children
         //of this item's implementation
-        if(implementation.addChild(synthItem.implementation))
+        if(implementation.addChild(synthItem.implementation, synthItem.childType))
         {
             //add QML child to this item's synthChildren
             synthChildren.push(synthItem)

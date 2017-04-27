@@ -8,6 +8,7 @@ SynthItem {
     id: root
     label: qsTr("OSC")
     type: QtTransport.OSCILLATOR
+    childType: QtSynthItem.INPUT
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 

@@ -99,7 +99,7 @@ SynthItem* Transport::createItem(SynthItem::ITEM type)
     SynthItem* item;
 
     switch (type){
-    case SynthItem::ITEM::OUT:
+    case SynthItem::ITEM::TRANSPORT:
     {
         item = NULL;
         break;

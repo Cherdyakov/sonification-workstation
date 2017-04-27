@@ -11,20 +11,20 @@
 
 using namespace son;
 
-class QtTransport : public QObject
+class QtTransport : public QtSynthItem
 {
     Q_OBJECT
     Q_ENUMS(ITEM)
 public:
 
     enum ITEM {
-        OUT = (int)SynthItem::ITEM::OUT,
+        OUT = (int)SynthItem::ITEM::TRANSPORT,
         OSCILLATOR,
         AUDIFIER,
         MODULATOR
     };
 
-    explicit QtTransport(QObject *parent = 0);
+    explicit QtTransport(SynthItem* item = 0, QObject *parent = 0);
 
     Q_INVOKABLE QtSynthItem* createItem(ITEM type);
     float process();
@@ -45,13 +45,12 @@ public slots:
     double getPos();
 
 private:
-    Transport transport;
 
 signals:
-    void cursorPosChanged(double pos);
+    void posChanged(double pos);
 
 private slots:
-    void updateCursorPos();
+    void updatePos();
 
 };
 

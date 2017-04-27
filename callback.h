@@ -16,7 +16,7 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
     UserData* uData = (UserData *) data;
     double *buffer = (double *) outputBuffer;
-    QtTransport* graph = uData->graph;
+    QtTransport* graph = uData->tranpsport;
 //    Sequencer* sequencer = uData->seq;
 
     if ( status )

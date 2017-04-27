@@ -17,7 +17,7 @@ class SynthItem
 public:
 
     enum class ITEM {
-        OUT,
+        TRANSPORT,
         OSCILLATOR,
         AUDIFIER,
         MODULATOR
