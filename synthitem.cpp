@@ -126,7 +126,7 @@ void SynthItem::processSetData(std::vector<double> *dataItem,
 
 bool SynthItem::verifyChildParameter(PARAMETER childParameter)
 {
-    bool accept = (std::find(acceptedChildren.begin(), acceptedChildren.end(), childParameter) == acceptedChildren.end());
+    bool accept = (std::find(acceptedChildren.begin(), acceptedChildren.end(), childParameter) != acceptedChildren.end());
     return accept;
 }
 

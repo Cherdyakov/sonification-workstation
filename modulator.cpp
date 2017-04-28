@@ -5,6 +5,7 @@ namespace son {
 Modulator::Modulator()
 {
     myType = ITEM::MODULATOR;
+    modType = PARAMETER::AMPLITUDE;
     waveform = WAVEFORM::SINE;
     depth = 100;
     fixedFreq = 1;
@@ -61,7 +62,10 @@ float Modulator::process()
         float amSample = visitChildren(amods);
         sample *= amSample;
     }
-    sample *= depth;
+    if(modType == PARAMETER::FREQUENCY)
+    {
+        sample *= depth;
+    }
 
     return sample;
 }
@@ -118,7 +122,6 @@ void Modulator::processCommand(SynthItemCommand command)
 
     switch (type) {
     case COMMAND::PARAM:
-    {
         switch (command.parameter) {
         case PARAMETER::DEPTH:
             processSetDepth(command.doubles[0]);
@@ -127,7 +130,9 @@ void Modulator::processCommand(SynthItemCommand command)
             Oscillator::processCommand(command);
             break;
         }
-    }
+    case COMMAND::MODULATION:
+        processSetModType(command.parameter);
+        break;
     default:
         Oscillator::processCommand(command);
         break;
@@ -208,6 +213,7 @@ void Modulator::setFreqs()
 
 void Modulator::processSetModType(PARAMETER parameter)
 {
+    modType = parameter;
     for(unsigned int i = 0; i < parents.size(); i++)
     {
         SynthItem* parent = parents[i];

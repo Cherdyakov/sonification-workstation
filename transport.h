@@ -66,7 +66,6 @@ private:
     // from outside (i.e. GUI)
     std::atomic<double> returnPos;
 
-    std::vector<SynthItem::PARAMETER> acceptedChildren;
     std::vector<SynthItem*> children;
     std::vector<double> currentDataColumn;
 

@@ -36,7 +36,9 @@ private:
     double depthScaleHigh;
     double depthScaleExp;
 
+    PARAMETER modType;
     void processSetModType(PARAMETER parameter);
+
     gam::AccumPhase<>* gen;
 
 };
