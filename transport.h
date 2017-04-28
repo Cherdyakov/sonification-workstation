@@ -42,12 +42,15 @@ protected:
 
 private:
 
+    std::vector<double> minDataVals;
+    std::vector<double> maxDataVals;
+
     virtual void processAddChild(SynthItem* child, PARAMETER parameter) override;
     virtual void processRemoveChild(SynthItem* child) override;
     virtual void processDeleteItem() override;
     void processPause(bool pause);
     void processSetPos(double pos);
-    void processSetData(std::vector<double>* data, unsigned int height, unsigned int width);
+    void processSetDataset(std::vector<double>* data, int height, int width);
     void processSetInterpolate(bool interpolate);
 
     float masterVolume;
@@ -66,8 +69,6 @@ private:
     std::vector<SynthItem::PARAMETER> acceptedChildren;
     std::vector<SynthItem*> children;
     std::vector<double> currentDataColumn;
-    std::vector<double> mins;
-    std::vector<double> maxes;
 
     bool dataStale;
     bool paused;

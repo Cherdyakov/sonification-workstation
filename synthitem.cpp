@@ -68,30 +68,26 @@ void SynthItem::processCommand(SynthItemCommand command)
     switch (type) {
 
     case COMMAND::DATA:
-    {
-        processSetDataItem(command.data, command.mins, command.maxes);
+        processSetData(command.data, command.mins, command.maxes);
         break;
-    }
+    case COMMAND::ADD_CHILD:
+        processAddChild(command.item, command.parameter);
+        break;
+    case COMMAND::REMOVE_CHILD:
+        processRemoveChild(command.item);
+        break;
     case COMMAND::ADD_PARENT:
-    {
         processAddParent(command.item);
         break;
-    }
     case COMMAND::REMOVE_PARENT:
-    {
         processRemoveParent(command.item);
         break;
-    }
     case COMMAND::MUTE:
-    {
         processMute(command.boolVal);
         break;
-    }
     case COMMAND::DELETE:
-    {
         processDeleteItem();
         break;
-    }
     default:
         break;
     }
@@ -119,7 +115,7 @@ void SynthItem::processAddParent(SynthItem *parent)
     }
 }
 
-void SynthItem::processSetDataItem(std::vector<double> *dataItem,
+void SynthItem::processSetData(std::vector<double> *dataItem,
                                    std::vector<double> *mins,
                                    std::vector<double> *maxes)
 {
@@ -182,6 +178,7 @@ void SynthItem::setIndexes(std::vector<int> indexes, SynthItem::PARAMETER parame
     for (unsigned int i = 0; i < indexes.size(); i++) {
         command.ints.push_back(indexes[i]);
     }
+    commandBuffer.push(command);
 }
 
 // based on the Max "Scale" object

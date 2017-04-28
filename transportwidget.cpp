@@ -53,7 +53,7 @@ void TransportWidget::on_pauseButton_released()
 void TransportWidget::on_loopButton_released()
 {
     looping = !looping;
-    qtTransport->on_loopingChanged(looping);
+    emit loopingChanged(looping);
 
     if(looping) {
         loopButton->setText(tr("Looping: ON"));
@@ -68,7 +68,7 @@ void TransportWidget::on_speedBox_valueChanged(double speed)
     if(stepsPerSecond != speed)
     {
         stepsPerSecond = speed;
-        qtTransport->on_speedChanged(stepsPerSecond);
+        emit speedChanged(stepsPerSecond);
     }
 }
 
@@ -76,6 +76,6 @@ void TransportWidget::on_interpolateBox_stateChanged(int state)
 {
     if(interpolate != state) {
         interpolate = state;
-        qtTransport->on_interpolateChanged(interpolate);
+        emit interpolateChanged(interpolate);
     }
 }

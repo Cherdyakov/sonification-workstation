@@ -94,7 +94,7 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setIndexes(implementationMappings)
+                        implementation.setIndexes(implementationMappings, QtSynthItem.FREQUENCY)
                     }
                 }
             }

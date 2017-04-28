@@ -6,6 +6,6 @@
 #include "qttransport.h"
 
 typedef struct {
-    QtTransport* tranpsport;
+    QtTransport* qtTransport;
 } UserData;
 

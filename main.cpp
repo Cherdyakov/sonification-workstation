@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
     MainWindow main_window;
     UserData uData;
-    uData.tranpsport = main_window.getTransport();
+    uData.qtTransport = main_window.getTransport();
 
     main_window.show();
 

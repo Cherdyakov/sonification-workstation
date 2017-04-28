@@ -31,7 +31,6 @@ private:
     QCheckBox* interpolateBox;
     QDial* speedDial;
     QDoubleSpinBox* speedBox;
-    QtTransport* qtTransport;
 
 
 signals:

@@ -124,7 +124,7 @@ protected:
     virtual void processAddParent(SynthItem* parent);
     virtual void processAddChild(SynthItem* child, PARAMETER parameter) = 0;
     virtual void processRemoveChild(SynthItem* child) = 0;
-    virtual void processSetDataItem(std::vector<double>* data,
+    virtual void processSetData(std::vector<double>* data,
                                     std::vector<double> *mins,
                                     std::vector<double> *maxes);
     virtual void processDeleteItem() = 0;

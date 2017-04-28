@@ -83,14 +83,20 @@ MainWindow::MainWindow(QWidget *parent) :
             qtTransport, SLOT(on_dataChanged(std::vector<double>*,uint,uint)));
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
             plotter, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
-    connect(playHead, SIGNAL(cursorPosChanged(double)),
-            qtTransport, SLOT(on_posChanged(double)));
+    connect(qtTransport, SIGNAL(posChanged(double)),
+            playHead, SLOT(on_cursorMoved(double)));
     connect(plotter->xAxis, SIGNAL(rangeChanged(QCPRange)),
             playHead, SLOT(on_xRangeChanged(QCPRange)));
     connect(transportWidget, SIGNAL(pausedChanged(bool)),
             playHead, SLOT(on_pausedChanged(bool)));
+    connect(transportWidget, SIGNAL(speedChanged(double)),
+            qtTransport, SLOT(on_speedChanged(double)));
+    connect(transportWidget, SIGNAL(pausedChanged(bool)),
+            qtTransport, SLOT(on_pausedChanged(bool)));
     connect(playHead, SIGNAL(cursorPosChanged(double)),
             qtTransport, SLOT(on_posChanged(double)));
+    connect(transportWidget, SIGNAL(loopingChanged(bool)),
+            qtTransport, SLOT(on_loopingChanged(bool)));
     connect(playHead, SIGNAL(loopPointsChanged(double,double)),
             qtTransport, SLOT(on_loopPointsChanged(double,double)));
 

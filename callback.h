@@ -16,8 +16,7 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
     UserData* uData = (UserData *) data;
     double *buffer = (double *) outputBuffer;
-    QtTransport* graph = uData->tranpsport;
-//    Sequencer* sequencer = uData->seq;
+    QtTransport* graph = uData->qtTransport;\
 
     if ( status )
         std::cout << "Stream underflow detected!" << std::endl;
@@ -33,6 +32,8 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
         //test noise
 //        *buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+//        *buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
+
         //test mssg
 //        qDebug() << "callback";
     }

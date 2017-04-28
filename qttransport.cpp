@@ -62,7 +62,7 @@ int QtTransport::graphSize()
     return size;
 }
 
-void QtTransport::on_pauseChanged(bool pause)
+void QtTransport::on_pausedChanged(bool pause)
 {
     dynamic_cast<Transport*>(synthItem)->pause(pause);
 }

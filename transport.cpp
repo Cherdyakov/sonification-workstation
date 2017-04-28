@@ -80,8 +80,6 @@ float Transport::process()
         dataStale = false;
     }
 
-    std::vector<SynthItem*>::const_iterator i;
-
     for (unsigned int i = 0; i < children.size(); ++i) {
         SynthItem* item = children[i];
         s += item->process();
@@ -107,19 +105,19 @@ SynthItem* Transport::createItem(SynthItem::ITEM type)
     case SynthItem::ITEM::OSCILLATOR:
     {
         item = new Oscillator();
-        item->setData(&currentDataColumn, &mins, &maxes);
+        item->setData(&currentDataColumn, &minDataVals, &maxDataVals);
         break;
     }
     case SynthItem::ITEM::AUDIFIER:
     {
         item = new Audifier();
-        item->setData(&currentDataColumn, &mins, &maxes);
+        item->setData(&currentDataColumn, &minDataVals, &maxDataVals);
         break;
     }
     case SynthItem::ITEM::MODULATOR:
     {
         item = new Modulator();
-        item->setData(&currentDataColumn, &mins, &maxes);
+        item->setData(&currentDataColumn, &minDataVals, &maxDataVals);
         break;
     }
     default:
@@ -231,6 +229,9 @@ void Transport::processCommand(SynthItemCommand command)
     COMMAND type = command.type;
 
     switch (type) {
+    case COMMAND::DATA:
+        processSetDataset(command.data, command.ints[0], command.ints[1]);
+        break;
     case COMMAND::PAUSE:
         processPause(command.boolVal);
         break;
@@ -247,12 +248,11 @@ void Transport::processCommand(SynthItemCommand command)
         loopBegin = command.doubles[0];
         loopEnd = command.doubles[1];
         break;
-    case COMMAND::DATA:
-        processSetData(command.data, command.doubles[0], command.doubles[1]);
-        break;
     case COMMAND::INTERPOLATE:
         processSetInterpolate(command.boolVal);
+        break;
     default:
+        SynthItem::processCommand(command);
         break;
     }
 }
@@ -304,7 +304,7 @@ void Transport::processSetPos(double pos)
     mu = (pos - currentIdx);
 }
 
-void Transport::processSetData(std::vector<double> *data, unsigned int height, unsigned int width)
+void Transport::processSetDataset(std::vector<double> *data, int height, int width)
 {
     paused = true;
     this->data = data;
@@ -334,8 +334,8 @@ void Transport::calculateMinMax()
 {
     double min;
     double max;
-    mins.clear();
-    maxes.clear();
+    minDataVals.clear();
+    maxDataVals.clear();
     for(unsigned int i = 0; i < dataHeight; i++)
     {
         for(unsigned int j = 0; j < dataWidth; j++)
@@ -355,8 +355,8 @@ void Transport::calculateMinMax()
                 max = value;
             }
         }
-        mins.push_back(min);
-        maxes.push_back(max);
+        minDataVals.push_back(min);
+        maxDataVals.push_back(max);
     }
 }
 
