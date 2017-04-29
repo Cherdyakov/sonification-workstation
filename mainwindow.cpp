@@ -99,6 +99,8 @@ MainWindow::MainWindow(QWidget *parent) :
             qtTransport, SLOT(on_loopingChanged(bool)));
     connect(playHead, SIGNAL(loopPointsChanged(double,double)),
             qtTransport, SLOT(on_loopPointsChanged(double,double)));
+    connect(transportWidget, SIGNAL(interpolateChanged(bool)),
+            qtTransport, SLOT(on_interpolateChanged(bool)));
 
 }
 
