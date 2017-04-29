@@ -44,6 +44,7 @@ private slots:
     void on_loopButton_released();
     void on_speedBox_valueChanged(double speed);
     void on_interpolateBox_stateChanged(int state);
+    void on_datasetChanged(std::vector<double>*data, uint height, uint width);
 };
 
 #endif // TRANSPORTWIDGET_H

@@ -89,7 +89,9 @@ void QtTransport::on_loopPointsChanged(double begin, double end)
 
 void QtTransport::on_dataChanged(std::vector<double> *data, unsigned int height, unsigned int width)
 {
-    dynamic_cast<Transport*>(synthItem)->setData(data, height, width);
+    Transport* t = dynamic_cast<Transport*>(synthItem);
+    t->pause(true);
+    t->setData(data, height, width);
 }
 
 double QtTransport::getPos()

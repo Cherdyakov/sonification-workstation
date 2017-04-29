@@ -79,3 +79,12 @@ void TransportWidget::on_interpolateBox_stateChanged(int state)
         emit interpolateChanged(interpolate);
     }
 }
+
+void TransportWidget::on_datasetChanged(std::vector<double> *data, uint height, uint width)
+{
+    Q_UNUSED(data);
+    Q_UNUSED(height);
+    Q_UNUSED(width);
+    paused = true;
+    pauseButton->setText(tr("Play"));
+}

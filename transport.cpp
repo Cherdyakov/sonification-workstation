@@ -306,15 +306,14 @@ void Transport::processSetPos(double pos)
 
 void Transport::processSetDataset(std::vector<double> *data, int height, int width)
 {
-    paused = true;
-    this->data = data;
-    dataWidth = width;
-    currentDataColumn.clear();
     currentIdx = 0;
     mu = 0.0;
     calculateReturnPos();
+    dataWidth = width;
     dataHeight = height;
+    currentDataColumn.clear();
     currentDataColumn.resize(dataHeight);
+    this->data = data;
     calculateMinMax();
 }
 

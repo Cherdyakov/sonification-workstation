@@ -101,6 +101,8 @@ MainWindow::MainWindow(QWidget *parent) :
             qtTransport, SLOT(on_loopPointsChanged(double,double)));
     connect(transportWidget, SIGNAL(interpolateChanged(bool)),
             qtTransport, SLOT(on_interpolateChanged(bool)));
+    connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
+            transportWidget, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
 
 }
 
