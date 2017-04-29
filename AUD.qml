@@ -8,10 +8,10 @@ SynthItem {
     id: root
     label: qsTr("AUD")
     type: QtTransport.AUDIFIER
+    childType: QtSynthItem.INPUT
     mainColor: Style.audColor
     textColor: Style.itemTextColor
-
-    Component.onCompleted: {
+   Component.onCompleted: {
     }
 
     Editor {
@@ -36,7 +36,7 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setIndexes(implementationMappings)
+                        implementation.setIndexes(implementationMappings, QtSynthItem.AUDIFICATION)
                     }
                 }
             }

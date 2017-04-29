@@ -5,6 +5,11 @@ namespace son {
 Audifier::Audifier()
 {
     myType = ITEM::AUDIFIER;
+
+    acceptedChildren = {
+        PARAMETER::AMPLITUDE,
+        PARAMETER::FREQUENCY
+    };
 }
 
 float Audifier::process()
@@ -30,7 +35,12 @@ float Audifier::process()
         }
     }
 
-    // visit amods eventually goes here
+    // vist amplitude modulating children
+    if(!amods.empty())
+    {
+        float amSample = visitChildren(amods);
+        sample *= amSample;
+    }
 
     // divide by total number of datasets mapped (rows)
     // to prevent clipping
@@ -50,16 +60,6 @@ void Audifier::processCommand(SynthItemCommand command)
     COMMAND type = command.type;
 
     switch (type) {
-    case COMMAND::ADD_CHILD:
-    {
-        processAddChild(command.item, command.parameter);
-        break;
-    }
-    case COMMAND::REMOVE_CHILD:
-    {
-        processRemoveChild(command.item);
-        break;
-    }
     case COMMAND::INDEXES:
     {
         if(command.parameter == PARAMETER::AUDIFICATION)

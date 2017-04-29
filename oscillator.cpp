@@ -189,9 +189,6 @@ void Oscillator::processCommand(SynthItemCommand command)
     COMMAND type = command.type;
 
     switch (type) {
-    case COMMAND::ADD_CHILD:
-        processAddChild(command.item, command.parameter);
-        break;
     case COMMAND::FIXED:
         if(command.parameter == PARAMETER::FREQUENCY)
         {
@@ -221,9 +218,6 @@ void Oscillator::processCommand(SynthItemCommand command)
         {
             SynthItem::processCommand(command);
         }
-        break;
-    case COMMAND::REMOVE_CHILD:
-        processRemoveChild(command.item);
         break;
     case COMMAND::WAVEFORM:
         processSetWaveform(command.waveform);
@@ -335,7 +329,7 @@ float Oscillator::process()
 
     sample /= gens.size();
 
-    //check AMPLITUDEs
+    // vist amplitude modulating children
     if(!amods.empty())
     {
         float amSample = visitChildren(amods);
