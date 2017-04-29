@@ -31,7 +31,7 @@ float Modulator::process()
         retrieveCommands();
     }
 
-    if(muted)
+    if(muted || (fixedFreq == 0 && (useFixedFreq == true)))
     {
         return 1; // good return value for am and fm
     }
@@ -39,7 +39,7 @@ float Modulator::process()
     //set frequency of generator
     setFreqs();
 
-    gam::Sine<>* g = static_cast<gam::Sine<>*>(gen);
+    gam::Sine<>* g = dynamic_cast<gam::Sine<>*>(gen);
 
     //generate sample
     switch (waveform) {
@@ -130,6 +130,7 @@ void Modulator::processCommand(SynthItemCommand command)
             Oscillator::processCommand(command);
             break;
         }
+        break;
     case COMMAND::MODULATION:
         processSetModType(command.parameter);
         break;

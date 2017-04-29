@@ -42,7 +42,7 @@ SynthItem {
             frequencyScaler.expSpinBox.value = freqScaleExp * 100
             frequencyScaler.checkBox.checked = useFreqScaling
             modEditor.spinBox.value = depth * 100
-            modEditor.comboBox.currentIndex = modType
+            modEditor.comboBox.currentIndex = 0
         }
 
         onWaveformChanged: {
@@ -54,8 +54,7 @@ SynthItem {
         }
 
         onFixedFreqChanged: {
-            implementation.setFixedFreq(fixedFreq)
-        }
+            implementation.setFixedFreq(fixedFreq)        }
 
         onModTypeChanged: {
             if(implementation !== null) {
@@ -114,7 +113,7 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setIndexes(implementationMappings)
+                        implementation.setIndexes(implementationMappings, QtSynthItem.FREQUENCY)
                     }
                 }
             }
@@ -161,8 +160,15 @@ SynthItem {
             EditorModulation {
                 id: modEditor
                 onModulationChanged: {
-                    if(editor.modType !== modulation) {
-                        editor.modType = modulation
+                    switch(modulation) {
+                    case "Amplitude":
+                        editor.modType = QtSynthItem.AMPLITUDE
+                        break
+                    case "Frequency":
+                        editor.modType = QtSynthItem.FREQUENCY
+                        break
+                    default:
+                        break
                     }
                 }
                 onDepthValueChanged:  {

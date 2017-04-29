@@ -15,7 +15,7 @@ ColumnLayout {
     property var modulationTypes: [qsTr("Amplitude"),
                                    qsTr("Frequency")]
 
-    signal modulationChanged(int modulation)
+    signal modulationChanged(string modulation)
     signal depthValueChanged(double depthValue)
 
     RowLayout {
@@ -31,7 +31,7 @@ ColumnLayout {
             model: modulationTypes
             Layout.maximumHeight: Style.editorRowHeight
             Layout.fillWidth: true
-            onCurrentIndexChanged: modulationChanged(comboBox.currentIndex)
+            onCurrentTextChanged: modulationChanged(comboBox.currentText)
         }
     }
 

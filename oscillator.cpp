@@ -13,6 +13,7 @@ Oscillator::Oscillator()
     useFreqScaling = true;
     freqScaleLow = 40;
     freqScaleHigh = 16000;
+    freqScaleExp = 1;
 
     acceptedChildren = {
         PARAMETER::AMPLITUDE,
@@ -163,7 +164,9 @@ void Oscillator::processSetIndexes(std::vector<int> indexes)
     }
     dataIndexes = indexes;
 
-    resize(dataIndexes.size());
+    if(dataIndexes.size() > 0) {
+        resize(dataIndexes.size());
+    }
 
     muted = m;
 }
@@ -239,8 +242,8 @@ void Oscillator::processCommand(SynthItemCommand command)
         if(command.parameter == PARAMETER::FREQUENCY)
         {
             processSetFreqScalingVals(command.doubles[0],
-                                      command.doubles[1],
-                                      command.doubles[2]);
+                    command.doubles[1],
+                    command.doubles[2]);
         }
         else
         {
@@ -365,7 +368,7 @@ void Oscillator::setFreqs()
             if(useFreqScaling)
             {
                 freq = scale(freq, mins->at(idx), maxes->at(idx),
-                          freqScaleLow, freqScaleHigh, freqScaleExp);
+                             freqScaleLow, freqScaleHigh, freqScaleExp);
             }
             gens[i]->freq(freq + fmSample);
         }
