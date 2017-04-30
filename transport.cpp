@@ -25,13 +25,18 @@ Transport::Transport()
     };
 }
 
+Transport::~Transport()
+{
+
+}
+
 float Transport::process()
 {
     float s = 0.0;
 
     if(!commandBuffer.empty())
     {
-        retrieveCommands();
+        retrieve_commands();
     }
 
     if(paused)
@@ -105,19 +110,19 @@ SynthItem* Transport::createItem(SynthItem::ITEM type)
     case SynthItem::ITEM::OSCILLATOR:
     {
         item = new Oscillator();
-        item->setData(&currentDataColumn, &minDataVals, &maxDataVals);
+        item->set_data(&currentDataColumn, &minDataVals, &maxDataVals);
         break;
     }
     case SynthItem::ITEM::AUDIFIER:
     {
         item = new Audifier();
-        item->setData(&currentDataColumn, &minDataVals, &maxDataVals);
+        item->set_data(&currentDataColumn, &minDataVals, &maxDataVals);
         break;
     }
     case SynthItem::ITEM::MODULATOR:
     {
         item = new Modulator();
-        item->setData(&currentDataColumn, &minDataVals, &maxDataVals);
+        item->set_data(&currentDataColumn, &minDataVals, &maxDataVals);
         break;
     }
     default:
@@ -173,11 +178,11 @@ void Transport::setSpeed(double speed)
     commandBuffer.push(command);
 }
 
-void Transport::setData(std::vector<double> *data, unsigned int height, unsigned int width)
+void Transport::set_data(std::vector<double> *data, unsigned int height, unsigned int width)
 {
     SynthItemCommand command;
     command.type = COMMAND::DATA;
-    command.data = data;
+    command.data_ = data;
     command.ints.push_back(height);
     command.ints.push_back(width);
     commandBuffer.push(command);
@@ -216,21 +221,21 @@ void Transport::retrieveData()
     }
 }
 
-void Transport::retrieveCommands()
+void Transport::retrieve_commands()
 {
     while(commandBuffer.pop(&currentCommand))
     {
-        processCommand(currentCommand);
+        process_command(currentCommand);
     }
 }
 
-void Transport::processCommand(SynthItemCommand command)
+void Transport::process_command(SynthItemCommand command)
 {
     COMMAND type = command.type;
 
     switch (type) {
     case COMMAND::DATA:
-        processSetDataset(command.data, command.ints[0], command.ints[1]);
+        processSetDataset(command.data_, command.ints[0], command.ints[1]);
         break;
     case COMMAND::PAUSE:
         processPause(command.boolVal);
@@ -252,12 +257,12 @@ void Transport::processCommand(SynthItemCommand command)
         processSetInterpolate(command.boolVal);
         break;
     default:
-        SynthItem::processCommand(command);
+        SynthItem::process_command(command);
         break;
     }
 }
 
-void Transport::processAddChild(SynthItem *child, SynthItem::PARAMETER parameter)
+void Transport::process_add_child(SynthItem *child, SynthItem::PARAMETER parameter)
 {
     if(std::find(children.begin(), children.end(), child) != children.end()) {
         return;
@@ -266,12 +271,12 @@ void Transport::processAddChild(SynthItem *child, SynthItem::PARAMETER parameter
     }
 }
 
-void Transport::processRemoveChild(SynthItem *child)
+void Transport::process_remove_child(SynthItem *child)
 {
     amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
 }
 
-void Transport::processDeleteItem()
+void Transport::process_delete_item()
 {
     delete this;
 }

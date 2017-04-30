@@ -14,22 +14,22 @@ void QtOscillator::setWaveform(WAVEFORM waveform)
 
 void QtOscillator::setFixedFreq(double freq)
 {
-   dynamic_cast<Oscillator*>(synthItem)->setFixedFreq(freq);
+   dynamic_cast<Oscillator*>(synthItem)->set_freq_fixed(freq);
 }
 
 void QtOscillator::setUseFixedFreq(bool fixed)
 {
-   dynamic_cast<Oscillator*>(synthItem)->setUseFixedFreq(fixed);
+   dynamic_cast<Oscillator*>(synthItem)->set_freq_fixed(fixed);
 }
 
 void QtOscillator::setUseFreqScaling(bool scaling)
 {
-   dynamic_cast<Oscillator*>(synthItem)->setUseFreqScaling(scaling);
+   dynamic_cast<Oscillator*>(synthItem)->set_freq_scaled(scaling);
 }
 
 void QtOscillator::setFreqScalingVals(double low, double high, double exp)
 {
-    dynamic_cast<Oscillator*>(synthItem)->setFreqScalingVals(low, high, exp);
+    dynamic_cast<Oscillator*>(synthItem)->set_freq_scale_vals(low, high, exp);
 }
 
 

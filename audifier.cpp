@@ -17,7 +17,7 @@ float Audifier::process()
 
     if(!commandBuffer.empty())
     {
-        retrieveCommands();
+        retrieve_commands();
     }
     if(muted)
     {
@@ -46,7 +46,7 @@ float Audifier::process()
     return sample /  dataIndexes.size();
 }
 
-void Audifier::processCommand(SynthItemCommand command)
+void Audifier::process_command(SynthItemCommand command)
 {
     COMMAND type = command.type;
 
@@ -60,12 +60,12 @@ void Audifier::processCommand(SynthItemCommand command)
         break;
     }
     default:
-        SynthItem::processCommand(command);
+        SynthItem::process_command(command);
         break;
     }
 }
 
-void Audifier::processAddChild(SynthItem *child, PARAMETER parameter)
+void Audifier::process_add_child(SynthItem *child, PARAMETER parameter)
 {
     switch (parameter){
     case PARAMETER::AMPLITUDE: {
@@ -81,7 +81,7 @@ void Audifier::processAddChild(SynthItem *child, PARAMETER parameter)
     }
 }
 
-void Audifier::processRemoveChild(SynthItem *child)
+void Audifier::process_remove_child(SynthItem *child)
 {
     amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
 }
@@ -97,17 +97,17 @@ void Audifier::processSetIndexes(std::vector<int> indexes)
     muted = m;
 }
 
-void Audifier::processDeleteItem()
+void Audifier::process_delete_item()
 {
     muted = true;
 
     for(unsigned int i = 0; i < parents.size(); i++) {
         SynthItem* parent = parents[i];
-        parent->removeChild(this);
+        parent->remove_child(this);
     }
     for(unsigned int i = 0; i < amods.size(); i++) {
         SynthItem* child = amods[i];
-        child->removeParent(this);
+        child->remove_parent(this);
     }
 
     delete this;

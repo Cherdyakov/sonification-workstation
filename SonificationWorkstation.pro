@@ -55,7 +55,8 @@ HEADERS += \
     qtmodulator.h \
     transport.h \
     transportwidget.h \
-    qttransport.h
+    qttransport.h \
+    utility.h
 
 FORMS +=
 

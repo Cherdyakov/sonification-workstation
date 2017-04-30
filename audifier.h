@@ -18,11 +18,11 @@ public:
 private:
 
     // command buffering and parsing stuff
-    void processCommand(SynthItemCommand command);
-    void processAddChild(SynthItem* child, PARAMETER parameter) override;
-    void processRemoveChild(SynthItem* child) override;
+    void process_command(SynthItemCommand command);
+    void process_add_child(SynthItem* child, PARAMETER parameter) override;
+    void process_remove_child(SynthItem* child) override;
     void processSetIndexes(std::vector<int> indexes);
-    void processDeleteItem() override;
+    void process_delete_item() override;
     float visitAmods();
 
 };

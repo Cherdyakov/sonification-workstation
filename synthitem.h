@@ -1,14 +1,16 @@
 #ifndef SYNTHITEM_H
 #define SYNTHITEM_H
 
-#define MAX_DIMENSIONS 128
-
 #include <atomic>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "ringbuffer.h"
 #include "Gamma/Oscillator.h"
+
+// Library definitions
+#define MAX_DIMENSIONS 128
 
 namespace son {
 
@@ -67,74 +69,50 @@ public:
         PARAMETER parameter;
         WAVEFORM waveform;
         std::vector<double>* data;
-        std::vector<double>* mins;
-        std::vector<double>* maxes;
+        std::vector<double> mins;
+        std::vector<double> maxes;
         std::vector<double> doubles;
         std::vector<int> ints;
         bool boolVal;
         SynthItem* item;
         SynthItemCommand() {
-            // Reserve space equal to twice the largest number of scalable
-            // parameters in any SynthItem, for storing high and low
-            // scaleVals for every parameter.
-            doubles.reserve(20);
-            // Reserve space equal to max number of
-            // mappings, which are stored in int vector
+            doubles.reserve(MAX_DIMENSIONS);
             ints.reserve(MAX_DIMENSIONS);
+            mins.reserve(MAX_DIMENSIONS);
+            maxes.reserve(MAX_DIMENSIONS);
         }
     };
 
     ITEM getType();
 
     explicit SynthItem();
-    virtual void setData(std::vector<double>* data,
-                             std::vector<double>* mins,
-                             std::vector<double>* maxes);  
-    virtual void setIndexes(std::vector<int> indexes, PARAMETER parameter);
-    virtual void addParent(SynthItem* parent);    
-    virtual void removeParent(SynthItem* parent);
-    virtual bool addChild(SynthItem *child, PARAMETER parameter);
-    virtual void removeChild(SynthItem *item);
-    virtual void mute(bool mute);
+    virtual ~SynthItem();
+    virtual void delete_item() = 0;
 
-    // pure virtual process function
     virtual float process() = 0;
-
-    // helper for proper deletion
-    virtual void deleteItem();
+    virtual void set_data(std::vector<double>* data,
+                             std::vector<double> mins,
+                             std::vector<double> maxes) = 0;
+    virtual void add_parent(SynthItem* parent) = 0;
+    virtual void remove_parent(SynthItem* parent) = 0;
+    virtual bool add_child(SynthItem *child, PARAMETER parameter) = 0;
+    virtual void remove_child(SynthItem *item) = 0;
+    virtual void mute(bool mute) = 0;
 
 protected:
-    ITEM myType;
-    std::vector<SynthItem::PARAMETER> acceptedChildren;
-    SynthItemCommand currentCommand;
-    bool muted;
-    std::vector<double>* data;
-    std::vector<double>* mins;
-    std::vector<double>* maxes;
-    std::vector<SynthItem*> parents;
-    std::vector<SynthItem*> amods;
-    std::vector<int> dataIndexes;
 
-    // Command buffer and parsing
-    RingBuffer<SynthItemCommand> commandBuffer;
-    virtual void retrieveCommands();
-    virtual void processCommand(SynthItemCommand command);
-    virtual void processMute(bool mute);
-    virtual void processRemoveParent(SynthItem* parent);
-    virtual void processAddParent(SynthItem* parent);
-    virtual void processAddChild(SynthItem* child, PARAMETER parameter) = 0;
-    virtual void processRemoveChild(SynthItem* child) = 0;
-    virtual void processSetData(std::vector<double>* data,
+    virtual void retrieve_commands() = 0;
+    virtual void process_command(SynthItemCommand command) = 0;
+    virtual void process_mute(bool mute) = 0;
+    virtual void process_add_parent(SynthItem* parent) = 0;
+    virtual void process_remove_parent(SynthItem* parent) = 0;
+    virtual void process_add_child(SynthItem* child, PARAMETER parameter) = 0;
+    virtual void process_remove_child(SynthItem* child) = 0;
+    virtual void process_set_data(std::vector<double>* data,
                                     std::vector<double> *mins,
-                                    std::vector<double> *maxes);
-    virtual void processDeleteItem() = 0;
+                                    std::vector<double> *maxes) = 0;
+    virtual void process_delete_item() = 0;
 
-    bool verifyChildParameter(SynthItem::PARAMETER childParameter);
-
-    float visitChildren(std::vector<SynthItem*> children);
-
-    double scale(double x, double in_low, double in_high,
-                 double out_low, double out_high, double exp = 1);
 };
 
 } //namespace son

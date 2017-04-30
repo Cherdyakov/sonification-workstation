@@ -18,13 +18,12 @@ public:
     void setDepthScalingVals(double low, double high, double exp);
 
 protected:
-    void processCommand(SynthItemCommand command) override;
-    virtual void processSetWaveform(WAVEFORM waveform) override;
+    void process_command(SynthItemCommand command) override;
     virtual void processSetDepth(double depth);
     void processSetUseFixedDepth(bool fixed);
     void processSetUseDepthScaling(bool scaling);
     void processSetDepthScalingVals(double low, double high, double exp);
-    virtual void setFreqs() override;
+    void set_gen_freqs();
 
 private:
     double depth;

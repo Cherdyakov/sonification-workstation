@@ -8,18 +8,18 @@ Modulator::Modulator()
     modType = PARAMETER::AMPLITUDE;
     waveform = WAVEFORM::SINE;
     depth = 100;
-    fixedFreq = 1;
-    useFixedFreq = true;
-    useFreqScaling = true;
-    freqScaleLow = 40;
-    freqScaleHigh = 16000;
+    frequency_ = 1;
+    frequency_fixed_ = true;
+    freq_scaled = true;
+    freq_low_ = 40;
+    freq_high_ = 16000;
 
     acceptedChildren = {
         PARAMETER::AMPLITUDE,
         PARAMETER::FREQUENCY
     };
 
-    gen = new gam::Sine<>(fixedFreq);
+    gen = new gam::Sine<>(frequency_);
 }
 
 float Modulator::process()
@@ -28,16 +28,16 @@ float Modulator::process()
 
     if(!commandBuffer.empty())
     {
-        retrieveCommands();
+        retrieve_commands();
     }
 
-    if(muted || (fixedFreq == 0 && (useFixedFreq == true)))
+    if(muted || (frequency_ == 0 && (frequency_fixed_ == true)))
     {
         return 1; // good return value for am and fm
     }
 
     //set frequency of generator
-    setFreqs();
+    set_gen_freqs();
 
     gam::Sine<>* g = dynamic_cast<gam::Sine<>*>(gen);
 
@@ -116,7 +116,7 @@ void Modulator::setDepthScalingVals(double low, double high, double exp)
     commandBuffer.push(command);
 }
 
-void Modulator::processCommand(SynthItemCommand command)
+void Modulator::process_command(SynthItemCommand command)
 {
     COMMAND type = command.type;
 
@@ -127,7 +127,7 @@ void Modulator::processCommand(SynthItemCommand command)
             processSetDepth(command.doubles[0]);
             break;
         default:
-            Oscillator::processCommand(command);
+            Oscillator::process_command(command);
             break;
         }
         break;
@@ -135,7 +135,7 @@ void Modulator::processCommand(SynthItemCommand command)
         processSetModType(command.parameter);
         break;
     default:
-        Oscillator::processCommand(command);
+        Oscillator::process_command(command);
         break;
     }
 }
@@ -188,25 +188,25 @@ void Modulator::processSetDepthScalingVals(double low, double high, double exp)
     depthScaleExp = exp;
 }
 
-void Modulator::setFreqs()
+void Modulator::set_gen_freqs()
 {
     float fmSample = 0;;
-    if(fmods.size() > 0) {
-        fmSample = visitChildren(fmods);
+    if(fmods_.size() > 0) {
+        fmSample = visitChildren(fmods_);
     }
 
-    if ((dataIndexes.size() < 1) || (useFixedFreq == true)) //no data mappings, use fixed freq
+    if ((freq_indexes_.size() < 1) || (frequency_fixed_ == true)) //no data mappings, use fixed freq
     {
-        gen->freq(fixedFreq + fmSample);
+        gen->freq(frequency_ + fmSample);
     }
     else //map each indexed value from the data row to the freq of a generator
     {
-        int idx = dataIndexes[0];
+        int idx = freq_indexes_[0];
         double freq = data->at(idx);
-        if(useFreqScaling)
+        if(freq_scaled)
         {
             freq = scale(freq, mins->at(idx), maxes->at(idx),
-                         freqScaleLow, freqScaleHigh, freqScaleExp);
+                         freq_low_, freq_high_, freq_exponent);
         }
         gen->freq(freq + fmSample);
     }
@@ -218,8 +218,8 @@ void Modulator::processSetModType(PARAMETER parameter)
     for(unsigned int i = 0; i < parents.size(); i++)
     {
         SynthItem* parent = parents[i];
-        parent->removeChild(this);
-        parent->addChild(this, parameter);
+        parent->remove_child(this);
+        parent->add_child(this, parameter);
     }
 }
 

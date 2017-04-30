@@ -18,6 +18,7 @@ class Transport : public SynthItem
 public:
 
     explicit Transport();
+    virtual ~Transport();
 
     float process() override;
     SynthItem *createItem(SynthItem::ITEM type);
@@ -29,7 +30,7 @@ public:
     void setSpeed(double speed);
     void setLooping(bool looping);
     void setLoopPoints(double begin, double end);
-    void setData(std::vector<double>* data, unsigned int height, unsigned int width);
+    void set_data(std::vector<double>* data, unsigned int height, unsigned int width);
     void setInterpolate(bool interpolate);
 
     // for polling state from outside
@@ -37,17 +38,17 @@ public:
     double getPos();
 
 protected:
-    void retrieveCommands() override;
-    void processCommand(SynthItemCommand command) override;
+    void retrieve_commands() override;
+    void process_command(SynthItemCommand command) override;
 
 private:
 
     std::vector<double> minDataVals;
     std::vector<double> maxDataVals;
 
-    virtual void processAddChild(SynthItem* child, PARAMETER parameter) override;
-    virtual void processRemoveChild(SynthItem* child) override;
-    virtual void processDeleteItem() override;
+    virtual void process_add_child(SynthItem* child, PARAMETER parameter) override;
+    virtual void process_remove_child(SynthItem* child) override;
+    virtual void process_delete_item() override;
     void processPause(bool pause);
     void processSetPos(double pos);
     void processSetDataset(std::vector<double>* data, int height, int width);

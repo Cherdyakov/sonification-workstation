@@ -91,7 +91,7 @@ void QtTransport::on_dataChanged(std::vector<double> *data, unsigned int height,
 {
     Transport* t = dynamic_cast<Transport*>(synthItem);
     t->pause(true);
-    t->setData(data, height, width);
+    t->set_data(data, height, width);
 }
 
 double QtTransport::getPos()
