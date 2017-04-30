@@ -14,7 +14,6 @@ class Audifier : public SynthItem
 public:
     Audifier();
     float process() override;
-    void removeChild(SynthItem* child) override;
 
 private:
 

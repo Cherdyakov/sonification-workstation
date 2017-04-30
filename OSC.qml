@@ -87,6 +87,7 @@ SynthItem {
             EditorMapper {
                 id: frequencyMapper
                 label.text: qsTr("Frequency Source: ")
+                maxIndexes: 128
                 onMappingsChanged:
                 {
                     if(root.mappedRows !== mappings) {

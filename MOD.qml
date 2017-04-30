@@ -12,6 +12,9 @@ SynthItem {
     mainColor: Style.modColor
     textColor: Style.itemTextColor
 
+
+    property var mappedRowsDepth: []
+
     Component.onCompleted: {
 
     }
@@ -43,6 +46,10 @@ SynthItem {
             frequencyScaler.checkBox.checked = useFreqScaling
             modEditor.spinBox.value = depth * 100
             modEditor.comboBox.currentIndex = 0
+            depthScaler.checkBox.checked = useDepthScaling
+            depthScaler.lowSpinBox.value = depthScaleLow * 100
+            depthScaler.highSpinBox.value = depthScaleHigh * 100
+            depthScaler.expSpinBox.value = depthScaleExp * 100
         }
 
         onWaveformChanged: {
@@ -178,6 +185,22 @@ SynthItem {
                 }
             }
 
+            EditorMapper {
+                id: depthMapper
+                label.text: qsTr("Depth Source: ")
+                maxIndexes: 1
+                onMappingsChanged:
+                {
+                    if(root.mappedRowsDepth !== mappings) {
+                        root.mappedRowsDepth = mappings
+                        var implementationMappings = mappings.map( function(value) {
+                            return value - 1;
+                        } )
+                        implementation.setIndexes(implementationMappings, QtSynthItem.DEPTH)
+                    }
+                }
+            }
+
             EditorScaler {
                 id: depthScaler
                 label.text: qsTr("Depth Scaling: ")
@@ -204,7 +227,7 @@ SynthItem {
                 {
                     if(editor.depthScaleExp !== exp) {
                         editor.depthScaleExp = exp
-                        implementation.setFreqScalingVals(editor.depthScaleLow,
+                        implementation.setDepthScalingVals(editor.depthScaleLow,
                                                           editor.depthScaleHigh,
                                                           editor.depthScaleExp)                    }
                 }

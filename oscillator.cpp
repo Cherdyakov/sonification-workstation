@@ -24,6 +24,15 @@ Oscillator::Oscillator()
     gens.push_back(defaultGen);
 }
 
+Oscillator::~Oscillator()
+{
+    for(unsigned int i = 0; i < gens.size(); i++)
+    {
+        gam::AccumPhase<>* gen = gens[i];
+        delete gen;
+    }
+}
+
 void Oscillator::setWaveform(WAVEFORM waveform)
 {
     SynthItemCommand command;

@@ -39,7 +39,6 @@ public:
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void mute(bool mute);
-    Q_INVOKABLE virtual void setIndexes(QVector<int> indexes, PARAMETER parameter);
     Q_INVOKABLE virtual void deleteItem();
 
 protected:

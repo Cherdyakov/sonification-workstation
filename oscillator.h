@@ -14,6 +14,7 @@ class Oscillator : public SynthItem
 
 public:
     Oscillator();
+    virtual ~Oscillator();
 
     float process() override;
     void removeChild(SynthItem* child) override;

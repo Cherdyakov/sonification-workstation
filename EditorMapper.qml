@@ -9,6 +9,7 @@ ColumnLayout {
 
     property alias label: label
     property alias textInput: textInput
+    property int maxIndexes: 1
 
     signal mappingsChanged(var mappings)
 
@@ -59,7 +60,8 @@ ColumnLayout {
         var inString = textInput.text
         var parsedInput = getNumbers(inString)
         var clampedInput = parsedInput.filter(filterMax)
-        textInput.text = getStringRange(clampedInput)
+        var sizedInput = clampedInput.slice(0, maxIndexes)
+        textInput.text = getStringRange(sizedInput)
         mappingsChanged(clampedInput)
     }
 

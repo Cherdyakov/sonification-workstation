@@ -7,8 +7,7 @@ Audifier::Audifier()
     myType = ITEM::AUDIFIER;
 
     acceptedChildren = {
-        PARAMETER::AMPLITUDE,
-        PARAMETER::FREQUENCY
+        PARAMETER::AMPLITUDE
     };
 }
 
@@ -45,14 +44,6 @@ float Audifier::process()
     // divide by total number of datasets mapped (rows)
     // to prevent clipping
     return sample /  dataIndexes.size();
-}
-
-void Audifier::removeChild(SynthItem *child)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::REMOVE_CHILD;
-    command.item = child;
-    commandBuffer.push(command);
 }
 
 void Audifier::processCommand(SynthItemCommand command)
