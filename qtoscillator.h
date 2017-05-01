@@ -14,7 +14,6 @@ public:
 
     explicit QtOscillator(SynthItem* item = 0, QObject *parent = 0);
 
-    Q_INVOKABLE void setWaveform(WAVEFORM waveform);
     Q_INVOKABLE void setFixedFreq(double freq);
     Q_INVOKABLE void setUseFixedFreq(bool fixed);
     Q_INVOKABLE void setUseFreqScaling(bool scaling);

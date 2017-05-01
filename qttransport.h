@@ -28,7 +28,6 @@ public:
 
     Q_INVOKABLE QtSynthItem* createItem(ITEM type);
     float process();
-    int graphSize();
 
 public slots:
     // slots for controlling playback

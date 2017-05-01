@@ -7,11 +7,6 @@ QtOscillator::QtOscillator(SynthItem *item, QObject *parent) : QtSynthItem(paren
     synthItem = item;
 }
 
-void QtOscillator::setWaveform(WAVEFORM waveform)
-{
-    dynamic_cast<Oscillator*>(synthItem)->setWaveform((SynthItem::WAVEFORM)waveform);
-}
-
 void QtOscillator::setFixedFreq(double freq)
 {
    dynamic_cast<Oscillator*>(synthItem)->set_freq_fixed(freq);

@@ -5,8 +5,6 @@ CONFIG += c++11
 SOURCES += \
     mainwindow.cpp \
     main.cpp \
-    synthitem.cpp \
-    output.cpp \
     oscillator.cpp \
     audifier.cpp \
     timerworker.cpp \
@@ -21,7 +19,8 @@ SOURCES += \
     qtmodulator.cpp \
     transport.cpp \
     transportwidget.cpp \
-    qttransport.cpp
+    qttransport.cpp \
+    utility.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,7 +37,6 @@ HEADERS += \
     synthitem.h \
     callback.h \
     userdata.h \
-    output.h \
     oscillator.h \
     ringbuffer.h \
     audifier.h \

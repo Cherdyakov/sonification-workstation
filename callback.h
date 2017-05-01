@@ -46,4 +46,4 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
 }
 
-} //namespace son
+} // namespace son

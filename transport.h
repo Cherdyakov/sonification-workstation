@@ -1,7 +1,6 @@
 #ifndef SYNTHGRAPH_H
 #define SYNTHGRAPH_H
 
-#include <output.h>
 #include <atomic>
 #include <mutex>
 
@@ -12,74 +11,79 @@
 
 namespace son {
 
-class Transport : public SynthItem
+class Transport final: public SynthItem
 {
 
 public:
 
     explicit Transport();
     virtual ~Transport();
-
-    float process() override;
-    SynthItem *createItem(SynthItem::ITEM type);
-    int graphSize();
-
+    // interface overrides
+    void delete_item() override;
+    SynthItem::ITEM get_type();
+    void set_data(std::vector<double>* data, std::vector<double> mins, std::vector<double> maxes) override;
+    void add_parent(SynthItem* parent) override;
+    void remove_parent(SynthItem* parent) override;
+    bool add_child(SynthItem *child, PARAMETER param) override;
+    void remove_child(SynthItem *child) override;
+    void mute(bool mute) override;
+    // for setting the entire dataset to be sonified
+    void set_dataset(std::vector<double>* dataset, unsigned int height, unsigned int width);
     // functions for controlling playback
     void pause(bool pause);
-    void setPos(double pos);
-    void setSpeed(double speed);
-    void setLooping(bool looping);
-    void setLoopPoints(double begin, double end);
-    void set_data(std::vector<double>* data, unsigned int height, unsigned int width);
-    void setInterpolate(bool interpolate);
-
+    void set_playback_position(double pos);
+    void set_speed(double speed_);
+    void set_looping(bool loop_);
+    void set_loop_points(double begin, double end);
+    void set_interpolate(bool interpolate_);
+    // factory for other SynthItems (probably should do something else)
+    SynthItem *create_item(SynthItem::ITEM type);
     // for polling state from outside
-    // (i.e. GUI)
-    double getPos();
-
-protected:
-    void retrieve_commands() override;
-    void process_command(SynthItemCommand command) override;
+    double get_playback_position();
+    // generate a sample
+    float process() override;
 
 private:
+    void retrieve_commands() override;
+    void process_command(SynthItemCommand command) override;
+    void process_add_child(SynthItem* child, PARAMETER parameter) override;
+    void process_remove_child(SynthItem* child) override;
+    void process_delete_item() override;
 
-    std::vector<double> minDataVals;
-    std::vector<double> maxDataVals;
+    void process_set_dataset(std::vector<double>*dataset, unsigned int height, unsigned int width);
+    void process_set_playback_position(double pos);
+    void process_set_interpolate(bool interpolate_);
 
-    virtual void process_add_child(SynthItem* child, PARAMETER parameter) override;
-    virtual void process_remove_child(SynthItem* child) override;
-    virtual void process_delete_item() override;
-    void processPause(bool pause);
-    void processSetPos(double pos);
-    void processSetDataset(std::vector<double>* data, int height, int width);
-    void processSetInterpolate(bool interpolate);
+    void retrieve_next_data_column();
+    void calculate_return_position();
+    void calculate_min_max();
 
-    float masterVolume;
-    unsigned int blockSize;
-    unsigned int dataHeight;
-    unsigned int dataWidth;
-    unsigned int sr;
-    double loopBegin;
-    double loopEnd;
-
-    // to return when current playback
-    // location is polled
-    // from outside (i.e. GUI)
-    std::atomic<double> returnPos;
-
-    std::vector<SynthItem*> children;
-    std::vector<double> currentDataColumn;
-
-    bool dataStale;
-    bool paused;
-    bool looping;
-    bool interpolate;
-    double speed;
-    unsigned int currentIdx;
-    double mu;
-    void retrieveData();
-    void calculateReturnPos();
-    void calculateMinMax();
+    ITEM my_type_;
+    RingBuffer<SynthItemCommand> command_buffer_;
+    SynthItemCommand current_command_;
+    std::vector<SynthItem::PARAMETER> accepted_children_;
+    std::vector<double>* dataset_;
+    std::vector<double> current_data_column_;
+    std::vector<double> min_data_vals_;
+    std::vector<double> max_data_vals_;
+    std::atomic<double> return_pos;
+    std::vector<SynthItem*> inputs_;
+    std::vector<SynthItem*> amods_;
+    float master_volume_;
+    unsigned int block_size_;
+    unsigned int data_height_;
+    unsigned int data_width_;
+    unsigned int sample_rate_;
+    unsigned int current_index_;
+    double mu_;
+    double speed_;
+    double loop_begin_;
+    double loop_end_;
+    bool muted_;
+    bool data_stale;
+    bool paused_;
+    bool loop_;
+    bool interpolate_;
 
 };
 

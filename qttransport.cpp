@@ -11,7 +11,7 @@ QtTransport::QtTransport(SynthItem *item, QObject *parent) : QtSynthItem(parent)
 
 void QtTransport::on_interpolateChanged(bool interpolate)
 {
-    dynamic_cast<Transport*>(synthItem)->setInterpolate(interpolate);
+    dynamic_cast<Transport*>(synthItem)->set_interpolate(interpolate);
 }
 
 QtSynthItem* QtTransport::createItem(ITEM type)
@@ -26,19 +26,19 @@ QtSynthItem* QtTransport::createItem(ITEM type)
     }
     case ITEM::OSCILLATOR:
     {
-        item = dynamic_cast<Transport*>(synthItem)->createItem((SynthItem::ITEM)type);
+        item = dynamic_cast<Transport*>(synthItem)->create_item((SynthItem::ITEM)type);
         qtItem = new QtOscillator(item);
         break;
     }
     case ITEM::AUDIFIER:
     {
-        item = dynamic_cast<Transport*>(synthItem)->createItem((SynthItem::ITEM)type);
+        item = dynamic_cast<Transport*>(synthItem)->create_item((SynthItem::ITEM)type);
         qtItem = new QtAudifier(item);
         break;
     }
     case ITEM::MODULATOR:
     {
-        item = dynamic_cast<Transport*>(synthItem)->createItem((SynthItem::ITEM)type);
+        item = dynamic_cast<Transport*>(synthItem)->create_item((SynthItem::ITEM)type);
         qtItem = new QtModulator(item);
         break;
     }
@@ -55,13 +55,6 @@ float QtTransport::process()
     return s;
 }
 
-int QtTransport::graphSize()
-{
-    int size;
-    size = dynamic_cast<Transport*>(synthItem)->graphSize();
-    return size;
-}
-
 void QtTransport::on_pausedChanged(bool pause)
 {
     dynamic_cast<Transport*>(synthItem)->pause(pause);
@@ -69,40 +62,40 @@ void QtTransport::on_pausedChanged(bool pause)
 
 void QtTransport::on_posChanged(double pos)
 {
-    dynamic_cast<Transport*>(synthItem)->setPos(pos);
+    dynamic_cast<Transport*>(synthItem)->set_playback_position(pos);
 }
 
 void QtTransport::on_speedChanged(double speed)
 {
-    dynamic_cast<Transport*>(synthItem)->setSpeed(speed);
+    dynamic_cast<Transport*>(synthItem)->set_speed(speed);
 }
 
 void QtTransport::on_loopingChanged(bool looping)
 {
-    dynamic_cast<Transport*>(synthItem)->setLooping(looping);
+    dynamic_cast<Transport*>(synthItem)->set_looping(looping);
 }
 
 void QtTransport::on_loopPointsChanged(double begin, double end)
 {
-    dynamic_cast<Transport*>(synthItem)->setLoopPoints(begin, end);
+    dynamic_cast<Transport*>(synthItem)->set_loop_points(begin, end);
 }
 
 void QtTransport::on_dataChanged(std::vector<double> *data, unsigned int height, unsigned int width)
 {
     Transport* t = dynamic_cast<Transport*>(synthItem);
     t->pause(true);
-    t->set_data(data, height, width);
+    t->set_dataset(data, height, width);
 }
 
 double QtTransport::getPos()
 {
     double pos;
-    pos = dynamic_cast<Transport*>(synthItem)->getPos();
+    pos = dynamic_cast<Transport*>(synthItem)->get_playback_position();
     return pos;
 }
 
 void QtTransport::updatePos()
 {
-    double pos = dynamic_cast<Transport*>(synthItem)->getPos();
+    double pos = dynamic_cast<Transport*>(synthItem)->get_playback_position();
     emit posChanged(pos);
 }

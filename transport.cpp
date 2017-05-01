@@ -4,23 +4,23 @@ namespace son {
 
 Transport::Transport()
 {
-    paused = true;
-    looping = false;
-    loopBegin = 0.0;
-    loopEnd = 0.0;
-    dataStale = false;
-    blockSize = 512;
-    sr = 44100;
-    dataWidth = 0;
-    dataHeight = 0;
-    currentIdx = 0;
-    mu = 0.0;
-    speed = 1.0;
-    returnPos = 0.0;
-    masterVolume = 1.0;
-    interpolate = false;
+    paused_ = true;
+    loop_ = false;
+    loop_begin_ = 0.0;
+    loop_end_ = 0.0;
+    data_stale = false;
+    block_size_ = 512;
+    sample_rate_ = 44100;
+    data_width_ = 0;
+    data_height_ = 0;
+    current_index_ = 0;
+    mu_ = 0.0;
+    speed_ = 1.0;
+    return_pos = 0.0;
+    master_volume_ = 1.0;
+    interpolate_ = false;
 
-    acceptedChildren = {
+    accepted_children_ = {
         SynthItem::PARAMETER::INPUT
     };
 }
@@ -30,101 +30,149 @@ Transport::~Transport()
 
 }
 
-float Transport::process()
+/*
+ Functions called from user thread
+ */
+
+void Transport::delete_item()
 {
-    float s = 0.0;
-
-    if(!commandBuffer.empty())
-    {
-        retrieve_commands();
-    }
-
-    if(paused)
-    {
-        calculateReturnPos();
-        return s;
-    }
-
-    // updating playheadPos
-    if(mu >= 1.0)
-    {
-        mu -= 1.0;
-        currentIdx++;
-
-        if((currentIdx + 1) > (dataWidth))
-        {
-            currentIdx = 0;
-        }
-        dataStale = true;
-    }
-
-    if(looping && (loopBegin != loopEnd))
-    {
-        if(((double)currentIdx + mu) > loopEnd)
-        {
-            currentIdx = (int)loopBegin;
-            mu = (loopBegin - currentIdx);
-            dataStale = true;
-        }
-        else if(((double)currentIdx + mu) < loopBegin)
-        {
-            currentIdx = (int)loopBegin;
-            mu = (loopBegin - currentIdx);
-            dataStale = true;
-        }
-    }
-
-    if(interpolate)
-    {
-        dataStale = true;
-    }
-
-    if(dataStale)
-    {
-        retrieveData();
-        dataStale = false;
-    }
-
-    for (unsigned int i = 0; i < children.size(); ++i) {
-        SynthItem* item = children[i];
-        s += item->process();
-    }
-
-    // advancing index
-    calculateReturnPos();
-    mu += (speed / sr);
-
-    return s * masterVolume;
+    SynthItemCommand command;
+    command.type = COMMAND::DELETE;
+    command_buffer_.push(command);
 }
 
-SynthItem* Transport::createItem(SynthItem::ITEM type)
+SynthItem::ITEM Transport::get_type()
+{
+    return my_type_;
+}
+
+void Transport::set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
+{
+    (void)data;
+    (void)mins;
+    (void)maxes;
+}
+
+void Transport::add_parent(SynthItem *parent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::ADD_PARENT;
+    command.item = parent;
+    command_buffer_.push(command);
+}
+
+void Transport::remove_parent(SynthItem *parent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::REMOVE_PARENT;
+    command.item = parent;
+    command_buffer_.push(command);
+}
+
+bool Transport::add_child(SynthItem *child, SynthItem::PARAMETER param)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::ADD_CHILD;
+    command.item = child;
+    command.parameter = param;
+    command_buffer_.push(command);
+}
+
+void Transport::remove_child(SynthItem *child)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::REMOVE_CHILD;
+    command.item = child;
+    command_buffer_.push(command);
+}
+
+void Transport::mute(bool mute)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::MUTE;
+    command.bool_val = mute;
+    command_buffer_.push(command);
+}
+
+void Transport::set_dataset(std::vector<double> *dataset, unsigned int height, unsigned int width)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::DATA;
+    command.data = dataset;
+    command.ints.push_back(height);
+    command.ints.push_back(height);
+    command_buffer_.push(command);
+}
+
+void Transport::pause(bool pause)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::PAUSE;
+    command.bool_val = pause;
+    command_buffer_.push(command);
+}
+
+void Transport::set_playback_position(double pos)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::POSITION;
+    command.doubles.push_back(pos);
+    command_buffer_.push(command);
+}
+
+void Transport::set_speed(double speed)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SPEED;
+    command.doubles.push_back(speed);
+    command_buffer_.push(command);
+}
+
+void Transport::set_looping(bool looping)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::LOOP;
+    command.bool_val = looping;
+    command_buffer_.push(command);
+}
+
+void Transport::set_loop_points(double begin, double end)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::LOOP_POINTS;
+    command.doubles.push_back(begin);
+    command.doubles.push_back(end);
+    command_buffer_.push(command);
+}
+
+void Transport::set_interpolate(bool interpolate)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::INTERPOLATE;
+    command.bool_val = interpolate;
+    command_buffer_.push(command);
+}
+
+SynthItem* Transport::create_item(SynthItem::ITEM type)
 {
     SynthItem* item;
 
     switch (type){
     case SynthItem::ITEM::TRANSPORT:
-    {
         item = NULL;
         break;
-    }
     case SynthItem::ITEM::OSCILLATOR:
-    {
         item = new Oscillator();
-        item->set_data(&currentDataColumn, &minDataVals, &maxDataVals);
+        item->set_data(&current_data_column_, min_data_vals_, max_data_vals_);
         break;
-    }
     case SynthItem::ITEM::AUDIFIER:
-    {
         item = new Audifier();
-        item->set_data(&currentDataColumn, &minDataVals, &maxDataVals);
+        item->set_data(&current_data_column_, min_data_vals_, max_data_vals_);
         break;
-    }
     case SynthItem::ITEM::MODULATOR:
-    {
         item = new Modulator();
-        item->set_data(&currentDataColumn, &minDataVals, &maxDataVals);
+        item->set_data(&current_data_column_, min_data_vals_, max_data_vals_);
         break;
-    }
     default:
         item = NULL;
         break;
@@ -132,100 +180,87 @@ SynthItem* Transport::createItem(SynthItem::ITEM type)
     return item;
 }
 
-int Transport::graphSize()
+double Transport::get_playback_position()
 {
-    return children.size();
+    return return_pos;
 }
 
-void Transport::pause(bool pause)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::PAUSE;
-    command.boolVal = pause;
-    commandBuffer.push(command);
-}
+/*
+ Functions called from audio callback thread
+ */
 
-void Transport::setLooping(bool looping)
+float Transport::process()
 {
-    SynthItemCommand command;
-    command.type = COMMAND::LOOP;
-    command.boolVal = looping;
-    commandBuffer.push(command);
-}
+    float s = 0.0;
 
-void Transport::setLoopPoints(double begin, double end)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::LOOP_POINTS;
-    command.doubles.push_back(begin);
-    command.doubles.push_back(end);
-    commandBuffer.push(command);
-}
-
-void Transport::setPos(double pos)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::POSITION;
-    command.doubles.push_back(pos);
-    commandBuffer.push(command);
-}
-
-void Transport::setSpeed(double speed)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::SPEED;
-    command.doubles.push_back(speed);
-    commandBuffer.push(command);
-}
-
-void Transport::set_data(std::vector<double> *data, unsigned int height, unsigned int width)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::DATA;
-    command.data_ = data;
-    command.ints.push_back(height);
-    command.ints.push_back(width);
-    commandBuffer.push(command);
-}
-
-void Transport::setInterpolate(bool interpolate)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::INTERPOLATE;
-    command.boolVal = interpolate;
-    commandBuffer.push(command);
-}
-
-void Transport::retrieveData()
-{
-    if(interpolate)
+    if(!command_buffer_.empty())
     {
-        for(unsigned int i = 0; i < dataHeight; i++)
+        retrieve_commands();
+    }
+
+    if(paused_)
+    {
+        calculate_return_position();
+        return s;
+    }
+
+    // updating playheadPos
+    if(mu_ >= 1.0)
+    {
+        mu_ -= 1.0;
+        current_index_++;
+
+        if((current_index_ + 1) > (data_width_))
         {
-            unsigned int idx = ((dataWidth * i) + currentIdx);
-            unsigned int nextIdx = idx + 1;
-            if(nextIdx > (dataWidth * i) + (dataWidth - 1)) {
-                nextIdx -= dataWidth;
-            }
-            double val = (*data)[idx];
-            double valNext = (*data)[nextIdx];
-            currentDataColumn[i] = ((1 - mu) * val) + (mu * valNext);
+            current_index_ = 0;
+        }
+        data_stale = true;
+    }
+
+    if(loop_ && (loop_begin_ != loop_end_))
+    {
+        if(((double)current_index_ + mu_) > loop_end_)
+        {
+            current_index_ = (int)loop_begin_;
+            mu_ = (loop_begin_ - current_index_);
+            data_stale = true;
+        }
+        else if(((double)current_index_ + mu_) < loop_begin_)
+        {
+            current_index_ = (int)loop_begin_;
+            mu_ = (loop_begin_ - current_index_);
+            data_stale = true;
         }
     }
-    else {
-        for(unsigned int i = 0; i < dataHeight; i++)
-        {
-            unsigned int idx = ((dataWidth * i) + currentIdx);
-            currentDataColumn[i] = (*data)[idx];
-        }
+
+    if(interpolate_)
+    {
+        data_stale = true;
     }
+
+    if(data_stale)
+    {
+        retrieve_next_data_column();
+        data_stale = false;
+    }
+
+    for (unsigned int i = 0; i < inputs_.size(); ++i) {
+        SynthItem* item = inputs_[i];
+        s += item->process();
+    }
+
+    // advancing index
+    calculate_return_position();
+    mu_ += (speed_ / sample_rate_);
+
+    return s * master_volume_;
 }
 
 void Transport::retrieve_commands()
 {
-    while(commandBuffer.pop(&currentCommand))
+    while(command_buffer_.pop(&current_command_))
     {
-        process_command(currentCommand);
+        process_command(current_command_);
     }
 }
 
@@ -235,117 +270,137 @@ void Transport::process_command(SynthItemCommand command)
 
     switch (type) {
     case COMMAND::DATA:
-        processSetDataset(command.data_, command.ints[0], command.ints[1]);
+        process_set_dataset(command.data, command.ints[0], command.ints[1]);
+        break;
+    case COMMAND::ADD_CHILD:
+        process_add_child(command.item, command.parameter);
+        break;
+    case COMMAND::REMOVE_CHILD:
+        process_remove_child(command.item);
+        break;
+    case COMMAND::MUTE:
+        muted_ = command.bool_val;
         break;
     case COMMAND::PAUSE:
-        processPause(command.boolVal);
+        paused_ = command.bool_val;
         break;
     case COMMAND::POSITION:
-        processSetPos(command.doubles[0]);
+        process_set_playback_position(command.doubles[0]);
         break;
     case COMMAND::SPEED:
-        speed = command.doubles[0];
+        speed_ = command.doubles[0];
         break;
     case COMMAND::LOOP:
-        looping = command.boolVal;
+        loop_ = command.bool_val;
         break;
     case COMMAND::LOOP_POINTS:
-        loopBegin = command.doubles[0];
-        loopEnd = command.doubles[1];
+        loop_begin_ = command.doubles[0];
+        loop_end_ = command.doubles[1];
         break;
     case COMMAND::INTERPOLATE:
-        processSetInterpolate(command.boolVal);
+        interpolate_ = command.bool_val;
         break;
     default:
-        SynthItem::process_command(command);
         break;
     }
 }
 
 void Transport::process_add_child(SynthItem *child, SynthItem::PARAMETER parameter)
 {
-    if(std::find(children.begin(), children.end(), child) != children.end()) {
-        return;
-    } else {
-        children.push_back(child);
+    switch (parameter){
+    case PARAMETER::INPUT:
+        insert_item_unique(child, inputs_);
+        break;
+    case PARAMETER::AMPLITUDE:
+        insert_item_unique(child, amods_);
+        break;
+    default:
+        break; //incompatible child type
     }
+    child->add_parent(this);
 }
 
 void Transport::process_remove_child(SynthItem *child)
 {
-    amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
+    erase_item(child, inputs_);
+    erase_item(child, amods_);
 }
 
 void Transport::process_delete_item()
 {
+    for(unsigned int i = 0; i < inputs_.size(); i++) {
+        SynthItem* child = inputs_[i];
+        child->remove_parent(this);
+    }
+    for(unsigned int i = 0; i < amods_.size(); i++) {
+        SynthItem* child = amods_[i];
+        child->remove_parent(this);
+    }
     delete this;
 }
 
-double Transport::getPos()
+void Transport::process_set_dataset(std::vector<double> *dataset, unsigned int height, unsigned int width)
 {
-    return returnPos;
+    dataset_ = dataset;
+    data_height_ = height;
+    data_width_ = width;
 }
 
-void Transport::processPause(bool pause)
-{
-    if(paused != pause)
-    {
-        if(!pause)
-        {
-            dataStale = true;
-        }
-        paused = pause;
-    }
-}
-
-void Transport::processSetPos(double pos)
+void Transport::process_set_playback_position(double pos)
 {
     unsigned int newIdx = (int)pos;
-    if(currentIdx != newIdx)
+    if(current_index_ != newIdx)
     {
-        dataStale = true;
-        currentIdx = newIdx;
+        data_stale = true;
+        current_index_ = newIdx;
     }
-    mu = (pos - currentIdx);
+    mu_ = (pos - current_index_);
 }
 
-void Transport::processSetDataset(std::vector<double> *data, int height, int width)
+void Transport::retrieve_next_data_column()
 {
-    currentIdx = 0;
-    mu = 0.0;
-    calculateReturnPos();
-    dataWidth = width;
-    dataHeight = height;
-    currentDataColumn.clear();
-    currentDataColumn.resize(dataHeight);
-    this->data = data;
-    calculateMinMax();
+    if(interpolate_)
+    {
+        for(unsigned int i = 0; i < data_height_; i++)
+        {
+            unsigned int idx = ((data_width_ * i) + current_index_);
+            unsigned int nextIdx = idx + 1;
+            if(nextIdx > (data_width_ * i) + (data_width_ - 1)) {
+                nextIdx -= data_width_;
+            }
+            double val = (*dataset_)[idx];
+            double valNext = (*dataset_)[nextIdx];
+            current_data_column_[i] = ((1 - mu_) * val) + (mu_ * valNext);
+        }
+    }
+    else {
+        for(unsigned int i = 0; i < data_height_; i++)
+        {
+            unsigned int idx = ((data_width_ * i) + current_index_);
+            current_data_column_[i] = (*dataset_)[idx];
+        }
+    }
 }
 
-void Transport::processSetInterpolate(bool interpolate)
-{
-    this->interpolate = interpolate;
-}
-
-void Transport::calculateReturnPos()
+void Transport::calculate_return_position()
 {
     // FIXME not on every callback
-    double pos = ((double)currentIdx + mu);
-    returnPos.store(pos, std::memory_order_relaxed);
+    double pos = ((double)current_index_ + mu_);
+    return_pos.store(pos, std::memory_order_relaxed);
 }
 
-void Transport::calculateMinMax()
+void Transport::calculate_min_max()
 {
     double min;
     double max;
-    minDataVals.clear();
-    maxDataVals.clear();
-    for(unsigned int i = 0; i < dataHeight; i++)
+    min_data_vals_.clear();
+    max_data_vals_.clear();
+    for(unsigned int i = 0; i < data_height_; i++)
     {
-        for(unsigned int j = 0; j < dataWidth; j++)
+        for(unsigned int j = 0; j < data_width_; j++)
         {
-            unsigned int idx = i * dataWidth + j;
-            double value = data->at(idx);
+            unsigned int idx = i * data_width_ + j;
+            double value = dataset_->at(idx);
             if(j == 0)
             {
                 min = max = value;
@@ -359,8 +414,8 @@ void Transport::calculateMinMax()
                 max = value;
             }
         }
-        minDataVals.push_back(min);
-        maxDataVals.push_back(max);
+        min_data_vals_.push_back(min);
+        max_data_vals_.push_back(max);
     }
 }
 

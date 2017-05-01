@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QTableView>
-#include <QtCharts>
 #include <QAction>
 #include <QTabWidget>
 #include <QLayout>
@@ -11,6 +10,7 @@
 #include <QQuickView>
 
 #include <atomic>
+#include <vector>
 
 //#include "scatterview.h"
 //#include "lineview.h"
@@ -19,8 +19,6 @@
 #include "filereader.h"
 #include "qcustomplot.h"
 #include "plotter.h"
-
-using namespace QtCharts;
 
 class MainWindow : public QMainWindow
 {

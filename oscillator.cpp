@@ -6,34 +6,24 @@ namespace son {
 
 Oscillator::Oscillator()
 {
-    myType = ITEM::OSCILLATOR;
-    frequency_ = 440;
-    frequency_fixed_ = true;
-    freq_scaled = true;
+    my_type_ = ITEM::OSCILLATOR;
+    freq_ = 440;
+    freq_fixed_ = true;
+    freq_scaled_ = true;
     freq_low_ = 40;
     freq_high_ = 16000;
-    freq_exponent = 1;
-    current_size_ = 1;
+    freq_exponent_ = 1;
 
-    acceptedChildren = {
+    accepted_children_ = {
         PARAMETER::AMPLITUDE,
         PARAMETER::FREQUENCY
     };
 
-    for(int i = 0; i < MAX_DIMENSIONS; i++)
-    {
-        gam::Sine<>* gen = new gam::Sine<>(frequency_);
-        gens_.push_back(gen);
-    }
 }
 
 Oscillator::~Oscillator()
 {
-    for(unsigned int i = 0; i < gens_.size(); i++)
-    {
-        gam::Sine<>* gen = gens_[i];
-        delete gen;
-    }
+
 }
 
 /*
@@ -44,32 +34,47 @@ void Oscillator::delete_item()
 {
     SynthItemCommand command;
     command.type = COMMAND::DELETE;
-    commandBuffer.push(command);
+    command_buffer_.push(command);
+}
+
+SynthItem::ITEM Oscillator::get_type()
+{
+    return my_type_;
 }
 
 void Oscillator::set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
 {
     SynthItemCommand command;
     command.type = COMMAND::DATA;
-    command.data_ = data;
-    command.mins_ = mins;
+    command.data = data;
+    command.mins = mins;
     command.maxes = maxes;
-    commandBuffer.push(command);
+    command_buffer_.push(command);
 }
 
 void Oscillator::add_parent(SynthItem *parent)
 {
-
+    SynthItemCommand command;
+    command.type = COMMAND::ADD_PARENT;
+    command.item = parent;
+    command_buffer_.push(command);
 }
 
 void Oscillator::remove_parent(SynthItem *parent)
 {
-
+    SynthItemCommand command;
+    command.type = COMMAND::REMOVE_PARENT;
+    command.item = parent;
+    command_buffer_.push(command);
 }
 
-bool Oscillator::add_child(SynthItem *child, SynthItem::PARAMETER parameter)
+bool Oscillator::add_child(SynthItem *child, SynthItem::PARAMETER param)
 {
-
+    SynthItemCommand command;
+    command.type = COMMAND::ADD_CHILD;
+    command.parameter = param;
+    command.item = child;
+    command_buffer_.push(command);
 }
 
 void Oscillator::remove_child(SynthItem *child)
@@ -77,7 +82,15 @@ void Oscillator::remove_child(SynthItem *child)
     SynthItemCommand command;
     command.type = COMMAND::REMOVE_CHILD;
     command.item = child;
-    commandBuffer.push(command);
+    command_buffer_.push(command);
+}
+
+void Oscillator::mute(bool mute)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::MUTE;
+    command.bool_val = mute;
+    command_buffer_.push(command);
 }
 
 void Oscillator::set_freq(double frequency)
@@ -86,18 +99,7 @@ void Oscillator::set_freq(double frequency)
     command.type = COMMAND::PARAM;
     command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(frequency);
-    commandBuffer.push(command);
-}
-
-void Oscillator::set_freq_indexes(std::vector<int> indexes)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::INDEXES;
-    command.parameter = PARAMETER::FREQUENCY;
-    for (unsigned int i = 0; i < indexes.size(); i++) {
-        command.ints.push_back(indexes[i]);
-    }
-    commandBuffer.push(command);
+    command_buffer_.push(command);
 }
 
 void Oscillator::set_freq_fixed(bool fixed)
@@ -105,17 +107,26 @@ void Oscillator::set_freq_fixed(bool fixed)
     SynthItemCommand command;
     command.type = COMMAND::FIXED;
     command.parameter = PARAMETER::FREQUENCY;
-    command.boolVal = fixed;
-    commandBuffer.push(command);
+    command.bool_val = fixed;
+    command_buffer_.push(command);
+}
+
+void Oscillator::set_freq_indexes(std::vector<int> indexes)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::INDEXES;
+    command.parameter = PARAMETER::FREQUENCY;
+    command.ints.assign(indexes.begin(), indexes.end());
+    command_buffer_.push(command);
 }
 
 void Oscillator::set_freq_scaled(bool scaled)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALING;
+    command.type = COMMAND::SCALED;
     command.parameter = PARAMETER::FREQUENCY;
-    command.boolVal = scaled;
-    commandBuffer.push(command);
+    command.bool_val = scaled;
+    command_buffer_.push(command);
 }
 
 void Oscillator::set_freq_scale_vals(double low, double high, double exp)
@@ -126,7 +137,7 @@ void Oscillator::set_freq_scale_vals(double low, double high, double exp)
     command.doubles.push_back(low);
     command.doubles.push_back(high);
     command.doubles.push_back(exp);
-    commandBuffer.push(command);
+    command_buffer_.push(command);
 }
 
 /*
@@ -137,12 +148,12 @@ float Oscillator::process()
 {
     float sample = 0.0;
 
-    if(!commandBuffer.empty())
+    if(!command_buffer_.empty())
     {
         retrieve_commands();
     }
 
-    if(muted)
+    if(muted_)
     {
         return sample;
     }
@@ -157,61 +168,27 @@ float Oscillator::process()
         size = 1;
     }
     for (unsigned int i = 0; i < size; ++i) {
-        sample += gens_[i].process();
+        sample += gens_[i]();
     }
 
     sample /= gens_.size();
 
     // vist amplitude modulating children
-    if(!amods.empty())
+    if(!amods_.empty())
     {
-        float amSample = visitChildren(amods);
-        sample *= amSample;
+        float am_sample = visit_children(amods_);
+        sample *= am_sample;
     }
 
     return sample;
 }
 
-void Oscillator::process_set_freq(double fixedFreq)
+void Oscillator::retrieve_commands()
 {
-    if (this->frequency_ != fixedFreq) {
-        this->frequency_ = fixedFreq;
-    }
-}
-
-void Oscillator::process_set_fixed_freq(bool useFixedFreq)
-{
-    this->frequency_fixed_ = useFixedFreq;
-}
-
-void Oscillator::process_set_freq_indexes(std::vector<int> indexes)
-{
-    bool m = muted;
-    if(!muted) {
-        muted = true;
-    }
-    freq_indexes_ = indexes;
-
-    current_size_ = freq_indexes_.size();
-    if(current_size_ < 1)
+    while(command_buffer_.pop(&current_command_))
     {
-        current_size_ = 1;
+        process_command(current_command_);
     }
-
-    muted = m;
-}
-
-void Oscillator::process_set_scale_freq(bool useFreqScaling)
-{
-    this->freq_scaled = useFreqScaling;
-}
-
-void Oscillator::process_set_freq_scale_vals(double low, double high, double exp)
-{
-    qDebug() << "cpp scalingVals: " << low << " " << high << " " << exp;
-    freq_low_ = low;
-    freq_high_ = high;
-    freq_exponent = exp;
 }
 
 void Oscillator::process_command(SynthItemCommand command)
@@ -219,35 +196,41 @@ void Oscillator::process_command(SynthItemCommand command)
     COMMAND type = command.type;
 
     switch (type) {
-    case COMMAND::FIXED:
-        if(command.parameter == PARAMETER::FREQUENCY)
-        {
-            process_set_fixed_freq(command.boolVal);
-        }
+    case COMMAND::DATA:
+        process_set_data(command.data, command.mins, command.maxes);
+        break;
+    case COMMAND::ADD_CHILD:
+        process_add_child(command.item, command.parameter);
+        break;
+    case COMMAND::REMOVE_CHILD:
+        process_remove_child(command.item);
+        break;
+    case COMMAND::ADD_PARENT:
+        insert_item_unique(command.item, parents_);
+        break;
+    case COMMAND::REMOVE_PARENT:
+        erase_item(command.item, parents_);
+        break;
+    case COMMAND::MUTE:
+        muted_ = command.bool_val;
         break;
     case COMMAND::PARAM:
-        if(command.parameter == PARAMETER::FREQUENCY)
-        {
-            process_set_freq(command.doubles[0]);
-        }
+        process_set_param_value(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::FIXED:
+        process_set_param_fixed(command.bool_val, command.parameter);
         break;
     case COMMAND::INDEXES:
-        if(command.parameter == PARAMETER::FREQUENCY)
-        {
-            process_set_freq_indexes(command.ints);
-        }
+        process_set_param_indexes(command.ints, command.parameter);
         break;
-    case COMMAND::SCALING:
-        if(command.parameter == PARAMETER::FREQUENCY)
-        {
-            process_set_scale_freq(command.boolVal);
-        }
+    case COMMAND::SCALED:
+        process_set_param_scaled(command.bool_val, command.parameter);
         break;
     case COMMAND::SCALE_VALS:
-        if(command.parameter == PARAMETER::FREQUENCY)
-        {
-            process_set_freq_scale_vals(command.doubles[0], command.doubles[1], command.doubles[2]);
-        }
+        process_set_param_scale_vals(command.doubles[0], command.doubles[1], command.doubles[2], command.parameter);
+        break;
+    case COMMAND::DELETE:
+        process_delete_item();
         break;
     default:
         break;
@@ -271,62 +254,89 @@ void Oscillator::process_add_child(SynthItem *child, PARAMETER parameter)
 
 void Oscillator::process_remove_child(SynthItem *child)
 {
-    amods.erase(std::remove(amods.begin(), amods.end(), child), amods.end());
-    fmods_.erase(std::remove(fmods_.begin(), fmods_.end(), child), fmods_.end());
-}
-
-void Oscillator::process_add_parent(SynthItem *parent)
-{
-    insert_item_unique(parent, parents_);
-}
-
-void Oscillator::process_remove_parent(SynthItem *parent)
-{
-    parents.erase(std::remove(parents.begin(), parents.end(), parent), parents.end());
+    erase_item(child, amods_);
+    erase_item(child, fmods_);
 }
 
 void Oscillator::process_delete_item()
 {
-    muted = true;
-
-    for(unsigned int i = 0; i < parents.size(); i++) {
-        SynthItem* parent = parents[i];
-        parent->remove_child(this);
-    }
-    for(unsigned int i = 0; i < amods.size(); i++) {
-        SynthItem* child = amods[i];
-        child->remove_parent(this);
-    }
-    for(unsigned int i = 0; i < fmods_.size(); i++) {
-        SynthItem* child = fmods_[i];
-        child->remove_parent(this);
-    }
-
+    remove_as_child(this, parents_);
+    remove_as_parent(this, amods_);
+    remove_as_parent(this, fmods_);
     delete this;
+}
+
+void Oscillator::process_set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
+{
+    data_ = data;
+    mins_ = mins;
+    maxes_ = maxes;
+}
+
+void Oscillator::process_set_param_value(double val, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
+        freq_ = val;
+    }
+}
+
+void Oscillator::process_set_param_fixed(bool fixed, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
+        freq_fixed_ = fixed;
+    }
+}
+
+void Oscillator::process_set_param_indexes(std::vector<int> indexes, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
+        freq_indexes_ = indexes;
+    }
+}
+
+void Oscillator::process_set_param_scaled(bool scaled, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
+        freq_scaled_ = scaled;
+    }
+}
+
+void Oscillator::process_set_param_scale_vals(double low, double high, double exp, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
+        freq_low_ = low;
+        freq_high_ = high;
+        freq_exponent_ = exp;
+    }
 }
 
 void Oscillator::set_gen_freqs()
 {
-    float fmSample = 0;
+    float fm_sample = 0;
     if(fmods_.size() > 0) {
-        fmSample = visitChildren(fmods_);
+        fm_sample = visit_children(fmods_);
     }
 
-    if (frequency_fixed_ == true || freq_indexes_.size() < 1) //no data mappings, use fixed freq
+    if (freq_fixed_ == true || freq_indexes_.size() < 1) //no data mappings, use fixed freq
     {
-        gens_[i]->freq(frequency_ + fmSample);
+        gens_[0].freq(freq_ + fm_sample);
     }
     else //map each indexed value from the data row to the freq of a generator
     {
         for (unsigned int i = 0; i < freq_indexes_.size(); ++i) {
             int idx = freq_indexes_[i];
-            double freq = data->at(idx);
-            if(freq_scaled)
+            double freq = data_->at(idx);
+            if(freq_scaled_)
             {
-                freq = scale(freq, mins->at(idx), maxes->at(idx),
-                             freq_low_, freq_high_, freq_exponent);
+                freq = scale(freq, mins_.at(idx), maxes_.at(idx),
+                             freq_low_, freq_high_, freq_exponent_);
             }
-            gens_[i]->freq(freq + fmSample);
+            gens_[i].freq(freq + fm_sample);
         }
     }
 }

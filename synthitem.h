@@ -44,7 +44,7 @@ public:
     enum class COMMAND {
         DATA,
         PARAM,
-        SCALING,
+        SCALED,
         SCALE_VALS,
         INDEXES,
         WAVEFORM,
@@ -73,7 +73,7 @@ public:
         std::vector<double> maxes;
         std::vector<double> doubles;
         std::vector<int> ints;
-        bool boolVal;
+        bool bool_val;
         SynthItem* item;
         SynthItemCommand() {
             doubles.reserve(MAX_DIMENSIONS);
@@ -83,13 +83,10 @@ public:
         }
     };
 
-    ITEM getType();
-
-    explicit SynthItem();
-    virtual ~SynthItem();
+    explicit SynthItem() {}
+    virtual ~SynthItem() {}
     virtual void delete_item() = 0;
-
-    virtual float process() = 0;
+    virtual ITEM get_type() = 0;
     virtual void set_data(std::vector<double>* data,
                              std::vector<double> mins,
                              std::vector<double> maxes) = 0;
@@ -98,19 +95,14 @@ public:
     virtual bool add_child(SynthItem *child, PARAMETER parameter) = 0;
     virtual void remove_child(SynthItem *item) = 0;
     virtual void mute(bool mute) = 0;
+    virtual float process() = 0;
 
 protected:
 
     virtual void retrieve_commands() = 0;
     virtual void process_command(SynthItemCommand command) = 0;
-    virtual void process_mute(bool mute) = 0;
-    virtual void process_add_parent(SynthItem* parent) = 0;
-    virtual void process_remove_parent(SynthItem* parent) = 0;
     virtual void process_add_child(SynthItem* child, PARAMETER parameter) = 0;
     virtual void process_remove_child(SynthItem* child) = 0;
-    virtual void process_set_data(std::vector<double>* data,
-                                    std::vector<double> *mins,
-                                    std::vector<double> *maxes) = 0;
     virtual void process_delete_item() = 0;
 
 };
