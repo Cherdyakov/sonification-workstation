@@ -14,8 +14,6 @@ class QtSynthItem : public QObject
     Q_ENUMS(WAVEFORM)
 public:
 
-    explicit QtSynthItem(QObject *parent = 0);
-
     enum PARAMETER {
         INPUT = (int)SynthItem::PARAMETER::INPUT,
         AMPLITUDE ,
@@ -32,21 +30,15 @@ public:
         PINK
     };
 
+    explicit QtSynthItem(QObject *parent = 0);
     virtual SynthItem* implementation();
-    virtual float process();
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER parameter);
-    Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
+    Q_INVOKABLE virtual void deleteItem();
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER parameter);
+    Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
     Q_INVOKABLE virtual void mute(bool mute);
-    Q_INVOKABLE virtual void deleteItem();
 
-protected:
-    SynthItem* synthItem;
-
-signals:
-
-public slots:
 };
 
 #endif // QTSYNTHITEM_H

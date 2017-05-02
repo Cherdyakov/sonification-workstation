@@ -18,7 +18,9 @@ Audifier::~Audifier()
 
 void Audifier::delete_item()
 {
-
+    SynthItemCommand command;
+    command.type = COMMAND::DELETE;
+    command_buffer_.push(command);
 }
 
 SynthItem::ITEM Audifier::get_type()
@@ -28,32 +30,58 @@ SynthItem::ITEM Audifier::get_type()
 
 void Audifier::set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
 {
-
+    SynthItemCommand command;
+    command.type = COMMAND::DATA;
+    command.data = data;
+    command.mins = mins;
+    command.maxes = maxes;
+    command_buffer_.push(command);
 }
 
 void Audifier::add_parent(SynthItem *parent)
 {
-
+    SynthItemCommand command;
+    command.type = COMMAND::ADD_PARENT;
+    command.item = parent;
+    command_buffer_.push(command);
 }
 
 void Audifier::remove_parent(SynthItem *parent)
 {
-
+    SynthItemCommand command;
+    command.type = COMMAND::REMOVE_PARENT;
+    command.item = parent;
+    command_buffer_.push(command);
 }
 
 bool Audifier::add_child(SynthItem *child, SynthItem::PARAMETER param)
 {
-
+    if(!verify_child(param, accepted_children_))
+    {
+        return false;
+    }
+    SynthItemCommand command;
+    command.type = COMMAND::ADD_CHILD;
+    command.parameter = param;
+    command.item = child;
+    command_buffer_.push(command);
+    return true;
 }
 
-void Audifier::remove_child(SynthItem *item)
+void Audifier::remove_child(SynthItem *child)
 {
-
+    SynthItemCommand command;
+    command.type = COMMAND::REMOVE_CHILD;
+    command.item = child;
+    command_buffer_.push(command);
 }
 
 void Audifier::mute(bool mute)
 {
-
+    SynthItemCommand command;
+    command.type = COMMAND::MUTE;
+    command.bool_val = mute;
+    command_buffer_.push(command);
 }
 
 float Audifier::process()
@@ -90,7 +118,10 @@ float Audifier::process()
 
 void Audifier::retrieve_commands()
 {
-
+    while(command_buffer_.pop(&current_command_))
+    {
+        process_command(current_command_);
+    }
 }
 
 void Audifier::process_command(SynthItemCommand command)
@@ -149,7 +180,9 @@ void Audifier::process_delete_item()
 
 void Audifier::process_set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
 {
-
+    data_ = data;
+    mins_ = mins;
+    maxes_ = maxes;
 }
 
 void Audifier::process_set_param_indexes(std::vector<int> indexes, PARAMETER param)

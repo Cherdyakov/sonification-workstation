@@ -16,7 +16,7 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
     UserData* uData = (UserData *) data;
     double *buffer = (double *) outputBuffer;
-    QtTransport* graph = uData->qtTransport;\
+    SynthItem* root = uData->root;
 
     if ( status )
         std::cout << "Stream underflow detected!" << std::endl;
@@ -25,22 +25,11 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     // Write interleaved audio data.
     for (unsigned int i=0; i < nBufferFrames; ++i) {
 
-        float s = graph->process();
+        float s = root->process();
         s *= 0.1;
         *buffer++ = s;
         *buffer++ = s;
-
-        //test noise
-//        *buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
-//        *buffer++ = ((qrand() * 1.0 / RAND_MAX) - 1.0) * 0.2;
-
-        //test mssg
-//        qDebug() << "callback";
     }
-
-//    qDebug() << "cb: " << qrand();
-
-//    sequencer->fillRingBuffer();
 
     return 0;
 

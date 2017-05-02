@@ -65,10 +65,16 @@ void Modulator::remove_parent(SynthItem *parent)
 
 bool Modulator::add_child(SynthItem *child, SynthItem::PARAMETER param)
 {
+    if(!verify_child(param, accepted_children_))
+    {
+        return false;
+    }
     SynthItemCommand command;
     command.type = COMMAND::ADD_CHILD;
+    command.parameter = param;
     command.item = child;
     command_buffer_.push(command);
+    return true;
 }
 
 void Modulator::remove_child(SynthItem *child)

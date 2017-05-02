@@ -30,9 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout* dataLayout = new QVBoxLayout(this);
     QVBoxLayout* synthLayout = new QVBoxLayout(this);
 
-    //synthesis tree root, transport
-    Transport* transport = new Transport();
-    qtTransport = new QtTransport(transport);
+    //synthesis tree root, transport;
+    qtTransport = new QtTransport();
 
     //////////////////////
     //Transport section //

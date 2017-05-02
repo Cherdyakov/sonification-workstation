@@ -23,7 +23,7 @@ public:
     void add_parent(SynthItem* parent) override;
     void remove_parent(SynthItem* parent) override;
     bool add_child(SynthItem *child, PARAMETER param) override;
-    void remove_child(SynthItem *item) override;
+    void remove_child(SynthItem *child) override;
     void mute(bool mute) override;
     // generate a sample
     float process() override;

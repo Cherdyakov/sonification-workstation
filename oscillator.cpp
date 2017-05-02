@@ -70,11 +70,16 @@ void Oscillator::remove_parent(SynthItem *parent)
 
 bool Oscillator::add_child(SynthItem *child, SynthItem::PARAMETER param)
 {
+    if(!verify_child(param, accepted_children_))
+    {
+        return false;
+    }
     SynthItemCommand command;
     command.type = COMMAND::ADD_CHILD;
     command.parameter = param;
     command.item = child;
     command_buffer_.push(command);
+    return true;
 }
 
 void Oscillator::remove_child(SynthItem *child)

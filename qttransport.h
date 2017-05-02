@@ -24,19 +24,26 @@ public:
         MODULATOR
     };
 
-    explicit QtTransport(SynthItem* item = 0, QObject *parent = 0);
+    explicit QtTransport(QObject *parent = 0);
+    virtual SynthItem* implementation() override;
 
     Q_INVOKABLE QtSynthItem* createItem(ITEM type);
-    float process();
+    Q_INVOKABLE virtual void deleteItem() override;
+    Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
+    Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) override;
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER param) override;
+    Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
+    Q_INVOKABLE virtual void mute(bool mute) override;
 
 public slots:
+
     // slots for controlling playback
+    void on_dataChanged(std::vector<double>* data, unsigned int height, unsigned int width);
     void on_pausedChanged(bool on_pausedChanged);
     void on_posChanged(double pos);
     void on_speedChanged(double speed);
     void on_loopingChanged(bool looping);
     void on_loopPointsChanged(double begin, double end);
-    void on_dataChanged(std::vector<double>* data, unsigned int height, unsigned int width);
     void on_interpolateChanged(bool interpolate);
 
     // for polling state from outside
@@ -44,6 +51,7 @@ public slots:
     double getPos();
 
 private:
+    Transport transport_;
 
 signals:
     void posChanged(double pos);

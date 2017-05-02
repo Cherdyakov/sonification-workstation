@@ -96,8 +96,6 @@ Item {
     }
 
     function addChild(synthItem) {
-        if(implementation === null)
-            return
         //add child's implementation to the children
         //of this item's implementation
         if(implementation.addChild(synthItem.implementation, synthItem.childType))
@@ -109,8 +107,6 @@ Item {
     }
 
     function removeChild(synthItem) {
-        if(implementation === null)
-            return
         //remove the child implementation from the
         //children of this item's implementation
         implementation.removeChild(synthItem.implementation)
@@ -123,15 +119,11 @@ Item {
     }
 
     function addParent(synthItem) {
-        if(implementation === null)
-            return
         //add QML parent to this item's synthParents
         synthParents.push(synthItem)
     }
 
     function removeParent(synthItem) {
-        if(implementation === null)
-            return
         //remove parent's implementation from
         //this implementation's parent's
         implementation.removeParent(synthItem.implementation);
@@ -144,8 +136,6 @@ Item {
     }
 
     function mute() {
-        if(implementation === null)
-            return
         //mute cpp counterpart
         implementation.mute(muted)
 

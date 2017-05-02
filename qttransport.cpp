@@ -1,17 +1,18 @@
 #include "qttransport.h"
 
-QtTransport::QtTransport(SynthItem *item, QObject *parent) : QtSynthItem(parent)
+using namespace son;
+
+QtTransport::QtTransport(QObject *parent) : QtSynthItem(parent)
 {
-    synthItem = item;
     // for refreshing the playhead position
     QTimer* posTimer = new QTimer(this);
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
 }
 
-void QtTransport::on_interpolateChanged(bool interpolate)
+SynthItem *QtTransport::implementation()
 {
-    dynamic_cast<Transport*>(synthItem)->set_interpolate(interpolate);
+    return &transport_;
 }
 
 QtSynthItem* QtTransport::createItem(ITEM type)
@@ -21,81 +22,100 @@ QtSynthItem* QtTransport::createItem(ITEM type)
 
     switch (type){
     case ITEM::OUT:
-    {
         break;
-    }
     case ITEM::OSCILLATOR:
-    {
-        item = dynamic_cast<Transport*>(synthItem)->create_item((SynthItem::ITEM)type);
-        qtItem = new QtOscillator(item);
+        item = transport_.create_item((SynthItem::ITEM)type);
+        qtItem = new QtOscillator(dynamic_cast<Oscillator*>(item));
         break;
-    }
     case ITEM::AUDIFIER:
-    {
-        item = dynamic_cast<Transport*>(synthItem)->create_item((SynthItem::ITEM)type);
-        qtItem = new QtAudifier(item);
+        item = transport_.create_item((SynthItem::ITEM)type);
+        qtItem = new QtAudifier(dynamic_cast<Audifier*>(item));
         break;
-    }
     case ITEM::MODULATOR:
-    {
-        item = dynamic_cast<Transport*>(synthItem)->create_item((SynthItem::ITEM)type);
-        qtItem = new QtModulator(item);
+        item = transport_.create_item((SynthItem::ITEM)type);
+        qtItem = new QtModulator(dynamic_cast<Modulator*>(item));
         break;
-    }
     default:
         break;
     }
     return qtItem;
 }
 
-float QtTransport::process()
+void QtTransport::deleteItem()
 {
-    float s;
-    s = dynamic_cast<Transport*>(synthItem)->process();
-    return s;
+    transport_.delete_item();
 }
 
-void QtTransport::on_pausedChanged(bool pause)
+void QtTransport::addParent(QtSynthItem *parent)
 {
-    dynamic_cast<Transport*>(synthItem)->pause(pause);
+    transport_.add_parent(parent->implementation());
 }
 
-void QtTransport::on_posChanged(double pos)
+void QtTransport::removeParent(QtSynthItem *parent)
 {
-    dynamic_cast<Transport*>(synthItem)->set_playback_position(pos);
+    transport_.remove_parent(parent->implementation());
 }
 
-void QtTransport::on_speedChanged(double speed)
+bool QtTransport::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
 {
-    dynamic_cast<Transport*>(synthItem)->set_speed(speed);
+    return transport_.add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }
 
-void QtTransport::on_loopingChanged(bool looping)
+void QtTransport::removeChild(QtSynthItem *child)
 {
-    dynamic_cast<Transport*>(synthItem)->set_looping(looping);
+    transport_.remove_child(child->implementation());
 }
 
-void QtTransport::on_loopPointsChanged(double begin, double end)
+void QtTransport::mute(bool mute)
 {
-    dynamic_cast<Transport*>(synthItem)->set_loop_points(begin, end);
+    transport_.mute(mute);
 }
 
 void QtTransport::on_dataChanged(std::vector<double> *data, unsigned int height, unsigned int width)
 {
-    Transport* t = dynamic_cast<Transport*>(synthItem);
-    t->pause(true);
-    t->set_dataset(data, height, width);
+    transport_.pause(true);
+    transport_.set_dataset(data, height, width);
+}
+
+void QtTransport::on_pausedChanged(bool pause)
+{
+    transport_.pause(pause);
+}
+
+void QtTransport::on_posChanged(double pos)
+{
+    transport_.set_playback_position(pos);
+}
+
+void QtTransport::on_speedChanged(double speed)
+{
+    transport_.set_speed(speed);
+}
+
+void QtTransport::on_loopingChanged(bool looping)
+{
+    transport_.set_looping(looping);
+}
+
+void QtTransport::on_loopPointsChanged(double begin, double end)
+{
+    transport_.set_loop_points(begin, end);
+}
+
+void QtTransport::on_interpolateChanged(bool interpolate)
+{
+    transport_.set_interpolate(interpolate);
 }
 
 double QtTransport::getPos()
 {
     double pos;
-    pos = dynamic_cast<Transport*>(synthItem)->get_playback_position();
+    pos = transport_.get_playback_position();
     return pos;
 }
 
 void QtTransport::updatePos()
 {
-    double pos = dynamic_cast<Transport*>(synthItem)->get_playback_position();
+    double pos = transport_.get_playback_position();
     emit posChanged(pos);
 }

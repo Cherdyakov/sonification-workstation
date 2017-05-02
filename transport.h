@@ -21,7 +21,9 @@ public:
     // interface overrides
     void delete_item() override;
     SynthItem::ITEM get_type();
-    void set_data(std::vector<double>* data, std::vector<double> mins, std::vector<double> maxes) override;
+    void set_data(std::vector<double>* data,
+                  std::vector<double> mins,
+                  std::vector<double> maxes) override;
     void add_parent(SynthItem* parent) override;
     void remove_parent(SynthItem* parent) override;
     bool add_child(SynthItem *child, PARAMETER param) override;
@@ -50,7 +52,9 @@ private:
     void process_remove_child(SynthItem* child) override;
     void process_delete_item() override;
 
-    void process_set_dataset(std::vector<double>*dataset, unsigned int height, unsigned int width);
+    void process_set_dataset(std::vector<double>*dataset,
+                             unsigned int height,
+                             unsigned int width);
     void process_set_playback_position(double pos);
     void process_set_interpolate(bool interpolate_);
 
