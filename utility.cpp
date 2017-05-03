@@ -22,20 +22,20 @@ float visit_children(std::vector<SynthItem*> children)
     return s;
 }
 
-void insert_item_unique(SynthItem* synth_item, std::vector<SynthItem*> items)
+void insert_item_unique(SynthItem* synth_item, std::vector<SynthItem*>* items)
 {
-    if(std::find(items.begin(), items.end(), synth_item) == items.end())
+    if(std::find(items->begin(), items->end(), synth_item) == items->end())
     {
-        items.push_back(synth_item);
+        items->push_back(synth_item);
     }
 }
 
-void erase_item(SynthItem* synth_item, std::vector<SynthItem*> items)
+void erase_item(SynthItem* synth_item, std::vector<SynthItem*>* items)
 {
-    items.erase(std::remove(items.begin(), items.end(), synth_item), items.end());
+    items->erase(std::remove(items->begin(), items->end(), synth_item), items->end());
 }
 
-void remove_as_child(SynthItem* self, std::vector<SynthItem*> parents)
+void remove_as_child(SynthItem* self, std::vector<SynthItem *> parents)
 {
     for(unsigned int i = 0; i < parents.size(); i++) {
         SynthItem* parent = parents[i];

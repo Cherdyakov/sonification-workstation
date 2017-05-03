@@ -314,10 +314,10 @@ void Transport::process_add_child(SynthItem *child, SynthItem::PARAMETER paramet
 {
     switch (parameter){
     case PARAMETER::INPUT:
-        insert_item_unique(child, inputs_);
+        insert_item_unique(child, &inputs_);
         break;
     case PARAMETER::AMPLITUDE:
-        insert_item_unique(child, amods_);
+        insert_item_unique(child, &inputs_);
         break;
     default:
         break; //incompatible child type
@@ -327,8 +327,8 @@ void Transport::process_add_child(SynthItem *child, SynthItem::PARAMETER paramet
 
 void Transport::process_remove_child(SynthItem *child)
 {
-    erase_item(child, inputs_);
-    erase_item(child, amods_);
+    erase_item(child, &inputs_);
+    erase_item(child, &amods_);
 }
 
 void Transport::process_delete_item()

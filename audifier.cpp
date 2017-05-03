@@ -5,6 +5,7 @@ namespace son {
 Audifier::Audifier()
 {
     my_type_ = ITEM::AUDIFIER;
+    muted_ = false;
 
     accepted_children_ = {
         PARAMETER::AMPLITUDE
@@ -139,10 +140,10 @@ void Audifier::process_command(SynthItemCommand command)
         process_remove_child(command.item);
         break;
     case COMMAND::ADD_PARENT:
-        insert_item_unique(command.item, parents_);
+        insert_item_unique(command.item, &parents_);
         break;
     case COMMAND::REMOVE_PARENT:
-        erase_item(command.item, parents_);
+        erase_item(command.item, &parents_);
         break;
     case COMMAND::MUTE:
         muted_ = command.bool_val;
@@ -162,7 +163,7 @@ void Audifier::process_add_child(SynthItem *child, PARAMETER param)
 {
     if(param == PARAMETER::AMPLITUDE)
     {
-        insert_item_unique(child, amods_);
+        insert_item_unique(child, &amods_);
     }
 }
 

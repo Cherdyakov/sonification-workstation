@@ -63,7 +63,7 @@ private:
     ITEM my_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
-    std::vector<gam::Sine<>> gens_;
+    std::vector<gam::Sine<>> gens_= std::vector<gam::Sine<>> (MAX_DIMENSIONS);
     std::vector<SynthItem::PARAMETER> accepted_children_;
     std::vector<double>* data_;
     std::vector<double> mins_;

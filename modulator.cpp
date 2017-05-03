@@ -6,6 +6,7 @@ Modulator::Modulator()
 {
     my_type_ = ITEM::MODULATOR;
     mod_type_ = PARAMETER::AMPLITUDE;
+    muted_ = false;
     depth_ = 100;
     freq_ = 1;
     freq_fixed_ = true;
@@ -251,10 +252,10 @@ void Modulator::process_command(SynthItemCommand command)
         process_remove_child(command.item);
         break;
     case COMMAND::ADD_PARENT:
-        insert_item_unique(command.item, parents_);
+        insert_item_unique(command.item, &parents_);
         break;
     case COMMAND::REMOVE_PARENT:
-        erase_item(command.item, parents_);
+        erase_item(command.item, &parents_);
         break;
     case COMMAND::MUTE:
         muted_ = command.bool_val;
@@ -286,10 +287,10 @@ void Modulator::process_add_child(SynthItem *child, SynthItem::PARAMETER paramet
 {
     switch (parameter){
     case PARAMETER::AMPLITUDE:
-        insert_item_unique(child, amods_);
+        insert_item_unique(child, &amods_);
         break;
     case PARAMETER::FREQUENCY:
-        insert_item_unique(child, fmods_);
+        insert_item_unique(child, &fmods_);
         break;
     default:
         break; //incompatible child type
@@ -299,8 +300,8 @@ void Modulator::process_add_child(SynthItem *child, SynthItem::PARAMETER paramet
 
 void Modulator::process_remove_child(SynthItem *child)
 {
-    erase_item(child, amods_);
-    erase_item(child, fmods_);
+    erase_item(child, &amods_);
+    erase_item(child, &fmods_);
 }
 
 void Modulator::process_delete_item()

@@ -4,7 +4,7 @@
 #include "qtoscillator.h"
 #include "modulator.h"
 
-class QtModulator : public QtOscillator
+class QtModulator : public QtSynthItem
 {
     Q_OBJECT
 

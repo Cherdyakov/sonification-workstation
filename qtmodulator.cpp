@@ -1,6 +1,6 @@
 #include "qtmodulator.h"
 
-QtModulator::QtModulator(Modulator *modulator, QObject *parent)
+QtModulator::QtModulator(Modulator *modulator, QObject *parent) : QtSynthItem(parent)
 {
     modulator_ = modulator;
 }

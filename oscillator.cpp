@@ -7,6 +7,7 @@ namespace son {
 Oscillator::Oscillator()
 {
     my_type_ = ITEM::OSCILLATOR;
+    muted_ = false;
     freq_ = 440;
     freq_fixed_ = true;
     freq_scaled_ = true;
@@ -176,7 +177,7 @@ float Oscillator::process()
         sample += gens_[i]();
     }
 
-    sample /= gens_.size();
+    sample /= size;
 
     // vist amplitude modulating children
     if(!amods_.empty())
@@ -211,10 +212,10 @@ void Oscillator::process_command(SynthItemCommand command)
         process_remove_child(command.item);
         break;
     case COMMAND::ADD_PARENT:
-        insert_item_unique(command.item, parents_);
+        insert_item_unique(command.item, &parents_);
         break;
     case COMMAND::REMOVE_PARENT:
-        erase_item(command.item, parents_);
+        erase_item(command.item, &parents_);
         break;
     case COMMAND::MUTE:
         muted_ = command.bool_val;
@@ -246,10 +247,10 @@ void Oscillator::process_add_child(SynthItem *child, PARAMETER parameter)
 {
     switch (parameter){
     case PARAMETER::AMPLITUDE:
-        insert_item_unique(child, amods_);
+        insert_item_unique(child, &amods_);
         break;
     case PARAMETER::FREQUENCY:
-        insert_item_unique(child, fmods_);
+        insert_item_unique(child, &fmods_);
         break;
     default:
         break; //incompatible child type
@@ -259,8 +260,8 @@ void Oscillator::process_add_child(SynthItem *child, PARAMETER parameter)
 
 void Oscillator::process_remove_child(SynthItem *child)
 {
-    erase_item(child, amods_);
-    erase_item(child, fmods_);
+    erase_item(child, &amods_);
+    erase_item(child, &fmods_);
 }
 
 void Oscillator::process_delete_item()
