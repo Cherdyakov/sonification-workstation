@@ -105,7 +105,7 @@ void Transport::set_dataset(std::vector<double> *dataset, unsigned int height, u
     command.type = COMMAND::DATA;
     command.data = dataset;
     command.ints.push_back(height);
-    command.ints.push_back(height);
+    command.ints.push_back(width);
     command_buffer_.push(command);
 }
 
@@ -353,12 +353,12 @@ void Transport::process_set_dataset(std::vector<double> *dataset, unsigned int h
     current_index_ = 0;
     mu_ = 0.0;
     calculate_return_position();
-
     if(data_height_ != height)
     {
         data_height_ = height;
         current_data_column_.resize(data_height_);
     }
+    calculate_min_max();
 }
 
 void Transport::process_set_playback_position(double pos)
