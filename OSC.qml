@@ -18,7 +18,6 @@ SynthItem {
     Editor {
 
         id: editor
-        property int waveform: QtSynthItem.SINE
         property bool useFixedFreq: true
         property double fixedFreq: 440
         property bool useFreqScaling: true
@@ -27,7 +26,6 @@ SynthItem {
         property double freqScaleExp: 1
 
         Component.onCompleted: {
-            waveformEditor.comboBox.currentIndex = waveform
             frequencyEditor.spinBox.value = fixedFreq * 100
             fixedEditor.checkBox.checked = useFixedFreq
             frequencyScaler.lowSpinBox.value = freqScaleLow * 100
@@ -36,30 +34,17 @@ SynthItem {
             frequencyScaler.checkBox.checked = useFreqScaling
         }
 
-        onWaveformChanged: {
-            implementation.setWaveform(waveform)
-        }
-
         onUseFixedFreqChanged: {
-            implementation.setUseFixedFreq(useFixedFreq)
+            implementation.setFreqFixed(useFixedFreq)
         }
 
         onFixedFreqChanged: {
-            implementation.setFixedFreq(fixedFreq)
+            implementation.setFreq(fixedFreq)
         }
 
         EditorLayout {
             id: layout
             title: label
-
-            EditorWaveform {
-                id: waveformEditor
-                onWaveformChanged: {
-                    if (editor.waveform !== form) {
-                        editor.waveform = form
-                    }
-                }
-            }
 
             RowLayout {
 
@@ -95,7 +80,7 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setIndexes(implementationMappings, QtSynthItem.FREQUENCY)
+                        implementation.setFreqIndexes(implementationMappings)
                     }
                 }
             }
@@ -109,7 +94,7 @@ SynthItem {
                 {
                     if(editor.freqScaleLow !== low) {
                         editor.freqScaleLow = low
-                        implementation.setFreqScalingVals(editor.freqScaleLow,
+                        implementation.setFreqScaleVals(editor.freqScaleLow,
                                                           editor.freqScaleHigh,
                                                           editor.freqScaleExp)
                     }
@@ -118,7 +103,7 @@ SynthItem {
                 {
                     if(editor.freqScaleHigh !== high) {
                         editor.freqScaleHigh = high
-                        implementation.setFreqScalingVals(editor.freqScaleLow,
+                        implementation.setFreqScaleVals(editor.freqScaleLow,
                                                           editor.freqScaleHigh,
                                                           editor.freqScaleExp)                    }
                 }
@@ -126,7 +111,7 @@ SynthItem {
                 {
                     if(editor.freqScaleExp !== exp) {
                         editor.freqScaleExp = exp
-                        implementation.setFreqScalingVals(editor.freqScaleLow,
+                        implementation.setFreqScaleVals(editor.freqScaleLow,
                                                           editor.freqScaleHigh,
                                                           editor.freqScaleExp)                    }
                 }
@@ -134,7 +119,7 @@ SynthItem {
                 {
                     if(editor.useFreqScaling !== scaling) {
                         editor.useFreqScaling = scaling
-                        implementation.setUseFreqScaling(editor.useFreqScaling)
+                        implementation.setFreqScaled(editor.useFreqScaling)
                     }
                 }
             }

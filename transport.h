@@ -22,8 +22,8 @@ public:
     void delete_item() override;
     SynthItem::ITEM get_type();
     void set_data(std::vector<double>* data,
-                  std::vector<double> mins,
-                  std::vector<double> maxes) override;
+                  std::vector<double>* mins,
+                  std::vector<double>* maxes) override;
     void add_parent(SynthItem* parent) override;
     void remove_parent(SynthItem* parent) override;
     bool add_child(SynthItem *child, PARAMETER param) override;

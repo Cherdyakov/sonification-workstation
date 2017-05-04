@@ -33,14 +33,6 @@ public:
         AUDIFICATION
     };
 
-    enum class WAVEFORM {
-        SINE,
-        SAW,
-        SQUARE,
-        WHITE,
-        PINK
-    };
-
     enum class COMMAND {
         DATA,
         PARAM,
@@ -67,10 +59,9 @@ public:
     struct SynthItemCommand {
         COMMAND type;
         PARAMETER parameter;
-        WAVEFORM waveform;
         std::vector<double>* data;
-        std::vector<double> mins;
-        std::vector<double> maxes;
+        std::vector<double>* mins;
+        std::vector<double>* maxes;
         std::vector<double> doubles;
         std::vector<int> ints;
         bool bool_val;
@@ -78,8 +69,6 @@ public:
         SynthItemCommand() {
             doubles.reserve(MAX_DIMENSIONS);
             ints.reserve(MAX_DIMENSIONS);
-            mins.reserve(MAX_DIMENSIONS);
-            maxes.reserve(MAX_DIMENSIONS);
         }
     };
 
@@ -88,8 +77,8 @@ public:
     virtual void delete_item() = 0;
     virtual ITEM get_type() = 0;
     virtual void set_data(std::vector<double>* data,
-                             std::vector<double> mins,
-                             std::vector<double> maxes) = 0;
+                             std::vector<double>* mins,
+                             std::vector<double>* maxes) = 0;
     virtual void add_parent(SynthItem* parent) = 0;
     virtual void remove_parent(SynthItem* parent) = 0;
     virtual bool add_child(SynthItem *child, PARAMETER parameter) = 0;

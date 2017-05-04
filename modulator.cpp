@@ -38,7 +38,7 @@ SynthItem::ITEM Modulator::get_type()
     return my_type_;
 }
 
-void Modulator::set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
+void Modulator::set_data(std::vector<double> *data, std::vector<double> *mins, std::vector<double> *maxes)
 {
     SynthItemCommand command;
     command.type = COMMAND::DATA;
@@ -312,7 +312,7 @@ void Modulator::process_delete_item()
     delete this;
 }
 
-void Modulator::process_set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
+void Modulator::process_set_data(std::vector<double> *data, std::vector<double>* mins, std::vector<double>* maxes)
 {
     data_ = data;
     mins_ = mins;
@@ -413,7 +413,7 @@ void Modulator::set_gen_freq()
         double freq = data_->at(freq_index_);
         if(freq_scaled_)
         {
-            freq = scale(freq, mins_.at(freq_index_), maxes_.at(freq_index_),
+            freq = scale(freq, mins_->at(freq_index_), maxes_->at(freq_index_),
                          freq_low_, freq_high_, freq_exponent_);
         }
         gen_.freq(freq + fm_sample);

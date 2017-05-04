@@ -46,7 +46,7 @@ SynthItem::ITEM Transport::get_type()
     return my_type_;
 }
 
-void Transport::set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
+void Transport::set_data(std::vector<double> *data, std::vector<double> *mins, std::vector<double> *maxes)
 {
     (void)data;
     (void)mins;
@@ -168,15 +168,15 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
         break;
     case SynthItem::ITEM::OSCILLATOR:
         item = new Oscillator();
-        item->set_data(&current_data_column_, min_data_vals_, max_data_vals_);
+        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
     case SynthItem::ITEM::AUDIFIER:
         item = new Audifier();
-        item->set_data(&current_data_column_, min_data_vals_, max_data_vals_);
+        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
     case SynthItem::ITEM::MODULATOR:
         item = new Modulator();
-        item->set_data(&current_data_column_, min_data_vals_, max_data_vals_);
+        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
     default:
         item = NULL;
@@ -346,9 +346,19 @@ void Transport::process_delete_item()
 
 void Transport::process_set_dataset(std::vector<double> *dataset, unsigned int height, unsigned int width)
 {
+    paused_ = true;
     dataset_ = dataset;
-    data_height_ = height;
     data_width_ = width;
+    current_data_column_.clear();
+    current_index_ = 0;
+    mu_ = 0.0;
+    calculate_return_position();
+
+    if(data_height_ != height)
+    {
+        data_height_ = height;
+        current_data_column_.resize(data_height_);
+    }
 }
 
 void Transport::process_set_playback_position(double pos)

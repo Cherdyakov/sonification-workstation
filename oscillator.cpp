@@ -43,7 +43,7 @@ SynthItem::ITEM Oscillator::get_type()
     return my_type_;
 }
 
-void Oscillator::set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
+void Oscillator::set_data(std::vector<double> *data, std::vector<double> *mins, std::vector<double> *maxes)
 {
     SynthItemCommand command;
     command.type = COMMAND::DATA;
@@ -272,7 +272,7 @@ void Oscillator::process_delete_item()
     delete this;
 }
 
-void Oscillator::process_set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
+void Oscillator::process_set_data(std::vector<double> *data, std::vector<double> *mins, std::vector<double> *maxes)
 {
     data_ = data;
     mins_ = mins;
@@ -339,7 +339,7 @@ void Oscillator::set_gen_freqs()
             double freq = data_->at(idx);
             if(freq_scaled_)
             {
-                freq = scale(freq, mins_.at(idx), maxes_.at(idx),
+                freq = scale(freq, mins_->at(idx), maxes_->at(idx),
                              freq_low_, freq_high_, freq_exponent_);
             }
             gens_[i].freq(freq + fm_sample);

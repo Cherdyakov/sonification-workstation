@@ -13,7 +13,7 @@ public:
     void delete_item() override;
     // interface overrides
     ITEM get_type() override;
-    void set_data(std::vector<double>* data, std::vector<double> mins, std::vector<double> maxes) override;
+    void set_data(std::vector<double>* data, std::vector<double>* mins, std::vector<double>* maxes) override;
     void add_parent(SynthItem* parent) override;
     void remove_parent(SynthItem* parent) override;
     bool add_child(SynthItem *child, PARAMETER param) override;
@@ -42,7 +42,7 @@ private:
     void process_remove_child(SynthItem* child) override;
     void process_delete_item() override;
 
-    void process_set_data(std::vector<double>* data, std::vector<double> mins, std::vector<double> maxes);
+    void process_set_data(std::vector<double>* data, std::vector<double> *mins, std::vector<double> *maxes);
     void process_set_mod_type(PARAMETER param);
     void process_set_param_value(double val, PARAMETER param);
     void process_set_param_fixed(bool fixed, PARAMETER param);
@@ -59,8 +59,8 @@ private:
     gam::Sine<> gen_;
     std::vector<SynthItem::PARAMETER> accepted_children_;
     std::vector<double>* data_;
-    std::vector<double> mins_;
-    std::vector<double> maxes_;
+    std::vector<double>* mins_;
+    std::vector<double>* maxes_;
     std::vector<SynthItem*> parents_;
     std::vector<SynthItem*> fmods_;
     std::vector<SynthItem*> amods_;

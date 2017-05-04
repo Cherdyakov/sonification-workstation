@@ -29,7 +29,7 @@ SynthItem::ITEM Audifier::get_type()
     return my_type_;
 }
 
-void Audifier::set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
+void Audifier::set_data(std::vector<double> *data, std::vector<double>* mins, std::vector<double>* maxes)
 {
     SynthItemCommand command;
     command.type = COMMAND::DATA;
@@ -101,7 +101,7 @@ float Audifier::process()
     {
         // Audifier always scales datasets to range -1.0 to 1.0
         sample += scale((data_->at(static_cast<unsigned int>(audify_indexes_[i]))),
-                        mins_.at(i), maxes_.at(i),
+                        mins_->at(i), maxes_->at(i),
                         -1.0, 1.0, 1.0);
     }
 
@@ -179,7 +179,7 @@ void Audifier::process_delete_item()
     delete this;
 }
 
-void Audifier::process_set_data(std::vector<double> *data, std::vector<double> mins, std::vector<double> maxes)
+void Audifier::process_set_data(std::vector<double> *data, std::vector<double>* mins, std::vector<double>* maxes)
 {
     data_ = data;
     mins_ = mins;

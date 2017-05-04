@@ -11,7 +11,6 @@ class QtSynthItem : public QObject
 {
     Q_OBJECT
     Q_ENUMS(PARAMETER)
-    Q_ENUMS(WAVEFORM)
 public:
 
     enum PARAMETER {
@@ -20,14 +19,6 @@ public:
         FREQUENCY,
         PAN,
         AUDIFICATION
-    };
-
-    enum WAVEFORM {
-        SINE = (int)SynthItem::WAVEFORM::SINE,
-        SAW,
-        SQUARE,
-        WHITE,
-        PINK
     };
 
     explicit QtSynthItem(QObject *parent = 0);
