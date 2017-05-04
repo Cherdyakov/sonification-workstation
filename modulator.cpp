@@ -221,9 +221,11 @@ float Modulator::process()
         float am_sample = visit_children(amods_);
         sample *= am_sample;
     }
+    // if we are an fmod, amplify our signal by depth
     if(mod_type_ == PARAMETER::FREQUENCY)
     {
-        sample *= depth_;
+        float depth_sample = get_depth_sample();
+        sample *= depth_sample;
     }
 
     return sample;
@@ -244,6 +246,9 @@ void Modulator::process_command(SynthItemCommand command)
     switch (type) {
     case COMMAND::DATA:
         process_set_data(command.data, command.mins, command.maxes);
+        break;
+    case COMMAND::MODULATION:
+        process_set_mod_type(command.parameter);
         break;
     case COMMAND::ADD_CHILD:
         process_add_child(command.item, command.parameter);
@@ -356,17 +361,15 @@ void Modulator::process_set_param_fixed(bool fixed, SynthItem::PARAMETER param)
 
 void Modulator::process_set_param_indexes(std::vector<int> indexes, PARAMETER param)
 {
-    int index = indexes[0];
 
     if(param == PARAMETER::FREQUENCY)
     {
-        freq_index_ = index;
+        freq_indexes_ = indexes;
     }
     else if(param == PARAMETER::DEPTH)
     {
-        depth_index_ = index;
+        depth_indexes_ = indexes;
     }
-
 }
 
 void Modulator::process_set_param_scaled(bool scaled, SynthItem::PARAMETER param)
@@ -404,20 +407,39 @@ void Modulator::set_gen_freq()
         fm_sample = visit_children(fmods_);
     }
 
-    if ((freq_index_ < 1) || (freq_fixed_ == true)) //no data mappings, use fixed freq
+    if (freq_fixed_ == true || freq_indexes_.size() < 1) //no data mappings, use fixed freq
     {
         gen_.freq(freq_ + fm_sample);
     }
     else //map each indexed value from the data row to the freq of a generator
     {
-        double freq = data_->at(freq_index_);
+        double freq = data_->at(freq_indexes_[0]);
         if(freq_scaled_)
         {
-            freq = scale(freq, mins_->at(freq_index_), maxes_->at(freq_index_),
+            freq = scale(freq, mins_->at(freq_indexes_[0]), maxes_->at(freq_indexes_[0]),
                          freq_low_, freq_high_, freq_exponent_);
         }
         gen_.freq(freq + fm_sample);
     }
+}
+
+float Modulator::get_depth_sample()
+{
+    float depth_sample = 0;
+    if (depth_fixed_ == true || depth_indexes_.size() < 1) //no data mappings, use fixed depth_
+    {
+        depth_sample = depth_;
+    }
+    else //map indexed value
+    {
+        depth_sample = data_->at(depth_indexes_[0]);
+        if(depth_scaled_)
+        {
+            depth_sample = scale(depth_sample, mins_->at(depth_indexes_[0]), maxes_->at(depth_indexes_[0]),
+                         depth_low_, depth_high_, depth_exponent_);
+        }
+    }
+    return depth_sample;
 }
 
 }

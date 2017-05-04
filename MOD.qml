@@ -22,7 +22,6 @@ SynthItem {
     Editor {
 
         id: editor
-        property int waveform: QtSynthItem.SINE
         property  int  modType: QtSynthItem.AMPLITUDE
         property bool useFixedFreq: true
         property double fixedFreq: 1
@@ -31,15 +30,15 @@ SynthItem {
         property double freqScaleHigh: 16000
         property double freqScaleExp: 1
         property double depth: 100
+        property  bool useFixedDepth: true
         property double depthScaleLow: 40
         property double depthScaleHigh:16000
         property double depthScaleExp:1
         property  bool useDepthScaling: true
 
         Component.onCompleted: {
-            waveformEditor.comboBox.currentIndex = waveform
             frequencyEditor.spinBox.value = fixedFreq * 100
-            fixedEditor.checkBox.checked = useFixedFreq
+            fixedFreqEditor.checkBox.checked = useFixedFreq
             frequencyScaler.lowSpinBox.value = freqScaleLow * 100
             frequencyScaler.highSpinBox.value = freqScaleHigh * 100
             frequencyScaler.expSpinBox.value = freqScaleExp * 100
@@ -48,25 +47,22 @@ SynthItem {
             modEditor.comboBox.currentIndex = 0
             depthScaler.checkBox.checked = useDepthScaling
             depthScaler.lowSpinBox.value = depthScaleLow * 100
+            fixedDepthEditor.checkBox.checked = useFixedDepth
             depthScaler.highSpinBox.value = depthScaleHigh * 100
             depthScaler.expSpinBox.value = depthScaleExp * 100
         }
 
-        onWaveformChanged: {
-            implementation.setWaveform(waveform)
-        }
-
         onUseFixedFreqChanged: {
-            implementation.setUseFixedFreq(useFixedFreq)
+            implementation.setFreqFixed(useFixedFreq)
         }
 
         onFixedFreqChanged: {
-            implementation.setFixedFreq(fixedFreq)        }
+            implementation.setFreq(fixedFreq)        }
 
         onModTypeChanged: {
             if(implementation !== null) {
                 root.childType = modType
-                implementation.setModulationParameter(modType)
+                implementation.setModType(modType)
             }
         }
 
@@ -74,18 +70,13 @@ SynthItem {
             implementation.setDepth(depth)
         }
 
+        onUseFixedDepthChanged: {
+            implementation.setDepthFixed(useFixedDepth)
+        }
+
         EditorLayout {
             id: layout
             title: label
-
-            EditorWaveform {
-                id: waveformEditor
-                onWaveformChanged: {
-                    if (editor.waveform != form) {
-                        editor.waveform = form
-                    }
-                }
-            }
 
             RowLayout {
 
@@ -99,7 +90,7 @@ SynthItem {
                 }
 
                 EditorFixedParam {
-                    id: fixedEditor
+                    id: fixedFreqEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
                         if (editor.useFixedFreq != fixed) {
@@ -113,6 +104,7 @@ SynthItem {
             EditorMapper {
                 id: frequencyMapper
                 label.text: qsTr("Frequency Source: ")
+                maxIndexes: 1
                 onMappingsChanged:
                 {
                     if(root.mappedRows !== mappings) {
@@ -120,7 +112,7 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setIndexes(implementationMappings, QtSynthItem.FREQUENCY)
+                        implementation.setFreqIndexes(implementationMappings)
                     }
                 }
             }
@@ -134,35 +126,36 @@ SynthItem {
                 {
                     if(editor.freqScaleLow !== low) {
                         editor.freqScaleLow = low
-                        implementation.setFreqScalingVals(editor.freqScaleLow,
-                                                          editor.freqScaleHigh,
-                                                          editor.freqScaleExp)
+                        implementation.setFreqScaleVals(editor.freqScaleLow,
+                                                        editor.freqScaleHigh,
+                                                        editor.freqScaleExp)
                     }
                 }
                 onHighChanged:
                 {
                     if(editor.freqScaleHigh !== high) {
                         editor.freqScaleHigh = high
-                        implementation.setFreqScalingVals(editor.freqScaleLow,
-                                                          editor.freqScaleHigh,
-                                                          editor.freqScaleExp)                    }
+                        implementation.setFreqScaleVals(editor.freqScaleLow,
+                                                        editor.freqScaleHigh,
+                                                        editor.freqScaleExp)                    }
                 }
                 onExponentChanged:
                 {
                     if(editor.freqScaleExp !== exp) {
                         editor.freqScaleExp = exp
-                        implementation.setFreqScalingVals(editor.freqScaleLow,
-                                                          editor.freqScaleHigh,
-                                                          editor.freqScaleExp)                    }
+                        implementation.setFreqScaleVals(editor.freqScaleLow,
+                                                        editor.freqScaleHigh,
+                                                        editor.freqScaleExp)                    }
                 }
                 onUseScalingChanged:
                 {
                     if(editor.useFreqScaling !== scaling) {
                         editor.useFreqScaling = scaling
-                        implementation.setUseFreqScaling(editor.useFreqScaling)
+                        implementation.setFreqScaled(editor.useFreqScaling)
                     }
                 }
             }
+
 
             EditorModulation {
                 id: modEditor
@@ -196,7 +189,19 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setIndexes(implementationMappings, QtSynthItem.DEPTH)
+                        implementation.setDepthIndexes(implementationMappings)
+                    }
+                }
+            }
+
+            RowLayout {
+                EditorFixedParam {
+                    id: fixedDepthEditor
+                    label.text: qsTr("Fixed: ")
+                    onFixedChanged: {
+                        if (editor.useFixedDepth != fixed) {
+                            editor.useFixedDepth = fixed
+                        }
                     }
                 }
             }
@@ -210,32 +215,32 @@ SynthItem {
                 {
                     if(editor.depthScaleLow !== low) {
                         editor.depthScaleLow = low
-                        implementation.setFreqScalingVals(editor.depthScaleLow,
-                                                          editor.depthScaleHigh,
-                                                          editor.depthScaleExp)
+                        implementation.setDepthScaleVals(editor.depthScaleLow,
+                                                         editor.depthScaleHigh,
+                                                         editor.depthScaleExp)
                     }
                 }
                 onHighChanged:
                 {
                     if(editor.depthScaleHigh !== high) {
                         editor.depthScaleHigh = high
-                        implementation.setFreqScalingVals(editor.depthScaleLow,
-                                                          editor.depthScaleHigh,
-                                                          editor.depthScaleExp)                    }
+                        implementation.setDepthScaleVals(editor.depthScaleLow,
+                                                         editor.depthScaleHigh,
+                                                         editor.depthScaleExp)                    }
                 }
                 onExponentChanged:
                 {
                     if(editor.depthScaleExp !== exp) {
                         editor.depthScaleExp = exp
-                        implementation.setDepthScalingVals(editor.depthScaleLow,
-                                                          editor.depthScaleHigh,
-                                                          editor.depthScaleExp)                    }
+                        implementation.setDepthScaleVals(editor.depthScaleLow,
+                                                         editor.depthScaleHigh,
+                                                         editor.depthScaleExp)                    }
                 }
                 onUseScalingChanged:
                 {
                     if(editor.useDepthScaling !== scaling) {
                         editor.useDepthScaling = scaling
-                        implementation.setUseDepthScaling(editor.useDepthScaling)
+                        implementation.setDepthScaled(editor.useDepthScaling)
                     }
                 }
             }

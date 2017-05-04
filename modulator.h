@@ -51,6 +51,7 @@ private:
     void process_set_param_scale_vals(double low, double high, double exp, PARAMETER param);
 
     void set_gen_freq();
+    float get_depth_sample();
 
     ITEM my_type_;
     PARAMETER mod_type_;
@@ -64,8 +65,8 @@ private:
     std::vector<SynthItem*> parents_;
     std::vector<SynthItem*> fmods_;
     std::vector<SynthItem*> amods_;
-    int freq_index_;
-    int depth_index_;
+    std::vector<int> freq_indexes_;
+    std::vector<int> depth_indexes_;
     bool muted_;
 
     // frequency
