@@ -19,12 +19,16 @@ public:
     void delete_item() override;
     // interface overrides
     ITEM get_type() override;
-    void set_data(std::vector<double>* data, std::vector<double>* mins, std::vector<double>* maxes) override;
+    void set_data(std::vector<double>* data,
+                  std::vector<double>* mins,
+                  std::vector<double>* maxes) override;
     void add_parent(SynthItem* parent) override;
     void remove_parent(SynthItem* parent) override;
     bool add_child(SynthItem *child, PARAMETER param) override;
     void remove_child(SynthItem *child) override;
     void mute(bool mute) override;
+    // audification source
+    void set_aud_indexes(std::vector<int> indexes);
     // generate a sample
     float process() override;
 

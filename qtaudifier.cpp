@@ -40,3 +40,9 @@ void QtAudifier::mute(bool mute)
     audifier_->mute(mute);
 }
 
+void QtAudifier::setAudIndexes(QVector<int> indexes)
+{
+    std::vector<int> vec = indexes.toStdVector();
+    audifier_->set_aud_indexes(vec);
+}
+

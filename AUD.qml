@@ -36,7 +36,7 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setIndexes(implementationMappings, QtSynthItem.AUDIFICATION)
+                        implementation.setAudIndexes(implementationMappings, QtSynthItem.AUDIFICATION)
                     }
                 }
             }

@@ -18,6 +18,8 @@ public:
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
 
+    Q_INVOKABLE virtual void setAudIndexes(QVector<int> indexes);
+
 private:
     Audifier* audifier_;
 };

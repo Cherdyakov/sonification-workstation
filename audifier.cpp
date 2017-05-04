@@ -85,6 +85,15 @@ void Audifier::mute(bool mute)
     command_buffer_.push(command);
 }
 
+void Audifier::set_aud_indexes(std::vector<int> indexes)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::INDEXES;
+    command.parameter = PARAMETER::AUDIFICATION;
+    command.ints = indexes;
+    command_buffer_.push(command);
+}
+
 float Audifier::process()
 {
     float sample = 0.0;
@@ -190,7 +199,6 @@ void Audifier::process_set_param_indexes(std::vector<int> indexes, PARAMETER par
 {
     if(param == PARAMETER::AUDIFICATION)
     {
-
         audify_indexes_ = indexes;
     }
 }
