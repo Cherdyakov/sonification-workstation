@@ -174,9 +174,7 @@ Frame Oscillator::process()
         size = 1;
     }
     for (unsigned int i = 0; i < size; ++i) {
-        float sample = gens_[i]();
-        frame.left += sample;
-        frame.right += sample;
+        frame += gens_[i]();
     }
 
     frame /= size;

@@ -7,12 +7,22 @@ Modulator::Modulator()
     my_type_ = ITEM::MODULATOR;
     mod_type_ = PARAMETER::AMPLITUDE;
     muted_ = false;
-    depth_ = 100;
+
+    // freq
     freq_ = 1;
     freq_fixed_ = true;
     freq_scaled_ = true;
     freq_low_ = 40;
     freq_high_ = 16000;
+    freq_exponent_ = 1;
+
+    // depth
+    depth_ = 100;
+    depth_fixed_ = true;
+    depth_scaled_ = true;
+    depth_low_ = 40;
+    depth_high_ = 16000;
+    depth_exponent_ = 1;
 
     accepted_children_ = {
         PARAMETER::AMPLITUDE,
@@ -198,7 +208,7 @@ void Modulator::set_depth_scale_vals(double low, double high, double exp)
 
 Frame Modulator::process()
 {
-    Frame frame = 0;
+    Frame frame;
 
     if(!command_buffer_.empty())
     {

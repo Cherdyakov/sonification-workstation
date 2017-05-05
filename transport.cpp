@@ -258,7 +258,7 @@ Frame Transport::process()
     calculate_return_position();
     mu_ += (speed_ / frame_rate);
 
-    return frame * master_volume_;
+    return frame;// * master_volume_;
 }
 
 void Transport::retrieve_commands()

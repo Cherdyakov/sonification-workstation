@@ -24,10 +24,10 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
     // Write interleaved audio data.
     for (unsigned int i=0; i < nBufferFrames; ++i) {
-        Frame f = root->process();
-        f *= 0.1;
-        *buffer++ = f.left;
-        *buffer++ = f.right;
+        Frame frame = root->process();
+        frame *= 0.1;
+        *buffer++ = frame.left;
+        *buffer++ = frame.right;
     }
 
     return 0;

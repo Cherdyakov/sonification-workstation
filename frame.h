@@ -73,6 +73,63 @@ struct Frame {
     bool operator!=(const Frame& rhs) const {
         return !(*this == rhs);
     }
+
+    // float overloads
+    Frame& operator=(const float rhs) {
+        this->left = rhs;
+        this->right = rhs;
+        return *this;
+    }
+
+    Frame& operator+=(const float rhs) {
+        this->left += rhs;
+        this->right += rhs;
+        return *this;
+    }
+
+    const Frame& operator+(const float rhs) const {
+        Frame result = *this;
+        result += rhs;
+        return *this;
+    }
+
+    Frame& operator-=(const float rhs) {
+        this->left -= rhs;
+        this->right -= rhs;
+        return *this;
+    }
+
+    const Frame operator-(const float rhs) {
+        Frame result = *this;
+        result -= rhs;
+        return result;
+    }
+
+    Frame& operator*=(const float rhs) {
+        this->left *= rhs;
+        this->right *= rhs;
+        return *this;
+    }
+
+    Frame operator*(const float rhs) {
+        Frame result = *this;
+        result *= rhs;
+        return result;
+    }
+
+    Frame& operator/=(const float rhs) {
+        this->left /= rhs;
+        this->right /= rhs;
+        return *this;
+    }
+
+    const Frame operator/(const float rhs) const{
+        Frame result = *this;
+        result /= rhs;
+        return result;
+    }
+
+
 };
 
 } // son

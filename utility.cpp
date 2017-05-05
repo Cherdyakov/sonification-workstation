@@ -12,7 +12,7 @@ double scale(double x, double in_low, double in_high, double out_low, double out
 
 Frame visit_children(std::vector<SynthItem*> children)
 {
-    Frame frame = 0.0;
+    Frame frame;
     for (unsigned int i = 0; i < children.size(); ++i)
     {
         SynthItem* gen = children[i];

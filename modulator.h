@@ -79,8 +79,8 @@ private:
 
     // depth
     double depth_;
-    bool depth_scaled_;
     bool depth_fixed_;
+    bool depth_scaled_;
     double depth_low_;
     double depth_high_;
     double depth_exponent_;
