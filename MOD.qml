@@ -178,23 +178,24 @@ SynthItem {
                 }
             }
 
-            EditorMapper {
-                id: depthMapper
-                label.text: qsTr("Depth Source: ")
-                maxIndexes: 1
-                onMappingsChanged:
-                {
-                    if(root.mappedRowsDepth !== mappings) {
-                        root.mappedRowsDepth = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
-                        implementation.setDepthIndexes(implementationMappings)
+            RowLayout {
+
+                EditorMapper {
+                    id: depthMapper
+                    label.text: qsTr("Depth Source: ")
+                    maxIndexes: 1
+                    onMappingsChanged:
+                    {
+                        if(root.mappedRowsDepth !== mappings) {
+                            root.mappedRowsDepth = mappings
+                            var implementationMappings = mappings.map( function(value) {
+                                return value - 1;
+                            } )
+                            implementation.setDepthIndexes(implementationMappings)
+                        }
                     }
                 }
-            }
 
-            RowLayout {
                 EditorFixedParam {
                     id: fixedDepthEditor
                     label.text: qsTr("Fixed: ")

@@ -12,9 +12,6 @@ SynthItem {
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 
-    Component.onCompleted: {
-    }
-
     Editor {
 
         id: editor

@@ -22,6 +22,7 @@ QtSynthItem* QtTransport::createItem(ITEM type)
 
     switch (type){
     case ITEM::OUT:
+        qtItem = this;
         break;
     case ITEM::OSCILLATOR:
         item = transport_.create_item((SynthItem::ITEM)type);
