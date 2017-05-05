@@ -10,7 +10,7 @@ Transport::Transport()
     loop_end_ = 0.0;
     data_stale = false;
     block_size_ = 512;
-    sample_rate_ = 44100;
+    frame_rate = 44100;
     data_width_ = 0;
     data_height_ = 0;
     current_index_ = 0;
@@ -194,9 +194,9 @@ double Transport::get_playback_position()
  Functions called from audio callback thread
  */
 
-float Transport::process()
+Frame Transport::process()
 {
-    float s = 0.0;
+    Frame frame;
 
     if(!command_buffer_.empty())
     {
@@ -206,7 +206,7 @@ float Transport::process()
     if(paused_)
     {
         calculate_return_position();
-        return s;
+        return frame;
     }
 
     // updating playheadPos
@@ -251,14 +251,14 @@ float Transport::process()
 
     for (unsigned int i = 0; i < inputs_.size(); ++i) {
         SynthItem* item = inputs_[i];
-        s += item->process();
+        frame += item->process();
     }
 
     // advancing index
     calculate_return_position();
-    mu_ += (speed_ / sample_rate_);
+    mu_ += (speed_ / frame_rate);
 
-    return s * master_volume_;
+    return frame * master_volume_;
 }
 
 void Transport::retrieve_commands()

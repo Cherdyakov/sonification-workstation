@@ -94,9 +94,9 @@ void Audifier::set_aud_indexes(std::vector<int> indexes)
     command_buffer_.push(command);
 }
 
-float Audifier::process()
+Frame Audifier::process()
 {
-    float sample = 0.0;
+    Frame frame = 0.0;
 
     if(!command_buffer_.empty())
     {
@@ -104,12 +104,12 @@ float Audifier::process()
     }
     if(muted_)
     {
-        return sample;
+        return frame;
     }
     for(unsigned int i = 0; i < audify_indexes_.size(); i++)
     {
         // Audifier always scales datasets to range -1.0 to 1.0
-        sample += scale((data_->at(static_cast<unsigned int>(audify_indexes_[i]))),
+        frame += scale((data_->at(static_cast<unsigned int>(audify_indexes_[i]))),
                         mins_->at(i), maxes_->at(i),
                         -1.0, 1.0, 1.0);
     }
@@ -117,13 +117,13 @@ float Audifier::process()
     // vist amplitude modulating children
     if(!amods_.empty())
     {
-        float am_sample = visit_children(amods_);
-        sample *= am_sample;
+        Frame am_frame = visit_children(amods_);
+        frame *= am_frame;
     }
 
     // divide by total number of datasets mapped (rows)
     // to prevent clipping
-    return sample /  audify_indexes_.size();
+    return frame /  audify_indexes_.size();
 }
 
 void Audifier::retrieve_commands()

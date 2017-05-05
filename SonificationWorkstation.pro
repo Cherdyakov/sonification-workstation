@@ -54,7 +54,8 @@ HEADERS += \
     transport.h \
     transportwidget.h \
     qttransport.h \
-    utility.h
+    utility.h \
+    frame.h
 
 FORMS +=
 

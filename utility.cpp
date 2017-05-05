@@ -10,16 +10,16 @@ double scale(double x, double in_low, double in_high, double out_low, double out
     return ((x-in_low)/(in_high-in_low) == 0) ? out_low : (((x-in_low)/(in_high-in_low)) > 0) ? (out_low + (out_high-out_low) * pow(((x-in_low)/(in_high-in_low)),exp)) : ( out_low + (out_high-out_low) * -(pow((((-x+in_low)/(in_high-in_low))),exp)));
 }
 
-float visit_children(std::vector<SynthItem*> children)
+Frame visit_children(std::vector<SynthItem*> children)
 {
-    float s = 0.0;
+    Frame frame = 0.0;
     for (unsigned int i = 0; i < children.size(); ++i)
     {
         SynthItem* gen = children[i];
-        s += gen->process();
+        frame += gen->process();
     }
-    s /= children.size();
-    return s;
+    frame /= children.size();
+    return frame;
 }
 
 void insert_item_unique(SynthItem* synth_item, std::vector<SynthItem*>* items)

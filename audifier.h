@@ -29,8 +29,8 @@ public:
     void mute(bool mute) override;
     // audification source
     void set_aud_indexes(std::vector<int> indexes);
-    // generate a sample
-    float process() override;
+    // generate a frame
+    Frame process() override;
 
 private:
     void retrieve_commands() override;

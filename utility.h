@@ -12,7 +12,7 @@ namespace son {
 double scale(double x, double in_low,
              double in_high, double out_low,
              double out_high, double exp);
-float visit_children(std::vector<SynthItem*> children);
+Frame visit_children(std::vector<SynthItem*> children);
 void insert_item_unique(SynthItem* synth_item, std::vector<SynthItem*> *items);
 void erase_item(SynthItem* synth_item, std::vector<SynthItem *> *items);
 void remove_as_child(SynthItem* self, std::vector<SynthItem *> parents);

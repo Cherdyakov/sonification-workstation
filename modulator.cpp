@@ -196,9 +196,9 @@ void Modulator::set_depth_scale_vals(double low, double high, double exp)
     command_buffer_.push(command);
 }
 
-float Modulator::process()
+Frame Modulator::process()
 {
-    float sample = 0;
+    Frame frame = 0;
 
     if(!command_buffer_.empty())
     {
@@ -213,22 +213,22 @@ float Modulator::process()
     //set frequency of generator
     set_gen_freq();
 
-    sample = gen_.operator ()();
+    frame = gen_.operator ()();
 
     //check amods
     if(!amods_.empty())
     {
-        float am_sample = visit_children(amods_);
-        sample *= am_sample;
+        Frame am_frame = visit_children(amods_);
+        frame *= am_frame;
     }
     // if we are an fmod, amplify our signal by depth
     if(mod_type_ == PARAMETER::FREQUENCY)
     {
-        float depth_sample = get_depth_sample();
-        sample *= depth_sample;
+        Frame depth_frame = get_depth_value();
+        frame *= depth_frame;
     }
 
-    return sample;
+    return frame;
 }
 
 void Modulator::retrieve_commands()
@@ -402,14 +402,14 @@ void Modulator::process_set_param_scale_vals(double low, double high, double exp
 
 void Modulator::set_gen_freq()
 {
-    float fm_sample = 0;
+    Frame fm_frame = 0;
     if(fmods_.size() > 0) {
-        fm_sample = visit_children(fmods_);
+        fm_frame = visit_children(fmods_);
     }
 
     if (freq_fixed_ == true || freq_indexes_.size() < 1) //no data mappings, use fixed freq
     {
-        gen_.freq(freq_ + fm_sample);
+        gen_.freq(freq_ + fm_frame.left);
     }
     else //map each indexed value from the data row to the freq of a generator
     {
@@ -419,27 +419,27 @@ void Modulator::set_gen_freq()
             freq = scale(freq, mins_->at(freq_indexes_[0]), maxes_->at(freq_indexes_[0]),
                          freq_low_, freq_high_, freq_exponent_);
         }
-        gen_.freq(freq + fm_sample);
+        gen_.freq(freq + fm_frame.left);
     }
 }
 
-float Modulator::get_depth_sample()
+float Modulator::get_depth_value()
 {
-    float depth_sample = 0;
+    float depth_value = 0;
     if (depth_fixed_ == true || depth_indexes_.size() < 1) //no data mappings, use fixed depth_
     {
-        depth_sample = depth_;
+        depth_value = depth_;
     }
     else //map indexed value
     {
-        depth_sample = data_->at(depth_indexes_[0]);
+        depth_value = data_->at(depth_indexes_[0]);
         if(depth_scaled_)
         {
-            depth_sample = scale(depth_sample, mins_->at(depth_indexes_[0]), maxes_->at(depth_indexes_[0]),
+            depth_value = scale(depth_value, mins_->at(depth_indexes_[0]), maxes_->at(depth_indexes_[0]),
                          depth_low_, depth_high_, depth_exponent_);
         }
     }
-    return depth_sample;
+    return depth_value;
 }
 
 }

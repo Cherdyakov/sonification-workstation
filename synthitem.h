@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <memory>
 
+#include "frame.h"
 #include "ringbuffer.h"
 #include "Gamma/Oscillator.h"
 
@@ -56,6 +57,7 @@ public:
         INTERPOLATE
     };
 
+
     struct SynthItemCommand {
         COMMAND type;
         PARAMETER parameter;
@@ -84,7 +86,7 @@ public:
     virtual bool add_child(SynthItem *child, PARAMETER parameter) = 0;
     virtual void remove_child(SynthItem *item) = 0;
     virtual void mute(bool mute) = 0;
-    virtual float process() = 0;
+    virtual Frame process() = 0;
 
 protected:
 

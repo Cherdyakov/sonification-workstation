@@ -150,9 +150,9 @@ void Oscillator::set_freq_scale_vals(double low, double high, double exp)
  Functions called from audio callback thread
  */
 
-float Oscillator::process()
+Frame Oscillator::process()
 {
-    float sample = 0.0;
+    Frame frame;
 
     if(!command_buffer_.empty())
     {
@@ -161,32 +161,34 @@ float Oscillator::process()
 
     if(muted_)
     {
-        return sample;
+        return frame;
     }
 
     //set frequencies of generators
     set_gen_freqs();
 
-    //generate sample
+    //generate frame
     unsigned int size = freq_indexes_.size();
     if(size < 1)
     {
         size = 1;
     }
     for (unsigned int i = 0; i < size; ++i) {
-        sample += gens_[i]();
+        float sample = gens_[i]();
+        frame.left += sample;
+        frame.right += sample;
     }
 
-    sample /= size;
+    frame /= size;
 
     // vist amplitude modulating children
     if(!amods_.empty())
     {
-        float am_sample = visit_children(amods_);
-        sample *= am_sample;
+        Frame am_frame = visit_children(amods_);
+        frame *= am_frame;
     }
 
-    return sample;
+    return frame;
 }
 
 void Oscillator::retrieve_commands()
@@ -323,14 +325,14 @@ void Oscillator::process_set_param_scale_vals(double low, double high, double ex
 
 void Oscillator::set_gen_freqs()
 {
-    float fm_sample = 0;
+    Frame fm_frame;
     if(fmods_.size() > 0) {
-        fm_sample = visit_children(fmods_);
+        fm_frame = visit_children(fmods_);
     }
 
     if (freq_fixed_ == true || freq_indexes_.size() < 1) //no data mappings, use fixed freq
     {
-        gens_[0].freq(freq_ + fm_sample);
+        gens_[0].freq(freq_ + fm_frame.left);
     }
     else //map each indexed value from the data row to the freq of a generator
     {
@@ -342,7 +344,7 @@ void Oscillator::set_gen_freqs()
                 freq = scale(freq, mins_->at(idx), maxes_->at(idx),
                              freq_low_, freq_high_, freq_exponent_);
             }
-            gens_[i].freq(freq + fm_sample);
+            gens_[i].freq(freq + fm_frame.left);
         }
     }
 }

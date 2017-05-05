@@ -42,8 +42,8 @@ public:
     SynthItem *create_item(SynthItem::ITEM type);
     // for polling state from outside
     double get_playback_position();
-    // generate a sample
-    float process() override;
+    // generate a frame
+    Frame process() override;
 
 private:
     void retrieve_commands() override;
@@ -77,7 +77,7 @@ private:
     unsigned int block_size_;
     unsigned int data_height_;
     unsigned int data_width_;
-    unsigned int sample_rate_;
+    unsigned int frame_rate;
     unsigned int current_index_;
     double mu_;
     double speed_;

@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QThread>
 #include <QQmlContext>
-#include <samplerate.h>
 
 #include "qtsynthitem.h"
 #include "qtoscillator.h"
@@ -13,7 +12,7 @@
 #include "ringbuffer.h"
 #include "filereader.h"
 
-#define SR 44100
+#define FRAME_RATE 44100
 #define BLOCK_SIZE 512
 
 int main(int argc, char *argv[])
@@ -33,7 +32,7 @@ int main(int argc, char *argv[])
 
 
     //initialize Gamma
-    gam::Sync::master().spu(SR);
+    gam::Sync::master().spu(FRAME_RATE);
 
     RtAudio dac;
 //    dac.showWarnings(true);
@@ -65,12 +64,12 @@ int main(int argc, char *argv[])
     outParams.nChannels = 2;
     outParams.firstChannel = 0;
 
-    unsigned int sampleRate = SR;
+    unsigned int frameRate = FRAME_RATE;
     unsigned int bufferFrames = BLOCK_SIZE;
 
     try {
         dac.openStream( &outParams, &inParams, RTAUDIO_FLOAT64,
-                        sampleRate, &bufferFrames, &son::callback, (void *)&uData );
+                        frameRate, &bufferFrames, &son::callback, (void *)&uData );
         dac.startStream();
     }
     catch ( RtAudioError& e ) {

@@ -36,8 +36,8 @@ public:
     void set_freq_scale_vals(double low,
                              double high,
                              double exp);
-    // generate a sample
-    float process() override;
+    // generate a frame
+    Frame process() override;
 
 private:
     void retrieve_commands() override;

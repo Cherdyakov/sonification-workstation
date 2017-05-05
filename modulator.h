@@ -32,8 +32,8 @@ public:
     void set_depth_indexes(std::vector<int> indexes);
     void set_depth_scaled(bool scaled);
     void set_depth_scale_vals(double low, double high, double exp);
-    // generate a sample
-    float process() override;
+    // generate a frame
+    Frame process() override;
 
 private:
     void retrieve_commands() override;
@@ -51,7 +51,7 @@ private:
     void process_set_param_scale_vals(double low, double high, double exp, PARAMETER param);
 
     void set_gen_freq();
-    float get_depth_sample();
+    float get_depth_value();
 
     ITEM my_type_;
     PARAMETER mod_type_;
