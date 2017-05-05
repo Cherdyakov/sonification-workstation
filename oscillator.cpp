@@ -169,7 +169,7 @@ Frame Oscillator::process()
 
     //generate frame
     unsigned int size = freq_indexes_.size();
-    if(size < 1)
+    if(size < 1 || freq_fixed_)
     {
         size = 1;
     }

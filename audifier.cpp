@@ -106,6 +106,11 @@ Frame Audifier::process()
     {
         return frame;
     }
+    else if(audify_indexes_.size() < 1)
+    {
+        return frame;
+    }
+
     for(unsigned int i = 0; i < audify_indexes_.size(); i++)
     {
         // Audifier always scales datasets to range -1.0 to 1.0
