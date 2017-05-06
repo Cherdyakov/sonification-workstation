@@ -12,15 +12,15 @@ Item {
     property int rowCount: 0
     property bool patching: false
     property bool muted: false
-    property int type: -1 //OUT = 0, OSC = 1
-    property int childType: -1 //INPUT = 0
+    property int type: -1 // OUT = 0, OSC = 1
+    property int childType: -1 // INPUT = 0
     property bool created: false
     property var inputs: new Array
     property var outputs: new Array
     property string label: "SON"
     property string mainColor
     property string textColor
-    property QtSynthItem implementation: null //the CPP implementation of this SynthItem
+    property QtSynthItem implementation: null // the CPP implementation of this SynthItem
 
     property alias radius: rect.radius
 
@@ -96,38 +96,42 @@ Item {
     }
 
     function addChild(synthItem) {
-        //add child's implementation to the children
-        //of this item's implementation
-        if(implementation.addChild(synthItem.implementation, synthItem.childType))
+        //  add child's implementation to the children
+        //  of this item's implementation
+        var added = implementation.addChild(synthItem.implementation, synthItem.childType)
+        if(added === true)
         {
-            //add QML child to this item's synthChildren
+            //  add QML child to this item's synthChildren
             synthChildren.push(synthItem)
+            //  add this to the new child's parents
             synthItem.addParent(this)
         }
+        canvas.requestPaint()
     }
 
     function removeChild(synthItem) {
-        //remove the child implementation from the
-        //children of this item's implementation
+        //  remove the child implementation from the
+        //  children of this item's implementation
         implementation.removeChild(synthItem.implementation)
-        //remove the QML child from this item's children
+        // remove the QML child from this item's children
         var idx = synthChildren.indexOf(synthItem)
         if(idx > -1)
         {
             synthChildren.splice(idx, 1)
         }
+        canvas.requestPaint()
     }
 
     function addParent(synthItem) {
-        //add QML parent to this item's synthParents
+        // add QML parent to this item's synthParents
         synthParents.push(synthItem)
     }
 
     function removeParent(synthItem) {
-        //remove parent's implementation from
-        //this implementation's parent's
+        // remove parent's implementation from
+        // this implementation's parent's
         implementation.removeParent(synthItem.implementation);
-        //remove parent from this item's synthParents
+        // remove parent from this item's synthParents
         var idx = synthParents.indexOf(synthItem)
         if(idx > -1)
         {
@@ -136,11 +140,11 @@ Item {
     }
 
     function mute() {
-        //mute cpp counterpart
+        // mute cpp counterpart
         implementation.mute(muted)
 
-        //mute children
-        for(var i = 0; i < synthChildren.length; ++i) {
+        // mute children
+        for(var i = 0; i < synthChildren.length; i++) {
             var synthItem = synthChildren[i]
             synthItem.muted = muted
         }
@@ -199,11 +203,11 @@ Item {
             }
 
             onClicked: {
-                //left clicked
+                // left clicked
                 if(mouse.button & Qt.LeftButton) {
                     root.forceActiveFocus()
                 }
-                //right clicked
+                // right clicked
                 if(mouse.button & Qt.RightButton) {
                     patchManager.setPatchPoint(root)
                     canvas.requestPaint()
@@ -212,7 +216,7 @@ Item {
             }
 
             onDoubleClicked: {
-                if(type === 0) { // item is OUT, has no editor
+                if(type === 0) { //  item is OUT, has no editor
                     return
                 }
 

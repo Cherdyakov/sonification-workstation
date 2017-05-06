@@ -57,12 +57,21 @@ SynthItem {
         }
 
         onFixedFreqChanged: {
-            implementation.setFreq(fixedFreq)        }
+            implementation.setFreq(fixedFreq)
+        }
 
         onModTypeChanged: {
-            if(implementation !== null) {
-                root.childType = modType
-                implementation.setModType(modType)
+            root.childType = modType           
+            var parentsCopy = synthParents.slice();
+            for(var i = 0; i < parentsCopy.length; i++) {
+                var synthItem = parentsCopy[i]
+                synthItem.removeChild(root)
+                removeParent(synthItem)
+            }
+            implementation.setModType(root.childType)
+            for(i = 0; i < parentsCopy.length; i++) {
+                synthItem = parentsCopy[i]
+                synthItem.addChild(root)
             }
         }
 

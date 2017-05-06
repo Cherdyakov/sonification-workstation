@@ -96,7 +96,7 @@ void Audifier::set_aud_indexes(std::vector<int> indexes)
 
 Frame Audifier::process()
 {
-    Frame frame = 0.0;
+            Frame frame = 0.0;
 
     if(!command_buffer_.empty())
     {
@@ -178,6 +178,7 @@ void Audifier::process_add_child(SynthItem *child, PARAMETER param)
     if(param == PARAMETER::AMPLITUDE)
     {
         insert_item_unique(child, &amods_);
+        child->add_parent(this);
     }
 }
 

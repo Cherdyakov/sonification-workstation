@@ -217,7 +217,8 @@ Frame Modulator::process()
 
     if(muted_ || (freq_ == 0 && (freq_fixed_ == true)))
     {
-        return 1; // good return value for am and fm
+        frame = 1;
+        return frame; // good return value for am and fm
     }
 
     //set frequency of generator
@@ -337,9 +338,11 @@ void Modulator::process_set_data(std::vector<double> *data, std::vector<double>*
 void Modulator::process_set_mod_type(PARAMETER parameter)
 {
     mod_type_ = parameter;
-    for(unsigned int i = 0; i < parents_.size(); i++)
+    std::vector<SynthItem*> parents_copy = parents_;
+    for(unsigned int i = 0; i < parents_copy.size(); i++)
     {
-        SynthItem* parent = parents_[i];
+        SynthItem* parent = parents_copy[i];
+        erase_item(parent, &parents_);
         parent->remove_child(this);
         parent->add_child(this, parameter);
     }
