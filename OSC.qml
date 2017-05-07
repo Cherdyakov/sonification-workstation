@@ -87,6 +87,7 @@ SynthItem {
                 label.text: qsTr("Frequency Scaling: ")
                 lowLabel.text: qsTr("Frequency Low: ")
                 highLabel.text: qsTr("Frequency High: ")
+
                 onLowChanged:
                 {
                     if(editor.freqScaleLow !== low) {

@@ -22,5 +22,7 @@
         <file>EditorScaler.qml</file>
         <file>MOD.qml</file>
         <file>EditorModulation.qml</file>
+        <file>PAN.qml</file>
+        <file>EditorPan.qml</file>
     </qresource>
 </RCC>

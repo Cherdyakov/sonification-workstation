@@ -131,6 +131,7 @@ SynthItem {
                 label.text: qsTr("Frequency Scaling: ")
                 lowLabel.text: qsTr("Frequency Low: ")
                 highLabel.text: qsTr("Frequency High: ")
+
                 onLowChanged:
                 {
                     if(editor.freqScaleLow !== low) {
@@ -221,6 +222,7 @@ SynthItem {
                 label.text: qsTr("Depth Scaling: ")
                 lowLabel.text: qsTr("Depth Low: ")
                 highLabel.text: qsTr("Depth High: ")
+
                 onLowChanged:
                 {
                     if(editor.depthScaleLow !== low) {

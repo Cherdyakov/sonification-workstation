@@ -15,10 +15,11 @@ public:
 
     enum PARAMETER {
         INPUT = (int)SynthItem::PARAMETER::INPUT,
-        AMPLITUDE ,
+        AMPLITUDE,
         FREQUENCY,
-        PAN,
-        AUDIFICATION
+        DEPTH,
+        AUDIFICATION,
+        PAN
     };
 
     explicit QtSynthItem(QObject *parent = 0);

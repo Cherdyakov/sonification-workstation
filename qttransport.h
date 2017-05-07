@@ -7,6 +7,7 @@
 #include "qtoscillator.h"
 #include "qtaudifier.h"
 #include "qtmodulator.h"
+#include "qtpanner.h"
 #include <QTimer>
 
 using namespace son;
@@ -21,7 +22,8 @@ public:
         OUT = (int)SynthItem::ITEM::TRANSPORT,
         OSCILLATOR,
         AUDIFIER,
-        MODULATOR
+        MODULATOR,
+        PANNER
     };
 
     explicit QtTransport(QObject *parent = 0);

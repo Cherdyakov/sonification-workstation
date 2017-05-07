@@ -20,7 +20,9 @@ SOURCES += \
     transport.cpp \
     transportwidget.cpp \
     qttransport.cpp \
-    utility.cpp
+    utility.cpp \
+    panner.cpp \
+    qtpanner.cpp
 
 RESOURCES += qml.qrc
 
@@ -55,7 +57,9 @@ HEADERS += \
     transportwidget.h \
     qttransport.h \
     utility.h \
-    frame.h
+    frame.h \
+    panner.h \
+    qtpanner.h
 
 FORMS +=
 

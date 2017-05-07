@@ -19,13 +19,6 @@ ColumnLayout {
     signal highChanged(double high)
     signal exponentChanged(double exp)
 
-    Connections {
-        target: fileReader
-        onQmlDatasetChanged: {
-            // maybe?
-        }
-    }
-
     RowLayout {
         EditorLabel {
             id: label
@@ -81,6 +74,9 @@ ColumnLayout {
 
         EditorDoubleSpinBox {
             id: expSpinBox
+            from: 1
+            to: 6400
+            stepSize: 1
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
             onValueChanged: exponentChanged(expSpinBox.value / 100)

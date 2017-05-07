@@ -36,6 +36,10 @@ QtSynthItem* QtTransport::createItem(ITEM type)
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtModulator(dynamic_cast<Modulator*>(item));
         break;
+    case ITEM::PANNER:
+        item = transport_.create_item((SynthItem::ITEM)type);
+        qtItem = new QtPanner(dynamic_cast<Panner*>(item));
+        break;
     default:
         break;
     }

@@ -1,17 +1,16 @@
-#ifndef QTOSCILLATOR_H
-#define QTOSCILLATOR_H
+#ifndef QTPANNER_H
+#define QTPANNER_H
 
 #include "qtsynthitem.h"
-#include "oscillator.h"
+#include "panner.h"
 
 using namespace son;
 
-class QtOscillator : public QtSynthItem
+class QtPanner : public QtSynthItem
 {
     Q_OBJECT
 public:
-
-    explicit QtOscillator(Oscillator *oscillator = 0, QObject *parent = 0);
+    explicit QtPanner(Panner *panner = 0, QObject *parent = 0);
     virtual SynthItem* implementation() override;
 
     Q_INVOKABLE virtual void deleteItem() override;
@@ -21,14 +20,14 @@ public:
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
 
-    Q_INVOKABLE void setFreq(double freq);
-    Q_INVOKABLE void setFreqFixed(bool fixed);
-    Q_INVOKABLE void setFreqIndexes(QVector<int> indexes);
-    Q_INVOKABLE void setFreqScaled(bool scaled);
-    Q_INVOKABLE void setFreqScaleVals(double low, double high, double exp);
+    Q_INVOKABLE void setPan(double pan);
+    Q_INVOKABLE void setPanFixed(bool fixed);
+    Q_INVOKABLE void setPanIndexes(QVector<int> indexes);
+    Q_INVOKABLE void setPanScaled(bool scaled);
+    Q_INVOKABLE void setPanScaleVals(double low, double high, double exp);
 
 private:
-    Oscillator* oscillator_;
+    Panner* panner_;
 };
 
-#endif // QTOSCILLATOR_H
+#endif // QTPANNER_H

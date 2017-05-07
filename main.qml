@@ -64,6 +64,20 @@ Rectangle
                 source: "images/oscIcon.png"
                 image: "images/oscIcon.png"
             }
+
+            PaletteItem {
+                anchors.verticalCenter: parent.verticalCenter
+                componentFile: "OUT.qml"
+                source: "images/oscIcon.png"
+                image: "images/oscIcon.png"
+            }
+
+            PaletteItem {
+                anchors.verticalCenter: parent.verticalCenter
+                componentFile: "PAN.qml"
+                source: "images/oscIcon.png"
+                image: "images/oscIcon.png"
+            }
         }
     }
 

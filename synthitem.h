@@ -23,7 +23,8 @@ public:
         TRANSPORT,
         OSCILLATOR,
         AUDIFIER,
-        MODULATOR
+        MODULATOR,
+        PANNER
     };
 
     enum class PARAMETER {
@@ -31,7 +32,8 @@ public:
         AMPLITUDE,
         FREQUENCY,
         DEPTH,
-        AUDIFICATION
+        AUDIFICATION,
+        PAN
     };
 
     enum class COMMAND {
@@ -84,7 +86,7 @@ public:
     virtual void add_parent(SynthItem* parent) = 0;
     virtual void remove_parent(SynthItem* parent) = 0;
     virtual bool add_child(SynthItem *child, PARAMETER parameter) = 0;
-    virtual void remove_child(SynthItem *item) = 0;
+    virtual void remove_child(SynthItem *child) = 0;
     virtual void mute(bool mute) = 0;
     virtual Frame process() = 0;
 
