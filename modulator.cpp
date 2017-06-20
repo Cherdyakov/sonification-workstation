@@ -304,14 +304,15 @@ void Modulator::process_add_child(SynthItem *child, SynthItem::PARAMETER paramet
     switch (parameter){
     case PARAMETER::AMPLITUDE:
         insert_item_unique(child, &amods_);
+        child->add_parent(this);
         break;
     case PARAMETER::FREQUENCY:
         insert_item_unique(child, &fmods_);
+        child->add_parent(this);
         break;
     default:
         break; //incompatible child type
     }
-    child->add_parent(this);
 }
 
 void Modulator::process_remove_child(SynthItem *child)

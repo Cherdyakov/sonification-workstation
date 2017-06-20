@@ -24,7 +24,8 @@ public:
         OSCILLATOR,
         AUDIFIER,
         MODULATOR,
-        PANNER
+        PANNER,
+        ENVELOPE
     };
 
     enum class PARAMETER {
@@ -33,7 +34,11 @@ public:
         FREQUENCY,
         DEPTH,
         AUDIFICATION,
-        PAN
+        PAN,
+        ATTACK,
+        DECAY,
+        SUSTAIN,
+        RELEASE
     };
 
     enum class COMMAND {
@@ -88,7 +93,9 @@ public:
     virtual bool add_child(SynthItem *child, PARAMETER parameter) = 0;
     virtual void remove_child(SynthItem *child) = 0;
     virtual void mute(bool mute) = 0;
-    virtual Frame process() = 0;
+    virtual Frame process() = 0; // every sample
+//    virtual void blockProcess() = 0; // every block
+//    virtual void stepProcess() = 0; // every datastep
 
 protected:
 
