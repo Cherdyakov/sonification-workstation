@@ -12,7 +12,6 @@
         <file>EditorLabel.qml</file>
         <file>EditorComboBox.qml</file>
         <file>EditorDoubleSpinBox.qml</file>
-        <file>EditorFrequency.qml</file>
         <file>EditorWaveform.qml</file>
         <file>Editor.qml</file>
         <file>EditorFixedParam.qml</file>
@@ -23,6 +22,7 @@
         <file>MOD.qml</file>
         <file>EditorModulation.qml</file>
         <file>PAN.qml</file>
-        <file>EditorPan.qml</file>
+        <file>ENV.qml</file>
+        <file>EditorDoubleParam.qml</file>
     </qresource>
 </RCC>

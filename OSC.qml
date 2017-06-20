@@ -45,11 +45,12 @@ SynthItem {
 
             RowLayout {
 
-                EditorFrequency {
+                EditorDoubleParam {
                     id: frequencyEditor
-                    onFrequencyChanged: {
-                        if (editor.fixedFreq !== freq) {
-                            editor.fixedFreq = freq
+                    label.text: "Frequency: "
+                    onParamValueChanged: {
+                        if (editor.fixedFreq !== value) {
+                            editor.fixedFreq = value
                         }
                     }
                 }
@@ -123,7 +124,4 @@ SynthItem {
             }
         }
     }
-
 }
-
-

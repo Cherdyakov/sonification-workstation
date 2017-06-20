@@ -10,22 +10,20 @@ ColumnLayout {
     property alias label: label
     property alias spinBox: spinBox
 
-    signal panChanged(double pan)
+    signal paramValueChanged(double value)
 
     EditorLabel {
         id: label
-        text: qsTr("Pan: ")
+        text: qsTr("Value: ")
         Layout.maximumHeight: Style.editorRowHeight
         Layout.fillWidth: true
     }
 
     EditorDoubleSpinBox {
         id: spinBox
-        from: -1
-        to: 1
         Layout.maximumHeight: Style.editorRowHeight
         Layout.preferredWidth: Style.editorControlWidth
-        onValueChanged: panChanged(spinBox.value / 100)
+        onValueChanged: paramValueChanged(spinBox.value / 100)
     }
 
 }

@@ -23,7 +23,6 @@ SynthItem {
         property double panScaleExp: 1
 
         Component.onCompleted: {
-
             panEditor.spinBox.value = fixedPan * 100
             fixedEditor.checkBox.checked = useFixedPan
             panScaler.lowSpinBox.value = panScaleLow * 100
@@ -46,14 +45,14 @@ SynthItem {
 
             RowLayout {
 
-                EditorPan {
+                EditorDoubleParam {
                     id: panEditor
                     spinBox.from: -100
                     spinBox.to: 100
                     spinBox.stepSize: 1
-                    onPanChanged: {
-                        if (editor.fixedPan !== pan) {
-                            editor.fixedPan = pan
+                    onParamValueChanged: {
+                        if (editor.fixedPan !== value) {
+                            editor.fixedPan = value
                         }
                     }
                 }
