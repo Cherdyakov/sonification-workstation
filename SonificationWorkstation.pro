@@ -23,7 +23,8 @@ SOURCES += \
     utility.cpp \
     panner.cpp \
     qtpanner.cpp \
-    envelope.cpp
+    envelope.cpp \
+    qtenvelope.cpp
 
 RESOURCES += qml.qrc
 
@@ -61,7 +62,8 @@ HEADERS += \
     frame.h \
     panner.h \
     qtpanner.h \
-    envelope.h
+    envelope.h \
+    qtenvelope.h
 
 FORMS +=
 

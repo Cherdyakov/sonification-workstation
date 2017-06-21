@@ -23,7 +23,8 @@ public:
         OSCILLATOR,
         AUDIFIER,
         MODULATOR,
-        PANNER
+        PANNER,
+        ENVELOPE
     };
 
     explicit QtTransport(QObject *parent = 0);

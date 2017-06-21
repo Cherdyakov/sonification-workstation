@@ -36,9 +36,7 @@ public:
         AUDIFICATION,
         PAN,
         ATTACK,
-        DECAY,
-        SUSTAIN,
-        RELEASE
+        DECAY
     };
 
     enum class COMMAND {

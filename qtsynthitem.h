@@ -19,7 +19,9 @@ public:
         FREQUENCY,
         DEPTH,
         AUDIFICATION,
-        PAN
+        PAN,
+        ATTACK,
+        DECAY
     };
 
     explicit QtSynthItem(QObject *parent = 0);

@@ -8,6 +8,7 @@
 #include "audifier.h"
 #include "modulator.h"
 #include "panner.h"
+#include "envelope.h"
 #include "ringbuffer.h"
 
 namespace son {

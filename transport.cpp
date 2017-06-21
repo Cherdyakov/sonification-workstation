@@ -182,6 +182,10 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
         item = new Panner();
         item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
+    case SynthItem::ITEM::ENVELOPE:
+        item = new Envelope();
+        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        break;
     default:
         item = NULL;
         break;

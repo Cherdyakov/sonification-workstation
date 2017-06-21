@@ -35,7 +35,7 @@ Rectangle
         Row {
             id: palette
             anchors.centerIn: parent
-            spacing: 12
+            spacing: 6
 
             PaletteItem {
                 anchors.verticalCenter: parent.verticalCenter
@@ -75,6 +75,13 @@ Rectangle
             PaletteItem {
                 anchors.verticalCenter: parent.verticalCenter
                 componentFile: "PAN.qml"
+                source: "images/oscIcon.png"
+                image: "images/oscIcon.png"
+            }
+
+            PaletteItem {
+                anchors.verticalCenter: parent.verticalCenter
+                componentFile: "ENV.qml"
                 source: "images/oscIcon.png"
                 image: "images/oscIcon.png"
             }
