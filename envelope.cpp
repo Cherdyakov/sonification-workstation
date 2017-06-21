@@ -206,8 +206,22 @@ Frame Envelope::process()
         return frame;
     }
 
+    // retrigger if necessary
+    if(env_.done()) {
+        env_.reset();
+    }
+    // get the envelope value
     frame = env_();
 
+    // multiply by input
+    if(!inputs_.empty())
+    {
+        Frame inFrame = visit_children(inputs_);
+        inFrame /= inputs_.size();
+        frame *= inFrame;
+    }
+
+    // modulate
     if(!amods_.empty())
     {
         Frame am_frame = visit_children(amods_);

@@ -2,13 +2,14 @@
 #define QTTRANSPORT_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "transport.h"
 #include "qtoscillator.h"
 #include "qtaudifier.h"
 #include "qtmodulator.h"
 #include "qtpanner.h"
-#include <QTimer>
+#include "qtenvelope.h"
 
 using namespace son;
 
