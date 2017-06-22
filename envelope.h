@@ -59,6 +59,10 @@ private:
                                       double exp,
                                       PARAMETER param);
 
+    double calculate_attack();
+    double calculate_decay();
+    void reset();
+
     ITEM my_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
@@ -70,17 +74,17 @@ private:
     std::vector<SynthItem*> parents_;
     std::vector<SynthItem*> inputs_;
     std::vector<SynthItem*> amods_;
-    std::vector<int> att_indexes_;
+    std::vector<int> attack_indexes_;
     std::vector<int> decay_indexes_;
     bool muted_;
 
     //for scaling the data to intended values
-    double att_;
-    bool att_fixed_;
-    bool att_scaled_;
-    double att_low_;
-    double att_high_;
-    double att_exponent_;
+    double attack_;
+    bool attack_fixed_;
+    bool attack_scaled_;
+    double attack_low_;
+    double attack_high_;
+    double attack_exponent_;
 
     double decay_;
     bool decay_fixed_;

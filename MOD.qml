@@ -91,6 +91,7 @@ SynthItem {
 
                 EditorDoubleParam {
                     id: frequencyEditor
+                    label.text: qsTr("Frequency: ")
                     onParamValueChanged: {
                         if (editor.fixedFreq !== value) {
                             editor.fixedFreq = value

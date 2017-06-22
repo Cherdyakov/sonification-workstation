@@ -14,43 +14,75 @@ SynthItem {
 
     Editor {
 
-        id: editor
-        property bool useFixedAttack: true
-        property double fixedAttack: 0.5
-        property bool useAttackScaling: true
-        property double attackScaleLow: 40
-        property double attackScaleHigh:6000
-        property double attackScaleExp: 1
+        id: editor    
+        property double attack: 0.01
+        property bool attackFixed: true
+        property bool attackScaled: true
+        property double attackLow: 0.1
+        property double attackHigh: 1
+        property double attackExponent: 1
 
-        property bool useFixedDecay: true
-        property double fixedDecay: 0.5
-        property bool useDecayScaling: true
-        property double decayScaleLow: 40
-        property double decayScaleHigh:6000
-        property double decayScaleExp: 1
+        property double decay: 0.1
+        property bool decayFixed: true
+        property bool decayScaled: true
+        property double decayLow: 0.1
+        property double decayHigh: 1
+        property double decayExponent: 1
 
         Component.onCompleted: {
-            attackEditor.spinBox.value = fixedAttack * 100
-            attackFixedEditor.checkBox.checked = useFixedAttack
-            attackScaler.lowSpinBox.value = attackScaleLow * 100
-            attackScaler.highSpinBox.value = attackScaleHigh * 100
-            attackScaler.expSpinBox.value = attackScaleExp * 100
-            attackScaler.checkBox.checked = useAttackScaling
+            attackEditor.spinBox.value = attack * 100
+            attackFixedEditor.checkBox.checked = attackFixed
+            attackScaler.lowSpinBox.value = attackLow * 100
+            attackScaler.highSpinBox.value = attackHigh * 100
+            attackScaler.expSpinBox.value = attackExponent * 100
+            attackScaler.checkBox.checked = attackScaled
 
-            decayEditor.spinBox.value = fixedDecay * 100
-            decayFixedEditor.checkBox.checked = useFixedDecay
-            decayScaler.lowSpinBox.value = decayScaleLow * 100
-            decayScaler.highSpinBox.value = decayScaleHigh * 100
-            decayScaler.expSpinBox.value = decayScaleExp * 100
-            decayScaler.checkBox.checked = useDecayScaling
+            decayEditor.spinBox.value = decay * 100
+            decayFixedEditor.checkBox.checked = decayFixed
+            decayScaler.lowSpinBox.value = decayLow * 100
+            decayScaler.highSpinBox.value = decayHigh * 100
+            decayScaler.expSpinBox.value = decayExponent * 100
+            decayScaler.checkBox.checked = decayScaled
         }
 
-        onUseFixedAttackChanged: {
-            implementation.setAttackFixed(useFixedAttack)
+        // Update Attack values in implementation
+        onAttackChanged: {
+            implementation.setAttack(attack)
+        }
+        onAttackFixedChanged: {
+            implementation.setAttackFixed(attackFixed)
+        }
+        onAttackLowChanged: {
+            implementation.setAttackScaleVals(attackLow, attackHigh, attackExponent)
+        }
+        onAttackHighChanged: {
+            implementation.setAttackScaleVals(attackLow, attackHigh, attackExponent)
+        }
+        onAttackExponentChanged: {
+            implementation.setAttackScaleVals(attackLow, attackHigh, attackExponent)
+        }
+        onAttackScaledChanged: {
+            implementation.setAttackScaled(attackScaled)
         }
 
-        onFixedAttackChanged: {
-            implementation.setAttack(fixedAttack)
+        // Update Decay values in implemenation
+        onDecayChanged: {
+            implementation.setDecay(decay)
+        }
+        onDecayFixedChanged: {
+            implementation.setDecayFixed(decayFixed)
+        }
+        onDecayLowChanged: {
+            implementation.setDecayScaleVals(decayLow, decayHigh, decayExponent)
+        }
+        onDecayHighChanged: {
+            implementation.setDecayScaleVals(decayLow, decayHigh, decayExponent)
+        }
+        onDecayExponentChanged: {
+            implementation.setDecayScaleVals(decayLow, decayHigh, decayExponent)
+        }
+        onDecayScaledChanged: {
+            implementation.setDecayScaled(decayScaled)
         }
 
         EditorLayout {
@@ -65,9 +97,12 @@ SynthItem {
                 EditorDoubleParam {
                     id: attackEditor
                     label.text: "Attack: "
+                    spinBox.from: -1000
+                    spinBox.to: 1000
+                    spinBox.stepSize: 1
                     onParamValueChanged: {
-                        if (editor.fixedAttack !== value) {
-                            editor.fixedAttack = value
+                        if (editor.attack !== value) {
+                            editor.attack = value
                         }
                     }
                 }
@@ -76,8 +111,8 @@ SynthItem {
                     id: attackFixedEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.useFixedAttack !== fixed) {
-                            editor.useFixedAttack = fixed
+                        if (editor.attackFixed !== fixed) {
+                            editor.attackFixed = fixed
                         }
                     }
                 }
@@ -95,7 +130,7 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setFreqIndexes(implementationMappings)
+                        implementation.setAttackIndexes(implementationMappings)
                     }
                 }
             }
@@ -105,37 +140,35 @@ SynthItem {
                 label.text: qsTr("Attack Scaling: ")
                 lowLabel.text: qsTr("Attack Low: ")
                 highLabel.text: qsTr("Attack High: ")
+                lowSpinBox.from: -1000
+                lowSpinBox.to: 1000
+                lowSpinBox.stepSize: 1
+                highSpinBox.from: -1000
+                highSpinBox.to: 1000
+                highSpinBox.stepSize: 1
 
                 onLowChanged:
                 {
-                    if(editor.attackScaleLow !== low) {
-                        editor.attackScaleLow = low
-                        implementation.setAttackScaleVals(editor.attScaleLow,
-                                                          editor.attackScaleHigh,
-                                                          editor.attackScaleExp)
+                    if(editor.attackLow !== low) {
+                        editor.attackLow = low
                     }
                 }
                 onHighChanged:
                 {
-                    if(editor.attackScaleHigh !== high) {
-                        editor.attackScaleHigh = high
-                        implementation.setAttackScaleVals(editor.attackScaleLow,
-                                                          editor.attackScaleHigh,
-                                                          editor.attackScaleExp)                    }
+                    if(editor.attackHigh !== high) {
+                        editor.attackHigh = high
+                    }
                 }
                 onExponentChanged:
                 {
-                    if(editor.attackScaleExp !== exp) {
-                        editor.attackScaleExp = exp
-                        implementation.setAttackScaleVals(editor.attackScaleLow,
-                                                          editor.attackScaleHigh,
-                                                          editor.attackScaleExp)                    }
+                    if(editor.attackExponent !== exp) {
+                        editor.attackExponent = exp
+                    }
                 }
                 onUseScalingChanged:
                 {
-                    if(editor.useAttackScaling !== scaling) {
-                        editor.useAttackScaling = scaling
-                        implementation.setAttackScaled(editor.useAttackScaling)
+                    if(editor.attackScaled !== scaling) {
+                        editor.attackScaled = scaling
                     }
                 }
             }
@@ -148,9 +181,12 @@ SynthItem {
                 EditorDoubleParam {
                     id: decayEditor
                     label.text: "Decay: "
+                    spinBox.from: -1000
+                    spinBox.to: 1000
+                    spinBox.stepSize: 1
                     onParamValueChanged: {
-                        if (editor.fixedDecay !== value) {
-                            editor.fixedDecay = value
+                        if (editor.decay !== value) {
+                            editor.decay = value
                         }
                     }
                 }
@@ -159,8 +195,8 @@ SynthItem {
                     id: decayFixedEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.useFixedDecay !== fixed) {
-                            editor.useFixedDecay = fixed
+                        if (editor.decayFixed !== fixed) {
+                            editor.decayFixed = fixed
                         }
                     }
                 }
@@ -178,7 +214,7 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setFreqIndexes(implementationMappings)
+                        implementation.setDecayIndexes(implementationMappings)
                     }
                 }
             }
@@ -188,37 +224,35 @@ SynthItem {
                 label.text: qsTr("Decay Scaling: ")
                 lowLabel.text: qsTr("Decay Low: ")
                 highLabel.text: qsTr("Decay High: ")
+                lowSpinBox.from: -1000
+                lowSpinBox.to: 1000
+                lowSpinBox.stepSize: 1
+                highSpinBox.from: -1000
+                highSpinBox.to: 1000
+                highSpinBox.stepSize: 1
 
                 onLowChanged:
                 {
-                    if(editor.decayScaleLow !== low) {
-                        editor.decayScaleLow = low
-                        implementation.setDecayScaleVals(editor.attScaleLow,
-                                                          editor.decayScaleHigh,
-                                                          editor.decayScaleExp)
+                    if(editor.decayLow !== low) {
+                        editor.decayLow = low
                     }
                 }
                 onHighChanged:
                 {
-                    if(editor.decayScaleHigh !== high) {
-                        editor.decayScaleHigh = high
-                        implementation.setDecayScaleVals(editor.decayScaleLow,
-                                                          editor.decayScaleHigh,
-                                                          editor.decayScaleExp)                    }
+                    if(editor.decayHigh !== high) {
+                        editor.decayHigh = high
+                    }
                 }
                 onExponentChanged:
                 {
-                    if(editor.decayScaleExp !== exp) {
-                        editor.decayScaleExp = exp
-                        implementation.setDecayScaleVals(editor.decayScaleLow,
-                                                          editor.decayScaleHigh,
-                                                          editor.decayScaleExp)                    }
+                    if(editor.decayExponent !== exp) {
+                        editor.decayExponent = exp
+                    }
                 }
                 onUseScalingChanged:
                 {
-                    if(editor.useDecayScaling !== scaling) {
-                        editor.useDecayScaling = scaling
-                        implementation.setDecayScaled(editor.useDecayScaling)
+                    if(editor.decayScaled !== scaling) {
+                        editor.decayScaled = scaling
                     }
                 }
             }

@@ -425,13 +425,13 @@ void Modulator::set_gen_freq()
     {
         gen_.freq(freq_ + fm_frame.left);
     }
-    else //map each indexed value from the data row to the freq of a generator
-    {
-        double freq = data_->at(freq_indexes_[0]);
+    else
+    { // map each indexed value from the data row to the freq of a generator
+        int idx = freq_indexes_[0];
+        double freq = data_->at(idx);
         if(freq_scaled_)
         {
-            freq = scale(freq, mins_->at(freq_indexes_[0]), maxes_->at(freq_indexes_[0]),
-                         freq_low_, freq_high_, freq_exponent_);
+            freq = scale(freq, mins_->at(freq_indexes_[0]), maxes_->at(freq_indexes_[0]), freq_low_, freq_high_, freq_exponent_);
         }
         gen_.freq(freq + fm_frame.left);
     }
@@ -440,17 +440,17 @@ void Modulator::set_gen_freq()
 float Modulator::get_depth_value()
 {
     float depth_value = 0;
-    if (depth_fixed_ == true || depth_indexes_.size() < 1) //no data mappings, use fixed depth_
+    if (depth_fixed_ == true || depth_indexes_.size() < 1) // no data mappings, use fixed depth_
     {
         depth_value = depth_;
     }
-    else //map indexed value
+    else
     {
-        depth_value = data_->at(depth_indexes_[0]);
+        int idx = depth_indexes_[0];
+        depth_value = data_->at(idx);
         if(depth_scaled_)
         {
-            depth_value = scale(depth_value, mins_->at(depth_indexes_[0]), maxes_->at(depth_indexes_[0]),
-                         depth_low_, depth_high_, depth_exponent_);
+            depth_value = scale(depth_value, mins_->at(depth_indexes_[0]), maxes_->at(depth_indexes_[0]), depth_low_, depth_high_, depth_exponent_);
         }
     }
     return depth_value;

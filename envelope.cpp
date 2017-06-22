@@ -1,4 +1,5 @@
 #include "envelope.h"
+#include "utility.h"
 
 namespace son {
 
@@ -6,12 +7,14 @@ Envelope::Envelope()
 {
     my_type_ = ITEM::ENVELOPE;
     muted_ = false;
-    att_ = 0.2;
-    att_scaled_ = true;
-    att_high_ = 0.9;
-    att_low_ = 0.1;
-    att_exponent_ = 1;
-    decay_ = 1.0;
+    attack_ = 0.01;
+    attack_fixed_ = true;
+    attack_scaled_ = true;
+    attack_high_ = 0.9;
+    attack_low_ = 0.1;
+    attack_exponent_ = 1;
+    decay_ = 0.1;
+    decay_fixed_ = true;
     decay_scaled_ = true;
     decay_low_ = 0.1;
     decay_high_ = 1.0;
@@ -208,7 +211,7 @@ Frame Envelope::process()
 
     // retrigger if necessary
     if(env_.done()) {
-        env_.reset();
+        reset();
     }
     // get the envelope value
     frame = env_();
@@ -326,7 +329,7 @@ void Envelope::process_set_param_value(double val, SynthItem::PARAMETER param)
 {
     if(param == PARAMETER::ATTACK)
     {
-        att_ = val;
+        attack_ = val;
     }
     else if(param == PARAMETER::DECAY)
     {
@@ -338,7 +341,7 @@ void Envelope::process_set_param_fixed(bool fixed, SynthItem::PARAMETER param)
 {
     if(param == PARAMETER::ATTACK)
     {
-        att_fixed_ = fixed;
+        attack_fixed_ = fixed;
     }
     else if(param == PARAMETER::DECAY)
     {
@@ -350,7 +353,7 @@ void Envelope::process_set_param_indexes(std::vector<int> indexes, SynthItem::PA
 {
     if(param == PARAMETER::ATTACK)
     {
-        att_indexes_ = indexes;
+        attack_indexes_ = indexes;
     }
     else if(param == PARAMETER::DECAY)
     {
@@ -362,7 +365,7 @@ void Envelope::process_set_param_scaled(bool scaled, SynthItem::PARAMETER param)
 {
     if(param == PARAMETER::ATTACK)
     {
-        att_scaled_ = scaled;
+        attack_scaled_ = scaled;
     }
     else if(param == PARAMETER::DECAY)
     {
@@ -374,9 +377,9 @@ void Envelope::process_set_param_scale_vals(double low, double high, double exp,
 {
     if(param == PARAMETER::ATTACK)
     {
-        att_low_ = low;
-        att_high_ = high;
-        att_exponent_ = exp;
+        attack_low_ = low;
+        attack_high_ = high;
+        attack_exponent_ = exp;
     }
     else if(param == PARAMETER::DECAY)
     {
@@ -384,6 +387,55 @@ void Envelope::process_set_param_scale_vals(double low, double high, double exp,
         decay_high_ = high;
         decay_exponent_ = exp;
     }
+}
+
+double Envelope::calculate_attack()
+{
+    double attack;
+
+    if(attack_fixed_ || attack_indexes_.size() < 1)
+    {
+        attack = attack_;
+    }
+    else
+    {
+        int idx = attack_indexes_[0];
+        attack = data_->at(idx);
+        if(attack_scaled_)
+        {
+            attack = scale(attack, mins_->at(idx), maxes_->at(idx), attack_low_, attack_high_, attack_exponent_);
+        }
+    }
+
+    return attack;
+}
+
+double Envelope::calculate_decay()
+{
+    double decay;
+
+    if(decay_fixed_ || decay_indexes_.size() < 1)
+    {
+        decay = decay_;
+    }
+    else
+    {
+        int idx = decay_indexes_[0];
+        decay = data_->at(idx);
+        if(decay_scaled_)
+        {
+            decay = scale(decay, mins_->at(idx), maxes_->at(idx), decay_low_, decay_high_, decay_exponent_);
+        }
+    }
+
+    return decay;
+}
+
+void Envelope::reset()
+{
+    env_.attack(calculate_attack());
+    env_.decay(calculate_decay());
+    env_.reset();
 }
 
 }
