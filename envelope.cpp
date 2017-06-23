@@ -213,12 +213,13 @@ Frame Envelope::process()
     if(env_.done()) {
         reset();
     }
-    // get the envelope value
-    frame = env_();
 
-    // multiply by input
+    // no need to generate output if no input
     if(!inputs_.empty())
     {
+        // get the envelope value
+        frame = env_();
+        // multiply by input
         Frame inFrame = visit_children(inputs_);
         inFrame /= inputs_.size();
         frame *= inFrame;
