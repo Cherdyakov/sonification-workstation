@@ -8,7 +8,7 @@ Transport::Transport()
     loop_ = false;
     loop_begin_ = 0.0;
     loop_end_ = 0.0;
-    data_stale = false;
+    data_stale_ = false;
     block_size_ = 512;
     frame_rate = 44100;
     data_width_ = 0;
@@ -205,6 +205,7 @@ double Transport::get_playback_position()
 Frame Transport::process()
 {
     Frame frame;
+    bool stepping = false;
 
     if(!command_buffer_.empty())
     {
@@ -227,7 +228,8 @@ Frame Transport::process()
         {
             current_index_ = 0;
         }
-        data_stale = true;
+        data_stale_ = true;
+        stepping = true;
     }
 
     if(loop_ && (loop_begin_ != loop_end_))
@@ -236,28 +238,34 @@ Frame Transport::process()
         {
             current_index_ = (int)loop_begin_;
             mu_ = (loop_begin_ - current_index_);
-            data_stale = true;
+            data_stale_ = true;
         }
         else if(((double)current_index_ + mu_) < loop_begin_)
         {
             current_index_ = (int)loop_begin_;
             mu_ = (loop_begin_ - current_index_);
-            data_stale = true;
+            data_stale_ = true;
         }
     }
 
     if(interpolate_)
     {
-        data_stale = true;
+        data_stale_ = true;
     }
 
-    if(data_stale)
+    if(data_stale_)
     {
         retrieve_next_data_column();
-        data_stale = false;
+        data_stale_ = false;
     }
 
-    for (unsigned int i = 0; i < inputs_.size(); ++i) {
+    if(stepping)
+    {
+        step();
+    }
+
+    for (unsigned int i = 0; i < inputs_.size(); ++i)
+    {
         SynthItem* item = inputs_[i];
         frame += item->process();
     }
@@ -267,6 +275,15 @@ Frame Transport::process()
     mu_ += (speed_ / frame_rate);
 
     return frame;// * master_volume_;
+}
+
+void Transport::step()
+{
+    for (unsigned int i = 0; i < inputs_.size(); ++i)
+    {
+        SynthItem* item = inputs_[i];
+        item->step();
+    }
 }
 
 void Transport::retrieve_commands()
@@ -374,7 +391,7 @@ void Transport::process_set_playback_position(double pos)
     unsigned int newIdx = (int)pos;
     if(current_index_ != newIdx)
     {
-        data_stale = true;
+        data_stale_ = true;
         current_index_ = newIdx;
     }
     mu_ = (pos - current_index_);

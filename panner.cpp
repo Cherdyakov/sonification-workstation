@@ -178,6 +178,14 @@ Frame Panner::process()
     return frame;
 }
 
+void Panner::step()
+{
+    for (unsigned int i = 0; i < amods_.size(); i++) {
+        SynthItem *item = amods_[i];
+        item->step();
+    }
+}
+
 void Panner::retrieve_commands()
 {
     while(command_buffer_.pop(&current_command_))

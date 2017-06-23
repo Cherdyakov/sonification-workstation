@@ -92,6 +92,7 @@ public:
     virtual void remove_child(SynthItem *child) = 0;
     virtual void mute(bool mute) = 0;
     virtual Frame process() = 0; // every sample
+    virtual void step() = 0; // every new data value (step)
 //    virtual void blockProcess() = 0; // every block
 //    virtual void stepProcess() = 0; // every datastep
 

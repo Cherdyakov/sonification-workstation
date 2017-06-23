@@ -131,6 +131,14 @@ Frame Audifier::process()
     return frame /  audify_indexes_.size();
 }
 
+void Audifier::step()
+{
+    for (unsigned int i = 0; i < amods_.size(); i++) {
+        SynthItem *item = amods_[i];
+        item->step();
+    }
+}
+
 void Audifier::retrieve_commands()
 {
     while(command_buffer_.pop(&current_command_))

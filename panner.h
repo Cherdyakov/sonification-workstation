@@ -32,7 +32,8 @@ public:
                              double exp);
 
     // generate a frame
-    Frame process() override;
+    Frame process() override; // every sample
+    void step() override; // every new data value (step)
 
 private:
     void retrieve_commands() override;

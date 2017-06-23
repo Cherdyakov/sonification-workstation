@@ -242,6 +242,14 @@ Frame Modulator::process()
     return frame;
 }
 
+void Modulator::step()
+{
+    for (unsigned int i = 0; i < amods_.size(); i++) {
+        SynthItem *item = amods_[i];
+        item->step();
+    }
+}
+
 void Modulator::retrieve_commands()
 {
     while(command_buffer_.pop(&current_command_))

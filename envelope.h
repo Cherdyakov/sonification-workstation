@@ -38,7 +38,8 @@ public:
     void set_decay_scaled(bool scaled);
     void set_decay_scale_vals(double low, double high, double exp);
     // generate a frame
-    Frame process() override;
+    Frame process() override; // every sample
+    void step() override; // every new data value (step)
 
 private:
     void retrieve_commands() override;

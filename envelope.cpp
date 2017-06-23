@@ -209,10 +209,10 @@ Frame Envelope::process()
         return frame;
     }
 
-    // retrigger if necessary
-    if(env_.done()) {
-        reset();
-    }
+//    // retrigger if necessary
+//    if(env_.done()) {
+//        reset();
+//    }
 
     // no need to generate output if no input
     if(!inputs_.empty())
@@ -233,6 +233,15 @@ Frame Envelope::process()
     }
 
     return frame;
+}
+
+void Envelope::step()
+{
+    for (unsigned int i = 0; i < amods_.size(); i++) {
+        SynthItem *item = amods_[i];
+        item->step();
+    }
+    reset();
 }
 
 void Envelope::retrieve_commands()

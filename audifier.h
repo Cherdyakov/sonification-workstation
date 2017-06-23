@@ -30,7 +30,8 @@ public:
     // audification source
     void set_aud_indexes(std::vector<int> indexes);
     // generate a frame
-    Frame process() override;
+    Frame process() override; // every sample
+    void step() override; // every new data value (step)
 
 private:
     void retrieve_commands() override;

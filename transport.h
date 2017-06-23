@@ -45,7 +45,8 @@ public:
     // for polling state from outside
     double get_playback_position();
     // generate a frame
-    Frame process() override;
+    Frame process() override; // every sample
+    void step() override; // every new data value (step)
 
 private:
     void retrieve_commands() override;
@@ -86,7 +87,7 @@ private:
     double loop_begin_;
     double loop_end_;
     bool muted_;
-    bool data_stale;
+    bool data_stale_;
     bool paused_;
     bool loop_;
     bool interpolate_;

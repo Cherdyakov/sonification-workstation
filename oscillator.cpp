@@ -189,6 +189,14 @@ Frame Oscillator::process()
     return frame;
 }
 
+void Oscillator::step()
+{
+    for (unsigned int i = 0; i < amods_.size(); i++) {
+        SynthItem *item = amods_[i];
+        item->step();
+    }
+}
+
 void Oscillator::retrieve_commands()
 {
     while(command_buffer_.pop(&current_command_))
