@@ -44,6 +44,10 @@ QtSynthItem* QtTransport::createItem(ITEM type)
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtEnvelope(dynamic_cast<Envelope*>(item));
         break;
+    case ITEM::VOLUME:
+        item = transport_.create_item((SynthItem::ITEM)type);
+        qtItem = new QtVolume(dynamic_cast<Volume*>(item));
+        break;
     default:
         break;
     }

@@ -9,6 +9,7 @@
 #include "modulator.h"
 #include "panner.h"
 #include "envelope.h"
+#include "volume.h"
 #include "ringbuffer.h"
 
 namespace son {

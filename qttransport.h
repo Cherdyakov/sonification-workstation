@@ -10,6 +10,7 @@
 #include "qtmodulator.h"
 #include "qtpanner.h"
 #include "qtenvelope.h"
+#include "qtvolume.h"
 
 using namespace son;
 
@@ -25,7 +26,8 @@ public:
         AUDIFIER,
         MODULATOR,
         PANNER,
-        ENVELOPE
+        ENVELOPE,
+        VOLUME
     };
 
     explicit QtTransport(QObject *parent = 0);
