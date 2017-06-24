@@ -12,6 +12,7 @@
 
 // Library definitions
 #define MAX_DIMENSIONS 128
+#define FRAME_RATE 44100
 
 namespace son {
 

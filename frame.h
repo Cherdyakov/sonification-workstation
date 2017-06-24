@@ -129,7 +129,6 @@ struct Frame {
         return result;
     }
 
-
 };
 
 } // son

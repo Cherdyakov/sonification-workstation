@@ -20,6 +20,15 @@ Envelope::Envelope()
     decay_high_ = 1.0;
     decay_exponent_ = 1;
 
+    current_segment_ = SEGMENT::ATTACK;
+    position_in_segment_ = 0;
+    num_attack_frames_ = 1;
+    num_decay_length_ = 1;
+    last_value_ = 0;
+    start_value_ = 0;
+    attack_delta_ = 0;
+    done_ = true;
+
     accepted_children_ = {
         PARAMETER::AMPLITUDE,
         PARAMETER::INPUT
@@ -194,9 +203,9 @@ void Envelope::set_decay_scale_vals(double low, double high, double exp)
     command_buffer_.push(command);
 }
 
-
 Frame Envelope::process()
 {
+    float value;
     Frame frame;
 
     if(!command_buffer_.empty())
@@ -204,25 +213,20 @@ Frame Envelope::process()
         retrieve_commands();
     }
 
-    if(muted_)
+    if(muted_ || done_)
     {
         return frame;
     }
 
-//    // retrigger if necessary
-//    if(env_.done()) {
-//        reset();
-//    }
-
     // no need to generate output if no input
     if(!inputs_.empty())
     {
-        // get the envelope value
-        frame = env_();
-        // multiply by input
-        Frame inFrame = visit_children(inputs_);
-        inFrame /= inputs_.size();
-        frame *= inFrame;
+        // get input
+        Frame in_frame = visit_children(inputs_);
+        in_frame /= inputs_.size();
+        // generate envelope value and apply to output frame
+        value = calculate_envelope_value();
+        frame = in_frame * value;
     }
 
     // modulate
@@ -232,6 +236,12 @@ Frame Envelope::process()
         frame *= am_frame;
     }
 
+    // move envelope position before next call
+    advance_position();
+
+    // value to begin from on reset()
+    last_value_ = value;
+
     return frame;
 }
 
@@ -239,6 +249,10 @@ void Envelope::step()
 {
     for (unsigned int i = 0; i < amods_.size(); i++) {
         SynthItem *item = amods_[i];
+        item->step();
+    }
+    for (unsigned int i = 0; i < inputs_.size(); i++) {
+        SynthItem *item = inputs_[i];
         item->step();
     }
     reset();
@@ -399,7 +413,7 @@ void Envelope::process_set_param_scale_vals(double low, double high, double exp,
     }
 }
 
-double Envelope::calculate_attack()
+unsigned int Envelope::calculate_num_attack_frames()
 {
     double attack;
 
@@ -417,10 +431,11 @@ double Envelope::calculate_attack()
         }
     }
 
-    return attack;
+    double num_frames = attack * FRAME_RATE;
+    return (unsigned int)num_frames;
 }
 
-double Envelope::calculate_decay()
+unsigned int Envelope::calculate_num_decay_frames()
 {
     double decay;
 
@@ -438,14 +453,64 @@ double Envelope::calculate_decay()
         }
     }
 
-    return decay;
+    double num_frames = decay * FRAME_RATE;
+    return (unsigned int)num_frames;
+}
+
+float Envelope::calculate_envelope_value()
+{
+    float value;
+    // calculate envelope value
+    switch(current_segment_)
+    {
+    case SEGMENT::ATTACK:
+        value = start_value_ + ((position_in_segment_ / (float)num_attack_frames_) * attack_delta_);
+        break;
+    case SEGMENT::DECAY:
+        value = 1.0 - (position_in_segment_ / (float)num_decay_length_);
+        break;
+    default:
+        break;
+    }
+    return value;
+}
+
+void Envelope::advance_position()
+{
+    position_in_segment_++;
+    if(current_segment_ == SEGMENT::ATTACK)
+    {
+        if(position_in_segment_ > num_attack_frames_)
+        {
+            current_segment_ = SEGMENT::DECAY;
+            position_in_segment_ = 0;
+        }
+    }
+    if(current_segment_ == SEGMENT::DECAY)
+    {
+        if(position_in_segment_ > num_decay_length_)
+        {
+            done_ = true;
+        }
+    }
 }
 
 void Envelope::reset()
 {
-    env_.attack(calculate_attack());
-    env_.decay(calculate_decay());
-    env_.reset();
+    num_attack_frames_ = calculate_num_attack_frames();
+    num_decay_length_ = calculate_num_decay_frames();
+
+    // to prevent discontinuity attack starts
+    // from last_value_ and goes to 1, rather
+    // than resetting to 0 every time
+    start_value_ = last_value_;
+    attack_delta_ = 1 - start_value_;
+
+    current_segment_ = SEGMENT::ATTACK;
+    position_in_segment_ = 0;
+
+    done_ = false;
 }
 
-}
+} // son
+

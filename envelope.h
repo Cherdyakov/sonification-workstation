@@ -11,6 +11,12 @@ namespace son {
 class Envelope final: public SynthItem
 {
 public:
+
+    enum class SEGMENT {
+        ATTACK,
+        DECAY
+    };
+
     Envelope();
     ~Envelope();
     // helper when deleting item contained in synth tree
@@ -60,15 +66,17 @@ private:
                                       double exp,
                                       PARAMETER param);
 
-    double calculate_attack();
-    double calculate_decay();
+    unsigned int calculate_num_attack_frames();
+    unsigned int calculate_num_decay_frames();
+    float calculate_envelope_value();
+    void advance_position();
     void reset();
 
     ITEM my_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
-    gam::AD<> env_;
     std::vector<SynthItem::PARAMETER> accepted_children_;
+    SEGMENT current_segment_;
     std::vector<double>* data_;
     std::vector<double>* mins_;
     std::vector<double>* maxes_;
@@ -79,9 +87,18 @@ private:
     std::vector<int> decay_indexes_;
     bool muted_;
 
-    //for scaling the data to intended values
+    // segment lengths and position in current segment
+    unsigned int position_in_segment_;
+    unsigned int num_attack_frames_;
+    unsigned int num_decay_length_;
+    float last_value_;
+    float start_value_;
+    float attack_delta_;
+    bool done_;
+
     double attack_;
     bool attack_fixed_;
+    // for scaling the data to intended values
     bool attack_scaled_;
     double attack_low_;
     double attack_high_;
@@ -89,6 +106,7 @@ private:
 
     double decay_;
     bool decay_fixed_;
+    // for scaling the data to intended values
     bool decay_scaled_;
     double decay_low_;
     double decay_high_;
