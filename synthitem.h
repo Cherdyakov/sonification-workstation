@@ -26,7 +26,8 @@ public:
         AUDIFIER,
         MODULATOR,
         PANNER,
-        ENVELOPE
+        ENVELOPE,
+        VOLUME
     };
 
     enum class PARAMETER {
@@ -37,7 +38,8 @@ public:
         AUDIFICATION,
         PAN,
         ATTACK,
-        DECAY
+        DECAY,
+        VOLUME
     };
 
     enum class COMMAND {

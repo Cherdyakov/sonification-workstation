@@ -24,7 +24,8 @@ SOURCES += \
     panner.cpp \
     qtpanner.cpp \
     envelope.cpp \
-    qtenvelope.cpp
+    qtenvelope.cpp \
+    volume.cpp
 
 RESOURCES += qml.qrc
 
@@ -63,7 +64,8 @@ HEADERS += \
     panner.h \
     qtpanner.h \
     envelope.h \
-    qtenvelope.h
+    qtenvelope.h \
+    volume.h
 
 FORMS +=
 
