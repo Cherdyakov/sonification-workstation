@@ -168,7 +168,7 @@ Frame Panner::process()
     frame.left *= (1.0 - pan_pos);
     frame.right *= pan_pos;
 
-    // vist amplitude modulating children
+    // visit amplitude modulating children
     if(!amods_.empty())
     {
         Frame am_frame = visit_children(amods_);

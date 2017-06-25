@@ -179,7 +179,7 @@ Frame Oscillator::process()
 
     frame /= size;
 
-    // vist amplitude modulating children
+    // visit amplitude modulating children
     if(!amods_.empty())
     {
         Frame am_frame = visit_children(amods_);

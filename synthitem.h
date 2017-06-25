@@ -27,7 +27,8 @@ public:
         MODULATOR,
         PANNER,
         ENVELOPE,
-        VOLUME
+        VOLUME,
+        NOISE
     };
 
     enum class PARAMETER {
@@ -48,8 +49,8 @@ public:
         SCALED,
         SCALE_VALS,
         INDEXES,
-        WAVEFORM,
         MODULATION,
+        NOISE,
         FIXED,
         ADD_CHILD,
         REMOVE_CHILD,
@@ -63,6 +64,11 @@ public:
         LOOP,
         LOOP_POINTS,
         INTERPOLATE
+    };
+
+    enum class NOISE {
+        WHITE,
+        PINK
     };
 
 
