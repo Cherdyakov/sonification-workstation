@@ -10,6 +10,7 @@
 #include "panner.h"
 #include "envelope.h"
 #include "volume.h"
+#include "noise.h"
 #include "ringbuffer.h"
 
 namespace son {

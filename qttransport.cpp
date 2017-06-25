@@ -48,6 +48,10 @@ QtSynthItem* QtTransport::createItem(ITEM type)
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtVolume(dynamic_cast<Volume*>(item));
         break;
+    case ITEM::NOISE:
+        item = transport_.create_item((SynthItem::ITEM)type);
+        qtItem = new QtNoise(dynamic_cast<Noise*>(item));
+        break;
     default:
         break;
     }

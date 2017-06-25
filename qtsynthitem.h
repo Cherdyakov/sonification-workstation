@@ -21,7 +21,9 @@ public:
         AUDIFICATION,
         PAN,
         ATTACK,
-        DECAY
+        DECAY,
+        VOLUME,
+        NOISE
     };
 
     explicit QtSynthItem(QObject *parent = 0);

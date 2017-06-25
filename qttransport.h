@@ -11,6 +11,7 @@
 #include "qtpanner.h"
 #include "qtenvelope.h"
 #include "qtvolume.h"
+#include "qtnoise.h"
 
 using namespace son;
 

@@ -7,23 +7,23 @@ ColumnLayout {
     id: root
     Layout.maximumHeight: Style.editorRowHeight * 2
 
-    property alias label: label
+    property alias label: label.text
     property alias comboBox: comboBox
-    property  alias model: comboBox.model
+    property alias model: comboBox.model
 
-    signal waveformChanged(int form)
+    signal valueChanged(int value)
 
     EditorLabel {
         id: label
-        text: qsTr("Waveform: ")
+        text: qsTr("Select: ")
         Layout.maximumHeight: Style.editorRowHeight
         Layout.fillWidth: true
     }
     EditorComboBox {
         id: comboBox
-        model: [qsTr("Sine"), qsTr("Saw"), qsTr("Square")]
+        model: [qsTr("First"), qsTr("Second"), qsTr("Third")]
         Layout.maximumHeight: Style.editorRowHeight
         Layout.fillWidth: true
-        onCurrentIndexChanged: waveformChanged(comboBox.currentIndex)
+        onCurrentIndexChanged: valueChanged(comboBox.currentIndex)
     }
 }

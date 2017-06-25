@@ -92,6 +92,13 @@ Rectangle
                 source: "images/oscIcon.png"
                 image: "images/oscIcon.png"
             }
+
+            PaletteItem {
+                anchors.verticalCenter: parent.verticalCenter
+                componentFile: "NSE.qml"
+                source: "images/oscIcon.png"
+                image: "images/oscIcon.png"
+            }
         }
     }
 

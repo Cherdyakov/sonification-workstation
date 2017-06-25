@@ -8,6 +8,7 @@ using namespace son;
 
 class QtNoise : public QtSynthItem
 {
+    Q_OBJECT
 public:
     explicit QtNoise(Noise *noise = 0, QObject *parent = 0);
     virtual SynthItem* implementation() override;

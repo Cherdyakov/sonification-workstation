@@ -25,5 +25,7 @@
         <file>ENV.qml</file>
         <file>EditorDoubleParam.qml</file>
         <file>VOL.qml</file>
+        <file>NSE.qml</file>
+        <file>EditorMenuParam.qml</file>
     </qresource>
 </RCC>
