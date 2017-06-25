@@ -27,7 +27,8 @@ SOURCES += \
     qtenvelope.cpp \
     volume.cpp \
     qtvolume.cpp \
-    noise.cpp
+    noise.cpp \
+    qtnoise.cpp
 
 RESOURCES += qml.qrc
 
@@ -69,7 +70,8 @@ HEADERS += \
     qtenvelope.h \
     volume.h \
     qtvolume.h \
-    noise.h
+    noise.h \
+    qtnoise.h
 
 FORMS +=
 

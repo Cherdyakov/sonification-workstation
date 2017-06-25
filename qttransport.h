@@ -27,7 +27,8 @@ public:
         MODULATOR,
         PANNER,
         ENVELOPE,
-        VOLUME
+        VOLUME,
+        NOISE
     };
 
     explicit QtTransport(QObject *parent = 0);
