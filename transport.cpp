@@ -190,6 +190,10 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
         item = new Volume();
         item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
+    case SynthItem::ITEM::NOISE:
+        item = new Noise();
+        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        break;
     default:
         item = NULL;
         break;
