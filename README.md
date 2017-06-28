@@ -1,3 +1,3 @@
 # README #
 
-MS Project for UCSB Department of Media Arts and Technology 20167
+MS Project for UCSB Department of Media Arts and Technology 2017
