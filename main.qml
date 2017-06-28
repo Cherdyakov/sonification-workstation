@@ -1,4 +1,5 @@
-import QtQuick.Controls 1.4
+//import QtQuick.Controls 1.4
+import QtQuick.Controls 2.2
 import QtQuick 2.7
 import QtQuick.Layouts 1.0
 
@@ -133,9 +134,27 @@ Rectangle
         id: workspaceMouseArea
         hoverEnabled: true
         anchors.fill: workspace
+        acceptedButtons: Qt.RightButton
 
         onMouseXChanged: if(patchManager.patchBegin) { canvas.requestPaint() }
         onMouseYChanged: if(patchManager.patchBegin) { canvas.requestPaint() }
+
+        onClicked: {
+            itemPopup.x = mouse.x
+            itemPopup.y = mouse.y
+            itemPopup.open()
+        }
+
+        Popup {
+            id: itemPopup
+            height: 100
+            width: 100
+            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+            Button {
+                text: "button"
+                onClicked: itemPopup.close()
+            }
+        }
     }
 
     //canvas on which the connections are drawn
