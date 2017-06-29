@@ -25,84 +25,6 @@ Rectangle
         }
     }
 
-    // top panel
-    Rectangle {
-        id: toolBox
-
-        height: 70
-        color: "gray"
-        anchors { right: parent.right; top: parent.top; left: parent.left }
-
-        Row {
-            id: palette
-            anchors.centerIn: parent
-            spacing: 1
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "OSC.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "OUT.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "AUD.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "MOD.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "OUT.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "PAN.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "ENV.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "VOL.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "NSE.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-        }
-    }
-
     Flickable {
         id: workspace
         clip: true
@@ -115,7 +37,7 @@ Rectangle
         onContentYChanged: canvas.requestPaint()
 
         anchors {
-            top: toolBox.bottom
+            top: root.top
             left: root.left
             right: root.right
             bottom: root.bottom
@@ -140,19 +62,31 @@ Rectangle
         onMouseYChanged: if(patchManager.patchBegin) { canvas.requestPaint() }
 
         onClicked: {
-            itemPopup.x = mouse.x
-            itemPopup.y = mouse.y
-            itemPopup.open()
+            if(itemPopup.visible) {
+                itemPopup.close()
+            }
+            else {
+                itemPopup.x = mouse.x - (itemPopup.width / 2)
+                itemPopup.y = mouse.y - (itemPopup.height / 2)
+                itemPopup.open()
+            }
         }
 
         Popup {
             id: itemPopup
-            height: 100
-            width: 100
+            height: palette.height
+            width: palette.width
             closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-            Button {
-                text: "button"
-                onClicked: itemPopup.close()
+
+            background: Rectangle {
+                opacity: 0
+                border.width: 1
+            }
+
+            Palette {
+                id: palette
+                height: childrenRect.height
+                width: childrenRect.width
             }
         }
     }

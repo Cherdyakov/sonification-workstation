@@ -9,6 +9,9 @@ Image {
 
     source: image
 
+    width: 50
+    height: 50
+
     MouseArea {
         anchors.fill: parent
 

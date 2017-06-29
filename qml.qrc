@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>images/oscIcon.png</file>
         <file>PaletteItem.qml</file>
         <file>itemCreation.js</file>
         <file>PatchManager.qml</file>
@@ -27,5 +26,14 @@
         <file>VOL.qml</file>
         <file>NSE.qml</file>
         <file>EditorMenuParam.qml</file>
+        <file>Palette.qml</file>
+        <file>images/NSE.png</file>
+        <file>images/VOL.png</file>
+        <file>images/PAN.png</file>
+        <file>images/OSC.png</file>
+        <file>images/MOD.png</file>
+        <file>images/ENV.png</file>
+        <file>images/AUD.png</file>
+        <file>images/OUT.png</file>
     </qresource>
 </RCC>
