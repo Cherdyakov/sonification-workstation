@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import "itemCreation.js" as Code
+//import "itemCreation.js" as Code
 
 Image {
     id: paletteItem
@@ -7,16 +7,19 @@ Image {
     property string componentFile
     property string image
 
-    source: image
+    signal itemClicked(var item)
 
+    source: image
     width: 50
     height: 50
 
     MouseArea {
         anchors.fill: parent
 
-        onPressed: Code.startDrag(mouse);
-        onPositionChanged: Code.continueDrag(mouse);
-        onReleased: Code.endDrag(mouse);
+        onPressed: {
+            console.log("clicked")
+            itemClicked(paletteItem);
+        }
     }
 }
+

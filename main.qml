@@ -66,8 +66,10 @@ Rectangle
                 itemPopup.close()
             }
             else {
-                itemPopup.x = mouse.x - (itemPopup.width / 2)
+                itemPopup.x = mouse.x
                 itemPopup.y = mouse.y - (itemPopup.height / 2)
+                palette.spawnX = mouse.x
+                palette.spawnY = mouse.y
                 itemPopup.open()
             }
         }
@@ -87,6 +89,7 @@ Rectangle
                 id: palette
                 height: childrenRect.height
                 width: childrenRect.width
+                onItemCreated: itemPopup.close()
             }
         }
     }

@@ -27,7 +27,7 @@ Item {
     signal clickedItem(var i)
     signal implementationSet()
 
-    width: 64; height: 64
+    width: Style.itemHeight; height: Style.itemWidth
 
     Component.onCompleted: {
         synthItems.push(this)

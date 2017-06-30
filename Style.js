@@ -7,6 +7,8 @@ var itemEditorZ = 300
 var canvasZ = 100
 
 // SynthItem.qml style
+var itemHeight = 64
+var itemWidth = 64
 var itemMinRadius = 40
 var itemMaxRadius = 10
 var itemTextColor = "white"

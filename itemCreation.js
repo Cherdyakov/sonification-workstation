@@ -36,7 +36,6 @@ function createItem() {
         console.log(itemComponent.errorString());
     }
 }
-
 function continueDrag(mouse)
 {
     if (draggedItem == null)
