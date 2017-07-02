@@ -67,6 +67,8 @@ private:
                                       double exp,
                                       PARAMETER param);
 
+    void process_set_filter_type(FILTER_TYPE type);
+
     ITEM my_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
@@ -99,8 +101,9 @@ private:
 
     // filter
     gam::Biquad<> filter_left_;
-    gam::Biquad<> filter_right_;\
+    gam::Biquad<> filter_right_;
     FILTER_TYPE filter_type_;
+    gam::FilterType convert_filter_type(FILTER_TYPE type);
     void set_filter();
     double calculate_filter_frequency();
     double calculate_filter_resonance();

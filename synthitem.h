@@ -42,24 +42,26 @@ public:
         ATTACK,
         DECAY,
         VOLUME,
-        RESONANCE
+        RESONANCE,
+        FILTER_TYPE
     };
 
     enum class COMMAND {
         DATA,
-        PARAM,
-        SCALED,
-        SCALE_VALS,
-        INDEXES,
-        MODULATION,
-        NOISE,
-        FIXED,
         ADD_CHILD,
         REMOVE_CHILD,
         ADD_PARENT,
         REMOVE_PARENT,
         MUTE,
+        PARAM,
+        FIXED,
+        INDEXES,
+        SCALED,
+        SCALE_VALS,
         DELETE,
+        MODULATION,
+        NOISE,
+        FILTER_TYPE,
         PAUSE,
         POSITION,
         SPEED,
@@ -76,7 +78,7 @@ public:
     enum class FILTER_TYPE {
         LOW_PASS,
         HIGH_PASS,
-        BAND_PASS,
+        PEAK,
         NOTCH
     };
 

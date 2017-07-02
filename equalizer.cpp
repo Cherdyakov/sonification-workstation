@@ -189,6 +189,14 @@ void Equalizer::set_resonance_scale_vals(double low, double high, double exp)
     command_buffer_.push(command);
 }
 
+void Equalizer::set_filter_type(SynthItem::FILTER_TYPE type)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::FILTER_TYPE;
+    command.ints.push_back((int) type);
+    command_buffer_.push(command);
+}
+
 // Generate a frame of output
 Frame Equalizer::process()
 {
@@ -286,6 +294,8 @@ void Equalizer::process_command(SynthItem::SynthItemCommand command)
     case COMMAND::DELETE:
         process_delete_item();
         break;
+    case COMMAND::FILTER_TYPE:
+        process_set_filter_type((FILTER_TYPE)command.ints[0]);
     default:
         break;
     }
@@ -392,13 +402,42 @@ void Equalizer::process_set_param_scale_vals(double low, double high, double exp
     }
 }
 
+void Equalizer::process_set_filter_type(SynthItem::FILTER_TYPE type)
+{
+    if(filter_type_ != type)
+    {
+        filter_type_ = type;
+        gam::FilterType gam_type = convert_filter_type(filter_type_);
+        filter_left_.type(gam_type);
+        filter_right_.type(gam_type);
+    }
+}
+
 void Equalizer::set_filter()
 {
-    filter_left_.type(filter_type_);
-    filter_right_.type(filter_type_);
     double frequency = calculate_filter_frequency();
     double resonance = calculate_filter_resonance();
     filter_left_.set(frequency, resonance);
+}
+
+gam::FilterType Equalizer::convert_filter_type(FILTER_TYPE type)
+{
+    gam::FilterType gam_type;
+    switch (type) {
+    case FILTER_TYPE::LOW_PASS:
+        gam_type = gam::FilterType::LOW_PASS;
+        break;
+    case FILTER_TYPE::HIGH_PASS:
+        gam_type =  gam::FilterType::HIGH_PASS;
+    case FILTER_TYPE::PEAK:
+        gam_type =  gam::FilterType::BAND_PASS;
+    case FILTER_TYPE::NOTCH:
+        gam_type =  gam::FilterType::BAND_REJECT;
+    default:
+        gam_type = gam::FilterType::LOW_PASS;
+        break;
+    }
+    return gam_type;
 }
 
 double Equalizer::calculate_filter_frequency()
