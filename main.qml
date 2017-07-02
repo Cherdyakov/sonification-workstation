@@ -1,4 +1,5 @@
-import QtQuick.Controls 1.4
+//import QtQuick.Controls 1.4
+import QtQuick.Controls 2.2
 import QtQuick 2.7
 import QtQuick.Layouts 1.0
 
@@ -24,84 +25,6 @@ Rectangle
         }
     }
 
-    // top panel
-    Rectangle {
-        id: toolBox
-
-        height: 70
-        color: "gray"
-        anchors { right: parent.right; top: parent.top; left: parent.left }
-
-        Row {
-            id: palette
-            anchors.centerIn: parent
-            spacing: 1
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "OSC.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "OUT.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "AUD.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "MOD.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "OUT.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "PAN.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "ENV.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "VOL.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-
-            PaletteItem {
-                anchors.verticalCenter: parent.verticalCenter
-                componentFile: "NSE.qml"
-                source: "images/oscIcon.png"
-                image: "images/oscIcon.png"
-            }
-        }
-    }
-
     Flickable {
         id: workspace
         clip: true
@@ -114,7 +37,7 @@ Rectangle
         onContentYChanged: canvas.requestPaint()
 
         anchors {
-            top: toolBox.bottom
+            top: root.top
             left: root.left
             right: root.right
             bottom: root.bottom
@@ -133,9 +56,42 @@ Rectangle
         id: workspaceMouseArea
         hoverEnabled: true
         anchors.fill: workspace
+        acceptedButtons: Qt.RightButton
 
         onMouseXChanged: if(patchManager.patchBegin) { canvas.requestPaint() }
         onMouseYChanged: if(patchManager.patchBegin) { canvas.requestPaint() }
+
+        onClicked: {
+            if(itemPopup.visible) {
+                itemPopup.close()
+            }
+            else {
+                itemPopup.x = mouse.x
+                itemPopup.y = mouse.y - (itemPopup.height / 2)
+                palette.spawnX = mouse.x
+                palette.spawnY = mouse.y
+                itemPopup.open()
+            }
+        }
+
+        Popup {
+            id: itemPopup
+            height: palette.height
+            width: palette.width
+            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+            background: Rectangle {
+                opacity: 0
+                border.width: 1
+            }
+
+            Palette {
+                id: palette
+                height: childrenRect.height
+                width: childrenRect.width
+                onItemCreated: itemPopup.close()
+            }
+        }
     }
 
     //canvas on which the connections are drawn
