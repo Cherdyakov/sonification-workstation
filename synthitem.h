@@ -28,7 +28,8 @@ public:
         PANNER,
         ENVELOPE,
         VOLUME,
-        NOISE
+        NOISE,
+        EQUALIZER
     };
 
     enum class PARAMETER {
@@ -40,7 +41,8 @@ public:
         PAN,
         ATTACK,
         DECAY,
-        VOLUME
+        VOLUME,
+        RESONANCE
     };
 
     enum class COMMAND {
@@ -69,6 +71,13 @@ public:
     enum class NOISE {
         WHITE,
         PINK
+    };
+
+    enum class FILTER_TYPE {
+        LOW_PASS,
+        HIGH_PASS,
+        BAND_PASS,
+        NOTCH
     };
 
 
@@ -113,6 +122,6 @@ protected:
 
 };
 
-} //namespace son
+} // namespace son
 
 #endif // SYNTHITEM_H

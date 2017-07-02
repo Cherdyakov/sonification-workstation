@@ -69,7 +69,7 @@ private:
     std::vector<int> pan_indexes_;
     bool muted_;
 
-    //for scaling the data to intended pan values
+    // for scaling the data to intended pan values
     double pan_;
     bool pan_fixed_;
     bool pan_scaled_;

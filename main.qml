@@ -82,7 +82,6 @@ Rectangle
 
             background: Rectangle {
                 opacity: 0
-                border.width: 1
             }
 
             Palette {

@@ -75,7 +75,7 @@ private:
     std::vector<int> freq_indexes_;
     bool muted_;
 
-    //for scaling the data to intended frequency values
+    // for scaling the data to intended frequency values
     double freq_;
     bool freq_fixed_;
     bool freq_scaled_;

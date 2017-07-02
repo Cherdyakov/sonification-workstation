@@ -28,7 +28,8 @@ SOURCES += \
     volume.cpp \
     qtvolume.cpp \
     noise.cpp \
-    qtnoise.cpp
+    qtnoise.cpp \
+    equalizer.cpp
 
 RESOURCES += qml.qrc
 
@@ -71,7 +72,8 @@ HEADERS += \
     volume.h \
     qtvolume.h \
     noise.h \
-    qtnoise.h
+    qtnoise.h \
+    equalizer.h
 
 FORMS +=
 

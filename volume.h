@@ -69,7 +69,7 @@ private:
     std::vector<int> volume_indexes_;
     bool muted_;
 
-    //for scaling the data to intended volume values
+    // for scaling the data to intended volume values
     double volume_;
     bool volume_fixed_;
     bool volume_scaled_;

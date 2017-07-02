@@ -146,18 +146,16 @@ Frame Panner::process()
         retrieve_commands();
     }
 
-    if(muted_)
+    if(muted_ || inputs_.size() < 1)
     {
         return frame;
     }
 
     // generate frame from all inputs
-    if(inputs_.size() > 0) {
-        for (unsigned int i = 0; i < inputs_.size(); ++i) {
-            frame += inputs_[i]->process();
-        }
-        frame /= inputs_.size();
+    for (unsigned int i = 0; i < inputs_.size(); ++i) {
+        frame += inputs_[i]->process();
     }
+    frame /= inputs_.size();
 
     // calculate the pan pos between -1 and 1
     float pan_pos = calculate_pan_pos();
