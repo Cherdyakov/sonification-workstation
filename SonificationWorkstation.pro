@@ -1,4 +1,4 @@
-QT += qml quick widgets charts printsupport
+QT += qml quick widgets printsupport
 
 CONFIG += c++11
 
@@ -9,7 +9,7 @@ SOURCES += \
     audifier.cpp \
     timerworker.cpp \
     filereader.cpp \
-    ../../../CodeLibs/qcustomplot/qcustomplot.cpp \
+    external/qcustomplot/qcustomplot.cpp \
     plotter.cpp \
     playhead.cpp \
     qtoscillator.cpp \
@@ -50,7 +50,7 @@ HEADERS += \
     audifier.h \
     timerworker.h \
     filereader.h \
-    ../../../CodeLibs/qcustomplot/qcustomplot.h \
+    external/qcustomplot/qcustomplot.h \
     plotter.h \
     playhead.h \
     enums.h \
@@ -90,16 +90,18 @@ FORMS +=
 #INCLUDEPATH += /usr/local/include
 
 #My Linux Desktop
+BASEPATH = /home/sean/CodeLibs
+#BASEPATH = /home/andres/Documents/src
 # Gamma synthesis library
-LIBS += -L/home/sean/CodeLibs/Gamma-master/build/lib -lGamma
-INCLUDEPATH += /home/sean/CodeLibs/Gamma-master/Gamma
+LIBS += -L$${BASEPATH}/Gamma-master/build/lib -L$${BASEPATH}/Gamma/build/lib -lGamma
+INCLUDEPATH += $${BASEPATH}/Gamma-master/Gamma
 # RT Audio library
-LIBS += -L/home/sean/CodeLibs/rtaudio-4.1.2 -lrtaudio
-INCLUDEPATH += /home/sean/CodeLibs/rtaudio-4.1.2/include
+LIBS += -L$${BASEPATH}/rtaudio-4.1.2 -lrtaudio
+INCLUDEPATH += $${BASEPATH}/rtaudio-4.1.2/include
 # Secret Rabbit Code
-LIBS += -L/home/sean/CodeLibs/libsamplerate-0.1.9 -lsamplerate
-INCLUDEPATH += /home/sean/CodeLibs/libsamplerate-0.1.9
+LIBS += -L$${BASEPATH}/libsamplerate-0.1.9 -lsamplerate
+INCLUDEPATH += $${BASEPATH}/libsamplerate-0.1.9
 # qcustomplot
-INCLUDEPATH += /home/sean/CodeLibs/qcustomplot
+INCLUDEPATH +=  external/qcustomplot
 
 DISTFILES +=
