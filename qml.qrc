@@ -35,5 +35,6 @@
         <file>images/ENV.png</file>
         <file>images/AUD.png</file>
         <file>images/OUT.png</file>
+        <file>EQ.qml</file>
     </qresource>
 </RCC>

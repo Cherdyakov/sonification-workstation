@@ -6,7 +6,7 @@
 
 using namespace  son;
 
-class QtEqualizer : QtSynthItem
+class QtEqualizer : public QtSynthItem
 {
     Q_OBJECT
 public:

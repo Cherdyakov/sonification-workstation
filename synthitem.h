@@ -42,6 +42,7 @@ public:
         ATTACK,
         DECAY,
         VOLUME,
+        NOISE,
         RESONANCE,
         FILTER_TYPE
     };

@@ -66,6 +66,12 @@ Rectangle {
         }
 
         PaletteItem {
+            componentFile: "EQ.qml"
+            source: "images/OUT.png"
+//            onItemClicked: { createItem(item) }
+        }
+
+        PaletteItem {
             componentFile: "OUT.qml"
             source: "images/OUT.png"
 //            onItemClicked: { createItem(item) }

@@ -11,6 +11,7 @@ class QtSynthItem : public QObject
 {
     Q_OBJECT
     Q_ENUMS(PARAMETER)
+    Q_ENUMS(FILTER_TYPE)
 public:
 
     enum PARAMETER {
@@ -23,7 +24,16 @@ public:
         ATTACK,
         DECAY,
         VOLUME,
-        NOISE
+        NOISE,
+        RESONANCE,
+        FILTER_TYPE
+    };
+
+    enum FILTER_TYPE {
+        LOW_PASS = (int)SynthItem::FILTER_TYPE::LOW_PASS,
+        HIGH_PASS,
+        PEAK,
+        NOTCH
     };
 
     explicit QtSynthItem(QObject *parent = 0);

@@ -11,6 +11,7 @@
 #include "envelope.h"
 #include "volume.h"
 #include "noise.h"
+#include "equalizer.h"
 #include "ringbuffer.h"
 
 namespace son {

@@ -36,6 +36,7 @@ var panColor = "purple"
 var envColor = "peach puff"
 var volColor = "salmon"
 var nseColor = "peru"
+var eqColor = "medium turquoise"
 
 // Palette
 var paletteColor = "dark grey"

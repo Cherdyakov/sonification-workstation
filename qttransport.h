@@ -12,6 +12,7 @@
 #include "qtenvelope.h"
 #include "qtvolume.h"
 #include "qtnoise.h"
+#include "qtequalizer.h"
 
 using namespace son;
 
@@ -29,7 +30,8 @@ public:
         PANNER,
         ENVELOPE,
         VOLUME,
-        NOISE
+        NOISE,
+        EQUALIZER
     };
 
     explicit QtTransport(QObject *parent = 0);
