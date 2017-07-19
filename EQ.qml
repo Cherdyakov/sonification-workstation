@@ -47,11 +47,11 @@ SynthItem {
         }
 
         onUseFixedFreqChanged: {
-            implementation.setFreqFixed(useFixedFreq)
+            implementation.setFrequencyFixed(useFixedFreq)
         }
 
         onFixedFreqChanged: {
-            implementation.setFreq(fixedFreq)
+            implementation.setFrequency(fixedFreq)
         }
 
         onFilterTypeChanged: {
@@ -105,7 +105,7 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setFreqIndexes(implementationMappings)
+                        implementation.setFrequencyIndexes(implementationMappings)
                     }
                 }
             }
@@ -120,7 +120,7 @@ SynthItem {
                 {
                     if(editor.freqScaleLow !== low) {
                         editor.freqScaleLow = low
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
+                        implementation.setFrequencyScaleVals(editor.freqScaleLow,
                                                         editor.freqScaleHigh,
                                                         editor.freqScaleExp)
                     }
@@ -129,7 +129,7 @@ SynthItem {
                 {
                     if(editor.freqScaleHigh !== high) {
                         editor.freqScaleHigh = high
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
+                        implementation.setFrequencyScaleVals(editor.freqScaleLow,
                                                         editor.freqScaleHigh,
                                                         editor.freqScaleExp)                    }
                 }
@@ -137,7 +137,7 @@ SynthItem {
                 {
                     if(editor.freqScaleExp !== exp) {
                         editor.freqScaleExp = exp
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
+                        implementation.setFrequencyScaleVals(editor.freqScaleLow,
                                                         editor.freqScaleHigh,
                                                         editor.freqScaleExp)                    }
                 }
@@ -145,7 +145,7 @@ SynthItem {
                 {
                     if(editor.useFreqScaling !== scaling) {
                         editor.useFreqScaling = scaling
-                        implementation.setFreqScaled(editor.useFreqScaling)
+                        implementation.setFrequencyScaled(editor.useFreqScaling)
                     }
                 }
             }
