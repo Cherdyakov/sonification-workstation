@@ -25,7 +25,7 @@ void QtEnvelope::removeParent(QtSynthItem *parent)
     envelope_->remove_parent(parent->implementation());
 }
 
-bool QtEnvelope::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtEnvelope::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return envelope_->add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }

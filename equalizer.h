@@ -1,21 +1,16 @@
-#ifndef OSCILLATOR_H
-#define OSCILLATOR_H
+﻿#ifndef EQUALIZER_H
+#define EQUALIZER_H
 
-#include <algorithm>
-
-#include "Gamma/Oscillator.h"
+#include "Gamma/Filter.h"
 #include "synthitem.h"
-#include "ringbuffer.h"
-#include "utility.h"
 
 namespace son {
 
-class Oscillator final: public SynthItem
+class Equalizer : public SynthItem
 {
-
 public:
-    Oscillator();
-    ~Oscillator();
+    Equalizer();
+
     // helper when deleting item contained in synth tree
     void delete_item() override;
     // interface overrides
@@ -26,16 +21,29 @@ public:
     void add_parent(SynthItem* parent) override;
     void remove_parent(SynthItem* parent) override;
     bool add_child(SynthItem *child, PARAMETER param) override;
-    void remove_child(SynthItem *item) override;
+    void remove_child(SynthItem *child) override;
     void mute(bool mute) override;
     // frequency parameter accessors
-    void set_freq(double freq);
-    void set_freq_fixed(bool fixed);
-    void set_freq_indexes(std::vector<int> indexes);
-    void set_freq_scaled(bool scaled);
-    void set_freq_scale_vals(double low,
+    void set_frequency(double frequency);
+    void set_frequency_fixed(bool fixed);
+    void set_frequency_indexes(std::vector<int> indexes);
+    void set_frequency_scaled(bool scaled);
+    void set_frequency_scale_vals(double low,
                              double high,
                              double exp);
+
+    // resonance parameter accessors
+    void set_resonance(double resonance);
+    void set_resonance_fixed(bool fixed);
+    void set_resonance_indexes(std::vector<int> indexes);
+    void set_resonance_scaled(bool scaled);
+    void set_resonance_scale_vals(double low,
+                             double high,
+                             double exp);
+
+    // filter type
+    void set_filter_type(FILTER_TYPE type);
+
     // generate a frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)
@@ -59,32 +67,49 @@ private:
                                       double exp,
                                       PARAMETER param);
 
-    void set_gen_freqs();
+    void process_set_filter_type(FILTER_TYPE type);
 
     ITEM my_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
-    std::vector<gam::Sine<>> gens_= std::vector<gam::Sine<>> (MAX_DIMENSIONS);
     std::vector<SynthItem::PARAMETER> accepted_children_;
     std::vector<double>* data_;
     std::vector<double>* mins_;
     std::vector<double>* maxes_;
     std::vector<SynthItem*> parents_;
-    std::vector<SynthItem*> fmods_;
+    std::vector<SynthItem*> inputs_;
     std::vector<SynthItem*> amods_;
-    std::vector<int> freq_indexes_;
+    std::vector<int> frequency_indexes_;
+    std::vector<int> resonance_indexes_;
     bool muted_;
 
     // for scaling the data to intended frequency values
-    double freq_;
-    bool freq_fixed_;
-    bool freq_scaled_;
-    double freq_low_;
-    double freq_high_;
-    double freq_exponent_;
+    double frequency_;
+    bool frequency_fixed_;
+    bool frequency_scaled_;
+    double frequency_low_;
+    double frequency_high_;
+    double frequency_exponent_;
+
+    // for scaling the data to intended resonance values
+    double resonance_;
+    bool resonance_fixed_;
+    bool resonance_scaled_;
+    double resonance_low_;
+    double resonance_high_;
+    double resonance_exponent_;
+
+    // filter
+    gam::Biquad<> filter_left_;
+    gam::Biquad<> filter_right_;
+    FILTER_TYPE filter_type_;
+    gam::FilterType convert_filter_type(FILTER_TYPE type);
+    void set_filter();
+    double calculate_filter_frequency();
+    double calculate_filter_resonance();
 
 };
 
 } // namespace son
 
-#endif // OSCILLATOR_H
+#endif // EQUALIZER_H

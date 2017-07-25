@@ -27,7 +27,7 @@ void QtPanner::removeParent(QtSynthItem *parent)
     panner_->remove_parent(parent->implementation());
 }
 
-bool QtPanner::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtPanner::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return panner_->add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }

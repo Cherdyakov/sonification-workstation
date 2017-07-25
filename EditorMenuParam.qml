@@ -7,7 +7,7 @@ ColumnLayout {
     id: root
     Layout.maximumHeight: Style.editorRowHeight * 2
 
-    property alias label: label.text
+    property alias label: label
     property alias comboBox: comboBox
     property alias model: comboBox.model
 

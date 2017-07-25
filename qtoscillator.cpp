@@ -27,7 +27,7 @@ void QtOscillator::removeParent(QtSynthItem *parent)
     oscillator_->remove_parent(parent->implementation());
 }
 
-bool QtOscillator::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtOscillator::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return oscillator_->add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }

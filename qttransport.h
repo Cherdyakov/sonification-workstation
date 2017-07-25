@@ -12,16 +12,17 @@
 #include "qtenvelope.h"
 #include "qtvolume.h"
 #include "qtnoise.h"
+#include "qtequalizer.h"
 
 using namespace son;
 
 class QtTransport : public QtSynthItem
 {
     Q_OBJECT
-    Q_ENUMS(ITEM)
+    Q_ENUMS(QT_ITEM)
 public:
 
-    enum ITEM {
+    enum QT_ITEM {
         OUT = (int)SynthItem::ITEM::TRANSPORT,
         OSCILLATOR,
         AUDIFIER,
@@ -29,17 +30,18 @@ public:
         PANNER,
         ENVELOPE,
         VOLUME,
-        NOISE
+        NOISE,
+        EQUALIZER
     };
 
     explicit QtTransport(QObject *parent = 0);
     virtual SynthItem* implementation() override;
 
-    Q_INVOKABLE QtSynthItem* createItem(ITEM type);
+    Q_INVOKABLE QtSynthItem* createItem(QT_ITEM type);
     Q_INVOKABLE virtual void deleteItem() override;
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) override;
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER param) override;
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, QT_PARAMETER param) override;
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
 

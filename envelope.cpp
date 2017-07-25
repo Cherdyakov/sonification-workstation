@@ -459,7 +459,7 @@ unsigned int Envelope::calculate_num_decay_frames()
 
 float Envelope::calculate_envelope_value()
 {
-    float value;
+    float value = 0;
     // calculate envelope value
     switch(current_segment_)
     {

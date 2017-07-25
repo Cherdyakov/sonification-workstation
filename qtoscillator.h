@@ -17,7 +17,7 @@ public:
     Q_INVOKABLE virtual void deleteItem() override;
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) override;
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER param) override;
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, QT_PARAMETER param) override;
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
 

@@ -28,7 +28,8 @@ public:
         PANNER,
         ENVELOPE,
         VOLUME,
-        NOISE
+        NOISE,
+        EQUALIZER
     };
 
     enum class PARAMETER {
@@ -40,24 +41,28 @@ public:
         PAN,
         ATTACK,
         DECAY,
-        VOLUME
+        VOLUME,
+        NOISE,
+        RESONANCE,
+        FILTER_TYPE
     };
 
     enum class COMMAND {
         DATA,
-        PARAM,
-        SCALED,
-        SCALE_VALS,
-        INDEXES,
-        MODULATION,
-        NOISE,
-        FIXED,
         ADD_CHILD,
         REMOVE_CHILD,
         ADD_PARENT,
         REMOVE_PARENT,
         MUTE,
+        PARAM,
+        FIXED,
+        INDEXES,
+        SCALED,
+        SCALE_VALS,
         DELETE,
+        MODULATION,
+        NOISE,
+        FILTER_TYPE,
         PAUSE,
         POSITION,
         SPEED,
@@ -69,6 +74,13 @@ public:
     enum class NOISE {
         WHITE,
         PINK
+    };
+
+    enum class FILTER_TYPE {
+        LOW_PASS,
+        HIGH_PASS,
+        PEAK,
+        NOTCH
     };
 
 
@@ -113,6 +125,6 @@ protected:
 
 };
 
-} //namespace son
+} // namespace son
 
 #endif // SYNTHITEM_H

@@ -25,7 +25,7 @@ void QtModulator::removeParent(QtSynthItem *parent)
     modulator_->remove_parent(parent->implementation());
 }
 
-bool QtModulator::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtModulator::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return modulator_->add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }
@@ -66,7 +66,7 @@ void QtModulator::setFreqScaleVals(double low, double high, double exp)
     modulator_->set_freq_scale_vals(low, high, exp);
 }
 
-void QtModulator::setModType(QtSynthItem::PARAMETER parameter)
+void QtModulator::setModType(QtSynthItem::QT_PARAMETER parameter)
 {
     modulator_->set_mod_type((SynthItem::PARAMETER)parameter);
 }

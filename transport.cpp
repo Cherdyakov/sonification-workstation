@@ -194,6 +194,10 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
         item = new Noise();
         item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
+    case SynthItem::ITEM::EQUALIZER:
+        item = new Equalizer();
+        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        break;
     default:
         item = NULL;
         break;

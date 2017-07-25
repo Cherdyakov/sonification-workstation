@@ -15,7 +15,7 @@ public:
     Q_INVOKABLE virtual void deleteItem() override;
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) override;
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER param) override;
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, QT_PARAMETER param) override;
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
 
@@ -25,7 +25,7 @@ public:
     Q_INVOKABLE void setFreqScaled(bool scaled);
     Q_INVOKABLE void setFreqScaleVals(double low, double high, double exp);
 
-    Q_INVOKABLE void setModType(PARAMETER parameter);
+    Q_INVOKABLE void setModType(QT_PARAMETER parameter);
     Q_INVOKABLE void setDepth(double depth);
     Q_INVOKABLE void setDepthFixed(bool fixed);
     Q_INVOKABLE void setDepthIndexes(QVector<int> indexes);

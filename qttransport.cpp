@@ -15,42 +15,46 @@ SynthItem *QtTransport::implementation()
     return &transport_;
 }
 
-QtSynthItem* QtTransport::createItem(ITEM type)
+QtSynthItem* QtTransport::createItem(QT_ITEM type)
 {
     SynthItem* item = NULL;
     QtSynthItem* qtItem = NULL;
 
     switch (type){
-    case ITEM::OUT:
+    case QT_ITEM::OUT:
         qtItem = this;
         break;
-    case ITEM::OSCILLATOR:
+    case QT_ITEM::OSCILLATOR:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtOscillator(dynamic_cast<Oscillator*>(item));
         break;
-    case ITEM::AUDIFIER:
+    case QT_ITEM::AUDIFIER:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtAudifier(dynamic_cast<Audifier*>(item));
         break;
-    case ITEM::MODULATOR:
+    case QT_ITEM::MODULATOR:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtModulator(dynamic_cast<Modulator*>(item));
         break;
-    case ITEM::PANNER:
+    case QT_ITEM::PANNER:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtPanner(dynamic_cast<Panner*>(item));
         break;
-    case ITEM::ENVELOPE:
+    case QT_ITEM::ENVELOPE:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtEnvelope(dynamic_cast<Envelope*>(item));
         break;
-    case ITEM::VOLUME:
+    case QT_ITEM::VOLUME:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtVolume(dynamic_cast<Volume*>(item));
         break;
-    case ITEM::NOISE:
+    case QT_ITEM::NOISE:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtNoise(dynamic_cast<Noise*>(item));
+        break;
+    case QT_ITEM::EQUALIZER:
+        item = transport_.create_item((SynthItem::ITEM)type);
+        qtItem = new QtEqualizer(dynamic_cast<Equalizer*>(item));
         break;
     default:
         break;
@@ -73,7 +77,7 @@ void QtTransport::removeParent(QtSynthItem *parent)
     transport_.remove_parent(parent->implementation());
 }
 
-bool QtTransport::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtTransport::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return transport_.add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }
