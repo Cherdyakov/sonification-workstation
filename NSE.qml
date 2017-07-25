@@ -30,7 +30,7 @@ SynthItem {
 
             EditorMenuParam {
                 id: noiseEditor
-                label: qsTr("Noise Type: ")
+                label.text: qsTr("Noise Type: ")
                 model: [qsTr("White"), qsTr("Pink")]
 
                 onValueChanged: {

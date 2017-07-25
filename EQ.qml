@@ -72,6 +72,17 @@ SynthItem {
 
             RowLayout {
 
+                EditorMenuParam {
+                    id: typeEditor
+                    label.text: qsTr("Type: ")
+                    model: [qsTr("Low Pass"), qsTr("High Pass"), qsTr("Peak"), qsTr("Notch")]
+                    onValueChanged: {
+                        if(editor.filterType !== value) {
+                            editor.filterType = value
+                        }
+                    }
+                }
+
                 EditorDoubleParam {
                     id: frequencyEditor
                     label.text: qsTr("Frequency: ")
