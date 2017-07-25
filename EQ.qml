@@ -24,11 +24,11 @@ SynthItem {
         property double freqScaleLow: 40
         property double freqScaleHigh: 16000
         property double freqScaleExp: 1
-        property double resonance: 100
+        property double resonance: 1
         property  bool useFixedResonance: true
-        property double resonanceScaleLow: 40
-        property double resonanceScaleHigh:16000
-        property double resonanceScaleExp:1
+        property double resonanceScaleLow: 1
+        property double resonanceScaleHigh: 10
+        property double resonanceScaleExp: 1
         property  bool useResonanceScaling: true
 
         Component.onCompleted: {
@@ -165,6 +165,9 @@ SynthItem {
             EditorDoubleParam {
                 id: resonanceEditor
                 label.text: "Resonance: "
+                spinBox.from: 100
+                spinBox.to: 1000
+                spinBox.stepSize: 1
                 onParamValueChanged: {
                     if(editor.resonance !== value) {
                         editor.resonance = value
@@ -206,6 +209,12 @@ SynthItem {
                 label.text: qsTr("Resonance Scaling: ")
                 lowLabel.text: qsTr("Resonance Low: ")
                 highLabel.text: qsTr("Resonance High: ")
+                lowSpinBox.from: 100
+                lowSpinBox.to: 1000
+                lowSpinBox.stepSize: 1
+                highSpinBox.from: 100
+                highSpinBox.to: 1000
+                highSpinBox.stepSize: 1
 
                 onLowChanged:
                 {
