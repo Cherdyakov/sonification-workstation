@@ -418,6 +418,7 @@ void Equalizer::set_filter()
     double frequency = calculate_filter_frequency();
     double resonance = calculate_filter_resonance();
     filter_left_.set(frequency, resonance);
+    filter_right_.set(frequency, resonance);
 }
 
 gam::FilterType Equalizer::convert_filter_type(FILTER_TYPE type)
@@ -429,10 +430,13 @@ gam::FilterType Equalizer::convert_filter_type(FILTER_TYPE type)
         break;
     case FILTER_TYPE::HIGH_PASS:
         gam_type =  gam::FilterType::HIGH_PASS;
+        break;
     case FILTER_TYPE::PEAK:
         gam_type =  gam::FilterType::BAND_PASS;
+        break;
     case FILTER_TYPE::NOTCH:
         gam_type =  gam::FilterType::BAND_REJECT;
+        break;
     default:
         gam_type = gam::FilterType::LOW_PASS;
         break;

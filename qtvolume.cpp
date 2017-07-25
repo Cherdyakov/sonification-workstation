@@ -27,7 +27,7 @@ void QtVolume::removeParent(QtSynthItem *parent)
 volume_->remove_parent(parent->implementation());
 }
 
-bool QtVolume::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtVolume::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return volume_->add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }

@@ -9,6 +9,7 @@ using namespace  son;
 class QtEqualizer : public QtSynthItem
 {
     Q_OBJECT
+
 public:
     explicit QtEqualizer(Equalizer *equalizer = 0, QObject *parent = 0);
     virtual SynthItem* implementation() override;
@@ -16,7 +17,7 @@ public:
     Q_INVOKABLE virtual void deleteItem() override;
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) override;
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER param) override;
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, QT_PARAMETER param) override;
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
 
@@ -32,7 +33,7 @@ public:
     Q_INVOKABLE void setResonanceScaled(bool scaled);
     Q_INVOKABLE void setResonanceScaleVals(double low, double high, double exp);
 
-    Q_INVOKABLE void setFilterType(SynthItem::FILTER_TYPE type);
+    Q_INVOKABLE void setFilterType(QT_FILTER_TYPES type);
 
 private:
     Equalizer* equalizer_;

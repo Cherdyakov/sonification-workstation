@@ -27,7 +27,7 @@ void QtSynthItem::removeParent(QtSynthItem *parent)
     Q_UNUSED(parent);
 }
 
-bool QtSynthItem::addChild(QtSynthItem *child, QtSynthItem::PARAMETER parameter)
+bool QtSynthItem::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER parameter)
 {
     Q_UNUSED(child);
     Q_UNUSED(parameter);

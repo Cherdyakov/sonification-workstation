@@ -25,7 +25,7 @@ void QtAudifier::removeParent(QtSynthItem *parent)
     audifier_->remove_parent(parent->implementation());
 }
 
-bool QtAudifier::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtAudifier::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return audifier_->add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }

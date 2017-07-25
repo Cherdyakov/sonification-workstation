@@ -27,7 +27,7 @@ void QtNoise::removeParent(QtSynthItem *parent)
     noise_->remove_parent(parent->implementation());
 }
 
-bool QtNoise::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtNoise::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return noise_->add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }

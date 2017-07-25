@@ -27,7 +27,7 @@ void QtEqualizer::removeParent(QtSynthItem *parent)
     equalizer_->remove_parent(parent->implementation());
 }
 
-bool QtEqualizer::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtEqualizer::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return equalizer_->add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }
@@ -94,7 +94,7 @@ void QtEqualizer::setResonanceScaleVals(double low, double high, double exp)
     equalizer_->set_resonance_scale_vals(low, high, exp);
 }
 
-void QtEqualizer::setFilterType(SynthItem::FILTER_TYPE type)
+void QtEqualizer::setFilterType(QT_FILTER_TYPES type)
 {
-    equalizer_->set_filter_type(type);
+    equalizer_->set_filter_type((SynthItem::FILTER_TYPE)type);
 }
