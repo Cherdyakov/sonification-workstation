@@ -168,35 +168,35 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
         break;
     case SynthItem::ITEM::OSCILLATOR:
         item = new Oscillator();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::AUDIFIER:
         item = new Audifier();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::MODULATOR:
         item = new Modulator();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::PANNER:
         item = new Panner();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::ENVELOPE:
         item = new Envelope();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::VOLUME:
         item = new Volume();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::NOISE:
         item = new Noise();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::EQUALIZER:
         item = new Equalizer();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     default:
         item = NULL;
@@ -445,8 +445,8 @@ void Transport::calculate_min_max()
 {
     double min;
     double max;
-    min_data_vals_.clear();
-    max_data_vals_.clear();
+    mins_.clear();
+    maxes_.clear();
     for(unsigned int i = 0; i < data_height_; i++)
     {
         for(unsigned int j = 0; j < data_width_; j++)
@@ -466,8 +466,8 @@ void Transport::calculate_min_max()
                 max = value;
             }
         }
-        min_data_vals_.push_back(min);
-        max_data_vals_.push_back(max);
+        mins_.push_back(min);
+        maxes_.push_back(max);
     }
 }
 

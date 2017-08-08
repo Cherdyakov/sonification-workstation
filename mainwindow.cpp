@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     playHead->show();
 
     //main window layout
-    QWidget* mainWidget = new QWidget;
+    QWidget *mainWidget = new QWidget;
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
     mainWidget->setLayout(mainLayout);
     //data layout
@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     quickView->rootContext()->setContextProperty("transport", qtTransport);
     quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
+    qmlRoot = quickView->rootObject();
 
     QWidget *container = QWidget::createWindowContainer(quickView, this);
 
@@ -58,9 +59,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //insert transport into window layout
     dataLayout->addWidget(transportWidget);
 
-    QSplitter* splitter = new QSplitter(this);
-    QWidget* leftSide = new QWidget;
-    QWidget* rightSide = new QWidget;
+    QSplitter *splitter = new QSplitter(this);
+    QWidget *leftSide = new QWidget;
+    QWidget *rightSide = new QWidget;
     leftSide->setLayout(dataLayout);
     rightSide->setLayout(synthLayout);
     splitter->addWidget(leftSide);
@@ -120,7 +121,7 @@ void MainWindow::createActions()
     QAction* openDatasetAction = new QAction(tr("&Open Dataset"), this);
     openDatasetAction->setShortcuts(QKeySequence::Open);
     openDatasetAction->setStatusTip(tr("Loads a CSV file into the Data Window"));
-    connect(openDatasetAction, SIGNAL(triggered(bool)), this, SLOT(openDataset()));
+    connect(openDatasetAction, SIGNAL(triggered(bool)), this, SLOT(importDataset()));
 }
 
 void MainWindow::createMenus()
@@ -129,21 +130,42 @@ void MainWindow::createMenus()
     //Menu actions//
     ////////////////
 
-    //importing files
-    QAction* openDataAct = new QAction(tr("Open Dataset"), this);
-    openDataAct->setShortcut(QKeySequence::Open);
-    openDataAct->setStatusTip(tr("Read CSV file into Data Window"));
-    connect(openDataAct, SIGNAL(triggered(bool)), this, SLOT(openDataset()));
+    // open session
+    QAction *openSessionAct = new QAction(tr("Open"), this);
+    openSessionAct->setShortcut(QKeySequence::Open);
+    openSessionAct->setStatusTip(tr("Open an existing SOW session"));
+    connect(openSessionAct, SIGNAL(triggered(bool)), this, SLOT(openSession()));
 
-    //quit application
-    QAction* quitAct = new QAction(tr("Quit"), this);
+    // save session
+    QAction *saveSessionAct = new QAction(tr("Save"), this);
+    saveSessionAct->setShortcut(QKeySequence::Save);
+    saveSessionAct->setStatusTip(tr("Save the current session to a file"));
+    connect(saveSessionAct, SIGNAL(triggered(bool)), this, SLOT(saveSession()));
+
+    // save session as
+    QAction *saveSessionAsAct = new QAction(tr("Save As"), this);
+    saveSessionAsAct->setShortcut(QKeySequence::SaveAs);
+    saveSessionAsAct->setStatusTip(tr("Save the current session with a new name"));
+    connect(saveSessionAsAct, SIGNAL(triggered(bool)), this, SLOT(saveSessionAs()));
+
+    // import dataset
+    QAction *importDatasetAct = new QAction(tr("Import Dataset"), this);
+    importDatasetAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    importDatasetAct->setStatusTip(tr("Import CSV data into the data window"));
+    connect(importDatasetAct, SIGNAL(triggered(bool)), this, SLOT(importDataset()));
+
+    // quit application
+    QAction *quitAct = new QAction(tr("Quit"), this);
     quitAct->setShortcut(QKeySequence::Quit);
     quitAct->setStatusTip(tr("Quit") + " " + tr("Sonification Workstation"));
     connect(quitAct, SIGNAL(triggered(bool)), this, SLOT(quit()));
 
-    //Create and populate the menus
-    QMenu* fileMenu = menuBar()->addMenu(tr("File"));
-    fileMenu->addAction(openDataAct);
+    // create and populate the menus
+    QMenu *fileMenu = menuBar()->addMenu(tr("File"));
+    fileMenu->addAction(openSessionAct);
+    fileMenu->addAction(saveSessionAct);
+    fileMenu->addAction(saveSessionAsAct);
+    fileMenu->addAction(importDatasetAct);
     fileMenu->addAction(quitAct);
 }
 
@@ -152,11 +174,11 @@ void MainWindow::quit()
     QApplication::quit();
 }
 
-void MainWindow::openDataset()
+void MainWindow::importDataset()
 {
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
-    QString fileName = QFileDialog::getOpenFileName(this, tr(("Open Dataset")), documents, ("csv File(*.csv)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr(("Import Dataset")), documents, ("csv File(*.csv)"));
 
     if(fileName.isEmpty())
     {
@@ -164,4 +186,27 @@ void MainWindow::openDataset()
     }
     dataset.clear();
     fileReader->readCSV(fileName, &dataset);
+}
+
+void MainWindow::saveSession()
+{
+    QVariant returnedValue;
+    QMetaObject::invokeMethod((QObject*)qmlRoot, "readTree",
+            Q_RETURN_ARG(QVariant, returnedValue));
+
+    qDebug() << "QML function returned:" << returnedValue.toString();
+}
+
+void MainWindow::saveSessionAs()
+{
+    QVariant returnedValue;
+    QMetaObject::invokeMethod((QObject*)qmlRoot, "readTree",
+            Q_RETURN_ARG(QVariant, returnedValue));
+
+    qDebug() << "QML function returned:" << returnedValue.toString();
+}
+
+void MainWindow::openSession()
+{
+
 }

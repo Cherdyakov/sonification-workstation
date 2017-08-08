@@ -74,8 +74,8 @@ private:
     std::vector<SynthItem::PARAMETER> accepted_children_;
     std::vector<double>* dataset_;
     std::vector<double> current_data_column_;
-    std::vector<double> min_data_vals_;
-    std::vector<double> max_data_vals_;
+    std::vector<double> mins_;
+    std::vector<double> maxes_;
     std::atomic<double> return_pos;
     std::vector<SynthItem*> inputs_;
     std::vector<SynthItem*> amods_;

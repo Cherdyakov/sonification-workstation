@@ -25,6 +25,11 @@ Rectangle
         }
     }
 
+    function readTree() {
+        console.log("QML: Read tree called!")
+        return "some return value"
+    }
+
     Flickable {
         id: workspace
         clip: true

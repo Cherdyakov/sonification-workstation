@@ -36,6 +36,8 @@ private:
     QtTransport* qtTransport;
     FileReader* fileReader;
 
+    //QML main
+    QQuickItem *qmlRoot;
     //Tab widget and tabs
     QTabWidget* tabWidget;
     QWidget* tableTab;
@@ -63,7 +65,10 @@ private:
 
 private slots:
     void quit();
-    void openDataset();
+    void openSession();
+    void saveSession();
+    void saveSessionAs();
+    void importDataset();
 
 signals:
 
