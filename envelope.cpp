@@ -145,14 +145,30 @@ void Envelope::set_attack_scaled(bool scaled)
     command_buffer_.push(command);
 }
 
-void Envelope::set_attack_scale_vals(double low, double high, double exp)
+void Envelope::set_attack_scale_low(double low)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALE_VALS;
+    command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::ATTACK;
     command.doubles.push_back(low);
+    command_buffer_.push(command);
+}
+
+void Envelope::set_attack_scale_high(double high)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_HIGH;
+    command.parameter = PARAMETER::ATTACK;
     command.doubles.push_back(high);
-    command.doubles.push_back(exp);
+    command_buffer_.push(command);
+}
+
+void Envelope::set_attack_scale_exponent(double exponent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_EXPONENT;
+    command.parameter = PARAMETER::ATTACK;
+    command.doubles.push_back(exponent);
     command_buffer_.push(command);
 }
 
@@ -192,15 +208,111 @@ void Envelope::set_decay_scaled(bool scaled)
     command_buffer_.push(command);
 }
 
-void Envelope::set_decay_scale_vals(double low, double high, double exp)
+void Envelope::set_decay_scale_low(double low)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALE_VALS;
+    command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::DECAY;
     command.doubles.push_back(low);
-    command.doubles.push_back(high);
-    command.doubles.push_back(exp);
     command_buffer_.push(command);
+}
+
+void Envelope::set_decay_scale_high(double high)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_HIGH;
+    command.parameter = PARAMETER::DECAY;
+    command.doubles.push_back(high);
+    command_buffer_.push(command);
+}
+
+void Envelope::set_decay_scale_exponent(double exponent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_EXPONENT;
+    command.parameter = PARAMETER::DECAY;
+    command.doubles.push_back(exponent);
+    command_buffer_.push(command);
+}
+
+bool Envelope::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Envelope::get_parents()
+{
+    return parents_;
+}
+
+double Envelope::get_attack()
+{
+    return attack_;
+}
+
+bool Envelope::get_attack_fixed()
+{
+    return attack_fixed_;
+}
+
+std::vector<int> Envelope::get_attack_indexes()
+{
+    return attack_indexes_;
+}
+
+bool Envelope::get_attack_scaled()
+{
+    return attack_scaled_;
+}
+
+double Envelope::get_attack_scale_low()
+{
+    return attack_low_;
+}
+
+double Envelope::get_attack_scale_high()
+{
+    return attack_high_;
+}
+
+double Envelope::get_attack_scale_exponent()
+{
+    return attack_exponent_;
+}
+
+double Envelope::get_decay()
+{
+    return decay_;
+}
+
+bool Envelope::get_decay_fixed()
+{
+    return decay_fixed_;
+}
+
+std::vector<int> Envelope::get_decay_indexes()
+{
+    return decay_indexes_;
+}
+
+bool Envelope::get_decay_scaled()
+{
+    return decay_scaled_;
+}
+
+double Envelope::get_decay_scale_low()
+{
+    return decay_low_;
+}
+
+double Envelope::get_decay_scale_high()
+{
+    return decay_high_;
+}
+
+double Envelope::get_decay_scale_exponent()
+{
+    return decay_exponent_;
 }
 
 Frame Envelope::process()
@@ -301,8 +413,14 @@ void Envelope::process_command(SynthItem::SynthItemCommand command)
     case COMMAND::SCALED:
         process_set_param_scaled(command.bool_val, command.parameter);
         break;
-    case COMMAND::SCALE_VALS:
-        process_set_param_scale_vals(command.doubles[0], command.doubles[1], command.doubles[2], command.parameter);
+    case COMMAND::SCALE_LOW:
+        process_set_param_scale_low(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_HIGH:
+        process_set_param_scale_high(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_EXPONENT:
+        process_set_param_scale_exponent(command.doubles[0], command.parameter);
         break;
     case COMMAND::DELETE:
         process_delete_item();
@@ -397,19 +515,39 @@ void Envelope::process_set_param_scaled(bool scaled, SynthItem::PARAMETER param)
     }
 }
 
-void Envelope::process_set_param_scale_vals(double low, double high, double exp, SynthItem::PARAMETER param)
+void Envelope::process_set_param_scale_low(double low, SynthItem::PARAMETER param)
 {
     if(param == PARAMETER::ATTACK)
     {
         attack_low_ = low;
-        attack_high_ = high;
-        attack_exponent_ = exp;
     }
     else if(param == PARAMETER::DECAY)
     {
         decay_low_ = low;
+    }
+}
+
+void Envelope::process_set_param_scale_high(double high, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::ATTACK)
+    {
+        attack_high_ = high;
+    }
+    else if(param == PARAMETER::DECAY)
+    {
         decay_high_ = high;
-        decay_exponent_ = exp;
+    }
+}
+
+void Envelope::process_set_param_scale_exponent(double exponent, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::ATTACK)
+    {
+        attack_exponent_ = exponent;
+    }
+    else if(param == PARAMETER::DECAY)
+    {
+        decay_exponent_ = exponent;
     }
 }
 

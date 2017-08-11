@@ -89,6 +89,21 @@ void Noise::set_noise(NOISE noise)
     command_buffer_.push(command);
 }
 
+bool Noise::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Noise::get_parents()
+{
+    return parents_;
+}
+
+SynthItem::NOISE Noise::get_noise()
+{
+    return noise_type_;
+}
+
 // Generate a frame of output
 Frame Noise::process()
 {

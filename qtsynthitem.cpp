@@ -44,3 +44,8 @@ void QtSynthItem::mute(bool mute)
     Q_UNUSED(mute);
 }
 
+bool QtSynthItem::getMute()
+{
+    return NULL;
+}
+

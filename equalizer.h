@@ -10,7 +10,7 @@ class Equalizer : public SynthItem
 {
 public:
     Equalizer();
-
+    ~Equalizer();
     // helper when deleting item contained in synth tree
     void delete_item() override;
     // interface overrides
@@ -23,26 +23,46 @@ public:
     bool add_child(SynthItem *child, PARAMETER param) override;
     void remove_child(SynthItem *child) override;
     void mute(bool mute) override;
-    // frequency parameter accessors
+    // frequency parameter setters
     void set_frequency(double frequency);
     void set_frequency_fixed(bool fixed);
     void set_frequency_indexes(std::vector<int> indexes);
     void set_frequency_scaled(bool scaled);
-    void set_frequency_scale_vals(double low,
-                             double high,
-                             double exp);
+    void set_frequency_scale_low(double low);
+    void set_frequency_scale_high(double high);
+    void set_frequency_scale_exponent(double exponent);
 
-    // resonance parameter accessors
+    // resonance parameter setters
     void set_resonance(double resonance);
     void set_resonance_fixed(bool fixed);
     void set_resonance_indexes(std::vector<int> indexes);
     void set_resonance_scaled(bool scaled);
-    void set_resonance_scale_vals(double low,
-                             double high,
-                             double exp);
+    void set_resonance_scale_low(double low);
+    void set_resonance_scale_high(double high);
+    void set_resonance_scale_exponent(double exponent);
 
     // filter type
     void set_filter_type(FILTER_TYPE type);
+
+    // getters are not thread-safe
+    bool get_mute();
+    std::vector<SynthItem*> get_parents();
+    // frequency parameter getters
+    double get_frequency();
+    bool get_frequency_fixed();
+    std::vector<int> get_frequency_indexes();
+    bool get_frequency_scaled();
+    double get_frequency_scale_low();
+    double get_frequency_scale_high();
+    double get_frequency_scale_exponent();
+    // resonance parameter getters
+    double get_resonance();
+    bool get_resonance_fixed();
+    std::vector<int> get_resonance_indexes();
+    bool get_resonance_scaled();
+    double get_resonance_scale_low();
+    double get_resonance_scale_high();
+    double get_resonance_scale_exponent();
 
     // generate a frame
     Frame process() override; // every sample
@@ -62,10 +82,9 @@ private:
     void process_set_param_fixed(bool fixed, PARAMETER param);
     void process_set_param_indexes(std::vector<int> indexes, PARAMETER param);
     void process_set_param_scaled(bool scaled, PARAMETER param);
-    void process_set_param_scale_vals(double low,
-                                      double high,
-                                      double exp,
-                                      PARAMETER param);
+    void process_set_param_scale_low(double low, PARAMETER param);
+    void process_set_param_scale_high(double high, PARAMETER param);
+    void process_set_param_scale_exponent(double exponent, PARAMETER param);
 
     void process_set_filter_type(FILTER_TYPE type);
 

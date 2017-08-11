@@ -36,5 +36,6 @@
         <file>images/AUD.png</file>
         <file>images/OUT.png</file>
         <file>EQ.qml</file>
+        <file>Sessions.js</file>
     </qresource>
 </RCC>

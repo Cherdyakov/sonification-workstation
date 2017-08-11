@@ -1,7 +1,7 @@
-//import QtQuick.Controls 1.4
 import QtQuick.Controls 2.2
 import QtQuick 2.7
 import QtQuick.Layouts 1.0
+import "Sessions.js" as Code
 
 Rectangle
 {
@@ -25,9 +25,23 @@ Rectangle
         }
     }
 
+    // create unique id for all SynthItems
+    // needed before reading tree to save session
+    function setIdentifiers() {
+        var i = 0;
+        for(var i = 0; i < synthItems.length; i++) {
+            var item = synthItems[i]
+            item.identifier = i
+        }
+    }
+
+    // get tree as json and return to C++ land
     function readTree() {
-        console.log("QML: Read tree called!")
-        return "some return value"
+        console.log("QML: Save session called!")
+        setIdentifiers()
+        var treeData = Code.readTree(synthItems)
+        console.log(JSON.stringify(treeData))
+        return treeData
     }
 
     Flickable {

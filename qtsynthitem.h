@@ -45,6 +45,7 @@ public:
     Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
     Q_INVOKABLE virtual void mute(bool mute);
 
+    Q_INVOKABLE virtual bool getMute();
 };
 
 #endif // QTSYNTHITEM_H

@@ -51,6 +51,10 @@ public:
     Frame process() override; // every sample
     void step() override; // every new data value (step)
 
+    // getters are not thread safe
+    bool get_mute();
+    std::vector<SynthItem*> get_parents();
+
 private:
     void retrieve_commands() override;
     void process_command(SynthItemCommand command) override;

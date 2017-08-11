@@ -6,17 +6,15 @@ Item {
 
     id: root
 
+    property int identifier: 0
     property var synthChildren: []
     property var synthParents: []
     property var mappedRows: []
-    property int rowCount: 0
     property bool patching: false
     property bool muted: false
     property int type: -1 // OUT = 0, OSC = 1
     property int childType: -1 // INPUT = 0
     property bool created: false
-    property var inputs: new Array
-    property var outputs: new Array
     property string label: "SON"
     property string mainColor
     property string textColor
@@ -93,6 +91,10 @@ Item {
         implementation = transport.createItem(type)
         implementationSet()
         canvas.requestPaint()
+    }
+
+    function read() {
+        // must override
     }
 
     function addChild(synthItem) {

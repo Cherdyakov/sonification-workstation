@@ -94,6 +94,21 @@ void Audifier::set_aud_indexes(std::vector<int> indexes)
     command_buffer_.push(command);
 }
 
+bool Audifier::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Audifier::get_parents()
+{
+    return parents_;
+}
+
+std::vector<int> Audifier::get_aud_indexes()
+{
+    return audify_indexes_;
+}
+
 Frame Audifier::process()
 {
             Frame frame = 0.0;

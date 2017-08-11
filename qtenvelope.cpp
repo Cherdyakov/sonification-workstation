@@ -61,9 +61,19 @@ void QtEnvelope::setAttackScaled(bool scaled)
     envelope_->set_attack_scaled(scaled);
 }
 
-void QtEnvelope::setAttackScaleVals(double low, double high, double exp)
+void QtEnvelope::setAttackScaleLow(double low)
 {
-    envelope_->set_attack_scale_vals(low, high, exp);
+    envelope_->set_attack_scale_low(low);
+}
+
+void QtEnvelope::setAttackScaleHigh(double high)
+{
+    envelope_->set_attack_scale_high(high);
+}
+
+void QtEnvelope::setAttackScaleExponent(double exponent)
+{
+    envelope_->set_attack_scale_exponent(exponent);
 }
 
 void QtEnvelope::setDecay(double att)
@@ -87,7 +97,109 @@ void QtEnvelope::setDecayScaled(bool scaled)
     envelope_->set_decay_scaled(scaled);
 }
 
-void QtEnvelope::setDecayScaleVals(double low, double high, double exp)
+void QtEnvelope::setDecayScaleLow(double low)
 {
-    envelope_->set_decay_scale_vals(low, high, exp);
+    envelope_->set_decay_scale_low(low);
+}
+
+void QtEnvelope::setDecayScaleHigh(double high)
+{
+    envelope_->set_decay_scale_high(high);
+}
+
+void QtEnvelope::setDecayScaleExponent(double exponent)
+{
+    envelope_->set_decay_scale_exponent(exponent);
+}
+
+bool QtEnvelope::getMute()
+{
+    bool muted = envelope_->get_mute();
+    return muted;
+}
+
+double QtEnvelope::getAttack()
+{
+    double attack = envelope_->get_attack();
+    return attack;
+}
+
+bool QtEnvelope::getAttackFixed()
+{
+    bool fixed = envelope_->get_attack_fixed();
+    return fixed;
+}
+
+QVector<int> QtEnvelope::getAttackIndexes()
+{
+    std::vector<int> vec = envelope_->get_attack_indexes();
+    QVector<int> indexes = QVector<int>::fromStdVector(vec);
+    return indexes;
+}
+
+bool QtEnvelope::getAttackScaled()
+{
+    bool scaled = envelope_->get_attack_scaled();
+    return scaled;
+}
+
+double QtEnvelope::getAttackScaleLow()
+{
+    double low = envelope_->get_attack_scale_low();
+    return low;
+}
+
+double QtEnvelope::getAttackScaleHigh()
+{
+    double high = envelope_->get_attack_scale_high();
+    return high;
+}
+
+double QtEnvelope::getAttackScaleExponent()
+{
+    double exponent = envelope_->get_attack_scale_exponent();
+    return exponent;
+}
+
+double QtEnvelope::getDecay()
+{
+    double decay = envelope_->get_decay();
+    return decay;
+}
+
+bool QtEnvelope::getDecayFixed()
+{
+    bool fixed = envelope_->get_decay_fixed();
+    return fixed;
+}
+
+QVector<int> QtEnvelope::getDecayIndexes()
+{
+    std::vector<int> vec = envelope_->get_decay_indexes();
+    QVector<int> indexes = QVector<int>::fromStdVector(vec);
+    return indexes;
+}
+
+bool QtEnvelope::getDecayScaled()
+{
+    bool scaled = envelope_->get_decay_scaled();
+    return scaled;
+}
+
+double QtEnvelope::getDecayScaleLow()
+{
+    double low = envelope_->get_decay_scale_low();
+    return low;
+}
+
+double QtEnvelope::getDecayScaleHigh()
+{
+    double high = envelope_->get_decay_scale_high();
+    return high;
+}
+
+double QtEnvelope::getDecayScaleExponent()
+{
+    double exponent = envelope_->get_decay_scale_exponent();
+    return exponent;
 }

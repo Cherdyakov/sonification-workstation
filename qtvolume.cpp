@@ -63,7 +63,66 @@ void QtVolume::setVolumeScaled(bool scaled)
     volume_->set_volume_scaled(scaled);
 }
 
-void QtVolume::setVolumeScaleVals(double low, double high, double exp)
+void QtVolume::setVolumeScaleLow(double low)
 {
-    volume_->set_volume_scale_vals(low, high, exp);
+    volume_->set_volume_scale_low(low);
+}
+
+void QtVolume::setVolumeScaleHigh(double high)
+{
+    volume_->set_volume_scale_high(high);
+}
+
+void QtVolume::setVolumeScaleExponent(double exponent)
+{
+    volume_->set_volume_scale_exponent(exponent);
+}
+
+bool QtVolume::getMute()
+{
+    bool muted = volume_->get_mute();
+    return muted;
+}
+
+double QtVolume::getVolume()
+{
+    double volume = volume_->get_volume();
+    return volume;
+}
+
+bool QtVolume::getVolumeFixed()
+{
+    bool fixed = volume_->get_volume_fixed();
+    return fixed;
+}
+
+QVector<int> QtVolume::getVolumeIndexes()
+{
+    std::vector<int> vec = volume_->get_volume_indexes();
+    QVector<int> indexes = QVector<int>::fromStdVector(vec);
+    return indexes;
+}
+
+bool QtVolume::getVolumeScaled()
+{
+    bool scaled = volume_->get_volume_scaled();
+    return scaled;
+}
+
+double QtVolume::getVolumeScaleLow()
+{
+    double low = volume_->get_volume_scale_low();
+    return low;
+}
+
+double QtVolume::getVolumeScaleHigh()
+{
+    double high = volume_->get_volume_scale_high();
+    return high;
+}
+
+double QtVolume::getVolumeScaleExponent()
+{
+    double exponent = volume_->get_volume_scale_exponent();
+    return exponent;
 }

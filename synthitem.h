@@ -58,7 +58,9 @@ public:
         FIXED,
         INDEXES,
         SCALED,
-        SCALE_VALS,
+        SCALE_LOW,
+        SCALE_HIGH,
+        SCALE_EXPONENT,
         DELETE,
         MODULATION,
         NOISE,
@@ -82,7 +84,6 @@ public:
         PEAK,
         NOTCH
     };
-
 
     struct SynthItemCommand {
         COMMAND type;
@@ -114,6 +115,9 @@ public:
     virtual void mute(bool mute) = 0;
     virtual Frame process() = 0; // every sample
     virtual void step() = 0; // every new data value (step)
+
+    virtual bool get_mute() = 0;
+    virtual std::vector<SynthItem*> get_parents() = 0;
 
 protected:
 

@@ -35,13 +35,38 @@ public:
     void set_attack_fixed(bool fixed);
     void set_attack_indexes(std::vector<int> indexes);
     void set_attack_scaled(bool scaled);
-    void set_attack_scale_vals(double low, double high, double exp);
+    void set_attack_scale_low(double low);
+    void set_attack_scale_high(double high);
+    void set_attack_scale_exponent(double exponent);
     // decay parameter accesors
     void set_decay(double dur);
     void set_decay_fixed(bool fixed);
     void set_decay_indexes(std::vector<int> indexes);
     void set_decay_scaled(bool scaled);
-    void set_decay_scale_vals(double low, double high, double exp);
+    void set_decay_scale_low(double low);
+    void set_decay_scale_high(double high);
+    void set_decay_scale_exponent(double exponent);
+
+    // getters are not thread-safe
+    bool get_mute();
+    std::vector<SynthItem*> get_parents();
+    // attack parameter getters
+    double get_attack();
+    bool get_attack_fixed();
+    std::vector<int> get_attack_indexes();
+    bool get_attack_scaled();
+    double get_attack_scale_low();
+    double get_attack_scale_high();
+    double get_attack_scale_exponent();
+    // decay parameter getters
+    double get_decay();
+    bool get_decay_fixed();
+    std::vector<int> get_decay_indexes();
+    bool get_decay_scaled();
+    double get_decay_scale_low();
+    double get_decay_scale_high();
+    double get_decay_scale_exponent();
+
     // generate a frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)
@@ -60,10 +85,9 @@ private:
     void process_set_param_fixed(bool fixed, PARAMETER param);
     void process_set_param_indexes(std::vector<int> indexes, PARAMETER param);
     void process_set_param_scaled(bool scaled, PARAMETER param);
-    void process_set_param_scale_vals(double low,
-                                      double high,
-                                      double exp,
-                                      PARAMETER param);
+    void process_set_param_scale_low(double low, PARAMETER param);
+    void process_set_param_scale_high(double high, PARAMETER param);
+    void process_set_param_scale_exponent(double exponent, PARAMETER param);
 
     unsigned int calculate_num_attack_frames();
     unsigned int calculate_num_decay_frames();

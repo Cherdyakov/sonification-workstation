@@ -63,9 +63,68 @@ void QtOscillator::setFreqScaled(bool scaled)
     oscillator_->set_freq_scaled(scaled);
 }
 
-void QtOscillator::setFreqScaleVals(double low, double high, double exp)
+void QtOscillator::setFreqScaleLow(double low)
 {
-    oscillator_->set_freq_scale_vals(low, high, exp);
+    oscillator_->set_freq_scale_low(low);
+}
+
+void QtOscillator::setFreqScaleHigh(double high)
+{
+    oscillator_->set_freq_scale_high(high);
+}
+
+void QtOscillator::setFreqScaleExponent(double exponent)
+{
+    oscillator_->set_freq_scale_exponent(exponent);
+}
+
+bool QtOscillator::getMute()
+{
+    bool muted = oscillator_->get_mute();
+    return muted;
+}
+
+double QtOscillator::getFreq()
+{
+    double freq = oscillator_->get_freq();
+    return freq;
+}
+
+bool QtOscillator::getFreqFixed()
+{
+    bool fixed = oscillator_->get_freq_fixed();
+    return fixed;
+}
+
+QVector<int> QtOscillator::getFreqIndexes()
+{
+    std::vector<int> vec = oscillator_->get_freq_indexes();
+    QVector<int> indexes = QVector<int>::fromStdVector(vec);
+    return indexes;
+}
+
+bool QtOscillator::getFreqScaled()
+{
+    bool scaled = oscillator_->get_freq_scaled();
+    return scaled;
+}
+
+double QtOscillator::getFreqScaleLow()
+{
+    double low = oscillator_->get_freq_scale_low();
+    return low;
+}
+
+double QtOscillator::getFreqScaleHigh()
+{
+    double high = oscillator_->get_freq_scale_high();
+    return high;
+}
+
+double QtOscillator::getFreqScaleExponent()
+{
+    double exponent = oscillator_->get_freq_scale_exponent();
+    return exponent;
 }
 
 

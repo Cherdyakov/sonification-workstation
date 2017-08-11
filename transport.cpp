@@ -298,6 +298,17 @@ void Transport::step()
     }
 }
 
+bool Transport::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Transport::get_parents()
+{
+    std::vector<SynthItem*> vec;
+    return vec;
+}
+
 void Transport::retrieve_commands()
 {
     while(command_buffer_.pop(&current_command_))

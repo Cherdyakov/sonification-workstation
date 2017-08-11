@@ -25,7 +25,20 @@ public:
     Q_INVOKABLE void setFreqFixed(bool fixed);
     Q_INVOKABLE void setFreqIndexes(QVector<int> indexes);
     Q_INVOKABLE void setFreqScaled(bool scaled);
-    Q_INVOKABLE void setFreqScaleVals(double low, double high, double exp);
+    Q_INVOKABLE void setFreqScaleLow(double low);
+    Q_INVOKABLE void setFreqScaleHigh(double high);
+    Q_INVOKABLE void setFreqScaleExponent(double exponent);
+
+    // getters
+    Q_INVOKABLE bool getMute();
+    // frequency getters
+    Q_INVOKABLE double getFreq();
+    Q_INVOKABLE bool getFreqFixed();
+    Q_INVOKABLE QVector<int> getFreqIndexes();
+    Q_INVOKABLE bool getFreqScaled();
+    Q_INVOKABLE double getFreqScaleLow();
+    Q_INVOKABLE double getFreqScaleHigh();
+    Q_INVOKABLE double getFreqScaleExponent();
 
 private:
     Oscillator* oscillator_;

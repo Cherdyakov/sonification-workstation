@@ -12,6 +12,34 @@ SynthItem {
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 
+
+    function read() {
+
+        var children = []
+        for(var i = 0; i < synthChildren.length; i++) {
+            var id = synthChildren[i].id
+            children.push(id)
+        }
+
+        var essence = {
+            "id": identifier,
+            "type":type,
+            "x": x,
+            "y": y,
+            "muted": muted,
+            "mappedRows": mappedRows,
+            "children": children,
+            "useFixedFreq": editor.useFixedFreq,
+            "fixedFreq": editor.fixedFreq,
+            "useFreqScaling": editor.useFreqScaling,
+            "freqScaleLow": editor.freqScaleLow,
+            "freqScaleHigh": editor.freqScaleHigh,
+            "freqScaleExp": editor.freqScaleExp
+        }
+
+        return essence
+    }
+
     Editor {
 
         id: editor
@@ -93,26 +121,20 @@ SynthItem {
                 {
                     if(editor.freqScaleLow !== low) {
                         editor.freqScaleLow = low
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
-                                                          editor.freqScaleHigh,
-                                                          editor.freqScaleExp)
+                        implementation.setFreqScaleLow(editor.freqScaleLow)
                     }
                 }
                 onHighChanged:
                 {
                     if(editor.freqScaleHigh !== high) {
                         editor.freqScaleHigh = high
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
-                                                          editor.freqScaleHigh,
-                                                          editor.freqScaleExp)                    }
+                        implementation.setFreqScaleHigh(editor.freqScaleHigh)                    }
                 }
                 onExponentChanged:
                 {
                     if(editor.freqScaleExp !== exp) {
                         editor.freqScaleExp = exp
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
-                                                          editor.freqScaleHigh,
-                                                          editor.freqScaleExp)                    }
+                        implementation.setFreqScaleExponent(editor.freqScaleExp)                    }
                 }
                 onUseScalingChanged:
                 {

@@ -10,6 +10,26 @@ SynthItem {
     textColor: Style.itemTextColor
     implementation: transport
 
+    function read() {
+
+        var children = []
+        for(var i = 0; i < synthChildren.length; i++) {
+            var id = synthChildren[i].id
+            children.push(id)
+        }
+
+        var essence = {
+            "id": identifier,
+            "type":type,
+            "x": x,
+            "y": y,
+            "muted": muted,
+            "children": children
+        }
+
+        return essence
+    }
+
     function mute() {
         //mute children
         for(var i = 0; i < synthChildren.length; i++) {
