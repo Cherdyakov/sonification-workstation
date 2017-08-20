@@ -33,7 +33,6 @@ public:
 
 private:
 
-    std::vector<double> dataset;
     QtTransport* qtTransport;
     FileReader* fileReader;
 
@@ -64,8 +63,9 @@ private:
     Session* session;
 
 private slots:
-    void quit();
-    void importDataset();
+    void on_quit();
+
+public slots:
 
 signals:
 

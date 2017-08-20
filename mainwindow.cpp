@@ -105,7 +105,8 @@ MainWindow::MainWindow(QWidget *parent) :
             qtTransport, SLOT(on_interpolateChanged(bool)));
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
             transportWidget, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
-
+    connect(session, SIGNAL(newDatasetFile(QString,std::vector<double>*)),
+            fileReader, SLOT(on_newDatasetFile(QString,std::vector<double>*)));
 }
 
 MainWindow::~MainWindow()
@@ -128,56 +129,42 @@ void MainWindow::createMenus()
     QAction *openSessionAct = new QAction(tr("Open"), this);
     openSessionAct->setShortcut(QKeySequence::Open);
     openSessionAct->setStatusTip(tr("Open an existing SOW session"));
-    connect(openSessionAct, SIGNAL(triggered(bool)), session, SLOT(open()));
+    connect(openSessionAct, SIGNAL(triggered(bool)), session, SLOT(on_open()));
 
     // save session
     QAction *saveSessionAct = new QAction(tr("Save"), this);
     saveSessionAct->setShortcut(QKeySequence::Save);
     saveSessionAct->setStatusTip(tr("Save the current session to a file"));
-    connect(saveSessionAct, SIGNAL(triggered(bool)), session, SLOT(save()));
+    connect(saveSessionAct, SIGNAL(triggered(bool)), session, SLOT(on_save()));
 
     // save session as
     QAction *saveSessionAsAct = new QAction(tr("Save As"), this);
     saveSessionAsAct->setShortcut(QKeySequence::SaveAs);
     saveSessionAsAct->setStatusTip(tr("Save the current session with a new name"));
-    connect(saveSessionAsAct, SIGNAL(triggered(bool)), session, SLOT(saveAs()));
+    connect(saveSessionAsAct, SIGNAL(triggered(bool)), session, SLOT(on_saveAs()));
 
     // import dataset
-    QAction *importDatasetAct = new QAction(tr("Import Dataset"), this);
-    importDatasetAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
-    importDatasetAct->setStatusTip(tr("Import CSV data into the data window"));
-    connect(importDatasetAct, SIGNAL(triggered(bool)), this, SLOT(importDataset()));
+    QAction *importDatasetFileAct = new QAction(tr("Import Dataset"), this);
+    importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    importDatasetFileAct->setStatusTip(tr("Import CSV data into the data window"));
+    connect(importDatasetFileAct, SIGNAL(triggered(bool)), session, SLOT(on_importDatasetFile()));
 
     // quit application
     QAction *quitAct = new QAction(tr("Quit"), this);
     quitAct->setShortcut(QKeySequence::Quit);
     quitAct->setStatusTip(tr("Quit") + " " + tr("Sonification Workstation"));
-    connect(quitAct, SIGNAL(triggered(bool)), this, SLOT(quit()));
+    connect(quitAct, SIGNAL(triggered(bool)), this, SLOT(on_quit()));
 
     // create and populate the menus
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
     fileMenu->addAction(openSessionAct);
     fileMenu->addAction(saveSessionAct);
     fileMenu->addAction(saveSessionAsAct);
-    fileMenu->addAction(importDatasetAct);
+    fileMenu->addAction(importDatasetFileAct);
     fileMenu->addAction(quitAct);
 }
 
-void MainWindow::quit()
+void MainWindow::on_quit()
 {
     QApplication::quit();
-}
-
-void MainWindow::importDataset()
-{
-    QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
-    QString documents = docDirs[0];
-    QString fileName = QFileDialog::getOpenFileName(this, tr(("Import Dataset")), documents, ("csv File(*.csv)"));
-
-    if(fileName.isEmpty())
-    {
-        return;
-    }
-    dataset.clear();
-    fileReader->readCSV(fileName, &dataset);
 }

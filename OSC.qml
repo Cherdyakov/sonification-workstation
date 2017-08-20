@@ -22,6 +22,7 @@ SynthItem {
         }
 
         var freqIndexes = implementation.getFreqIndexes()
+        // remove keys from freqIndexes and store in js array
         var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
 
         var essence = {

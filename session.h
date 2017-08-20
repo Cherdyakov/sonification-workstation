@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QVariantMap>
 #include <QVariant>
+#include <vector>
 
 class Session : public QObject
 {
@@ -19,18 +20,20 @@ private:
     void write();
 
     QObject* synthTree;
-    QString filename;
-    QString dataset;
+    std::vector<double> dataset;
+    QString sessionFile;
+    QString datasetFile;
     QJsonDocument treeDocument;
     QJsonDocument sessionDocument;
 
 signals:
-    void SessionOpened(QJsonDocument treeDocument);
+    void newDatasetFile(QString datasetFile, std::vector<double>* dataset);
 
 public slots:
-    void save();
-    void saveAs();
-    void open();
+    void on_save();
+    void on_saveAs();
+    void on_open();
+    void on_importDatasetFile();
 };
 
 #endif // SESSION_H
