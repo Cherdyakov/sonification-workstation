@@ -5,7 +5,17 @@ function save(path) {
     }
 }
 
+// create unique id for all SynthItems
+// needed before reading tree to save session
+function setIdentifiers(items) {
+    for(var i = 0; i < items.length; i++) {
+        var item = items[i]
+        item.identifier = i
+    }
+}
+
 function readTree(items) {
+    setIdentifiers(items)
     var synthTree = {};
     var synthItems = []
     synthTree.synthItems = synthItems

@@ -8,12 +8,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.95);
 
-    createActions();
-    createMenus();
-
-    ///////////////////////
-    //Qplotter Setup  //
-    ///////////////////////
+    ///////////////////
+    // plotter Setup //
+    ///////////////////
 
     plotter = new Plotter;
 
@@ -48,9 +45,11 @@ MainWindow::MainWindow(QWidget *parent) :
     quickView->rootContext()->setContextProperty("transport", qtTransport);
     quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
-    qmlRoot = quickView->rootObject();
 
     QWidget *container = QWidget::createWindowContainer(quickView, this);
+
+    // session
+    session = new Session((QObject*)quickView->rootObject());
 
     //insert quickView into synthWindow layout
     synthLayout->addWidget(container);
@@ -77,6 +76,9 @@ MainWindow::MainWindow(QWidget *parent) :
     sizes.append(this->width() * 0.65);
     sizes.append(this->width() * 0.35);
     splitter->setSizes(sizes);
+
+    // populate menus and connect signals to slots
+    createMenus();
 
     /* connect non-ui slots and signals */
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
@@ -116,14 +118,6 @@ QtTransport *MainWindow::getTransport()
     return qtTransport;
 }
 
-void MainWindow::createActions()
-{
-    QAction* openDatasetAction = new QAction(tr("&Open Dataset"), this);
-    openDatasetAction->setShortcuts(QKeySequence::Open);
-    openDatasetAction->setStatusTip(tr("Loads a CSV file into the Data Window"));
-    connect(openDatasetAction, SIGNAL(triggered(bool)), this, SLOT(importDataset()));
-}
-
 void MainWindow::createMenus()
 {
     ////////////////
@@ -134,19 +128,19 @@ void MainWindow::createMenus()
     QAction *openSessionAct = new QAction(tr("Open"), this);
     openSessionAct->setShortcut(QKeySequence::Open);
     openSessionAct->setStatusTip(tr("Open an existing SOW session"));
-    connect(openSessionAct, SIGNAL(triggered(bool)), this, SLOT(openSession()));
+    connect(openSessionAct, SIGNAL(triggered(bool)), session, SLOT(open()));
 
     // save session
     QAction *saveSessionAct = new QAction(tr("Save"), this);
     saveSessionAct->setShortcut(QKeySequence::Save);
     saveSessionAct->setStatusTip(tr("Save the current session to a file"));
-    connect(saveSessionAct, SIGNAL(triggered(bool)), this, SLOT(saveSession()));
+    connect(saveSessionAct, SIGNAL(triggered(bool)), session, SLOT(save()));
 
     // save session as
     QAction *saveSessionAsAct = new QAction(tr("Save As"), this);
     saveSessionAsAct->setShortcut(QKeySequence::SaveAs);
     saveSessionAsAct->setStatusTip(tr("Save the current session with a new name"));
-    connect(saveSessionAsAct, SIGNAL(triggered(bool)), this, SLOT(saveSessionAs()));
+    connect(saveSessionAsAct, SIGNAL(triggered(bool)), session, SLOT(saveAs()));
 
     // import dataset
     QAction *importDatasetAct = new QAction(tr("Import Dataset"), this);
@@ -186,27 +180,4 @@ void MainWindow::importDataset()
     }
     dataset.clear();
     fileReader->readCSV(fileName, &dataset);
-}
-
-void MainWindow::saveSession()
-{
-    QVariant returnedValue;
-    QMetaObject::invokeMethod((QObject*)qmlRoot, "readTree",
-            Q_RETURN_ARG(QVariant, returnedValue));
-
-    qDebug() << "QML function returned:" << returnedValue.toString();
-}
-
-void MainWindow::saveSessionAs()
-{
-    QVariant returnedValue;
-    QMetaObject::invokeMethod((QObject*)qmlRoot, "readTree",
-            Q_RETURN_ARG(QVariant, returnedValue));
-
-    qDebug() << "QML function returned:" << returnedValue.toString();
-}
-
-void MainWindow::openSession()
-{
-
 }

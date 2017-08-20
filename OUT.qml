@@ -23,8 +23,7 @@ SynthItem {
             "type":type,
             "x": x,
             "y": y,
-            "muted": muted,
-            "children": children
+            "muted": muted
         }
 
         return essence

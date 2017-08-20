@@ -18,6 +18,7 @@
 #include "transportwidget.h"
 #include "filereader.h"
 #include "qcustomplot.h"
+#include "session.h"
 #include "plotter.h"
 
 class MainWindow : public QMainWindow
@@ -36,8 +37,6 @@ private:
     QtTransport* qtTransport;
     FileReader* fileReader;
 
-    //QML main
-    QQuickItem *qmlRoot;
     //Tab widget and tabs
     QTabWidget* tabWidget;
     QWidget* tableTab;
@@ -62,12 +61,10 @@ private:
     //menus and actions
     QMenu *fileMenu;
     QAction* importCSVAct;
+    Session* session;
 
 private slots:
     void quit();
-    void openSession();
-    void saveSession();
-    void saveSessionAs();
     void importDataset();
 
 signals:

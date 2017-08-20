@@ -31,7 +31,8 @@ SOURCES += \
     qtnoise.cpp \
     equalizer.cpp \
     qtequalizer.cpp \
-    granulator.cpp
+    granulator.cpp \
+    session.cpp
 
 RESOURCES += qml.qrc
 
@@ -77,7 +78,8 @@ HEADERS += \
     qtnoise.h \
     equalizer.h \
     qtequalizer.h \
-    granulator.h
+    granulator.h \
+    session.h
 
 FORMS +=
 

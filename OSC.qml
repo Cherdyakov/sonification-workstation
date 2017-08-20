@@ -15,10 +15,10 @@ SynthItem {
 
     function read() {
 
-        var children = []
+        var parents = []
         for(var i = 0; i < synthChildren.length; i++) {
             var id = synthChildren[i].id
-            children.push(id)
+            parents.push(id)
         }
 
         var essence = {
@@ -26,15 +26,15 @@ SynthItem {
             "type":type,
             "x": x,
             "y": y,
-            "muted": muted,
-            "mappedRows": mappedRows,
-            "children": children,
-            "useFixedFreq": editor.useFixedFreq,
-            "fixedFreq": editor.fixedFreq,
-            "useFreqScaling": editor.useFreqScaling,
-            "freqScaleLow": editor.freqScaleLow,
-            "freqScaleHigh": editor.freqScaleHigh,
-            "freqScaleExp": editor.freqScaleExp
+            "muted": implementation.getMute(),
+            "freqIndexes": implementation.getFreqIndexes(),
+            "parents": parents,
+            "useFixedFreq": implementation.getFreqFixed(),
+            "freq": implementation.getFreq(),
+            "useFreqScaling": implementation.getFreqScaled(),
+            "freqScaleLow": implementation.getFreqScaleLow(),
+            "freqScaleHigh": implementation.getFreqScaleHigh(),
+            "freqScaleExp": implementation.getFreqScaleExponent()
         }
 
         return essence
