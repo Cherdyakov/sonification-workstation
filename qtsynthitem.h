@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+#include "qtutility.h"
 #include "synthitem.h"
 
 using namespace son;

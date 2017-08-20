@@ -96,10 +96,10 @@ bool QtOscillator::getFreqFixed()
     return fixed;
 }
 
-QVector<int> QtOscillator::getFreqIndexes()
+QList<int> QtOscillator::getFreqIndexes()
 {
     std::vector<int> vec = oscillator_->get_freq_indexes();
-    QVector<int> indexes = QVector<int>::fromStdVector(vec);
+    QList<int> indexes = vecToQList(vec);
     return indexes;
 }
 

@@ -34,7 +34,7 @@ public:
     // frequency getters
     Q_INVOKABLE double getFreq();
     Q_INVOKABLE bool getFreqFixed();
-    Q_INVOKABLE QVector<int> getFreqIndexes();
+    Q_INVOKABLE QList<int> getFreqIndexes();
     Q_INVOKABLE bool getFreqScaled();
     Q_INVOKABLE double getFreqScaleLow();
     Q_INVOKABLE double getFreqScaleHigh();

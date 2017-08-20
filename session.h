@@ -17,7 +17,6 @@ public:
 
 private:
     void write();
-    void saveAs();
 
     QObject* synthTree;
     QString filename;
@@ -30,6 +29,7 @@ signals:
 
 public slots:
     void save();
+    void saveAs();
     void open();
 };
 

@@ -21,13 +21,16 @@ SynthItem {
             parents.push(id)
         }
 
+        var freqIndexes = implementation.getFreqIndexes()
+        var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
+
         var essence = {
             "id": identifier,
             "type":type,
             "x": x,
             "y": y,
             "muted": implementation.getMute(),
-            "freqIndexes": implementation.getFreqIndexes(),
+            "freqIndexes": freqIndexesArray,
             "parents": parents,
             "useFixedFreq": implementation.getFreqFixed(),
             "freq": implementation.getFreq(),
