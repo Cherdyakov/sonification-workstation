@@ -19,8 +19,8 @@ SynthItem {
         }
 
         var essence = {
-            "id": identifier,
-            "type":type,
+            "identifier": identifier,
+            "type": type,
             "x": x,
             "y": y,
             "muted": muted

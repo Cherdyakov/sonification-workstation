@@ -16,17 +16,17 @@ SynthItem {
     function read() {
 
         var parents = []
-        for(var i = 0; i < synthChildren.length; i++) {
-            var id = synthChildren[i].id
-            parents.push(id)
+        for(var i = 0; i < synthParents.length; i++) {
+            var parent = synthParents[i].identifier
+            parents.push(parent)
         }
 
         var freqIndexes = implementation.getFreqIndexes()
         var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
 
         var essence = {
-            "id": identifier,
-            "type":type,
+            "identifier": identifier,
+            "type": type,
             "x": x,
             "y": y,
             "muted": implementation.getMute(),
