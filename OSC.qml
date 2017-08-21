@@ -49,15 +49,15 @@ SynthItem {
         y = essence["y"]
         identifier = essence["identifier"]
         muted = essence["muted"]
-        frequencyEditor.spinBox.value = essence["freq"]
+        frequencyEditor.spinBox.realValue = essence["freq"]
         fixedFrequencyEditor.checkBox.checked = essence["useFixedFreq"]
         var indexes = essence["freqIndexes"]
         var stringIndexes = SessionCode.indexesToString(indexes)
         frequencyMapper.textInput.text = stringIndexes
         frequencyMapper.validateMappings()
-        frequencyScaler.lowSpinBox.value = essence["freqScaleLow"]
-        frequencyScaler.highSpinBox.value = essence["freqScaleHigh"]
-        frequencyScaler.expSpinBox.value = essence["freqScaleExp"]
+        frequencyScaler.lowSpinBox.realValue = essence["freqScaleLow"]
+        frequencyScaler.highSpinBox.realValue = essence["freqScaleHigh"]
+        frequencyScaler.expSpinBox.realValue = essence["freqScaleExp"]
         frequencyScaler.checkBox.checked = essence["useFreqScaling"]
     }
 
@@ -67,13 +67,13 @@ SynthItem {
 
         Component.onCompleted: {
             create()
-            frequencyEditor.spinBox.value = implementation.getFreq() * 100
+            frequencyEditor.spinBox.realValue = implementation.getFreq()
             fixedFrequencyEditor.checkBox.checked = implementation.getFreqFixed()
             frequencyMapper.textInput.text = "1,2,3"
             frequencyMapper.validateMappings()
-            frequencyScaler.lowSpinBox.value = implementation.getFreqScaleLow() * 100
-            frequencyScaler.highSpinBox.value = implementation.getFreqScaleHigh() * 100
-            frequencyScaler.expSpinBox.value = implementation.getFreqScaleExponent * 100
+            frequencyScaler.lowSpinBox.realValue = implementation.getFreqScaleLow()
+            frequencyScaler.highSpinBox.realValue = implementation.getFreqScaleHigh()
+            frequencyScaler.expSpinBox.realValue = implementation.getFreqScaleExponent()
             frequencyScaler.checkBox.checked = implementation.getFreqScaled()
         }
 
@@ -87,7 +87,9 @@ SynthItem {
                     id: frequencyEditor
                     label.text: "Frequency: "
                     onParamValueChanged: {
-                        implementation.setFreq(value)
+                        if(implementation !== null) {
+                            implementation.setFreq(value)
+                        }
                     }
                 }
 
@@ -125,19 +127,27 @@ SynthItem {
 
                 onLowChanged:
                 {
-                    implementation.setFreqScaleLow(low)
+                    if(implementation !== null) {
+                        implementation.setFreqScaleLow(low)
+                    }
                 }
                 onHighChanged:
                 {
-                    implementation.setFreqScaleHigh(high)
+                    if(implementation !== null) {
+                        implementation.setFreqScaleHigh(high)
+                    }
                 }
                 onExponentChanged:
                 {
-                    implementation.setFreqScaleExponent(exp)
+                    if(implementation !== null) {
+                        implementation.setFreqScaleExponent(exp)
+                    }
                 }
                 onUseScalingChanged:
                 {
-                    implementation.setFreqScaled(scaling)
+                    if(implementation !== null) {
+                        implementation.setFreqScaled(scaling)
+                    }
                 }
             }
         }

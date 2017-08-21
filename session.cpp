@@ -35,7 +35,9 @@ void Session::on_saveAs()
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
     sessionFile = QFileDialog::getSaveFileName((QWidget*)this->parent(), tr(("Save Session")), documents, ("JSON(*.json)"));
-    write();
+    if(!sessionFile.isEmpty()) {
+        write();
+    }
 }
 
 void Session::on_open()
@@ -43,23 +45,26 @@ void Session::on_open()
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
     QString filename = QFileDialog::getOpenFileName((QWidget*)this->parent(), tr(("Open Session")), documents, ("JSON(*.json)"));
-    QFile file(filename);
-    file.open(QFile::ReadOnly);
-    QString input = file.readAll();
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(input.toUtf8());
-    QJsonObject jsonObject = jsonDocument.object();
 
-    // load the new dataset
-    QJsonValue value = jsonObject.value("dataset");
-    datasetFile = value.toString();
-    emit newDatasetFile(datasetFile, &dataset);
+    if(!filename.isEmpty()) {
+        QFile file(filename);
+        file.open(QFile::ReadOnly);
+        QString input = file.readAll();
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(input.toUtf8());
+        QJsonObject jsonObject = jsonDocument.object();
 
-    // get the synthItems and send it to QML as
-    // a string, to reconstruct it
-    value = jsonObject.value("synthItems");
-    QVariant synthItems = value.toVariant();
-    QMetaObject::invokeMethod(qmlRoot, "createTree",
-                              Q_ARG(QVariant, synthItems));
+        // load the new dataset
+        QJsonValue value = jsonObject.value("dataset");
+        datasetFile = value.toString();
+        emit newDatasetFile(datasetFile, &dataset);
+
+        // get the synthItems and send it to QML as
+        // a string, to reconstruct it
+        value = jsonObject.value("synthItems");
+        QVariant synthItems = value.toVariant();
+        QMetaObject::invokeMethod(qmlRoot, "createTree",
+                                  Q_ARG(QVariant, synthItems));
+    }
 
 }
 
@@ -69,11 +74,10 @@ void Session::on_importDatasetFile()
     QString documents = docDirs[0];
     datasetFile = QFileDialog::getOpenFileName((QWidget*)this->parent(), tr("Import Dataset"), documents, ("csv File(*.csv)"));
 
-    if(datasetFile.isEmpty())
+    if(!datasetFile.isEmpty())
     {
-        return;
+        emit newDatasetFile(datasetFile, &dataset);
     }
-    emit newDatasetFile(datasetFile, &dataset);
 }
 
 
