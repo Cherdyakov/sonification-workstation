@@ -14,12 +14,12 @@ class Session : public QObject
 {
     Q_OBJECT
 public:
-    explicit Session(QObject* tree, QObject *parent = nullptr);
+    explicit Session(QObject* rootObj, QObject *parent = nullptr);
 
 private:
     void write();
 
-    QObject* synthTree;
+    QObject* qmlRoot;
     std::vector<double> dataset;
     QString sessionFile;
     QString datasetFile;

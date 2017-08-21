@@ -1,7 +1,7 @@
 import QtQuick.Controls 2.2
 import QtQuick 2.7
 import QtQuick.Layouts 1.0
-import "Sessions.js" as Code
+import "SessionCode.js" as SessionCode
 
 Rectangle
 {
@@ -25,11 +25,17 @@ Rectangle
 
     // get tree as json and return to C++ land
     function readTree(datapath) {
-        var treeData = Code.readTree(synthItems)
+        var treeData = SessionCode.readTree(synthItems)
         treeData["dataset"] = datapath
         var stringTree = JSON.stringify(treeData)
         return stringTree
     }
+
+    function createTree(obj) {
+        SessionCode.destroyItems(synthItems)
+        SessionCode.createTree(obj)
+    }
+
 
     Flickable {
         id: workspace
@@ -94,7 +100,6 @@ Rectangle
                 id: palette
                 height: childrenRect.height
                 width: childrenRect.width
-                onItemCreated: itemPopup.close()
             }
         }
     }

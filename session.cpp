@@ -1,8 +1,8 @@
 #include "session.h"
 
-Session::Session(QObject *tree, QObject *parent) : QObject(parent)
+Session::Session(QObject *rootObj, QObject *parent) : QObject(parent)
 {
-    synthTree = tree;
+    qmlRoot = rootObj;
     sessionFile = QString();
     datasetFile = QString();
 }
@@ -10,7 +10,7 @@ Session::Session(QObject *tree, QObject *parent) : QObject(parent)
 void Session::write()
 {
     QVariant returnedValue;
-    QMetaObject::invokeMethod(synthTree, "readTree",
+    QMetaObject::invokeMethod(qmlRoot, "readTree",
                               Q_RETURN_ARG(QVariant, returnedValue),
                               Q_ARG(QVariant, datasetFile));
     QJsonDocument jsonDocument = QJsonDocument::fromJson(returnedValue.toString().toUtf8());
@@ -48,8 +48,19 @@ void Session::on_open()
     QString input = file.readAll();
     QJsonDocument jsonDocument = QJsonDocument::fromJson(input.toUtf8());
     QJsonObject jsonObject = jsonDocument.object();
-    datasetFile = jsonObject.value("dataset").toString();
+
+    // load the new dataset
+    QJsonValue value = jsonObject.value("dataset");
+    datasetFile = value.toString();
     emit newDatasetFile(datasetFile, &dataset);
+
+    // get the synthItems and send it to QML as
+    // a string, to reconstruct it
+    value = jsonObject.value("synthItems");
+    QVariant synthItems = value.toVariant();
+    QMetaObject::invokeMethod(qmlRoot, "createTree",
+                              Q_ARG(QVariant, synthItems));
+
 }
 
 void Session::on_importDatasetFile()

@@ -22,9 +22,6 @@ Item {
 
     property alias radius: rect.radius
 
-    signal clickedItem(var i)
-    signal implementationSet()
-
     width: Style.itemHeight; height: Style.itemWidth
 
     Component.onCompleted: {
@@ -89,12 +86,17 @@ Item {
     function create() {
         created = true
         implementation = transport.createItem(type)
-        implementationSet()
         canvas.requestPaint()
     }
 
     function read() {
         // must override
+        // returns params for saving in session file
+    }
+
+    function init(obj) {
+        // must override
+        // sets params of new item created from saved sesssion file
     }
 
     function addChild(synthItem) {

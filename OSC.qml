@@ -3,6 +3,7 @@ import SonLib 1.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import "Style.js" as Style
+import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
@@ -11,7 +12,6 @@ SynthItem {
     childType: QtSynthItem.INPUT
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
-
 
     function read() {
 
@@ -44,31 +44,37 @@ SynthItem {
         return essence
     }
 
+    function init(essence) {
+        x = essence["x"]
+        y = essence["y"]
+        identifier = essence["identifier"]
+        muted = essence["muted"]
+        frequencyEditor.spinBox.value = essence["freq"]
+        fixedFrequencyEditor.checkBox.checked = essence["useFixedFreq"]
+        var indexes = essence["freqIndexes"]
+        var stringIndexes = SessionCode.indexesToString(indexes)
+        frequencyMapper.textInput.text = stringIndexes
+        frequencyMapper.validateMappings()
+        frequencyScaler.lowSpinBox.value = essence["freqScaleLow"]
+        frequencyScaler.highSpinBox.value = essence["freqScaleHigh"]
+        frequencyScaler.expSpinBox.value = essence["freqScaleExp"]
+        frequencyScaler.checkBox.checked = essence["useFreqScaling"]
+    }
+
     Editor {
 
         id: editor
-        property bool useFixedFreq: true
-        property double fixedFreq: 440
-        property bool useFreqScaling: true
-        property double freqScaleLow: 40
-        property double freqScaleHigh: 16000
-        property double freqScaleExp: 1
 
         Component.onCompleted: {
-            frequencyEditor.spinBox.value = fixedFreq * 100
-            fixedEditor.checkBox.checked = useFixedFreq
-            frequencyScaler.lowSpinBox.value = freqScaleLow * 100
-            frequencyScaler.highSpinBox.value = freqScaleHigh * 100
-            frequencyScaler.expSpinBox.value = freqScaleExp * 100
-            frequencyScaler.checkBox.checked = useFreqScaling
-        }
-
-        onUseFixedFreqChanged: {
-            implementation.setFreqFixed(useFixedFreq)
-        }
-
-        onFixedFreqChanged: {
-            implementation.setFreq(fixedFreq)
+            create()
+            frequencyEditor.spinBox.value = implementation.getFreq() * 100
+            fixedFrequencyEditor.checkBox.checked = implementation.getFreqFixed()
+            frequencyMapper.textInput.text = "1,2,3"
+            frequencyMapper.validateMappings()
+            frequencyScaler.lowSpinBox.value = implementation.getFreqScaleLow() * 100
+            frequencyScaler.highSpinBox.value = implementation.getFreqScaleHigh() * 100
+            frequencyScaler.expSpinBox.value = implementation.getFreqScaleExponent * 100
+            frequencyScaler.checkBox.checked = implementation.getFreqScaled()
         }
 
         EditorLayout {
@@ -81,19 +87,15 @@ SynthItem {
                     id: frequencyEditor
                     label.text: "Frequency: "
                     onParamValueChanged: {
-                        if (editor.fixedFreq !== value) {
-                            editor.fixedFreq = value
-                        }
+                        implementation.setFreq(value)
                     }
                 }
 
                 EditorFixedParam {
-                    id: fixedEditor
+                    id: fixedFrequencyEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.useFixedFreq != fixed) {
-                            editor.useFixedFreq = fixed
-                        }
+                        implementation.setFreqFixed(fixed)
                     }
                 }
 
@@ -123,29 +125,19 @@ SynthItem {
 
                 onLowChanged:
                 {
-                    if(editor.freqScaleLow !== low) {
-                        editor.freqScaleLow = low
-                        implementation.setFreqScaleLow(editor.freqScaleLow)
-                    }
+                    implementation.setFreqScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(editor.freqScaleHigh !== high) {
-                        editor.freqScaleHigh = high
-                        implementation.setFreqScaleHigh(editor.freqScaleHigh)                    }
+                    implementation.setFreqScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(editor.freqScaleExp !== exp) {
-                        editor.freqScaleExp = exp
-                        implementation.setFreqScaleExponent(editor.freqScaleExp)                    }
+                    implementation.setFreqScaleExponent(exp)
                 }
                 onUseScalingChanged:
                 {
-                    if(editor.useFreqScaling !== scaling) {
-                        editor.useFreqScaling = scaling
-                        implementation.setFreqScaled(editor.useFreqScaling)
-                    }
+                    implementation.setFreqScaled(scaling)
                 }
             }
         }
