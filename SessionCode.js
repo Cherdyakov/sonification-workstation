@@ -23,7 +23,7 @@ function readTree(items) {
 
 // accepts json array of SynthItem descriptions
 function createTree(arr) {
-    for (var i = 0; i < arr.length; i++) {
+        for (var i = 0; i < arr.length; i++) {
         var essence = arr[i]
         var synthItem = createItem(essence["type"])
         if(synthItem !== null) {
@@ -34,11 +34,9 @@ function createTree(arr) {
 
 // clear the existing tree
 function destroyItems(items) {
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i]
-        var index = items.indexOf(item);
-        items.splice(index, 1);
-        item.destroy()
+    while (items.length > 0) {
+        var item = items.pop()
+        item.deleteThis()
     }
 }
 

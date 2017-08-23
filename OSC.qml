@@ -49,16 +49,16 @@ SynthItem {
         y = essence["y"]
         identifier = essence["identifier"]
         muted = essence["muted"]
-        frequencyEditor.spinBox.realValue = essence["freq"]
-        fixedFrequencyEditor.checkBox.checked = essence["useFixedFreq"]
+        frequencyEditor.value = essence["freq"]
+        fixedFrequencyEditor.fixed = essence["useFixedFreq"]
         var indexes = essence["freqIndexes"]
         var stringIndexes = SessionCode.indexesToString(indexes)
         frequencyMapper.textInput.text = stringIndexes
         frequencyMapper.validateMappings()
-        frequencyScaler.lowSpinBox.realValue = essence["freqScaleLow"]
-        frequencyScaler.highSpinBox.realValue = essence["freqScaleHigh"]
-        frequencyScaler.expSpinBox.realValue = essence["freqScaleExp"]
-        frequencyScaler.checkBox.checked = essence["useFreqScaling"]
+        frequencyScaler.low = essence["freqScaleLow"]
+        frequencyScaler.high = essence["freqScaleHigh"]
+        frequencyScaler.exponent = essence["freqScaleExp"]
+        frequencyScaler.scaled = essence["useFreqScaling"]
     }
 
     Editor {
@@ -67,14 +67,16 @@ SynthItem {
 
         Component.onCompleted: {
             create()
-            frequencyEditor.spinBox.realValue = implementation.getFreq()
-            fixedFrequencyEditor.checkBox.checked = implementation.getFreqFixed()
-            frequencyMapper.textInput.text = "1,2,3"
+            frequencyEditor.value = implementation.getFreq()
+            fixedFrequencyEditor.fixed = implementation.getFreqFixed()
+//            var indexes = implementation.getFreqIndexes();
+//            var stringIndexes = SessionCode.indexesToString(indexes)
+//            frequencyMapper.textInput.text = stringIndexes
             frequencyMapper.validateMappings()
-            frequencyScaler.lowSpinBox.realValue = implementation.getFreqScaleLow()
-            frequencyScaler.highSpinBox.realValue = implementation.getFreqScaleHigh()
-            frequencyScaler.expSpinBox.realValue = implementation.getFreqScaleExponent()
-            frequencyScaler.checkBox.checked = implementation.getFreqScaled()
+            frequencyScaler.low = implementation.getFreqScaleLow()
+            frequencyScaler.high = implementation.getFreqScaleHigh()
+            frequencyScaler.exponent = implementation.getFreqScaleExponent()
+            frequencyScaler.scaled = implementation.getFreqScaled()
         }
 
         EditorLayout {
@@ -86,7 +88,7 @@ SynthItem {
                 EditorDoubleParam {
                     id: frequencyEditor
                     label.text: "Frequency: "
-                    onParamValueChanged: {
+                    onValueChanged: {
                         if(implementation !== null) {
                             implementation.setFreq(value)
                         }
@@ -97,7 +99,9 @@ SynthItem {
                     id: fixedFrequencyEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        implementation.setFreqFixed(fixed)
+                        if(implementation !== null) {
+                            implementation.setFreqFixed(fixed)
+                        }
                     }
                 }
 
@@ -114,7 +118,9 @@ SynthItem {
                         var implementationMappings = mappings.map( function(value) {
                             return value - 1;
                         } )
-                        implementation.setFreqIndexes(implementationMappings)
+                        if(implementation !== null) {
+                            implementation.setFreqIndexes(implementationMappings)
+                        }
                     }
                 }
             }
@@ -140,13 +146,13 @@ SynthItem {
                 onExponentChanged:
                 {
                     if(implementation !== null) {
-                        implementation.setFreqScaleExponent(exp)
+                        implementation.setFreqScaleExponent(exponent)
                     }
                 }
-                onUseScalingChanged:
+                onScaledChanged:
                 {
                     if(implementation !== null) {
-                        implementation.setFreqScaled(scaling)
+                        implementation.setFreqScaled(scaled)
                     }
                 }
             }

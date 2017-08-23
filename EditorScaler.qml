@@ -9,15 +9,10 @@ ColumnLayout {
     property alias label: label
     property alias lowLabel: lowLabel
     property alias highLabel: highLabel
-    property alias checkBox: checkBox
-    property alias lowSpinBox: lowSpinBox
-    property alias highSpinBox: highSpinBox
-    property alias expSpinBox: expSpinBox
-
-    signal useScalingChanged(bool scaling)
-    signal lowChanged(double low)
-    signal highChanged(double high)
-    signal exponentChanged(double exp)
+    property alias low: lowSpinBox.doubleValue
+    property alias high: highSpinBox.doubleValue
+    property alias exponent: expSpinBox.doubleValue
+    property alias scaled: checkBox.checked
 
     RowLayout {
         EditorLabel {
@@ -30,7 +25,6 @@ ColumnLayout {
 
         CheckBox {
             id: checkBox
-            onCheckedChanged: useScalingChanged(checkBox.checked)
         }
     }
 
@@ -46,7 +40,7 @@ ColumnLayout {
             id: lowSpinBox
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onValueChanged: lowChanged(lowSpinBox.value / 100)
+            onDoubleValueChanged: lowChanged(doubleValue)
         }
     }
     RowLayout {
@@ -61,7 +55,7 @@ ColumnLayout {
             id: highSpinBox
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onValueChanged: highChanged(highSpinBox.value / 100)
+            onDoubleValueChanged: highChanged(doubleValue)
         }
     }
     RowLayout {
@@ -74,12 +68,12 @@ ColumnLayout {
 
         EditorDoubleSpinBox {
             id: expSpinBox
-            from: 1
-            to: 6400
-            stepSize: 1
+            doubleFrom: 1
+            doubleTo: 6400
+            doubleStepSize: 1
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onValueChanged: exponentChanged(expSpinBox.value / 100)
+            onDoubleValueChanged: exponentChanged(doubleValue)
         }
     }
 }
