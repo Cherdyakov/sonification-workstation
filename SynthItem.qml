@@ -172,7 +172,9 @@ Item {
         }
 
         var idx = synthItems.indexOf(root)
-        synthItems.splice(idx, 1)
+        if(idx > -1) {
+            synthItems.splice(idx, 1)
+        }
 
         root.destroy()
         canvas.requestPaint()

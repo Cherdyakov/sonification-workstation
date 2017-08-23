@@ -10,23 +10,31 @@ SynthItem {
     textColor: Style.itemTextColor
     implementation: transport
 
+    Component.onCompleted: {
+        create()
+    }
+
     function read() {
 
-        var children = []
-        for(var i = 0; i < synthChildren.length; i++) {
-            var id = synthChildren[i].id
-            children.push(id)
-        }
+        var parents = []
 
         var essence = {
             "identifier": identifier,
             "type": type,
             "x": x,
             "y": y,
-            "muted": muted
+            "muted": muted,
+            "parents": parents
         }
 
         return essence
+    }
+
+    function init(essence) {
+        x = essence["x"]
+        y = essence["y"]
+        identifier = essence["identifier"]
+        muted = essence["muted"]
     }
 
     function mute() {

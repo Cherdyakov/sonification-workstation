@@ -31,8 +31,8 @@ SynthItem {
             "x": x,
             "y": y,
             "muted": implementation.getMute(),
-            "freqIndexes": freqIndexesArray,
             "parents": parents,
+            "freqIndexes": freqIndexesArray,
             "useFixedFreq": implementation.getFreqFixed(),
             "freq": implementation.getFreq(),
             "useFreqScaling": implementation.getFreqScaled(),
@@ -69,9 +69,6 @@ SynthItem {
             create()
             frequencyEditor.value = implementation.getFreq()
             fixedFrequencyEditor.fixed = implementation.getFreqFixed()
-//            var indexes = implementation.getFreqIndexes();
-//            var stringIndexes = SessionCode.indexesToString(indexes)
-//            frequencyMapper.textInput.text = stringIndexes
             frequencyMapper.validateMappings()
             frequencyScaler.low = implementation.getFreqScaleLow()
             frequencyScaler.high = implementation.getFreqScaleHigh()
