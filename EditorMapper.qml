@@ -8,7 +8,7 @@ ColumnLayout {
     Layout.maximumHeight: Style.editorRowHeight * 2
 
     property alias label: label
-    property alias textInput: textInput
+    property alias text: textInput.text
     property int maxIndexes: 1
 
     signal mappingsChanged(var mappings)

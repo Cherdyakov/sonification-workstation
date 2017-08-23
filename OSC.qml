@@ -13,6 +13,19 @@ SynthItem {
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 
+    Component.onCompleted: {
+        create()
+        frequencyEditor.value = implementation.getFreq()
+        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
+
+        frequencyMapper.validateMappings()
+        frequencyScaler.low = implementation.getFreqScaleLow()
+        frequencyScaler.high = implementation.getFreqScaleHigh()
+        frequencyScaler.exponent = implementation.getFreqScaleExponent()
+        frequencyScaler.scaled = implementation.getFreqScaled()
+    }
+
+    // return json representation of self
     function read() {
 
         var parents = []
@@ -31,8 +44,8 @@ SynthItem {
             "x": x,
             "y": y,
             "muted": implementation.getMute(),
-            "parents": parents,
             "freqIndexes": freqIndexesArray,
+            "parents": parents,
             "useFixedFreq": implementation.getFreqFixed(),
             "freq": implementation.getFreq(),
             "useFreqScaling": implementation.getFreqScaled(),
@@ -44,6 +57,7 @@ SynthItem {
         return essence
     }
 
+    // initialize self from json
     function init(essence) {
         x = essence["x"]
         y = essence["y"]
@@ -53,7 +67,7 @@ SynthItem {
         fixedFrequencyEditor.fixed = essence["useFixedFreq"]
         var indexes = essence["freqIndexes"]
         var stringIndexes = SessionCode.indexesToString(indexes)
-        frequencyMapper.textInput.text = stringIndexes
+        frequencyMapper.text = stringIndexes
         frequencyMapper.validateMappings()
         frequencyScaler.low = essence["freqScaleLow"]
         frequencyScaler.high = essence["freqScaleHigh"]
@@ -64,17 +78,6 @@ SynthItem {
     Editor {
 
         id: editor
-
-        Component.onCompleted: {
-            create()
-            frequencyEditor.value = implementation.getFreq()
-            fixedFrequencyEditor.fixed = implementation.getFreqFixed()
-            frequencyMapper.validateMappings()
-            frequencyScaler.low = implementation.getFreqScaleLow()
-            frequencyScaler.high = implementation.getFreqScaleHigh()
-            frequencyScaler.exponent = implementation.getFreqScaleExponent()
-            frequencyScaler.scaled = implementation.getFreqScaled()
-        }
 
         EditorLayout {
             id: layout

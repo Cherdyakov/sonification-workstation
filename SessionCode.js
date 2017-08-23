@@ -74,6 +74,9 @@ function createItem(type) {
     case 1:
         componentFile = "OSC.qml"
         break;
+    case 2:
+        componentFile = "AUD.qml"
+        break;
     default:
         return null
     }

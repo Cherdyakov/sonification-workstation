@@ -3,6 +3,7 @@ import SonLib 1.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import "Style.js" as Style
+import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
@@ -11,16 +12,54 @@ SynthItem {
     childType: QtSynthItem.INPUT
     mainColor: Style.audColor
     textColor: Style.itemTextColor
-   Component.onCompleted: {
+
+
+    Component.onCompleted: {
+        create()
     }
+
+    // return json representation of self
+    function read() {
+
+        var parents = []
+        for(var i = 0; i < synthParents.length; i++) {
+            var parent = synthParents[i].identifier
+            parents.push(parent)
+        }
+
+        var audIndexes = implementation.getAudIndexes()
+        // remove keys from freqIndexes and store in js array
+        var audIndexesArray = Object.keys(audIndexes).map(function(k) { return audIndexes[k] });
+
+        var essence = {
+            "identifier": identifier,
+            "type": type,
+            "x": x,
+            "y": y,
+            "muted": implementation.getMute(),
+            "parents": parents,
+            "audIndexes": audIndexesArray,
+        }
+
+        return essence
+    }
+
+    // initialize self from json
+    function init(essence) {
+        x = essence["x"]
+        y = essence["y"]
+        identifier = essence["identifier"]
+        muted = essence["muted"]
+        var indexes = essence["audIndexes"]
+        var stringIndexes = SessionCode.indexesToString(indexes)
+        audificationMapper.text = stringIndexes
+        audificationMapper.validateMappings()
+    }
+
 
     Editor {
 
         id: editor
-
-        Component.onCompleted: {
-
-        }
 
         EditorLayout {
             id: layout
@@ -29,15 +68,13 @@ SynthItem {
             EditorMapper {
                 id: audificationMapper
                 label.text: qsTr("Amplitude Source: ")
+                maxIndexes: 128
                 onMappingsChanged:
                 {
-                    if(root.mappedRows !== mappings) {
-                        root.mappedRows = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
-                        implementation.setAudIndexes(implementationMappings, QtSynthItem.AUDIFICATION)
-                    }
+                    var implementationMappings = mappings.map( function(value) {
+                        return value - 1;
+                    } )
+                    implementation.setAudIndexes(implementationMappings, QtSynthItem.AUDIFICATION)
                 }
             }
         }

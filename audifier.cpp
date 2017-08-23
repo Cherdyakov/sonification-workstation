@@ -111,7 +111,7 @@ std::vector<int> Audifier::get_aud_indexes()
 
 Frame Audifier::process()
 {
-            Frame frame = 0.0;
+    Frame frame = 0.0;
 
     if(!command_buffer_.empty())
     {
@@ -130,8 +130,8 @@ Frame Audifier::process()
     {
         // Audifier always scales datasets to range -1.0 to 1.0
         frame += scale((data_->at(static_cast<unsigned int>(audify_indexes_[i]))),
-                        mins_->at(i), maxes_->at(i),
-                        -1.0, 1.0, 1.0);
+                       mins_->at(i), maxes_->at(i),
+                       -1.0, 1.0, 1.0);
     }
 
     // visit amplitude modulating children
