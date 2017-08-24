@@ -8,7 +8,6 @@ ColumnLayout {
     Layout.maximumHeight: Style.editorRowHeight * 2
 
     property alias label: label
-    property alias spinBox: spinBox
     property alias value: spinBox.doubleValue
 
     EditorLabel {

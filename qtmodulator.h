@@ -19,6 +19,8 @@ public:
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
 
+    Q_INVOKABLE void setModType(QT_PARAMETER parameter);
+
     Q_INVOKABLE void setFreq(double freq);
     Q_INVOKABLE void setFreqFixed(bool fixed);
     Q_INVOKABLE void setFreqIndexes(QVector<int> indexes);
@@ -27,7 +29,6 @@ public:
     Q_INVOKABLE void setFreqScaleHigh(double high);
     Q_INVOKABLE void setFreqScaleExponent(double exponent);
 
-    Q_INVOKABLE void setModType(QT_PARAMETER parameter);
     Q_INVOKABLE void setDepth(double depth);
     Q_INVOKABLE void setDepthFixed(bool fixed);
     Q_INVOKABLE void setDepthIndexes(QVector<int> indexes);
@@ -38,6 +39,7 @@ public:
 
     // getters
     Q_INVOKABLE bool getMute();
+    Q_INVOKABLE int getModType();
     // frequency getters
     Q_INVOKABLE double getFreq();
     Q_INVOKABLE bool getFreqFixed();

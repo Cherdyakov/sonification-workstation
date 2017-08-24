@@ -70,13 +70,31 @@ function createItem(type) {
     switch(type) {
     case 0:
         componentFile = "OUT.qml"
-        break;
+        break
     case 1:
         componentFile = "OSC.qml"
-        break;
+        break
     case 2:
         componentFile = "AUD.qml"
-        break;
+        break
+    case 3:
+        componentFile = "MOD.qml"
+        break
+    case 4:
+        componentFile = "PAN.qml"
+        break
+    case 5:
+        componentFile = "ENV.qml"
+        break
+    case 6:
+        componentFile = "VOL.qml"
+        break
+    case 7:
+        componentFile = "NSE.qml"
+        break
+    case 8:
+        componentFile = "EQ.qml"
+        break
     default:
         return null
     }

@@ -48,7 +48,8 @@ public:
     double get_freq_scale_low();
     double get_freq_scale_high();
     double get_freq_scale_exponent();
-    // depth parameter getters
+    // mod type getter
+    PARAMETER get_mod_type();
     double get_depth();
     bool get_depth_fixed();
     std::vector<int> get_depth_indexes();
@@ -82,7 +83,7 @@ private:
     float get_depth_value();
 
     ITEM my_type_;
-    PARAMETER mod_type_;
+    PARAMETER child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
     gam::Sine<> gen_;

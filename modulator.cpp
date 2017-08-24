@@ -5,7 +5,7 @@ namespace son {
 Modulator::Modulator()
 {
     my_type_ = ITEM::MODULATOR;
-    mod_type_ = PARAMETER::AMPLITUDE;
+    child_type_ = PARAMETER::AMPLITUDE;
     muted_ = false;
 
     // freq
@@ -283,6 +283,11 @@ double Modulator::get_freq_scale_exponent()
     return freq_exponent_;
 }
 
+SynthItem::PARAMETER Modulator::get_mod_type()
+{
+    return child_type_;
+}
+
 double Modulator::get_depth()
 {
     return depth_;
@@ -345,7 +350,7 @@ Frame Modulator::process()
         frame *= am_frame;
     }
     // if we are an fmod, amplify our signal by depth
-    if(mod_type_ == PARAMETER::FREQUENCY)
+    if(child_type_ == PARAMETER::FREQUENCY)
     {
         Frame depth_frame = get_depth_value();
         frame *= depth_frame;
@@ -464,14 +469,14 @@ void Modulator::process_set_data(std::vector<double> *data, std::vector<double>*
 
 void Modulator::process_set_mod_type(PARAMETER parameter)
 {
-    mod_type_ = parameter;
+    child_type_ = parameter;
     std::vector<SynthItem*> parents_copy = parents_;
     for(unsigned int i = 0; i < parents_copy.size(); i++)
     {
         SynthItem* parent = parents_copy[i];
         erase_item(parent, &parents_);
         parent->remove_child(this);
-        parent->add_child(this, parameter);
+        parent->add_child(this, child_type_);
     }
 }
 
