@@ -74,7 +74,7 @@ void Modulator::remove_parent(SynthItem *parent)
     command_buffer_.push(command);
 }
 
-bool Modulator::add_child(SynthItem *child, SynthItem::PARAMETER param)
+bool Modulator::add_child(SynthItem *child, PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {
@@ -281,11 +281,6 @@ double Modulator::get_freq_scale_high()
 double Modulator::get_freq_scale_exponent()
 {
     return freq_exponent_;
-}
-
-SynthItem::PARAMETER Modulator::get_mod_type()
-{
-    return child_type_;
 }
 
 double Modulator::get_depth()

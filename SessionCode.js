@@ -35,8 +35,8 @@ function createTree(arr) {
             obj["synthItem"] = synthItem
             itemDict[id] = obj
         }
-        connectTree(itemDict)
     }
+    connectTree(itemDict)
 }
 
 // patch newly created items together
@@ -45,8 +45,9 @@ function connectTree(itemDict) {
         if (itemDict.hasOwnProperty(key)) {
             var obj = itemDict[key];
             var item = obj["synthItem"]
-            var pIDs = obj["parents"]
-            for(var pID in pIDs) {
+            var parents = obj["parents"]
+            for(var parent in parents) {
+                var pID = parents[parent]
                 var pObj = itemDict[pID]
                 var pItem = pObj["synthItem"]
                 pItem.addChild(item)

@@ -5,6 +5,7 @@ namespace son {
 Oscillator::Oscillator()
 {
     my_type_ = ITEM::OSCILLATOR;
+    my_child_type_ = PARAMETER::INPUT;
     muted_ = false;
     freq_ = 440;
     freq_fixed_ = true;
@@ -67,7 +68,7 @@ void Oscillator::remove_parent(SynthItem *parent)
     command_buffer_.push(command);
 }
 
-bool Oscillator::add_child(SynthItem *child, SynthItem::PARAMETER param)
+bool Oscillator::add_child(SynthItem *child, PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {

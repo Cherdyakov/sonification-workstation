@@ -53,7 +53,7 @@ public:
 
     // getters are not thread safe
     bool get_mute();
-    std::vector<SynthItem*> get_parents();
+    std::vector<SynthItem*> get_parents() override;
 
 private:
     void retrieve_commands() override;
@@ -73,6 +73,7 @@ private:
     void calculate_min_max();
 
     ITEM my_type_;
+    PARAMETER my_child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
     std::vector<SynthItem::PARAMETER> accepted_children_;

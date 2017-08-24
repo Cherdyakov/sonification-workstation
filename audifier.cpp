@@ -55,7 +55,7 @@ void Audifier::remove_parent(SynthItem *parent)
     command_buffer_.push(command);
 }
 
-bool Audifier::add_child(SynthItem *child, SynthItem::PARAMETER param)
+bool Audifier::add_child(SynthItem *child, PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {

@@ -3,24 +3,26 @@ import SonLib 1.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import "Style.js" as Style
+import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
     label: qsTr("MOD")
     type: QtTransport.MODULATOR
+    childType: QtSynthItem.AMPLITUDE
     mainColor: Style.modColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()
         frequencyEditor.value = implementation.getFreq()
-        fixedFreqEditor.fixed = implementation.getFreqFixed()
+        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
         frequencyScaler.low = implementation.getFreqScaleLow()
         frequencyScaler.high = implementation.getFreqScaleHigh()
         frequencyScaler.exponent = implementation.getFreqScaleExponent()
         frequencyScaler.scaled = implementation.getFreqScaled()
         modEditor.depth = implementation.getDepth()
-        modEditor.setModType(implementation.getModType())
+//        modEditor.modFromParameter(1)
         fixedDepthEditor.fixed = implementation.getDepthFixed()
         depthScaler.low = implementation.getDepthScaleLow()
         depthScaler.high = implementation.getDepthScaleHigh()
@@ -51,7 +53,7 @@ SynthItem {
             "x": x,
             "y": y,
             "muted": implementation.getMute(),
-            "modType": implementation.getModType(),
+            "modType": childType,
             "freqIndexes": freqIndexesArray,
             "depthIndexes": depthIndexesArray,
             "parents": parents,
@@ -77,7 +79,7 @@ SynthItem {
         y = essence["y"]
         identifier = essence["identifier"]
         muted = essence["muted"]
-        modEditor.setModType(essence["modType"])
+        modEditor.modFromParameter(essence["modType"])
         frequencyEditor.value = essence["freq"]
         fixedFrequencyEditor.fixed = essence["useFixedFreq"]
         var indexes = essence["freqIndexes"]
@@ -118,7 +120,7 @@ SynthItem {
                 }
 
                 EditorFixedParam {
-                    id: fixedFreqEditor
+                    id: fixedFrequencyEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
                         implementation.setFreqFixed(fixed)
@@ -133,11 +135,10 @@ SynthItem {
                 maxIndexes: 1
                 onMappingsChanged:
                 {
-                    if(root.mappedRows !== mappings) {
-                        root.mappedRows = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
+                    var implementationMappings = mappings.map(function(value) {
+                        return value - 1
+                    } )
+                    if(implementation !== null) {
                         implementation.setFreqIndexes(implementationMappings)
                     }
                 }
@@ -181,14 +182,12 @@ SynthItem {
                     if(implementation === null) {
                         return
                     }
-
-                    var mod
                     switch(modulation) {
-                    case 0:
-                        mod = QtSynthItem.AMPLITUDE
+                    case "Amplitude":
+                        childType = QtSynthItem.AMPLITUDE
                         break
-                    case 1:
-                        mod = QtSynthItem.FREQUENCY
+                    case "Frequency":
+                        childType = QtSynthItem.FREQUENCY
                         break
                     default:
                         break
@@ -200,7 +199,7 @@ SynthItem {
                         synthItem.removeChild(root)
                         removeParent(synthItem)
                     }
-                    implementation.setModType(mod)
+                    implementation.setModType(childType)
                     for(i = 0; i < parentsCopy.length; i++) {
                         synthItem = parentsCopy[i]
                         synthItem.addChild(root)
@@ -219,11 +218,10 @@ SynthItem {
                     maxIndexes: 1
                     onMappingsChanged:
                     {
-                        if(root.mappedRowsDepth !== mappings) {
-                            root.mappedRowsDepth = mappings
-                            var implementationMappings = mappings.map( function(value) {
-                                return value - 1;
-                            } )
+                        var implementationMappings = mappings.map(function(value) {
+                            return value - 1
+                        } )
+                        if(implementation !== null) {
                             implementation.setDepthIndexes(implementationMappings)
                         }
                     }

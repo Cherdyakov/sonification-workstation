@@ -55,21 +55,15 @@ void Transport::set_data(std::vector<double> *data, std::vector<double> *mins, s
 
 void Transport::add_parent(SynthItem *parent)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::ADD_PARENT;
-    command.item = parent;
-    command_buffer_.push(command);
+    (void)parent;
 }
 
 void Transport::remove_parent(SynthItem *parent)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::REMOVE_PARENT;
-    command.item = parent;
-    command_buffer_.push(command);
+    (void)parent;
 }
 
-bool Transport::add_child(SynthItem *child, SynthItem::PARAMETER param)
+bool Transport::add_child(SynthItem *child, PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {

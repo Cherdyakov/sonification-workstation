@@ -110,7 +110,7 @@ public:
                              std::vector<double>* maxes) = 0;
     virtual void add_parent(SynthItem* parent) = 0;
     virtual void remove_parent(SynthItem* parent) = 0;
-    virtual bool add_child(SynthItem *child, PARAMETER parameter) = 0;
+    virtual bool add_child(SynthItem *child, PARAMETER param) = 0;
     virtual void remove_child(SynthItem *child) = 0;
     virtual void mute(bool mute) = 0;
     virtual Frame process() = 0; // every sample

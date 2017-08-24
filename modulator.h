@@ -48,8 +48,8 @@ public:
     double get_freq_scale_low();
     double get_freq_scale_high();
     double get_freq_scale_exponent();
-    // mod type getter
-    PARAMETER get_mod_type();
+
+    // depth parameter getters
     double get_depth();
     bool get_depth_fixed();
     std::vector<int> get_depth_indexes();

@@ -166,12 +166,6 @@ double QtModulator::getFreqScaleExponent()
     return exponent;
 }
 
-int QtModulator::getModType()
-{
-    QT_PARAMETER type = (QT_PARAMETER)modulator_->get_mod_type();
-    return type;
-}
-
 double QtModulator::getDepth()
 {
     double depth = modulator_->get_depth();

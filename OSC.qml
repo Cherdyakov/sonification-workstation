@@ -113,49 +113,47 @@ SynthItem {
                 maxIndexes: 128
                 onMappingsChanged:
                 {
-                    if(root.mappedRows !== mappings) {
-                        root.mappedRows = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
-                        if(implementation !== null) {
-                            implementation.setFreqIndexes(implementationMappings)
-                        }
+                    var implementationMappings = mappings.map(function(value) {
+                        return value - 1
+                    } )
+                    if(implementation !== null) {
+                        implementation.setFreqIndexes(implementationMappings)
                     }
                 }
             }
+        }
 
-            EditorScaler {
-                id: frequencyScaler
-                label.text: qsTr("Frequency Scaling: ")
-                lowLabel.text: qsTr("Frequency Low: ")
-                highLabel.text: qsTr("Frequency High: ")
+        EditorScaler {
+            id: frequencyScaler
+            label.text: qsTr("Frequency Scaling: ")
+            lowLabel.text: qsTr("Frequency Low: ")
+            highLabel.text: qsTr("Frequency High: ")
 
-                onLowChanged:
-                {
-                    if(implementation !== null) {
-                        implementation.setFreqScaleLow(low)
-                    }
+            onLowChanged:
+            {
+                if(implementation !== null) {
+                    implementation.setFreqScaleLow(low)
                 }
-                onHighChanged:
-                {
-                    if(implementation !== null) {
-                        implementation.setFreqScaleHigh(high)
-                    }
+            }
+            onHighChanged:
+            {
+                if(implementation !== null) {
+                    implementation.setFreqScaleHigh(high)
                 }
-                onExponentChanged:
-                {
-                    if(implementation !== null) {
-                        implementation.setFreqScaleExponent(exponent)
-                    }
+            }
+            onExponentChanged:
+            {
+                if(implementation !== null) {
+                    implementation.setFreqScaleExponent(exponent)
                 }
-                onScaledChanged:
-                {
-                    if(implementation !== null) {
-                        implementation.setFreqScaled(scaled)
-                    }
+            }
+            onScaledChanged:
+            {
+                if(implementation !== null) {
+                    implementation.setFreqScaled(scaled)
                 }
             }
         }
     }
 }
+

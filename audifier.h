@@ -51,6 +51,7 @@ private:
     void process_set_param_indexes(std::vector<int> indexes, PARAMETER param);
 
     ITEM my_type_;
+    PARAMETER my_child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
     std::vector<SynthItem::PARAMETER> accepted_children_;

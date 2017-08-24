@@ -74,6 +74,7 @@ private:
     void set_gen_freqs();
 
     ITEM my_type_;
+    PARAMETER my_child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
     std::vector<gam::Sine<>> gens_= std::vector<gam::Sine<>> (MAX_DIMENSIONS);

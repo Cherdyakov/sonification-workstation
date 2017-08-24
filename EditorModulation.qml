@@ -9,13 +9,13 @@ ColumnLayout {
     Layout.maximumHeight: Style.editorRowHeight * 2
 
     property  alias depth: spinBox.doubleValue
-    property alias modulation: comboBox.currentIndex
+    property alias modulation: comboBox.currentText
 
     property var modulationTypes: [qsTr("Amplitude"),
                                    qsTr("Frequency")]
 
-    function setModType(modulation) {
-        switch(modulation) {
+    function modFromParameter(mod) {
+        switch(mod) {
         case QtSynthItem.AMPLITUDE:
             comboBox.currentIndex = 0
             break

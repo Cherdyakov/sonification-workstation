@@ -39,7 +39,6 @@ public:
 
     // getters
     Q_INVOKABLE bool getMute();
-    Q_INVOKABLE int getModType();
     // frequency getters
     Q_INVOKABLE double getFreq();
     Q_INVOKABLE bool getFreqFixed();
