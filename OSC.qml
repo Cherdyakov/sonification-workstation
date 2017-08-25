@@ -43,7 +43,7 @@ SynthItem {
             "type": type,
             "x": x,
             "y": y,
-            "muted": implementation.getMute(),
+            "mute": implementation.getMute(),
             "freqIndexes": freqIndexesArray,
             "parents": parents,
             "useFixedFreq": implementation.getFreqFixed(),
@@ -62,7 +62,7 @@ SynthItem {
         x = essence["x"]
         y = essence["y"]
         identifier = essence["identifier"]
-        muted = essence["muted"]
+        muted = essence["mute"]
         frequencyEditor.value = essence["freq"]
         fixedFrequencyEditor.fixed = essence["useFixedFreq"]
         var indexes = essence["freqIndexes"]

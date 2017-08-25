@@ -13,6 +13,12 @@ ColumnLayout {
     property alias high: highSpinBox.doubleValue
     property alias exponent: expSpinBox.doubleValue
     property alias scaled: checkBox.checked
+    property alias lowFrom: lowSpinBox.doubleFrom
+    property alias lowTo: lowSpinBox.doubleTo
+    property alias lowStepSize: lowSpinBox.doubleStepSize
+    property alias highFrom: highSpinBox.doubleFrom
+    property alias highTo: highSpinBox.doubleTo
+    property alias highStepSize: highSpinBox.doubleStepSize
 
     RowLayout {
         EditorLabel {

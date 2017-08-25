@@ -3,6 +3,7 @@ import SonLib 1.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import "Style.js" as Style
+import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
@@ -12,32 +13,70 @@ SynthItem {
     mainColor: Style.panColor
     textColor: Style.itemTextColor
 
+    Component.onCompleted: {
+        create()
+        panEditor.value = implementation.getPan();
+        fixedEditor.fixed = implementation.getPanFixed();
+        panScaler.low = implementation.getPanScaleLow();
+        panScaler.high = implementation.getPanScaleHigh();
+        panScaler.exponent = implementation.getPanScaleExponent();
+        panScaler.scaled = implementation.getPanScaled();
+    }
+
+    // return json representation of self
+    function read() {
+
+        var parents = []
+        for(var i = 0; i < synthParents.length; i++) {
+            var parent = synthParents[i].identifier
+            parents.push(parent)
+        }
+
+        var panIndexes = implementation.getPanIndexes()
+        // remove keys from freqIndexes and store in js array
+        var panIndexesArray = Object.keys(panIndexes).map(function(k) { return panIndexes[k] });
+
+        var essence = {
+            "identifier": identifier,
+            "type": type,
+            "x": x,
+            "y": y,
+            "muted": implementation.getMute(),
+            "parents": parents,
+            "panIndexes": panIndexesArray,
+            "pan": implementation.getPan(),
+            "panFixed": implementation.getPanFixed(),
+            "panScaled": implementation.getPanScaled(),
+            "panScaleLow": implementation.getPanScaleLow(),
+            "panScaleHigh": implementation.getPanScaleHigh(),
+            "panScaleExponent": implementation.getPanScaleExponent()
+
+        }
+
+        return essence
+    }
+
+    // initialize self from json
+    function init(essence) {
+        identifier = essence["identifier"]
+        x = essence["x"]
+        y = essence["y"]
+        muted = essence["muted"]
+        var indexes = essence["panIndexes"]
+        var stringIndexes = SessionCode.indexesToString(indexes)
+        panMapper.text = stringIndexes
+        panMapper.validateMappings()
+        panEditor.value = essence["pan"]
+        fixedEditor.fixed = essence["panFixed"]
+        panScaler.scaled = essence["panScaled"]
+        panScaler.low = essence["panScaleLow"]
+        panScaler.high = essence["panScaleHigh"]
+        panScaler.exponent = essence["panScaleExponent"]
+    }
+
     Editor {
 
         id: editor
-        property bool useFixedPan: true
-        property double fixedPan: 0
-        property bool usePanScaling: true
-        property double panScaleLow: -1
-        property double panScaleHigh: 1
-        property double panScaleExp: 1
-
-        Component.onCompleted: {
-            panEditor.spinBox.value = fixedPan * 100
-            fixedEditor.checkBox.checked = useFixedPan
-            panScaler.lowSpinBox.value = panScaleLow * 100
-            panScaler.highSpinBox.value = panScaleHigh * 100
-            panScaler.expSpinBox.value = panScaleExp * 100
-            panScaler.checkBox.checked = usePanScaling
-        }
-
-        onUseFixedPanChanged: {
-            implementation.setPanFixed(useFixedPan)
-        }
-
-        onFixedPanChanged: {
-            implementation.setPan(fixedPan)
-        }
 
         EditorLayout {
             id: layout
@@ -47,13 +86,11 @@ SynthItem {
 
                 EditorDoubleParam {
                     id: panEditor
-                    spinBox.from: -100
-                    spinBox.to: 100
-                    spinBox.stepSize: 1
-                    onParamValueChanged: {
-                        if (editor.fixedPan !== value) {
-                            editor.fixedPan = value
-                        }
+                    from: -1
+                    to: 1
+                    stepSize: 0.1
+                    onValueChanged: {
+                        implementation.setPan(value)
                     }
                 }
 
@@ -61,9 +98,7 @@ SynthItem {
                     id: fixedEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.useFixedPan != fixed) {
-                            editor.useFixedPan = fixed
-                        }
+                        implementation.setPanFixed(fixed)
                     }
                 }
 
@@ -72,14 +107,12 @@ SynthItem {
             EditorMapper {
                 id: panMapper
                 label.text: qsTr("Pan Source: ")
-                maxIndexes: 128
                 onMappingsChanged:
                 {
-                    if(root.mappedRows !== mappings) {
-                        root.mappedRows = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
+                    var implementationMappings = mappings.map(function(value) {
+                        return value - 1
+                    } )
+                    if(implementation !== null) {
                         implementation.setPanIndexes(implementationMappings)
                     }
                 }
@@ -90,49 +123,30 @@ SynthItem {
                 label.text: qsTr("Pan Scaling: ")
                 lowLabel.text: qsTr("Pan Low: ")
                 highLabel.text: qsTr("Pan High: ")
-                lowSpinBox.from: -100
-                lowSpinBox.to: 100
-                lowSpinBox.stepSize: 1
-                highSpinBox.from: -100
-                highSpinBox.to: 100
-                highSpinBox.stepSize: 1
+                lowFrom: -1
+                lowTo: 1
+                lowStepSize: 0.1
+                highFrom: -1
+                highTo: 1
+                highStepSize: 0.1
 
                 onLowChanged:
                 {
-                    if(editor.panScaleLow !== low) {
-                        editor.panScaleLow = low
-                        implementation.setPanScaleVals(editor.panScaleLow,
-                                                          editor.panScaleHigh,
-                                                          editor.panScaleExp)
-                    }
+                    implementation.setPanScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(editor.panScaleHigh !== high) {
-                        editor.panScaleHigh = high
-                        implementation.setPanScaleVals(editor.panScaleLow,
-                                                          editor.panScaleHigh,
-                                                          editor.panScaleExp)                    }
+                    implementation.setPanScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(editor.panScaleExp !== exp) {
-                        editor.panScaleExp = exp
-                        implementation.setPanScaleVals(editor.panScaleLow,
-                                                          editor.panScaleHigh,
-                                                          editor.panScaleExp)                    }
+                    implementation.setPanScaleExponent(exponent)
                 }
-                onUseScalingChanged:
+                onScaledChanged:
                 {
-                    if(editor.usePanScaling !== scaling) {
-                        editor.usePanScaling = scaling
-                        implementation.setPanScaled(editor.usePanScaling)
-                    }
+                    implementation.setPanScaled(scaled)
                 }
             }
         }
     }
-
 }
-
-

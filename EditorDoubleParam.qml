@@ -9,6 +9,9 @@ ColumnLayout {
 
     property alias label: label
     property alias value: spinBox.doubleValue
+    property alias from: spinBox.doubleFrom
+    property alias to: spinBox.doubleTo
+    property alias stepSize: spinBox.doubleStepSize
 
     EditorLabel {
         id: label

@@ -53,7 +53,6 @@ function connectTree(itemDict) {
                 pItem.addChild(item)
             }
         }
-
     }
 }
 
