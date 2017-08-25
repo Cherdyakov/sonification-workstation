@@ -43,15 +43,15 @@ SynthItem {
             "type": type,
             "x": x,
             "y": y,
-            "mute": implementation.getMute(),
+            "muted": implementation.getMute(),
             "freqIndexes": freqIndexesArray,
             "parents": parents,
-            "useFixedFreq": implementation.getFreqFixed(),
             "freq": implementation.getFreq(),
-            "useFreqScaling": implementation.getFreqScaled(),
+            "freqFixed": implementation.getFreqFixed(),
+            "freqScaled": implementation.getFreqScaled(),
             "freqScaleLow": implementation.getFreqScaleLow(),
             "freqScaleHigh": implementation.getFreqScaleHigh(),
-            "freqScaleExp": implementation.getFreqScaleExponent()
+            "freqScaleExponent": implementation.getFreqScaleExponent()
         }
 
         return essence
@@ -62,17 +62,17 @@ SynthItem {
         x = essence["x"]
         y = essence["y"]
         identifier = essence["identifier"]
-        muted = essence["mute"]
+        muted = essence["muted"]
         frequencyEditor.value = essence["freq"]
-        fixedFrequencyEditor.fixed = essence["useFixedFreq"]
+        fixedFrequencyEditor.fixed = essence["freqFixed"]
         var indexes = essence["freqIndexes"]
         var stringIndexes = SessionCode.indexesToString(indexes)
         frequencyMapper.text = stringIndexes
         frequencyMapper.validateMappings()
+        frequencyScaler.scaled = essence["freqScaled"]
         frequencyScaler.low = essence["freqScaleLow"]
         frequencyScaler.high = essence["freqScaleHigh"]
-        frequencyScaler.exponent = essence["freqScaleExp"]
-        frequencyScaler.scaled = essence["useFreqScaling"]
+        frequencyScaler.exponent = essence["freqScaleExponent"]
     }
 
     Editor {

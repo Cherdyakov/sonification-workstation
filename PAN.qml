@@ -43,8 +43,8 @@ SynthItem {
             "y": y,
             "muted": implementation.getMute(),
             "parents": parents,
-            "panIndexes": panIndexesArray,
             "pan": implementation.getPan(),
+            "panIndexes": panIndexesArray,
             "panFixed": implementation.getPanFixed(),
             "panScaled": implementation.getPanScaled(),
             "panScaleLow": implementation.getPanScaleLow(),
@@ -62,11 +62,11 @@ SynthItem {
         x = essence["x"]
         y = essence["y"]
         muted = essence["muted"]
+        panEditor.value = essence["pan"]
         var indexes = essence["panIndexes"]
         var stringIndexes = SessionCode.indexesToString(indexes)
         panMapper.text = stringIndexes
         panMapper.validateMappings()
-        panEditor.value = essence["pan"]
         fixedEditor.fixed = essence["panFixed"]
         panScaler.scaled = essence["panScaled"]
         panScaler.low = essence["panScaleLow"]

@@ -57,18 +57,18 @@ SynthItem {
             "freqIndexes": freqIndexesArray,
             "depthIndexes": depthIndexesArray,
             "parents": parents,
-            "useFixedFreq": implementation.getFreqFixed(),
             "freq": implementation.getFreq(),
-            "useFreqScaling": implementation.getFreqScaled(),
+            "freqFixed": implementation.getFreqFixed(),
+            "freqScaled": implementation.getFreqScaled(),
             "freqScaleLow": implementation.getFreqScaleLow(),
             "freqScaleHigh": implementation.getFreqScaleHigh(),
-            "freqScaleExp": implementation.getFreqScaleExponent(),
-            "useFixedDepth": implementation.getFreqFixed(),
-            "depth": implementation.getFreq(),
-            "useDepthScaling": implementation.getFreqScaled(),
-            "depthScaleLow": implementation.getFreqScaleLow(),
-            "depthScaleHigh": implementation.getFreqScaleHigh(),
-            "depthScaleExp": implementation.getFreqScaleExponent()
+            "freqScaleExponent": implementation.getFreqScaleExponent(),
+            "depth": implementation.getDepth(),
+            "depthFixed": implementation.getDepthFixed(),
+            "depthScaled": implementation.getDepthScaled(),
+            "depthScaleLow": implementation.getDepthScaleLow(),
+            "depthScaleHigh": implementation.getDepthScaleHigh(),
+            "depthScaleExponent": implementation.getDepthScaleExponent()
         }
         return essence
     }
@@ -86,18 +86,18 @@ SynthItem {
         var stringIndexes = SessionCode.indexesToString(indexes)
         frequencyMapper.text = stringIndexes
         frequencyMapper.validateMappings()
+        frequencyScaler.scaled = essence["freqScaled"]
         frequencyScaler.low = essence["freqScaleLow"]
         frequencyScaler.high = essence["freqScaleHigh"]
-        frequencyScaler.exponent = essence["freqScaleExp"]
-        frequencyScaler.scaled = essence["useFreqScaling"]
+        frequencyScaler.exponent = essence["freqScaleExponent"]
         indexes = essence["depthIndexes"]
         stringIndexes = SessionCode.indexesToString(indexes)
         depthMapper.text = stringIndexes
         depthMapper.validateMappings()
-        depthScaler.low = essence["freqScaleLow"]
-        depthScaler.high = essence["freqScaleHigh"]
-        depthScaler.exponent = essence["freqScaleExp"]
-        depthScaler.scaled = essence["useFreqScaling"]
+        depthScaler.scaled = essence["depthScaled"]
+        depthScaler.low = essence["depthScaleLow"]
+        depthScaler.high = essence["depthScaleHigh"]
+        depthScaler.exponent = essence["depthScaleExponent"]
     }
 
 
