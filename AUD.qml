@@ -28,7 +28,7 @@ SynthItem {
         }
 
         var audIndexes = implementation.getAudIndexes()
-        // remove keys from freqIndexes and store in js array
+        // remove keys from audIndexes and store in js array
         var audIndexesArray = Object.keys(audIndexes).map(function(k) { return audIndexes[k] });
 
         var essence = {
