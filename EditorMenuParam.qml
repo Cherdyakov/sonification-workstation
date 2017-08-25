@@ -10,8 +10,7 @@ ColumnLayout {
     property alias label: label
     property alias comboBox: comboBox
     property alias model: comboBox.model
-
-    signal valueChanged(int value)
+    property alias index: comboBox.currentIndex
 
     EditorLabel {
         id: label
@@ -24,6 +23,5 @@ ColumnLayout {
         model: [qsTr("First"), qsTr("Second"), qsTr("Third")]
         Layout.maximumHeight: Style.editorRowHeight
         Layout.fillWidth: true
-        onCurrentIndexChanged: valueChanged(comboBox.currentIndex)
     }
 }

@@ -37,6 +37,11 @@ public:
         NOTCH
     };
 
+    enum QT_NOISE {
+        WHITE = (int)SynthItem::NOISE::WHITE,
+        PINK
+    };
+
     explicit QtSynthItem(QObject *parent = 0);
     virtual SynthItem* implementation();
     Q_INVOKABLE virtual void deleteItem();

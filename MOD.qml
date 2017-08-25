@@ -22,7 +22,7 @@ SynthItem {
         frequencyScaler.exponent = implementation.getFreqScaleExponent()
         frequencyScaler.scaled = implementation.getFreqScaled()
         modEditor.depth = implementation.getDepth()
-//        modEditor.modFromParameter(1)
+        //        modEditor.modFromParameter(1)
         fixedDepthEditor.fixed = implementation.getDepthFixed()
         depthScaler.low = implementation.getDepthScaleLow()
         depthScaler.high = implementation.getDepthScaleHigh()
@@ -242,30 +242,21 @@ SynthItem {
                 lowLabel.text: qsTr("Depth Low: ")
                 highLabel.text: qsTr("Depth High: ")
 
-
                 onLowChanged:
                 {
-                    if(implementation !== null) {
-                        implementation.setDepthScaleLow(low)
-                    }
+                    implementation.setDepthScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(implementation !== null) {
-                        implementation.setDepthScaleHigh(high)
-                    }
+                    implementation.setDepthScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(implementation !== null) {
-                        implementation.setDepthScaleExponent(exponent)
-                    }
+                    implementation.setDepthScaleExponent(exponent)
                 }
                 onScaledChanged:
                 {
-                    if(implementation !== null) {
-                        implementation.setDepthScaled(scaled)
-                    }
+                    implementation.setDepthScaled(scaled)
                 }
             }
         }

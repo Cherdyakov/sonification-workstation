@@ -12,17 +12,45 @@ SynthItem {
     mainColor: Style.nseColor
     textColor: Style.itemTextColor
 
+    Component.onCompleted: {
+        create()
+        noiseEditor.index = implementation.getNoise()
+    }
+
+    // return json representation of self
+    function read() {
+
+        var parents = []
+        for(var i = 0; i < synthParents.length; i++) {
+            var parent = synthParents[i].identifier
+            parents.push(parent)
+        }
+
+        var essence = {
+            "identifier": identifier,
+            "type": type,
+            "x": x,
+            "y": y,
+            "muted": implementation.getMute(),
+            "parents": parents,
+            "noise": implementation.getNoise()
+        }
+
+        return essence
+    }
+
+    // initialize self from json
+    function init(essence) {
+        x = essence["x"]
+        y = essence["y"]
+        identifier = essence["identifier"]
+        muted = essence["muted"]
+        noiseEditor.index = essence["noise"]
+    }
+
     Editor {
 
         id: editor
-        property  int noise: 0
-
-        Component.onCompleted: {
-        }
-
-        onNoiseChanged: {
-            implementation.setNoise(noise)
-        }
 
         EditorLayout {
             id: layout
@@ -33,10 +61,11 @@ SynthItem {
                 label.text: qsTr("Noise Type: ")
                 model: [qsTr("White"), qsTr("Pink")]
 
-                onValueChanged: {
-                    if (editor.noise != value) {
-                        editor.noise = value;
+                onIndexChanged: {
+                    if(implementation === null) {
+                        return
                     }
+                    implementation.setNoise(index)
                 }
             }
 
