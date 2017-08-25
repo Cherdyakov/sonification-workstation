@@ -131,27 +131,19 @@ SynthItem {
 
             onLowChanged:
             {
-                if(implementation !== null) {
-                    implementation.setFreqScaleLow(low)
-                }
+                implementation.setFreqScaleLow(low)
             }
             onHighChanged:
             {
-                if(implementation !== null) {
-                    implementation.setFreqScaleHigh(high)
-                }
+                implementation.setFreqScaleHigh(high)
             }
             onExponentChanged:
             {
-                if(implementation !== null) {
-                    implementation.setFreqScaleExponent(exponent)
-                }
+                implementation.setFreqScaleExponent(exponent)
             }
             onScaledChanged:
             {
-                if(implementation !== null) {
-                    implementation.setFreqScaled(scaled)
-                }
+                implementation.setFreqScaled(scaled)
             }
         }
     }

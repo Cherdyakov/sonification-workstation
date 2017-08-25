@@ -81,7 +81,7 @@ SynthItem {
         muted = essence["muted"]
         modEditor.modFromParameter(essence["modType"])
         frequencyEditor.value = essence["freq"]
-        fixedFrequencyEditor.fixed = essence["useFixedFreq"]
+        fixedFrequencyEditor.fixed = essence["freqFixed"]
         var indexes = essence["freqIndexes"]
         var stringIndexes = SessionCode.indexesToString(indexes)
         frequencyMapper.text = stringIndexes
@@ -90,6 +90,8 @@ SynthItem {
         frequencyScaler.low = essence["freqScaleLow"]
         frequencyScaler.high = essence["freqScaleHigh"]
         frequencyScaler.exponent = essence["freqScaleExponent"]
+        modEditor.depth = essence["depth"]
+        fixedDepthEditor.fixed = essence["depthFixed"]
         indexes = essence["depthIndexes"]
         stringIndexes = SessionCode.indexesToString(indexes)
         depthMapper.text = stringIndexes
@@ -99,7 +101,6 @@ SynthItem {
         depthScaler.high = essence["depthScaleHigh"]
         depthScaler.exponent = essence["depthScaleExponent"]
     }
-
 
     Editor {
 
@@ -126,7 +127,6 @@ SynthItem {
                         implementation.setFreqFixed(fixed)
                     }
                 }
-
             }
 
             EditorMapper {
@@ -152,27 +152,19 @@ SynthItem {
 
                 onLowChanged:
                 {
-                    if(implementation !== null) {
-                        implementation.setFreqScaleLow(low)
-                    }
+                    implementation.setFreqScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(implementation !== null) {
-                        implementation.setFreqScaleHigh(high)
-                    }
+                    implementation.setFreqScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(implementation !== null) {
-                        implementation.setFreqScaleExponent(exponent)
-                    }
+                    implementation.setFreqScaleExponent(exponent)
                 }
                 onScaledChanged:
                 {
-                    if(implementation !== null) {
-                        implementation.setFreqScaled(scaled)
-                    }
+                    implementation.setFreqScaled(scaled)
                 }
             }
 

@@ -17,7 +17,7 @@ Equalizer::Equalizer()
     resonance_ = 1;
     resonance_fixed_ = true;
     resonance_scaled_ = true;
-    resonance_low_ = 0;
+    resonance_low_ = 1;
     resonance_high_ = 10;
     resonance_exponent_ = 1;
 
@@ -146,6 +146,7 @@ void Equalizer::set_frequency_scale_low(double low)
     command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(low);
+    command_buffer_.push(command);
 }
 
 void Equalizer::set_frequency_scale_high(double high)
@@ -154,6 +155,7 @@ void Equalizer::set_frequency_scale_high(double high)
     command.type = COMMAND::SCALE_HIGH;
     command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(high);
+    command_buffer_.push(command);
 }
 
 void Equalizer::set_frequency_scale_exponent(double exponent)
@@ -162,6 +164,7 @@ void Equalizer::set_frequency_scale_exponent(double exponent)
     command.type = COMMAND::SCALE_EXPONENT;
     command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(exponent);
+    command_buffer_.push(command);
 }
 
 void Equalizer::set_resonance(double resonance)
@@ -206,6 +209,7 @@ void Equalizer::set_resonance_scale_low(double low)
     command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::RESONANCE;
     command.doubles.push_back(low);
+    command_buffer_.push(command);
 }
 
 void Equalizer::set_resonance_scale_high(double high)
@@ -214,6 +218,7 @@ void Equalizer::set_resonance_scale_high(double high)
     command.type = COMMAND::SCALE_HIGH;
     command.parameter = PARAMETER::RESONANCE;
     command.doubles.push_back(high);
+    command_buffer_.push(command);
 }
 
 void Equalizer::set_resonance_scale_exponent(double exponent)
@@ -222,6 +227,7 @@ void Equalizer::set_resonance_scale_exponent(double exponent)
     command.type = COMMAND::SCALE_EXPONENT;
     command.parameter = PARAMETER::RESONANCE;
     command.doubles.push_back(exponent);
+    command_buffer_.push(command);
 }
 
 void Equalizer::set_filter_type(SynthItem::FILTER_TYPE type)
@@ -602,6 +608,10 @@ double Equalizer::calculate_filter_frequency()
                               frequency_low_, frequency_high_, frequency_exponent_);
         }
     }
+    if(frequency == 0) // blows up the filter
+    {
+        frequency = 0.001;
+    }
     return frequency;
 }
 
@@ -621,6 +631,10 @@ double Equalizer::calculate_filter_resonance()
             resonance = scale(resonance, mins_->at(idx), maxes_->at(idx),
                               resonance_low_, resonance_high_, resonance_exponent_);
         }
+    }
+    if(resonance == 0) // blows up the filter
+    {
+        resonance = 0.001;
     }
     return resonance;
 }
