@@ -10,7 +10,6 @@ Item {
     property var synthChildren: []
     property var synthParents: []
     property var mappedRows: []
-    property bool patching: false
     property bool muted: false
     property int type: -1 // OUT = 0, OSC = 1
     property int childType: -1 // INPUT = 0
@@ -24,8 +23,9 @@ Item {
 
     width: Style.itemHeight; height: Style.itemWidth
 
+    signal patching(var item)
+
     Component.onCompleted: {
-        synthItems.push(this)
         this.parent = workspace.contentItem
     }
 
@@ -215,8 +215,7 @@ Item {
                 }
                 // right clicked
                 if(mouse.button & Qt.RightButton) {
-                    patchManager.setPatchPoint(root)
-                    canvas.requestPaint()
+                    root.patching(root)
                     root.forceActiveFocus()
                 }
             }

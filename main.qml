@@ -16,6 +16,11 @@ Rectangle
     property alias canvas: canvas
     property alias workspace: workspace
 
+    Component.onCompleted: {
+        dac.patching.connect(patchManager.patchBegin)
+        synthItems.push(dac)
+    }
+
     Connections {
         target: fileReader
         onQmlDatasetChanged: {
@@ -99,6 +104,10 @@ Rectangle
                 id: palette
                 height: childrenRect.height
                 width: childrenRect.width
+                onItemCreated: {
+                    synthItems.push(item)
+                    item.patching.connect(patchManager.patchBegin)
+                }
             }
         }
     }
@@ -109,6 +118,11 @@ Rectangle
         z: 0
         anchors.fill: workspace
 
+        PatchManager {
+            id: patchManager
+            anchors.fill: parent
+        }
+
         onPaint: {
             // get context to draw with
             var ctx = getContext("2d")
@@ -118,59 +132,19 @@ Rectangle
             ctx.lineWidth = 4
             ctx.strokeStyle = "chartreuse"
 
-            // get each patch
-            var itemCount = synthItems.length
+            var pointPairs = patchManager.getDrawPoints(synthItems)
 
-            for(var i = 0; i < itemCount; i++)
+            for (var i = 0; i < pointPairs.length; i++)
             {
-                var parentItem = synthItems[i]
-
-                if (parentItem.synthChildren)
-                {
-                    var numChildren = parentItem.synthChildren.length
-
-                    for (var j = 0; j < numChildren; j++)
-                    {
-                        var childItem = parentItem.synthChildren[j]
-
-                        var startPoint = mapFromItem(workspace.contentItem, parentItem.x, parentItem.y)
-                        var beginX = startPoint.x + parentItem.width / 2
-                        var beginY = startPoint.y + parentItem.height / 2
-                        var endPoint = mapFromItem(workspace.contentItem, childItem.x, childItem.y)
-                        var endX = endPoint.x + childItem.width / 2
-                        var endY = endPoint.y + childItem.height / 2
-
-                        // begin a new path to draw
-                        ctx.beginPath()
-                        // line start point
-                        ctx.moveTo(beginX,beginY)
-                        // line end point
-                        ctx.lineTo(endX,endY)
-                        // stroke using line width and stroke style
-                        ctx.stroke()
-                    }
-                }
-
-                if (patchManager.patchBegin)
-                {
-                    var beginning = patchManager.patchBegin
-                    startPoint = mapFromItem(workspace.contentItem, beginning.x, beginning.y)
-                    beginX = startPoint.x + beginning.width / 2
-                    beginY = startPoint.y + beginning.height / 2
-
-                    endPoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
-                    endX = endPoint.x
-                    endY = endPoint.y
-
-                    // begin a new path to draw
-                    ctx.beginPath()
-                    // line start point
-                    ctx.moveTo(beginX,beginY)
-                    // line end point
-                    ctx.lineTo(endX,endY)
-                    // stroke using line width and stroke style
-                    ctx.stroke()
-                }
+                var points = pointPairs[i]
+                // begin new drawing path
+                ctx.beginPath()
+                // line start point
+                ctx.moveTo(points.begin.x,points.begin.y)
+                // line end point
+                ctx.lineTo(points.end.x,points.end.y)
+                // stroke using line width and stroke style
+                ctx.stroke()
             }
         }
     }
@@ -182,10 +156,6 @@ Rectangle
         created: true
         x: workspace.width / 2 - dac.width / 2
         y: workspace.height - 100
-    }
-
-    PatchManager {
-        id: patchManager
     }
 
 }

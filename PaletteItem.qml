@@ -12,11 +12,16 @@ Image {
     width: 50
     height: 50
 
+    signal itemCreated(var item)
+
     MouseArea {
         anchors.fill: parent
 
-        onPressed: Code.startDrag(mouse);
-        onPositionChanged: Code.continueDrag(mouse);
-        onReleased: Code.endDrag(mouse);
+        onPressed: {
+            var item = Code.startDrag(mouse)
+            itemCreated(item)
+        }
+        onPositionChanged: Code.continueDrag(mouse)
+        onReleased: Code.endDrag(mouse)
     }
 }
