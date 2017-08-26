@@ -255,6 +255,10 @@ void Oscillator::step()
         SynthItem *item = amods_[i];
         item->step();
     }
+    for (unsigned int i = 0; i < fmods_.size(); i++) {
+        SynthItem *item = fmods_[i];
+        item->step();
+    }
 }
 
 void Oscillator::retrieve_commands()

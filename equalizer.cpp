@@ -364,6 +364,10 @@ void Equalizer::step()
         SynthItem *item = amods_[i];
         item->step();
     }
+    for (unsigned int i = 0; i < inputs_.size(); i++) {
+        SynthItem *item = inputs_[i];
+        item->step();
+    }
 }
 
 void Equalizer::retrieve_commands()
