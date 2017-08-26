@@ -10,7 +10,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     //transport controls
     pauseButton = new QPushButton(tr("Play"));
     speedDial = new QDial;
-    speedBox = new QDoubleSpinBox;
+    speedBox = new QSpinBox;
     QLabel* speedLabel = new QLabel;
     loopButton = new QPushButton(tr("Looping: OFF"));
     interpolateBox = new QCheckBox(tr("Interpolation"));
@@ -31,10 +31,20 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
             this, SLOT(on_pauseButton_released()));
     connect(loopButton, SIGNAL(released()),
             this, SLOT(on_loopButton_released()));
-    connect(speedBox, SIGNAL(valueChanged(double)),
-            this,SLOT(on_speedBox_valueChanged(double)));
+    connect(speedBox, SIGNAL(valueChanged(int)),
+            this,SLOT(on_speedBox_valueChanged(int)));
     connect(interpolateBox, SIGNAL(stateChanged(int)),
             this, SLOT(on_interpolateBox_stateChanged(int)));
+}
+
+void TransportWidget::on_speed_changed(int speed)
+{
+    this->speedBox->setValue(speed);
+}
+
+void TransportWidget::on_interpolation_changed(bool interpolation)
+{
+    this->interpolateBox->setChecked(interpolation);
 }
 
 void TransportWidget::on_pauseButton_released()
@@ -63,7 +73,7 @@ void TransportWidget::on_loopButton_released()
     }
 }
 
-void TransportWidget::on_speedBox_valueChanged(double speed)
+void TransportWidget::on_speedBox_valueChanged(int speed)
 {
     if(stepsPerSecond != speed)
     {

@@ -91,8 +91,8 @@ MainWindow::MainWindow(QWidget *parent) :
             playHead, SLOT(on_xRangeChanged(QCPRange)));
     connect(transportWidget, SIGNAL(pausedChanged(bool)),
             playHead, SLOT(on_pausedChanged(bool)));
-    connect(transportWidget, SIGNAL(speedChanged(double)),
-            qtTransport, SLOT(on_speedChanged(double)));
+    connect(transportWidget, SIGNAL(speedChanged(int)),
+            qtTransport, SLOT(on_speedChanged(int)));
     connect(transportWidget, SIGNAL(pausedChanged(bool)),
             qtTransport, SLOT(on_pausedChanged(bool)));
     connect(playHead, SIGNAL(cursorPosChanged(double)),
@@ -107,6 +107,14 @@ MainWindow::MainWindow(QWidget *parent) :
             transportWidget, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
     connect(session, SIGNAL(newDatasetFile(QString,std::vector<double>*)),
             fileReader, SLOT(on_newDatasetFile(QString,std::vector<double>*)));
+    connect(session, SIGNAL(speedChanged(int)),
+            transportWidget, SLOT(on_speed_changed(int)));
+    connect(session, SIGNAL(interpolateChanged(bool)),
+            transportWidget, SLOT(on_interpolation_changed(bool)));
+    connect(transportWidget, SIGNAL(speedChanged(int)),
+            session, SLOT(on_speedChanged(int)));
+    connect(transportWidget, SIGNAL(interpolateChanged(bool)),
+            session, SLOT(on_interpolateChanged(bool)));
 }
 
 MainWindow::~MainWindow()

@@ -39,7 +39,7 @@ public:
     // functions for controlling playback
     void pause(bool pause);
     void set_playback_position(double pos);
-    void set_speed(double speed_);
+    void set_speed(int speed_);
     void set_looping(bool loop_);
     void set_loop_points(double begin, double end);
     void set_interpolate(bool interpolate_);
@@ -91,7 +91,7 @@ private:
     unsigned int frame_rate;
     unsigned int current_index_;
     double mu_;
-    double speed_;
+    int speed_;
     double loop_begin_;
     double loop_end_;
     bool muted_;

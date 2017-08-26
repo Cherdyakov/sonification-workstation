@@ -15,7 +15,7 @@ Transport::Transport()
     data_height_ = 0;
     current_index_ = 0;
     mu_ = 0.0;
-    speed_ = 1.0;
+    speed_ = 1;
     return_pos = 0.0;
     master_volume_ = 1.0;
     interpolate_ = false;
@@ -119,11 +119,11 @@ void Transport::set_playback_position(double pos)
     command_buffer_.push(command);
 }
 
-void Transport::set_speed(double speed)
+void Transport::set_speed(int speed)
 {
     SynthItemCommand command;
     command.type = COMMAND::SPEED;
-    command.doubles.push_back(speed);
+    command.ints.push_back(speed);
     command_buffer_.push(command);
 }
 
@@ -278,7 +278,7 @@ Frame Transport::process()
 
     // advancing index
     calculate_return_position();
-    mu_ += (speed_ / frame_rate);
+    mu_ += ((double)speed_ / frame_rate);
 
     return frame;// * master_volume_;
 }
@@ -335,7 +335,7 @@ void Transport::process_command(SynthItemCommand command)
         process_set_playback_position(command.doubles[0]);
         break;
     case COMMAND::SPEED:
-        speed_ = command.doubles[0];
+        speed_ = command.ints[0];
         break;
     case COMMAND::LOOP:
         loop_ = command.bool_val;

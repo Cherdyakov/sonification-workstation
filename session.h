@@ -10,11 +10,13 @@
 #include <QVariant>
 #include <vector>
 
+#include "transportwidget.h"
+
 class Session : public QObject
 {
     Q_OBJECT
 public:
-    explicit Session(QObject* rootObj, QObject *parent = nullptr);
+    explicit Session(QObject* root, QObject *parent = nullptr);
 
 private:
     void write();
@@ -23,17 +25,21 @@ private:
     std::vector<double> dataset;
     QString sessionFile;
     QString datasetFile;
-    QJsonDocument treeDocument;
-    QJsonDocument sessionDocument;
+    bool interpolate;
+    int speed;
 
 signals:
     void newDatasetFile(QString datasetFile, std::vector<double>* dataset);
+    void interpolateChanged(bool interpolate);
+    void speedChanged(int speed);
 
 public slots:
     void on_save();
     void on_saveAs();
     void on_open();
     void on_importDatasetFile();
+    void on_interpolateChanged(bool interpolate);
+    void on_speedChanged(int speed);
 };
 
 #endif // SESSION_H

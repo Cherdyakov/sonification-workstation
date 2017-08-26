@@ -24,9 +24,8 @@ Rectangle
     }
 
     // get tree as json and return to C++ land
-    function readTree(datapath) {
+    function readTree() {
         var treeData = SessionCode.readTree(synthItems)
-        treeData["dataset"] = datapath
         var stringTree = JSON.stringify(treeData)
         return stringTree
     }
