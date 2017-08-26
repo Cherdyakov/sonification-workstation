@@ -322,11 +322,6 @@ Frame Modulator::process()
 {
     Frame frame;
 
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
-
     if(muted_ || (freq_ == 0 && (freq_fixed_ == true)))
     {
         frame = 1;
@@ -363,6 +358,24 @@ void Modulator::step()
     for (unsigned int i = 0; i < fmods_.size(); i++) {
         SynthItem *item = fmods_[i];
         item->step();
+    }
+}
+
+void Modulator::block_start()
+{
+    if(!command_buffer_.empty())
+    {
+        retrieve_commands();
+    }
+    for (unsigned int i = 0; i < amods_.size(); ++i)
+    {
+        SynthItem* item = amods_[i];
+        item->block_start();
+    }
+    for (unsigned int i = 0; i < fmods_.size(); ++i)
+    {
+        SynthItem* item = fmods_[i];
+        item->block_start();
     }
 }
 

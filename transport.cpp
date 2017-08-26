@@ -9,7 +9,6 @@ Transport::Transport()
     loop_begin_ = 0.0;
     loop_end_ = 0.0;
     data_stale_ = false;
-    block_size_ = 512;
     frame_rate = 44100;
     data_width_ = 0;
     data_height_ = 0;
@@ -213,11 +212,6 @@ Frame Transport::process()
     Frame frame;
     bool stepping = false;
 
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
-
     if(paused_)
     {
         calculate_return_position();
@@ -289,6 +283,19 @@ void Transport::step()
     {
         SynthItem* item = inputs_[i];
         item->step();
+    }
+}
+
+void Transport::block_start()
+{
+    if(!command_buffer_.empty())
+    {
+        retrieve_commands();
+    }
+    for (unsigned int i = 0; i < inputs_.size(); ++i)
+    {
+        SynthItem* item = inputs_[i];
+        item->block_start();
     }
 }
 

@@ -320,11 +320,6 @@ Frame Envelope::process()
     float value;
     Frame frame;
 
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
-
     if(muted_ || done_)
     {
         return frame;
@@ -368,6 +363,24 @@ void Envelope::step()
         item->step();
     }
     reset();
+}
+
+void Envelope::block_start()
+{
+    if(!command_buffer_.empty())
+    {
+        retrieve_commands();
+    }
+    for (unsigned int i = 0; i < inputs_.size(); ++i)
+    {
+        SynthItem* item = inputs_[i];
+        item->block_start();
+    }
+    for (unsigned int i = 0; i < amods_.size(); ++i)
+    {
+        SynthItem* item = amods_[i];
+        item->block_start();
+    }
 }
 
 void Envelope::retrieve_commands()

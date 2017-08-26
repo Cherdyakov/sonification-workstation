@@ -323,11 +323,6 @@ Frame Equalizer::process()
 {
     Frame frame;
 
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
-
     if(muted_ || inputs_.size() < 1)
     {
         return frame;
@@ -367,6 +362,24 @@ void Equalizer::step()
     for (unsigned int i = 0; i < inputs_.size(); i++) {
         SynthItem *item = inputs_[i];
         item->step();
+    }
+}
+
+void Equalizer::block_start()
+{
+    if(!command_buffer_.empty())
+    {
+        retrieve_commands();
+    }
+    for (unsigned int i = 0; i < inputs_.size(); ++i)
+    {
+        SynthItem* item = inputs_[i];
+        item->block_start();
+    }
+    for (unsigned int i = 0; i < amods_.size(); ++i)
+    {
+        SynthItem* item = amods_[i];
+        item->block_start();
     }
 }
 

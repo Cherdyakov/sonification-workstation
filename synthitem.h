@@ -115,6 +115,7 @@ public:
     virtual void mute(bool mute) = 0;
     virtual Frame process() = 0; // every sample
     virtual void step() = 0; // every new data value (step)
+    virtual void block_start() = 0; // every process block
 
     virtual bool get_mute() = 0;
     virtual std::vector<SynthItem*> get_parents() = 0;

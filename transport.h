@@ -47,9 +47,10 @@ public:
     SynthItem *create_item(SynthItem::ITEM type);
     // for polling state from outside
     double get_playback_position();
-    // generate a frame
+    // generate frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)
+    void block_start() override; // every process block
 
     // getters are not thread safe
     bool get_mute();
@@ -76,6 +77,7 @@ private:
     PARAMETER my_child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
+    Frame frame_buffer_[4096];
     std::vector<SynthItem::PARAMETER> accepted_children_;
     std::vector<double>* dataset_;
     std::vector<double> current_data_column_;
@@ -85,7 +87,6 @@ private:
     std::vector<SynthItem*> inputs_;
     std::vector<SynthItem*> amods_;
     float master_volume_;
-    unsigned int block_size_;
     unsigned int data_height_;
     unsigned int data_width_;
     unsigned int frame_rate;

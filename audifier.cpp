@@ -113,10 +113,6 @@ Frame Audifier::process()
 {
     Frame frame = 0.0;
 
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
     if(muted_)
     {
         return frame;
@@ -151,6 +147,19 @@ void Audifier::step()
     for (unsigned int i = 0; i < amods_.size(); i++) {
         SynthItem *item = amods_[i];
         item->step();
+    }
+}
+
+void Audifier::block_start()
+{
+    if(!command_buffer_.empty())
+    {
+        retrieve_commands();
+    }
+    for (unsigned int i = 0; i < amods_.size(); ++i)
+    {
+        SynthItem* item = amods_[i];
+        item->block_start();
     }
 }
 
