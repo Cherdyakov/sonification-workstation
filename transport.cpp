@@ -15,7 +15,7 @@ Transport::Transport()
     data_height_ = 0;
     current_index_ = 0;
     mu_ = 0.0;
-    speed_ = 1.0;
+    speed_ = 1;
     return_pos = 0.0;
     master_volume_ = 1.0;
     interpolate_ = false;
@@ -55,21 +55,15 @@ void Transport::set_data(std::vector<double> *data, std::vector<double> *mins, s
 
 void Transport::add_parent(SynthItem *parent)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::ADD_PARENT;
-    command.item = parent;
-    command_buffer_.push(command);
+    (void)parent;
 }
 
 void Transport::remove_parent(SynthItem *parent)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::REMOVE_PARENT;
-    command.item = parent;
-    command_buffer_.push(command);
+    (void)parent;
 }
 
-bool Transport::add_child(SynthItem *child, SynthItem::PARAMETER param)
+bool Transport::add_child(SynthItem *child, PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {
@@ -125,11 +119,11 @@ void Transport::set_playback_position(double pos)
     command_buffer_.push(command);
 }
 
-void Transport::set_speed(double speed)
+void Transport::set_speed(int speed)
 {
     SynthItemCommand command;
     command.type = COMMAND::SPEED;
-    command.doubles.push_back(speed);
+    command.ints.push_back(speed);
     command_buffer_.push(command);
 }
 
@@ -168,35 +162,35 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
         break;
     case SynthItem::ITEM::OSCILLATOR:
         item = new Oscillator();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::AUDIFIER:
         item = new Audifier();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::MODULATOR:
         item = new Modulator();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::PANNER:
         item = new Panner();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::ENVELOPE:
         item = new Envelope();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::VOLUME:
         item = new Volume();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::NOISE:
         item = new Noise();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::EQUALIZER:
         item = new Equalizer();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     default:
         item = NULL;
@@ -284,7 +278,7 @@ Frame Transport::process()
 
     // advancing index
     calculate_return_position();
-    mu_ += (speed_ / frame_rate);
+    mu_ += ((double)speed_ / frame_rate);
 
     return frame;// * master_volume_;
 }
@@ -296,6 +290,17 @@ void Transport::step()
         SynthItem* item = inputs_[i];
         item->step();
     }
+}
+
+bool Transport::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Transport::get_parents()
+{
+    std::vector<SynthItem*> vec;
+    return vec;
 }
 
 void Transport::retrieve_commands()
@@ -330,7 +335,7 @@ void Transport::process_command(SynthItemCommand command)
         process_set_playback_position(command.doubles[0]);
         break;
     case COMMAND::SPEED:
-        speed_ = command.doubles[0];
+        speed_ = command.ints[0];
         break;
     case COMMAND::LOOP:
         loop_ = command.bool_val;
@@ -445,8 +450,8 @@ void Transport::calculate_min_max()
 {
     double min;
     double max;
-    min_data_vals_.clear();
-    max_data_vals_.clear();
+    mins_.clear();
+    maxes_.clear();
     for(unsigned int i = 0; i < data_height_; i++)
     {
         for(unsigned int j = 0; j < data_width_; j++)
@@ -466,8 +471,8 @@ void Transport::calculate_min_max()
                 max = value;
             }
         }
-        min_data_vals_.push_back(min);
-        max_data_vals_.push_back(max);
+        mins_.push_back(min);
+        maxes_.push_back(max);
     }
 }
 

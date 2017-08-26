@@ -51,7 +51,7 @@ public slots:
     void on_dataChanged(std::vector<double>* data, unsigned int height, unsigned int width);
     void on_pausedChanged(bool on_pausedChanged);
     void on_posChanged(double pos);
-    void on_speedChanged(double speed);
+    void on_speedChanged(int speed);
     void on_loopingChanged(bool looping);
     void on_loopPointsChanged(double begin, double end);
     void on_interpolateChanged(bool interpolate);

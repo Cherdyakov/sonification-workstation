@@ -3,6 +3,7 @@ import SonLib 1.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import "Style.js" as Style
+import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
@@ -12,76 +13,98 @@ SynthItem {
     mainColor: Style.modColor
     textColor: Style.itemTextColor
 
-
-    property var mappedRowsDepth: []
-
     Component.onCompleted: {
+        create()
+        frequencyEditor.value = implementation.getFreq()
+        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
+        frequencyScaler.low = implementation.getFreqScaleLow()
+        frequencyScaler.high = implementation.getFreqScaleHigh()
+        frequencyScaler.exponent = implementation.getFreqScaleExponent()
+        frequencyScaler.scaled = implementation.getFreqScaled()
+        modEditor.depth = implementation.getDepth()
+        //        modEditor.modFromParameter(1)
+        fixedDepthEditor.fixed = implementation.getDepthFixed()
+        depthScaler.low = implementation.getDepthScaleLow()
+        depthScaler.high = implementation.getDepthScaleHigh()
+        depthScaler.exponent = implementation.getDepthScaleExponent()
+        depthScaler.scaled = implementation.getDepthScaled()
+    }
 
+    // return json representation of self
+    function read() {
+
+        var parents = []
+        for(var i = 0; i < synthParents.length; i++) {
+            var parent = synthParents[i].identifier
+            parents.push(parent)
+        }
+
+        var freqIndexes = implementation.getFreqIndexes()
+        // remove keys from freqIndexes and store in js array
+        var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
+
+        var depthIndexes = implementation.getDepthIndexes()
+        // remove keys from freqIndexes and store in js array
+        var depthIndexesArray = Object.keys(depthIndexes).map(function(k) { return depthIndexes[k] });
+
+        var essence = {
+            "identifier": identifier,
+            "type": type,
+            "x": x,
+            "y": y,
+            "muted": implementation.getMute(),
+            "modType": childType,
+            "freqIndexes": freqIndexesArray,
+            "depthIndexes": depthIndexesArray,
+            "parents": parents,
+            "freq": implementation.getFreq(),
+            "freqFixed": implementation.getFreqFixed(),
+            "freqScaled": implementation.getFreqScaled(),
+            "freqScaleLow": implementation.getFreqScaleLow(),
+            "freqScaleHigh": implementation.getFreqScaleHigh(),
+            "freqScaleExponent": implementation.getFreqScaleExponent(),
+            "depth": implementation.getDepth(),
+            "depthFixed": implementation.getDepthFixed(),
+            "depthScaled": implementation.getDepthScaled(),
+            "depthScaleLow": implementation.getDepthScaleLow(),
+            "depthScaleHigh": implementation.getDepthScaleHigh(),
+            "depthScaleExponent": implementation.getDepthScaleExponent()
+        }
+        return essence
+    }
+
+    // initialize self from json
+    function init(essence) {
+        x = essence["x"]
+        y = essence["y"]
+        identifier = essence["identifier"]
+        muted = essence["muted"]
+        modEditor.modFromParameter(essence["modType"])
+        frequencyEditor.value = essence["freq"]
+        fixedFrequencyEditor.fixed = essence["freqFixed"]
+        var indexes = essence["freqIndexes"]
+        var stringIndexes = SessionCode.indexesToString(indexes)
+        frequencyMapper.text = stringIndexes
+        frequencyMapper.validateMappings()
+        frequencyScaler.scaled = essence["freqScaled"]
+        frequencyScaler.low = essence["freqScaleLow"]
+        frequencyScaler.high = essence["freqScaleHigh"]
+        frequencyScaler.exponent = essence["freqScaleExponent"]
+        modEditor.depth = essence["depth"]
+        fixedDepthEditor.fixed = essence["depthFixed"]
+        indexes = essence["depthIndexes"]
+        stringIndexes = SessionCode.indexesToString(indexes)
+        depthMapper.text = stringIndexes
+        depthMapper.validateMappings()
+        depthScaler.scaled = essence["depthScaled"]
+        depthScaler.low = essence["depthScaleLow"]
+        depthScaler.high = essence["depthScaleHigh"]
+        depthScaler.exponent = essence["depthScaleExponent"]
     }
 
     Editor {
 
         id: editor
-        property  int  modType: QtSynthItem.AMPLITUDE
-        property bool useFixedFreq: true
-        property double fixedFreq: 1
-        property bool useFreqScaling: true
-        property double freqScaleLow: 40
-        property double freqScaleHigh: 16000
-        property double freqScaleExp: 1
-        property double depth: 100
-        property  bool useFixedDepth: true
-        property double depthScaleLow: 40
-        property double depthScaleHigh:16000
-        property double depthScaleExp:1
-        property  bool useDepthScaling: true
-
-        Component.onCompleted: {
-            frequencyEditor.spinBox.value = fixedFreq * 100
-            fixedFreqEditor.checkBox.checked = useFixedFreq
-            frequencyScaler.lowSpinBox.value = freqScaleLow * 100
-            frequencyScaler.highSpinBox.value = freqScaleHigh * 100
-            frequencyScaler.expSpinBox.value = freqScaleExp * 100
-            frequencyScaler.checkBox.checked = useFreqScaling
-            modEditor.spinBox.value = depth * 100
-            modEditor.comboBox.currentIndex = 0
-            depthScaler.checkBox.checked = useDepthScaling
-            depthScaler.lowSpinBox.value = depthScaleLow * 100
-            fixedDepthEditor.checkBox.checked = useFixedDepth
-            depthScaler.highSpinBox.value = depthScaleHigh * 100
-            depthScaler.expSpinBox.value = depthScaleExp * 100
-        }
-
-        onUseFixedFreqChanged: {
-            implementation.setFreqFixed(useFixedFreq)
-        }
-
-        onFixedFreqChanged: {
-            implementation.setFreq(fixedFreq)
-        }
-
-        onModTypeChanged: {
-            root.childType = modType           
-            var parentsCopy = synthParents.slice();
-            for(var i = 0; i < parentsCopy.length; i++) {
-                var synthItem = parentsCopy[i]
-                synthItem.removeChild(root)
-                removeParent(synthItem)
-            }
-            implementation.setModType(root.childType)
-            for(i = 0; i < parentsCopy.length; i++) {
-                synthItem = parentsCopy[i]
-                synthItem.addChild(root)
-            }
-        }
-
-        onDepthChanged: {
-            implementation.setDepth(depth)
-        }
-
-        onUseFixedDepthChanged: {
-            implementation.setDepthFixed(useFixedDepth)
-        }
 
         EditorLayout {
             id: layout
@@ -92,23 +115,18 @@ SynthItem {
                 EditorDoubleParam {
                     id: frequencyEditor
                     label.text: qsTr("Frequency: ")
-                    onParamValueChanged: {
-                        if (editor.fixedFreq !== value) {
-                            editor.fixedFreq = value
-                        }
+                    onValueChanged: {
+                        implementation.setFreq(value)
                     }
                 }
 
                 EditorFixedParam {
-                    id: fixedFreqEditor
+                    id: fixedFrequencyEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.useFixedFreq != fixed) {
-                            editor.useFixedFreq = fixed
-                        }
+                        implementation.setFreqFixed(fixed)
                     }
                 }
-
             }
 
             EditorMapper {
@@ -117,11 +135,10 @@ SynthItem {
                 maxIndexes: 1
                 onMappingsChanged:
                 {
-                    if(root.mappedRows !== mappings) {
-                        root.mappedRows = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
+                    var implementationMappings = mappings.map(function(value) {
+                        return value - 1
+                    } )
+                    if(implementation !== null) {
                         implementation.setFreqIndexes(implementationMappings)
                     }
                 }
@@ -135,57 +152,53 @@ SynthItem {
 
                 onLowChanged:
                 {
-                    if(editor.freqScaleLow !== low) {
-                        editor.freqScaleLow = low
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
-                                                        editor.freqScaleHigh,
-                                                        editor.freqScaleExp)
-                    }
+                    implementation.setFreqScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(editor.freqScaleHigh !== high) {
-                        editor.freqScaleHigh = high
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
-                                                        editor.freqScaleHigh,
-                                                        editor.freqScaleExp)                    }
+                    implementation.setFreqScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(editor.freqScaleExp !== exp) {
-                        editor.freqScaleExp = exp
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
-                                                        editor.freqScaleHigh,
-                                                        editor.freqScaleExp)                    }
+                    implementation.setFreqScaleExponent(exponent)
                 }
-                onUseScalingChanged:
+                onScaledChanged:
                 {
-                    if(editor.useFreqScaling !== scaling) {
-                        editor.useFreqScaling = scaling
-                        implementation.setFreqScaled(editor.useFreqScaling)
-                    }
+                    implementation.setFreqScaled(scaled)
                 }
             }
-
 
             EditorModulation {
                 id: modEditor
                 onModulationChanged: {
+                    if(implementation === null) {
+                        return
+                    }
                     switch(modulation) {
                     case "Amplitude":
-                        editor.modType = QtSynthItem.AMPLITUDE
+                        childType = QtSynthItem.AMPLITUDE
                         break
                     case "Frequency":
-                        editor.modType = QtSynthItem.FREQUENCY
+                        childType = QtSynthItem.FREQUENCY
                         break
                     default:
                         break
                     }
-                }
-                onDepthValueChanged:  {
-                    if(editor.depth !== depthValue) {
-                        editor.depth = depthValue
+
+                    var parentsCopy = synthParents.slice();
+                    for(var i = 0; i < parentsCopy.length; i++) {
+                        var synthItem = parentsCopy[i]
+                        synthItem.removeChild(root)
+                        removeParent(synthItem)
                     }
+                    implementation.setModType(childType)
+                    for(i = 0; i < parentsCopy.length; i++) {
+                        synthItem = parentsCopy[i]
+                        synthItem.addChild(root)
+                    }
+                }
+                onDepthChanged: {
+                    implementation.setDepth(depth)
                 }
             }
 
@@ -197,11 +210,10 @@ SynthItem {
                     maxIndexes: 1
                     onMappingsChanged:
                     {
-                        if(root.mappedRowsDepth !== mappings) {
-                            root.mappedRowsDepth = mappings
-                            var implementationMappings = mappings.map( function(value) {
-                                return value - 1;
-                            } )
+                        var implementationMappings = mappings.map(function(value) {
+                            return value - 1
+                        } )
+                        if(implementation !== null) {
                             implementation.setDepthIndexes(implementationMappings)
                         }
                     }
@@ -211,9 +223,7 @@ SynthItem {
                     id: fixedDepthEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.useFixedDepth != fixed) {
-                            editor.useFixedDepth = fixed
-                        }
+                        implementation.setDepthFixed(fixed)
                     }
                 }
             }
@@ -226,35 +236,19 @@ SynthItem {
 
                 onLowChanged:
                 {
-                    if(editor.depthScaleLow !== low) {
-                        editor.depthScaleLow = low
-                        implementation.setDepthScaleVals(editor.depthScaleLow,
-                                                         editor.depthScaleHigh,
-                                                         editor.depthScaleExp)
-                    }
+                    implementation.setDepthScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(editor.depthScaleHigh !== high) {
-                        editor.depthScaleHigh = high
-                        implementation.setDepthScaleVals(editor.depthScaleLow,
-                                                         editor.depthScaleHigh,
-                                                         editor.depthScaleExp)                    }
+                    implementation.setDepthScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(editor.depthScaleExp !== exp) {
-                        editor.depthScaleExp = exp
-                        implementation.setDepthScaleVals(editor.depthScaleLow,
-                                                         editor.depthScaleHigh,
-                                                         editor.depthScaleExp)                    }
+                    implementation.setDepthScaleExponent(exponent)
                 }
-                onUseScalingChanged:
+                onScaledChanged:
                 {
-                    if(editor.useDepthScaling !== scaling) {
-                        editor.useDepthScaling = scaling
-                        implementation.setDepthScaled(editor.useDepthScaling)
-                    }
+                    implementation.setDepthScaled(scaled)
                 }
             }
         }

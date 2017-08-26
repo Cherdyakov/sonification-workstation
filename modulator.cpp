@@ -5,7 +5,7 @@ namespace son {
 Modulator::Modulator()
 {
     my_type_ = ITEM::MODULATOR;
-    mod_type_ = PARAMETER::AMPLITUDE;
+    child_type_ = PARAMETER::AMPLITUDE;
     muted_ = false;
 
     // freq
@@ -74,7 +74,7 @@ void Modulator::remove_parent(SynthItem *parent)
     command_buffer_.push(command);
 }
 
-bool Modulator::add_child(SynthItem *child, SynthItem::PARAMETER param)
+bool Modulator::add_child(SynthItem *child, PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {
@@ -140,14 +140,30 @@ void Modulator::set_freq_scaled(bool scaled)
     command_buffer_.push(command);
 }
 
-void Modulator::set_freq_scale_vals(double low, double high, double exp)
+void Modulator::set_freq_scale_low(double low)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALE_VALS;
+    command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(low);
+    command_buffer_.push(command);
+}
+
+void Modulator::set_freq_scale_high(double high)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_HIGH;
+    command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(high);
-    command.doubles.push_back(exp);
+    command_buffer_.push(command);
+}
+
+void Modulator::set_freq_scale_exponent(double exponent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_EXPONENT;
+    command.parameter = PARAMETER::FREQUENCY;
+    command.doubles.push_back(exponent);
     command_buffer_.push(command);
 }
 
@@ -195,15 +211,111 @@ void Modulator::set_depth_scaled(bool scaled)
     command_buffer_.push(command);
 }
 
-void Modulator::set_depth_scale_vals(double low, double high, double exp)
+void Modulator::set_depth_scale_low(double low)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALE_VALS;
-    command.parameter = PARAMETER::DEPTH;
+    command.type = COMMAND::SCALE_LOW;
+    command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(low);
-    command.doubles.push_back(high);
-    command.doubles.push_back(exp);
     command_buffer_.push(command);
+}
+
+void Modulator::set_depth_scale_high(double high)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_HIGH;
+    command.parameter = PARAMETER::FREQUENCY;
+    command.doubles.push_back(high);
+    command_buffer_.push(command);
+}
+
+void Modulator::set_depth_scale_exponent(double exponent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_EXPONENT;
+    command.parameter = PARAMETER::FREQUENCY;
+    command.doubles.push_back(exponent);
+    command_buffer_.push(command);
+}
+
+bool Modulator::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Modulator::get_parents()
+{
+    return parents_;
+}
+
+double Modulator::get_freq()
+{
+    return freq_;
+}
+
+bool Modulator::get_freq_fixed()
+{
+    return freq_fixed_;
+}
+
+std::vector<int> Modulator::get_freq_indexes()
+{
+    return freq_indexes_;
+}
+
+bool Modulator::get_freq_scaled()
+{
+    return freq_scaled_;
+}
+
+double Modulator::get_freq_scale_low()
+{
+    return freq_low_;
+}
+
+double Modulator::get_freq_scale_high()
+{
+    return freq_high_;
+}
+
+double Modulator::get_freq_scale_exponent()
+{
+    return freq_exponent_;
+}
+
+double Modulator::get_depth()
+{
+    return depth_;
+}
+
+bool Modulator::get_depth_fixed()
+{
+    return depth_fixed_;
+}
+
+std::vector<int> Modulator::get_depth_indexes()
+{
+    return depth_indexes_;
+}
+
+bool Modulator::get_depth_scaled()
+{
+    return depth_scaled_;
+}
+
+double Modulator::get_depth_scale_low()
+{
+    return depth_low_;
+}
+
+double Modulator::get_depth_scale_high()
+{
+    return depth_high_;
+}
+
+double Modulator::get_depth_scale_exponent()
+{
+    return depth_exponent_;
 }
 
 Frame Modulator::process()
@@ -233,7 +345,7 @@ Frame Modulator::process()
         frame *= am_frame;
     }
     // if we are an fmod, amplify our signal by depth
-    if(mod_type_ == PARAMETER::FREQUENCY)
+    if(child_type_ == PARAMETER::FREQUENCY)
     {
         Frame depth_frame = get_depth_value();
         frame *= depth_frame;
@@ -296,8 +408,14 @@ void Modulator::process_command(SynthItemCommand command)
     case COMMAND::SCALED:
         process_set_param_scaled(command.bool_val, command.parameter);
         break;
-    case COMMAND::SCALE_VALS:
-        process_set_param_scale_vals(command.doubles[0], command.doubles[1], command.doubles[2], command.parameter);
+    case COMMAND::SCALE_LOW:
+        process_set_param_scale_low(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_HIGH:
+        process_set_param_scale_high(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_EXPONENT:
+        process_set_param_scale_exponent(command.doubles[0], command.parameter);
         break;
     case COMMAND::DELETE:
         process_delete_item();
@@ -346,14 +464,14 @@ void Modulator::process_set_data(std::vector<double> *data, std::vector<double>*
 
 void Modulator::process_set_mod_type(PARAMETER parameter)
 {
-    mod_type_ = parameter;
+    child_type_ = parameter;
     std::vector<SynthItem*> parents_copy = parents_;
     for(unsigned int i = 0; i < parents_copy.size(); i++)
     {
         SynthItem* parent = parents_copy[i];
         erase_item(parent, &parents_);
         parent->remove_child(this);
-        parent->add_child(this, parameter);
+        parent->add_child(this, child_type_);
     }
 }
 
@@ -406,19 +524,27 @@ void Modulator::process_set_param_scaled(bool scaled, SynthItem::PARAMETER param
     }
 }
 
-void Modulator::process_set_param_scale_vals(double low, double high, double exp, PARAMETER param)
+void Modulator::process_set_param_scale_low(double low, SynthItem::PARAMETER param)
 {
     if(param == PARAMETER::FREQUENCY)
     {
         freq_low_ = low;
-        freq_high_ = high;
-        freq_exponent_ = exp;
     }
-    else if(param == PARAMETER::DEPTH)
+}
+
+void Modulator::process_set_param_scale_high(double high, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
     {
-        depth_low_ = low;
-        depth_high_ = high;
-        depth_exponent_ = exp;
+        freq_high_ = high;
+    }
+}
+
+void Modulator::process_set_param_scale_exponent(double exponent, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
+        freq_exponent_ = exponent;
     }
 }
 

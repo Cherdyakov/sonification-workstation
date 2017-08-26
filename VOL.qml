@@ -3,6 +3,7 @@ import SonLib 1.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import "Style.js" as Style
+import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
@@ -12,32 +13,69 @@ SynthItem {
     mainColor: Style.volColor
     textColor: Style.itemTextColor
 
+    Component.onCompleted: {
+        create()
+        volumeEditor.value = implementation.getVolume()
+        fixedEditor.fixed = implementation.getVolumeFixed()
+        volumeScaler.low = implementation.getVolumeScaleLow()
+        volumeScaler.high = implementation.getVolumeScaleHigh()
+        volumeScaler.exponent = implementation.getVolumeScaleExponent()
+        volumeScaler.scaled = implementation.getVolumeScaled()
+    }
+
+    // return json representation of self
+    function read() {
+
+        var parents = []
+        for(var i = 0; i < synthParents.length; i++) {
+            var parent = synthParents[i].identifier
+            parents.push(parent)
+        }
+
+        var volumeIndexes = implementation.getVolumeIndexes()
+        // remove keys from volumeIndexes and store in js array
+        var volumeIndexesArray = Object.keys(volumeIndexes).map(function(k) { return volumeIndexes[k] });
+
+        var essence = {
+            "identifier": identifier,
+            "type": type,
+            "x": x,
+            "y": y,
+            "muted": implementation.getMute(),
+            "parents": parents,
+            "volume": implementation.getVolume(),
+            "volumeIndexes": volumeIndexesArray,
+            "volumeFixed": implementation.getVolumeFixed(),
+            "volumeScaled": implementation.getVolumeScaled(),
+            "volumeScaleLow": implementation.getVolumeScaleLow(),
+            "volumeScaleHigh": implementation.getVolumeScaleHigh(),
+            "volumeScaleExponent": implementation.getVolumeScaleExponent()
+        }
+
+        return essence
+    }
+
+    // initialize self from json
+    function init(essence) {
+        x = essence["x"]
+        y = essence["y"]
+        identifier = essence["identifier"]
+        muted = essence["muted"]
+        volumeEditor.value = essence["volume"]
+        var indexes = essence["volumeIndexes"]
+        var stringIndexes = SessionCode.indexesToString(indexes)
+        volumeMapper.text = stringIndexes
+        volumeMapper.validateMappings()
+        fixedEditor.fixed = essence["volumeFixed"]
+        volumeScaler.scaled = essence["volumeScaled"]
+        volumeScaler.low = essence["volumeScaleLow"]
+        volumeScaler.high = essence["volumeScaleHigh"]
+        volumeScaler.exponent = essence["volumeScaleExponent"]
+    }
+
     Editor {
 
         id: editor
-        property bool useFixedVolume: true
-        property double fixedVolume: 1
-        property bool useVolumeScaling: true
-        property double volumeScaleLow: 0
-        property double volumeScaleHigh: 1
-        property double volumeScaleExp: 1
-
-        Component.onCompleted: {
-            volumeEditor.spinBox.value = fixedVolume * 100
-            fixedEditor.checkBox.checked = useFixedVolume
-            volumeScaler.lowSpinBox.value = volumeScaleLow * 100
-            volumeScaler.highSpinBox.value = volumeScaleHigh * 100
-            volumeScaler.expSpinBox.value = volumeScaleExp * 100
-            volumeScaler.checkBox.checked = useVolumeScaling
-        }
-
-        onUseFixedVolumeChanged: {
-            implementation.setVolumeFixed(useFixedVolume)
-        }
-
-        onFixedVolumeChanged: {
-            implementation.setVolume(fixedVolume)
-        }
 
         EditorLayout {
             id: layout
@@ -47,13 +85,11 @@ SynthItem {
 
                 EditorDoubleParam {
                     id: volumeEditor
-                    spinBox.from: 0
-                    spinBox.to: 100
-                    spinBox.stepSize: 1
-                    onParamValueChanged: {
-                        if (editor.fixedVolume !== value) {
-                            editor.fixedVolume = value
-                        }
+                    from: 0
+                    to: 1
+                    stepSize: 0.01
+                    onValueChanged: {
+                        implementation.setVolume(value)
                     }
                 }
 
@@ -61,9 +97,7 @@ SynthItem {
                     id: fixedEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.useFixedVolume != fixed) {
-                            editor.useFixedVolume = fixed
-                        }
+                        implementation.setVolumeFixed(fixed)
                     }
                 }
 
@@ -72,14 +106,12 @@ SynthItem {
             EditorMapper {
                 id: volumeMapper
                 label.text: qsTr("Volume Source: ")
-                maxIndexes: 128
                 onMappingsChanged:
                 {
-                    if(root.mappedRows !== mappings) {
-                        root.mappedRows = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
+                    var implementationMappings = mappings.map(function(value) {
+                        return value - 1
+                    } )
+                    if(implementation !== null) {
                         implementation.setVolumeIndexes(implementationMappings)
                     }
                 }
@@ -90,44 +122,28 @@ SynthItem {
                 label.text: qsTr("Volume Scaling: ")
                 lowLabel.text: qsTr("Volume Low: ")
                 highLabel.text: qsTr("Volume High: ")
-                lowSpinBox.from: 0
-                lowSpinBox.to: 100
-                lowSpinBox.stepSize: 1
-                highSpinBox.from: -100
-                highSpinBox.to: 100
-                highSpinBox.stepSize: 1
+                lowFrom: 0
+                lowTo: 1
+                lowStepSize: 0.01
+                highFrom: 0
+                highTo: 1
+                highStepSize: 0.01
 
                 onLowChanged:
                 {
-                    if(editor.volumeScaleLow !== low) {
-                        editor.volumeScaleLow = low
-                        implementation.setVolumeScaleVals(editor.volumeScaleLow,
-                                                          editor.volumeScaleHigh,
-                                                          editor.volumeScaleExp)
-                    }
+                    implementation.setVolumeScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(editor.volumeScaleHigh !== high) {
-                        editor.volumeScaleHigh = high
-                        implementation.setVolumeScaleVals(editor.volumeScaleLow,
-                                                          editor.volumeScaleHigh,
-                                                          editor.volumeScaleExp)                    }
+                    implementation.setVolumeScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(editor.volumeScaleExp !== exp) {
-                        editor.volumeScaleExp = exp
-                        implementation.setVolumeScaleVals(editor.volumeScaleLow,
-                                                          editor.volumeScaleHigh,
-                                                          editor.volumeScaleExp)                    }
+                    implementation.setVolumeScaleExponent(exponent)
                 }
-                onUseScalingChanged:
+                onScaledChanged:
                 {
-                    if(editor.useVolumeScaling !== scaling) {
-                        editor.useVolumeScaling = scaling
-                        implementation.setVolumeScaled(editor.useVolumeScaling)
-                    }
+                    implementation.setVolumeScaled(scaled)
                 }
             }
         }

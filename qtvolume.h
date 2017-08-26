@@ -24,7 +24,20 @@ public:
     Q_INVOKABLE void setVolumeFixed(bool fixed);
     Q_INVOKABLE void setVolumeIndexes(QVector<int> indexes);
     Q_INVOKABLE void setVolumeScaled(bool scaled);
-    Q_INVOKABLE void setVolumeScaleVals(double low, double high, double exp);
+    Q_INVOKABLE void setVolumeScaleLow(double low);
+    Q_INVOKABLE void setVolumeScaleHigh(double high);
+    Q_INVOKABLE void setVolumeScaleExponent(double exponent);
+
+    // getters
+    Q_INVOKABLE bool getMute();
+    // Volumeuency getters
+    Q_INVOKABLE double getVolume();
+    Q_INVOKABLE bool getVolumeFixed();
+    Q_INVOKABLE QVector<int> getVolumeIndexes();
+    Q_INVOKABLE bool getVolumeScaled();
+    Q_INVOKABLE double getVolumeScaleLow();
+    Q_INVOKABLE double getVolumeScaleHigh();
+    Q_INVOKABLE double getVolumeScaleExponent();
 
 private:
     Volume* volume_;

@@ -27,6 +27,12 @@ public:
     // noise parameter accessors
     void set_noise(NOISE noise);
 
+    // getters are not thread-safe
+    bool get_mute();
+    std::vector<SynthItem*> get_parents();
+    // frequency parameter getters
+    NOISE get_noise();
+
     // generate a frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)

@@ -19,18 +19,42 @@ public:
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
 
+    Q_INVOKABLE void setModType(QT_PARAMETER parameter);
+
     Q_INVOKABLE void setFreq(double freq);
     Q_INVOKABLE void setFreqFixed(bool fixed);
     Q_INVOKABLE void setFreqIndexes(QVector<int> indexes);
     Q_INVOKABLE void setFreqScaled(bool scaled);
-    Q_INVOKABLE void setFreqScaleVals(double low, double high, double exp);
+    Q_INVOKABLE void setFreqScaleLow(double low);
+    Q_INVOKABLE void setFreqScaleHigh(double high);
+    Q_INVOKABLE void setFreqScaleExponent(double exponent);
 
-    Q_INVOKABLE void setModType(QT_PARAMETER parameter);
     Q_INVOKABLE void setDepth(double depth);
     Q_INVOKABLE void setDepthFixed(bool fixed);
     Q_INVOKABLE void setDepthIndexes(QVector<int> indexes);
     Q_INVOKABLE void setDepthScaled(bool scaled);
-    Q_INVOKABLE void setDepthScaleVals(double low, double high, double exp);
+    Q_INVOKABLE void setDepthScaleLow(double low);
+    Q_INVOKABLE void setDepthScaleHigh(double high);
+    Q_INVOKABLE void setDepthScaleExponent(double exponent);
+
+    // getters
+    Q_INVOKABLE bool getMute();
+    // frequency getters
+    Q_INVOKABLE double getFreq();
+    Q_INVOKABLE bool getFreqFixed();
+    Q_INVOKABLE QVector<int> getFreqIndexes();
+    Q_INVOKABLE bool getFreqScaled();
+    Q_INVOKABLE double getFreqScaleLow();
+    Q_INVOKABLE double getFreqScaleHigh();
+    Q_INVOKABLE double getFreqScaleExponent();
+    // depth getters
+    Q_INVOKABLE double getDepth();
+    Q_INVOKABLE bool getDepthFixed();
+    Q_INVOKABLE QVector<int> getDepthIndexes();
+    Q_INVOKABLE bool getDepthScaled();
+    Q_INVOKABLE double getDepthScaleLow();
+    Q_INVOKABLE double getDepthScaleHigh();
+    Q_INVOKABLE double getDepthScaleExponent();
 
 private:
     Modulator* modulator_;

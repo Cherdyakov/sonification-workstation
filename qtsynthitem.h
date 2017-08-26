@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+#include "qtutility.h"
 #include "synthitem.h"
 
 using namespace son;
@@ -36,6 +37,11 @@ public:
         NOTCH
     };
 
+    enum QT_NOISE {
+        WHITE = (int)SynthItem::NOISE::WHITE,
+        PINK
+    };
+
     explicit QtSynthItem(QObject *parent = 0);
     virtual SynthItem* implementation();
     Q_INVOKABLE virtual void deleteItem();
@@ -45,6 +51,7 @@ public:
     Q_INVOKABLE virtual void removeChild(QtSynthItem *item);
     Q_INVOKABLE virtual void mute(bool mute);
 
+    Q_INVOKABLE virtual bool getMute();
 };
 
 #endif // QTSYNTHITEM_H

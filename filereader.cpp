@@ -92,6 +92,11 @@ void FileReader::readCSV(QString filename, std::vector<double> *array)
 
     qDebug() << "Done reading file: " << QTime::currentTime();
 
-    emit datasetChanged(array,height, width);
+    emit datasetChanged(array, height, width);
     emit qmlDatasetChanged(height, width);
+}
+
+void FileReader::on_newDatasetFile(QString filename, std::vector<double>* array)
+{
+    readCSV(filename, array);
 }

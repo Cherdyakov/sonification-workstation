@@ -12,13 +12,16 @@ class FileReader : public QObject
 
 public:
     explicit FileReader(QObject *parent = 0);
-    void readCSV(QString filename, std::vector<double>* array);
 
 private:
+    void readCSV(QString filename, std::vector<double>* array);
 
 signals:
     void datasetChanged(std::vector<double>* data, uint height, uint width);
     void qmlDatasetChanged(uint height, uint width);
+
+public slots:
+    void on_newDatasetFile(QString filename, std::vector<double> *array);
 
 private slots:
 

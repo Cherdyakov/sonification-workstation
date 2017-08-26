@@ -1,12 +1,11 @@
 #include "oscillator.h"
 
-#include <QDebug>
-
 namespace son {
 
 Oscillator::Oscillator()
 {
     my_type_ = ITEM::OSCILLATOR;
+    my_child_type_ = PARAMETER::INPUT;
     muted_ = false;
     freq_ = 440;
     freq_fixed_ = true;
@@ -69,7 +68,7 @@ void Oscillator::remove_parent(SynthItem *parent)
     command_buffer_.push(command);
 }
 
-bool Oscillator::add_child(SynthItem *child, SynthItem::PARAMETER param)
+bool Oscillator::add_child(SynthItem *child, PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {
@@ -135,15 +134,76 @@ void Oscillator::set_freq_scaled(bool scaled)
     command_buffer_.push(command);
 }
 
-void Oscillator::set_freq_scale_vals(double low, double high, double exp)
+void Oscillator::set_freq_scale_low(double low)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALE_VALS;
+    command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(low);
-    command.doubles.push_back(high);
-    command.doubles.push_back(exp);
     command_buffer_.push(command);
+}
+
+void Oscillator::set_freq_scale_high(double high)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_HIGH;
+    command.parameter = PARAMETER::FREQUENCY;
+    command.doubles.push_back(high);
+    command_buffer_.push(command);
+}
+
+void Oscillator::set_freq_scale_exponent(double exponent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_EXPONENT;
+    command.parameter = PARAMETER::FREQUENCY;
+    command.doubles.push_back(exponent);
+    command_buffer_.push(command);
+}
+
+bool Oscillator::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Oscillator::get_parents()
+{
+    return parents_;
+}
+
+double Oscillator::get_freq()
+{
+    return freq_;
+}
+
+bool Oscillator::get_freq_fixed()
+{
+    return freq_fixed_;
+}
+
+std::vector<int> Oscillator::get_freq_indexes()
+{
+    return freq_indexes_;
+}
+
+bool Oscillator::get_freq_scaled()
+{
+    return freq_scaled_;
+}
+
+double Oscillator::get_freq_scale_low()
+{
+    return freq_low_;
+}
+
+double Oscillator::get_freq_scale_high()
+{
+    return freq_high_;
+}
+
+double Oscillator::get_freq_scale_exponent()
+{
+    return freq_exponent_;
 }
 
 /*
@@ -240,8 +300,14 @@ void Oscillator::process_command(SynthItemCommand command)
     case COMMAND::SCALED:
         process_set_param_scaled(command.bool_val, command.parameter);
         break;
-    case COMMAND::SCALE_VALS:
-        process_set_param_scale_vals(command.doubles[0], command.doubles[1], command.doubles[2], command.parameter);
+    case COMMAND::SCALE_LOW:
+        process_set_param_scale_low(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_HIGH:
+        process_set_param_scale_high(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_EXPONENT:
+        process_set_param_scale_exponent(command.doubles[0], command.parameter);
         break;
     case COMMAND::DELETE:
         process_delete_item();
@@ -320,13 +386,27 @@ void Oscillator::process_set_param_scaled(bool scaled, SynthItem::PARAMETER para
     }
 }
 
-void Oscillator::process_set_param_scale_vals(double low, double high, double exp, SynthItem::PARAMETER param)
+void Oscillator::process_set_param_scale_low(double low, PARAMETER param)
 {
     if(param == PARAMETER::FREQUENCY)
     {
         freq_low_ = low;
+    }
+}
+
+void Oscillator::process_set_param_scale_high(double high, PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
         freq_high_ = high;
-        freq_exponent_ = exp;
+    }
+}
+
+void Oscillator::process_set_param_scale_exponent(double exponent, PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
+        freq_exponent_ = exponent;
     }
 }
 

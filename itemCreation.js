@@ -10,8 +10,8 @@ function startDrag(mouse)
     loadComponent();
 }
 
-//Creation is split into two functions due to an asynchronous wait while
-//possible external files are loaded.
+// Creation is split into two functions due to an asynchronous wait while
+// possible external files are loaded.
 
 function loadComponent() {
     if (itemComponent != null) { // component has been previously loaded
@@ -20,7 +20,7 @@ function loadComponent() {
     }
 
     itemComponent = Qt.createComponent(paletteItem.componentFile);
-    if (itemComponent.status === Component.Loading)  //Depending on the content, it can be ready or error immediately
+    if (itemComponent.status === Component.Loading)  // Depending on the content, it can be ready or error immediately
         component.statusChanged.connect(createItem);
     else
         createItem();
@@ -28,7 +28,7 @@ function loadComponent() {
 
 function createItem() {
     if (itemComponent.status === Component.Ready && draggedItem == null) {
-        //creates an object instance of this component with the given parent and properties
+        // creates an object instance of this component with the given parent and properties
         draggedItem = itemComponent.createObject(root, {"image": paletteItem.image, "x": posnInWindow.x, "y": posnInWindow.y, "z": 3});
     } else if (itemComponent.status === Component.Error) {
         draggedItem = null;
@@ -54,7 +54,6 @@ function endDrag(mouse)
         draggedItem.destroy();
         draggedItem = null;
     } else {
-        draggedItem.create();
         draggedItem = null;
     }
 }

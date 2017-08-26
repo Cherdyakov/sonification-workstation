@@ -125,15 +125,76 @@ void Panner::set_pan_scaled(bool scaled)
     command_buffer_.push(command);
 }
 
-void Panner::set_pan_scale_vals(double low, double high, double exp)
+void Panner::set_pan_scale_low(double low)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALE_VALS;
+    command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::PAN;
     command.doubles.push_back(low);
-    command.doubles.push_back(high);
-    command.doubles.push_back(exp);
     command_buffer_.push(command);
+}
+
+void Panner::set_pan_scale_high(double high)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_HIGH;
+    command.parameter = PARAMETER::PAN;
+    command.doubles.push_back(high);
+    command_buffer_.push(command);
+}
+
+void Panner::set_pan_scale_exponent(double exponent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_EXPONENT;
+    command.parameter = PARAMETER::PAN;
+    command.doubles.push_back(exponent);
+    command_buffer_.push(command);
+}
+
+bool Panner::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Panner::get_parents()
+{
+    return parents_;
+}
+
+double Panner::get_pan()
+{
+    return pan_;
+}
+
+bool Panner::get_pan_fixed()
+{
+    return pan_fixed_;
+}
+
+std::vector<int> Panner::get_pan_indexes()
+{
+    return pan_indexes_;
+}
+
+bool Panner::get_pan_scaled()
+{
+    return pan_scaled_;
+}
+
+double Panner::get_pan_scale_low()
+{
+    return pan_low_;
+}
+
+double Panner::get_pan_scale_high()
+{
+    return pan_high_;
+}
+
+double Panner::get_pan_scale_exponent()
+{
+    return pan_exponent_;
 }
 
 // Generate a frame of output
@@ -227,8 +288,14 @@ void Panner::process_command(SynthItem::SynthItemCommand command)
     case COMMAND::SCALED:
         process_set_param_scaled(command.bool_val, command.parameter);
         break;
-    case COMMAND::SCALE_VALS:
-        process_set_param_scale_vals(command.doubles[0], command.doubles[1], command.doubles[2], command.parameter);
+    case COMMAND::SCALE_LOW:
+        process_set_param_scale_low(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_HIGH:
+        process_set_param_scale_high(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_EXPONENT:
+        process_set_param_scale_exponent(command.doubles[0], command.parameter);
         break;
     case COMMAND::DELETE:
         process_delete_item();
@@ -307,13 +374,27 @@ void Panner::process_set_param_scaled(bool scaled, SynthItem::PARAMETER param)
     }
 }
 
-void Panner::process_set_param_scale_vals(double low, double high, double exp, SynthItem::PARAMETER param)
+void Panner::process_set_param_scale_low(double low, SynthItem::PARAMETER param)
 {
     if(param == PARAMETER::PAN)
     {
         pan_low_ = low;
+    }
+}
+
+void Panner::process_set_param_scale_high(double high, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::PAN)
+    {
         pan_high_ = high;
-        pan_exponent_ = exp;
+    }
+}
+
+void Panner::process_set_param_scale_exponent(double exponent, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::PAN)
+    {
+        pan_exponent_ = exponent;
     }
 }
 

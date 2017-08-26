@@ -46,3 +46,16 @@ void QtAudifier::setAudIndexes(QVector<int> indexes)
     audifier_->set_aud_indexes(vec);
 }
 
+bool QtAudifier::getMute()
+{
+    bool muted = audifier_->get_mute();
+    return muted;
+}
+
+QVector<int> QtAudifier::getAudIndexes()
+{
+    std::vector<int> vec = audifier_->get_aud_indexes();
+    QVector<int> indexes = QVector<int>::fromStdVector(vec);
+    return indexes;
+}
+

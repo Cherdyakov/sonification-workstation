@@ -22,6 +22,11 @@ public:
 
     Q_INVOKABLE void setNoise(int noise);
 
+    // getters
+    Q_INVOKABLE bool getMute();
+    // noise getters
+    Q_INVOKABLE int getNoise();
+
 private:
     Noise* noise_;
 };

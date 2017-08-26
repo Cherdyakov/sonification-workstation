@@ -39,7 +39,7 @@ public:
     // functions for controlling playback
     void pause(bool pause);
     void set_playback_position(double pos);
-    void set_speed(double speed_);
+    void set_speed(int speed_);
     void set_looping(bool loop_);
     void set_loop_points(double begin, double end);
     void set_interpolate(bool interpolate_);
@@ -50,6 +50,10 @@ public:
     // generate a frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)
+
+    // getters are not thread safe
+    bool get_mute();
+    std::vector<SynthItem*> get_parents() override;
 
 private:
     void retrieve_commands() override;
@@ -69,13 +73,14 @@ private:
     void calculate_min_max();
 
     ITEM my_type_;
+    PARAMETER my_child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
     std::vector<SynthItem::PARAMETER> accepted_children_;
     std::vector<double>* dataset_;
     std::vector<double> current_data_column_;
-    std::vector<double> min_data_vals_;
-    std::vector<double> max_data_vals_;
+    std::vector<double> mins_;
+    std::vector<double> maxes_;
     std::atomic<double> return_pos;
     std::vector<SynthItem*> inputs_;
     std::vector<SynthItem*> amods_;
@@ -86,7 +91,7 @@ private:
     unsigned int frame_rate;
     unsigned int current_index_;
     double mu_;
-    double speed_;
+    int speed_;
     double loop_begin_;
     double loop_end_;
     bool muted_;

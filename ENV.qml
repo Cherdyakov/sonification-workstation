@@ -3,6 +3,7 @@ import SonLib 1.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import "Style.js" as Style
+import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
@@ -12,78 +13,97 @@ SynthItem {
     mainColor: Style.envColor
     textColor: Style.itemTextColor
 
+    Component.onCompleted: {
+        create()
+        attackEditor.value = implementation.getAttack()
+        attackFixedEditor.fixed = implementation.getAttackFixed()
+        attackScaler.scaled = implementation.getAttackScaled()
+        attackScaler.low = implementation.getAttackScaleLow()
+        attackScaler.high = implementation.getAttackScaleHigh()
+        attackScaler.exponent = implementation.getAttackScaleExponent()
+        decayEditor.value = implementation.getDecay()
+        decayFixedEditor.fixed = implementation.getDecayFixed()
+        decayScaler.scaled = implementation.getDecayScaled()
+        decayScaler.low = implementation.getDecayScaleLow()
+        decayScaler.high = implementation.getDecayScaleHigh()
+        decayScaler.exponent = implementation.getDecayScaleExponent()
+    }
+
+    // return json representation of self
+    function read() {
+
+        var parents = []
+        for(var i = 0; i < synthParents.length; i++) {
+            var parent = synthParents[i].identifier
+            parents.push(parent)
+        }
+
+        var attackIndexes = implementation.getAttackIndexes()
+        // remove keys from attackIndexes and store in js array
+        var attackIndexesArray = Object.keys(attackIndexes).map(function(k) { return attackIndexes[k] });
+
+        var decayIndexes = implementation.getDecayIndexes()
+        // remove keys from decayIndexes and store in js array
+        var decayIndexesArray = Object.keys(decayIndexes).map(function(k) { return decayIndexes[k] });
+
+
+        var essence = {
+            "identifier": identifier,
+            "type": type,
+            "x": x,
+            "y": y,
+            "muted": implementation.getMute(),
+            "parents": parents,
+            "attack": implementation.getAttack(),
+            "attackIndexes": attackIndexesArray,
+            "attackFixed": implementation.getAttackFixed(),
+            "attackScaled": implementation.getAttackScaled(),
+            "attackScaleLow": implementation.getAttackScaleLow(),
+            "attackScaleHigh": implementation.getAttackScaleHigh(),
+            "attackScaleExponent": implementation.getAttackScaleExponent(),
+            "decay": implementation.getDecay(),
+            "decayIndexes": decayIndexesArray,
+            "decayFixed": implementation.getDecayFixed(),
+            "decayScaled": implementation.getDecayScaled(),
+            "decayScaleLow": implementation.getDecayScaleLow(),
+            "decayScaleHigh": implementation.getDecayScaleHigh(),
+            "decayScaleExponent": implementation.getDecayScaleExponent()
+        }
+
+        return essence
+    }
+
+    // initialize self from json
+    function init(essence) {
+        x = essence["x"]
+        y = essence["y"]
+        identifier = essence["identifier"]
+        muted = essence["muted"]
+        attackEditor.value = essence["attack"]
+        attackFixedEditor.fixed = essence["attackFixed"]
+        var indexes = essence["attackIndexes"]
+        var stringIndexes = SessionCode.indexesToString(indexes)
+        attackMapper.text = stringIndexes
+        attackMapper.validateMappings()
+        attackScaler.scaled = essence["attackScaled"]
+        attackScaler.low = essence["attackScaleLow"]
+        attackScaler.high = essence["attackScaleHigh"]
+        attackScaler.exponent = essence["attackScaleExponent"]
+        decayEditor.value = essence["decay"]
+        decayFixedEditor.fixed = essence["decayFixed"]
+        indexes = essence["decayIndexes"]
+        stringIndexes = SessionCode.indexesToString(indexes)
+        decayMapper.text = stringIndexes
+        decayMapper.validateMappings()
+        decayScaler.scaled = essence["decayScaled"]
+        decayScaler.low = essence["decayScaleLow"]
+        decayScaler.high = essence["decayScaleHigh"]
+        decayScaler.exponent = essence["decayScaleExponent"]
+    }
+
     Editor {
 
-        id: editor    
-        property double attack: 0.01
-        property bool attackFixed: true
-        property bool attackScaled: true
-        property double attackLow: 0.1
-        property double attackHigh: 1
-        property double attackExponent: 1
-
-        property double decay: 0.1
-        property bool decayFixed: true
-        property bool decayScaled: true
-        property double decayLow: 0.1
-        property double decayHigh: 1
-        property double decayExponent: 1
-
-        Component.onCompleted: {
-            attackEditor.spinBox.value = attack * 100
-            attackFixedEditor.checkBox.checked = attackFixed
-            attackScaler.lowSpinBox.value = attackLow * 100
-            attackScaler.highSpinBox.value = attackHigh * 100
-            attackScaler.expSpinBox.value = attackExponent * 100
-            attackScaler.checkBox.checked = attackScaled
-
-            decayEditor.spinBox.value = decay * 100
-            decayFixedEditor.checkBox.checked = decayFixed
-            decayScaler.lowSpinBox.value = decayLow * 100
-            decayScaler.highSpinBox.value = decayHigh * 100
-            decayScaler.expSpinBox.value = decayExponent * 100
-            decayScaler.checkBox.checked = decayScaled
-        }
-
-        // Update Attack values in implementation
-        onAttackChanged: {
-            implementation.setAttack(attack)
-        }
-        onAttackFixedChanged: {
-            implementation.setAttackFixed(attackFixed)
-        }
-        onAttackLowChanged: {
-            implementation.setAttackScaleVals(attackLow, attackHigh, attackExponent)
-        }
-        onAttackHighChanged: {
-            implementation.setAttackScaleVals(attackLow, attackHigh, attackExponent)
-        }
-        onAttackExponentChanged: {
-            implementation.setAttackScaleVals(attackLow, attackHigh, attackExponent)
-        }
-        onAttackScaledChanged: {
-            implementation.setAttackScaled(attackScaled)
-        }
-
-        // Update Decay values in implemenation
-        onDecayChanged: {
-            implementation.setDecay(decay)
-        }
-        onDecayFixedChanged: {
-            implementation.setDecayFixed(decayFixed)
-        }
-        onDecayLowChanged: {
-            implementation.setDecayScaleVals(decayLow, decayHigh, decayExponent)
-        }
-        onDecayHighChanged: {
-            implementation.setDecayScaleVals(decayLow, decayHigh, decayExponent)
-        }
-        onDecayExponentChanged: {
-            implementation.setDecayScaleVals(decayLow, decayHigh, decayExponent)
-        }
-        onDecayScaledChanged: {
-            implementation.setDecayScaled(decayScaled)
-        }
+        id: editor
 
         EditorLayout {
             id: layout
@@ -97,13 +117,11 @@ SynthItem {
                 EditorDoubleParam {
                     id: attackEditor
                     label.text: "Attack: "
-                    spinBox.from: -1000
-                    spinBox.to: 1000
-                    spinBox.stepSize: 1
-                    onParamValueChanged: {
-                        if (editor.attack !== value) {
-                            editor.attack = value
-                        }
+                    from: 0
+                    to: 100
+                    stepSize: 0.1
+                    onValueChanged: {
+                        implementation.setAttack(value)
                     }
                 }
 
@@ -111,9 +129,7 @@ SynthItem {
                     id: attackFixedEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.attackFixed !== fixed) {
-                            editor.attackFixed = fixed
-                        }
+                        implementation.setAttackFixed(fixed)
                     }
                 }
 
@@ -125,11 +141,10 @@ SynthItem {
                 maxIndexes: 128
                 onMappingsChanged:
                 {
-                    if(root.mappedRows !== mappings) {
-                        root.mappedRows = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
+                    var implementationMappings = mappings.map(function(value) {
+                        return value - 1
+                    } )
+                    if(implementation !== null) {
                         implementation.setAttackIndexes(implementationMappings)
                     }
                 }
@@ -140,36 +155,28 @@ SynthItem {
                 label.text: qsTr("Attack Scaling: ")
                 lowLabel.text: qsTr("Attack Low: ")
                 highLabel.text: qsTr("Attack High: ")
-                lowSpinBox.from: -1000
-                lowSpinBox.to: 1000
-                lowSpinBox.stepSize: 1
-                highSpinBox.from: -1000
-                highSpinBox.to: 1000
-                highSpinBox.stepSize: 1
+                lowFrom: 0
+                lowTo: 100
+                lowStepSize: 0.1
+                highFrom: 0
+                highTo: 100
+                highStepSize: 0.1
 
                 onLowChanged:
                 {
-                    if(editor.attackLow !== low) {
-                        editor.attackLow = low
-                    }
+                    implementation.setAttackScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(editor.attackHigh !== high) {
-                        editor.attackHigh = high
-                    }
+                    implementation.setAttackScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(editor.attackExponent !== exp) {
-                        editor.attackExponent = exp
-                    }
+                    implementation.setAttackScaleExponent(exponent)
                 }
-                onUseScalingChanged:
+                onScaledChanged:
                 {
-                    if(editor.attackScaled !== scaling) {
-                        editor.attackScaled = scaling
-                    }
+                    implementation.setAttackScaled(scaled)
                 }
             }
 
@@ -181,13 +188,11 @@ SynthItem {
                 EditorDoubleParam {
                     id: decayEditor
                     label.text: "Decay: "
-                    spinBox.from: -1000
-                    spinBox.to: 1000
-                    spinBox.stepSize: 1
-                    onParamValueChanged: {
-                        if (editor.decay !== value) {
-                            editor.decay = value
-                        }
+                    from: -100
+                    to: 100
+                    stepSize: 0.1
+                    onValueChanged: {
+                        implementation.setDecay(value)
                     }
                 }
 
@@ -195,9 +200,7 @@ SynthItem {
                     id: decayFixedEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.decayFixed !== fixed) {
-                            editor.decayFixed = fixed
-                        }
+                        implementation.setDecayFixed(fixed)
                     }
                 }
 
@@ -209,11 +212,10 @@ SynthItem {
                 maxIndexes: 128
                 onMappingsChanged:
                 {
-                    if(root.mappedRows !== mappings) {
-                        root.mappedRows = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
+                    var implementationMappings = mappings.map(function(value) {
+                        return value - 1
+                    } )
+                    if(implementation !== null) {
                         implementation.setDecayIndexes(implementationMappings)
                     }
                 }
@@ -224,36 +226,28 @@ SynthItem {
                 label.text: qsTr("Decay Scaling: ")
                 lowLabel.text: qsTr("Decay Low: ")
                 highLabel.text: qsTr("Decay High: ")
-                lowSpinBox.from: -1000
-                lowSpinBox.to: 1000
-                lowSpinBox.stepSize: 1
-                highSpinBox.from: -1000
-                highSpinBox.to: 1000
-                highSpinBox.stepSize: 1
+                lowFrom: 0
+                lowTo: 100
+                lowStepSize: 0.1
+                highFrom: 0
+                highTo: 100
+                highStepSize: 0.1
 
                 onLowChanged:
                 {
-                    if(editor.decayLow !== low) {
-                        editor.decayLow = low
-                    }
+                    implementation.setDecayScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(editor.decayHigh !== high) {
-                        editor.decayHigh = high
-                    }
+                    implementation.setDecayScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(editor.decayExponent !== exp) {
-                        editor.decayExponent = exp
-                    }
+                    implementation.setDecayScaleExponent(exponent)
                 }
-                onUseScalingChanged:
+                onScaledChanged:
                 {
-                    if(editor.decayScaled !== scaling) {
-                        editor.decayScaled = scaling
-                    }
+                    implementation.setDecayScaled(scaled)
                 }
             }
         }

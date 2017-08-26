@@ -61,9 +61,19 @@ void QtModulator::setFreqScaled(bool scaled)
     modulator_->set_freq_scaled(scaled);
 }
 
-void QtModulator::setFreqScaleVals(double low, double high, double exp)
+void QtModulator::setFreqScaleLow(double low)
 {
-    modulator_->set_freq_scale_vals(low, high, exp);
+    modulator_->set_freq_scale_low(low);
+}
+
+void QtModulator::setFreqScaleHigh(double high)
+{
+    modulator_->set_freq_scale_high(high);
+}
+
+void QtModulator::setFreqScaleExponent(double exponent)
+{
+    modulator_->set_freq_scale_exponent(exponent);
 }
 
 void QtModulator::setModType(QtSynthItem::QT_PARAMETER parameter)
@@ -92,8 +102,109 @@ void QtModulator::setDepthScaled(bool scaled)
     modulator_->set_depth_scaled(scaled);
 }
 
-void QtModulator::setDepthScaleVals(double low, double high, double exp)
+void QtModulator::setDepthScaleLow(double low)
 {
-    modulator_->set_depth_scale_vals(low, high, exp);
+    modulator_->set_depth_scale_low(low);
 }
 
+void QtModulator::setDepthScaleHigh(double high)
+{
+    modulator_->set_depth_scale_high(high);
+}
+
+void QtModulator::setDepthScaleExponent(double exponent)
+{
+    modulator_->set_depth_scale_exponent(exponent);
+}
+
+bool QtModulator::getMute()
+{
+    bool mute = modulator_->get_mute();
+    return mute;
+}
+
+double QtModulator::getFreq()
+{
+    double freq = modulator_->get_freq();
+    return freq;
+}
+
+bool QtModulator::getFreqFixed()
+{
+    bool fixed = modulator_->get_freq_fixed();
+    return fixed;
+}
+
+QVector<int> QtModulator::getFreqIndexes()
+{
+    std::vector<int> vec = modulator_->get_freq_indexes();
+    QVector<int> indexes = QVector<int>::fromStdVector(vec);
+    return indexes;
+}
+
+bool QtModulator::getFreqScaled()
+{
+    bool scaled = modulator_->get_freq_scaled();
+    return scaled;
+}
+
+double QtModulator::getFreqScaleLow()
+{
+    double low = modulator_->get_freq_scale_low();
+    return low;
+}
+
+double QtModulator::getFreqScaleHigh()
+{
+    double high = modulator_->get_freq_scale_high();
+    return high;
+}
+
+double QtModulator::getFreqScaleExponent()
+{
+    double exponent = modulator_->get_freq_scale_exponent();
+    return exponent;
+}
+
+double QtModulator::getDepth()
+{
+    double depth = modulator_->get_depth();
+    return depth;
+}
+
+bool QtModulator::getDepthFixed()
+{
+    bool fixed = modulator_->get_depth_fixed();
+    return fixed;
+}
+
+QVector<int> QtModulator::getDepthIndexes()
+{
+    std::vector<int> vec = modulator_->get_depth_indexes();
+    QVector<int> indexes = QVector<int>::fromStdVector(vec);
+    return indexes;
+}
+
+bool QtModulator::getDepthScaled()
+{
+    bool scaled = modulator_->get_depth_scaled();
+    return scaled;
+}
+
+double QtModulator::getDepthScaleLow()
+{
+    double low = modulator_->get_depth_scale_low();
+    return low;
+}
+
+double QtModulator::getDepthScaleHigh()
+{
+    double high = modulator_->get_depth_scale_high();
+    return high;
+}
+
+double QtModulator::getDepthScaleExponent()
+{
+    double exponent = modulator_->get_depth_scale_exponent();
+    return exponent;
+}

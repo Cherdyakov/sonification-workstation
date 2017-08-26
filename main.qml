@@ -1,12 +1,10 @@
-//import QtQuick.Controls 1.4
 import QtQuick.Controls 2.2
 import QtQuick 2.7
 import QtQuick.Layouts 1.0
+import "SessionCode.js" as SessionCode
 
 Rectangle
 {
-    signal quit()
-
     id: root
     color: "light grey"
     anchors.fill: parent
@@ -24,6 +22,19 @@ Rectangle
             dataHeight = height
         }
     }
+
+    // get tree as json and return to C++ land
+    function readTree() {
+        var treeData = SessionCode.readTree(synthItems)
+        var stringTree = JSON.stringify(treeData)
+        return stringTree
+    }
+
+    function createTree(obj) {
+        SessionCode.destroyItems(synthItems)
+        SessionCode.createTree(obj)
+    }
+
 
     Flickable {
         id: workspace
@@ -88,7 +99,6 @@ Rectangle
                 id: palette
                 height: childrenRect.height
                 width: childrenRect.width
-                onItemCreated: itemPopup.close()
             }
         }
     }

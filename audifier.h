@@ -29,6 +29,13 @@ public:
     void mute(bool mute) override;
     // audification source
     void set_aud_indexes(std::vector<int> indexes);
+
+    // getters are not thread-safe
+    bool get_mute();
+    std::vector<SynthItem*> get_parents();
+    // audification parameter getters
+    std::vector<int> get_aud_indexes();
+
     // generate a frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)
@@ -44,6 +51,7 @@ private:
     void process_set_param_indexes(std::vector<int> indexes, PARAMETER param);
 
     ITEM my_type_;
+    PARAMETER my_child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
     std::vector<SynthItem::PARAMETER> accepted_children_;

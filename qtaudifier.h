@@ -20,6 +20,11 @@ public:
 
     Q_INVOKABLE virtual void setAudIndexes(QVector<int> indexes);
 
+    // getters
+    Q_INVOKABLE bool getMute();
+    // frequency getters
+    Q_INVOKABLE QVector<int> getAudIndexes();
+
 private:
     Audifier* audifier_;
 };

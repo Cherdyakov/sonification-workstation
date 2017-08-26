@@ -108,7 +108,7 @@ void QtTransport::on_posChanged(double pos)
     transport_.set_playback_position(pos);
 }
 
-void QtTransport::on_speedChanged(double speed)
+void QtTransport::on_speedChanged(int speed)
 {
     transport_.set_speed(speed);
 }

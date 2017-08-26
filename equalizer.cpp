@@ -17,7 +17,7 @@ Equalizer::Equalizer()
     resonance_ = 1;
     resonance_fixed_ = true;
     resonance_scaled_ = true;
-    resonance_low_ = 0;
+    resonance_low_ = 1;
     resonance_high_ = 10;
     resonance_exponent_ = 1;
 
@@ -26,6 +26,15 @@ Equalizer::Equalizer()
         PARAMETER::AMPLITUDE
     };
 }
+
+Equalizer::~Equalizer()
+{
+
+}
+
+/*
+ Functions called from user thread
+ */
 
 void Equalizer::delete_item()
 {
@@ -131,14 +140,30 @@ void Equalizer::set_frequency_scaled(bool scaled)
     command_buffer_.push(command);
 }
 
-void Equalizer::set_frequency_scale_vals(double low, double high, double exp)
+void Equalizer::set_frequency_scale_low(double low)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALE_VALS;
+    command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(low);
+    command_buffer_.push(command);
+}
+
+void Equalizer::set_frequency_scale_high(double high)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_HIGH;
+    command.parameter = PARAMETER::FREQUENCY;
     command.doubles.push_back(high);
-    command.doubles.push_back(exp);
+    command_buffer_.push(command);
+}
+
+void Equalizer::set_frequency_scale_exponent(double exponent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_EXPONENT;
+    command.parameter = PARAMETER::FREQUENCY;
+    command.doubles.push_back(exponent);
     command_buffer_.push(command);
 }
 
@@ -178,14 +203,30 @@ void Equalizer::set_resonance_scaled(bool scaled)
     command_buffer_.push(command);
 }
 
-void Equalizer::set_resonance_scale_vals(double low, double high, double exp)
+void Equalizer::set_resonance_scale_low(double low)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALE_VALS;
+    command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::RESONANCE;
     command.doubles.push_back(low);
+    command_buffer_.push(command);
+}
+
+void Equalizer::set_resonance_scale_high(double high)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_HIGH;
+    command.parameter = PARAMETER::RESONANCE;
     command.doubles.push_back(high);
-    command.doubles.push_back(exp);
+    command_buffer_.push(command);
+}
+
+void Equalizer::set_resonance_scale_exponent(double exponent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_EXPONENT;
+    command.parameter = PARAMETER::RESONANCE;
+    command.doubles.push_back(exponent);
     command_buffer_.push(command);
 }
 
@@ -195,6 +236,86 @@ void Equalizer::set_filter_type(SynthItem::FILTER_TYPE type)
     command.type = COMMAND::FILTER_TYPE;
     command.ints.push_back((int) type);
     command_buffer_.push(command);
+}
+
+bool Equalizer::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Equalizer::get_parents()
+{
+    return parents_;
+}
+
+double Equalizer::get_frequency()
+{
+    return frequency_;
+}
+
+bool Equalizer::get_frequency_fixed()
+{
+    return frequency_fixed_;
+}
+
+std::vector<int> Equalizer::get_frequency_indexes()
+{
+    return frequency_indexes_;
+}
+
+bool Equalizer::get_frequency_scaled()
+{
+    return frequency_scaled_;
+}
+
+double Equalizer::get_frequency_scale_low()
+{
+    return frequency_low_;
+}
+
+double Equalizer::get_frequency_scale_high()
+{
+    return frequency_high_;
+}
+
+double Equalizer::get_frequency_scale_exponent()
+{
+    return frequency_exponent_;
+}
+
+double Equalizer::get_resonance()
+{
+    return resonance_;
+}
+
+bool Equalizer::get_resonance_fixed()
+{
+    return resonance_fixed_;
+}
+
+std::vector<int> Equalizer::get_resonance_indexes()
+{
+    return resonance_indexes_;
+}
+
+bool Equalizer::get_resonance_scaled()
+{
+    return resonance_scaled_;
+}
+
+double Equalizer::get_resonance_scale_low()
+{
+    return resonance_low_;
+}
+
+double Equalizer::get_resonance_scale_high()
+{
+    return resonance_high_;
+}
+
+double Equalizer::get_resonance_scale_exponent()
+{
+    return resonance_exponent_;
 }
 
 // Generate a frame of output
@@ -288,8 +409,14 @@ void Equalizer::process_command(SynthItem::SynthItemCommand command)
     case COMMAND::SCALED:
         process_set_param_scaled(command.bool_val, command.parameter);
         break;
-    case COMMAND::SCALE_VALS:
-        process_set_param_scale_vals(command.doubles[0], command.doubles[1], command.doubles[2], command.parameter);
+    case COMMAND::SCALE_LOW:
+        process_set_param_scale_low(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_HIGH:
+        process_set_param_scale_high(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_EXPONENT:
+        process_set_param_scale_exponent(command.doubles[0], command.parameter);
         break;
     case COMMAND::DELETE:
         process_delete_item();
@@ -386,19 +513,39 @@ void Equalizer::process_set_param_scaled(bool scaled, SynthItem::PARAMETER param
     }
 }
 
-void Equalizer::process_set_param_scale_vals(double low, double high, double exp, SynthItem::PARAMETER param)
+void Equalizer::process_set_param_scale_low(double low, SynthItem::PARAMETER param)
 {
     if(param == PARAMETER::FREQUENCY)
     {
         frequency_low_ = low;
-        frequency_high_ = high;
-        frequency_exponent_ = exp;
     }
     else if(param ==  PARAMETER::RESONANCE)
     {
         resonance_low_ = low;
+    }
+}
+
+void Equalizer::process_set_param_scale_high(double high, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
+        frequency_high_ = high;
+    }
+    else if(param ==  PARAMETER::RESONANCE)
+    {
         resonance_high_ = high;
-        resonance_exponent_ = exp;
+    }
+}
+
+void Equalizer::process_set_param_scale_exponent(double exponent, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::FREQUENCY)
+    {
+        frequency_exponent_ = exponent;
+    }
+    else if(param ==  PARAMETER::RESONANCE)
+    {
+        resonance_exponent_ = exponent;
     }
 }
 
@@ -461,6 +608,10 @@ double Equalizer::calculate_filter_frequency()
                               frequency_low_, frequency_high_, frequency_exponent_);
         }
     }
+    if(frequency == 0) // blows up the filter
+    {
+        frequency = 0.001;
+    }
     return frequency;
 }
 
@@ -480,6 +631,10 @@ double Equalizer::calculate_filter_resonance()
             resonance = scale(resonance, mins_->at(idx), maxes_->at(idx),
                               resonance_low_, resonance_high_, resonance_exponent_);
         }
+    }
+    if(resonance == 0) // blows up the filter
+    {
+        resonance = 0.001;
     }
     return resonance;
 }

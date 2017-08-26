@@ -27,9 +27,21 @@ public:
     void set_pan_fixed(bool fixed);
     void set_pan_indexes(std::vector<int> indexes);
     void set_pan_scaled(bool scaled);
-    void set_pan_scale_vals(double low,
-                             double high,
-                             double exp);
+    void set_pan_scale_low(double low);
+    void set_pan_scale_high(double high);
+    void set_pan_scale_exponent(double exponent);
+
+    // getters are not thread-safe
+    bool get_mute();
+    std::vector<SynthItem*> get_parents();
+    // frequency parameter getters
+    double get_pan();
+    bool get_pan_fixed();
+    std::vector<int> get_pan_indexes();
+    bool get_pan_scaled();
+    double get_pan_scale_low();
+    double get_pan_scale_high();
+    double get_pan_scale_exponent();
 
     // generate a frame
     Frame process() override; // every sample
@@ -49,10 +61,9 @@ private:
     void process_set_param_fixed(bool fixed, PARAMETER param);
     void process_set_param_indexes(std::vector<int> indexes, PARAMETER param);
     void process_set_param_scaled(bool scaled, PARAMETER param);
-    void process_set_param_scale_vals(double low,
-                                      double high,
-                                      double exp,
-                                      PARAMETER param);
+    void process_set_param_scale_low(double low, PARAMETER param);
+    void process_set_param_scale_high(double high, PARAMETER param);
+    void process_set_param_scale_exponent(double exponent, PARAMETER param);
 
     double calculate_pan_pos();
 
