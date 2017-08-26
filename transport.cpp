@@ -195,6 +195,7 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
         item = NULL;
         break;
     }
+    synth_items_.push_back(item);
     return item;
 }
 
@@ -292,9 +293,9 @@ void Transport::block_start()
     {
         retrieve_commands();
     }
-    for (unsigned int i = 0; i < inputs_.size(); ++i)
+    for (unsigned int i = 0; i < synth_items_.size(); ++i)
     {
-        SynthItem* item = inputs_[i];
+        SynthItem* item = synth_items_[i];
         item->block_start();
     }
 }

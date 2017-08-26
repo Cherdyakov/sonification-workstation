@@ -371,16 +371,6 @@ void Equalizer::block_start()
     {
         retrieve_commands();
     }
-    for (unsigned int i = 0; i < inputs_.size(); ++i)
-    {
-        SynthItem* item = inputs_[i];
-        item->block_start();
-    }
-    for (unsigned int i = 0; i < amods_.size(); ++i)
-    {
-        SynthItem* item = amods_[i];
-        item->block_start();
-    }
 }
 
 void Equalizer::retrieve_commands()

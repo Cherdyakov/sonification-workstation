@@ -156,11 +156,6 @@ void Audifier::block_start()
     {
         retrieve_commands();
     }
-    for (unsigned int i = 0; i < amods_.size(); ++i)
-    {
-        SynthItem* item = amods_[i];
-        item->block_start();
-    }
 }
 
 void Audifier::retrieve_commands()

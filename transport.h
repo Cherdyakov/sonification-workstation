@@ -78,6 +78,7 @@ private:
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
     Frame frame_buffer_[4096];
+    std::vector<SynthItem*> synth_items_;
     std::vector<SynthItem::PARAMETER> accepted_children_;
     std::vector<double>* dataset_;
     std::vector<double> current_data_column_;
