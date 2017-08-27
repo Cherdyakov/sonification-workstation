@@ -44,8 +44,8 @@ Rectangle
 
     Flickable {
         id: workspace
+        z: Style.workspaceZ
         clip: true
-        z: 100
         boundsBehavior: Flickable.DragAndOvershootBounds
         anchors {
             top: root.top
@@ -54,7 +54,7 @@ Rectangle
             bottom: root.bottom
         }
 
-        Component.onCompleted: console.log("workspace parent: " + parent)
+        Component.onCompleted: console.log("workspace z: " + z)
 
         function updateRect() {
             var rect = Utils.itemsRect(synthItems)
@@ -76,56 +76,66 @@ Rectangle
             y: 0
         }
 
-        MouseArea {
-            id: workspaceMouseArea
-            parent: workspace
-            anchors.fill: parent
-            hoverEnabled: true
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
+    }
 
-            Component.onCompleted: console.log("mousearea parent: " + parent)
+    MouseArea {
+        id: workspaceMouseArea
+        z: -100
+        parent: workspace
+        anchors.fill: parent
+        hoverEnabled: true
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-            onMouseXChanged: if(patchManager.activePatchParent !== null) { canvas.requestPaint() }
-            onMouseYChanged: if(patchManager.activePatchParent !== null) { canvas.requestPaint() }
+        Component.onCompleted: console.log("workspace mousearea z: " + z)
 
-            onClicked: {
-                console.log("click")
-                if(mouse.button === Qt.RightButton) {
-                    if(itemPopup.visible) {
-                        itemPopup.close()
-                    }
-                    else {
-                        itemPopup.x = mouse.x
-                        itemPopup.y = mouse.y - (itemPopup.height / 2)
-                        palette.spawnX = mouse.x
-                        palette.spawnY = mouse.y
-                        itemPopup.open()
-                    }
+        onMouseXChanged: if(patchManager.patchInProgressParent !== null) { canvas.requestPaint() }
+        onMouseYChanged: if(patchManager.patchInProgressParent !== null) { canvas.requestPaint() }
+
+        onClicked: {
+            console.log("click")
+            if(mouse.button === Qt.RightButton) {
+                if(itemPopup.visible) {
+                    itemPopup.close()
+                }
+                else {
+                    itemPopup.x = mouse.x
+                    itemPopup.y = mouse.y - (itemPopup.height / 2)
+                    palette.spawnX = mouse.x
+                    palette.spawnY = mouse.y
+                    itemPopup.open()
                 }
             }
-
-            Popup {
-                id: itemPopup
-                height: palette.height
-                width: palette.width
-                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-
-                background: Rectangle {
-                    opacity: 0
+            else if(mouse.button === Qt.LeftButton) {
+                var point = {
+                    x: mouse.x,
+                    y: mouse.y
                 }
-
-                Palette {
-                    id: palette
-                    height: childrenRect.height
-                    width: childrenRect.width
-                    onItemCreated: {
-                        synthItems.push(item)
-                        item.patching.connect(patchManager.patchBegin)
-                    }
-                }
+                patchManager.click(point)
+                canvas.requestPaint()
             }
         }
 
+        Popup {
+            id: itemPopup
+            height: palette.height
+            width: palette.width
+            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+            background: Rectangle {
+                opacity: 0
+            }
+
+            Palette {
+                id: palette
+                height: childrenRect.height
+                width: childrenRect.width
+                onItemCreated: {
+                    synthItems.push(item)
+                    item.patching.connect(patchManager.patchBegin)
+                    item.parent = workspace.contentItem
+                }
+            }
+        }
     }
 
 
@@ -154,8 +164,9 @@ Rectangle
                 drawPatch(ctx, points, Style.patchColor)
             }
 
-            if(patchManager.selectedPatch !== null) {
-                points = patchManager.pointsFromPatch(patchManager.selectedPatch)
+            var selectedPatch = patchManager.selectedPatch
+            if(selectedPatch !== null) {
+                points = patchManager.pointsFromPatch(selectedPatch)
                 drawPatch(ctx, points, Style.itemActiveFocusColor)
             }
         }

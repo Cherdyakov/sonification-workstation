@@ -5,6 +5,8 @@ import "Style.js" as Style
 Item {
 
     id: root
+     z: Style.itemZ
+     width: Style.itemHeight; height: Style.itemWidth
 
     property int identifier: 0
     property var synthChildren: []
@@ -21,13 +23,7 @@ Item {
 
     property alias radius: rect.radius
 
-    width: Style.itemHeight; height: Style.itemWidth
-
     signal patching(var item)
-
-    Component.onCompleted: {
-        this.parent = workspace.contentItem
-    }
 
     onMutedChanged: {
         mute()
@@ -188,7 +184,6 @@ Item {
 
     Rectangle {
         id: rect
-        z: Style.itemZ
         anchors.fill: parent
         color: muted ? Style.itemMuteColor : mainColor
         radius: Style.itemMinRadius
@@ -198,7 +193,10 @@ Item {
 
         MouseArea {
             id: mouseArea
+            z: Style.itemZ
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+
+            Component.onCompleted: console.log("item mousearea z: " + z)
 
             anchors.fill: rect
 

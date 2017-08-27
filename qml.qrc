@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>PaletteItem.qml</file>
-        <file>itemCreation.js</file>
+        <file>ItemCreation.js</file>
         <file>PatchManager.qml</file>
         <file>OUT.qml</file>
         <file>SynthItem.qml</file>

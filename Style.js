@@ -2,9 +2,10 @@
 .pragma library
 
 // z values
-var itemZ = 200
-var itemEditorZ = 300
-var canvasZ = 100
+var workspaceZ = 100
+var canvasZ = 200
+var itemZ = 300
+var itemEditorZ = 400
 
 // SynthItem.qml style
 var itemHeight = 64

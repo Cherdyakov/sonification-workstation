@@ -11,16 +11,6 @@ Rectangle {
     border.width: 0
     border.color: "white"
 
-//    property alias osc: osc
-//    property alias aud: aud
-//    property alias mod: mod
-//    property alias pan: pan
-//    property alias env: env
-//    property alias vol: vol
-//    property alias nse: nse
-//    property alias eq: eq
-//    property alias out: out
-
     property int spawnX: 0
     property  int spawnY: 0
 
