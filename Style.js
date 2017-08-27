@@ -13,6 +13,10 @@ var itemMinRadius = 40
 var itemMaxRadius = 10
 var itemTextColor = "white"
 var itemMuteColor = "dark gray"
+var itemActiveFocusColor = "orange"
+
+// Patches
+var patchColor = "white"
 
 // SynthItem.qml editor style
 var editorTitleSize = 12

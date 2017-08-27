@@ -37,5 +37,6 @@
         <file>images/OUT.png</file>
         <file>EQ.qml</file>
         <file>SessionCode.js</file>
+        <file>Utils.js</file>
     </qresource>
 </RCC>

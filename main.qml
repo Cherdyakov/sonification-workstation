@@ -2,6 +2,8 @@ import QtQuick.Controls 2.2
 import QtQuick 2.7
 import QtQuick.Layouts 1.0
 import "SessionCode.js" as SessionCode
+import "Style.js" as Style
+import "Utils.js" as Utils
 
 Rectangle
 {
@@ -40,23 +42,31 @@ Rectangle
         SessionCode.createTree(obj)
     }
 
-
     Flickable {
         id: workspace
         clip: true
         z: 100
         boundsBehavior: Flickable.DragAndOvershootBounds
-        contentHeight: contentItem.childrenRect.height + 20
-        contentWidth: contentItem.childrenRect.width + 20
-
-        onContentXChanged: canvas.requestPaint()
-        onContentYChanged: canvas.requestPaint()
-
         anchors {
             top: root.top
             left: root.left
             right: root.right
             bottom: root.bottom
+        }
+
+        Component.onCompleted: console.log("workspace parent: " + parent)
+
+        function updateRect() {
+            var rect = Utils.itemsRect(synthItems)
+            contentHeight = rect.yMax + Style.itemHeight
+            contentWidth = rect.xMax + Style.itemWidth
+        }
+
+        onContentXChanged: {
+            canvas.requestPaint()
+        }
+        onContentYChanged: {
+            canvas.requestPaint()
         }
 
         //This item establishes the upper left
@@ -66,51 +76,58 @@ Rectangle
             y: 0
         }
 
-    }
+        MouseArea {
+            id: workspaceMouseArea
+            parent: workspace
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-    MouseArea {
-        id: workspaceMouseArea
-        hoverEnabled: true
-        anchors.fill: workspace
-        acceptedButtons: Qt.RightButton
+            Component.onCompleted: console.log("mousearea parent: " + parent)
 
-        onMouseXChanged: if(patchManager.patchBegin) { canvas.requestPaint() }
-        onMouseYChanged: if(patchManager.patchBegin) { canvas.requestPaint() }
+            onMouseXChanged: if(patchManager.activePatchParent !== null) { canvas.requestPaint() }
+            onMouseYChanged: if(patchManager.activePatchParent !== null) { canvas.requestPaint() }
 
-        onClicked: {
-            if(itemPopup.visible) {
-                itemPopup.close()
-            }
-            else {
-                itemPopup.x = mouse.x
-                itemPopup.y = mouse.y - (itemPopup.height / 2)
-                palette.spawnX = mouse.x
-                palette.spawnY = mouse.y
-                itemPopup.open()
-            }
-        }
-
-        Popup {
-            id: itemPopup
-            height: palette.height
-            width: palette.width
-            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-
-            background: Rectangle {
-                opacity: 0
+            onClicked: {
+                console.log("click")
+                if(mouse.button === Qt.RightButton) {
+                    if(itemPopup.visible) {
+                        itemPopup.close()
+                    }
+                    else {
+                        itemPopup.x = mouse.x
+                        itemPopup.y = mouse.y - (itemPopup.height / 2)
+                        palette.spawnX = mouse.x
+                        palette.spawnY = mouse.y
+                        itemPopup.open()
+                    }
+                }
             }
 
-            Palette {
-                id: palette
-                height: childrenRect.height
-                width: childrenRect.width
-                onItemCreated: {
-                    synthItems.push(item)
-                    item.patching.connect(patchManager.patchBegin)
+            Popup {
+                id: itemPopup
+                height: palette.height
+                width: palette.width
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+                background: Rectangle {
+                    opacity: 0
+                }
+
+                Palette {
+                    id: palette
+                    height: childrenRect.height
+                    width: childrenRect.width
+                    onItemCreated: {
+                        synthItems.push(item)
+                        item.patching.connect(patchManager.patchBegin)
+                    }
                 }
             }
         }
+
     }
+
 
     //canvas on which the connections are drawn
     Canvas {
@@ -128,24 +145,33 @@ Rectangle
             var ctx = getContext("2d")
             // clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height)
-            // setup the stroke
-            ctx.lineWidth = 4
-            ctx.strokeStyle = "chartreuse"
 
-            var pointPairs = patchManager.getDrawPoints(synthItems)
+            var patchPoints = patchManager.getDrawPoints(synthItems)
 
-            for (var i = 0; i < pointPairs.length; i++)
+            for (var i = 0; i < patchPoints.length; i++)
             {
-                var points = pointPairs[i]
-                // begin new drawing path
-                ctx.beginPath()
-                // line start point
-                ctx.moveTo(points.begin.x,points.begin.y)
-                // line end point
-                ctx.lineTo(points.end.x,points.end.y)
-                // stroke using line width and stroke style
-                ctx.stroke()
+                var points = patchPoints[i]
+                drawPatch(ctx, points, Style.patchColor)
             }
+
+            if(patchManager.selectedPatch !== null) {
+                points = patchManager.pointsFromPatch(patchManager.selectedPatch)
+                drawPatch(ctx, points, Style.itemActiveFocusColor)
+            }
+        }
+
+        function drawPatch(ctx, points, style) {
+            // set color
+            ctx.strokeStyle = style
+            ctx.lineWidth = 4
+            // begin new drawing path
+            ctx.beginPath()
+            // line start point
+            ctx.moveTo(points.begin.x,points.begin.y)
+            // line end point
+            ctx.lineTo(points.end.x,points.end.y)
+            // stroke using line width and stroke style
+            ctx.stroke()
         }
     }
 

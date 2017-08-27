@@ -4,34 +4,68 @@ Item {
 
     id: root
 
-    property var activePatcher: null
+    property var activePatchParent: null
+    property var selectedPatch: null
+    property var patches: []
+    property int margin: 5 // distance from patch considered "clicked"
+
+    function click(point) {
+        var closest = closestPatch(point)
+        if(closest.distance < margin) {
+            closest.patch.active = true
+            selectedPatch = closest
+        }
+        else if(selectedPatch !== null) {
+            selectedPatch.active = false
+            selectedPatch = null
+        }
+    }
+
+    // find closest patch to point
+    function closestPatch(point) {
+        var closestPatch = null
+        var distance = Number.MAX_VALUE
+        for(var i = 0; i < patches.length; i++) {
+            var currentPatch = patches[i]
+            var currentDistance = distanceToPatch(point, currentPatch)
+            if(currentDistance < distance) {
+                distance = currentDistance
+                closestPatch = currentPatch
+            }
+        }
+        return {
+            patch: closestPatch,
+            distance: distance
+        }
+    }
 
     // a patch in progress
     function patchBegin(item) {
         //not currently patching, start one
-        if(activePatcher === null) {
+        if(activePatchParent === null) {
             if(item.type !== 0) { //item is OUT, cannot have parent
-                activePatcher = item
+                activePatchParent = item
             }
         }
         else {
             //clicked on same item, cancel patching
-            if (activePatcher === item) {
-                activePatcher = null
+            if (activePatchParent === item) {
+                activePatchParent = null
             }
             else {
                 //clicked on second item
                 //add startpoint to end's parents
-                item.addChild(activePatcher)
+                item.addChild(activePatchParent)
                 //stop patching
-                activePatcher = null
+                activePatchParent = null
             }
         }
     }
 
     // returns array of point pairs
     function getDrawPoints(items) {
-        var patches = getPatches(items)
+        patches = []
+        patches = getPatches(items)
         var points = getPatchPoints(patches)
         return points
     }
@@ -39,7 +73,7 @@ Item {
     // takes array of Synthitems
     // returns array of patches between them
     function getPatches(items) {
-        var patches = []
+        var newPatches = []
         for(var i = 0; i < items.length; i++)
         {
             var parentItem = items[i]
@@ -48,12 +82,13 @@ Item {
                 var childItem = parentItem.synthChildren[j]
                 var patch = {
                     parent: parentItem,
-                    child: childItem
+                    child: childItem,
+                    active: false
                 }
-                patches.push(patch)
+                newPatches.push(patch)
             }
         }
-        return patches
+        return newPatches
     }
 
     function getPatchPoints(patches) {
@@ -63,7 +98,7 @@ Item {
             var pointPair =  pointsFromPatch(patch)
             patchPoints.push(pointPair)
         }
-        if(activePatcher !== null) {
+        if(activePatchParent !== null) {
             var activePatchPoints = getActivePatchPoints()
             patchPoints.push(activePatchPoints)
         }
@@ -71,8 +106,8 @@ Item {
     }
 
     function getActivePatchPoints() {
-        if(activePatcher !== null) {
-            var beginPoint = centerPoint(activePatcher)
+        if(activePatchParent !== null) {
+            var beginPoint = centerPoint(activePatchParent)
             var endPoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
         }
         return {
@@ -101,6 +136,19 @@ Item {
         var yCentered = item.y + item.height / 2
         var mappedPoint = mapFromItem(workspace.contentItem, xCentered, yCentered)
         return mappedPoint
+    }
+
+    function distanceToPatch(point, patchPoints)
+    {
+        x0 = point.x
+        y0 = point.y
+        x1 = patchPoints.beginPoint.x
+        y1 = patchPoints.beginPoint.y
+        x2 = patchPoints.endPoint.x
+        y2 = patchPoints.endPoint.y
+
+        var distance = Math.abs((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1) / Math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1))
+        return distance
     }
 
 }

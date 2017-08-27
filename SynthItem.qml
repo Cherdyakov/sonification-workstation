@@ -32,8 +32,14 @@ Item {
     onMutedChanged: {
         mute()
     }
-    onXChanged: canvas.requestPaint()
-    onYChanged: canvas.requestPaint()
+    onXChanged:  {
+        canvas.requestPaint()
+        workspace.updateRect()
+    }
+    onYChanged: {
+        canvas.requestPaint()
+        workspace.updateRect()
+    }
     onWidthChanged: canvas.requestPaint()
 
     states: [
@@ -186,7 +192,7 @@ Item {
         anchors.fill: parent
         color: muted ? Style.itemMuteColor : mainColor
         radius: Style.itemMinRadius
-        border.color: root.activeFocus ? "orange" : textColor
+        border.color: root.activeFocus ? Style.itemActiveFocusColor : textColor
         border.width: 4
         opacity: created ? 1 : 0.4
 
