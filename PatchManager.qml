@@ -173,4 +173,13 @@ Item {
         }
     }
 
+    function itemDeleted(item) {
+        for(var i = 0; i < patches.length; i++) {
+            var patch = patches[i]
+            if(patch.parent === item || patch.child === item) {
+                deletePatch(patch)
+            }
+        }
+    }
+
 }

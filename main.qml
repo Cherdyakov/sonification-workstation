@@ -42,6 +42,13 @@ Rectangle
         SessionCode.createTree(obj)
     }
 
+    function deleteItem(item) {
+        var idx = synthItems.indexOf(item)
+        if(idx > -1) {
+            synthItems.splice(idx, 1)
+        }
+    }
+
     Flickable {
         id: workspace
         z: Style.workspaceZ
@@ -127,6 +134,8 @@ Rectangle
                 onItemCreated: {
                     synthItems.push(item)
                     item.patching.connect(patchManager.patchBegin)
+                    item.deleted.connect(patchManager.itemDeleted)
+                    item.deleted.connect(deleteItem)
                     item.parent = workspace.contentItem
                 }
             }

@@ -25,6 +25,7 @@ Item {
 
     signal patching(var item)
     signal selected(var item)
+    signal deleted(var item)
 
     onMutedChanged: {
         mute()
@@ -159,28 +160,7 @@ Item {
     }
 
     function deleteThis() {
-
-        implementation.deleteItem()
-
-        for(var i = 0; i < synthParents.length; i++)
-        {
-            var parentItem = synthParents[i]
-            parentItem.removeChild(root)
-        }
-
-        for(i = 0; i < synthChildren.length; i++)
-        {
-            var childItem = synthChildren[i]
-            childItem.removeParent(root)
-        }
-
-        var idx = synthItems.indexOf(root)
-        if(idx > -1) {
-            synthItems.splice(idx, 1)
-        }
-
-        root.destroy()
-        canvas.requestPaint()
+        deleted(root)
     }
 
     Rectangle {
