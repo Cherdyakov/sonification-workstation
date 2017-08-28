@@ -12,9 +12,9 @@ SynthItem *QtOscillator::implementation()
     return oscillator_;
 }
 
-void QtOscillator::deleteItem()
+void QtOscillator::deleteSelf()
 {
-    oscillator_->delete_item();
+    oscillator_->delete_self();
 }
 
 void QtOscillator::addParent(QtSynthItem *parent)

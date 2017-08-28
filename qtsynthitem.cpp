@@ -12,7 +12,7 @@ SynthItem *QtSynthItem::implementation()
     return NULL;
 }
 
-void QtSynthItem::deleteItem()
+void QtSynthItem::deleteSelf()
 {
 
 }

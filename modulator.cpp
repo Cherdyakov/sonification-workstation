@@ -36,7 +36,7 @@ Modulator::Modulator()
  Functions called from user thread
  */
 
-void Modulator::delete_item()
+void Modulator::delete_self()
 {
     SynthItemCommand command;
     command.type = COMMAND::DELETE;
@@ -398,7 +398,7 @@ void Modulator::process_command(SynthItemCommand command)
         insert_item_unique(command.item, &parents_);
         break;
     case COMMAND::REMOVE_PARENT:
-        erase_item(command.item, &parents_);
+        remove_item(command.item, &parents_);
         break;
     case COMMAND::MUTE:
         muted_ = command.bool_val;
@@ -425,7 +425,7 @@ void Modulator::process_command(SynthItemCommand command)
         process_set_param_scale_exponent(command.doubles[0], command.parameter);
         break;
     case COMMAND::DELETE:
-        process_delete_item();
+        process_delete();
         break;
     default:
         break;
@@ -450,11 +450,11 @@ void Modulator::process_add_child(SynthItem *child, SynthItem::PARAMETER paramet
 
 void Modulator::process_remove_child(SynthItem *child)
 {
-    erase_item(child, &amods_);
-    erase_item(child, &fmods_);
+    remove_item(child, &amods_);
+    remove_item(child, &fmods_);
 }
 
-void Modulator::process_delete_item()
+void Modulator::process_delete()
 {
     remove_as_child(this, parents_);
     remove_as_parent(this, amods_);
@@ -476,7 +476,7 @@ void Modulator::process_set_mod_type(PARAMETER parameter)
     for(unsigned int i = 0; i < parents_copy.size(); i++)
     {
         SynthItem* parent = parents_copy[i];
-        erase_item(parent, &parents_);
+        remove_item(parent, &parents_);
         parent->remove_child(this);
         parent->add_child(this, child_type_);
     }

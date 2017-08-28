@@ -12,9 +12,9 @@ SynthItem *QtEqualizer::implementation()
     return equalizer_;
 }
 
-void QtEqualizer::deleteItem()
+void QtEqualizer::deleteSelf()
 {
-    equalizer_->delete_item();
+    equalizer_->delete_self();
 }
 
 void QtEqualizer::addParent(QtSynthItem *parent)

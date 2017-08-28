@@ -11,7 +11,7 @@ public:
     explicit QtEnvelope(Envelope *envelop = 0, QObject *parent = 0);
     virtual SynthItem* implementation() override;
 
-    Q_INVOKABLE virtual void deleteItem() override;
+    Q_INVOKABLE virtual void deleteSelf() override;
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) override;
     Q_INVOKABLE virtual bool addChild(QtSynthItem *child, QT_PARAMETER param) override;

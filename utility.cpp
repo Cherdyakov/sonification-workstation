@@ -30,7 +30,7 @@ void insert_item_unique(SynthItem* synth_item, std::vector<SynthItem*>* items)
     }
 }
 
-void erase_item(SynthItem* synth_item, std::vector<SynthItem*>* items)
+void remove_item(SynthItem* synth_item, std::vector<SynthItem*>* items)
 {
     items->erase(std::remove(items->begin(), items->end(), synth_item), items->end());
 }

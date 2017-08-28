@@ -44,7 +44,7 @@ public:
 
     explicit QtSynthItem(QObject *parent = 0);
     virtual SynthItem* implementation();
-    Q_INVOKABLE virtual void deleteItem();
+    Q_INVOKABLE virtual void deleteSelf();
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
     Q_INVOKABLE virtual bool addChild(QtSynthItem *child, QT_PARAMETER parameter);

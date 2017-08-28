@@ -12,9 +12,9 @@ SynthItem *QtPanner::implementation()
     return panner_;
 }
 
-void QtPanner::deleteItem()
+void QtPanner::deleteSelf()
 {
-    panner_->delete_item();
+    panner_->delete_self();
 }
 
 void QtPanner::addParent(QtSynthItem *parent)

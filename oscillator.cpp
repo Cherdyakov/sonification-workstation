@@ -30,7 +30,7 @@ Oscillator::~Oscillator()
  Functions called from user thread
  */
 
-void Oscillator::delete_item()
+void Oscillator::delete_self()
 {
     SynthItemCommand command;
     command.type = COMMAND::DELETE;
@@ -290,7 +290,7 @@ void Oscillator::process_command(SynthItemCommand command)
         insert_item_unique(command.item, &parents_);
         break;
     case COMMAND::REMOVE_PARENT:
-        erase_item(command.item, &parents_);
+        remove_item(command.item, &parents_);
         break;
     case COMMAND::MUTE:
         muted_ = command.bool_val;
@@ -317,7 +317,7 @@ void Oscillator::process_command(SynthItemCommand command)
         process_set_param_scale_exponent(command.doubles[0], command.parameter);
         break;
     case COMMAND::DELETE:
-        process_delete_item();
+        process_delete();
         break;
     default:
         break;
@@ -342,11 +342,11 @@ void Oscillator::process_add_child(SynthItem *child, PARAMETER parameter)
 
 void Oscillator::process_remove_child(SynthItem *child)
 {
-    erase_item(child, &amods_);
-    erase_item(child, &fmods_);
+    remove_item(child, &amods_);
+    remove_item(child, &fmods_);
 }
 
-void Oscillator::process_delete_item()
+void Oscillator::process_delete()
 {
     remove_as_child(this, parents_);
     remove_as_parent(this, amods_);

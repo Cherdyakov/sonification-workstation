@@ -12,9 +12,9 @@ SynthItem *QtVolume::implementation()
     return volume_;
 }
 
-void QtVolume::deleteItem()
+void QtVolume::deleteSelf()
 {
-    volume_->delete_item();
+    volume_->delete_self();
 }
 
 void QtVolume::addParent(QtSynthItem *parent)

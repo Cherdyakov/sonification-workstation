@@ -13,7 +13,7 @@ Noise::Noise()
     };
 }
 
-void Noise::delete_item()
+void Noise::delete_self()
 {
     SynthItemCommand command;
     command.type = COMMAND::DELETE;
@@ -176,7 +176,7 @@ void Noise::process_command(SynthItem::SynthItemCommand command)
         insert_item_unique(command.item, &parents_);
         break;
     case COMMAND::REMOVE_PARENT:
-        erase_item(command.item, &parents_);
+        remove_item(command.item, &parents_);
         break;
     case COMMAND::MUTE:
         muted_ = command.bool_val;
@@ -185,7 +185,7 @@ void Noise::process_command(SynthItem::SynthItemCommand command)
         process_set_noise((NOISE)command.ints[0]);
         break;
     case COMMAND::DELETE:
-        process_delete_item();
+        process_delete();
         break;
     default:
         break;
@@ -210,11 +210,11 @@ void Noise::process_add_child(SynthItem *child, SynthItem::PARAMETER parameter)
 
 void Noise::process_remove_child(SynthItem *child)
 {
-    erase_item(child, &inputs_);
-    erase_item(child, &amods_);
+    remove_item(child, &inputs_);
+    remove_item(child, &amods_);
 }
 
-void Noise::process_delete_item()
+void Noise::process_delete()
 {
     remove_as_child(this, parents_);
     remove_as_parent(this, inputs_);

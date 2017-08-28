@@ -62,6 +62,7 @@ public:
         SCALE_HIGH,
         SCALE_EXPONENT,
         DELETE,
+        DELETE_ITEM,
         MODULATION,
         NOISE,
         FILTER_TYPE,
@@ -103,7 +104,7 @@ public:
 
     explicit SynthItem() {}
     virtual ~SynthItem() {}
-    virtual void delete_item() = 0;
+    virtual void delete_self() = 0;
     virtual ITEM get_type() = 0;
     virtual void set_data(std::vector<double>* data,
                              std::vector<double>* mins,
@@ -126,7 +127,7 @@ protected:
     virtual void process_command(SynthItemCommand command) = 0;
     virtual void process_add_child(SynthItem* child, PARAMETER parameter) = 0;
     virtual void process_remove_child(SynthItem* child) = 0;
-    virtual void process_delete_item() = 0;
+    virtual void process_delete() = 0;
 
 };
 
