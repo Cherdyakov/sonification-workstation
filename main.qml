@@ -54,8 +54,6 @@ Rectangle
             bottom: root.bottom
         }
 
-        Component.onCompleted: console.log("workspace z: " + z)
-
         function updateRect() {
             var rect = Utils.itemsRect(synthItems)
             contentHeight = rect.yMax + Style.itemHeight
@@ -86,13 +84,11 @@ Rectangle
         hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-        Component.onCompleted: console.log("workspace mousearea z: " + z)
-
         onMouseXChanged: if(patchManager.patchInProgressParent !== null) { canvas.requestPaint() }
         onMouseYChanged: if(patchManager.patchInProgressParent !== null) { canvas.requestPaint() }
 
         onClicked: {
-            console.log("click")
+            workspace.forceActiveFocus()
             if(mouse.button === Qt.RightButton) {
                 if(itemPopup.visible) {
                     itemPopup.close()
@@ -111,7 +107,6 @@ Rectangle
                     y: mouse.y
                 }
                 patchManager.click(point)
-                canvas.requestPaint()
             }
         }
 
@@ -174,7 +169,7 @@ Rectangle
         function drawPatch(ctx, points, style) {
             // set color
             ctx.strokeStyle = style
-            ctx.lineWidth = 4
+            ctx.lineWidth = Style.patchWidth
             // begin new drawing path
             ctx.beginPath()
             // line start point

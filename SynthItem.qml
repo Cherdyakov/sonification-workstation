@@ -24,6 +24,7 @@ Item {
     property alias radius: rect.radius
 
     signal patching(var item)
+    signal selected(var item)
 
     onMutedChanged: {
         mute()
@@ -196,8 +197,6 @@ Item {
             z: Style.itemZ
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
-            Component.onCompleted: console.log("item mousearea z: " + z)
-
             anchors.fill: rect
 
             drag.target: root
@@ -228,7 +227,6 @@ Item {
                 if(type === 0) { //  item is OUT, has no editor
                     return
                 }
-
                 switch(root.state) {
                 case "":
                     root.state = "MAXIMIZED"

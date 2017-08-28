@@ -18,6 +18,7 @@ var itemActiveFocusColor = "orange"
 
 // Patches
 var patchColor = "white"
+var patchWidth = 4
 
 // SynthItem.qml editor style
 var editorTitleSize = 12

@@ -1,4 +1,5 @@
 import QtQuick 2.7
+import "Style.js" as Style
 
 Item {
 
@@ -7,11 +8,26 @@ Item {
     property var patchInProgressParent: null
     property var selectedPatch: null
     property var patches: []
-    property int margin: 8 // distance from patch considered "clicked"
+    property int margin: 1 + (Style.patchWidth / 2) // distance from patch considered "clicked"
+
+    onActiveFocusChanged: {
+        if(root.activeFocus === false) {
+            selectedPatch = null
+        }
+        canvas.requestPaint()
+    }
+
+    Keys.onDeletePressed: {
+        deletePatch(selectedPatch)
+        selectedPatch = null
+        canvas.requestPaint()
+    }
 
     function click(point) {
-        var closest = selectPatch(point)
-        selectedPatch = closest
+        selectedPatch = selectPatch(point)
+        if(selectedPatch !== null) {
+            root.forceActiveFocus()
+        }
     }
 
     // find closest patch to point
@@ -27,12 +43,12 @@ Item {
                 selectPatch = currentPatch
             }
         }
-       if(distance < margin) {
-           return selectPatch
-       }
-       else {
-           return null
-       }
+        if(distance < margin) {
+            return selectPatch
+        }
+        else {
+            return null
+        }
     }
 
     // a patch in progress
@@ -127,7 +143,6 @@ Item {
     // return point at center of item
     function centerPoint(item)
     {
-        console.log(item)
         var xCentered = item.x + item.width / 2
         var yCentered = item.y + item.height / 2
         var mappedPoint = mapFromItem(workspace.contentItem, xCentered, yCentered)
@@ -144,8 +159,18 @@ Item {
         var y2 = patchPoints.end.y
 
         var distance = Math.abs((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1) / Math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1))
-        console.log(distance)
         return distance
+    }
+
+    function deletePatch(patch) {
+        var parent = patch.parent
+        var child = patch.child
+        parent.removeChild(child)
+        child.removeParent(parent)
+        var idx = patches.indexOf(patch)
+        if(idx > -1) {
+            patches.splice(idx, 1)
+        }
     }
 
 }
