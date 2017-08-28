@@ -149,17 +149,13 @@ Item {
         return mappedPoint
     }
 
-    function distanceToPatch(point, patchPoints)
-    {
-        var x0 = point.x
-        var y0 = point.y
-        var x1 = patchPoints.begin.x
-        var y1 = patchPoints.begin.y
-        var x2 = patchPoints.end.x
-        var y2 = patchPoints.end.y
-
-        var distance = Math.abs((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1) / Math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1))
-        return distance
+    function itemDeleted(item) {
+        for(var i = 0; i < patches.length; i++) {
+            var patch = patches[i]
+            if(patch.parent === item || patch.child === item) {
+                deletePatch(patch)
+            }
+        }
     }
 
     function deletePatch(patch) {
@@ -173,13 +169,46 @@ Item {
         }
     }
 
-    function itemDeleted(item) {
-        for(var i = 0; i < patches.length; i++) {
-            var patch = patches[i]
-            if(patch.parent === item || patch.child === item) {
-                deletePatch(patch)
-            }
-        }
+    //    function distanceToPatch(point, patchPoints)
+    //    {
+    //        var x0 = point.x
+    //        var y0 = point.y
+    //        var x1 = patchPoints.begin.x
+    //        var y1 = patchPoints.begin.y
+    //        var x2 = patchPoints.end.x
+    //        var y2 = patchPoints.end.y
+
+    //        var distance = Math.abs((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1) / Math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1))
+    //        return distance
+    //    }
+
+    function distanceToPatch(point, patchPoints) {
+        var v = patchPoints.begin
+        var w = patchPoints.end
+
+        var distance = distToSegment(point, v, w)
+        return distance
+    }
+
+    function distToSegment(p, v, w) {
+        return Math.sqrt(distToSegmentSquared(p, v, w))
+    }
+
+    function distToSegmentSquared(p, v, w) {
+        var l2 = dist2(v, w)
+        if (l2 === 0) return dist2(p, v)
+        var t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2
+        t = Math.max(0, Math.min(1, t))
+        return dist2(p, { x: v.x + t * (w.x - v.x),
+                         y: v.y + t * (w.y - v.y) })
+    }
+
+    function sqr(x) {
+        return x * x
+    }
+
+    function dist2(v, w) {
+        return sqr(v.x - w.x) + sqr(v.y - w.y)
     }
 
 }
