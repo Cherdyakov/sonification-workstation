@@ -10,9 +10,9 @@ SynthItem *QtAudifier::implementation()
     return audifier_;
 }
 
-void QtAudifier::deleteItem()
+void QtAudifier::deleteSelf()
 {
-    audifier_->delete_item();
+    audifier_->delete_self();
 }
 
 void QtAudifier::addParent(QtSynthItem *parent)

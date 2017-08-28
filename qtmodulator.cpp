@@ -10,9 +10,9 @@ SynthItem *QtModulator::implementation()
     return modulator_;
 }
 
-void QtModulator::deleteItem()
+void QtModulator::deleteSelf()
 {
-    modulator_->delete_item();
+    modulator_->delete_self();
 }
 
 void QtModulator::addParent(QtSynthItem *parent)

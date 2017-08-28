@@ -10,9 +10,9 @@ SynthItem *QtEnvelope::implementation()
     return envelope_;
 }
 
-void QtEnvelope::deleteItem()
+void QtEnvelope::deleteSelf()
 {
-    envelope_->delete_item();
+    envelope_->delete_self();
 }
 
 void QtEnvelope::addParent(QtSynthItem *parent)

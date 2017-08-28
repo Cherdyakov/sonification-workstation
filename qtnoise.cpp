@@ -12,9 +12,9 @@ SynthItem *QtNoise::implementation()
     return noise_;
 }
 
-void QtNoise::deleteItem()
+void QtNoise::deleteSelf()
 {
-    noise_->delete_item();
+    noise_->delete_self();
 }
 
 void QtNoise::addParent(QtSynthItem *parent)

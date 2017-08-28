@@ -14,7 +14,7 @@ double scale(double x, double in_low,
              double out_high, double exp);
 Frame visit_children(std::vector<SynthItem*> children);
 void insert_item_unique(SynthItem* synth_item, std::vector<SynthItem*> *items);
-void erase_item(SynthItem* synth_item, std::vector<SynthItem *> *items);
+void remove_item(SynthItem* synth_item, std::vector<SynthItem *> *items);
 void remove_as_child(SynthItem* self, std::vector<SynthItem *> parents);
 void remove_as_parent(SynthItem* self, std::vector<SynthItem*> children);
 bool verify_child(SynthItem::PARAMETER param, std::vector<SynthItem::PARAMETER> vec);

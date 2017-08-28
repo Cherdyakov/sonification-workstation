@@ -33,10 +33,18 @@ Transport::~Transport()
  Functions called from user thread
  */
 
-void Transport::delete_item()
+void Transport::delete_self()
 {
     SynthItemCommand command;
     command.type = COMMAND::DELETE;
+    command_buffer_.push(command);
+}
+
+void Transport::delete_item(SynthItem *item)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::DELETE_ITEM;
+    command.item = item;
     command_buffer_.push(command);
 }
 
@@ -355,6 +363,12 @@ void Transport::process_command(SynthItemCommand command)
     case COMMAND::INTERPOLATE:
         interpolate_ = command.bool_val;
         break;
+    case COMMAND::DELETE:
+        process_delete();
+        break;
+    case COMMAND::DELETE_ITEM:
+        process_delete_item(command.item);
+        break;
     default:
         break;
     }
@@ -377,11 +391,11 @@ void Transport::process_add_child(SynthItem *child, SynthItem::PARAMETER paramet
 
 void Transport::process_remove_child(SynthItem *child)
 {
-    erase_item(child, &inputs_);
-    erase_item(child, &amods_);
+    remove_item(child, &inputs_);
+    remove_item(child, &amods_);
 }
 
-void Transport::process_delete_item()
+void Transport::process_delete()
 {
     for(unsigned int i = 0; i < inputs_.size(); i++) {
         SynthItem* child = inputs_[i];
@@ -392,6 +406,12 @@ void Transport::process_delete_item()
         child->remove_parent(this);
     }
     delete this;
+}
+
+void Transport::process_delete_item(SynthItem *item)
+{
+    remove_item(item, &synth_items_);
+    item->delete_self();
 }
 
 void Transport::process_set_dataset(std::vector<double> *dataset, unsigned int height, unsigned int width)

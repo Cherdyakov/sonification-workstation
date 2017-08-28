@@ -16,7 +16,7 @@ public:
     Audifier();
     ~Audifier();
     // helper when deleting item contained in synth tree
-    void delete_item() override;
+    void delete_self() override;
     // interface overrides
     ITEM get_type() override;
     void set_data(std::vector<double>* data,
@@ -46,7 +46,7 @@ private:
     void process_command(SynthItemCommand command);
     void process_add_child(SynthItem* child, PARAMETER param) override;
     void process_remove_child(SynthItem* child) override;
-    void process_delete_item() override;
+    void process_delete() override;
 
     void process_set_data(std::vector<double>* data, std::vector<double>* mins, std::vector<double>* maxes);
     void process_set_param_indexes(std::vector<int> indexes, PARAMETER param);

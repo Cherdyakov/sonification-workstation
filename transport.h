@@ -24,7 +24,9 @@ public:
     explicit Transport();
     virtual ~Transport();
     // interface overrides
-    void delete_item() override;
+    void delete_self() override;
+    // safely delete SynthItem attached to this transport
+    void delete_item(SynthItem* item);
     SynthItem::ITEM get_type();
     void set_data(std::vector<double>* data,
                   std::vector<double>* mins,
@@ -56,12 +58,15 @@ public:
     bool get_mute();
     std::vector<SynthItem*> get_parents() override;
 
+
+
 private:
     void retrieve_commands() override;
     void process_command(SynthItemCommand command) override;
     void process_add_child(SynthItem* child, PARAMETER parameter) override;
     void process_remove_child(SynthItem* child) override;
-    void process_delete_item() override;
+    void process_delete() override;
+    void process_delete_item(SynthItem* item);
 
     void process_set_dataset(std::vector<double>*dataset,
                              unsigned int height,

@@ -62,9 +62,9 @@ QtSynthItem* QtTransport::createItem(QT_ITEM type)
     return qtItem;
 }
 
-void QtTransport::deleteItem()
+void QtTransport::deleteSelf()
 {
-    transport_.delete_item();
+    transport_.delete_self();
 }
 
 void QtTransport::addParent(QtSynthItem *parent)
@@ -90,6 +90,11 @@ void QtTransport::removeChild(QtSynthItem *child)
 void QtTransport::mute(bool mute)
 {
     transport_.mute(mute);
+}
+
+void QtTransport::deleteItem(QtSynthItem *item)
+{
+    transport_.delete_item(item->implementation());
 }
 
 void QtTransport::on_dataChanged(std::vector<double> *data, unsigned int height, unsigned int width)

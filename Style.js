@@ -2,9 +2,10 @@
 .pragma library
 
 // z values
-var itemZ = 200
-var itemEditorZ = 300
-var canvasZ = 100
+var workspaceZ = 100
+var canvasZ = 200
+var itemZ = 300
+var itemEditorZ = 400
 
 // SynthItem.qml style
 var itemHeight = 64
@@ -13,6 +14,11 @@ var itemMinRadius = 40
 var itemMaxRadius = 10
 var itemTextColor = "white"
 var itemMuteColor = "dark gray"
+var itemActiveFocusColor = "orange"
+
+// Patches
+var patchColor = "white"
+var patchWidth = 4
 
 // SynthItem.qml editor style
 var editorTitleSize = 12
