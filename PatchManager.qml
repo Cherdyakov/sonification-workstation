@@ -5,12 +5,12 @@ Item {
 
     id: root
 
-    property var patchInProgressParent: null
+    property var patchingChild: null
     property var selectedPatch: null
     property var patches: []
     property int margin: 1 + (Style.patchWidth / 2) // distance from patch considered "clicked"
 
-    property bool patching: patchInProgressParent ? true : false
+    property bool patching: patchingChild ? true : false
 
     onActiveFocusChanged: {
         if(root.activeFocus === false) {
@@ -56,22 +56,22 @@ Item {
     // a patch in progress
     function patchBegin(item) {
         //not currently patching, start one
-        if(patchInProgressParent === null) {
+        if(patchingChild === null) {
             if(item.type !== 0) { //item is OUT, cannot have parent
-                patchInProgressParent = item
+                patchingChild = item
             }
         }
         else {
             //clicked on same item, cancel patching
-            if (patchInProgressParent === item) {
-                patchInProgressParent = null
+            if (patchingChild === item) {
+                patchingChild = null
             }
             else {
                 //clicked on second item
                 //add startpoint to end's parents
-                item.addChild(patchInProgressParent)
+                item.addChild(patchingChild)
                 //stop patching
-                patchInProgressParent = null
+                patchingChild = null
             }
         }
     }
@@ -111,7 +111,7 @@ Item {
             var pointPair =  pointsFromPatch(patch)
             patchPoints.push(pointPair)
         }
-        if(patchInProgressParent !== null) {
+        if(patchingChild !== null) {
             var inProgressPoints = getPatchInProgressPoints()
             patchPoints.push(inProgressPoints)
         }
@@ -119,9 +119,9 @@ Item {
     }
 
     function getPatchInProgressPoints() {
-        if(patchInProgressParent !== null) {
-            var beginPoint = centerPoint(patchInProgressParent)
-            var endPoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
+        if(patchingChild !== null) {
+            var endPoint = centerPoint(patchingChild)
+            var beginPoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
         }
         return {
             begin: beginPoint,

@@ -160,26 +160,47 @@ Rectangle
             for (var i = 0; i < patchPoints.length; i++)
             {
                 var points = patchPoints[i]
-                drawPatch(ctx, points, Style.patchColor)
+                drawPatch(ctx, points, false)
             }
 
             var selectedPatch = patchManager.selectedPatch
             if(selectedPatch !== null) {
                 points = patchManager.pointsFromPatch(selectedPatch)
-                drawPatch(ctx, points, Style.itemActiveFocusColor)
+                drawPatch(ctx, points, true)
             }
         }
 
-        function drawPatch(ctx, points, style) {
+        function drawPatch(ctx, points, active) {
+
+            var outColor
+            var inColor
+
+            if(active) {
+                outColor = Style.patchActiveOutColor
+                inColor = Style.patchActiveInColor
+            }
+            else {
+                outColor = Style.patchOutColor
+                inColor = Style.patchInColor
+            }
+
+            var x0 = points.begin.x
+            var y0 = points.begin.y
+            var x1 = points.end.x
+            var y1 = points.end.y
+
+            var gradient = ctx.createLinearGradient(x0, y0, x1, y1);
+            gradient.addColorStop(Style.patchInColorStop, outColor);
+            gradient.addColorStop(Style.patchOutColorStop, inColor);
             // set color
-            ctx.strokeStyle = style
+            ctx.strokeStyle = gradient
             ctx.lineWidth = Style.patchWidth
             // begin new drawing path
             ctx.beginPath()
             // line start point
-            ctx.moveTo(points.begin.x,points.begin.y)
+            ctx.moveTo(x0, y0)
             // line end point
-            ctx.lineTo(points.end.x,points.end.y)
+            ctx.lineTo(x1, y1)
             // stroke using line width and stroke style
             ctx.stroke()
         }
