@@ -10,6 +10,8 @@ Item {
     property var patches: []
     property int margin: 1 + (Style.patchWidth / 2) // distance from patch considered "clicked"
 
+    property bool patching: patchInProgressParent ? true : false
+
     onActiveFocusChanged: {
         if(root.activeFocus === false) {
             selectedPatch = null
@@ -168,19 +170,6 @@ Item {
             patches.splice(idx, 1)
         }
     }
-
-    //    function distanceToPatch(point, patchPoints)
-    //    {
-    //        var x0 = point.x
-    //        var y0 = point.y
-    //        var x1 = patchPoints.begin.x
-    //        var y1 = patchPoints.begin.y
-    //        var x2 = patchPoints.end.x
-    //        var y2 = patchPoints.end.y
-
-    //        var distance = Math.abs((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1) / Math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1))
-    //        return distance
-    //    }
 
     function distanceToPatch(point, patchPoints) {
         var v = patchPoints.begin

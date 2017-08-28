@@ -27,6 +27,14 @@ Item {
     signal selected(var item)
     signal deleted(var item)
 
+     Component.onCompleted: {
+         synthItems.push(root)
+         patching.connect(patchManager.patchBegin)
+         deleted.connect(patchManager.itemDeleted)
+         deleted.connect(deleteItem)
+         parent = workspace.contentItem
+     }
+
     onMutedChanged: {
         mute()
     }

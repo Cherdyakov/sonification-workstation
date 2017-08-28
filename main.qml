@@ -93,8 +93,8 @@ Rectangle
         hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-        onMouseXChanged: if(patchManager.patchInProgressParent !== null) { canvas.requestPaint() }
-        onMouseYChanged: if(patchManager.patchInProgressParent !== null) { canvas.requestPaint() }
+        onMouseXChanged: if(patchManager.patching) { canvas.requestPaint() }
+        onMouseYChanged: if(patchManager.patching) { canvas.requestPaint() }
 
         onClicked: {
             workspace.forceActiveFocus()
@@ -133,13 +133,6 @@ Rectangle
                 id: palette
                 height: childrenRect.height
                 width: childrenRect.width
-                onItemCreated: {
-                    synthItems.push(item)
-                    item.patching.connect(patchManager.patchBegin)
-                    item.deleted.connect(patchManager.itemDeleted)
-                    item.deleted.connect(deleteItem)
-                    item.parent = workspace.contentItem
-                }
             }
         }
     }
