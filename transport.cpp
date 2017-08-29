@@ -207,7 +207,7 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
     default:
         item = NULL;
         break;
-    }  
+    }
     item->set_data(&current_data_column_, &mins_, &maxes_);
     subscribe_item(item);
     return item;
@@ -424,7 +424,7 @@ void Transport::process_delete_item(SynthItem *item)
 {
     unsubscribe_item(item);
     item->delete_self();
-    item->control_process();
+    //    item->control_process();
 }
 
 void Transport::process_subscribe_item(SynthItem *item)
@@ -446,11 +446,8 @@ void Transport::process_set_dataset(std::vector<double> *dataset, unsigned int h
     current_index_ = 0;
     mu_ = 0.0;
     calculate_return_position();
-    if(data_height_ != height)
-    {
-        data_height_ = height;
-        current_data_column_.resize(data_height_);
-    }
+    data_height_ = height;
+    current_data_column_.resize(data_height_);
     calculate_min_max();
 }
 
