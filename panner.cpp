@@ -244,7 +244,7 @@ void Panner::step()
     }
 }
 
-void Panner::block_start()
+void Panner::control_process()
 {
     if(!command_buffer_.empty())
     {

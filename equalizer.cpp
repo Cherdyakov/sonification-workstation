@@ -365,7 +365,7 @@ void Equalizer::step()
     }
 }
 
-void Equalizer::block_start()
+void Equalizer::control_process()
 {
     if(!command_buffer_.empty())
     {

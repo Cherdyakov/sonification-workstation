@@ -25,7 +25,6 @@ public:
     virtual ~Transport();
     // interface overrides
     void delete_self() override;
-    // safely delete SynthItem attached to this transport
     void delete_item(SynthItem* item);
     SynthItem::ITEM get_type();
     void set_data(std::vector<double>* data,
@@ -45,6 +44,9 @@ public:
     void set_looping(bool loop_);
     void set_loop_points(double begin, double end);
     void set_interpolate(bool interpolate_);
+    // add or remove SynthItem from block processing
+    void subscribe_item(SynthItem* item);
+    void unsubscribe_item(SynthItem* item);
     // factory for other SynthItems (probably should do something else)
     SynthItem *create_item(SynthItem::ITEM type);
     // for polling state from outside
@@ -52,7 +54,7 @@ public:
     // generate frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)
-    void block_start() override; // every process block
+    void control_process() override; // every process block
 
     // getters are not thread safe
     bool get_mute();
@@ -67,6 +69,9 @@ private:
     void process_remove_child(SynthItem* child) override;
     void process_delete() override;
     void process_delete_item(SynthItem* item);
+
+    void process_subscribe_item(SynthItem* item);
+    void process_unsubscribe_item(SynthItem* item);
 
     void process_set_dataset(std::vector<double>*dataset,
                              unsigned int height,
@@ -83,7 +88,7 @@ private:
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
     Frame frame_buffer_[4096];
-    std::vector<SynthItem*> synth_items_;
+    std::vector<SynthItem*> subscribers_;
     std::vector<SynthItem::PARAMETER> accepted_children_;
     std::vector<double>* dataset_;
     std::vector<double> current_data_column_;

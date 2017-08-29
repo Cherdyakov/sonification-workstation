@@ -159,51 +159,57 @@ void Transport::set_interpolate(bool interpolate)
     command_buffer_.push(command);
 }
 
+void Transport::subscribe_item(SynthItem *item)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SUBSCRIBE;
+    command.item = item;
+    command_buffer_.push(command);
+}
+
+void Transport::unsubscribe_item(SynthItem *item)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::UNSUBSCRIBE;
+    command.item = item;
+    command_buffer_.push(command);
+}
+
 SynthItem* Transport::create_item(SynthItem::ITEM type)
 {
     SynthItem* item;
 
     switch (type){
-    case SynthItem::ITEM::TRANSPORT:
-        item = NULL;
-        break;
     case SynthItem::ITEM::OSCILLATOR:
         item = new Oscillator();
-        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::AUDIFIER:
         item = new Audifier();
-        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::MODULATOR:
         item = new Modulator();
-        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::PANNER:
         item = new Panner();
-        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::ENVELOPE:
         item = new Envelope();
-        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::VOLUME:
         item = new Volume();
-        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::NOISE:
         item = new Noise();
-        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     case SynthItem::ITEM::EQUALIZER:
         item = new Equalizer();
-        item->set_data(&current_data_column_, &mins_, &maxes_);
         break;
     default:
         item = NULL;
         break;
-    }
-    synth_items_.push_back(item);
+    }  
+    item->set_data(&current_data_column_, &mins_, &maxes_);
+    subscribe_item(item);
     return item;
 }
 
@@ -295,16 +301,16 @@ void Transport::step()
     }
 }
 
-void Transport::block_start()
+void Transport::control_process()
 {
+    for (unsigned int i = 0; i < subscribers_.size(); ++i)
+    {
+        SynthItem* item = subscribers_[i];
+        item->control_process();
+    }
     if(!command_buffer_.empty())
     {
         retrieve_commands();
-    }
-    for (unsigned int i = 0; i < synth_items_.size(); ++i)
-    {
-        SynthItem* item = synth_items_[i];
-        item->block_start();
     }
 }
 
@@ -369,6 +375,12 @@ void Transport::process_command(SynthItemCommand command)
     case COMMAND::DELETE_ITEM:
         process_delete_item(command.item);
         break;
+    case COMMAND::SUBSCRIBE:
+        process_subscribe_item(command.item);
+        break;
+    case COMMAND::UNSUBSCRIBE:
+        process_unsubscribe_item(command.item);
+        break;
     default:
         break;
     }
@@ -410,8 +422,19 @@ void Transport::process_delete()
 
 void Transport::process_delete_item(SynthItem *item)
 {
-    remove_item(item, &synth_items_);
+    unsubscribe_item(item);
     item->delete_self();
+    item->control_process();
+}
+
+void Transport::process_subscribe_item(SynthItem *item)
+{
+    subscribers_.push_back(item);
+}
+
+void Transport::process_unsubscribe_item(SynthItem *item)
+{
+    remove_item(item, &subscribers_);
 }
 
 void Transport::process_set_dataset(std::vector<double> *dataset, unsigned int height, unsigned int width)
