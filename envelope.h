@@ -70,7 +70,7 @@ public:
     // generate a frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)
-    void block_start() override; // every process block
+    void control_process() override; // every process block
 
 private:
     void retrieve_commands() override;

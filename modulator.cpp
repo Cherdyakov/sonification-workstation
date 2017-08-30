@@ -361,7 +361,7 @@ void Modulator::step()
     }
 }
 
-void Modulator::block_start()
+void Modulator::control_process()
 {
     if(!command_buffer_.empty())
     {

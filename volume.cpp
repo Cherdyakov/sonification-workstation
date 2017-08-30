@@ -238,7 +238,7 @@ void Volume::step()
     }
 }
 
-void Volume::block_start()
+void Volume::control_process()
 {
     if(!command_buffer_.empty())
     {

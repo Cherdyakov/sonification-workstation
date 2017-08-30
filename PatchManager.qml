@@ -152,11 +152,20 @@ Item {
     }
 
     function itemDeleted(item) {
+        var patchesToDelete = []
         for(var i = 0; i < patches.length; i++) {
             var patch = patches[i]
             if(patch.parent === item || patch.child === item) {
-                deletePatch(patch)
+                patchesToDelete.push(patch)
             }
+        }
+        deletePatches(patchesToDelete)
+    }
+
+    function deletePatches(patchesToDelete) {
+        for(var i = 0; i < patchesToDelete.length; i++) {
+            var toDelete = patchesToDelete[i]
+            deletePatch(toDelete)
         }
     }
 

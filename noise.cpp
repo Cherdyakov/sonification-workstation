@@ -142,7 +142,7 @@ void Noise::step()
     }
 }
 
-void Noise::block_start()
+void Noise::control_process()
 {
     if(!command_buffer_.empty())
     {

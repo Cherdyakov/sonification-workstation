@@ -256,7 +256,7 @@ void Oscillator::step()
     }
 }
 
-void Oscillator::block_start()
+void Oscillator::control_process()
 {
     if(!command_buffer_.empty())
     {

@@ -150,7 +150,7 @@ void Audifier::step()
     }
 }
 
-void Audifier::block_start()
+void Audifier::control_process()
 {
     if(!command_buffer_.empty())
     {

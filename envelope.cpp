@@ -365,7 +365,7 @@ void Envelope::step()
     reset();
 }
 
-void Envelope::block_start()
+void Envelope::control_process()
 {
     if(!command_buffer_.empty())
     {
