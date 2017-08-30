@@ -19,8 +19,8 @@ Rectangle
     property alias workspace: workspace
 
     Component.onCompleted: {
-        dac.patching.connect(patchManager.patchBegin)
-        synthItems.push(dac)
+//        dac.patching.connect(patchManager.patchBegin)
+//        synthItems.push(dac)
     }
 
     Connections {
@@ -206,14 +206,14 @@ Rectangle
         }
     }
 
-    //Audio output (root of transport)
-    OUT {
-        type: 0
-        id: dac
-        created: true
-        x: workspace.width / 2 - dac.width / 2
-        y: workspace.height - 100
-    }
+//    //Audio output (root of transport)
+//    OUT {
+//        type: 0
+//        id: dac
+//        created: true
+//        x: workspace.width / 2 - dac.width / 2
+//        y: workspace.height - 100
+//    }
 
 }
 

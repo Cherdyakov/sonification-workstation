@@ -94,13 +94,13 @@ private:
     std::vector<double> current_data_column_;
     std::vector<double> mins_;
     std::vector<double> maxes_;
-    std::atomic<double> return_pos;
+    std::atomic<double> return_pos_;
     std::vector<SynthItem*> inputs_;
     std::vector<SynthItem*> amods_;
     float master_volume_;
     unsigned int data_height_;
     unsigned int data_width_;
-    unsigned int frame_rate;
+    unsigned int frame_rate_;
     unsigned int current_index_;
     double mu_;
     int speed_;

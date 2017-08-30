@@ -2,9 +2,9 @@
 
 using namespace son;
 
-QtOscillator::QtOscillator(Oscillator *item, QObject *parent) : QtSynthItem(parent)
+QtOscillator::QtOscillator(Oscillator *oscillator, QObject *parent) : QtSynthItem(parent)
 {
-    oscillator_ = item;
+    oscillator_ = oscillator;
 }
 
 SynthItem *QtOscillator::implementation()

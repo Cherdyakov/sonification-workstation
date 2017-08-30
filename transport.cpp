@@ -4,18 +4,20 @@ namespace son {
 
 Transport::Transport()
 {
+    my_type_ = ITEM::TRANSPORT;
+    my_child_type_ = PARAMETER::OUTPUT;
     paused_ = true;
     loop_ = false;
     loop_begin_ = 0.0;
     loop_end_ = 0.0;
     data_stale_ = false;
-    frame_rate = 44100;
+    frame_rate_ = 44100;
     data_width_ = 0;
     data_height_ = 0;
     current_index_ = 0;
     mu_ = 0.0;
     speed_ = 1;
-    return_pos = 0.0;
+    return_pos_ = 0.0;
     master_volume_ = 1.0;
     interpolate_ = false;
 
@@ -209,13 +211,12 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
         break;
     }
     item->set_data(&current_data_column_, &mins_, &maxes_);
-    subscribe_item(item);
     return item;
 }
 
 double Transport::get_playback_position()
 {
-    return return_pos;
+    return return_pos_;
 }
 
 /*
@@ -287,7 +288,7 @@ Frame Transport::process()
 
     // advancing index
     calculate_return_position();
-    mu_ += ((double)speed_ / frame_rate);
+    mu_ += ((double)speed_ / frame_rate_);
 
     return frame;// * master_volume_;
 }
@@ -422,7 +423,7 @@ void Transport::process_delete()
 
 void Transport::process_delete_item(SynthItem *item)
 {
-    unsubscribe_item(item);
+    process_unsubscribe_item(item);
     item->delete_self();
     item->control_process();
 }
@@ -491,7 +492,7 @@ void Transport::calculate_return_position()
 {
     // FIXME not on every callback
     double pos = ((double)current_index_ + mu_);
-    return_pos.store(pos, std::memory_order_relaxed);
+    return_pos_.store(pos, std::memory_order_relaxed);
 }
 
 void Transport::calculate_min_max()

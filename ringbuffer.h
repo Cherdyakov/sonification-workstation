@@ -12,6 +12,7 @@ class RingBuffer
 {
 public:
     RingBuffer(int cap = 512);
+    ~RingBuffer();
 
     void reset();
 
@@ -27,7 +28,7 @@ private:
     std::atomic<int> capacity;
     std::atomic<int> head;
     std::atomic<int> tail;
-    std::vector<T> array;
+    T* array;
 
 };
 
@@ -39,7 +40,13 @@ RingBuffer<T>::RingBuffer(int cap)
     tail = 0;
     currentSize = 0;
     capacity = cap;
-    array.resize(capacity);
+    array = new T[capacity];
+}
+
+template<class T>
+RingBuffer<T>::~RingBuffer()
+{
+    delete[] array;
 }
 
 template<class T>

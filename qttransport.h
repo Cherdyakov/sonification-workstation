@@ -45,6 +45,7 @@ public:
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
     Q_INVOKABLE void deleteItem(QtSynthItem* item);
+    Q_INVOKABLE void subscribeItem(QtSynthItem* item);
 
 public slots:
 
