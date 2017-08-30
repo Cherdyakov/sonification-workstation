@@ -104,7 +104,6 @@ SynthItem {
                         }
                     }
                 }
-
             }
 
             EditorMapper {
@@ -121,29 +120,29 @@ SynthItem {
                     }
                 }
             }
-        }
 
-        EditorScaler {
-            id: frequencyScaler
-            label.text: qsTr("Frequency Scaling: ")
-            lowLabel.text: qsTr("Frequency Low: ")
-            highLabel.text: qsTr("Frequency High: ")
+            EditorScaler {
+                id: frequencyScaler
+                label.text: qsTr("Frequency Scaling: ")
+                lowLabel.text: qsTr("Frequency Low: ")
+                highLabel.text: qsTr("Frequency High: ")
 
-            onLowChanged:
-            {
-                implementation.setFreqScaleLow(low)
-            }
-            onHighChanged:
-            {
-                implementation.setFreqScaleHigh(high)
-            }
-            onExponentChanged:
-            {
-                implementation.setFreqScaleExponent(exponent)
-            }
-            onScaledChanged:
-            {
-                implementation.setFreqScaled(scaled)
+                onLowChanged:
+                {
+                    implementation.setFreqScaleLow(low)
+                }
+                onHighChanged:
+                {
+                    implementation.setFreqScaleHigh(high)
+                }
+                onExponentChanged:
+                {
+                    implementation.setFreqScaleExponent(exponent)
+                }
+                onScaledChanged:
+                {
+                    implementation.setFreqScaled(scaled)
+                }
             }
         }
     }
