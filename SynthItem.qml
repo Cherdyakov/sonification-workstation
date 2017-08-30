@@ -5,7 +5,7 @@ import "Style.js" as Style
 Item {
 
     id: root
-     z: Style.itemZ
+     z: Style.itemZ + zModifier
      width: Style.itemHeight; height: Style.itemWidth
 
     property int identifier: 0
@@ -20,6 +20,7 @@ Item {
     property string mainColor
     property string textColor
     property QtSynthItem implementation: null // the CPP implementation of this SynthItem
+     property var zModifier: root.activeFocus === true ? 10 : 0
 
     property alias radius: rect.radius
 
@@ -56,6 +57,7 @@ Item {
                 target: root
                 width: editor.width + Style.editorMargin
                 height: editor.height + Style.editorMargin
+                z: Style.itemEditorZ + zModifier
             }
             PropertyChanges {
                 target: rect
