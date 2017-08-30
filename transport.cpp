@@ -424,7 +424,7 @@ void Transport::process_delete_item(SynthItem *item)
 {
     unsubscribe_item(item);
     item->delete_self();
-    //    item->control_process();
+    item->control_process();
 }
 
 void Transport::process_subscribe_item(SynthItem *item)
