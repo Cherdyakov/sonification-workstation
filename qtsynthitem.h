@@ -17,6 +17,7 @@ public:
 
     enum QT_PARAMETER {
         INPUT = (int)SynthItem::PARAMETER::INPUT,
+        OUTPUT,
         AMPLITUDE,
         FREQUENCY,
         DEPTH,

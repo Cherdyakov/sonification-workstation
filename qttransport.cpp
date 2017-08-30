@@ -27,34 +27,42 @@ QtSynthItem* QtTransport::createItem(QT_ITEM type)
     case QT_ITEM::OSCILLATOR:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtOscillator(dynamic_cast<Oscillator*>(item));
+        subscribeItem(qtItem);
         break;
     case QT_ITEM::AUDIFIER:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtAudifier(dynamic_cast<Audifier*>(item));
+        subscribeItem(qtItem);
         break;
     case QT_ITEM::MODULATOR:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtModulator(dynamic_cast<Modulator*>(item));
+        subscribeItem(qtItem);
         break;
     case QT_ITEM::PANNER:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtPanner(dynamic_cast<Panner*>(item));
+        subscribeItem(qtItem);
         break;
     case QT_ITEM::ENVELOPE:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtEnvelope(dynamic_cast<Envelope*>(item));
+        subscribeItem(qtItem);
         break;
     case QT_ITEM::VOLUME:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtVolume(dynamic_cast<Volume*>(item));
+        subscribeItem(qtItem);
         break;
     case QT_ITEM::NOISE:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtNoise(dynamic_cast<Noise*>(item));
+        subscribeItem(qtItem);
         break;
     case QT_ITEM::EQUALIZER:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtEqualizer(dynamic_cast<Equalizer*>(item));
+        subscribeItem(qtItem);
         break;
     default:
         break;
@@ -95,6 +103,11 @@ void QtTransport::mute(bool mute)
 void QtTransport::deleteItem(QtSynthItem *item)
 {
     transport_.delete_item(item->implementation());
+}
+
+void QtTransport::subscribeItem(QtSynthItem *item)
+{
+    transport_.subscribe_item(item->implementation());
 }
 
 void QtTransport::on_dataChanged(std::vector<double> *data, unsigned int height, unsigned int width)

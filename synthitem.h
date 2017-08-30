@@ -34,6 +34,7 @@ public:
 
     enum class PARAMETER {
         INPUT,
+        OUTPUT,
         AMPLITUDE,
         FREQUENCY,
         DEPTH,
