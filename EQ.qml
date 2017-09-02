@@ -108,18 +108,18 @@ SynthItem {
             id: layout
             title: label
 
-            RowLayout {
-
-                EditorMenuParam {
-                    id: typeEditor
-                    label.text: qsTr("Type: ")
-                    model: [qsTr("Low Pass"), qsTr("High Pass"), qsTr("Peak"), qsTr("Notch")]
-                    onIndexChanged: {
-                        if(implementation !== null) {
-                            implementation.setFilterType(index)
-                        }
+            EditorMenuParam {
+                id: typeEditor
+                label.text: qsTr("Type: ")
+                model: [qsTr("Low Pass"), qsTr("High Pass"), qsTr("Peak"), qsTr("Notch")]
+                onIndexChanged: {
+                    if(implementation !== null) {
+                        implementation.setFilterType(index)
                     }
                 }
+            }
+
+            RowLayout {
 
                 EditorDoubleParam {
                     id: frequencyEditor

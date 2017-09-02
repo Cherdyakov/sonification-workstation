@@ -75,7 +75,7 @@ Rectangle {
         PaletteItem {
             id: eq
             componentFile: "EQ.qml"
-            source: "images/OUT.png"
+            source: "images/EQ.png"
             onItemCreated: root.itemCreated(item)
         }
 

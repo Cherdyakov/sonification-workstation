@@ -38,5 +38,6 @@
         <file>EQ.qml</file>
         <file>SessionCode.js</file>
         <file>Utils.js</file>
+        <file>images/EQ.png</file>
     </qresource>
 </RCC>
