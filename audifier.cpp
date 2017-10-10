@@ -17,7 +17,7 @@ Audifier::~Audifier()
 
 }
 
-void Audifier::delete_item()
+void Audifier::delete_self()
 {
     SynthItemCommand command;
     command.type = COMMAND::DELETE;
@@ -55,7 +55,7 @@ void Audifier::remove_parent(SynthItem *parent)
     command_buffer_.push(command);
 }
 
-bool Audifier::add_child(SynthItem *child, SynthItem::PARAMETER param)
+bool Audifier::add_child(SynthItem *child, PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {
@@ -94,14 +94,25 @@ void Audifier::set_aud_indexes(std::vector<int> indexes)
     command_buffer_.push(command);
 }
 
+bool Audifier::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Audifier::get_parents()
+{
+    return parents_;
+}
+
+std::vector<int> Audifier::get_aud_indexes()
+{
+    return audify_indexes_;
+}
+
 Frame Audifier::process()
 {
-            Frame frame = 0.0;
+    Frame frame = 0.0;
 
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
     if(muted_)
     {
         return frame;
@@ -115,8 +126,8 @@ Frame Audifier::process()
     {
         // Audifier always scales datasets to range -1.0 to 1.0
         frame += scale((data_->at(static_cast<unsigned int>(audify_indexes_[i]))),
-                        mins_->at(i), maxes_->at(i),
-                        -1.0, 1.0, 1.0);
+                       mins_->at(i), maxes_->at(i),
+                       -1.0, 1.0, 1.0);
     }
 
     // visit amplitude modulating children
@@ -136,6 +147,14 @@ void Audifier::step()
     for (unsigned int i = 0; i < amods_.size(); i++) {
         SynthItem *item = amods_[i];
         item->step();
+    }
+}
+
+void Audifier::control_process()
+{
+    if(!command_buffer_.empty())
+    {
+        retrieve_commands();
     }
 }
 
@@ -165,7 +184,7 @@ void Audifier::process_command(SynthItemCommand command)
         insert_item_unique(command.item, &parents_);
         break;
     case COMMAND::REMOVE_PARENT:
-        erase_item(command.item, &parents_);
+        remove_item(command.item, &parents_);
         break;
     case COMMAND::MUTE:
         muted_ = command.bool_val;
@@ -174,7 +193,7 @@ void Audifier::process_command(SynthItemCommand command)
         process_set_param_indexes(command.ints, command.parameter);
         break;
     case COMMAND::DELETE:
-        process_delete_item();
+        process_delete();
         break;
     default:
         break;
@@ -195,7 +214,7 @@ void Audifier::process_remove_child(SynthItem *child)
     amods_.erase(std::remove(amods_.begin(), amods_.end(), child), amods_.end());
 }
 
-void Audifier::process_delete_item()
+void Audifier::process_delete()
 {
     remove_as_child(this, parents_);
     remove_as_parent(this, amods_);

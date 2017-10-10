@@ -11,7 +11,7 @@ public:
     Volume();
 
     // helper when deleting item contained in synth tree
-    void delete_item() override;
+    void delete_self() override;
     // interface overrides
     ITEM get_type() override;
     void set_data(std::vector<double>* data,
@@ -27,20 +27,33 @@ public:
     void set_volume_fixed(bool fixed);
     void set_volume_indexes(std::vector<int> indexes);
     void set_volume_scaled(bool scaled);
-    void set_volume_scale_vals(double low,
-                             double high,
-                             double exp);
+    void set_volume_scale_low(double low);
+    void set_volume_scale_high(double high);
+    void set_volume_scale_exponent(double exponent);
+
+    // getters are not thread-safe
+    bool get_mute();
+    std::vector<SynthItem*> get_parents();
+    // volume parameter getters
+    double get_volume();
+    bool get_volume_fixed();
+    std::vector<int> get_volume_indexes();
+    bool get_volume_scaled();
+    double get_volume_scale_low();
+    double get_volume_scale_high();
+    double get_volume_scale_exponent();
 
     // generate a frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)
+    void control_process() override; // every process block
 
 private:
     void retrieve_commands() override;
     void process_command(SynthItemCommand command) override;
     void process_add_child(SynthItem* child, PARAMETER parameter) override;
     void process_remove_child(SynthItem* child) override;
-    void process_delete_item() override;
+    void process_delete() override;
 
     void process_set_data(std::vector<double>* data,
                           std::vector<double>* mins,
@@ -49,10 +62,9 @@ private:
     void process_set_param_fixed(bool fixed, PARAMETER param);
     void process_set_param_indexes(std::vector<int> indexes, PARAMETER param);
     void process_set_param_scaled(bool scaled, PARAMETER param);
-    void process_set_param_scale_vals(double low,
-                                      double high,
-                                      double exp,
-                                      PARAMETER param);
+    void process_set_param_scale_low(double low, PARAMETER param);
+    void process_set_param_scale_high(double high, PARAMETER param);
+    void process_set_param_scale_exponent(double exponent, PARAMETER param);
 
     float calculate_volume_();
 
@@ -69,7 +81,7 @@ private:
     std::vector<int> volume_indexes_;
     bool muted_;
 
-    //for scaling the data to intended volume values
+    // for scaling the data to intended volume values
     double volume_;
     bool volume_fixed_;
     bool volume_scaled_;

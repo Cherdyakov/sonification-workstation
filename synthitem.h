@@ -28,11 +28,13 @@ public:
         PANNER,
         ENVELOPE,
         VOLUME,
-        NOISE
+        NOISE,
+        EQUALIZER
     };
 
     enum class PARAMETER {
         INPUT,
+        OUTPUT,
         AMPLITUDE,
         FREQUENCY,
         DEPTH,
@@ -40,30 +42,39 @@ public:
         PAN,
         ATTACK,
         DECAY,
-        VOLUME
+        VOLUME,
+        NOISE,
+        RESONANCE,
+        FILTER_TYPE
     };
 
     enum class COMMAND {
         DATA,
-        PARAM,
-        SCALED,
-        SCALE_VALS,
-        INDEXES,
-        MODULATION,
-        NOISE,
-        FIXED,
         ADD_CHILD,
         REMOVE_CHILD,
         ADD_PARENT,
         REMOVE_PARENT,
         MUTE,
+        PARAM,
+        FIXED,
+        INDEXES,
+        SCALED,
+        SCALE_LOW,
+        SCALE_HIGH,
+        SCALE_EXPONENT,
         DELETE,
+        DELETE_ITEM,
+        MODULATION,
+        NOISE,
+        FILTER_TYPE,
         PAUSE,
         POSITION,
         SPEED,
         LOOP,
         LOOP_POINTS,
-        INTERPOLATE
+        INTERPOLATE,
+        SUBSCRIBE,
+        UNSUBSCRIBE
     };
 
     enum class NOISE {
@@ -71,6 +82,12 @@ public:
         PINK
     };
 
+    enum class FILTER_TYPE {
+        LOW_PASS,
+        HIGH_PASS,
+        PEAK,
+        NOTCH
+    };
 
     struct SynthItemCommand {
         COMMAND type;
@@ -90,18 +107,22 @@ public:
 
     explicit SynthItem() {}
     virtual ~SynthItem() {}
-    virtual void delete_item() = 0;
+    virtual void delete_self() = 0;
     virtual ITEM get_type() = 0;
     virtual void set_data(std::vector<double>* data,
                              std::vector<double>* mins,
                              std::vector<double>* maxes) = 0;
     virtual void add_parent(SynthItem* parent) = 0;
     virtual void remove_parent(SynthItem* parent) = 0;
-    virtual bool add_child(SynthItem *child, PARAMETER parameter) = 0;
+    virtual bool add_child(SynthItem *child, PARAMETER param) = 0;
     virtual void remove_child(SynthItem *child) = 0;
     virtual void mute(bool mute) = 0;
     virtual Frame process() = 0; // every sample
     virtual void step() = 0; // every new data value (step)
+    virtual void control_process() = 0; // every process block
+
+    virtual bool get_mute() = 0;
+    virtual std::vector<SynthItem*> get_parents() = 0;
 
 protected:
 
@@ -109,10 +130,10 @@ protected:
     virtual void process_command(SynthItemCommand command) = 0;
     virtual void process_add_child(SynthItem* child, PARAMETER parameter) = 0;
     virtual void process_remove_child(SynthItem* child) = 0;
-    virtual void process_delete_item() = 0;
+    virtual void process_delete() = 0;
 
 };
 
-} //namespace son
+} // namespace son
 
 #endif // SYNTHITEM_H

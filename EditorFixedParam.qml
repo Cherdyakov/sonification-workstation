@@ -9,8 +9,7 @@ ColumnLayout {
 
     property alias label: label
     property alias checkBox: checkBox
-
-    signal fixedChanged(bool fixed)
+    property alias fixed: checkBox.checked
 
     EditorLabel {
         id: label
@@ -19,6 +18,5 @@ ColumnLayout {
     }
     CheckBox {
         id: checkBox
-        onCheckedChanged: fixedChanged(checkBox.checked)
     }
 }

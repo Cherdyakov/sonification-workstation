@@ -14,76 +14,77 @@ Rectangle {
     property int spawnX: 0
     property  int spawnY: 0
 
-    signal itemCreated()
+    signal itemCreated(var item)
 
     Column {
 
         //        Row {
 
         PaletteItem {
+            id: osc
             componentFile: "OSC.qml"
             source: "images/OSC.png"
-//            onItemClicked: { createItem(item) }
+            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
+            id: aud
             componentFile: "AUD.qml"
             source: "images/AUD.png"
-//            onItemClicked: { createItem(item) }
+            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
+            id: mod
             componentFile: "MOD.qml"
             source: "images/MOD.png"
-//            onItemClicked: { createItem(item) }
+            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
+            id: pan
             componentFile: "PAN.qml"
             source: "images/PAN.png"
-//            onItemClicked: { createItem(item) }
+            onItemCreated: root.itemCreated(item)
         }
         //        }
 
         //        Row {
 
         PaletteItem {
+            id: env
             componentFile: "ENV.qml"
             source: "images/ENV.png"
-//            onItemClicked: { createItem(item) }
+            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
+            id: vol
             componentFile: "VOL.qml"
             source: "images/VOL.png"
-//            onItemClicked: { createItem(item) }
+            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
+            id: nse
             componentFile: "NSE.qml"
             source: "images/NSE.png"
-//            onItemClicked: { createItem(item) }
+            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            componentFile: "OUT.qml"
-            source: "images/OUT.png"
-//            onItemClicked: { createItem(item) }
+            id: eq
+            componentFile: "EQ.qml"
+            source: "images/EQ.png"
+            onItemCreated: root.itemCreated(item)
         }
 
-        //        }
+        PaletteItem {
+            id: out
+            componentFile: "OUT.qml"
+            source: "images/OUT.png"
+            onItemCreated: root.itemCreated(item)
+        }
 
     }
-
-//    function createItem(paletteItem) {
-//        console.log(paletteItem.componentFile)
-//        var component = Qt.createComponent(paletteItem.componentFile);
-//        console.log(component.errorString())
-//        if(component.status === Component.Ready) {
-//            var item = component.createObject(root, { "x": spawnX - Style.itemWidth / 2,
-//                                                  "y": spawnY - Style.itemHeight / 2 } )
-//            item.create();
-//        }
-//        itemCreated()
-//    }
 }

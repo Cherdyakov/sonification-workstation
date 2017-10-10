@@ -13,7 +13,7 @@ Noise::Noise()
     };
 }
 
-void Noise::delete_item()
+void Noise::delete_self()
 {
     SynthItemCommand command;
     command.type = COMMAND::DELETE;
@@ -89,15 +89,25 @@ void Noise::set_noise(NOISE noise)
     command_buffer_.push(command);
 }
 
+bool Noise::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Noise::get_parents()
+{
+    return parents_;
+}
+
+SynthItem::NOISE Noise::get_noise()
+{
+    return noise_type_;
+}
+
 // Generate a frame of output
 Frame Noise::process()
 {
     Frame frame;
-
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
 
     if(muted_)
     {
@@ -132,6 +142,14 @@ void Noise::step()
     }
 }
 
+void Noise::control_process()
+{
+    if(!command_buffer_.empty())
+    {
+        retrieve_commands();
+    }
+}
+
 void Noise::retrieve_commands()
 {
     while(command_buffer_.pop(&current_command_))
@@ -158,7 +176,7 @@ void Noise::process_command(SynthItem::SynthItemCommand command)
         insert_item_unique(command.item, &parents_);
         break;
     case COMMAND::REMOVE_PARENT:
-        erase_item(command.item, &parents_);
+        remove_item(command.item, &parents_);
         break;
     case COMMAND::MUTE:
         muted_ = command.bool_val;
@@ -167,7 +185,7 @@ void Noise::process_command(SynthItem::SynthItemCommand command)
         process_set_noise((NOISE)command.ints[0]);
         break;
     case COMMAND::DELETE:
-        process_delete_item();
+        process_delete();
         break;
     default:
         break;
@@ -192,11 +210,11 @@ void Noise::process_add_child(SynthItem *child, SynthItem::PARAMETER parameter)
 
 void Noise::process_remove_child(SynthItem *child)
 {
-    erase_item(child, &inputs_);
-    erase_item(child, &amods_);
+    remove_item(child, &inputs_);
+    remove_item(child, &amods_);
 }
 
-void Noise::process_delete_item()
+void Noise::process_delete()
 {
     remove_as_child(this, parents_);
     remove_as_parent(this, inputs_);

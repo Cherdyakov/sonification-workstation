@@ -20,7 +20,7 @@ Volume::Volume()
     };
 }
 
-void Volume::delete_item()
+void Volume::delete_self()
 {
     SynthItemCommand command;
     command.type = COMMAND::DELETE;
@@ -124,25 +124,81 @@ void Volume::set_volume_scaled(bool scaled)
     command_buffer_.push(command);
 }
 
-void Volume::set_volume_scale_vals(double low, double high, double exp)
+void Volume::set_volume_scale_low(double low)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SCALE_VALS;
+    command.type = COMMAND::SCALE_LOW;
     command.parameter = PARAMETER::VOLUME;
     command.doubles.push_back(low);
-    command.doubles.push_back(high);
-    command.doubles.push_back(exp);
     command_buffer_.push(command);
+}
+
+void Volume::set_volume_scale_high(double high)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_HIGH;
+    command.parameter = PARAMETER::VOLUME;
+    command.doubles.push_back(high);
+    command_buffer_.push(command);
+}
+
+void Volume::set_volume_scale_exponent(double exponent)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SCALE_EXPONENT;
+    command.parameter = PARAMETER::VOLUME;
+    command.doubles.push_back(exponent);
+    command_buffer_.push(command);
+}
+
+bool Volume::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Volume::get_parents()
+{
+    return parents_;
+}
+
+double Volume::get_volume()
+{
+    return volume_;
+}
+
+bool Volume::get_volume_fixed()
+{
+    return volume_fixed_;
+}
+
+std::vector<int> Volume::get_volume_indexes()
+{
+    return volume_indexes_;
+}
+
+bool Volume::get_volume_scaled()
+{
+    return volume_scaled_;
+}
+
+double Volume::get_volume_scale_low()
+{
+    return volume_low_;
+}
+
+double Volume::get_volume_scale_high()
+{
+    return volume_high_;
+}
+
+double Volume::get_volume_scale_exponent()
+{
+    return volume_exponent_;
 }
 
 Frame Volume::process()
 {
     Frame frame;
-
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
 
     if(muted_)
     {
@@ -176,6 +232,18 @@ void Volume::step()
         SynthItem *item = amods_[i];
         item->step();
     }
+    for (unsigned int i = 0; i < inputs_.size(); i++) {
+        SynthItem *item = inputs_[i];
+        item->step();
+    }
+}
+
+void Volume::control_process()
+{
+    if(!command_buffer_.empty())
+    {
+        retrieve_commands();
+    }
 }
 
 void Volume::retrieve_commands()
@@ -204,7 +272,7 @@ void Volume::process_command(SynthItem::SynthItemCommand command)
         insert_item_unique(command.item, &parents_);
         break;
     case COMMAND::REMOVE_PARENT:
-        erase_item(command.item, &parents_);
+        remove_item(command.item, &parents_);
         break;
     case COMMAND::MUTE:
         muted_ = command.bool_val;
@@ -221,11 +289,17 @@ void Volume::process_command(SynthItem::SynthItemCommand command)
     case COMMAND::SCALED:
         process_set_param_scaled(command.bool_val, command.parameter);
         break;
-    case COMMAND::SCALE_VALS:
-        process_set_param_scale_vals(command.doubles[0], command.doubles[1], command.doubles[2], command.parameter);
+    case COMMAND::SCALE_LOW:
+        process_set_param_scale_low(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_HIGH:
+        process_set_param_scale_high(command.doubles[0], command.parameter);
+        break;
+    case COMMAND::SCALE_EXPONENT:
+        process_set_param_scale_exponent(command.doubles[0], command.parameter);
         break;
     case COMMAND::DELETE:
-        process_delete_item();
+        process_delete();
         break;
     default:
         break;
@@ -250,11 +324,11 @@ void Volume::process_add_child(SynthItem *child, SynthItem::PARAMETER parameter)
 
 void Volume::process_remove_child(SynthItem *child)
 {
-    erase_item(child, &inputs_);
-    erase_item(child, &amods_);
+    remove_item(child, &inputs_);
+    remove_item(child, &amods_);
 }
 
-void Volume::process_delete_item()
+void Volume::process_delete()
 {
     remove_as_child(this, parents_);
     remove_as_parent(this, inputs_);
@@ -301,13 +375,27 @@ void Volume::process_set_param_scaled(bool scaled, SynthItem::PARAMETER param)
     }
 }
 
-void Volume::process_set_param_scale_vals(double low, double high, double exp, SynthItem::PARAMETER param)
+void Volume::process_set_param_scale_low(double low, SynthItem::PARAMETER param)
 {
     if(param == PARAMETER::VOLUME)
     {
         volume_low_ = low;
+    }
+}
+
+void Volume::process_set_param_scale_high(double high, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::VOLUME)
+    {
         volume_high_ = high;
-        volume_exponent_ = exp;
+    }
+}
+
+void Volume::process_set_param_scale_exponent(double exponent, SynthItem::PARAMETER param)
+{
+    if(param == PARAMETER::VOLUME)
+    {
+        volume_exponent_ = exponent;
     }
 }
 

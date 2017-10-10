@@ -13,7 +13,7 @@ public:
     Noise();
 
     // helper when deleting item contained in synth tree
-    void delete_item() override;
+    void delete_self() override;
     // interface overrides
     ITEM get_type() override;
     void set_data(std::vector<double>* data,
@@ -27,16 +27,23 @@ public:
     // noise parameter accessors
     void set_noise(NOISE noise);
 
+    // getters are not thread-safe
+    bool get_mute();
+    std::vector<SynthItem*> get_parents();
+    // frequency parameter getters
+    NOISE get_noise();
+
     // generate a frame
     Frame process() override; // every sample
     void step() override; // every new data value (step)
+    void control_process() override; // every process block
 
 private:
     void retrieve_commands() override;
     void process_command(SynthItemCommand command) override;
     void process_add_child(SynthItem* child, PARAMETER parameter) override;
     void process_remove_child(SynthItem* child) override;
-    void process_delete_item() override;
+    void process_delete() override;
 
     void process_set_data(std::vector<double>* data,
                           std::vector<double>* mins,

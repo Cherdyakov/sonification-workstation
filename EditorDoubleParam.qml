@@ -8,9 +8,10 @@ ColumnLayout {
     Layout.maximumHeight: Style.editorRowHeight * 2
 
     property alias label: label
-    property alias spinBox: spinBox
-
-    signal paramValueChanged(double value)
+    property alias value: spinBox.doubleValue
+    property alias from: spinBox.doubleFrom
+    property alias to: spinBox.doubleTo
+    property alias stepSize: spinBox.doubleStepSize
 
     EditorLabel {
         id: label
@@ -23,7 +24,6 @@ ColumnLayout {
         id: spinBox
         Layout.maximumHeight: Style.editorRowHeight
         Layout.preferredWidth: Style.editorControlWidth
-        onValueChanged: paramValueChanged(spinBox.value / 100)
     }
 
 }

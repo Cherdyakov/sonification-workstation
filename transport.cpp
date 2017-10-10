@@ -4,19 +4,20 @@ namespace son {
 
 Transport::Transport()
 {
+    my_type_ = ITEM::TRANSPORT;
+    my_child_type_ = PARAMETER::OUTPUT;
     paused_ = true;
     loop_ = false;
     loop_begin_ = 0.0;
     loop_end_ = 0.0;
     data_stale_ = false;
-    block_size_ = 512;
-    frame_rate = 44100;
+    frame_rate_ = 44100;
     data_width_ = 0;
     data_height_ = 0;
     current_index_ = 0;
     mu_ = 0.0;
-    speed_ = 1.0;
-    return_pos = 0.0;
+    speed_ = 1;
+    return_pos_ = 0.0;
     master_volume_ = 1.0;
     interpolate_ = false;
 
@@ -34,10 +35,18 @@ Transport::~Transport()
  Functions called from user thread
  */
 
-void Transport::delete_item()
+void Transport::delete_self()
 {
     SynthItemCommand command;
     command.type = COMMAND::DELETE;
+    command_buffer_.push(command);
+}
+
+void Transport::delete_item(SynthItem *item)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::DELETE_ITEM;
+    command.item = item;
     command_buffer_.push(command);
 }
 
@@ -55,21 +64,15 @@ void Transport::set_data(std::vector<double> *data, std::vector<double> *mins, s
 
 void Transport::add_parent(SynthItem *parent)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::ADD_PARENT;
-    command.item = parent;
-    command_buffer_.push(command);
+    (void)parent;
 }
 
 void Transport::remove_parent(SynthItem *parent)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::REMOVE_PARENT;
-    command.item = parent;
-    command_buffer_.push(command);
+    (void)parent;
 }
 
-bool Transport::add_child(SynthItem *child, SynthItem::PARAMETER param)
+bool Transport::add_child(SynthItem *child, PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {
@@ -125,11 +128,11 @@ void Transport::set_playback_position(double pos)
     command_buffer_.push(command);
 }
 
-void Transport::set_speed(double speed)
+void Transport::set_speed(int speed)
 {
     SynthItemCommand command;
     command.type = COMMAND::SPEED;
-    command.doubles.push_back(speed);
+    command.ints.push_back(speed);
     command_buffer_.push(command);
 }
 
@@ -158,52 +161,62 @@ void Transport::set_interpolate(bool interpolate)
     command_buffer_.push(command);
 }
 
+void Transport::subscribe_item(SynthItem *item)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::SUBSCRIBE;
+    command.item = item;
+    command_buffer_.push(command);
+}
+
+void Transport::unsubscribe_item(SynthItem *item)
+{
+    SynthItemCommand command;
+    command.type = COMMAND::UNSUBSCRIBE;
+    command.item = item;
+    command_buffer_.push(command);
+}
+
 SynthItem* Transport::create_item(SynthItem::ITEM type)
 {
     SynthItem* item;
 
     switch (type){
-    case SynthItem::ITEM::TRANSPORT:
-        item = NULL;
-        break;
     case SynthItem::ITEM::OSCILLATOR:
         item = new Oscillator();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
     case SynthItem::ITEM::AUDIFIER:
         item = new Audifier();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
     case SynthItem::ITEM::MODULATOR:
         item = new Modulator();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
     case SynthItem::ITEM::PANNER:
         item = new Panner();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
     case SynthItem::ITEM::ENVELOPE:
         item = new Envelope();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
     case SynthItem::ITEM::VOLUME:
         item = new Volume();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
         break;
     case SynthItem::ITEM::NOISE:
         item = new Noise();
-        item->set_data(&current_data_column_, &min_data_vals_, &max_data_vals_);
+        break;
+    case SynthItem::ITEM::EQUALIZER:
+        item = new Equalizer();
         break;
     default:
         item = NULL;
         break;
     }
+    item->set_data(&current_data_column_, &mins_, &maxes_);
     return item;
 }
 
 double Transport::get_playback_position()
 {
-    return return_pos;
+    return return_pos_;
 }
 
 /*
@@ -214,11 +227,6 @@ Frame Transport::process()
 {
     Frame frame;
     bool stepping = false;
-
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
 
     if(paused_)
     {
@@ -280,7 +288,7 @@ Frame Transport::process()
 
     // advancing index
     calculate_return_position();
-    mu_ += (speed_ / frame_rate);
+    mu_ += ((double)speed_ / frame_rate_);
 
     return frame;// * master_volume_;
 }
@@ -292,6 +300,30 @@ void Transport::step()
         SynthItem* item = inputs_[i];
         item->step();
     }
+}
+
+void Transport::control_process()
+{
+    for (unsigned int i = 0; i < subscribers_.size(); ++i)
+    {
+        SynthItem* item = subscribers_[i];
+        item->control_process();
+    }
+    if(!command_buffer_.empty())
+    {
+        retrieve_commands();
+    }
+}
+
+bool Transport::get_mute()
+{
+    return muted_;
+}
+
+std::vector<SynthItem *> Transport::get_parents()
+{
+    std::vector<SynthItem*> vec;
+    return vec;
 }
 
 void Transport::retrieve_commands()
@@ -326,7 +358,7 @@ void Transport::process_command(SynthItemCommand command)
         process_set_playback_position(command.doubles[0]);
         break;
     case COMMAND::SPEED:
-        speed_ = command.doubles[0];
+        speed_ = command.ints[0];
         break;
     case COMMAND::LOOP:
         loop_ = command.bool_val;
@@ -337,6 +369,18 @@ void Transport::process_command(SynthItemCommand command)
         break;
     case COMMAND::INTERPOLATE:
         interpolate_ = command.bool_val;
+        break;
+    case COMMAND::DELETE:
+        process_delete();
+        break;
+    case COMMAND::DELETE_ITEM:
+        process_delete_item(command.item);
+        break;
+    case COMMAND::SUBSCRIBE:
+        process_subscribe_item(command.item);
+        break;
+    case COMMAND::UNSUBSCRIBE:
+        process_unsubscribe_item(command.item);
         break;
     default:
         break;
@@ -360,11 +404,11 @@ void Transport::process_add_child(SynthItem *child, SynthItem::PARAMETER paramet
 
 void Transport::process_remove_child(SynthItem *child)
 {
-    erase_item(child, &inputs_);
-    erase_item(child, &amods_);
+    remove_item(child, &inputs_);
+    remove_item(child, &amods_);
 }
 
-void Transport::process_delete_item()
+void Transport::process_delete()
 {
     for(unsigned int i = 0; i < inputs_.size(); i++) {
         SynthItem* child = inputs_[i];
@@ -377,6 +421,23 @@ void Transport::process_delete_item()
     delete this;
 }
 
+void Transport::process_delete_item(SynthItem *item)
+{
+    process_unsubscribe_item(item);
+    item->delete_self();
+    item->control_process();
+}
+
+void Transport::process_subscribe_item(SynthItem *item)
+{
+    subscribers_.push_back(item);
+}
+
+void Transport::process_unsubscribe_item(SynthItem *item)
+{
+    remove_item(item, &subscribers_);
+}
+
 void Transport::process_set_dataset(std::vector<double> *dataset, unsigned int height, unsigned int width)
 {
     paused_ = true;
@@ -386,11 +447,8 @@ void Transport::process_set_dataset(std::vector<double> *dataset, unsigned int h
     current_index_ = 0;
     mu_ = 0.0;
     calculate_return_position();
-    if(data_height_ != height)
-    {
-        data_height_ = height;
-        current_data_column_.resize(data_height_);
-    }
+    data_height_ = height;
+    current_data_column_.resize(data_height_);
     calculate_min_max();
 }
 
@@ -434,15 +492,15 @@ void Transport::calculate_return_position()
 {
     // FIXME not on every callback
     double pos = ((double)current_index_ + mu_);
-    return_pos.store(pos, std::memory_order_relaxed);
+    return_pos_.store(pos, std::memory_order_relaxed);
 }
 
 void Transport::calculate_min_max()
 {
     double min;
     double max;
-    min_data_vals_.clear();
-    max_data_vals_.clear();
+    mins_.clear();
+    maxes_.clear();
     for(unsigned int i = 0; i < data_height_; i++)
     {
         for(unsigned int j = 0; j < data_width_; j++)
@@ -462,8 +520,8 @@ void Transport::calculate_min_max()
                 max = value;
             }
         }
-        min_data_vals_.push_back(min);
-        max_data_vals_.push_back(max);
+        mins_.push_back(min);
+        maxes_.push_back(max);
     }
 }
 

@@ -8,7 +8,7 @@ ColumnLayout {
     Layout.maximumHeight: Style.editorRowHeight * 2
 
     property alias label: label
-    property alias textInput: textInput
+    property alias text: textInput.text
     property int maxIndexes: 1
 
     signal mappingsChanged(var mappings)
@@ -91,7 +91,7 @@ ColumnLayout {
                 //check if what we split are both numbers, else skip
                 if (!filterInt(range[0]) || !filterInt(range[1])) continue
 
-                //force both to be numbers
+                // force both to be numbers
                 low = +range[0]
                 high = +range[1]
 
@@ -147,7 +147,7 @@ ColumnLayout {
         return a - b
     }
 
-    //for taking validated range of numbers and presenting as text
+    // for taking validated range of numbers and presenting as text
     function getStringRange(array) {
         var ranges = ''
         var rstart, rend

@@ -3,6 +3,7 @@ import SonLib 1.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import "Style.js" as Style
+import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
@@ -12,32 +13,71 @@ SynthItem {
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 
+    Component.onCompleted: {
+        create()
+        frequencyEditor.value = implementation.getFreq()
+        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
+
+        frequencyMapper.validateMappings()
+        frequencyScaler.low = implementation.getFreqScaleLow()
+        frequencyScaler.high = implementation.getFreqScaleHigh()
+        frequencyScaler.exponent = implementation.getFreqScaleExponent()
+        frequencyScaler.scaled = implementation.getFreqScaled()
+    }
+
+    // return json representation of self
+    function read() {
+
+        var parents = []
+        for(var i = 0; i < synthParents.length; i++) {
+            var parent = synthParents[i].identifier
+            parents.push(parent)
+        }
+
+        var freqIndexes = implementation.getFreqIndexes()
+        // remove keys from freqIndexes and store in js array
+        var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
+
+        var essence = {
+            "identifier": identifier,
+            "type": type,
+            "x": x,
+            "y": y,
+            "muted": implementation.getMute(),
+            "parents": parents,
+            "freq": implementation.getFreq(),
+            "freqIndexes": freqIndexesArray,
+            "freqFixed": implementation.getFreqFixed(),
+            "freqScaled": implementation.getFreqScaled(),
+            "freqScaleLow": implementation.getFreqScaleLow(),
+            "freqScaleHigh": implementation.getFreqScaleHigh(),
+            "freqScaleExponent": implementation.getFreqScaleExponent()
+        }
+
+        return essence
+    }
+
+    // initialize self from json
+    function init(essence) {
+        x = essence["x"]
+        y = essence["y"]
+        identifier = essence["identifier"]
+        muted = essence["muted"]
+        frequencyEditor.value = essence["freq"]
+        fixedFrequencyEditor.fixed = essence["freqFixed"]
+        var indexes = essence["freqIndexes"]
+        var stringIndexes = SessionCode.indexesToString(indexes)
+        frequencyMapper.text = stringIndexes
+        frequencyMapper.validateMappings()
+        frequencyScaler.scaled = essence["freqScaled"]
+        frequencyScaler.low = essence["freqScaleLow"]
+        frequencyScaler.high = essence["freqScaleHigh"]
+        frequencyScaler.exponent = essence["freqScaleExponent"]
+    }
+
     Editor {
 
         id: editor
-        property bool useFixedFreq: true
-        property double fixedFreq: 440
-        property bool useFreqScaling: true
-        property double freqScaleLow: 40
-        property double freqScaleHigh: 16000
-        property double freqScaleExp: 1
-
-        Component.onCompleted: {
-            frequencyEditor.spinBox.value = fixedFreq * 100
-            fixedEditor.checkBox.checked = useFixedFreq
-            frequencyScaler.lowSpinBox.value = freqScaleLow * 100
-            frequencyScaler.highSpinBox.value = freqScaleHigh * 100
-            frequencyScaler.expSpinBox.value = freqScaleExp * 100
-            frequencyScaler.checkBox.checked = useFreqScaling
-        }
-
-        onUseFixedFreqChanged: {
-            implementation.setFreqFixed(useFixedFreq)
-        }
-
-        onFixedFreqChanged: {
-            implementation.setFreq(fixedFreq)
-        }
 
         EditorLayout {
             id: layout
@@ -48,23 +88,22 @@ SynthItem {
                 EditorDoubleParam {
                     id: frequencyEditor
                     label.text: "Frequency: "
-                    onParamValueChanged: {
-                        if (editor.fixedFreq !== value) {
-                            editor.fixedFreq = value
+                    onValueChanged: {
+                        if(implementation !== null) {
+                            implementation.setFreq(value)
                         }
                     }
                 }
 
                 EditorFixedParam {
-                    id: fixedEditor
+                    id: fixedFrequencyEditor
                     label.text: qsTr("Fixed: ")
                     onFixedChanged: {
-                        if (editor.useFixedFreq != fixed) {
-                            editor.useFixedFreq = fixed
+                        if(implementation !== null) {
+                            implementation.setFreqFixed(fixed)
                         }
                     }
                 }
-
             }
 
             EditorMapper {
@@ -73,11 +112,10 @@ SynthItem {
                 maxIndexes: 128
                 onMappingsChanged:
                 {
-                    if(root.mappedRows !== mappings) {
-                        root.mappedRows = mappings
-                        var implementationMappings = mappings.map( function(value) {
-                            return value - 1;
-                        } )
+                    var implementationMappings = mappings.map(function(value) {
+                        return value - 1
+                    } )
+                    if(implementation !== null) {
                         implementation.setFreqIndexes(implementationMappings)
                     }
                 }
@@ -91,37 +129,22 @@ SynthItem {
 
                 onLowChanged:
                 {
-                    if(editor.freqScaleLow !== low) {
-                        editor.freqScaleLow = low
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
-                                                          editor.freqScaleHigh,
-                                                          editor.freqScaleExp)
-                    }
+                    implementation.setFreqScaleLow(low)
                 }
                 onHighChanged:
                 {
-                    if(editor.freqScaleHigh !== high) {
-                        editor.freqScaleHigh = high
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
-                                                          editor.freqScaleHigh,
-                                                          editor.freqScaleExp)                    }
+                    implementation.setFreqScaleHigh(high)
                 }
                 onExponentChanged:
                 {
-                    if(editor.freqScaleExp !== exp) {
-                        editor.freqScaleExp = exp
-                        implementation.setFreqScaleVals(editor.freqScaleLow,
-                                                          editor.freqScaleHigh,
-                                                          editor.freqScaleExp)                    }
+                    implementation.setFreqScaleExponent(exponent)
                 }
-                onUseScalingChanged:
+                onScaledChanged:
                 {
-                    if(editor.useFreqScaling !== scaling) {
-                        editor.useFreqScaling = scaling
-                        implementation.setFreqScaled(editor.useFreqScaling)
-                    }
+                    implementation.setFreqScaled(scaled)
                 }
             }
         }
     }
 }
+

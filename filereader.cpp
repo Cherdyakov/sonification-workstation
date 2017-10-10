@@ -10,9 +10,7 @@ void FileReader::readCSV(QString filename, std::vector<double> *array)
 {
     qDebug() << "Reading file: " << QTime::currentTime();
 
-    if(array->size() > 0) {
-        array->clear();
-    }
+    array->clear();
 
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
@@ -92,6 +90,16 @@ void FileReader::readCSV(QString filename, std::vector<double> *array)
 
     qDebug() << "Done reading file: " << QTime::currentTime();
 
-    emit datasetChanged(array,height, width);
+    emit datasetChanged(array, height, width);
     emit qmlDatasetChanged(height, width);
+}
+
+void FileReader::on_newDatasetFile(QString filename, std::vector<double>* array)
+{
+    // clear the dataset
+    if(filename.isEmpty()) {
+        array->clear();
+        datasetChanged(array, 0, 0);
+    }
+    readCSV(filename, array);
 }

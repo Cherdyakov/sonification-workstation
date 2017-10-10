@@ -5,40 +5,48 @@ import "Style.js" as Style
 Item {
 
     id: root
+     z: Style.itemZ + zModifier
+     width: Style.itemHeight; height: Style.itemWidth
 
+    property int identifier: 0
     property var synthChildren: []
     property var synthParents: []
     property var mappedRows: []
-    property int rowCount: 0
-    property bool patching: false
     property bool muted: false
     property int type: -1 // OUT = 0, OSC = 1
     property int childType: -1 // INPUT = 0
     property bool created: false
-    property var inputs: new Array
-    property var outputs: new Array
     property string label: "SON"
     property string mainColor
     property string textColor
     property QtSynthItem implementation: null // the CPP implementation of this SynthItem
+     property var zModifier: root.activeFocus === true ? 10 : 0
 
     property alias radius: rect.radius
 
-    signal clickedItem(var i)
-    signal implementationSet()
+    signal patching(var item)
+    signal selected(var item)
+    signal deleted(var item)
 
-    width: Style.itemHeight; height: Style.itemWidth
-
-    Component.onCompleted: {
-        synthItems.push(this)
-        this.parent = workspace.contentItem
-    }
+     Component.onCompleted: {
+         synthItems.push(root)
+         patching.connect(patchManager.patchBegin)
+         deleted.connect(patchManager.itemDeleted)
+         deleted.connect(deleteItem)
+         parent = workspace.contentItem
+     }
 
     onMutedChanged: {
         mute()
     }
-    onXChanged: canvas.requestPaint()
-    onYChanged: canvas.requestPaint()
+    onXChanged:  {
+        canvas.requestPaint()
+        workspace.updateRect()
+    }
+    onYChanged: {
+        canvas.requestPaint()
+        workspace.updateRect()
+    }
     onWidthChanged: canvas.requestPaint()
 
     states: [
@@ -49,6 +57,7 @@ Item {
                 target: root
                 width: editor.width + Style.editorMargin
                 height: editor.height + Style.editorMargin
+                z: Style.itemEditorZ + zModifier
             }
             PropertyChanges {
                 target: rect
@@ -91,8 +100,17 @@ Item {
     function create() {
         created = true
         implementation = transport.createItem(type)
-        implementationSet()
         canvas.requestPaint()
+    }
+
+    function read() {
+        // must override
+        // returns params for saving in session file
+    }
+
+    function init(obj) {
+        // must override
+        // sets params of new item created from saved sesssion file
     }
 
     function addChild(synthItem) {
@@ -152,40 +170,21 @@ Item {
     }
 
     function deleteThis() {
-
-        implementation.deleteItem()
-
-        for(var i = 0; i < synthParents.length; i++)
-        {
-            var parentItem = synthParents[i]
-            parentItem.removeChild(root)
-        }
-
-        for(i = 0; i < synthChildren.length; i++)
-        {
-            var childItem = synthChildren[i]
-            childItem.removeParent(root)
-        }
-
-        var idx = synthItems.indexOf(root)
-        synthItems.splice(idx, 1)
-
-        root.destroy()
-        canvas.requestPaint()
+        deleted(root)
     }
 
     Rectangle {
         id: rect
-        z: Style.itemZ
         anchors.fill: parent
         color: muted ? Style.itemMuteColor : mainColor
         radius: Style.itemMinRadius
-        border.color: root.activeFocus ? "orange" : textColor
+        border.color: root.activeFocus ? Style.itemActiveFocusColor : textColor
         border.width: 4
         opacity: created ? 1 : 0.4
 
         MouseArea {
             id: mouseArea
+            z: Style.itemZ
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
             anchors.fill: rect
@@ -209,8 +208,7 @@ Item {
                 }
                 // right clicked
                 if(mouse.button & Qt.RightButton) {
-                    patchManager.setPatchPoint(root)
-                    canvas.requestPaint()
+                    root.patching(root)
                     root.forceActiveFocus()
                 }
             }
@@ -219,7 +217,6 @@ Item {
                 if(type === 0) { //  item is OUT, has no editor
                     return
                 }
-
                 switch(root.state) {
                 case "":
                     root.state = "MAXIMIZED"
@@ -255,4 +252,3 @@ Item {
     }
 
 }
-

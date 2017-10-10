@@ -21,6 +21,7 @@ int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     if ( status )
         std::cout << "Stream underflow detected!" << std::endl;
 
+    root->control_process();
 
     // Write interleaved audio data.
     for (unsigned int i=0; i < nBufferFrames; ++i) {

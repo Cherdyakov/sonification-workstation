@@ -18,6 +18,7 @@
 #include "transportwidget.h"
 #include "filereader.h"
 #include "qcustomplot.h"
+#include "session.h"
 #include "plotter.h"
 
 class MainWindow : public QMainWindow
@@ -32,7 +33,6 @@ public:
 
 private:
 
-    std::vector<double> dataset;
     QtTransport* qtTransport;
     FileReader* fileReader;
 
@@ -60,10 +60,12 @@ private:
     //menus and actions
     QMenu *fileMenu;
     QAction* importCSVAct;
+    Session* session;
 
 private slots:
-    void quit();
-    void openDataset();
+    void on_quit();
+
+public slots:
 
 signals:
 

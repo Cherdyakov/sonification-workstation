@@ -15,42 +15,54 @@ SynthItem *QtTransport::implementation()
     return &transport_;
 }
 
-QtSynthItem* QtTransport::createItem(ITEM type)
+QtSynthItem* QtTransport::createItem(QT_ITEM type)
 {
     SynthItem* item = NULL;
     QtSynthItem* qtItem = NULL;
 
     switch (type){
-    case ITEM::OUT:
+    case QT_ITEM::OUT:
         qtItem = this;
         break;
-    case ITEM::OSCILLATOR:
+    case QT_ITEM::OSCILLATOR:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtOscillator(dynamic_cast<Oscillator*>(item));
+        subscribeItem(qtItem);
         break;
-    case ITEM::AUDIFIER:
+    case QT_ITEM::AUDIFIER:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtAudifier(dynamic_cast<Audifier*>(item));
+        subscribeItem(qtItem);
         break;
-    case ITEM::MODULATOR:
+    case QT_ITEM::MODULATOR:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtModulator(dynamic_cast<Modulator*>(item));
+        subscribeItem(qtItem);
         break;
-    case ITEM::PANNER:
+    case QT_ITEM::PANNER:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtPanner(dynamic_cast<Panner*>(item));
+        subscribeItem(qtItem);
         break;
-    case ITEM::ENVELOPE:
+    case QT_ITEM::ENVELOPE:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtEnvelope(dynamic_cast<Envelope*>(item));
+        subscribeItem(qtItem);
         break;
-    case ITEM::VOLUME:
+    case QT_ITEM::VOLUME:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtVolume(dynamic_cast<Volume*>(item));
+        subscribeItem(qtItem);
         break;
-    case ITEM::NOISE:
+    case QT_ITEM::NOISE:
         item = transport_.create_item((SynthItem::ITEM)type);
         qtItem = new QtNoise(dynamic_cast<Noise*>(item));
+        subscribeItem(qtItem);
+        break;
+    case QT_ITEM::EQUALIZER:
+        item = transport_.create_item((SynthItem::ITEM)type);
+        qtItem = new QtEqualizer(dynamic_cast<Equalizer*>(item));
+        subscribeItem(qtItem);
         break;
     default:
         break;
@@ -58,9 +70,9 @@ QtSynthItem* QtTransport::createItem(ITEM type)
     return qtItem;
 }
 
-void QtTransport::deleteItem()
+void QtTransport::deleteSelf()
 {
-    transport_.delete_item();
+    transport_.delete_self();
 }
 
 void QtTransport::addParent(QtSynthItem *parent)
@@ -73,7 +85,7 @@ void QtTransport::removeParent(QtSynthItem *parent)
     transport_.remove_parent(parent->implementation());
 }
 
-bool QtTransport::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtTransport::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return transport_.add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }
@@ -86,6 +98,16 @@ void QtTransport::removeChild(QtSynthItem *child)
 void QtTransport::mute(bool mute)
 {
     transport_.mute(mute);
+}
+
+void QtTransport::deleteItem(QtSynthItem *item)
+{
+    transport_.delete_item(item->implementation());
+}
+
+void QtTransport::subscribeItem(QtSynthItem *item)
+{
+    transport_.subscribe_item(item->implementation());
 }
 
 void QtTransport::on_dataChanged(std::vector<double> *data, unsigned int height, unsigned int width)
@@ -104,7 +126,7 @@ void QtTransport::on_posChanged(double pos)
     transport_.set_playback_position(pos);
 }
 
-void QtTransport::on_speedChanged(double speed)
+void QtTransport::on_speedChanged(int speed)
 {
     transport_.set_speed(speed);
 }

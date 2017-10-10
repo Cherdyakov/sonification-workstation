@@ -10,9 +10,9 @@ SynthItem *QtAudifier::implementation()
     return audifier_;
 }
 
-void QtAudifier::deleteItem()
+void QtAudifier::deleteSelf()
 {
-    audifier_->delete_item();
+    audifier_->delete_self();
 }
 
 void QtAudifier::addParent(QtSynthItem *parent)
@@ -25,7 +25,7 @@ void QtAudifier::removeParent(QtSynthItem *parent)
     audifier_->remove_parent(parent->implementation());
 }
 
-bool QtAudifier::addChild(QtSynthItem *child, QtSynthItem::PARAMETER param)
+bool QtAudifier::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER param)
 {
     return audifier_->add_child(child->implementation(), (SynthItem::PARAMETER)param);
 }
@@ -44,5 +44,18 @@ void QtAudifier::setAudIndexes(QVector<int> indexes)
 {
     std::vector<int> vec = indexes.toStdVector();
     audifier_->set_aud_indexes(vec);
+}
+
+bool QtAudifier::getMute()
+{
+    bool muted = audifier_->get_mute();
+    return muted;
+}
+
+QVector<int> QtAudifier::getAudIndexes()
+{
+    std::vector<int> vec = audifier_->get_aud_indexes();
+    QVector<int> indexes = QVector<int>::fromStdVector(vec);
+    return indexes;
 }
 

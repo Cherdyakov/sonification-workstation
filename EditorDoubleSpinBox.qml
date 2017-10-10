@@ -3,27 +3,40 @@ import QtQuick.Controls 2.0
 import "Style.js" as Style
 
 SpinBox {
-    id: spinbox
-    editable: true
-    from: -2000000
-    to: 2000000
-    stepSize: 100
-    font.pointSize: Style.editorFontSize
 
     property int decimals: 2
-    property real realValue: value / 100
+    property real doubleValue: 440.0
+    property real doubleFrom: -20000.0
+    property real doubleTo: 20000.0
+    property real doubleStepSize: 1.0
 
-    validator: DoubleValidator {
-        bottom: Math.min(spinbox.from, spinbox.to)
-        top:  Math.max(spinbox.from, spinbox.to)
+    property real factor: Math.pow(10, decimals)
+
+    id: spinBox
+    onValueChanged: {
+        doubleValue = value / factor
     }
 
-    textFromValue: function(value, locale) {
-        return Number(value / 100).toLocaleString(locale, 'f', spinbox.decimals)
+    editable: true
+    value: doubleValue*factor
+    to: doubleTo*factor
+    from : doubleFrom*factor
+    stepSize: doubleStepSize*factor
+    font.pointSize: Style.editorFontSize
+
+    validator: DoubleValidator {
+        bottom: Math.min(spinBox.from, spinBox.to)*spinBox.factor
+        top:  Math.max(spinBox.from, spinBox.to)*spinBox.factor
     }
 
     valueFromText: function(text, locale) {
-        return Number.fromLocaleString(locale, text) * 100
+        return Number.fromLocaleString(locale, text) * factor
+    }
+
+    textFromValue: function(value, locale) {
+        return parseFloat(value * 1.0 / factor).toFixed(decimals)
     }
 
 }
+
+

@@ -12,7 +12,7 @@ SynthItem *QtSynthItem::implementation()
     return NULL;
 }
 
-void QtSynthItem::deleteItem()
+void QtSynthItem::deleteSelf()
 {
 
 }
@@ -27,7 +27,7 @@ void QtSynthItem::removeParent(QtSynthItem *parent)
     Q_UNUSED(parent);
 }
 
-bool QtSynthItem::addChild(QtSynthItem *child, QtSynthItem::PARAMETER parameter)
+bool QtSynthItem::addChild(QtSynthItem *child, QtSynthItem::QT_PARAMETER parameter)
 {
     Q_UNUSED(child);
     Q_UNUSED(parameter);
@@ -42,5 +42,10 @@ void QtSynthItem::removeChild(QtSynthItem *item)
 void QtSynthItem::mute(bool mute)
 {
     Q_UNUSED(mute);
+}
+
+bool QtSynthItem::getMute()
+{
+    return NULL;
 }
 
