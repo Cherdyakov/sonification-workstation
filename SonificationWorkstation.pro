@@ -108,9 +108,6 @@ INCLUDEPATH += $${BASEPATH}/Gamma-master/Gamma
 # RT Audio library
 LIBS += -L$${BASEPATH}/rtaudio-4.1.2 -lrtaudio
 INCLUDEPATH += $${BASEPATH}/rtaudio-4.1.2/include
-# Secret Rabbit Code
-LIBS += -L$${BASEPATH}/libsamplerate-0.1.9 -lsamplerate
-INCLUDEPATH += $${BASEPATH}/libsamplerate-0.1.9
 # qcustomplot
 INCLUDEPATH +=  external/qcustomplot
 
