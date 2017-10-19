@@ -20,6 +20,7 @@
 #include "qcustomplot.h"
 #include "session.h"
 #include "plotter.h"
+#include "trackview.h"
 
 class MainWindow : public QMainWindow
 {
@@ -53,6 +54,7 @@ private:
     //Main graphical widgets
     QTableView* tableView;
     Plotter* plotter;
+    TrackView* trackView;
 
     //convenience functions to create and populate menus
     void createActions();

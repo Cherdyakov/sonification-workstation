@@ -13,10 +13,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ///////////////////
 
     plotter = new Plotter;
+    trackView = new TrackView;
 
     // Draws the playhead,loop points, loop shading
     PlayHead* playHead = new PlayHead(plotter);
-    plotter->setPlayHead(playHead);
+    trackView->setPlayHead(playHead);
     playHead->show();
 
     //main window layout
@@ -54,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //insert quickView into synthWindow layout
     synthLayout->addWidget(container);
     //inset tab widget into window layout
-    dataLayout->addWidget(plotter);
+    dataLayout->addWidget(trackView);
     //insert transport into window layout
     dataLayout->addWidget(transportWidget);
 
