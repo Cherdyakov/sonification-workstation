@@ -10,6 +10,10 @@ Track::Track()
     axisRect()->setRangeDrag(Qt::Horizontal);
     axisRect()->setRangeZoom(Qt::Horizontal);
 
+    // hide x axis and set zero margins
+    axisRect()->setAutoMargins(QCP::msLeft);
+    axisRect()->setMargins(QMargins(0,0,0,0));
+
     connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
     connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
 }
