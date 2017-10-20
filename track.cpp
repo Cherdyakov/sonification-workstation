@@ -2,6 +2,7 @@
 
 Track::Track()
 {
+
     QCP::Interactions qcpInteractions;
     qcpInteractions |= QCP::iRangeDrag;
     qcpInteractions |= QCP::iRangeZoom;
@@ -13,6 +14,7 @@ Track::Track()
     // hide x axis and set zero margins
     axisRect()->setAutoMargins(QCP::msLeft);
     axisRect()->setMargins(QMargins(0,0,0,0));
+    xAxis->setTicks(false);
 
     connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
     connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
@@ -43,7 +45,7 @@ void Track::plot(std::vector<double> *array, uint start, uint end)
 
     QPen pen;
     QColor color;
-    color.setNamedColor("#0000FF");
+    color.setNamedColor("#blue");
     pen.setColor(color);
     pen.setWidth(0);
     graph->setPen(pen);
@@ -64,7 +66,7 @@ void Track::plot(std::vector<double> *array, uint start, uint end)
 
 void Track::resizeEvent(QResizeEvent *event)
 {
-
+    QCustomPlot::resizeEvent(event);
 }
 
 void Track::on_xRangeChanged(const QCPRange &newRange)
