@@ -9,25 +9,46 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
     this->setAutoFillBackground(true);
     this->setPalette(pal);
 
-
-
     // set layout
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    this->setLayout(layout);
-
-    Track* track = new Track;
-
-    track->setFixedHeight(120);
-//    track->resize(track->width(), 120);
-    layout->addWidget(track);
-
-    QSpacerItem *spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Maximum);
-//    layout->addItem(spacer);
-    layout->addStretch();
-
+    trackLayout = new QVBoxLayout(this);
+    this->setLayout(trackLayout);
 }
 
 void TrackView::setPlayHead(PlayHead *p)
 {
     playHead = p;
+}
+
+void TrackView::plot(std::vector<double> *array, uint height, uint width)
+{
+
+    for(uint i = 0; i < height; i++)
+    {
+        //add tracks
+        Track* track = addTrack();
+
+        //plot to each track
+        uint start = i * width;
+        uint end = start + width;
+        track->plot(array, start, end);
+    }
+    trackLayout->addStretch();
+}
+
+Track *TrackView::addTrack()
+{
+    Track *track = new Track();
+    track->setFixedHeight(120);
+    trackLayout->addWidget(track);
+    return track;
+}
+
+void TrackView::removeTrack(Track *track)
+{
+
+}
+
+void TrackView::on_datasetChanged(std::vector<double> *data, uint height, uint width)
+{
+    plot(data, height, width);
 }

@@ -17,10 +17,18 @@ public:
 
 private:
     PlayHead* playHead;
+    void plot(std::vector<double> *array, uint height, uint width);
+    Track* addTrack();
+    void removeTrack(Track* track);
+    QVBoxLayout *trackLayout;
 
 signals:
 
 public slots:
+    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
+//    void addTrack();
+//    void removeTrack();
+
 };
 
 #endif // TRACKVIEW_H

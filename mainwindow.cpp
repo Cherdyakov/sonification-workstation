@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
             qtTransport, SLOT(on_dataChanged(std::vector<double>*,uint,uint)));
     connect(fileReader, SIGNAL(datasetChanged(std::vector<double>*,uint,uint)),
-            plotter, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
+            trackView, SLOT(on_datasetChanged(std::vector<double>*,uint,uint)));
     connect(qtTransport, SIGNAL(posChanged(double)),
             playHead, SLOT(on_cursorMoved(double)));
     connect(plotter->xAxis, SIGNAL(rangeChanged(QCPRange)),
