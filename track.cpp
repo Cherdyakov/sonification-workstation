@@ -45,7 +45,7 @@ void Track::plot(std::vector<double> *array, uint start, uint end)
 
     QPen pen;
     QColor color;
-    color.setNamedColor("#blue");
+    color.setNamedColor("#0000FF");
     pen.setColor(color);
     pen.setWidth(0);
     graph->setPen(pen);

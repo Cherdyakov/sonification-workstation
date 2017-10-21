@@ -18,6 +18,7 @@ public:
 private:
     PlayHead* playHead;
     void plot(std::vector<double> *array, uint height, uint width);
+    void clear();
     Track* addTrack();
     void removeTrack(Track* track);
     QVBoxLayout *trackLayout;

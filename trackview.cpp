@@ -21,7 +21,7 @@ void TrackView::setPlayHead(PlayHead *p)
 
 void TrackView::plot(std::vector<double> *array, uint height, uint width)
 {
-
+    clear();
     for(uint i = 0; i < height; i++)
     {
         //add tracks
@@ -33,6 +33,20 @@ void TrackView::plot(std::vector<double> *array, uint height, uint width)
         track->plot(array, start, end);
     }
     trackLayout->addStretch();
+}
+
+void TrackView::clear()
+{
+    // assumes all items in TrackView trackLayout are Tracks
+    while (QLayoutItem* item = trackLayout->takeAt(0))
+    {
+        if (QWidget* widget = item->widget())
+        {
+            widget->deleteLater();
+        }
+        delete item;
+    }
+
 }
 
 Track *TrackView::addTrack()
