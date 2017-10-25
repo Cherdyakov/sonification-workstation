@@ -24,9 +24,11 @@ private:
     QVBoxLayout *trackLayout;
 
 signals:
+    void zoomChanged(QCPRange range);
 
 public slots:
     void on_datasetChanged(std::vector<double> *data, uint height, uint width);
+    void on_zoomChanged(QCPRange range);
 //    void addTrack();
 //    void removeTrack();
 

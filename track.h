@@ -21,16 +21,20 @@ private:
     // to areas that are plotted (not empty space)
     QCPRange xBounds;
     QCPRange yBounds;
+    QCPRange zoomRange;
 
     void resizeEvent(QResizeEvent *event) override;
-    void rangeBounder(QCPAxis * const axis, const QCPRange &newRange, const QCPRange &bounds);\
+    void rangeBounder(QCPAxis *axis, QCPRange newRange, QCPRange bounds);
 
 signals:
+    void zoomChanged(QCPRange range);
 
+public slots:
+    void on_zoomChanged(QCPRange range);
 
 private slots:
-    void on_xRangeChanged(const QCPRange &newRange);
-    void on_yRangeChanged(const QCPRange &newRange);
+    void on_xRangeChanged(QCPRange range);
+    void on_yRangeChanged(QCPRange range);
 
 };
 

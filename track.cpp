@@ -69,12 +69,48 @@ void Track::resizeEvent(QResizeEvent *event)
     QCustomPlot::resizeEvent(event);
 }
 
-void Track::on_xRangeChanged(const QCPRange &newRange)
+void Track::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
 {
-
+    double lowerBound = bounds.lower;
+    double upperBound = bounds.upper;
+    QCPRange fixedRange(range);
+    if (fixedRange.lower < lowerBound)
+    {
+        fixedRange.lower = lowerBound;
+        fixedRange.upper = lowerBound + range.size();
+        if (fixedRange.upper > upperBound || qFuzzyCompare(range.size(), upperBound-lowerBound))
+            fixedRange.upper = upperBound;
+        axis->setRange(fixedRange);
+    } else if (fixedRange.upper > upperBound)
+    {
+        fixedRange.upper = upperBound;
+        fixedRange.lower = upperBound - range.size();
+        if (fixedRange.lower < lowerBound || qFuzzyCompare(range.size(), upperBound-lowerBound))
+            fixedRange.lower = lowerBound;
+        axis->setRange(fixedRange);
+    }
 }
 
-void Track::on_yRangeChanged(const QCPRange &newRange)
+void Track::on_xRangeChanged(QCPRange range)
 {
-
+    rangeBounder(xAxis, range, xBounds);
+    zoomRange = xAxis->range();
+    emit zoomChanged(zoomRange);
 }
+
+void Track::on_yRangeChanged(QCPRange range)
+{
+//    rangeBounder(yAxis, range, yBounds);
+}
+
+void Track::on_zoomChanged(QCPRange range)
+{
+    if(zoomRange != range)
+    {
+        zoomRange = range;
+        xAxis->setRange(range);
+        replot();
+    }
+}
+
+

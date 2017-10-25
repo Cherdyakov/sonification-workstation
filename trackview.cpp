@@ -52,6 +52,10 @@ void TrackView::clear()
 Track *TrackView::addTrack()
 {
     Track *track = new Track();
+    connect(track, SIGNAL(zoomChanged(QCPRange)),
+            this, SLOT(on_zoomChanged(QCPRange)));
+    connect(this, SIGNAL(zoomChanged(QCPRange)),
+            track, SLOT(on_zoomChanged(QCPRange)));
     track->setFixedHeight(120);
     trackLayout->addWidget(track);
     return track;
@@ -65,4 +69,9 @@ void TrackView::removeTrack(Track *track)
 void TrackView::on_datasetChanged(std::vector<double> *data, uint height, uint width)
 {
     plot(data, height, width);
+}
+
+void TrackView::on_zoomChanged(QCPRange range)
+{
+    emit zoomChanged(range);
 }
