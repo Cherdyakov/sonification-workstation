@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include "trackplot.h"
+#include "track.h"
 #include "playhead.h"
 
 // Containter widget for tracks
@@ -19,8 +19,8 @@ private:
     PlayHead* playHead;
     void plot(std::vector<double> *array, uint height, uint width);
     void clear();
-    TrackPlot* addTrack();
-    void removeTrack(TrackPlot* track);
+    Track* addTrack();
+    void removeTrack(Track* track);
     QVBoxLayout *trackLayout;
 
 signals:

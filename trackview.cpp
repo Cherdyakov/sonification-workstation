@@ -2,12 +2,12 @@
 
 TrackView::TrackView(QWidget *parent) : QWidget(parent)
 {
-    QPalette pal = palette();
+    QPalette* pal = new QPalette;
 
     // set black background
-    pal.setColor(QPalette::Background, QColor("light grey"));
+    pal->setColor(QPalette::Background, QColor("light grey"));
     this->setAutoFillBackground(true);
-    this->setPalette(pal);
+    this->setPalette(*pal);
 
     // set layout
     trackLayout = new QVBoxLayout(this);
@@ -24,7 +24,7 @@ void TrackView::plot(std::vector<double> *array, uint height, uint width)
     for(uint i = 0; i < height; i++)
     {
         //add tracks
-        TrackPlot* track = addTrack();
+        Track* track = addTrack();
 
         //plot to each track
         uint start = i * width;
@@ -48,9 +48,9 @@ void TrackView::clear()
     }
 }
 
-TrackPlot *TrackView::addTrack()
+Track *TrackView::addTrack()
 {
-    TrackPlot *track = new TrackPlot();
+    Track *track = new Track;
     connect(track, SIGNAL(zoomChanged(QCPRange)),
             this, SLOT(on_zoomChanged(QCPRange)));
     connect(this, SIGNAL(zoomChanged(QCPRange)),
@@ -60,7 +60,7 @@ TrackPlot *TrackView::addTrack()
     return track;
 }
 
-void TrackView::removeTrack(TrackPlot *track)
+void TrackView::removeTrack(Track *track)
 {
 
 }

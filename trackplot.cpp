@@ -52,11 +52,7 @@ void TrackPlot::plot(std::vector<double> *array, uint start, uint end)
     // small datasets look best with wider pen
     // large datasets plot faster with narrow pen
     int penWidth;
-    if(len < 100)
-    {
-        penWidth = 2;
-    }
-    else if(len < 1000)
+    if(len < 1000)
     {
         penWidth = 1;
     }
@@ -111,23 +107,7 @@ void TrackPlot::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
 void TrackPlot::on_xRangeChanged(QCPRange range)
 {
     rangeBounder(xAxis, range, xBounds);
-    zoomRange = xAxis->range();
-    emit zoomChanged(zoomRange);
-}
-
-void TrackPlot::on_yRangeChanged(QCPRange range)
-{
-//    rangeBounder(yAxis, range, yBounds);
-}
-
-void TrackPlot::on_zoomChanged(QCPRange range)
-{
-    if(zoomRange != range)
-    {
-        zoomRange = range;
-        xAxis->setRange(range);
-        replot();
-    }
+    emit zoomChanged(xAxis->range());
 }
 
 
