@@ -7,6 +7,7 @@ Track::Track(QWidget *parent) : QWidget(parent)
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(plotter);
     layout->setContentsMargins(0,0,0,0);
+    this->setLayout(layout);
 
     connect(plotter, SIGNAL(zoomChanged(QCPRange)),
             this, SLOT(on_zoomChanged(QCPRange)));

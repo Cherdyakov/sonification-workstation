@@ -11,6 +11,8 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
 
     // set layout
     trackLayout = new QVBoxLayout(this);
+    trackLayout->setContentsMargins(4,4,4,4);
+    trackLayout->setSpacing(4);
     this->setLayout(trackLayout);
 }
 
