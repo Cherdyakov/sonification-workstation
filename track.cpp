@@ -2,11 +2,14 @@
 
 Track::Track(QWidget *parent) : QWidget(parent)
 {
-    plotter = new TrackPlot;
+    plotter = new TrackPlotter;
+    header = new TrackHeader;
 
     QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->addWidget(header);
     layout->addWidget(plotter);
     layout->setContentsMargins(0,0,0,0);
+    layout->setSpacing(0);
     this->setLayout(layout);
 
     connect(plotter, SIGNAL(zoomChanged(QCPRange)),

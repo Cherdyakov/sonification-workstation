@@ -35,8 +35,9 @@ SOURCES += \
     session.cpp \
     qtutility.cpp \
     trackview.cpp \
-    trackplot.cpp \
-    track.cpp
+    track.cpp \
+    trackheader.cpp \
+    trackplotter.cpp
 
 RESOURCES += qml.qrc
 
@@ -86,8 +87,9 @@ HEADERS += \
     session.h \
     qtutility.h \
     trackview.h \
-    trackplot.h \
-    track.h
+    track.h \
+    trackheader.h \
+    trackplotter.h
 
 FORMS +=
 

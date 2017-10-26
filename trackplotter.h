@@ -1,5 +1,5 @@
-#ifndef TRACKPLOT_H
-#define TRACKPLOT_H
+#ifndef TRACKPLOTTER_H
+#define TRACKPLOTTER_H
 
 #include <QObject>
 #include <QDebug>
@@ -8,12 +8,12 @@
 
 // a single track in the multi-track data view
 
-class TrackPlot : public QCustomPlot
+class TrackPlotter : public QCustomPlot
 {
     Q_OBJECT
 
 public:
-    TrackPlot();
+    TrackPlotter();
     void plot(std::vector<double>* array, uint start, uint end);
 
 private:

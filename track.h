@@ -2,7 +2,8 @@
 #define TRACK_H
 
 #include <QWidget>
-#include "trackplot.h"
+#include "trackplotter.h"
+#include "trackheader.h"
 
 class Track : public QWidget
 {
@@ -12,7 +13,8 @@ public:
     void plot(std::vector<double> *array, uint start, uint end);
 
 private:
-    TrackPlot* plotter;
+    TrackPlotter* plotter;
+    TrackHeader* header;
     QCPRange zoomRange;
 
 signals:

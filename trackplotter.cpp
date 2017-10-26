@@ -1,6 +1,6 @@
-#include "trackplot.h"
+#include "trackplotter.h"
 
-TrackPlot::TrackPlot()
+TrackPlotter::TrackPlotter()
 {
 
     QCP::Interactions qcpInteractions;
@@ -20,7 +20,7 @@ TrackPlot::TrackPlot()
     connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
 }
 
-void TrackPlot::plot(std::vector<double> *array, uint start, uint end)
+void TrackPlotter::plot(std::vector<double> *array, uint start, uint end)
 {
     uint len =  end - start;
     if(len < 1) {
@@ -77,12 +77,12 @@ void TrackPlot::plot(std::vector<double> *array, uint start, uint end)
     yBounds = yAxis->range();
 }
 
-void TrackPlot::resizeEvent(QResizeEvent *event)
+void TrackPlotter::resizeEvent(QResizeEvent *event)
 {
     QCustomPlot::resizeEvent(event);
 }
 
-void TrackPlot::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
+void TrackPlotter::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
 {
     double lowerBound = bounds.lower;
     double upperBound = bounds.upper;
@@ -104,7 +104,7 @@ void TrackPlot::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
     }
 }
 
-void TrackPlot::on_xRangeChanged(QCPRange range)
+void TrackPlotter::on_xRangeChanged(QCPRange range)
 {
     rangeBounder(xAxis, range, xBounds);
     emit zoomChanged(xAxis->range());
