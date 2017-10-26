@@ -24,7 +24,7 @@ void TrackView::plot(std::vector<double> *array, uint height, uint width)
     for(uint i = 0; i < height; i++)
     {
         //add tracks
-        Track* track = addTrack();
+        TrackPlot* track = addTrack();
 
         //plot to each track
         uint start = i * width;
@@ -48,9 +48,9 @@ void TrackView::clear()
     }
 }
 
-Track *TrackView::addTrack()
+TrackPlot *TrackView::addTrack()
 {
-    Track *track = new Track();
+    TrackPlot *track = new TrackPlot();
     connect(track, SIGNAL(zoomChanged(QCPRange)),
             this, SLOT(on_zoomChanged(QCPRange)));
     connect(this, SIGNAL(zoomChanged(QCPRange)),
@@ -60,7 +60,7 @@ Track *TrackView::addTrack()
     return track;
 }
 
-void TrackView::removeTrack(Track *track)
+void TrackView::removeTrack(TrackPlot *track)
 {
 
 }
