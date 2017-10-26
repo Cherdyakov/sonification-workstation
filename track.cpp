@@ -11,13 +11,13 @@ Track::Track()
     axisRect()->setRangeDrag(Qt::Horizontal);
     axisRect()->setRangeZoom(Qt::Horizontal);
 
-    // hide x axis and set zero margins
-    axisRect()->setAutoMargins(QCP::msLeft);
+    // hide axes and set zero margins
+    axisRect()->setAutoMargins(QCP::msNone);
     axisRect()->setMargins(QMargins(0,0,0,0));
     xAxis->setTicks(false);
+    yAxis->setTicks(false);
 
     connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
-    connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
 }
 
 void Track::plot(std::vector<double> *array, uint start, uint end)
@@ -47,7 +47,24 @@ void Track::plot(std::vector<double> *array, uint start, uint end)
     QColor color;
     color.setNamedColor("#0000FF");
     pen.setColor(color);
-    pen.setWidth(0);
+
+    // set pen width
+    // small datasets look best with wider pen
+    // large datasets plot faster with narrow pen
+    int penWidth;
+    if(len < 100)
+    {
+        penWidth = 2;
+    }
+    else if(len < 1000)
+    {
+        penWidth = 1;
+    }
+    else
+    {
+        penWidth = 0;
+    }
+    pen.setWidth(penWidth);
     graph->setPen(pen);
 
     // no Legend
