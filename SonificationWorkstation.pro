@@ -33,7 +33,9 @@ SOURCES += \
     qtequalizer.cpp \
     granulator.cpp \
     session.cpp \
-    qtutility.cpp
+    qtutility.cpp \
+    track.cpp \
+    trackview.cpp
 
 RESOURCES += qml.qrc
 
@@ -81,7 +83,9 @@ HEADERS += \
     qtequalizer.h \
     granulator.h \
     session.h \
-    qtutility.h
+    qtutility.h \
+    track.h \
+    trackview.h
 
 FORMS +=
 

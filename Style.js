@@ -52,3 +52,6 @@ var eqColor = "medium turquoise"
 // Palette
 var paletteColor = "dark grey"
 var paletteOpacity = 1
+
+// workspace
+var workspaceColor = "light grey"

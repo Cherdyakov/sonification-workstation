@@ -8,7 +8,7 @@ import "Utils.js" as Utils
 Rectangle
 {
     id: root
-    color: "light grey"
+    color: Style.workspaceColor
     anchors.fill: parent
 
     property int dataHeight: 0
