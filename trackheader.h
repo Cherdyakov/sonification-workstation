@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QDoubleSpinBox>
 
 class TrackHeader : public QWidget
 {
@@ -16,8 +17,8 @@ public:
 private:
     uint trackNumber;
     QLabel *trackLabel;
-    QLabel *dataValueLabel;
-    QLabel *dataValueReadout;
+    QDoubleSpinBox *dataDisplay;
+    QLabel *dataLabel;
     QLabel *dataProcessingLabel;
 
 

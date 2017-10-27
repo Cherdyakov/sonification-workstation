@@ -9,27 +9,33 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     this->setAutoFillBackground(true);
     this->setPalette(*pal);
 
-    //set up track label
+    // set up track label
     trackLabel = new QLabel;
     trackLabel->setFrameStyle(QFrame::Panel | QFrame::Raised);
     trackLabel->setContentsMargins(0,0,0,0);
-    trackLabel->setMaximumHeight(20);
+    trackLabel->setFixedHeight(20);
     trackLabel->setStyleSheet("background: dark grey");
 
-    dataValueLabel = new QLabel;
-    dataValueReadout = new QLabel;
-    dataProcessingLabel = new QLabel;
-
-
+    // set up data display
+    dataDisplay = new QDoubleSpinBox;
+    dataDisplay->setReadOnly(true);
+    dataDisplay->setButtonSymbols(QAbstractSpinBox::NoButtons);
+    dataLabel = new QLabel;
+    dataLabel->setText("");
     QHBoxLayout *dataLayout = new QHBoxLayout;
-    dataLayout->addWidget(dataValueReadout);
-    dataLayout->addWidget(dataValueLabel);
+//    dataLayout->addWidget(dataLabel);
+    dataLayout->addWidget(dataDisplay);
+
+    // add everything to main layout
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(trackLabel);
     mainLayout->addItem(dataLayout);
-    mainLayout->addWidget(dataProcessingLabel);
+//    mainLayout->addWidget(dataProcessingLabel);
+    mainLayout->setSpacing(4);
+    mainLayout->addStretch();
     this->setLayout(mainLayout);
 
+    // set this track header's width
     this->setFixedWidth(120);
 
 }
