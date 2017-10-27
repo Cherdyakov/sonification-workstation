@@ -21,6 +21,15 @@ void Track::plot(std::vector<double> *array, uint start, uint end)
     plotter->plot(array, start, end);
 }
 
+void Track::setTrackNumber(uint num)
+{
+    if(trackNumber != num)
+    {
+        trackNumber = num;
+        header->setTrackNumber(trackNumber);
+    }
+}
+
 void Track::on_zoomChanged(QCPRange range)
 {
     if(range != zoomRange)
@@ -30,4 +39,9 @@ void Track::on_zoomChanged(QCPRange range)
         plotter->replot();
         emit zoomChanged(zoomRange);
     }
+}
+
+void Track::on_dataValueChanged(double val)
+{
+
 }

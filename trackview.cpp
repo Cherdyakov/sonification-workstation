@@ -27,7 +27,7 @@ void TrackView::plot(std::vector<double> *array, uint height, uint width)
     {
         //add tracks
         Track* track = addTrack();
-
+        track->setTrackNumber(i + 1);
         //plot to each track
         uint start = i * width;
         uint end = start + width;

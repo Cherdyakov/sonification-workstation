@@ -18,6 +18,7 @@ TrackPlotter::TrackPlotter()
     yAxis->setTicks(false);
 
     connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
+
 }
 
 void TrackPlotter::plot(std::vector<double> *array, uint start, uint end)
