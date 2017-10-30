@@ -4,8 +4,9 @@
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
-#include "dataprocessing.h"
-#include "datadisplay.h"
+#include <QDoubleSpinBox>
+#include <QHBoxLayout>
+#include <QPushButton>
 
 class TrackHeader : public QWidget
 {
@@ -15,8 +16,8 @@ public:
 
 private:
     uint trackNumber;
-    DataDisplay *display;
-    DataProcessing *processing;
+    QDoubleSpinBox *display;
+    QPushButton *procButton;
 
 signals:
 
