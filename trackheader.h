@@ -4,25 +4,19 @@
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QDoubleSpinBox>
-
-#include "trackname.h"
+#include "dataprocessing.h"
+#include "datadisplay.h"
 
 class TrackHeader : public QWidget
 {
     Q_OBJECT
 public:
     explicit TrackHeader(QWidget *parent = nullptr);
-    void setTrackNumber(uint num);
 
 private:
     uint trackNumber;
-    TrackName *trackName;
-    QDoubleSpinBox *dataDisplay;
-    QLabel *dataLabel;
-    QLabel *dataProcessingLabel;
-
+    DataDisplay *display;
+    DataProcessing *processing;
 
 signals:
 

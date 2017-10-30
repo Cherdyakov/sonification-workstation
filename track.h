@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "trackplotter.h"
 #include "trackheader.h"
+#include "trackname.h"
 
 class Track : public QWidget
 {
@@ -17,6 +18,7 @@ private:
     uint trackNumber;
     TrackPlotter* plotter;
     TrackHeader* header;
+    TrackName* name;
     QCPRange zoomRange;
 
 signals:

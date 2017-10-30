@@ -4,9 +4,13 @@ Track::Track(QWidget *parent) : QWidget(parent)
 {
     plotter = new TrackPlotter;
     header = new TrackHeader;
+    name = new TrackName;
 
+    QVBoxLayout *headerLayout = new QVBoxLayout;
+    headerLayout->addWidget(name);
+    headerLayout->addWidget(header);
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->addWidget(header);
+    layout->addLayout(headerLayout);
     layout->addWidget(plotter);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
@@ -26,7 +30,7 @@ void Track::setTrackNumber(uint num)
     if(trackNumber != num)
     {
         trackNumber = num;
-        header->setTrackNumber(trackNumber);
+        name->setTrackNumber(num);
     }
 }
 
