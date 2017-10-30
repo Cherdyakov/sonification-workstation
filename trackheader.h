@@ -7,6 +7,8 @@
 #include <QHBoxLayout>
 #include <QDoubleSpinBox>
 
+#include "trackname.h"
+
 class TrackHeader : public QWidget
 {
     Q_OBJECT
@@ -16,7 +18,7 @@ public:
 
 private:
     uint trackNumber;
-    QLabel *trackLabel;
+    TrackName *trackName;
     QDoubleSpinBox *dataDisplay;
     QLabel *dataLabel;
     QLabel *dataProcessingLabel;

@@ -10,11 +10,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     this->setPalette(*pal);
 
     // set up track label
-    trackLabel = new QLabel;
-    trackLabel->setFrameStyle(QFrame::Panel | QFrame::Raised);
-    trackLabel->setContentsMargins(0,0,0,0);
-    trackLabel->setFixedHeight(20);
-    trackLabel->setStyleSheet("background: dark grey");
+    trackName = new TrackName;
 
     // set up data display
     dataDisplay = new QDoubleSpinBox;
@@ -23,14 +19,22 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     dataLabel = new QLabel;
     dataLabel->setText("");
     QHBoxLayout *dataLayout = new QHBoxLayout;
-//    dataLayout->addWidget(dataLabel);
     dataLayout->addWidget(dataDisplay);
+
+    // set up processing display
+    dataProcessingLabel = new QLabel;
+    dataProcessingLabel->setFrameStyle(QFrame::Panel | QFrame::Raised);
+    dataProcessingLabel->setContentsMargins(0,0,0,0);
+    dataProcessingLabel->setFixedHeight(20);
+    dataProcessingLabel->setStyleSheet("background: dark grey");
+    dataProcessingLabel->setText("Pre-processing");
 
     // add everything to main layout
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(trackLabel);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->addWidget(trackName);
     mainLayout->addItem(dataLayout);
-//    mainLayout->addWidget(dataProcessingLabel);
+    mainLayout->addWidget(dataProcessingLabel);
     mainLayout->setSpacing(4);
     mainLayout->addStretch();
     this->setLayout(mainLayout);
@@ -42,7 +46,5 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
 
 void TrackHeader::setTrackNumber(uint num)
 {
-    QString label;
-    label = "Dimension " + QString::number(num);
-    trackLabel->setText(label);
+    trackName->setTrackNumber(num);
 }
