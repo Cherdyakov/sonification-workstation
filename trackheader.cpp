@@ -9,6 +9,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     display = new QDoubleSpinBox;
     procButton = new QPushButton;
     QPalette* pal = new QPalette;
+    processor = new DataProcessor;
 
     // set background color for header
     pal->setColor(QPalette::Background, QColor("dark grey"));
@@ -44,4 +45,13 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     // set this track header's width
     this->setFixedWidth(120);
 
+    // connect signals and slots
+    connect(procButton, SIGNAL(clicked(bool)),
+            this, SLOT(ShowProcessing()));
+
+}
+
+void TrackHeader::ShowProcessing()
+{
+    processor->show();
 }
