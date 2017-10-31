@@ -34,8 +34,12 @@ SOURCES += \
     granulator.cpp \
     session.cpp \
     qtutility.cpp \
+    trackview.cpp \
     track.cpp \
-    trackview.cpp
+    trackheader.cpp \
+    trackplotter.cpp \
+    trackname.cpp \
+    dataprocessor.cpp
 
 RESOURCES += qml.qrc
 
@@ -84,8 +88,12 @@ HEADERS += \
     granulator.h \
     session.h \
     qtutility.h \
+    trackview.h \
     track.h \
-    trackview.h
+    trackheader.h \
+    trackplotter.h \
+    trackname.h \
+    dataprocessor.h
 
 FORMS +=
 

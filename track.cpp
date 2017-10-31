@@ -1,133 +1,51 @@
 #include "track.h"
 
-Track::Track()
+Track::Track(QWidget *parent) : QWidget(parent)
 {
+    plotter = new TrackPlotter;
+    header = new TrackHeader;
+    name = new TrackName;
 
-    QCP::Interactions qcpInteractions;
-    qcpInteractions |= QCP::iRangeDrag;
-    qcpInteractions |= QCP::iRangeZoom;
-    qcpInteractions |= QCP::iSelectPlottables;
-    setInteractions(qcpInteractions);
-    axisRect()->setRangeDrag(Qt::Horizontal);
-    axisRect()->setRangeZoom(Qt::Horizontal);
+    QVBoxLayout *headerLayout = new QVBoxLayout;
+    headerLayout->addWidget(name);
+    headerLayout->addWidget(header);
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->addLayout(headerLayout);
+    layout->addWidget(plotter);
+    layout->setContentsMargins(0,0,0,0);
+    layout->setSpacing(0);
+    this->setLayout(layout);
 
-    // hide axes and set zero margins
-    axisRect()->setAutoMargins(QCP::msNone);
-    axisRect()->setMargins(QMargins(0,0,0,0));
-    xAxis->setTicks(false);
-    yAxis->setTicks(false);
-
-    connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
+    connect(plotter, SIGNAL(zoomChanged(QCPRange)),
+            this, SLOT(on_zoomChanged(QCPRange)));
 }
 
 void Track::plot(std::vector<double> *array, uint start, uint end)
 {
-    uint len =  end - start;
-    if(len < 1) {
-        qDebug("length of plot must be greater than zero");
-        return;
-    }
-
-    clearGraphs();
-
-    QVector<double> data(len);
-    for(uint i = 0; i < len; i++)
-    {
-        data[static_cast<int>(i)] = (*array)[start + i];
-    }
-
-    QVector<double> xTicks(static_cast<int>(len));
-    std::iota(xTicks.begin(), xTicks.end(), 0);
-
-    QCPGraph* graph = addGraph();
-    graph->setData(xTicks, data);
-    graph->setSelectable(QCP::stNone);
-
-    QPen pen;
-    QColor color;
-    color.setNamedColor("#0000FF");
-    pen.setColor(color);
-
-    // set pen width
-    // small datasets look best with wider pen
-    // large datasets plot faster with narrow pen
-    int penWidth;
-    if(len < 100)
-    {
-        penWidth = 2;
-    }
-    else if(len < 1000)
-    {
-        penWidth = 1;
-    }
-    else
-    {
-        penWidth = 0;
-    }
-    pen.setWidth(penWidth);
-    graph->setPen(pen);
-
-    // no Legend
-    legend->setVisible(false);
-    // release bounds so replot can fit the new data
-    xBounds.upper = xAxis->range().maxRange;
-    xBounds.lower = -(xAxis->range().maxRange);
-    yBounds.upper = yAxis->range().maxRange;
-    yBounds.lower = -(yAxis->range().maxRange);
-    rescaleAxes();
-    replot();
-    // set bounds based on new data
-    xBounds = xAxis->range();
-    yBounds = yAxis->range();
+    plotter->plot(array, start, end);
 }
 
-void Track::resizeEvent(QResizeEvent *event)
+void Track::setTrackNumber(uint num)
 {
-    QCustomPlot::resizeEvent(event);
-}
-
-void Track::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
-{
-    double lowerBound = bounds.lower;
-    double upperBound = bounds.upper;
-    QCPRange fixedRange(range);
-    if (fixedRange.lower < lowerBound)
+    if(trackNumber != num)
     {
-        fixedRange.lower = lowerBound;
-        fixedRange.upper = lowerBound + range.size();
-        if (fixedRange.upper > upperBound || qFuzzyCompare(range.size(), upperBound-lowerBound))
-            fixedRange.upper = upperBound;
-        axis->setRange(fixedRange);
-    } else if (fixedRange.upper > upperBound)
-    {
-        fixedRange.upper = upperBound;
-        fixedRange.lower = upperBound - range.size();
-        if (fixedRange.lower < lowerBound || qFuzzyCompare(range.size(), upperBound-lowerBound))
-            fixedRange.lower = lowerBound;
-        axis->setRange(fixedRange);
+        trackNumber = num;
+        name->setTrackNumber(num);
     }
-}
-
-void Track::on_xRangeChanged(QCPRange range)
-{
-    rangeBounder(xAxis, range, xBounds);
-    zoomRange = xAxis->range();
-    emit zoomChanged(zoomRange);
-}
-
-void Track::on_yRangeChanged(QCPRange range)
-{
-//    rangeBounder(yAxis, range, yBounds);
 }
 
 void Track::on_zoomChanged(QCPRange range)
 {
-    if(zoomRange != range)
+    if(range != zoomRange)
     {
         zoomRange = range;
-        xAxis->setRange(range);
-        replot();
+        plotter->xAxis->setRange(range);
+        plotter->replot();
+        emit zoomChanged(zoomRange);
     }
 }
 
+void Track::on_dataValueChanged(double val)
+{
 
+}
