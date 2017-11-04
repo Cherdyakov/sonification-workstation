@@ -39,5 +39,6 @@
         <file>SessionCode.js</file>
         <file>Utils.js</file>
         <file>images/EQ.png</file>
+        <file>images/alpha.png</file>
     </qresource>
 </RCC>
