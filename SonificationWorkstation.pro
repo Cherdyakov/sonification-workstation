@@ -38,7 +38,8 @@ SOURCES += \
     track.cpp \
     trackheader.cpp \
     trackplotter.cpp \
-    trackname.cpp
+    trackname.cpp \
+    dataprocessor.cpp
 
 RESOURCES += qml.qrc
 
@@ -91,7 +92,8 @@ HEADERS += \
     track.h \
     trackheader.h \
     trackplotter.h \
-    trackname.h
+    trackname.h \
+    dataprocessor.h
 
 FORMS +=
 

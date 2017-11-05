@@ -41,7 +41,6 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     QHBoxLayout *alphaLayout = new QHBoxLayout;
     alphaLayout->addWidget(alphaLabel);
     alphaLayout->addWidget(alphaSpinBox);
-//    alphaLayout->setContentsMargins(4,4,4,4);
 
     procComboBox->addItem("None");
     procComboBox->addItem("Simple Average");
