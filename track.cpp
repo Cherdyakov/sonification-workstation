@@ -20,9 +20,9 @@ Track::Track(QWidget *parent) : QWidget(parent)
             this, SLOT(on_zoomChanged(QCPRange)));
 }
 
-void Track::plot(std::vector<double> *array, uint start, uint end)
+void Track::plot(std::vector<double> vec)
 {
-    plotter->plot(array, start, end);
+    plotter->plot(vec);
 }
 
 void Track::setTrackNumber(uint num)
@@ -41,8 +41,8 @@ void Track::on_zoomChanged(QCPRange range)
         zoomRange = range;
         plotter->xAxis->setRange(range);
         plotter->replot();
-        emit zoomChanged(zoomRange);
     }
+    emit zoomChanged(zoomRange);
 }
 
 void Track::on_dataValueChanged(double val)

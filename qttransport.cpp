@@ -110,10 +110,10 @@ void QtTransport::subscribeItem(QtSynthItem *item)
     transport_.subscribe_item(item->implementation());
 }
 
-void QtTransport::on_dataChanged(std::vector<double> *data, unsigned int height, unsigned int width)
+void QtTransport::on_datasetChanged(Dataset* dataset)
 {
     transport_.pause(true);
-    transport_.set_dataset(data, height, width);
+    transport_.set_dataset(dataset);
 }
 
 void QtTransport::on_pausedChanged(bool pause)

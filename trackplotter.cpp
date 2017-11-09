@@ -21,20 +21,15 @@ TrackPlotter::TrackPlotter()
 
 }
 
-void TrackPlotter::plot(std::vector<double> *array, uint start, uint end)
+void TrackPlotter::plot(std::vector<double> vec)
 {
-    uint len =  end - start;
-    if(len < 1) {
-        qDebug("length of plot must be greater than zero");
-        return;
-    }
-
     clearGraphs();
+    int len = static_cast<uint>(vec.size());
 
     QVector<double> data(len);
-    for(uint i = 0; i < len; i++)
+    for(int i = 0; i < len; i++)
     {
-        data[static_cast<int>(i)] = (*array)[start + i];
+        data[i] = vec[i];
     }
 
     QVector<double> xTicks(static_cast<int>(len));

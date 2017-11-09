@@ -4,6 +4,7 @@
 #include <atomic>
 #include <mutex>
 
+#include "dataset.h"
 #include "oscillator.h"
 #include "audifier.h"
 #include "modulator.h"
@@ -36,7 +37,7 @@ public:
     void remove_child(SynthItem *child) override;
     void mute(bool mute) override;
     // for setting the entire dataset to be sonified
-    void set_dataset(std::vector<double>* dataset, unsigned int height, unsigned int width);
+    void set_dataset(Dataset* dataset);
     // functions for controlling playback
     void pause(bool pause);
     void set_playback_position(double pos);
@@ -73,15 +74,13 @@ private:
     void process_subscribe_item(SynthItem* item);
     void process_unsubscribe_item(SynthItem* item);
 
-    void process_set_dataset(std::vector<double>*dataset,
-                             unsigned int height,
-                             unsigned int width);
+    void process_set_dataset(Dataset *dataset);
     void process_set_playback_position(double pos);
     void process_set_interpolate(bool interpolate_);
 
     void retrieve_next_data_column();
     void calculate_return_position();
-    void calculate_min_max();
+    std::vector<double> interpolate(std::vector<double> first, std::vector<double> second, double mu);
 
     ITEM my_type_;
     PARAMETER my_child_type_;
@@ -90,7 +89,7 @@ private:
     Frame frame_buffer_[4096];
     std::vector<SynthItem*> subscribers_;
     std::vector<SynthItem::PARAMETER> accepted_children_;
-    std::vector<double>* dataset_;
+    Dataset* dataset_;
     std::vector<double> current_data_column_;
     std::vector<double> mins_;
     std::vector<double> maxes_;
@@ -98,8 +97,6 @@ private:
     std::vector<SynthItem*> inputs_;
     std::vector<SynthItem*> amods_;
     float master_volume_;
-    unsigned int data_height_;
-    unsigned int data_width_;
     unsigned int frame_rate_;
     unsigned int current_index_;
     double mu_;

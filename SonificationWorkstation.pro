@@ -93,7 +93,8 @@ HEADERS += \
     trackheader.h \
     trackplotter.h \
     trackname.h \
-    dataprocessor.h
+    dataprocessor.h \
+    dataset.h
 
 FORMS +=
 

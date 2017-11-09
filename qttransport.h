@@ -50,7 +50,7 @@ public:
 public slots:
 
     // slots for controlling playback
-    void on_dataChanged(std::vector<double>* data, unsigned int height, unsigned int width);
+    void on_datasetChanged(son::Dataset *dataset);
     void on_pausedChanged(bool on_pausedChanged);
     void on_posChanged(double pos);
     void on_speedChanged(int speed);

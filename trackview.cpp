@@ -21,17 +21,16 @@ void TrackView::setPlayHead(PlayHead *p)
     playHead = p;
 }
 
-void TrackView::plot(std::vector<double> *array, uint height, uint width)
+void TrackView::plot(son::Dataset *dataset)
 {
-    for(uint i = 0; i < height; i++)
+    for(uint i = 0; i < dataset->height_; i++)
     {
         //add tracks
         Track* track = addTrack();
         track->setTrackNumber(i + 1);
         //plot to each track
-        uint start = i * width;
-        uint end = start + width;
-        track->plot(array, start, end);
+        std::vector<double> trackData = dataset->get_row(i);
+        track->plot(trackData);
     }
     trackLayout->addStretch();
 }
@@ -67,10 +66,10 @@ void TrackView::removeTrack(Track *track)
 
 }
 
-void TrackView::on_datasetChanged(std::vector<double> *data, uint height, uint width)
+void TrackView::on_datasetChanged(son::Dataset* dataset)
 {
     clear();
-    plot(data, height, width);
+    plot(dataset);
 }
 
 void TrackView::on_zoomChanged(QCPRange range)

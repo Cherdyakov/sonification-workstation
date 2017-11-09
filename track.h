@@ -11,7 +11,7 @@ class Track : public QWidget
     Q_OBJECT
 public:
     explicit Track(QWidget *parent = nullptr);
-    void plot(std::vector<double> *array, uint start, uint end);
+    void plot(std::vector<double> vec);
     void setTrackNumber(uint num);
 
 private:
