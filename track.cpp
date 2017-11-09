@@ -41,8 +41,8 @@ void Track::on_zoomChanged(QCPRange range)
         zoomRange = range;
         plotter->xAxis->setRange(range);
         plotter->replot();
+        emit zoomChanged(zoomRange);
     }
-    emit zoomChanged(zoomRange);
 }
 
 void Track::on_dataValueChanged(double val)
