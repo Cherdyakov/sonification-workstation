@@ -460,9 +460,12 @@ void Transport::retrieve_next_data_column()
 {
     if(interpolate_)
     {
-        std::vector<double> next_column;
-        next_column = dataset_->get_column(current_index_);
-        current_data_column_ = interpolate(dataset_->get_column(current_index_), dataset_->get_column(current_index_ + 1), mu_);
+        unsigned int next_index = current_index_ + 1;
+        if(next_index > dataset_->width_)
+        {
+            next_index = 0;
+        }
+        current_data_column_ = interpolate(dataset_->get_column(current_index_), dataset_->get_column(next_index), mu_);
     }
     else {
         current_data_column_ = dataset_->get_column(current_index_);
