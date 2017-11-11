@@ -461,7 +461,7 @@ void Transport::retrieve_next_data_column()
     if(interpolate_)
     {
         unsigned int next_index = current_index_ + 1;
-        if(next_index > dataset_->width_)
+        if(next_index >= dataset_->width_)
         {
             next_index = 0;
         }
