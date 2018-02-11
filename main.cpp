@@ -6,7 +6,7 @@
 #include "qtsynthitem.h"
 #include "qtoscillator.h"
 #include "mainwindow.h"
-#include "rtaudio/RtAudio.h"
+#include "RtAudio.h"
 #include "callback.h"
 #include "qttransport.h"
 #include "ringbuffer.h"
@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     //      }
     //    }
 
+    qDebug() << "Default audio output: " << dac.getDefaultOutputDevice();
 
     if ( dac.getDeviceCount() < 1 ) {
         qDebug() << "\nNo audio devices found!\n";
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
     inParams.deviceId = dac.getDefaultInputDevice();
     inParams.nChannels = 2;
     inParams.firstChannel = 0;
-    outParams.deviceId = dac.getDefaultOutputDevice();
+    outParams.deviceId = 9;//dac.getDefaultOutputDevice();
     outParams.nChannels = 2;
     outParams.firstChannel = 0;
 

@@ -116,10 +116,10 @@ BASEPATH = /home/sean/CodeLibs
 #BASEPATH = /home/andres/Documents/src
 # Gamma synthesis library
 LIBS += -L$${BASEPATH}/Gamma-master/build/lib -L$${BASEPATH}/Gamma/build/lib -lGamma
-INCLUDEPATH += $${BASEPATH}/Gamma-master/Gamma
+INCLUDEPATH += $${BASEPATH}/Gamma-master
 # RT Audio library
-LIBS += -L$${BASEPATH}/rtaudio-4.1.2 -lrtaudio
-INCLUDEPATH += $${BASEPATH}/rtaudio-4.1.2/include
+LIBS += -L$${BASEPATH}/rtaudio-5.0.0 -lrtaudio
+INCLUDEPATH += $${BASEPATH}/rtaudio-5.0.0
 # qcustomplot
 INCLUDEPATH +=  external/qcustomplot
 
