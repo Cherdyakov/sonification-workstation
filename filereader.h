@@ -6,6 +6,8 @@
 #include <QFile>
 #include <QString>
 
+#include "dataset.h"
+
 class FileReader : public QObject
 {
     Q_OBJECT
@@ -14,14 +16,14 @@ public:
     explicit FileReader(QObject *parent = 0);
 
 private:
-    void readCSV(QString filename, std::vector<double>* array);
+    void readCSV(QString filename, son::Dataset *dataset);
 
 signals:
-    void datasetChanged(std::vector<double>* data, uint height, uint width);
+    void datasetChanged(son::Dataset *data);
     void qmlDatasetChanged(uint height, uint width);
 
 public slots:
-    void on_newDatasetFile(QString filename, std::vector<double> *array);
+    void on_newDatafile(QString filename, son::Dataset *dataset);
 
 private slots:
 

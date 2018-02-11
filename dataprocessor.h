@@ -1,17 +1,33 @@
 #ifndef DATAPROCESSOR_H
 #define DATAPROCESSOR_H
 
-#include <QWidget>
+#include <vector>
 
-class DataProcessor : public QWidget
+namespace son {
+
+class DataProcessor
 {
-    Q_OBJECT
 public:
-    explicit DataProcessor(QWidget *parent = nullptr);
+    DataProcessor();
 
-signals:
+    enum class PROCESSING_TYPE {
+        SIMPLE_AVERAGE,
+        EXPONENTIAL_AVERAGE,
+        CUMULATIVE_AVERAGE
+    };
 
-public slots:
+    std::vector<double> get_processed_column(unsigned int col, PROCESSING_TYPE proc);
+    void reset();
+
+private:
+
+    std::vector<double> get_column(unsigned int col);
+    std::vector<double> get_simple_average(unsigned int col, unsigned int alpha);
+    std::vector<double> get_exponential_average(unsigned int col, unsigned int alpha);
+    std::vector<double> get_cumulative_average(unsigned int col);
+
 };
+
+} // namespace son
 
 #endif // DATAPROCESSOR_H

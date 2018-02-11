@@ -9,6 +9,7 @@
 #include "frame.h"
 #include "ringbuffer.h"
 #include "Gamma/Oscillator.h"
+#include "dataset.h"
 
 // Library definitions
 #define MAX_DIMENSIONS 128
@@ -92,6 +93,7 @@ public:
     struct SynthItemCommand {
         COMMAND type;
         PARAMETER parameter;
+        Dataset *dataset;
         std::vector<double>* data;
         std::vector<double>* mins;
         std::vector<double>* maxes;

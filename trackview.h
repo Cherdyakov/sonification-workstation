@@ -5,6 +5,7 @@
 #include <QWidget>
 #include "track.h"
 #include "playhead.h"
+#include "dataset.h"
 
 // Containter widget for tracks
 
@@ -17,7 +18,7 @@ public:
 
 private:
     PlayHead* playHead;
-    void plot(std::vector<double> *array, uint height, uint width);
+    void plot(son::Dataset* dataset);
     void clear();
     Track* addTrack();
     void removeTrack(Track* track);
@@ -27,7 +28,7 @@ signals:
     void zoomChanged(QCPRange range);
 
 public slots:
-    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
+    void on_datasetChanged(son::Dataset *dataset);
     void on_zoomChanged(QCPRange range);
 //    void addTrack();
 //    void removeTrack();

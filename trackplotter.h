@@ -14,9 +14,10 @@ class TrackPlotter : public QCustomPlot
 
 public:
     TrackPlotter();
-    void plot(std::vector<double>* array, uint start, uint end);
+    void plot(std::vector<double> vec);
 
 private:
+
     // These will limit our zoom and drag ops
     // to areas that are plotted (not empty space)
     QCPRange xBounds;
@@ -25,13 +26,12 @@ private:
     void resizeEvent(QResizeEvent *event) override;
     void rangeBounder(QCPAxis *axis, QCPRange newRange, QCPRange bounds);
 
+private slots:
+    void on_xRangeChanged(QCPRange range);
+
 signals:
     void zoomChanged(QCPRange range);
 
-public slots:
-
-private slots:
-    void on_xRangeChanged(QCPRange range);
 
 };
 

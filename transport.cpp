@@ -12,8 +12,6 @@ Transport::Transport()
     loop_end_ = 0.0;
     data_stale_ = false;
     frame_rate_ = 44100;
-    data_width_ = 0;
-    data_height_ = 0;
     current_index_ = 0;
     mu_ = 0.0;
     speed_ = 1;
@@ -102,13 +100,11 @@ void Transport::mute(bool mute)
     command_buffer_.push(command);
 }
 
-void Transport::set_dataset(std::vector<double> *dataset, unsigned int height, unsigned int width)
+void Transport::set_dataset(Dataset *dataset)
 {
     SynthItemCommand command;
     command.type = COMMAND::DATA;
-    command.data = dataset;
-    command.ints.push_back(height);
-    command.ints.push_back(width);
+    command.dataset = dataset;
     command_buffer_.push(command);
 }
 
@@ -210,7 +206,7 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
         item = NULL;
         break;
     }
-    item->set_data(&current_data_column_, &mins_, &maxes_);
+    item->set_data(&current_data_column_, &dataset_->mins_, &dataset_->maxes_);
     return item;
 }
 
@@ -240,7 +236,7 @@ Frame Transport::process()
         mu_ -= 1.0;
         current_index_++;
 
-        if((current_index_ + 1) > (data_width_))
+        if((current_index_ + 1) > (dataset_->width_))
         {
             current_index_ = 0;
         }
@@ -340,7 +336,7 @@ void Transport::process_command(SynthItemCommand command)
 
     switch (type) {
     case COMMAND::DATA:
-        process_set_dataset(command.data, command.ints[0], command.ints[1]);
+        process_set_dataset(command.dataset);
         break;
     case COMMAND::ADD_CHILD:
         process_add_child(command.item, command.parameter);
@@ -438,18 +434,15 @@ void Transport::process_unsubscribe_item(SynthItem *item)
     remove_item(item, &subscribers_);
 }
 
-void Transport::process_set_dataset(std::vector<double> *dataset, unsigned int height, unsigned int width)
+void Transport::process_set_dataset(Dataset *dataset)
 {
     paused_ = true;
     dataset_ = dataset;
-    data_width_ = width;
     current_data_column_.clear();
     current_index_ = 0;
     mu_ = 0.0;
     calculate_return_position();
-    data_height_ = height;
-    current_data_column_.resize(data_height_);
-    calculate_min_max();
+    current_data_column_.resize(dataset_->height_);
 }
 
 void Transport::process_set_playback_position(double pos)
@@ -467,24 +460,15 @@ void Transport::retrieve_next_data_column()
 {
     if(interpolate_)
     {
-        for(unsigned int i = 0; i < data_height_; i++)
+        unsigned int next_index = current_index_ + 1;
+        if(next_index >= dataset_->width_)
         {
-            unsigned int idx = ((data_width_ * i) + current_index_);
-            unsigned int nextIdx = idx + 1;
-            if(nextIdx > (data_width_ * i) + (data_width_ - 1)) {
-                nextIdx -= data_width_;
-            }
-            double val = (*dataset_)[idx];
-            double valNext = (*dataset_)[nextIdx];
-            current_data_column_[i] = ((1 - mu_) * val) + (mu_ * valNext);
+            next_index = 0;
         }
+        current_data_column_ = interpolate(dataset_->get_column(current_index_), dataset_->get_column(next_index), mu_);
     }
     else {
-        for(unsigned int i = 0; i < data_height_; i++)
-        {
-            unsigned int idx = ((data_width_ * i) + current_index_);
-            current_data_column_[i] = (*dataset_)[idx];
-        }
+        current_data_column_ = dataset_->get_column(current_index_);
     }
 }
 
@@ -495,34 +479,21 @@ void Transport::calculate_return_position()
     return_pos_.store(pos, std::memory_order_relaxed);
 }
 
-void Transport::calculate_min_max()
+std::vector<double> Transport::interpolate(std::vector<double> first, std::vector<double> second, double mu)
 {
-    double min;
-    double max;
-    mins_.clear();
-    maxes_.clear();
-    for(unsigned int i = 0; i < data_height_; i++)
+    std::vector<double> vec;
+    if(first.size() != second.size())
     {
-        for(unsigned int j = 0; j < data_width_; j++)
-        {
-            unsigned int idx = i * data_width_ + j;
-            double value = dataset_->at(idx);
-            if(j == 0)
-            {
-                min = max = value;
-            }
-            else if(value < min)
-            {
-                min = value;
-            }
-            else if(value > max)
-            {
-                max = value;
-            }
-        }
-        mins_.push_back(min);
-        maxes_.push_back(max);
+        return vec;
     }
+    for(unsigned int i = 0; i < first.size(); i++)
+    {
+        double val_first = first[i];
+        double val_second = second[i];
+        double interpolated_val = ((1 - mu) * val_first) + (mu * val_second);
+        vec.push_back(interpolated_val);
+    }
+    return vec;
 }
 
 } //namespace son

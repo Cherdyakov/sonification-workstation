@@ -7,7 +7,9 @@
 #include <QDoubleSpinBox>
 #include <QHBoxLayout>
 #include <QPushButton>
-#include "dataprocessor.h"
+#include <QComboBox>
+#include <QPixmap>
+#include <QBitmap>
 
 class TrackHeader : public QWidget
 {
@@ -18,15 +20,15 @@ public:
 private:
     uint trackNumber;
     QDoubleSpinBox *display;
-    QPushButton *procButton;
-    DataProcessor *processor;
+    QComboBox *procComboBox;
+    QSpinBox *alphaSpinBox;
 
 signals:
 
 public slots:
 
 private slots:
-    void ShowProcessing();
+    void on_processingChanged(QString text);
 
 };
 

@@ -7,9 +7,9 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     QHBoxLayout *displayLayout = new QHBoxLayout;
     QVBoxLayout *processingLayout = new QVBoxLayout;
     display = new QDoubleSpinBox;
-    procButton = new QPushButton;
+    alphaSpinBox = new QSpinBox;
+    procComboBox = new QComboBox;
     QPalette* pal = new QPalette;
-    processor = new DataProcessor;
 
     // set background color for header
     pal->setColor(QPalette::Background, QColor("dark grey"));
@@ -29,29 +29,46 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     // data processing section
     QLabel *procLabel = new QLabel;
     procLabel->setText("Data processing:");
-    procButton->setText("None");
+    QLabel *alphaLabel = new QLabel;
+    QPixmap pixmap;
+    if (!pixmap.load( ":/images/alpha.png" )) {
+        qDebug("Failed to load images/target.png");
+    }
+    alphaLabel->setPixmap(pixmap);
+    alphaLabel->setScaledContents(true);
+    alphaLabel->setFixedSize(16, 16);
+
+    QHBoxLayout *alphaLayout = new QHBoxLayout;
+    alphaLayout->addWidget(alphaLabel);
+    alphaLayout->addWidget(alphaSpinBox);
+
+    procComboBox->addItem("None");
+    procComboBox->addItem("Simple Average");
+    procComboBox->addItem("Exponential Average");
+    procComboBox->addItem("Cumulative Average");
     processingLayout->setContentsMargins(4,4,4,4);
     processingLayout->addWidget(procLabel);
-    processingLayout->addWidget(procButton);
+    processingLayout->addWidget(procComboBox);
+    processingLayout->addLayout(alphaLayout);
 
     // add everything to main layout
     mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(0);
+    mainLayout->setSpacing(2);
     mainLayout->addLayout(displayLayout);
     mainLayout->addLayout(processingLayout);
     mainLayout->addStretch();
     this->setLayout(mainLayout);
 
     // set this track header's width
-    this->setFixedWidth(120);
+    this->setFixedWidth(140);
 
     // connect signals and slots
-    connect(procButton, SIGNAL(clicked(bool)),
-            this, SLOT(ShowProcessing()));
+    connect(procComboBox, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(on_processingChanged(QString)));
 
 }
 
-void TrackHeader::ShowProcessing()
+void TrackHeader::on_processingChanged(QString text)
 {
-    processor->show();
+
 }

@@ -6,11 +6,11 @@ FileReader::FileReader(QObject *parent) : QObject(parent)
 
 }
 
-void FileReader::readCSV(QString filename, std::vector<double> *array)
+void FileReader::readCSV(QString filename, son::Dataset* dataset)
 {
     qDebug() << "Reading file: " << QTime::currentTime();
 
-    array->clear();
+    std::vector<double> vec;
 
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
@@ -64,7 +64,7 @@ void FileReader::readCSV(QString filename, std::vector<double> *array)
         }
     }
 
-    array->resize(width*height);
+    vec.resize(height*width);
     uint index = 0;
 
     for(uint i = 0; i < height; i++)
@@ -77,29 +77,30 @@ void FileReader::readCSV(QString filename, std::vector<double> *array)
             double value = temp.toDouble(&isDouble);
             if(isDouble)
             {
-                array->at(index++) = value;
+                vec.at(index++) = value;
             }
             else
             {
                 qDebug() << "FileReader: bad value. row: "
                          << i << "col: " << j;
-                array->at(index++) = 0;
+                vec.at(index++) = 0;
             }
         }
     }
 
     qDebug() << "Done reading file: " << QTime::currentTime();
 
-    emit datasetChanged(array, height, width);
-    emit qmlDatasetChanged(height, width);
+    dataset->init(vec, height, width);
+    emit datasetChanged(dataset);
+    emit qmlDatasetChanged(dataset->height_, dataset->width_);
 }
 
-void FileReader::on_newDatasetFile(QString filename, std::vector<double>* array)
+void FileReader::on_newDatafile(QString filename, son::Dataset *dataset)
 {
     // clear the dataset
     if(filename.isEmpty()) {
-        array->clear();
-        datasetChanged(array, 0, 0);
+        dataset->clear();
+        datasetChanged(dataset);
     }
-    readCSV(filename, array);
+    readCSV(filename, dataset);
 }
