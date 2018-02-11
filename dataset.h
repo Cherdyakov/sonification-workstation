@@ -13,6 +13,12 @@ struct Dataset
     std::vector<double> mins_;
     std::vector<double> maxes_;
 
+    Dataset()
+    {
+        height_ = 0;
+        width_ = 0;
+    }
+
     // helper functions
     void init(std::vector<double> data, unsigned int height, unsigned int width)
     {

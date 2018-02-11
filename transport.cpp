@@ -4,6 +4,8 @@ namespace son {
 
 Transport::Transport()
 {
+    dataset_ = new Dataset;
+
     my_type_ = ITEM::TRANSPORT;
     my_child_type_ = PARAMETER::OUTPUT;
     paused_ = true;
