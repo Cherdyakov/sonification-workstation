@@ -112,8 +112,9 @@ FORMS +=
 #DEFINES += __MACOSX_CORE__
 #INCLUDEPATH += /usr/local/include
 
-#My Linux Desktop
-BASEPATH = /home/sean/CodeLibs
+#Sean Ubuntu
+BASEPATH = /home/sean/Documents/src
+#Andres
 #BASEPATH = /home/andres/Documents/src
 # Gamma synthesis library
 LIBS += -L$${BASEPATH}/Gamma-master/build/lib -L$${BASEPATH}/Gamma/build/lib -lGamma
