@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
                                 2,
                                 paFloat32,
                                 SR,
-                                256,
+                                BLOCK_SIZE,
                                 callback,
                                 &uData );
 

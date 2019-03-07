@@ -9,7 +9,7 @@
 
 namespace son {
 
-int callback( const void *inputBuffer,
+static int callback( const void *inputBuffer,
                      void *outputBuffer,
                      unsigned long framesPerBuffer,
                      const PaStreamCallbackTimeInfo* timeInfo,
@@ -23,7 +23,7 @@ int callback( const void *inputBuffer,
 
     // Cast data passed through stream to our struct.
     UserData *uData = (UserData*)userData;
-    double *buffer = (double*) outputBuffer;
+    float *buffer = (float*) outputBuffer;
     SynthItem* root = uData->root;
 
     // Write interleaved audio data.
