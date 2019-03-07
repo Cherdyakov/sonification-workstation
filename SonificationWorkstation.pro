@@ -1,6 +1,9 @@
 QT += qml quick widgets printsupport
-
+RESOURCES += qml.qrc
+TEMPLATE = app
 CONFIG += c++11
+# Default rules for deployment.
+include(deployment.pri)
 
 SOURCES += \
     mainwindow.cpp \
@@ -40,16 +43,6 @@ SOURCES += \
     trackplotter.cpp \
     trackname.cpp \
     dataprocessor.cpp
-
-RESOURCES += qml.qrc
-
-TEMPLATE = app
-
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
-
-# Default rules for deployment.
-include(deployment.pri)
 
 HEADERS += \
     mainwindow.h \
@@ -96,22 +89,6 @@ HEADERS += \
     dataprocessor.h \
     dataset.h
 
-FORMS +=
-
-#My MBP
-# Gamma synthesis library
-#LIBS += -L/Users/Sean/libs/Gamma-master/build/lib -lGamma
-#INCLUDEPATH += /Users/Sean/libs/Gamma-master/Gamma
-## RT Audio library
-#LIBS += -L/Users/Sean/libs/rtaudio-4.1.2 -lrtaudio
-#INCLUDEPATH += /Users/Sean/libs/rtaudio-4.1.2/include
-## oscpack
-##LIBS += -L/Users/Sean/libs/oscpack_1_1_0/oscpack/lib -loscpack
-##INCLUDEPATH += /Users/Sean/libs/oscpack_1_1_0/oscpack/include
-## Core Audio
-#DEFINES += __MACOSX_CORE__
-#INCLUDEPATH += /usr/local/include
-
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src
 #Andres
@@ -119,15 +96,7 @@ BASEPATH = /home/sean/Documents/src
 # Gamma synthesis library
 LIBS += -L$${BASEPATH}/Gamma-master/build/lib -L$${BASEPATH}/Gamma/build/lib -lGamma
 INCLUDEPATH += $${BASEPATH}/Gamma-master
-# RT Audio library
-LIBS += -L$${BASEPATH}/rtaudio-5.0.0 -lrtaudio
-INCLUDEPATH += $${BASEPATH}/rtaudio-5.0.0
 # qcustomplot
 INCLUDEPATH +=  external/qcustomplot
-
-
-
-DISTFILES +=
-
 # PortAudio
 unix|win32: LIBS += -lportaudio
