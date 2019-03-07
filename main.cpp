@@ -15,6 +15,10 @@
 #define SR 44100
 #define BLOCK_SIZE 512
 
+void PrintAudioError(PaError e) {
+    qDebug("PortAudio error: %s\n", Pa_GetErrorText(e));
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -30,7 +34,6 @@ int main(int argc, char *argv[])
 
     main_window.show();
 
-
     //initialize Gamma
     gam::Sync::master().spu(SR);
 
@@ -38,9 +41,7 @@ int main(int argc, char *argv[])
     PaError err;
 
     err = Pa_Initialize();
-    if (err != paNoError ) {
-        printf( "Pa_Initialize PortAudio error: %s\n", Pa_GetErrorText(err));
-    }
+    if(err != paNoError) PrintAudioError(err);
 
     // Open an audio I/O stream
     err = Pa_OpenDefaultStream( &stream,
@@ -52,27 +53,24 @@ int main(int argc, char *argv[])
                                 callback,
                                 &uData );
 
-    if ( err != paNoError )
-        printf( "Pa_OpenDefaultStream PortAudio error: %s\n", Pa_GetErrorText(err));
+    if(err != paNoError) PrintAudioError(err);
 
     err = Pa_StartStream( stream );
-    if ( err != paNoError )
-        printf( "Pa_StartStream PortAudio error: %s\n", Pa_GetErrorText(err));
+    if(err != paNoError) PrintAudioError(err);
 
+    // Place cleanup code after a.exec, before returning exit code
+    const int ret = a.exec();
 
-    // Sleep for several seconds to listen
-//    Pa_Sleep(3000);
+    // Cleanup PortAudio
+    err = Pa_AbortStream( stream );
+    if(err != paNoError) PrintAudioError(err);
 
-//    err = Pa_AbortStream( stream );
-//    if ( err != paNoError )
-//        printf( "Pa_AbortStream PortAudio error: %s\n", Pa_GetErrorText(err));
+    err = Pa_CloseStream( stream );
+    printf( "Pa_CloseStream PortAudio error: %s\n", Pa_GetErrorText(err));
 
-//    err = Pa_CloseStream( stream );
-//        printf( "Pa_CloseStream PortAudio error: %s\n", Pa_GetErrorText(err));
+    err = Pa_Terminate();
+    if(err != paNoError) PrintAudioError(err);
 
-//    err = Pa_Terminate();
-//    if ( err != paNoError )
-//        printf( "Pa_Terminate PortAudio error: %s\n", Pa_GetErrorText(err));
-
-    return a.exec();
+    // Return
+    return ret;
 }
