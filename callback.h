@@ -5,34 +5,38 @@
 
 #include <QDebug>
 #include "userdata.h"
+#include "portaudio.h"
 
 namespace son {
 
-int callback( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
-              double streamTime, RtAudioStreamStatus status, void *data )
+int callback( const void *inputBuffer,
+                     void *outputBuffer,
+                     unsigned long framesPerBuffer,
+                     const PaStreamCallbackTimeInfo* timeInfo,
+                     PaStreamCallbackFlags statusFlags,
+                     void *userData )
 {
-    Q_UNUSED(streamTime)
+    // Prevent unused parameter warnings.
+    Q_UNUSED(timeInfo)
     Q_UNUSED(inputBuffer)
+    Q_UNUSED(statusFlags)
 
-    UserData* uData = (UserData *) data;
-    double *buffer = (double *) outputBuffer;
+    // Cast data passed through stream to our struct.
+    UserData *uData = (UserData*)userData;
+    double *buffer = (double*) outputBuffer;
     SynthItem* root = uData->root;
 
-    if ( status )
-        std::cout << "Stream underflow detected!" << std::endl;
-
-    root->control_process();
-
     // Write interleaved audio data.
-    for (unsigned int i=0; i < nBufferFrames; ++i) {
+    for (unsigned int i=0; i < framesPerBuffer; ++i) {
         Frame frame = root->process();
         frame *= 0.1;
         *buffer++ = frame.left;
         *buffer++ = frame.right;
     }
 
-    return 0;
+    root->control_process();
 
+    return 0;
 }
 
 } // namespace son
