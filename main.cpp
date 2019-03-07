@@ -6,7 +6,7 @@
 #include "qtsynthitem.h"
 #include "qtoscillator.h"
 #include "mainwindow.h"
-#include "RtAudio.h"
+#include "portaudio.h"
 #include "callback.h"
 #include "qttransport.h"
 #include "ringbuffer.h"
@@ -34,50 +34,45 @@ int main(int argc, char *argv[])
     //initialize Gamma
     gam::Sync::master().spu(SR);
 
-    RtAudio dac;
-//    dac.showWarnings(true);
+    PaStream *stream;
+    PaError err;
 
-    //    // Determine the number of devices available
-    //    unsigned int devices = dac.getDeviceCount();
-    //    // Scan through devices for various capabilities
-    //    RtAudio::DeviceInfo info;
-    //    for ( unsigned int i=0; i<devices; i++ ) {
-    //      info = dac.getDeviceInfo( i );
-    //      if ( info.probed == true ) {
-    //        // Print, for example, the maximum number of output channels for each device
-    //        std::cout << "device = " << i;
-    //        std::cout << ": maximum output channels = " << info.outputChannels << "\n";
-    //      }
-    //    }
-
-    qDebug() << "Default audio output: " << dac.getDefaultOutputDevice();
-
-    if ( dac.getDeviceCount() < 1 ) {
-        qDebug() << "\nNo audio devices found!\n";
-        exit( 0 );
+    err = Pa_Initialize();
+    if (err != paNoError ) {
+        printf( "Pa_Initialize PortAudio error: %s\n", Pa_GetErrorText(err));
     }
-    RtAudio::StreamParameters inParams, outParams;
-    //temp assignment for my system, eventually need to allow user selection of audio device
-    inParams.deviceId = dac.getDefaultInputDevice();
-    inParams.nChannels = 2;
-    inParams.firstChannel = 0;
-    outParams.deviceId = 9;//dac.getDefaultOutputDevice();
-    outParams.nChannels = 2;
-    outParams.firstChannel = 0;
 
-    unsigned int sr = SR;
-    unsigned int bufferFrames = BLOCK_SIZE;
+    // Open an audio I/O stream
+    err = Pa_OpenDefaultStream( &stream,
+                                0,
+                                2,
+                                paFloat32,
+                                SR,
+                                256,
+                                callback,
+                                &uData );
 
-    try {
-        dac.openStream( &outParams, &inParams, RTAUDIO_FLOAT64,
-                        sr, &bufferFrames, &son::callback, (void *)&uData );
-        dac.startStream();
-    }
-    catch ( RtAudioError& e ) {
-        qDebug() << "error";
-        e.printMessage();
-        //      exit( 0 );
-    }
+    if ( err != paNoError )
+        printf( "Pa_OpenDefaultStream PortAudio error: %s\n", Pa_GetErrorText(err));
+
+    err = Pa_StartStream( stream );
+    if ( err != paNoError )
+        printf( "Pa_StartStream PortAudio error: %s\n", Pa_GetErrorText(err));
+
+
+    // Sleep for several seconds to listen
+//    Pa_Sleep(3000);
+
+//    err = Pa_AbortStream( stream );
+//    if ( err != paNoError )
+//        printf( "Pa_AbortStream PortAudio error: %s\n", Pa_GetErrorText(err));
+
+//    err = Pa_CloseStream( stream );
+//        printf( "Pa_CloseStream PortAudio error: %s\n", Pa_GetErrorText(err));
+
+//    err = Pa_Terminate();
+//    if ( err != paNoError )
+//        printf( "Pa_Terminate PortAudio error: %s\n", Pa_GetErrorText(err));
 
     return a.exec();
 }

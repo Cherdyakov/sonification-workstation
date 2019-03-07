@@ -125,4 +125,9 @@ INCLUDEPATH += $${BASEPATH}/rtaudio-5.0.0
 # qcustomplot
 INCLUDEPATH +=  external/qcustomplot
 
+
+
 DISTFILES +=
+
+# PortAudio
+unix|win32: LIBS += -lportaudio
