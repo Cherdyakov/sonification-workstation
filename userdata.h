@@ -6,6 +6,6 @@
 #include "qttransport.h"
 
 typedef struct {
-    SynthItem* root;
+    QtSynthItem* root;
 } UserData;
 
