@@ -1,16 +1,10 @@
 #ifndef SOWENUMS_H
 #define SOWENUMS_H
-
 #include <QObject>
 
-namespace sow {
+namespace Sow {
 
-class sowenums : public QObject
-{
-    Q_OBJECT
-public:
-    explicit sowenums(QObject *parent = nullptr);
-
+    Q_NAMESPACE
     enum class PARAMETER {
         INPUT,
         OUTPUT,
@@ -26,8 +20,9 @@ public:
         RESONANCE,
         FILTER_TYPE
     };
-    Q_ENUMS(PARAMETER)
+    Q_ENUM_NS(PARAMETER)
 
+    Q_NAMESPACE
     enum class SUB_PARAMETER {
         VALUE,
         FIXED,
@@ -37,8 +32,9 @@ public:
         SCALE_EXP,
         MAP
     };
-    Q_ENUMS(SUB_PARAMETER)
+    Q_ENUM_NS(SUB_PARAMETER)
 
+    Q_NAMESPACE
     enum class ITEM {
         TRANSPORT,
         OSCILLATOR,
@@ -50,24 +46,23 @@ public:
         NOISE,
         EQUALIZER
     };
-    Q_ENUMS(ITEM)
+    Q_ENUM_NS(ITEM)
 
+    Q_NAMESPACE
     enum class NOISE {
         WHITE,
         PINK
     };
-    Q_ENUMS(NOISE)
+    Q_ENUM_NS(NOISE)
 
+    Q_NAMESPACE
     enum class FILTER_TYPE {
         LOW_PASS,
         HIGH_PASS,
         PEAK,
         NOTCH
     };
-    Q_ENUMS(FILTER_TYPE)
-
-
-};
+    Q_ENUM_NS(FILTER_TYPE)
 
 } // Namespace sow.
 
