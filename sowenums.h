@@ -2,7 +2,7 @@
 #define SOWENUMS_H
 #include <QObject>
 
-namespace Sow {
+namespace sow {
 
     Q_NAMESPACE
     enum class PARAMETER {
