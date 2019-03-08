@@ -7,6 +7,7 @@
 #include "ringbuffer.h"
 #include "Gamma/Oscillator.h"
 #include "dataset.h"
+#include "sowenums.h"
 
 // Library definitions
 #define MAX_DIMENSIONS 128
@@ -21,91 +22,7 @@ class QtSynthItem : public QObject
     Q_ENUMS(FILTER_TYPE)
 public:
 
-    enum class ITEM {
-        TRANSPORT,
-        OSCILLATOR,
-        AUDIFIER,
-        MODULATOR,
-        PANNER,
-        ENVELOPE,
-        VOLUME,
-        NOISE,
-        EQUALIZER
-    };
 
-    enum class PARAMETER {
-        INPUT,
-        OUTPUT,
-        AMPLITUDE,
-        FREQUENCY,
-        DEPTH,
-        AUDIFICATION,
-        PAN,
-        ATTACK,
-        DECAY,
-        VOLUME,
-        NOISE,
-        RESONANCE,
-        FILTER_TYPE
-    };
-
-    enum class COMMAND {
-        DATA,
-        ADD_CHILD,
-        REMOVE_CHILD,
-        ADD_PARENT,
-        REMOVE_PARENT,
-        MUTE,
-        PARAM,
-        FIXED,
-        INDEXES,
-        SCALED,
-        SCALE_LOW,
-        SCALE_HIGH,
-        SCALE_EXPONENT,
-        DELETE,
-        DELETE_ITEM,
-        MODULATION,
-        NOISE,
-        FILTER_TYPE,
-        PAUSE,
-        POSITION,
-        SPEED,
-        LOOP,
-        LOOP_POINTS,
-        INTERPOLATE,
-        SUBSCRIBE,
-        UNSUBSCRIBE
-    };
-
-    enum class NOISE {
-        WHITE,
-        PINK
-    };
-
-    enum class FILTER_TYPE {
-        LOW_PASS,
-        HIGH_PASS,
-        PEAK,
-        NOTCH
-    };
-
-    struct SynthItemCommand {
-        COMMAND type;
-        PARAMETER parameter;
-        Dataset *dataset;
-        std::vector<double>* data;
-        std::vector<double>* mins;
-        std::vector<double>* maxes;
-        std::vector<double> doubles;
-        std::vector<int> ints;
-        bool bool_val;
-        QtSynthItem* item;
-        SynthItemCommand() {
-            doubles.reserve(MAX_DIMENSIONS);
-            ints.reserve(MAX_DIMENSIONS);
-        }
-    };
 
     explicit QtSynthItem() {}
     virtual ~QtSynthItem() {}

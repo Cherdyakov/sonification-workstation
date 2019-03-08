@@ -2,40 +2,13 @@
 #define SOWPARAMETER_H
 
 #include <QObject>
+#include "sowenums.h"
 
 class SowParameter : public QObject
 {
     Q_OBJECT
 public:
     explicit SowParameter(QObject *parent = nullptr);
-
-    enum class PARAMETER {
-        INPUT,
-        OUTPUT,
-        AMPLITUDE,
-        FREQUENCY,
-        DEPTH,
-        AUDIFICATION,
-        PAN,
-        ATTACK,
-        DECAY,
-        VOLUME,
-        NOISE,
-        RESONANCE,
-        FILTER_TYPE
-    };
-
-    enum class SUB_PARAMETER {
-        VALUE,
-        FIXED,
-        SCALED,
-        SCALE_HI,
-        SCALE_LO,
-        SCALE_EXP,
-        MAP
-    };
-
-
 
 private:
 
