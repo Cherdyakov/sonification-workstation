@@ -6,13 +6,13 @@
 
 #include "dataset.h"
 #include "oscillator.h"
-#include "audifier.h"
-#include "modulator.h"
-#include "panner.h"
-#include "envelope.h"
-#include "volume.h"
-#include "noise.h"
-#include "equalizer.h"
+//#include "audifier.h"
+//#include "modulator.h"
+//#include "panner.h"
+//#include "envelope.h"
+//#include "volume.h"
+//#include "noise.h"
+//#include "equalizer.h"
 #include "ringbuffer.h"
 
 namespace sow {

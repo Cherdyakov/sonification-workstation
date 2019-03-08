@@ -6,13 +6,13 @@
 
 #include "transport.h"
 #include "qtoscillator.h"
-#include "qtaudifier.h"
-#include "qtmodulator.h"
-#include "qtpanner.h"
-#include "qtenvelope.h"
-#include "qtvolume.h"
-#include "qtnoise.h"
-#include "qtequalizer.h"
+//#include "qtaudifier.h"
+//#include "qtmodulator.h"
+//#include "qtpanner.h"
+//#include "qtenvelope.h"
+//#include "qtvolume.h"
+//#include "qtnoise.h"
+//#include "qtequalizer.h"
 
 using namespace sow;
 

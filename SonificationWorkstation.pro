@@ -9,7 +9,7 @@ SOURCES += \
     mainwindow.cpp \
     main.cpp \
     oscillator.cpp \
-    audifier.cpp \
+#    audifier.cpp \
     timerworker.cpp \
     filereader.cpp \
     external/qcustomplot/qcustomplot.cpp \
@@ -17,24 +17,24 @@ SOURCES += \
     playhead.cpp \
     qtoscillator.cpp \
     qtsynthitem.cpp \
-    qtaudifier.cpp \
-    modulator.cpp \
-    qtmodulator.cpp \
+#    qtaudifier.cpp \
+#    modulator.cpp \
+#    qtmodulator.cpp \
     transport.cpp \
     transportwidget.cpp \
     qttransport.cpp \
     utility.cpp \
-    panner.cpp \
-    qtpanner.cpp \
-    envelope.cpp \
-    qtenvelope.cpp \
-    volume.cpp \
-    qtvolume.cpp \
-    noise.cpp \
-    qtnoise.cpp \
-    equalizer.cpp \
-    qtequalizer.cpp \
-    granulator.cpp \
+#    panner.cpp \
+#    qtpanner.cpp \
+#    envelope.cpp \
+#    qtenvelope.cpp \
+#    volume.cpp \
+#    qtvolume.cpp \
+#    noise.cpp \
+#    qtnoise.cpp \
+#    equalizer.cpp \
+#    qtequalizer.cpp \
+#    granulator.cpp \
     session.cpp \
     qtutility.cpp \
     trackview.cpp \
@@ -51,7 +51,7 @@ HEADERS += \
     userdata.h \
     oscillator.h \
     ringbuffer.h \
-    audifier.h \
+#    audifier.h \
     timerworker.h \
     filereader.h \
     external/qcustomplot/qcustomplot.h \
@@ -59,25 +59,25 @@ HEADERS += \
     playhead.h \
     qtoscillator.h \
     qtsynthitem.h \
-    qtaudifier.h \
-    modulator.h \
-    qtmodulator.h \
+#    qtaudifier.h \
+#    modulator.h \
+#    qtmodulator.h \
     transport.h \
     transportwidget.h \
     qttransport.h \
     utility.h \
     frame.h \
-    panner.h \
-    qtpanner.h \
-    envelope.h \
-    qtenvelope.h \
-    volume.h \
-    qtvolume.h \
-    noise.h \
-    qtnoise.h \
-    equalizer.h \
-    qtequalizer.h \
-    granulator.h \
+#    panner.h \
+#    qtpanner.h \
+#    envelope.h \
+#    qtenvelope.h \
+#    volume.h \
+#    qtvolume.h \
+#    noise.h \
+#    qtnoise.h \
+#    equalizer.h \
+#    qtequalizer.h \
+#    granulator.h \
     session.h \
     qtutility.h \
     trackview.h \
