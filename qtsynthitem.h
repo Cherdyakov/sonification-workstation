@@ -139,30 +139,30 @@ public:
     explicit QtSynthItem() {}
     virtual ~QtSynthItem() {}
 
-    Q_INVOKABLE virtual void addParent(QtSynthItem* parent) = 0;
-    Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) = 0;
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER param) = 0;
-    Q_INVOKABLE virtual void removeChild(QtSynthItem *child) = 0;
-    Q_INVOKABLE virtual void mute(bool mute) = 0;
-    Q_INVOKABLE virtual bool getMute() = 0;
+    Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
+    Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER param);
+    Q_INVOKABLE virtual void removeChild(QtSynthItem *child);
+    Q_INVOKABLE virtual void mute(bool mute);
+    Q_INVOKABLE virtual bool getMute();
 
-    virtual void deleteSelf() = 0;
-    virtual ITEM getType() = 0;
+    virtual void deleteSelf();
+    virtual ITEM getType();
     virtual void setData(std::vector<double>* data,
                              std::vector<double>* mins,
-                             std::vector<double>* maxes) = 0;
-    virtual Frame process() = 0; // every sample
-    virtual void step() = 0; // every new data value (step)
-    virtual void controlProcess() = 0; // every process block
-    virtual std::vector<QtSynthItem*> getParents() = 0;
+                             std::vector<double>* maxes);
+    virtual Frame process(); // every sample
+    virtual void step(); // every new data value (step)
+    virtual void controlProcess(); // every process block
+    virtual std::vector<QtSynthItem*> getParents();
 
 protected:
 
-    virtual void retrieveCommands() = 0;
-    virtual void processCommand(SynthItemCommand command) = 0;
-    virtual void processAddChild(QtSynthItem* child, PARAMETER parameter) = 0;
-    virtual void processRemoveChild(QtSynthItem* child) = 0;
-    virtual void processDelete() = 0;
+    virtual void retrieveCommands();
+    virtual void processCommand(SynthItemCommand command);
+    virtual void processAddChild(QtSynthItem* child, PARAMETER parameter);
+    virtual void processRemoveChild(QtSynthItem* child);
+    virtual void processDelete();
 };
 
 } // Namespace sow.

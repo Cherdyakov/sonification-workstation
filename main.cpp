@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
-    qmlRegisterInterface<QtSynthItem>("QtSynthItem");
+    qmlRegisterType<QtSynthItem>("SonLib", 1, 0, "QtSynthItem");
     qmlRegisterType<QtTransport>("SonLib", 1, 0, "QtTransport");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
 
