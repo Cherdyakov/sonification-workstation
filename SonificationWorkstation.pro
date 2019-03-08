@@ -42,7 +42,8 @@ SOURCES += \
     trackplotter.cpp \
     trackname.cpp \
     dataprocessor.cpp \
-    qtsynthitem.cpp
+    qtsynthitem.cpp \
+    sowparameter.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -86,7 +87,8 @@ HEADERS += \
     trackplotter.h \
     trackname.h \
     dataprocessor.h \
-    dataset.h
+    dataset.h \
+    sowparameter.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src
