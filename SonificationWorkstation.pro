@@ -57,7 +57,6 @@ HEADERS += \
     external/qcustomplot/qcustomplot.h \
     plotter.h \
     playhead.h \
-    enums.h \
     qtoscillator.h \
     qtsynthitem.h \
     qtaudifier.h \
