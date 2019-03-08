@@ -89,6 +89,8 @@ HEADERS += \
     dataprocessor.h \
     dataset.h \
     sowparameter.h \
+    sowenums.h \
+    sowenums.h \
     sowenums.h
 
 #Sean Ubuntu
