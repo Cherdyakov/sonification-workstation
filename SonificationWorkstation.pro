@@ -41,7 +41,8 @@ SOURCES += \
     trackheader.cpp \
     trackplotter.cpp \
     trackname.cpp \
-    dataprocessor.cpp
+    dataprocessor.cpp \
+    qtsynthitem.cpp
 
 HEADERS += \
     mainwindow.h \

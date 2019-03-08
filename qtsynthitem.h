@@ -136,8 +136,8 @@ public:
         PINK
     };
 
-    explicit QtSynthItem(QObject *parent = nullptr);
-    virtual QtSynthItem* implementation();
+    explicit QtSynthItem() {}
+    virtual ~QtSynthItem() {}
 
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) = 0;
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) = 0;
@@ -146,22 +146,23 @@ public:
     Q_INVOKABLE virtual void mute(bool mute) = 0;
     Q_INVOKABLE virtual bool getMute() = 0;
 
+    virtual void deleteSelf() = 0;
     virtual ITEM getType() = 0;
-    virtual void set_data(std::vector<double>* data,
+    virtual void setData(std::vector<double>* data,
                              std::vector<double>* mins,
                              std::vector<double>* maxes) = 0;
     virtual Frame process() = 0; // every sample
     virtual void step() = 0; // every new data value (step)
-    virtual void control_process() = 0; // every process block
-    virtual std::vector<QtSynthItem*> get_parents() = 0;
+    virtual void controlProcess() = 0; // every process block
+    virtual std::vector<QtSynthItem*> getParents() = 0;
 
 protected:
 
-    virtual void retrieve_commands() = 0;
-    virtual void process_command(SynthItemCommand command) = 0;
-    virtual void process_add_child(QtSynthItem* child, PARAMETER parameter) = 0;
-    virtual void process_remove_child(QtSynthItem* child) = 0;
-    virtual void process_delete() = 0;
+    virtual void retrieveCommands() = 0;
+    virtual void processCommand(SynthItemCommand command) = 0;
+    virtual void processAddChild(QtSynthItem* child, PARAMETER parameter) = 0;
+    virtual void processRemoveChild(QtSynthItem* child) = 0;
+    virtual void processDelete() = 0;
 };
 
 } // Namespace sow.

@@ -4,7 +4,6 @@
 #include <QQmlContext>
 
 #include "qtsynthitem.h"
-#include "qtoscillator.h"
 #include "mainwindow.h"
 #include "portaudio.h"
 #include "callback.h"
@@ -24,13 +23,13 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
-    qmlRegisterType<QtSynthItem>("SonLib", 1, 0, "QtSynthItem");
+    qmlRegisterInterface<QtSynthItem>("QtSynthItem");
     qmlRegisterType<QtTransport>("SonLib", 1, 0, "QtTransport");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
 
     MainWindow main_window;
     UserData uData;
-    uData.root =  main_window.getTransport()->implementation();
+    uData.root =  main_window.getTransport();
 
     main_window.show();
 
