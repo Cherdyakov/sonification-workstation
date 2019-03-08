@@ -29,7 +29,7 @@ private:
     int speed_;
 
 signals:
-    void newDatafile(QString datafile, son::Dataset* dataset);
+    void newDatafile(QString datafile, sow::Dataset* dataset);
     void interpolateChanged(bool interpolate);
     void speedChanged(int speed);
 

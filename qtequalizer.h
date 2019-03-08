@@ -4,7 +4,7 @@
 #include "qtsynthitem.h"
 #include "equalizer.h"
 
-using namespace  son;
+using namespace sow;
 
 class QtEqualizer : public QtSynthItem
 {

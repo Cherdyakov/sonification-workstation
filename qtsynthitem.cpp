@@ -1,6 +1,6 @@
 #include "qtsynthitem.h"
 
-using namespace son;
+using namespace sow;
 
 QtSynthItem::QtSynthItem(QObject *parent) : QObject(parent)
 {

@@ -1,6 +1,6 @@
 #include "qtvolume.h"
 
-using namespace son;
+using namespace sow;
 
 QtVolume::QtVolume(Volume *volume, QObject *parent) : QtSynthItem(parent)
 {

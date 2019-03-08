@@ -1,6 +1,6 @@
 #include "qtpanner.h"
 
-using namespace son;
+using namespace sow;
 
 QtPanner::QtPanner(Panner *panner, QObject *parent) : QtSynthItem(parent)
 {

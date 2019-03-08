@@ -6,7 +6,7 @@
 #include "qtutility.h"
 #include "synthitem.h"
 
-using namespace son;
+using namespace sow;
 
 class QtSynthItem : public QObject
 {

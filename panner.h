@@ -3,7 +3,7 @@
 
 #include "synthitem.h"
 
-namespace son {
+namespace sow {
 
 class Panner : public SynthItem
 {
@@ -90,6 +90,6 @@ private:
     double pan_exponent_;
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // PANNER_H

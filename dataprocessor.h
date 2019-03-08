@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace son {
+namespace sow {
 
 class DataProcessor
 {
@@ -28,6 +28,6 @@ private:
 
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // DATAPROCESSOR_H

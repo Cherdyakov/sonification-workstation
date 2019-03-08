@@ -1,6 +1,6 @@
 #include "modulator.h"
 
-namespace son {
+namespace sow {
 
 Modulator::Modulator()
 {

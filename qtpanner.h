@@ -4,7 +4,7 @@
 #include "qtsynthitem.h"
 #include "panner.h"
 
-using namespace son;
+using namespace sow;
 
 class QtPanner : public QtSynthItem
 {

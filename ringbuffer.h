@@ -4,7 +4,7 @@
 #include <atomic>
 #include <vector>
 
-namespace son
+namespace sow
 {
 
 template <class T>
@@ -112,7 +112,7 @@ bool RingBuffer<T>::full() const
     return(currentSize == capacity);
 }
 
-} //namespace son
+} //namespace sow
 
 #endif // RingBuffer_H
 

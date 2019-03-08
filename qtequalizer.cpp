@@ -1,6 +1,6 @@
 #include "qtequalizer.h"
 
-using namespace son;
+using namespace sow;
 
 QtEqualizer::QtEqualizer(Equalizer *equalizer, QObject *parent) : QtSynthItem(parent)
 {

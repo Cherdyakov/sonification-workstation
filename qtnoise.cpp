@@ -1,6 +1,6 @@
 #include "qtnoise.h"
 
-using namespace son;
+using namespace sow;
 
 QtNoise::QtNoise(Noise *noise, QObject *parent) : QtSynthItem(parent)
 {

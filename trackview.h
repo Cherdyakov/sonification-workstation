@@ -18,7 +18,7 @@ public:
 
 private:
     PlayHead* playHead;
-    void plot(son::Dataset* dataset);
+    void plot(sow::Dataset* dataset);
     void clear();
     Track* addTrack();
     void removeTrack(Track* track);
@@ -28,7 +28,7 @@ signals:
     void zoomChanged(QCPRange range);
 
 public slots:
-    void on_datasetChanged(son::Dataset *dataset);
+    void on_datasetChanged(sow::Dataset *dataset);
     void on_zoomChanged(QCPRange range);
 //    void addTrack();
 //    void removeTrack();

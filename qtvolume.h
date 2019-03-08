@@ -4,7 +4,7 @@
 #include "qtsynthitem.h"
 #include "volume.h"
 
-using namespace son;
+using namespace sow;
 
 class QtVolume : public QtSynthItem
 {

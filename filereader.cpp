@@ -6,7 +6,7 @@ FileReader::FileReader(QObject *parent) : QObject(parent)
 
 }
 
-void FileReader::readCSV(QString filename, son::Dataset* dataset)
+void FileReader::readCSV(QString filename, sow::Dataset* dataset)
 {
     qDebug() << "Reading file: " << QTime::currentTime();
 
@@ -95,7 +95,7 @@ void FileReader::readCSV(QString filename, son::Dataset* dataset)
     emit qmlDatasetChanged(dataset->height_, dataset->width_);
 }
 
-void FileReader::on_newDatafile(QString filename, son::Dataset *dataset)
+void FileReader::on_newDatafile(QString filename, sow::Dataset *dataset)
 {
     // clear the dataset
     if(filename.isEmpty()) {

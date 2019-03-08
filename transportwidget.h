@@ -48,7 +48,7 @@ private slots:
     void on_loopButton_released();
     void on_speedBox_valueChanged(int speed);
     void on_interpolateBox_stateChanged(int state);
-    void on_datasetChanged(son::Dataset *dataset);
+    void on_datasetChanged(sow::Dataset *dataset);
 };
 
 #endif // TRANSPORTWIDGET_H

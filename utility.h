@@ -4,7 +4,7 @@
 #include <vector>
 #include "synthitem.h"
 
-namespace son {
+namespace sow {
 
 // based on the Max "Scale" object
 // https://docs.cycling74.com/max7/maxobject/scale
@@ -19,5 +19,5 @@ void remove_as_child(SynthItem* self, std::vector<SynthItem *> parents);
 void remove_as_parent(SynthItem* self, std::vector<SynthItem*> children);
 bool verify_child(SynthItem::PARAMETER param, std::vector<SynthItem::PARAMETER> vec);
 
-} // namespace son
+} // namespace sow
 #endif // UTILITY_H

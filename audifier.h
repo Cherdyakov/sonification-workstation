@@ -7,7 +7,7 @@
 #include "synthitem.h"
 #include "ringbuffer.h"
 
-namespace son {
+namespace sow {
 
 class Audifier final : public SynthItem
 {

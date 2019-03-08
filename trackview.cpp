@@ -21,7 +21,7 @@ void TrackView::setPlayHead(PlayHead *p)
     playHead = p;
 }
 
-void TrackView::plot(son::Dataset *dataset)
+void TrackView::plot(sow::Dataset *dataset)
 {
     for(uint i = 0; i < dataset->height_; i++)
     {
@@ -66,7 +66,7 @@ void TrackView::removeTrack(Track *track)
 
 }
 
-void TrackView::on_datasetChanged(son::Dataset* dataset)
+void TrackView::on_datasetChanged(sow::Dataset* dataset)
 {
     clear();
     plot(dataset);

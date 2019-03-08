@@ -7,7 +7,7 @@
 #include "userdata.h"
 #include "portaudio.h"
 
-namespace son {
+namespace sow {
 
 static int callback( const void *inputBuffer,
                      void *outputBuffer,
@@ -39,4 +39,4 @@ static int callback( const void *inputBuffer,
     return 0;
 }
 
-} // namespace son
+} // namespace sow

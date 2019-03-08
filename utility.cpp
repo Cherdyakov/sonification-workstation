@@ -1,6 +1,6 @@
 #include "utility.h"
 
-namespace son {
+namespace sow {
 
 // based on the Max "Scale" object
 // https://docs.cycling74.com/max7/maxobject/scale
@@ -56,4 +56,4 @@ bool verify_child(SynthItem::PARAMETER param, std::vector<SynthItem::PARAMETER> 
     return std::find(vec.begin(), vec.end(), param) != vec.end();
 }
 
-}// namespace son
+}// namespace sow

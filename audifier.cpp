@@ -1,6 +1,6 @@
 #include "audifier.h"
 
-namespace son {
+namespace sow {
 
 Audifier::Audifier()
 {
@@ -237,4 +237,4 @@ void Audifier::process_set_param_indexes(std::vector<int> indexes, PARAMETER par
 }
 
 
-} // namespace son
+} // namespace sow

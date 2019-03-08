@@ -1,6 +1,6 @@
 #include "qttransport.h"
 
-using namespace son;
+using namespace sow;
 
 QtTransport::QtTransport(QObject *parent) : QtSynthItem(parent)
 {

@@ -1,7 +1,7 @@
 #include "volume.h"
 #include "utility.h"
 
-namespace son {
+namespace sow {
 
 Volume::Volume()
 {
@@ -413,4 +413,4 @@ float Volume::calculate_volume_()
     return volume;
 }
 
-} // namespace son
+} // namespace sow

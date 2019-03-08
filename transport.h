@@ -15,7 +15,7 @@
 #include "equalizer.h"
 #include "ringbuffer.h"
 
-namespace son {
+namespace sow {
 
 class Transport final: public SynthItem
 {
@@ -111,6 +111,6 @@ private:
 
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // SYNTHGRAPH_H

@@ -4,7 +4,7 @@
 #include "qtsynthitem.h"
 #include "oscillator.h"
 
-using namespace son;
+using namespace sow;
 
 class QtOscillator : public QtSynthItem
 {

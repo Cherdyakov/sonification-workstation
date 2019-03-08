@@ -82,10 +82,10 @@ MainWindow::MainWindow(QWidget *parent) :
     createMenus();
 
     /* connect non-ui slots and signals */
-    connect(fileReader, SIGNAL(datasetChanged(son::Dataset*)),
-            qtTransport, SLOT(on_datasetChanged(son::Dataset*)));
-    connect(fileReader, SIGNAL(datasetChanged(son::Dataset*)),
-            trackView, SLOT(on_datasetChanged(son::Dataset*)));
+    connect(fileReader, SIGNAL(datasetChanged(sow::Dataset*)),
+            qtTransport, SLOT(on_datasetChanged(sow::Dataset*)));
+    connect(fileReader, SIGNAL(datasetChanged(sow::Dataset*)),
+            trackView, SLOT(on_datasetChanged(sow::Dataset*)));
     connect(qtTransport, SIGNAL(posChanged(double)),
             playHead, SLOT(on_cursorMoved(double)));
     connect(plotter->xAxis, SIGNAL(rangeChanged(QCPRange)),
@@ -104,10 +104,10 @@ MainWindow::MainWindow(QWidget *parent) :
             qtTransport, SLOT(on_loopPointsChanged(double,double)));
     connect(transportWidget, SIGNAL(interpolateChanged(bool)),
             qtTransport, SLOT(on_interpolateChanged(bool)));
-    connect(fileReader, SIGNAL(datasetChanged(son::Dataset*)),
-            transportWidget, SLOT(on_datasetChanged(son::Dataset*)));
-    connect(session, SIGNAL(newDatafile(QString,son::Dataset*)),
-            fileReader, SLOT(on_newDatafile(QString,son::Dataset*)));
+    connect(fileReader, SIGNAL(datasetChanged(sow::Dataset*)),
+            transportWidget, SLOT(on_datasetChanged(sow::Dataset*)));
+    connect(session, SIGNAL(newDatafile(QString,sow::Dataset*)),
+            fileReader, SLOT(on_newDatafile(QString,sow::Dataset*)));
     connect(session, SIGNAL(speedChanged(int)),
             transportWidget, SLOT(on_speed_changed(int)));
     connect(session, SIGNAL(interpolateChanged(bool)),

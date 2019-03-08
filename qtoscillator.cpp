@@ -1,6 +1,6 @@
 #include "qtoscillator.h"
 
-using namespace son;
+using namespace sow;
 
 QtOscillator::QtOscillator(Oscillator *oscillator, QObject *parent) : QtSynthItem(parent)
 {

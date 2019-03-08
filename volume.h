@@ -3,7 +3,7 @@
 
 #include "synthitem.h"
 
-namespace son {
+namespace sow {
 
 class Volume : public SynthItem
 {
@@ -91,6 +91,6 @@ private:
 
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // VOLUME_H

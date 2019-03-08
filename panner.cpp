@@ -2,7 +2,7 @@
 #include "math.h"
 #include "utility.h"
 
-namespace  son {
+namespace sow {
 
 Panner::Panner()
 {
@@ -421,4 +421,4 @@ double Panner::calculate_pan_pos()
 
 
 
-} // namespace son
+} // namespace sow

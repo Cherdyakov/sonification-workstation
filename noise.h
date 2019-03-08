@@ -5,7 +5,7 @@
 #include "synthitem.h"
 #include "Gamma/Noise.h"
 
-namespace son {
+namespace sow {
 
 class Noise : public SynthItem
 {
@@ -67,6 +67,6 @@ private:
     NOISE noise_type_;
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // NOISE_H
