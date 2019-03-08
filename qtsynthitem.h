@@ -18,8 +18,8 @@ namespace sow {
 class QtSynthItem : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(QT_PARAMETER)
-    Q_ENUMS(QT_FILTER_TYPES)
+    Q_ENUMS(PARAMETER)
+    Q_ENUMS(FILTER_TYPE)
 public:
 
     enum class ITEM {
@@ -106,34 +106,6 @@ public:
             doubles.reserve(MAX_DIMENSIONS);
             ints.reserve(MAX_DIMENSIONS);
         }
-    };
-
-    enum QT_PARAMETER {
-        INPUT = (int)QtSynthItem::PARAMETER::INPUT,
-        OUTPUT,
-        AMPLITUDE,
-        FREQUENCY,
-        DEPTH,
-        AUDIFICATION,
-        PAN,
-        ATTACK,
-        DECAY,
-        VOLUME,
-        NOISE,
-        RESONANCE,
-        FILTER_TYPE
-    };
-
-    enum QT_FILTER_TYPES {
-        LOW_PASS = (int)QtSynthItem::FILTER_TYPE::LOW_PASS,
-        HIGH_PASS,
-        PEAK,
-        NOTCH
-    };
-
-    enum QT_NOISE {
-        WHITE = (int)QtSynthItem::NOISE::WHITE,
-        PINK
     };
 
     explicit QtSynthItem() {}
