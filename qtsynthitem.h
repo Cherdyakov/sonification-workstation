@@ -18,8 +18,7 @@ namespace sow {
 class QtSynthItem : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(PARAMETER)
-    Q_ENUMS(FILTER_TYPE)
+
 public:
 
 
