@@ -16,7 +16,6 @@ SOURCES += \
     plotter.cpp \
     playhead.cpp \
     qtoscillator.cpp \
-    qtsynthitem.cpp \
 #    qtaudifier.cpp \
 #    modulator.cpp \
 #    qtmodulator.cpp \
