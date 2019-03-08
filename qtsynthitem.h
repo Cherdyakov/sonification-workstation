@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QVector>
-#include "qtutility.h"
 #include "frame.h"
 #include "ringbuffer.h"
 #include "Gamma/Oscillator.h"
@@ -135,6 +134,30 @@ protected:
     virtual void processAddChild(QtSynthItem* child, PARAMETER parameter);
     virtual void processRemoveChild(QtSynthItem* child);
     virtual void processDelete();
+    virtual void processSetData(std::vector<double>* data,
+                          std::vector<double>* mins,
+                          std::vector<double>* maxes);
+    virtual void processSetParamValue(double val, PARAMETER param);
+    virtual void processSetParamFixed(bool fixed, PARAMETER param);
+    virtual void processSetParamIndexes(std::vector<int> indexes, PARAMETER param);
+    virtual void processSetParamScaled(bool scaled, PARAMETER param);
+    virtual void processSetParamScaleLow(double low, PARAMETER param);
+    virtual void processSetParamScaleHigh(double high, PARAMETER param);
+    virtual void processSetParamScaleExponent(double exponent, PARAMETER param);
+
+    ITEM my_type_;
+    PARAMETER my_child_type_;
+    RingBuffer<SynthItemCommand> command_buffer_;
+    SynthItemCommand current_command_;
+    std::vector<QtSynthItem::PARAMETER> accepted_children_;
+    std::vector<double>* data_;
+    std::vector<double>* mins_;
+    std::vector<double>* maxes_;
+    std::vector<QtSynthItem*> parents_;
+    std::vector<QtSynthItem*> children_;
+    std::vector<int> audify_indexes_;
+    bool muted_;
+
 };
 
 } // Namespace sow.
