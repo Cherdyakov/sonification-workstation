@@ -8,18 +8,18 @@ include(deployment.pri)
 SOURCES += \
     mainwindow.cpp \
     main.cpp \
-    oscillator.cpp \
+#    oscillator.cpp \
 #    audifier.cpp \
     timerworker.cpp \
     filereader.cpp \
     external/qcustomplot/qcustomplot.cpp \
     plotter.cpp \
     playhead.cpp \
-    qtoscillator.cpp \
+#    qtoscillator.cpp \
 #    qtaudifier.cpp \
 #    modulator.cpp \
 #    qtmodulator.cpp \
-    transport.cpp \
+#    transport.cpp \
     transportwidget.cpp \
     qttransport.cpp \
     utility.cpp \
@@ -48,7 +48,7 @@ HEADERS += \
     synthitem.h \
     callback.h \
     userdata.h \
-    oscillator.h \
+#    oscillator.h \
     ringbuffer.h \
 #    audifier.h \
     timerworker.h \
@@ -56,12 +56,12 @@ HEADERS += \
     external/qcustomplot/qcustomplot.h \
     plotter.h \
     playhead.h \
-    qtoscillator.h \
+#    qtoscillator.h \
     qtsynthitem.h \
 #    qtaudifier.h \
 #    modulator.h \
 #    qtmodulator.h \
-    transport.h \
+#    transport.h \
     transportwidget.h \
     qttransport.h \
     utility.h \
