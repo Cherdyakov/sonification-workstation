@@ -26,16 +26,13 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
     qmlRegisterType<QtSynthItem>("SonLib", 1, 0, "QtSynthItem");
+    qmlRegisterType<QtOscillator>("SonLib", 1, 0, "QtOscillator");
     qmlRegisterType<QtTransport>("SonLib", 1, 0, "QtTransport");
+    qmlRegisterType<SowParameter>("SonLib", 1, 0, "SowParameter");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
-
-    qmlRegisterUncreatableMetaObject(
-      sow::sowenums::staticMetaObject, // static meta object
-      "SowEnums",                // import statement (can be any string)
-      0, 1,                          // major and minor version of the import
-      "SowEnums",                 // name in QML (does not have to match C++ name)
-      "Error: only enums"            // error in case someone tries to create a MyNamespace object
-    );
+    qmlRegisterType<SowEnums>("SowEnums", 0, 1, "SowEnums");
+    qRegisterMetaType<SowEnums::ITEM>();
+    qRegisterMetaType<SowEnums::PARAMETER>();
 
     MainWindow main_window;
     UserData uData;
