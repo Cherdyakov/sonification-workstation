@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QTimer>
 #include "qtsynthitem.h"
+#include "qtoscillator.h"
 //#include "transport.h"
-//#include "qtoscillator.h"
 //#include "qtaudifier.h"
 //#include "qtmodulator.h"
 //#include "qtpanner.h"
@@ -19,25 +19,12 @@ namespace sow {
 class QtTransport : public QtSynthItem
 {
     Q_OBJECT
-    Q_ENUMS(QT_ITEM)
 public:
-
-    enum QT_ITEM {
-        OUT,
-        OSCILLATOR,
-        AUDIFIER,
-        MODULATOR,
-        PANNER,
-        ENVELOPE,
-        VOLUME,
-        NOISE,
-        EQUALIZER
-    };
 
     explicit QtTransport(QObject *parent = nullptr);
 
     // factory for other SynthItems
-    Q_INVOKABLE QtSynthItem* createItem(QT_ITEM type);
+    Q_INVOKABLE QtSynthItem* createItem(ITEM type);
     Q_INVOKABLE virtual ITEM getType() override;
     Q_INVOKABLE virtual void deleteSelf() override;
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
