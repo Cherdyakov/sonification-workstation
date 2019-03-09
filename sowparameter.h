@@ -10,12 +10,11 @@ class SowParameter : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName)
-    Q_PROPERTY(SowEnums::PARAMETER type READ type WRITE setType)
     Q_PROPERTY(float value READ value WRITE setValue)
     Q_PROPERTY(bool fixed READ fixed WRITE setFixed)
     Q_PROPERTY(bool scaled READ scaled WRITE setScaled)
-    Q_PROPERTY(float scaleHi READ scaleHi WRITE setScaleHi)
     Q_PROPERTY(float scaleLo READ scaleLo WRITE setScaleLo)
+    Q_PROPERTY(float scaleHi READ scaleHi WRITE setScaleHi)
     Q_PROPERTY(float scaleExp READ scaleExp WRITE setScaleExp)
     Q_PROPERTY(QString map READ map WRITE setMap)
 

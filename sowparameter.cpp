@@ -1,4 +1,5 @@
 #include "sowparameter.h"
+#include <QDebug>
 
 namespace sow {
 
@@ -13,7 +14,7 @@ void sow::SowParameter::setName(const QString name) {
         name_ = name;
         emit nameChanged();
     }
-    qDebug(qUtf8Printable(name_));
+    qDebug() << "setName: " + name_;
 }
 
 QString sow::SowParameter::name() const {
@@ -24,8 +25,6 @@ void sow::SowParameter::setType(const SowEnums::PARAMETER type) {
     if (type_ != type) {
         type_ = type;
         emit typeChanged();
-        qDebug(qUtf8Printable(name_));
-
     }
 }
 
@@ -37,8 +36,7 @@ void sow::SowParameter::setValue(const float value) {
     if (!qFuzzyCompare(value_, value)) {
         value_ =  value;
         emit valueChanged();
-        qDebug() << "setValue: " + QString::number(value);
-
+        qDebug() << "setValue: " + QString::number(value_);
     }
 }
 
@@ -50,8 +48,7 @@ void sow::SowParameter::setFixed(const bool fixed) {
     if (fixed_ != fixed) {
         fixed_ =  fixed;
         emit fixedChanged();
-        qDebug(qUtf8Printable(name_));
-
+        qDebug() << "setFixed: " + QString::number(fixed_);
     }
 }
 
@@ -63,8 +60,7 @@ void sow::SowParameter::setScaled(const bool scaled) {
     if (scaled_ != scaled) {
         scaled_ =  scaled;
         emit scaledChanged();
-        qDebug(qUtf8Printable(name_));
-
+        qDebug() << "setScaled: " + QString::number(scaled_);
     }
 }
 
@@ -76,8 +72,7 @@ void sow::SowParameter::setScaleLo(const float scaleLo) {
     if (!qFuzzyCompare(scaleLo_, scaleLo)) {
         scaleLo_ =  scaleLo;
         emit scaleLoChanged();
-        qDebug(qUtf8Printable(name_));
-
+        qDebug() << "setScaleLo: " + QString::number(scaleLo_);
     }
 }
 
@@ -89,8 +84,7 @@ void sow::SowParameter::setScaleHi(const float scaleHi) {
     if (!qFuzzyCompare(scaleHi_, scaleHi)) {
         scaleHi_ =  scaleHi;
         emit scaleHiChanged();
-        qDebug(qUtf8Printable(name_));
-
+        qDebug() << "setScaleHi: " + QString::number(scaleHi_);
     }
 }
 
@@ -102,8 +96,7 @@ void sow::SowParameter::setScaleExp(const float scaleExp) {
     if (!qFuzzyCompare(scaleExp_, scaleExp)) {
         scaleExp_ =  scaleExp;
         emit scaleExpChanged();
-        qDebug(qUtf8Printable(name_));
-
+        qDebug() << "setScaleExp: " + QString::number(scaleExp_);
     }
 }
 
@@ -115,8 +108,7 @@ void sow::SowParameter::setMap(const QString map) {
     if (map_ != map) {
         map_ = map;
         emit nameChanged();
-        qDebug(qUtf8Printable(name_));
-
+        qDebug() << "setMap: " + map_;
     }
 }
 

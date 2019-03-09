@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import SonLib 1.0
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.0
 import SowEnums 0.1
 import "Style.js" as Style
@@ -14,18 +14,16 @@ SynthItem {
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 
-//    property QtOscillator oscillator: implementation
-
     Component.onCompleted: {
         create()
-//        frequencyEditor.value = implementation.getFreq()
-//        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
+        //        frequencyEditor.value = implementation.getFreq()
+        //        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
 
-//        frequencyMapper.validateMappings()
-//        frequencyScaler.low = implementation.getFreqScaleLow()
-//        frequencyScaler.high = implementation.getFreqScaleHigh()
-//        frequencyScaler.exponent = implementation.getFreqScaleExponent()
-//        frequencyScaler.scaled = implementation.getFreqScaled()
+        //        frequencyMapper.validateMappings()
+        //        frequencyScaler.low = implementation.getFreqScaleLow()
+        //        frequencyScaler.high = implementation.getFreqScaleHigh()
+        //        frequencyScaler.exponent = implementation.getFreqScaleExponent()
+        //        frequencyScaler.scaled = implementation.getFreqScaled()
     }
 
     // return json representation of self
@@ -78,10 +76,21 @@ SynthItem {
         frequencyScaler.exponent = essence["freqScaleExponent"]
     }
 
-    SowParameter {
-        onValueChanged: oscillator.frequency.value = value
+    Editor {
+        id: editor
+        Parameter {
+            onValueChanged: oscillator.frequency.value = value
+            onFixedChanged: oscillator.frequency.fixed = fixed
+            onScaledChanged: oscillator.frequency.scaled = scaled
+            onScaleLowChanged: oscillator.frequency.scaleLo = scaleLow
+            onScaleHighChanged: oscillator.frequency.scaleHi = scaleHigh
+            onMappingChanged: oscillator.frequency.map = mapping
+        }
     }
 
+    QtOscillator {
+        id: oscillator
+    }
 
 }
 
