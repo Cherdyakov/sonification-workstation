@@ -15,7 +15,7 @@ SOURCES += \
     external/qcustomplot/qcustomplot.cpp \
     plotter.cpp \
     playhead.cpp \
-#    qtoscillator.cpp \
+    qtoscillator.cpp \
 #    qtaudifier.cpp \
 #    modulator.cpp \
 #    qtmodulator.cpp \
@@ -58,7 +58,7 @@ HEADERS += \
     external/qcustomplot/qcustomplot.h \
     plotter.h \
     playhead.h \
-#    qtoscillator.h \
+    qtoscillator.h \
     qtsynthitem.h \
 #    qtaudifier.h \
 #    modulator.h \
