@@ -54,7 +54,6 @@ SynthItem {
             "freqScaleHigh": implementation.getFreqScaleHigh(),
             "freqScaleExponent": implementation.getFreqScaleExponent()
         }
-
         return essence
     }
 
@@ -85,6 +84,13 @@ SynthItem {
             onScaleLowChanged: oscillator.frequency.scaleLo = scaleLow
             onScaleHighChanged: oscillator.frequency.scaleHi = scaleHigh
             onMappingChanged: oscillator.frequency.map = mapping
+
+            value: oscillator.frequency.value
+            fixed: oscillator.frequency.fixed
+            scaled: oscillator.frequency.scaled
+            scaleLow: oscillator.frequency.scaleLo
+            scaleHigh: oscillator.frequency.scaleHi
+            mapping: oscillator.frequency.map
         }
     }
 

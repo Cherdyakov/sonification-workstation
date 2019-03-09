@@ -5,7 +5,8 @@ namespace sow {
 
 SowParameter::SowParameter(QObject *parent) : QObject(parent)
 {
-
+    setFixed(true);
+    setScaleLo(900);
 }
 
 

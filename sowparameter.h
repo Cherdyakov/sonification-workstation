@@ -9,14 +9,14 @@ namespace sow {
 class SowParameter : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName)
-    Q_PROPERTY(float value READ value WRITE setValue)
-    Q_PROPERTY(bool fixed READ fixed WRITE setFixed)
-    Q_PROPERTY(bool scaled READ scaled WRITE setScaled)
-    Q_PROPERTY(float scaleLo READ scaleLo WRITE setScaleLo)
-    Q_PROPERTY(float scaleHi READ scaleHi WRITE setScaleHi)
-    Q_PROPERTY(float scaleExp READ scaleExp WRITE setScaleExp)
-    Q_PROPERTY(QString map READ map WRITE setMap)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(float value READ value WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(bool fixed READ fixed WRITE setFixed NOTIFY fixedChanged)
+    Q_PROPERTY(bool scaled READ scaled WRITE setScaled NOTIFY scaledChanged)
+    Q_PROPERTY(float scaleLo READ scaleLo WRITE setScaleLo NOTIFY scaleLoChanged)
+    Q_PROPERTY(float scaleHi READ scaleHi WRITE setScaleHi NOTIFY scaleHiChanged)
+    Q_PROPERTY(float scaleExp READ scaleExp WRITE setScaleExp NOTIFY scaleExpChanged)
+    Q_PROPERTY(QString map READ map WRITE setMap NOTIFY mapChanged)
 
 public:
     explicit SowParameter(QObject *parent = nullptr);

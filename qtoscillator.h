@@ -9,7 +9,7 @@ namespace sow {
 class QtOscillator : public QtSynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(SowParameter* frequency READ frequency)
+    Q_PROPERTY(SowParameter* frequency READ frequency CONSTANT)
 public:
 
     explicit QtOscillator(QObject *parent = nullptr);
