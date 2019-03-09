@@ -9,9 +9,12 @@ using namespace sow;
 class QtOscillator : public QtSynthItem
 {
     Q_OBJECT
+    Q_PROPERTY(SowParameter frequency READ frequency)
 public:
 
     explicit QtOscillator(QObject *parent = nullptr);
+
+    SowParameter frequency;
 
 
 private:
