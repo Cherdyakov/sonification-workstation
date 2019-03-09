@@ -5,28 +5,27 @@
 #include "sowenums.h"
 
 namespace sow {
-using namespace  sowenums;
 
 class SowParameter : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name_ READ name WRITE setName)
-    Q_PROPERTY(PARAMETER type_ READ type WRITE setType)
-    Q_PROPERTY(float value_ READ value WRITE setValue)
-    Q_PROPERTY(bool fixed_ READ fixed WRITE setFixed)
-    Q_PROPERTY(bool scaled_ READ scaled WRITE setScaled)
-    Q_PROPERTY(float scaleHi_ READ scaleHi WRITE setScaleHi)
-    Q_PROPERTY(float scaleLo_ READ scaleLo WRITE setScaleLo)
-    Q_PROPERTY(float scaleExp_ READ scaleExp WRITE setScaleExp)
-    Q_PROPERTY(QString map_ READ map WRITE setMap)
+    Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(SowEnums::PARAMETER type READ type WRITE setType)
+    Q_PROPERTY(float value READ value WRITE setValue)
+    Q_PROPERTY(bool fixed READ fixed WRITE setFixed)
+    Q_PROPERTY(bool scaled READ scaled WRITE setScaled)
+    Q_PROPERTY(float scaleHi READ scaleHi WRITE setScaleHi)
+    Q_PROPERTY(float scaleLo READ scaleLo WRITE setScaleLo)
+    Q_PROPERTY(float scaleExp READ scaleExp WRITE setScaleExp)
+    Q_PROPERTY(QString map READ map WRITE setMap)
 
 public:
     explicit SowParameter(QObject *parent = nullptr);
 
     void setName(const QString name);
     QString name() const;
-    void setType(const PARAMETER type);
-    PARAMETER type() const;
+    void setType(const SowEnums::PARAMETER type);
+    SowEnums::PARAMETER type() const;
     void setValue(const float value);
     float value() const;
     void setFixed(const bool fixed);
@@ -45,7 +44,7 @@ public:
 private:
 
     QString name_;
-    PARAMETER type_;
+    SowEnums::PARAMETER type_;
     float value_;
     bool fixed_;
     bool scaled_;

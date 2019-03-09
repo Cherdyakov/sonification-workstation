@@ -20,7 +20,7 @@ QString sow::SowParameter::name() const {
     return name_;
 }
 
-void sow::SowParameter::setType(const PARAMETER type) {
+void sow::SowParameter::setType(const SowEnums::PARAMETER type) {
     if (type_ != type) {
         type_ = type;
         emit typeChanged();
@@ -29,7 +29,7 @@ void sow::SowParameter::setType(const PARAMETER type) {
     }
 }
 
-PARAMETER sow::SowParameter::type() const {
+SowEnums::PARAMETER sow::SowParameter::type() const {
     return type_;
 }
 

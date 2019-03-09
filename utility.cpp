@@ -51,7 +51,7 @@ void remove_as_parent(QtSynthItem* self, std::vector<QtSynthItem*> children)
     }
 }
 
-bool verify_child(PARAMETER param, std::vector<PARAMETER> vec)
+bool verify_child(SowEnums::PARAMETER param, std::vector<SowEnums::PARAMETER> vec)
 {
     return std::find(vec.begin(), vec.end(), param) != vec.end();
 }

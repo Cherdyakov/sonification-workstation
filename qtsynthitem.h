@@ -13,8 +13,8 @@
 #define MAX_DIMENSIONS 128
 #define FRAME_RATE 44100
 
-namespace sow {
-using namespace sowenums;
+//namespace sow {
+using namespace sow;
 
 class QtSynthItem : public QObject
 {
@@ -23,8 +23,8 @@ class QtSynthItem : public QObject
 public:
 
     struct SynthItemCommand {
-        COMMAND type;
-        PARAMETER parameter;
+        SowEnums::COMMAND type;
+        SowEnums::PARAMETER parameter;
         Dataset *dataset;
         std::vector<double>* data;
         std::vector<double>* mins;
@@ -44,13 +44,13 @@ public:
 
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER param);
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, SowEnums::PARAMETER param);
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child);
     Q_INVOKABLE virtual void mute(bool mute);
     Q_INVOKABLE virtual bool getMute();
 
     virtual void deleteSelf();
-    virtual ITEM getType();
+    virtual SowEnums::ITEM getType();
     virtual void setData(std::vector<double>* data,
                              std::vector<double>* mins,
                              std::vector<double>* maxes);
@@ -63,25 +63,25 @@ protected:
 
     virtual void retrieveCommands();
     virtual void processCommand(SynthItemCommand command);
-    virtual void processAddChild(QtSynthItem* child, PARAMETER parameter);
+    virtual void processAddChild(QtSynthItem* child, SowEnums::PARAMETER parameter);
     virtual void processRemoveChild(QtSynthItem* child);
     virtual void processDelete();
     virtual void processSetData(std::vector<double>* data,
                           std::vector<double>* mins,
                           std::vector<double>* maxes);
-    virtual void processSetParamValue(double val, PARAMETER param);
-    virtual void processSetParamFixed(bool fixed, PARAMETER param);
-    virtual void processSetParamIndexes(std::vector<int> indexes, PARAMETER param);
-    virtual void processSetParamScaled(bool scaled, PARAMETER param);
-    virtual void processSetParamScaleLow(double low, PARAMETER param);
-    virtual void processSetParamScaleHigh(double high, PARAMETER param);
-    virtual void processSetParamScaleExponent(double exponent, PARAMETER param);
+    virtual void processSetParamValue(double val, SowEnums::PARAMETER param);
+    virtual void processSetParamFixed(bool fixed, SowEnums::PARAMETER param);
+    virtual void processSetParamIndexes(std::vector<int> indexes, SowEnums::PARAMETER param);
+    virtual void processSetParamScaled(bool scaled, SowEnums::PARAMETER param);
+    virtual void processSetParamScaleLow(double low, SowEnums::PARAMETER param);
+    virtual void processSetParamScaleHigh(double high, SowEnums::PARAMETER param);
+    virtual void processSetParamScaleExponent(double exponent, SowEnums::PARAMETER param);
 
-    ITEM my_type_;
-    PARAMETER my_child_type_;
+    SowEnums::ITEM my_type_;
+    SowEnums::PARAMETER my_child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
-    std::vector<PARAMETER> accepted_children_;
+    std::vector<SowEnums::PARAMETER> accepted_children_;
     std::vector<double>* data_;
     std::vector<double>* mins_;
     std::vector<double>* maxes_;
@@ -92,6 +92,6 @@ protected:
 
 };
 
-} // Namespace sow.
+//} // Namespace sow.
 
 #endif // QTSYNTHITEM_H

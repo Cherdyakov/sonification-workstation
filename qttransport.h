@@ -24,12 +24,12 @@ public:
     explicit QtTransport(QObject *parent = nullptr);
 
     // factory for other SynthItems
-    Q_INVOKABLE QtSynthItem* createItem(ITEM type);
-    Q_INVOKABLE virtual ITEM getType() override;
+    Q_INVOKABLE QtSynthItem* createItem(SowEnums::ITEM type);
+    Q_INVOKABLE virtual SowEnums::ITEM getType() override;
     Q_INVOKABLE virtual void deleteSelf() override;
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) override;
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, PARAMETER param) override;
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, SowEnums::PARAMETER param) override;
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void mute(bool mute) override;
     Q_INVOKABLE void deleteItem(QtSynthItem* item);
@@ -86,7 +86,7 @@ public slots:
 private:
     void retrieveCommands() override;
     void processCommand(SynthItemCommand command) override;
-    void processAddChild(QtSynthItem* child, PARAMETER parameter) override;
+    void processAddChild(QtSynthItem* child, SowEnums::PARAMETER parameter) override;
     void processRemoveChild(QtSynthItem* child) override;
     void processDelete() override;
     void process_delete_item(QtSynthItem* item);
@@ -101,13 +101,13 @@ private:
     void calculate_return_position();
     std::vector<double> interpolate(std::vector<double> first, std::vector<double> second, double mu);
 
-    ITEM my_type_;
-    PARAMETER my_child_type_;
+    SowEnums::ITEM my_type_;
+    SowEnums::PARAMETER my_child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
     Frame frame_buffer_[4096];
     std::vector<QtSynthItem*> subscribers_;
-    std::vector<PARAMETER> accepted_children_;
+    std::vector<SowEnums::PARAMETER> accepted_children_;
     Dataset* dataset_;
     std::vector<double> current_data_column_;
     std::vector<double> mins_;

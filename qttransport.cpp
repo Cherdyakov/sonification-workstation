@@ -2,7 +2,6 @@
 #include "utility.h"
 
 namespace sow {
-using namespace sowenums;
 
 QtTransport::QtTransport(QObject *parent)
 {
@@ -13,8 +12,8 @@ QtTransport::QtTransport(QObject *parent)
 
     dataset_ = new Dataset;
 
-    my_type_ = ITEM::TRANSPORT;
-    my_child_type_ = PARAMETER::OUTPUT;
+    my_type_ = SowEnums::ITEM::TRANSPORT;
+    my_child_type_ = SowEnums::PARAMETER::OUTPUT;
     paused_ = true;
     loop_ = false;
     loop_begin_ = 0.0;
@@ -29,7 +28,7 @@ QtTransport::QtTransport(QObject *parent)
     interpolate_ = false;
 
     accepted_children_ = {
-        PARAMETER::INPUT
+        SowEnums::PARAMETER::INPUT
     };
 }
 
@@ -40,19 +39,19 @@ QtTransport::QtTransport(QObject *parent)
 void QtTransport::deleteSelf()
 {
     SynthItemCommand command;
-    command.type = COMMAND::DELETE;
+    command.type = SowEnums::COMMAND::DELETE;
     command_buffer_.push(command);
 }
 
 void QtTransport::deleteItem(QtSynthItem *item)
 {
     SynthItemCommand command;
-    command.type = COMMAND::DELETE_ITEM;
+    command.type = SowEnums::COMMAND::DELETE_ITEM;
     command.item = item;
     command_buffer_.push(command);
 }
 
-ITEM QtTransport::getType()
+SowEnums::ITEM QtTransport::getType()
 {
     return my_type_;
 }
@@ -74,14 +73,14 @@ void QtTransport::removeParent(QtSynthItem *parent)
     (void)parent;
 }
 
-bool QtTransport::addChild(QtSynthItem *child, PARAMETER param)
+bool QtTransport::addChild(QtSynthItem *child, SowEnums::PARAMETER param)
 {
     if(!verify_child(param, accepted_children_))
     {
         return false;
     }
     SynthItemCommand command;
-    command.type = COMMAND::ADD_CHILD;
+    command.type = SowEnums::COMMAND::ADD_CHILD;
     command.parameter = param;
     command.item = child;
     command_buffer_.push(command);
@@ -91,7 +90,7 @@ bool QtTransport::addChild(QtSynthItem *child, PARAMETER param)
 void QtTransport::removeChild(QtSynthItem *child)
 {
     SynthItemCommand command;
-    command.type = COMMAND::REMOVE_CHILD;
+    command.type = SowEnums::COMMAND::REMOVE_CHILD;
     command.item = child;
     command_buffer_.push(command);
 }
@@ -99,7 +98,7 @@ void QtTransport::removeChild(QtSynthItem *child)
 void QtTransport::mute(bool mute)
 {
     SynthItemCommand command;
-    command.type = COMMAND::MUTE;
+    command.type = SowEnums::COMMAND::MUTE;
     command.bool_val = mute;
     command_buffer_.push(command);
 }
@@ -107,7 +106,7 @@ void QtTransport::mute(bool mute)
 void QtTransport::set_dataset(Dataset *dataset)
 {
     SynthItemCommand command;
-    command.type = COMMAND::DATA;
+    command.type = SowEnums::COMMAND::DATA;
     command.dataset = dataset;
     command_buffer_.push(command);
 }
@@ -115,7 +114,7 @@ void QtTransport::set_dataset(Dataset *dataset)
 void QtTransport::pause(bool pause)
 {
     SynthItemCommand command;
-    command.type = COMMAND::PAUSE;
+    command.type = SowEnums::COMMAND::PAUSE;
     command.bool_val = pause;
     command_buffer_.push(command);
 }
@@ -123,7 +122,7 @@ void QtTransport::pause(bool pause)
 void QtTransport::set_playback_position(double pos)
 {
     SynthItemCommand command;
-    command.type = COMMAND::POSITION;
+    command.type = SowEnums::COMMAND::POSITION;
     command.doubles.push_back(pos);
     command_buffer_.push(command);
 }
@@ -131,7 +130,7 @@ void QtTransport::set_playback_position(double pos)
 void QtTransport::set_speed(int speed)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SPEED;
+    command.type = SowEnums::COMMAND::SPEED;
     command.ints.push_back(speed);
     command_buffer_.push(command);
 }
@@ -139,7 +138,7 @@ void QtTransport::set_speed(int speed)
 void QtTransport::set_looping(bool looping)
 {
     SynthItemCommand command;
-    command.type = COMMAND::LOOP;
+    command.type = SowEnums::COMMAND::LOOP;
     command.bool_val = looping;
     command_buffer_.push(command);
 }
@@ -147,7 +146,7 @@ void QtTransport::set_looping(bool looping)
 void QtTransport::set_loop_points(double begin, double end)
 {
     SynthItemCommand command;
-    command.type = COMMAND::LOOP_POINTS;
+    command.type = SowEnums::COMMAND::LOOP_POINTS;
     command.doubles.push_back(begin);
     command.doubles.push_back(end);
     command_buffer_.push(command);
@@ -156,7 +155,7 @@ void QtTransport::set_loop_points(double begin, double end)
 void QtTransport::set_interpolate(bool interpolate)
 {
     SynthItemCommand command;
-    command.type = COMMAND::INTERPOLATE;
+    command.type = SowEnums::COMMAND::INTERPOLATE;
     command.bool_val = interpolate;
     command_buffer_.push(command);
 }
@@ -164,7 +163,7 @@ void QtTransport::set_interpolate(bool interpolate)
 void QtTransport::subscribeItem(QtSynthItem *item)
 {
     SynthItemCommand command;
-    command.type = COMMAND::SUBSCRIBE;
+    command.type = SowEnums::COMMAND::SUBSCRIBE;
     command.item = item;
     command_buffer_.push(command);
 }
@@ -172,20 +171,20 @@ void QtTransport::subscribeItem(QtSynthItem *item)
 void QtTransport::unsubscribe_item(QtSynthItem *item)
 {
     SynthItemCommand command;
-    command.type = COMMAND::UNSUBSCRIBE;
+    command.type = SowEnums::COMMAND::UNSUBSCRIBE;
     command.item = item;
     command_buffer_.push(command);
 }
 
-QtSynthItem* QtTransport::createItem(ITEM type)
+QtSynthItem* QtTransport::createItem(SowEnums::ITEM type)
 {
     QtSynthItem* item;
 
     switch (type){
-    case ITEM::OUT:
+    case SowEnums::ITEM::OUT:
         item = this;
         break;
-    case ITEM::OSCILLATOR:
+    case SowEnums::ITEM::OSCILLATOR:
         item = new QtOscillator();
         break;
 //    case QtSynthItem::ITEM::AUDIFIER:
@@ -213,7 +212,7 @@ QtSynthItem* QtTransport::createItem(ITEM type)
         item = NULL;
         break;
     }
-    item->setData(&current_data_column_, &dataset_->mins_, &dataset_->maxes_);
+//    item->setData(&current_data_column_, &dataset_->mins_, &dataset_->maxes_);
     return item;
 }
 
@@ -382,64 +381,64 @@ void QtTransport::retrieveCommands()
 
 void QtTransport::processCommand(SynthItemCommand command)
 {
-    COMMAND type = command.type;
+//    COMMAND type = command.type;
 
-    switch (type) {
-    case COMMAND::DATA:
-        process_set_dataset(command.dataset);
-        break;
-    case COMMAND::ADD_CHILD:
-        processAddChild(command.item, command.parameter);
-        break;
-    case COMMAND::REMOVE_CHILD:
-        processRemoveChild(command.item);
-        break;
-    case COMMAND::MUTE:
-        muted_ = command.bool_val;
-        break;
-    case COMMAND::PAUSE:
-        paused_ = command.bool_val;
-        break;
-    case COMMAND::POSITION:
-        process_set_playback_position(command.doubles[0]);
-        break;
-    case COMMAND::SPEED:
-        speed_ = command.ints[0];
-        break;
-    case COMMAND::LOOP:
-        loop_ = command.bool_val;
-        break;
-    case COMMAND::LOOP_POINTS:
-        loop_begin_ = command.doubles[0];
-        loop_end_ = command.doubles[1];
-        break;
-    case COMMAND::INTERPOLATE:
-        interpolate_ = command.bool_val;
-        break;
-    case COMMAND::DELETE:
-        processDelete();
-        break;
-    case COMMAND::DELETE_ITEM:
-        process_delete_item(command.item);
-        break;
-    case COMMAND::SUBSCRIBE:
-        process_subscribe_item(command.item);
-        break;
-    case COMMAND::UNSUBSCRIBE:
-        process_unsubscribe_item(command.item);
-        break;
-    default:
-        break;
-    }
+//    switch (type) {
+//    case SowEnums::COMMAND::DATA:
+//        process_set_dataset(command.dataset);
+//        break;
+//    case SowEnums::COMMAND::ADD_CHILD:
+//        processAddChild(command.item, command.parameter);
+//        break;
+//    case SowEnums::COMMAND::REMOVE_CHILD:
+//        processRemoveChild(command.item);
+//        break;
+//    case SowEnums::COMMAND::MUTE:
+//        muted_ = command.bool_val;
+//        break;
+//    case SowEnums::COMMAND::PAUSE:
+//        paused_ = command.bool_val;
+//        break;
+//    case SowEnums::COMMAND::POSITION:
+//        process_set_playback_position(command.doubles[0]);
+//        break;
+//    case SowEnums::COMMAND::SPEED:
+//        speed_ = command.ints[0];
+//        break;
+//    case SowEnums::COMMAND::LOOP:
+//        loop_ = command.bool_val;
+//        break;
+//    case SowEnums::COMMAND::LOOP_POINTS:
+//        loop_begin_ = command.doubles[0];
+//        loop_end_ = command.doubles[1];
+//        break;
+//    case SowEnums::COMMAND::INTERPOLATE:
+//        interpolate_ = command.bool_val;
+//        break;
+//    case SowEnums::COMMAND::DELETE:
+//        processDelete();
+//        break;
+//    case SowEnums::COMMAND::DELETE_ITEM:
+//        process_delete_item(command.item);
+//        break;
+//    case SowEnums::COMMAND::SUBSCRIBE:
+//        process_subscribe_item(command.item);
+//        break;
+//    case SowEnums::COMMAND::UNSUBSCRIBE:
+//        process_unsubscribe_item(command.item);
+//        break;
+//    default:
+//        break;
+//    }
 }
 
-void QtTransport::processAddChild(QtSynthItem *child, PARAMETER parameter)
+void QtTransport::processAddChild(QtSynthItem *child, SowEnums::PARAMETER parameter)
 {
     switch (parameter){
-    case PARAMETER::INPUT:
+    case SowEnums::PARAMETER::INPUT:
         insert_item_unique(child, &inputs_);
         break;
-    case PARAMETER::AMPLITUDE:
+    case SowEnums::PARAMETER::AMPLITUDE:
         insert_item_unique(child, &inputs_);
         break;
     default:

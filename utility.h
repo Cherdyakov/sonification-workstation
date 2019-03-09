@@ -17,7 +17,7 @@ void insert_item_unique(QtSynthItem* synth_item, std::vector<QtSynthItem*> *item
 void remove_item(QtSynthItem* synth_item, std::vector<QtSynthItem *> *items);
 void remove_as_child(QtSynthItem* self, std::vector<QtSynthItem *> parents);
 void remove_as_parent(QtSynthItem* self, std::vector<QtSynthItem*> children);
-bool verify_child(PARAMETER param, std::vector<PARAMETER> vec);
+bool verify_child(SowEnums::PARAMETER param, std::vector<SowEnums::PARAMETER> vec);
 
 } // namespace sow
 #endif // UTILITY_H
