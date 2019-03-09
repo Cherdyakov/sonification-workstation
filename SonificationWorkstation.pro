@@ -104,3 +104,10 @@ INCLUDEPATH += $${BASEPATH}/Gamma-master
 INCLUDEPATH +=  external/qcustomplot
 # PortAudio
 unix|win32: LIBS += -lportaudio
+
+# Update qrc files
+update_qml.target = qml.qrc
+update_qml.commands = echo>>$${update_qml.target} # same as touch
+update_qml.depends = $$files(path/to/resource/files/*, true) # recurse into subdirs
+QMAKE_EXTRA_TARGETS += update_qml
+PRE_TARGETDEPS += $${update_qml.target}
