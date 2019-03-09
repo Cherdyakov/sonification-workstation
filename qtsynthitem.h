@@ -14,6 +14,7 @@
 #define FRAME_RATE 44100
 
 namespace sow {
+using namespace sowenums;
 
 class QtSynthItem : public QObject
 {
@@ -21,10 +22,25 @@ class QtSynthItem : public QObject
 
 public:
 
+    struct SynthItemCommand {
+        COMMAND type;
+        PARAMETER parameter;
+        Dataset *dataset;
+        std::vector<double>* data;
+        std::vector<double>* mins;
+        std::vector<double>* maxes;
+        std::vector<double> doubles;
+        std::vector<int> ints;
+        bool bool_val;
+        QtSynthItem* item;
+        SynthItemCommand() {
+            doubles.reserve(MAX_DIMENSIONS);
+            ints.reserve(MAX_DIMENSIONS);
+        }
+    };
 
-
-    explicit QtSynthItem() {}
-    virtual ~QtSynthItem() {}
+    explicit QtSynthItem(QObject *parent = nullptr);
+    virtual ~QtSynthItem();
 
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
@@ -65,7 +81,7 @@ protected:
     PARAMETER my_child_type_;
     RingBuffer<SynthItemCommand> command_buffer_;
     SynthItemCommand current_command_;
-    std::vector<QtSynthItem::PARAMETER> accepted_children_;
+    std::vector<PARAMETER> accepted_children_;
     std::vector<double>* data_;
     std::vector<double>* mins_;
     std::vector<double>* maxes_;
