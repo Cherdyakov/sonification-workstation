@@ -6,6 +6,14 @@ import "Style.js" as Style
 Item {
     id: root
 
+    property alias name: layout.title
+    property alias value: parameter.value
+    property alias fixed: fixed.fixed
+    property alias mapping: mapper.text
+    property alias scaled: scaler.scaled
+    property alias scaleLow: scaler.low
+    property alias scaleHigh: scaler.high
+
     EditorLayout {
         id: layout
         title: label
@@ -13,7 +21,7 @@ Item {
         RowLayout {
 
             EditorDoubleParam {
-                id: parameterEditor
+                id: parameter
                 label.text: "Parameter: "
                 onValueChanged: {
                     if(implementation !== null) {
@@ -23,7 +31,7 @@ Item {
             }
 
             EditorFixedParam {
-                id: fixedEditor
+                id: fixed
                 label.text: qsTr("Fixed: ")
                 onFixedChanged: {
                     if(implementation !== null) {
