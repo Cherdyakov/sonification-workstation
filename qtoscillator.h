@@ -4,7 +4,7 @@
 #include "qtsynthitem.h"
 #include "sowparameter.h"
 
-using namespace sow;
+namespace sow {
 
 class QtOscillator : public QtSynthItem
 {
@@ -22,5 +22,7 @@ private:
     SowParameter* frequency_;
 
 };
+
+} // End namespace sow.
 
 #endif // QTOSCILLATOR_H

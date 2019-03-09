@@ -1,6 +1,6 @@
 #include "qtoscillator.h"
 
-using namespace sow;
+namespace sow {
 
 QtOscillator::QtOscillator(QObject *parent) : QtSynthItem(parent)
 {
@@ -11,3 +11,5 @@ SowParameter* QtOscillator::frequency() const
 {
     return frequency_;
 }
+
+} // End namespace sow.
