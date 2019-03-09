@@ -7,7 +7,7 @@ namespace sow {
 namespace sowenums {
 
 Q_NAMESPACE
-enum QT_ITEM {
+enum ITEM {
     OUT,
     OSCILLATOR,
     AUDIFIER,
@@ -16,9 +16,10 @@ enum QT_ITEM {
     ENVELOPE,
     VOLUME,
     NOISE,
-    EQUALIZER
+    EQUALIZER,
+    TRANSPORT
 };
-Q_ENUM_NS(QT_ITEM)
+Q_ENUM_NS(ITEM)
 
 Q_NAMESPACE
 enum class PARAMETER {
@@ -32,7 +33,7 @@ enum class PARAMETER {
     ATTACK,
     DECAY,
     VOLUME,
-    NOISE,
+    NOISE_TYPE,
     RESONANCE,
     FILTER_TYPE
 };
@@ -51,20 +52,6 @@ enum class SUB_PARAMETER {
 Q_ENUM_NS(SUB_PARAMETER)
 
 Q_NAMESPACE
-enum class ITEM {
-    TRANSPORT,
-    OSCILLATOR,
-    AUDIFIER,
-    MODULATOR,
-    PANNER,
-    ENVELOPE,
-    VOLUME,
-    NOISE,
-    EQUALIZER
-};
-Q_ENUM_NS(ITEM)
-
-Q_NAMESPACE
 enum class NOISE_TYPE {
     WHITE,
     PINK
@@ -80,7 +67,6 @@ enum class FILTER_TYPE {
 };
 Q_ENUM_NS(FILTER_TYPE)
 
-Q_NAMESPACE
 enum class COMMAND {
     DATA,
     ADD_CHILD,
@@ -109,7 +95,6 @@ enum class COMMAND {
     SUBSCRIBE,
     UNSUBSCRIBE
 };
-Q_ENUM_NS(COMMAND)
 
 } // Namespace sowenums.
 

@@ -22,6 +22,8 @@
 #include "plotter.h"
 #include "trackview.h"
 
+using namespace sow;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

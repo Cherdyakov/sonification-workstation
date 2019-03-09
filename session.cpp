@@ -1,5 +1,7 @@
 #include "session.h"
 
+namespace sow {
+
 Session::Session(QObject *root, QObject *parent) : QObject(parent)
 {
     qmlRoot_ = root;
@@ -108,4 +110,4 @@ void Session::on_speedChanged(int speed)
     this->speed_ = speed;
 }
 
-
+} // End namespace sow.

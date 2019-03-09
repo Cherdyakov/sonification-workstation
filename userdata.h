@@ -5,7 +5,13 @@
 
 #include "qttransport.h"
 
+namespace sow {
+
 typedef struct {
     QtSynthItem* root;
 } UserData;
+
+} // End namespace sow.
+
+
 

@@ -1,7 +1,8 @@
 #include "qttransport.h"
 #include "utility.h"
 
-using namespace sow;
+namespace sow {
+using namespace sowenums;
 
 QtTransport::QtTransport(QObject *parent)
 {
@@ -547,3 +548,5 @@ void QtTransport::updatePos()
     double pos = get_playback_position();
     emit posChanged(pos);
 }
+
+} // Namespace sow.

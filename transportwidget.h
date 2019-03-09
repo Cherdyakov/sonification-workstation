@@ -13,6 +13,8 @@
 
 #include "qttransport.h"
 
+using namespace sow;
+
 class TransportWidget : public QWidget
 {
     Q_OBJECT

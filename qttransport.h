@@ -14,7 +14,7 @@
 //#include "qtnoise.h"
 //#include "qtequalizer.h"
 
-using namespace sow;
+namespace sow {
 
 class QtTransport : public QtSynthItem
 {
@@ -150,5 +150,7 @@ private slots:
     void updatePos();
 
 };
+
+} // Namespace sow.
 
 #endif // QTTRANSPORT_H

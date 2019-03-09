@@ -12,6 +12,8 @@
 
 #include "transportwidget.h"
 
+namespace sow {
+
 class Session : public QObject
 {
     Q_OBJECT
@@ -41,5 +43,7 @@ public slots:
     void on_interpolateChanged(bool interpolate_);
     void on_speedChanged(int speed_);
 };
+
+} // End namespace sow.
 
 #endif // SESSION_H

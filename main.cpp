@@ -18,6 +18,8 @@ void PrintAudioError(PaError e) {
     qDebug("PortAudio error: %s\n", Pa_GetErrorText(e));
 }
 
+using namespace sow;
+
 int main(int argc, char *argv[])
 {
 
