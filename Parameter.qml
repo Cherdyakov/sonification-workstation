@@ -6,6 +6,9 @@ import "Style.js" as Style
 Item {
     id: root
 
+    width: childrenRect.width
+    height: childrenRect.height
+
     property alias name: layout.title
     property alias value: parameter.value
     property alias fixed: fixed.fixed
@@ -23,11 +26,11 @@ Item {
             EditorDoubleParam {
                 id: parameter
                 label.text: "Parameter: "
-                onValueChanged: {
-                    if(implementation !== null) {
-                        implementation.setFreq(value)
-                    }
-                }
+//                onValueChanged: {
+//                    if(implementation !== null) {
+//                        implementation.setFreq(value)
+//                    }
+//                }
             }
 
             EditorFixedParam {
