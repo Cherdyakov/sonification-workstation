@@ -4,65 +4,114 @@
 
 namespace sow {
 
-    Q_NAMESPACE
-    enum class PARAMETER {
-        INPUT,
-        OUTPUT,
-        AMPLITUDE,
-        FREQUENCY,
-        DEPTH,
-        AUDIFICATION,
-        PAN,
-        ATTACK,
-        DECAY,
-        VOLUME,
-        NOISE,
-        RESONANCE,
-        FILTER_TYPE
-    };
-    Q_ENUM_NS(PARAMETER)
+namespace sowenums {
 
-    Q_NAMESPACE
-    enum class SUB_PARAMETER {
-        VALUE,
-        FIXED,
-        SCALED,
-        SCALE_HI,
-        SCALE_LO,
-        SCALE_EXP,
-        MAP
-    };
-    Q_ENUM_NS(SUB_PARAMETER)
+Q_NAMESPACE
+enum QT_ITEM {
+    OUT,
+    OSCILLATOR,
+    AUDIFIER,
+    MODULATOR,
+    PANNER,
+    ENVELOPE,
+    VOLUME,
+    NOISE,
+    EQUALIZER
+};
+Q_ENUM_NS(QT_ITEM)
 
-    Q_NAMESPACE
-    enum class ITEM {
-        TRANSPORT,
-        OSCILLATOR,
-        AUDIFIER,
-        MODULATOR,
-        PANNER,
-        ENVELOPE,
-        VOLUME,
-        NOISE,
-        EQUALIZER
-    };
-    Q_ENUM_NS(ITEM)
+Q_NAMESPACE
+enum class PARAMETER {
+    INPUT,
+    OUTPUT,
+    AMPLITUDE,
+    FREQUENCY,
+    DEPTH,
+    AUDIFICATION,
+    PAN,
+    ATTACK,
+    DECAY,
+    VOLUME,
+    NOISE,
+    RESONANCE,
+    FILTER_TYPE
+};
+Q_ENUM_NS(PARAMETER)
 
-    Q_NAMESPACE
-    enum class NOISE {
-        WHITE,
-        PINK
-    };
-    Q_ENUM_NS(NOISE)
+Q_NAMESPACE
+enum class SUB_PARAMETER {
+    VALUE,
+    FIXED,
+    SCALED,
+    SCALE_HI,
+    SCALE_LO,
+    SCALE_EXP,
+    MAP
+};
+Q_ENUM_NS(SUB_PARAMETER)
 
-    Q_NAMESPACE
-    enum class FILTER_TYPE {
-        LOW_PASS,
-        HIGH_PASS,
-        PEAK,
-        NOTCH
-    };
-    Q_ENUM_NS(FILTER_TYPE)
+Q_NAMESPACE
+enum class ITEM {
+    TRANSPORT,
+    OSCILLATOR,
+    AUDIFIER,
+    MODULATOR,
+    PANNER,
+    ENVELOPE,
+    VOLUME,
+    NOISE,
+    EQUALIZER
+};
+Q_ENUM_NS(ITEM)
+
+Q_NAMESPACE
+enum class NOISE_TYPE {
+    WHITE,
+    PINK
+};
+Q_ENUM_NS(NOISE_TYPE)
+
+Q_NAMESPACE
+enum class FILTER_TYPE {
+    LOW_PASS,
+    HIGH_PASS,
+    PEAK,
+    NOTCH
+};
+Q_ENUM_NS(FILTER_TYPE)
+
+Q_NAMESPACE
+enum class COMMAND {
+    DATA,
+    ADD_CHILD,
+    REMOVE_CHILD,
+    ADD_PARENT,
+    REMOVE_PARENT,
+    MUTE,
+    PARAM,
+    FIXED,
+    INDEXES,
+    SCALED,
+    SCALE_LOW,
+    SCALE_HIGH,
+    SCALE_EXPONENT,
+    DELETE,
+    DELETE_ITEM,
+    MODULATION,
+    NOISE,
+    FILTER_TYPE,
+    PAUSE,
+    POSITION,
+    SPEED,
+    LOOP,
+    LOOP_POINTS,
+    INTERPOLATE,
+    SUBSCRIBE,
+    UNSUBSCRIBE
+};
+Q_ENUM_NS(COMMAND)
+
+} // Namespace sowenums.
 
 } // Namespace sow.
 
