@@ -10,13 +10,13 @@ class SowParameter : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name_ READ name WRITE setName)
-    Q_PROPERTY(PARAMETER type_ READ name WRITE setName)
-    Q_PROPERTY(float value_ READ name WRITE setName)
-    Q_PROPERTY(bool fixed_ READ name WRITE setName)
-    Q_PROPERTY(bool scaled_ READ name WRITE setName)
-    Q_PROPERTY(float scaleHi_ READ name WRITE setName)
-    Q_PROPERTY(float scaleL0_ READ name WRITE setName)
-    Q_PROPERTY(float scaleExp_ READ name WRITE setName)
+    Q_PROPERTY(PARAMETER type_ READ type WRITE setType)
+    Q_PROPERTY(float value_ READ value WRITE setValue)
+    Q_PROPERTY(bool fixed_ READ fixed WRITE setFixed)
+    Q_PROPERTY(bool scaled_ READ scaled WRITE setScaled)
+    Q_PROPERTY(float scaleHi_ READ scaleHi WRITE setScaleHi)
+    Q_PROPERTY(float scaleLo_ READ scaleLo WRITE setScaleLo)
+    Q_PROPERTY(float scaleExp_ READ scaleExp WRITE setScaleExp)
     Q_PROPERTY(QString map_ READ map WRITE setMap)
 
 public:
