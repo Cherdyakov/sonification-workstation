@@ -26,21 +26,11 @@ Item {
             EditorDoubleParam {
                 id: parameter
                 label.text: "Parameter: "
-//                onValueChanged: {
-//                    if(implementation !== null) {
-//                        implementation.setFreq(value)
-//                    }
-//                }
             }
 
             EditorFixedParam {
                 id: fixed
                 label.text: qsTr("Fixed: ")
-                onFixedChanged: {
-                    if(implementation !== null) {
-                        implementation.setFreqFixed(fixed)
-                    }
-                }
             }
         }
 
@@ -48,15 +38,6 @@ Item {
             id: mapper
             label.text: qsTr("Parameter Source: ")
             maxIndexes: 128
-            onMappingsChanged:
-            {
-                var implementationMappings = mappings.map(function(value) {
-                    return value - 1
-                } )
-                if(implementation !== null) {
-                    implementation.setFreqIndexes(implementationMappings)
-                }
-            }
         }
 
         EditorScaler {
@@ -64,11 +45,5 @@ Item {
             label.text: qsTr("Scaled: ")
             lowLabel.text: qsTr("Scale Low: ")
             highLabel.text: qsTr("Scale High: ")
-
-            onLowChanged: { implementation.setFreqScaleLow(low) }
-            onHighChanged:{ implementation.setFreqScaleHigh(high) }
-            onExponentChanged: { implementation.setFreqScaleExponent(exponent) }
-            onScaledChanged: { implementation.setFreqScaled(scaled) }
-        }
     }
 }
