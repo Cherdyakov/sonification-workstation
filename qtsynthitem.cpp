@@ -3,6 +3,10 @@
 
 namespace sow {
 
+QtSynthItem::QtSynthItem(QObject *parent) : QObject (parent) {}
+
+QtSynthItem::~QtSynthItem() {}
+
 void QtSynthItem::addParent(QtSynthItem *parent)
 {
     SynthItemCommand command;
