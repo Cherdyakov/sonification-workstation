@@ -28,7 +28,7 @@ QtTransport::QtTransport(QObject *parent)
     interpolate_ = false;
 
     accepted_children_ = {
-        QtSynthItem::PARAMETER::INPUT
+        PARAMETER::INPUT
     };
 }
 
@@ -51,7 +51,7 @@ void QtTransport::deleteItem(QtSynthItem *item)
     command_buffer_.push(command);
 }
 
-QtSynthItem::ITEM QtTransport::getType()
+ITEM QtTransport::getType()
 {
     return my_type_;
 }
@@ -429,7 +429,7 @@ void QtTransport::processCommand(SynthItemCommand command)
     }
 }
 
-void QtTransport::processAddChild(QtSynthItem *child, QtSynthItem::PARAMETER parameter)
+void QtTransport::processAddChild(QtSynthItem *child, PARAMETER parameter)
 {
     switch (parameter){
     case PARAMETER::INPUT:

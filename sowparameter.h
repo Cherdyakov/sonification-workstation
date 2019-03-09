@@ -5,6 +5,7 @@
 #include "sowenums.h"
 
 namespace sow {
+using namespace  sowenums;
 
 class SowParameter : public QObject
 {

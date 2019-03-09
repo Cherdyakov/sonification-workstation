@@ -23,7 +23,7 @@ class QtTransport : public QtSynthItem
 public:
 
     enum QT_ITEM {
-        OUT = (int)QtSynthItem::ITEM::TRANSPORT,
+        OUT,
         OSCILLATOR,
         AUDIFIER,
         MODULATOR,
@@ -120,7 +120,7 @@ private:
     SynthItemCommand current_command_;
     Frame frame_buffer_[4096];
     std::vector<QtSynthItem*> subscribers_;
-    std::vector<QtSynthItem::PARAMETER> accepted_children_;
+    std::vector<PARAMETER> accepted_children_;
     Dataset* dataset_;
     std::vector<double> current_data_column_;
     std::vector<double> mins_;
