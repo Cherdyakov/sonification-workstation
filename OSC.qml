@@ -9,10 +9,12 @@ import "SessionCode.js" as SessionCode
 SynthItem {
     id: root
     label: qsTr("OSC")
-    type: QtTransport.OSCILLATOR
+    type: SowEnums.OSCILLATOR
     childType: SowEnums.INPUT
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
+
+//    property QtOscillator oscillator: implementation
 
     Component.onCompleted: {
         create()
@@ -77,7 +79,7 @@ SynthItem {
     }
 
     SowParameter {
-
+        onValueChanged: oscillator.frequency.value = value
     }
 
 
