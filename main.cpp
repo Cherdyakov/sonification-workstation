@@ -27,6 +27,14 @@ int main(int argc, char *argv[])
     qmlRegisterType<QtTransport>("SonLib", 1, 0, "QtTransport");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
 
+    qmlRegisterUncreatableMetaObject(
+      sow::sowenums::staticMetaObject, // static meta object
+      "sow.sowenums",                // import statement (can be any string)
+      0, 1,                          // major and minor version of the import
+      "SowEnums",                 // name in QML (does not have to match C++ name)
+      "Error: only enums"            // error in case someone tries to create a MyNamespace object
+    );
+
     MainWindow main_window;
     UserData uData;
     uData.root =  main_window.getTransport();
