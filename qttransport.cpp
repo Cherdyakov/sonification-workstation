@@ -177,14 +177,17 @@ void QtTransport::unsubscribe_item(QtSynthItem *item)
     command_buffer_.push(command);
 }
 
-QtSynthItem* QtTransport::createItem(QT_ITEM type)
+QtSynthItem* QtTransport::createItem(ITEM type)
 {
     QtSynthItem* item;
 
     switch (type){
-//    case QtSynthItem::ITEM::OSCILLATOR:
-//        item = new Oscillator();
-//        break;
+    case ITEM::OUT:
+        item = this;
+        break;
+    case ITEM::OSCILLATOR:
+        item = new QtOscillator();
+        break;
 //    case QtSynthItem::ITEM::AUDIFIER:
 //        item = new Audifier();
 //        break;
