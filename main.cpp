@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterUncreatableMetaObject(
       sow::sowenums::staticMetaObject, // static meta object
-      "sow.sowenums",                // import statement (can be any string)
+      "SowEnums",                // import statement (can be any string)
       0, 1,                          // major and minor version of the import
       "SowEnums",                 // name in QML (does not have to match C++ name)
       "Error: only enums"            // error in case someone tries to create a MyNamespace object

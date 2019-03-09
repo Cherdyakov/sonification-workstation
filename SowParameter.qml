@@ -3,26 +3,61 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.11
 import "Style.js" as Style
 
-SowParameter {
+Item {
     id: root
 
-    // Fixed (user supplied) value toggle
-    ColumnLayout {
-        id: fixed
-        Layout.maximumHeight: Style.editorRowHeight * 2
+    EditorLayout {
+        id: layout
+        title: label
 
-        property alias label: label
-        property alias checkBox: checkBox
-        property alias fixed: checkBox.checked
+        RowLayout {
 
-        EditorLabel {
-            id: label
-            text: qsTr("Fixed: ")
-            height: Style.editorRowHeight
+            EditorDoubleParam {
+                id: parameterEditor
+                label.text: "Parameter: "
+                onValueChanged: {
+                    if(implementation !== null) {
+                        implementation.setFreq(value)
+                    }
+                }
+            }
+
+            EditorFixedParam {
+                id: fixedEditor
+                label.text: qsTr("Fixed: ")
+                onFixedChanged: {
+                    if(implementation !== null) {
+                        implementation.setFreqFixed(fixed)
+                    }
+                }
+            }
         }
-        CheckBox {
-            id: checkBox
+
+        EditorMapper {
+            id: mapper
+            label.text: qsTr("Parameter Source: ")
+            maxIndexes: 128
+            onMappingsChanged:
+            {
+                var implementationMappings = mappings.map(function(value) {
+                    return value - 1
+                } )
+                if(implementation !== null) {
+                    implementation.setFreqIndexes(implementationMappings)
+                }
+            }
+        }
+
+        EditorScaler {
+            id: scaler
+            label.text: qsTr("Scaled: ")
+            lowLabel.text: qsTr("Scale Low: ")
+            highLabel.text: qsTr("Scale High: ")
+
+            onLowChanged: { implementation.setFreqScaleLow(low) }
+            onHighChanged:{ implementation.setFreqScaleHigh(high) }
+            onExponentChanged: { implementation.setFreqScaleExponent(exponent) }
+            onScaledChanged: { implementation.setFreqScaled(scaled) }
         }
     }
-
 }

@@ -2,6 +2,7 @@ import QtQuick 2.7
 import SonLib 1.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
+import SowEnums 0.1
 import "Style.js" as Style
 import "SessionCode.js" as SessionCode
 
@@ -9,20 +10,20 @@ SynthItem {
     id: root
     label: qsTr("OSC")
     type: QtTransport.OSCILLATOR
-    childType: QtSynthItem.INPUT
+    childType: SowEnums.INPUT
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()
-        frequencyEditor.value = implementation.getFreq()
-        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
+//        frequencyEditor.value = implementation.getFreq()
+//        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
 
-        frequencyMapper.validateMappings()
-        frequencyScaler.low = implementation.getFreqScaleLow()
-        frequencyScaler.high = implementation.getFreqScaleHigh()
-        frequencyScaler.exponent = implementation.getFreqScaleExponent()
-        frequencyScaler.scaled = implementation.getFreqScaled()
+//        frequencyMapper.validateMappings()
+//        frequencyScaler.low = implementation.getFreqScaleLow()
+//        frequencyScaler.high = implementation.getFreqScaleHigh()
+//        frequencyScaler.exponent = implementation.getFreqScaleExponent()
+//        frequencyScaler.scaled = implementation.getFreqScaled()
     }
 
     // return json representation of self
@@ -75,76 +76,10 @@ SynthItem {
         frequencyScaler.exponent = essence["freqScaleExponent"]
     }
 
-    Editor {
+    SowParameter {
 
-        id: editor
-
-        EditorLayout {
-            id: layout
-            title: label
-
-            RowLayout {
-
-                EditorDoubleParam {
-                    id: frequencyEditor
-                    label.text: "Frequency: "
-                    onValueChanged: {
-                        if(implementation !== null) {
-                            implementation.setFreq(value)
-                        }
-                    }
-                }
-
-                EditorFixedParam {
-                    id: fixedFrequencyEditor
-                    label.text: qsTr("Fixed: ")
-                    onFixedChanged: {
-                        if(implementation !== null) {
-                            implementation.setFreqFixed(fixed)
-                        }
-                    }
-                }
-            }
-
-            EditorMapper {
-                id: frequencyMapper
-                label.text: qsTr("Frequency Source: ")
-                maxIndexes: 128
-                onMappingsChanged:
-                {
-                    var implementationMappings = mappings.map(function(value) {
-                        return value - 1
-                    } )
-                    if(implementation !== null) {
-                        implementation.setFreqIndexes(implementationMappings)
-                    }
-                }
-            }
-
-            EditorScaler {
-                id: frequencyScaler
-                label.text: qsTr("Frequency Scaling: ")
-                lowLabel.text: qsTr("Frequency Low: ")
-                highLabel.text: qsTr("Frequency High: ")
-
-                onLowChanged:
-                {
-                    implementation.setFreqScaleLow(low)
-                }
-                onHighChanged:
-                {
-                    implementation.setFreqScaleHigh(high)
-                }
-                onExponentChanged:
-                {
-                    implementation.setFreqScaleExponent(exponent)
-                }
-                onScaledChanged:
-                {
-                    implementation.setFreqScaled(scaled)
-                }
-            }
-        }
     }
+
+
 }
 
