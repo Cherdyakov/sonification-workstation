@@ -34,10 +34,10 @@ PARAMETER sow::SowParameter::type() const {
 }
 
 void sow::SowParameter::setValue(const float value) {
-    if (qFuzzyCompare(value_, value)) {
+    if (!qFuzzyCompare(value_, value)) {
         value_ =  value;
         emit valueChanged();
-        qDebug(qUtf8Printable(name_));
+        qDebug() << "setValue: " + QString::number(value);
 
     }
 }
@@ -73,7 +73,7 @@ bool sow::SowParameter::scaled() const {
 }
 
 void sow::SowParameter::setScaleLo(const float scaleLo) {
-    if (qFuzzyCompare(scaleLo_, scaleLo)) {
+    if (!qFuzzyCompare(scaleLo_, scaleLo)) {
         scaleLo_ =  scaleLo;
         emit scaleLoChanged();
         qDebug(qUtf8Printable(name_));
@@ -86,7 +86,7 @@ float sow::SowParameter::scaleLo() const {
 }
 
 void sow::SowParameter::setScaleHi(const float scaleHi) {
-    if (qFuzzyCompare(scaleHi_, scaleHi)) {
+    if (!qFuzzyCompare(scaleHi_, scaleHi)) {
         scaleHi_ =  scaleHi;
         emit scaleHiChanged();
         qDebug(qUtf8Printable(name_));
@@ -99,7 +99,7 @@ float sow::SowParameter::scaleHi() const {
 }
 
 void sow::SowParameter::setScaleExp(const float scaleExp) {
-    if (qFuzzyCompare(scaleExp_, scaleExp)) {
+    if (!qFuzzyCompare(scaleExp_, scaleExp)) {
         scaleExp_ =  scaleExp;
         emit scaleExpChanged();
         qDebug(qUtf8Printable(name_));
