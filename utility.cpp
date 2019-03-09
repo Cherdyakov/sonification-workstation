@@ -51,7 +51,7 @@ void remove_as_parent(QtSynthItem* self, std::vector<QtSynthItem*> children)
     }
 }
 
-bool verify_child(QtSynthItem::PARAMETER param, std::vector<QtSynthItem::PARAMETER> vec)
+bool verify_child(PARAMETER param, std::vector<PARAMETER> vec)
 {
     return std::find(vec.begin(), vec.end(), param) != vec.end();
 }
