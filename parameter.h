@@ -16,6 +16,7 @@ public:
     explicit Parameter(QObject *parent = nullptr);
 
     void connectInterface(ParameterInterface* interface);
+    void controlProcess();
 
 private:
 
@@ -30,7 +31,9 @@ private:
     float scaleExp_;
     QString map_;
 
+    // For processing ParameterCommands
     RingBuffer<ParameterCommand> commandBuffer_;
+    ParameterCommand currentCommand_;
 
     void processCommand(ParameterCommand cmd);
 

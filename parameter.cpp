@@ -9,6 +9,7 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 }
 
+// Connect an interface to this Parameter
 void Parameter::connectInterface(ParameterInterface *interface)
 {
     connect(interface, &ParameterInterface::iParameterChanged,
@@ -17,6 +18,15 @@ void Parameter::connectInterface(ParameterInterface *interface)
             this, &Parameter::onMapChanged);
 }
 
+// Process outstanding ParameterCommands
+void Parameter::controlProcess()
+{
+    while(commandBuffer_.pop(&currentCommand_)) {
+        processCommand(currentCommand_);
+    }
+}
+
+// Execute commands pulled from the command buffer
 void Parameter::processCommand(sow::ParameterCommand cmd)
 {
     SowEnums::SUB_PARAMETER subParam = cmd.subParam;
@@ -48,6 +58,7 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
     qDebug() << "Parameter.cpp: " + QString::number((int)subParam) + " " + QString::number(cmd.value) + " " + cmd.map;
 }
 
+// Slot for updated float values from the interface
 void Parameter::onParameterChanged(const SowEnums::SUB_PARAMETER subParam, const float value)
 {
     ParameterCommand cmd;
@@ -56,6 +67,7 @@ void Parameter::onParameterChanged(const SowEnums::SUB_PARAMETER subParam, const
     commandBuffer_.push(cmd);
 }
 
+// Slot for updated parameter mapping from the interface
 void Parameter::onMapChanged(const QString map)
 {
     ParameterCommand cmd;
