@@ -116,7 +116,7 @@ void QtSynthItem::retrieveCommands()
     }
 }
 
-void QtSynthItem::processCommand(QtSynthItem::SynthItemCommand command)
+void QtSynthItem::processCommand(SynthItemCommand command)
 {
     SowEnums::COMMAND type = command.type;
 
