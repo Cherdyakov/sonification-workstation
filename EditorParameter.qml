@@ -16,6 +16,7 @@ Item {
     property alias scaled: scaler.scaled
     property alias scaleLow: scaler.low
     property alias scaleHigh: scaler.high
+    property alias scaleExp: scaler.exponent
 
     EditorLayout {
         id: layout

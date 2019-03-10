@@ -83,6 +83,7 @@ SynthItem {
             onScaledChanged: oscillator.frequency.scaled = scaled
             onScaleLowChanged: oscillator.frequency.scaleLo = scaleLow
             onScaleHighChanged: oscillator.frequency.scaleHi = scaleHigh
+            onScaleExpChanged: oscillator.frequency.scaleExp = scaleExp
             onMappingChanged: oscillator.frequency.map = mapping
 
             value: oscillator.frequency.value
@@ -90,6 +91,7 @@ SynthItem {
             scaled: oscillator.frequency.scaled
             scaleLow: oscillator.frequency.scaleLo
             scaleHigh: oscillator.frequency.scaleHi
+            scaleExp: oscillator.frequency.scaleExp
             mapping: oscillator.frequency.map
         }
     }
