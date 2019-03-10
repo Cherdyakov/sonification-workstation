@@ -91,7 +91,8 @@ HEADERS += \
     sowparameter.h \
     sowenums.h \
     sowenums.h \
-    sowenums.h
+    sowenums.h \
+    commands.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

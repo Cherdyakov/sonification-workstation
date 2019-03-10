@@ -8,36 +8,15 @@
 #include "Gamma/Oscillator.h"
 #include "dataset.h"
 #include "sowenums.h"
+#include "commands.h"
 
-// Library definitions
-#define MAX_DIMENSIONS 128
-#define FRAME_RATE 44100
-
-//namespace sow {
-using namespace sow;
+namespace sow {
 
 class QtSynthItem : public QObject
 {
     Q_OBJECT
 
 public:
-
-    struct SynthItemCommand {
-        SowEnums::COMMAND type;
-        SowEnums::PARAMETER parameter;
-        Dataset *dataset;
-        std::vector<double>* data;
-        std::vector<double>* mins;
-        std::vector<double>* maxes;
-        std::vector<double> doubles;
-        std::vector<int> ints;
-        bool bool_val;
-        QtSynthItem* item;
-        SynthItemCommand() {
-            doubles.reserve(MAX_DIMENSIONS);
-            ints.reserve(MAX_DIMENSIONS);
-        }
-    };
 
     explicit QtSynthItem(QObject *parent = nullptr);
     virtual ~QtSynthItem();
@@ -92,6 +71,6 @@ protected:
 
 };
 
-//} // Namespace sow.
+} // Namespace sow.
 
 #endif // QTSYNTHITEM_H
