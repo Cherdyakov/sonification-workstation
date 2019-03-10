@@ -10,7 +10,6 @@ namespace sow {
 class ParameterInterface : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(float value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(bool fixed READ fixed WRITE setFixed NOTIFY fixedChanged)
     Q_PROPERTY(bool scaled READ scaled WRITE setScaled NOTIFY scaledChanged)
@@ -22,8 +21,6 @@ class ParameterInterface : public QObject
 public:
     explicit ParameterInterface(QObject *parent = nullptr);
 
-    void setName(const QString name);
-    QString name() const;
     void setType(const SowEnums::PARAMETER type);
     SowEnums::PARAMETER type() const;
     void setValue(const float value);
@@ -45,7 +42,6 @@ private:
 
     // Interface variables, bound to QML
     SowEnums::PARAMETER iType_;
-    QString iName_;
     float iValue_;
     bool iFixed_;
     bool iScaled_;
