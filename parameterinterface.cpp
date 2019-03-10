@@ -5,8 +5,14 @@ namespace sow {
 
 ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
 {
-    setFixed(true);
-    setScaleLo(900);
+    // Interface variables, bound to QML
+    iValue_ = 440.0f;
+    iFixed_ = true;
+    iScaled_ = true;
+    iScaleLo_ = 100.0f;
+    iScaleHi_ = 8000.0f;
+    iScaleExp_ = 1.0f;
+    iMap_ = QString();
 }
 
 void sow::ParameterInterface::setType(const SowEnums::PARAMETER type) {
