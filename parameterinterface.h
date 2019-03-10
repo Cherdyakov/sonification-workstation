@@ -4,7 +4,6 @@
 #include <QObject>
 #include "sowenums.h"
 #include "commands.h"
-#include "ringbuffer.h"
 
 namespace sow {
 
@@ -54,21 +53,9 @@ private:
     float iScaleHi_;
     float iScaleExp_;
     QString iMap_;
-    // Backing variables, used by sow
-    SowEnums::PARAMETER type_;
-    QString name_;
-    float value_;
-    bool fixed_;
-    bool scaled_;
-    float scaleLo_;
-    float scaleHi_;
-    float scaleExp_;
-    QString map_;
-
-    RingBuffer<ParameterCommand> commandBuffer_;
 
 signals:
-
+    // Notify signals
     void nameChanged();
     void typeChanged();
     void valueChanged();
@@ -78,6 +65,9 @@ signals:
     void scaleLoChanged();
     void scaleExpChanged();
     void mapChanged();
+    // Connect to correspoding backing Parameter
+    void parameterChanged(ParameterCommand cmd);
+
 
 public slots:
 };
