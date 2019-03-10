@@ -78,6 +78,7 @@ SynthItem {
     Editor {
         id: editor
         EditorParameter {
+            // Bind QML to C++ values
             onValueChanged: oscillator.frequency.value = value
             onFixedChanged: oscillator.frequency.fixed = fixed
             onScaledChanged: oscillator.frequency.scaled = scaled
@@ -85,7 +86,7 @@ SynthItem {
             onScaleHighChanged: oscillator.frequency.scaleHi = scaleHigh
             onScaleExpChanged: oscillator.frequency.scaleExp = scaleExp
             onMappingChanged: oscillator.frequency.map = mapping
-
+            // Bind C++ to QML values
             value: oscillator.frequency.value
             fixed: oscillator.frequency.fixed
             scaled: oscillator.frequency.scaled
