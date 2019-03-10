@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<QtSynthItem>("SonLib", 1, 0, "QtSynthItem");
     qmlRegisterType<QtOscillator>("SonLib", 1, 0, "QtOscillator");
     qmlRegisterType<QtTransport>("SonLib", 1, 0, "QtTransport");
-    qmlRegisterType<SowParameter>("SonLib", 1, 0, "SowParameter");
+    qmlRegisterType<ParameterInterface>("SonLib", 1, 0, "SowParameter");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
     qmlRegisterType<SowEnums>("SowEnums", 0, 1, "SowEnums");
     qRegisterMetaType<SowEnums::ITEM>();
