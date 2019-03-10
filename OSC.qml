@@ -16,14 +16,6 @@ SynthItem {
 
     Component.onCompleted: {
         create()
-        //        frequencyEditor.value = implementation.getFreq()
-        //        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
-
-        //        frequencyMapper.validateMappings()
-        //        frequencyScaler.low = implementation.getFreqScaleLow()
-        //        frequencyScaler.high = implementation.getFreqScaleHigh()
-        //        frequencyScaler.exponent = implementation.getFreqScaleExponent()
-        //        frequencyScaler.scaled = implementation.getFreqScaled()
     }
 
     // return json representation of self
