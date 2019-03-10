@@ -29,10 +29,7 @@ struct SynthItemCommand {
 struct ParameterCommand {
     SowEnums::SUB_PARAMETER subParam;
     float value;
-    QString map;
-    ParameterCommand() {
-        map.reserve(128);
-    }
+    QChar map[MAX_DATASET_DIMS];
 };
 
 } // End namespace sow.

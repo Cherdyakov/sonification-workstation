@@ -51,11 +51,11 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
         scaleExp_ = cmd.value;
         break;
     case SowEnums::SUB_PARAMETER::MAP:
-        map_ = cmd.map;
+        map_ = QString(cmd.map);
         break;
     }
 
-    qDebug() << "Parameter.cpp: " + QString::number((int)subParam) + " " + QString::number(cmd.value) + " " + cmd.map;
+    qDebug() << "processCommand: " + QString::number((int)subParam) + " " + QString::number(cmd.value) + " " + map_;
 }
 
 // Slot for updated float values from the interface
@@ -65,6 +65,8 @@ void Parameter::onParameterChanged(const SowEnums::SUB_PARAMETER subParam, const
     cmd.subParam = subParam;
     cmd.value = value;
     commandBuffer_.push(cmd);
+    qDebug() << "onParameterChanged: " + QString::number((int)subParam) + " " + QString::number(cmd.value);
+
 }
 
 // Slot for updated parameter mapping from the interface
@@ -72,8 +74,15 @@ void Parameter::onMapChanged(const QString map)
 {
     ParameterCommand cmd;
     cmd.subParam = SowEnums::SUB_PARAMETER::MAP;
-    cmd.map = map;
+    // QString to QChar array to pass through command buffer
+    const QChar* unicode = map.unicode();
+    for(int i = 0; i < map.length(); i++) {
+        cmd.map[i] = unicode[i];
+    }
+
     commandBuffer_.push(cmd);
+    qDebug() << "onMapChanged: " + map;
+
 }
 
 } // namespace sow
