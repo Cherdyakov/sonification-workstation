@@ -4,19 +4,21 @@
 #include <QVector>
 #include "sowenums.h"
 #include "dataset.h"
-// Forward declare QtSynthItem
-class QtSynthItem;
 
 namespace sow {
+
+// Forward declare QtSynthItem
+class QtSynthItem;
 
 struct SynthItemCommand {
     SowEnums::COMMAND type;
     SowEnums::PARAMETER parameter;
     Dataset *dataset;
-    QVector<double>* data;
-    QVector<double>* mins;
-    QVector<double>* maxes;
-    QVector<double> doubles;
+    std::vector<double>* data;
+    std::vector<double>* mins;
+    std::vector<double>* maxes;
+    std::vector<double> doubles;
+    std::vector<int> ints;
     bool bool_val;
     QtSynthItem* item;
     SynthItemCommand() {
