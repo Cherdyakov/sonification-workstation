@@ -2,24 +2,24 @@
 #define QTOSCILLATOR_H
 
 #include "qtsynthitem.h"
-#include "sowparameter.h"
+#include "parameterinterface.h"
 
 namespace sow {
 
 class QtOscillator : public QtSynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(SowParameter* frequency READ frequency CONSTANT)
+    Q_PROPERTY(ParameterInterface* frequency READ frequency CONSTANT)
 public:
 
     explicit QtOscillator(QObject *parent = nullptr);
 
-    SowParameter* frequency() const;
+    ParameterInterface* frequency() const;
 
 
 private:
 
-    SowParameter* frequency_;
+    ParameterInterface* frequency_;
 
 };
 

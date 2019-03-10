@@ -1,16 +1,16 @@
-#include "sowparameter.h"
+#include "parameterinterface.h"
 #include <QDebug>
 
 namespace sow {
 
-SowParameter::SowParameter(QObject *parent) : QObject(parent)
+ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
 {
     setFixed(true);
     setScaleLo(900);
 }
 
 
-void sow::SowParameter::setName(const QString name) {
+void sow::ParameterInterface::setName(const QString name) {
     if (name_ != name) {
         name_ = name;
         emit nameChanged();
@@ -18,22 +18,22 @@ void sow::SowParameter::setName(const QString name) {
     qDebug() << "setName: " + name_;
 }
 
-QString sow::SowParameter::name() const {
+QString sow::ParameterInterface::name() const {
     return name_;
 }
 
-void sow::SowParameter::setType(const SowEnums::PARAMETER type) {
+void sow::ParameterInterface::setType(const SowEnums::PARAMETER type) {
     if (type_ != type) {
         type_ = type;
         emit typeChanged();
     }
 }
 
-SowEnums::PARAMETER sow::SowParameter::type() const {
+SowEnums::PARAMETER sow::ParameterInterface::type() const {
     return type_;
 }
 
-void sow::SowParameter::setValue(const float value) {
+void sow::ParameterInterface::setValue(const float value) {
     if (!qFuzzyCompare(value_, value)) {
         value_ =  value;
         emit valueChanged();
@@ -41,11 +41,11 @@ void sow::SowParameter::setValue(const float value) {
     }
 }
 
-float sow::SowParameter::value() const {
+float sow::ParameterInterface::value() const {
     return value_;
 }
 
-void sow::SowParameter::setFixed(const bool fixed) {
+void sow::ParameterInterface::setFixed(const bool fixed) {
     if (fixed_ != fixed) {
         fixed_ =  fixed;
         emit fixedChanged();
@@ -53,11 +53,11 @@ void sow::SowParameter::setFixed(const bool fixed) {
     }
 }
 
-bool sow::SowParameter::fixed() const {
+bool sow::ParameterInterface::fixed() const {
     return fixed_;
 }
 
-void sow::SowParameter::setScaled(const bool scaled) {
+void sow::ParameterInterface::setScaled(const bool scaled) {
     if (scaled_ != scaled) {
         scaled_ =  scaled;
         emit scaledChanged();
@@ -65,11 +65,11 @@ void sow::SowParameter::setScaled(const bool scaled) {
     }
 }
 
-bool sow::SowParameter::scaled() const {
+bool sow::ParameterInterface::scaled() const {
     return scaled_;
 }
 
-void sow::SowParameter::setScaleLo(const float scaleLo) {
+void sow::ParameterInterface::setScaleLo(const float scaleLo) {
     if (!qFuzzyCompare(scaleLo_, scaleLo)) {
         scaleLo_ =  scaleLo;
         emit scaleLoChanged();
@@ -77,11 +77,11 @@ void sow::SowParameter::setScaleLo(const float scaleLo) {
     }
 }
 
-float sow::SowParameter::scaleLo() const {
+float sow::ParameterInterface::scaleLo() const {
     return scaleLo_;
 }
 
-void sow::SowParameter::setScaleHi(const float scaleHi) {
+void sow::ParameterInterface::setScaleHi(const float scaleHi) {
     if (!qFuzzyCompare(scaleHi_, scaleHi)) {
         scaleHi_ =  scaleHi;
         emit scaleHiChanged();
@@ -89,11 +89,11 @@ void sow::SowParameter::setScaleHi(const float scaleHi) {
     }
 }
 
-float sow::SowParameter::scaleHi() const {
+float sow::ParameterInterface::scaleHi() const {
     return scaleHi_;
 }
 
-void sow::SowParameter::setScaleExp(const float scaleExp) {
+void sow::ParameterInterface::setScaleExp(const float scaleExp) {
     if (!qFuzzyCompare(scaleExp_, scaleExp)) {
         scaleExp_ =  scaleExp;
         emit scaleExpChanged();
@@ -101,11 +101,11 @@ void sow::SowParameter::setScaleExp(const float scaleExp) {
     }
 }
 
-float sow::SowParameter::scaleExp() const {
+float sow::ParameterInterface::scaleExp() const {
     return scaleExp_;
 }
 
-void sow::SowParameter::setMap(const QString map) {
+void sow::ParameterInterface::setMap(const QString map) {
     if (map_ != map) {
         map_ = map;
         emit nameChanged();
@@ -113,7 +113,7 @@ void sow::SowParameter::setMap(const QString map) {
     }
 }
 
-QString sow::SowParameter::map() const {
+QString sow::ParameterInterface::map() const {
     return map_;
 }
 

@@ -6,7 +6,7 @@
 
 namespace sow {
 
-class SowParameter : public QObject
+class ParameterInterface : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -19,7 +19,7 @@ class SowParameter : public QObject
     Q_PROPERTY(QString map READ map WRITE setMap NOTIFY mapChanged)
 
 public:
-    explicit SowParameter(QObject *parent = nullptr);
+    explicit ParameterInterface(QObject *parent = nullptr);
 
     void setName(const QString name);
     QString name() const;
