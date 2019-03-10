@@ -2,6 +2,7 @@
 #define QTOSCILLATOR_H
 
 #include "qtsynthitem.h"
+#include "parameter.h"
 #include "parameterinterface.h"
 
 namespace sow {
@@ -9,17 +10,17 @@ namespace sow {
 class QtOscillator : public QtSynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterInterface* frequency READ frequency CONSTANT)
+    Q_PROPERTY(ParameterInterface* frequency READ frequencyInterface CONSTANT)
 public:
 
     explicit QtOscillator(QObject *parent = nullptr);
 
-    ParameterInterface* frequency() const;
-
+    ParameterInterface* frequencyInterface() const;
 
 private:
 
-    ParameterInterface* frequency_;
+    ParameterInterface* frequencyInterface_;
+    Parameter* frequency_;
 
 };
 

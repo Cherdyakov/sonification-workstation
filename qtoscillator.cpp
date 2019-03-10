@@ -4,12 +4,14 @@ namespace sow {
 
 QtOscillator::QtOscillator(QObject *parent) : QtSynthItem(parent)
 {
-    frequency_ = new ParameterInterface(this);
+    frequencyInterface_ = new ParameterInterface(this);
+    frequency_ = new Parameter(this);
+    frequency_->connectInterface(frequencyInterface_);
 }
 
-ParameterInterface* QtOscillator::frequency() const
+ParameterInterface* QtOscillator::frequencyInterface() const
 {
-    return frequency_;
+    return frequencyInterface_;
 }
 
 } // End namespace sow.

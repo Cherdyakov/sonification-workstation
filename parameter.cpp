@@ -1,4 +1,6 @@
 #include "parameter.h"
+#include <QString>
+#include <QDebug>
 
 namespace sow {
 
@@ -7,7 +9,15 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 }
 
-void Parameter::ProcessCommand(sow::ParameterCommand cmd)
+void Parameter::connectInterface(ParameterInterface *interface)
+{
+    connect(interface, &ParameterInterface::iParameterChanged,
+            this, &Parameter::onParameterChanged);
+    connect(interface, &ParameterInterface::iMapChanged,
+            this, &Parameter::onMapChanged);
+}
+
+void Parameter::processCommand(sow::ParameterCommand cmd)
 {
     SowEnums::SUB_PARAMETER subParam = cmd.subParam;
 
@@ -34,6 +44,8 @@ void Parameter::ProcessCommand(sow::ParameterCommand cmd)
         map_ = cmd.map;
         break;
     }
+
+    qDebug() << "Parameter.cpp: " + QString::number((int)subParam) + " " + QString::number(cmd.value) + " " + cmd.map;
 }
 
 void Parameter::onParameterChanged(const SowEnums::SUB_PARAMETER subParam, const float value)

@@ -5,6 +5,7 @@
 #include "sowenums.h"
 #include "ringbuffer.h"
 #include "commands.h"
+#include "parameterinterface.h"
 
 namespace sow {
 
@@ -14,6 +15,7 @@ class Parameter : public QObject
 public:
     explicit Parameter(QObject *parent = nullptr);
 
+    void connectInterface(ParameterInterface* interface);
 
 private:
 
@@ -30,7 +32,7 @@ private:
 
     RingBuffer<ParameterCommand> commandBuffer_;
 
-    void ProcessCommand(ParameterCommand cmd);
+    void processCommand(ParameterCommand cmd);
 
 signals:
 

@@ -64,8 +64,8 @@ signals:
     void scaleExpChanged();
     void mapChanged();
     // Connect to correspoding backing Parameter
-    void parameterChanged(const SowEnums::SUB_PARAMETER subParam, const float value);
-    void mapChanged(const QString map);
+    void iParameterChanged(const SowEnums::SUB_PARAMETER subParam, const float value);
+    void iMapChanged(const QString map);
 
 public slots:
 };
