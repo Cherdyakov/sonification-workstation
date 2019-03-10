@@ -29,9 +29,9 @@ struct SynthItemCommand {
 struct ParameterCommand {
     SowEnums::SUB_PARAMETER subParam;
     float value;
-    QString mapping;
+    QString map;
     ParameterCommand() {
-        mapping.reserve(128);
+        map.reserve(128);
     }
 };
 
