@@ -29,7 +29,7 @@ struct SynthItemCommand {
 struct ParameterCommand {
     SowEnums::SUB_PARAMETER subParam;
     float value;
-    QVector<char> mapping;
+    QString mapping;
     ParameterCommand() {
         mapping.reserve(128);
     }
