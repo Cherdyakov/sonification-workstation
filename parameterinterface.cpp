@@ -9,22 +9,10 @@ ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
     setScaleLo(900);
 }
 
-
-void sow::ParameterInterface::setName(const QString name) {
-    if (iName_ != name) {
-        iName_ = name;
-        emit nameChanged();
-    }
-}
-
-QString sow::ParameterInterface::name() const {
-    return iName_;
-}
-
 void sow::ParameterInterface::setType(const SowEnums::PARAMETER type) {
     if (iType_ != type) {
         iType_ = type;
-        emit typeChanged();
+        emit typeChanged();     
     }
 }
 SowEnums::PARAMETER sow::ParameterInterface::type() const {
@@ -35,6 +23,7 @@ void sow::ParameterInterface::setValue(const float value) {
     if (!qFuzzyCompare(iValue_, value)) {
         iValue_ =  value;
         emit valueChanged();
+        parameterChanged(SowEnums::SUB_PARAMETER::VALUE, iValue_);
     }
 }
 
@@ -46,6 +35,7 @@ void sow::ParameterInterface::setFixed(const bool fixed) {
     if (iFixed_ != fixed) {
         iFixed_ =  fixed;
         emit fixedChanged();
+        parameterChanged(SowEnums::SUB_PARAMETER::FIXED, iFixed_);
     }
 }
 
@@ -57,6 +47,7 @@ void sow::ParameterInterface::setScaled(const bool scaled) {
     if (iScaled_ != scaled) {
         iScaled_ =  scaled;
         emit scaledChanged();
+        parameterChanged(SowEnums::SUB_PARAMETER::SCALED, iScaled_);
     }
 }
 
@@ -68,6 +59,7 @@ void sow::ParameterInterface::setScaleLo(const float scaleLo) {
     if (!qFuzzyCompare(iScaleLo_, scaleLo)) {
         iScaleLo_ =  scaleLo;
         emit scaleLoChanged();
+        parameterChanged(SowEnums::SUB_PARAMETER::SCALE_LO, iScaleLo_);
     }
 }
 
@@ -79,6 +71,7 @@ void sow::ParameterInterface::setScaleHi(const float scaleHi) {
     if (!qFuzzyCompare(iScaleHi_, scaleHi)) {
         iScaleHi_ =  scaleHi;
         emit scaleHiChanged();
+        parameterChanged(SowEnums::SUB_PARAMETER::SCALE_HI, iScaleHi_);
     }
 }
 
@@ -90,6 +83,7 @@ void sow::ParameterInterface::setScaleExp(const float scaleExp) {
     if (!qFuzzyCompare(iScaleExp_, scaleExp)) {
         iScaleExp_ =  scaleExp;
         emit scaleExpChanged();
+        parameterChanged(SowEnums::SUB_PARAMETER::SCALE_EXP, iScaleExp_);
     }
 }
 
@@ -101,6 +95,7 @@ void sow::ParameterInterface::setMap(const QString map) {
     if (iMap_ != map) {
         iMap_ = map;
         emit nameChanged();
+        mapChanged(iMap_);
     }
 }
 
