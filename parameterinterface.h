@@ -19,6 +19,7 @@ class ParameterInterface : public QObject
     Q_PROPERTY(QString map READ map WRITE setMap NOTIFY mapChanged)
 
 public:
+
     explicit ParameterInterface(QObject *parent = nullptr);
 
     void setType(const SowEnums::PARAMETER type);
@@ -51,6 +52,7 @@ private:
     QString iMap_;
 
 signals:
+
     // Notify signals
     void nameChanged();
     void typeChanged();

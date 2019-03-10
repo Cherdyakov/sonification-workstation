@@ -37,9 +37,22 @@ void Parameter::ProcessCommand(sow::ParameterCommand cmd)
 
 }
 
-void Parameter::onParameterChanged(sow::ParameterCommand cmd)
+void Parameter::onParameterChanged(const SowEnums::SUB_PARAMETER subParam, const float value)
 {
+    ParameterCommand cmd;
+    cmd.subParam = subParam;
+    cmd.value = value;
     commandBuffer_.push(cmd);
 }
+
+void Parameter::onMapChanged(const QString map)
+{
+    ParameterCommand cmd;
+    cmd.subParam = SowEnums::SUB_PARAMETER::MAP;
+    cmd.map = map;
+    commandBuffer_.push(cmd);
+}
+
+
 
 } // namespace sow

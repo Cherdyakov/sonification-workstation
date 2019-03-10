@@ -35,7 +35,8 @@ private:
 signals:
 
 public slots:
-    void onParameterChanged(ParameterCommand cmd);
+    void onParameterChanged(const SowEnums::SUB_PARAMETER subParam, const float value);
+    void onMapChanged(const QString map);
 
 };
 
