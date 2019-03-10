@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include "sowenums.h"
+#include "commands.h"
+#include "ringbuffer.h"
 
 namespace sow {
 
@@ -42,8 +44,19 @@ public:
 
 private:
 
-    QString name_;
+    // Interface variables, bound to QML
+    SowEnums::PARAMETER iType_;
+    QString iName_;
+    float iValue_;
+    bool iFixed_;
+    bool iScaled_;
+    float iScaleLo_;
+    float iScaleHi_;
+    float iScaleExp_;
+    QString iMap_;
+    // Backing variables, used by sow
     SowEnums::PARAMETER type_;
+    QString name_;
     float value_;
     bool fixed_;
     bool scaled_;
@@ -51,6 +64,8 @@ private:
     float scaleHi_;
     float scaleExp_;
     QString map_;
+
+    RingBuffer<ParameterCommand> commandBuffer_;
 
 signals:
 

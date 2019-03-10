@@ -11,110 +11,109 @@ ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
 
 
 void sow::ParameterInterface::setName(const QString name) {
-    if (name_ != name) {
-        name_ = name;
+    if (iName_ != name) {
+        iName_ = name;
         emit nameChanged();
     }
-    qDebug() << "setName: " + name_;
+    qDebug() << "setName: " + iName_;
 }
 
 QString sow::ParameterInterface::name() const {
-    return name_;
+    return iName_;
 }
 
 void sow::ParameterInterface::setType(const SowEnums::PARAMETER type) {
-    if (type_ != type) {
-        type_ = type;
+    if (iType_ != type) {
+        iType_ = type;
         emit typeChanged();
     }
 }
-
 SowEnums::PARAMETER sow::ParameterInterface::type() const {
-    return type_;
+    return iType_;
 }
 
 void sow::ParameterInterface::setValue(const float value) {
-    if (!qFuzzyCompare(value_, value)) {
-        value_ =  value;
+    if (!qFuzzyCompare(iValue_, value)) {
+        iValue_ =  value;
         emit valueChanged();
-        qDebug() << "setValue: " + QString::number(value_);
+        qDebug() << "setValue: " + QString::number(iValue_);
     }
 }
 
 float sow::ParameterInterface::value() const {
-    return value_;
+    return iValue_;
 }
 
 void sow::ParameterInterface::setFixed(const bool fixed) {
-    if (fixed_ != fixed) {
-        fixed_ =  fixed;
+    if (iFixed_ != fixed) {
+        iFixed_ =  fixed;
         emit fixedChanged();
-        qDebug() << "setFixed: " + QString::number(fixed_);
+        qDebug() << "setFixed: " + QString::number(iFixed_);
     }
 }
 
 bool sow::ParameterInterface::fixed() const {
-    return fixed_;
+    return iFixed_;
 }
 
 void sow::ParameterInterface::setScaled(const bool scaled) {
-    if (scaled_ != scaled) {
-        scaled_ =  scaled;
+    if (iScaled_ != scaled) {
+        iScaled_ =  scaled;
         emit scaledChanged();
-        qDebug() << "setScaled: " + QString::number(scaled_);
+        qDebug() << "setScaled: " + QString::number(iScaled_);
     }
 }
 
 bool sow::ParameterInterface::scaled() const {
-    return scaled_;
+    return iScaled_;
 }
 
 void sow::ParameterInterface::setScaleLo(const float scaleLo) {
-    if (!qFuzzyCompare(scaleLo_, scaleLo)) {
-        scaleLo_ =  scaleLo;
+    if (!qFuzzyCompare(iScaleLo_, scaleLo)) {
+        iScaleLo_ =  scaleLo;
         emit scaleLoChanged();
-        qDebug() << "setScaleLo: " + QString::number(scaleLo_);
+        qDebug() << "setScaleLo: " + QString::number(iScaleLo_);
     }
 }
 
 float sow::ParameterInterface::scaleLo() const {
-    return scaleLo_;
+    return iScaleLo_;
 }
 
 void sow::ParameterInterface::setScaleHi(const float scaleHi) {
-    if (!qFuzzyCompare(scaleHi_, scaleHi)) {
-        scaleHi_ =  scaleHi;
+    if (!qFuzzyCompare(iScaleHi_, scaleHi)) {
+        iScaleHi_ =  scaleHi;
         emit scaleHiChanged();
-        qDebug() << "setScaleHi: " + QString::number(scaleHi_);
+        qDebug() << "setScaleHi: " + QString::number(iScaleHi_);
     }
 }
 
 float sow::ParameterInterface::scaleHi() const {
-    return scaleHi_;
+    return iScaleHi_;
 }
 
 void sow::ParameterInterface::setScaleExp(const float scaleExp) {
-    if (!qFuzzyCompare(scaleExp_, scaleExp)) {
-        scaleExp_ =  scaleExp;
+    if (!qFuzzyCompare(iScaleExp_, scaleExp)) {
+        iScaleExp_ =  scaleExp;
         emit scaleExpChanged();
-        qDebug() << "setScaleExp: " + QString::number(scaleExp_);
+        qDebug() << "setScaleExp: " + QString::number(iScaleExp_);
     }
 }
 
 float sow::ParameterInterface::scaleExp() const {
-    return scaleExp_;
+    return iScaleExp_;
 }
 
 void sow::ParameterInterface::setMap(const QString map) {
-    if (map_ != map) {
-        map_ = map;
+    if (iMap_ != map) {
+        iMap_ = map;
         emit nameChanged();
-        qDebug() << "setMap: " + map_;
+        qDebug() << "setMap: " + iMap_;
     }
 }
 
 QString sow::ParameterInterface::map() const {
-    return map_;
+    return iMap_;
 }
 
 } // Namespace sow.
