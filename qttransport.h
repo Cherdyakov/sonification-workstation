@@ -24,7 +24,7 @@ public:
     explicit QtTransport(QObject *parent = nullptr);
 
     // factory for other SynthItems
-    Q_INVOKABLE QtSynthItem* createItem(SowEnums::ITEM type);
+    Q_INVOKABLE sow::QtSynthItem* createItem(SowEnums::ITEM type);
     Q_INVOKABLE virtual SowEnums::ITEM getType() override;
     Q_INVOKABLE virtual void deleteSelf() override;
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
