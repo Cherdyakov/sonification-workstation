@@ -31,7 +31,7 @@ void Parameter::ProcessCommand(sow::ParameterCommand cmd)
         scaleExp_ = cmd.value;
         break;
     case SowEnums::SUB_PARAMETER::MAP:
-        map_ = cmd.mapping;
+        map_ = cmd.map;
         break;
     }
 

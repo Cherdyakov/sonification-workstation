@@ -30,12 +30,12 @@ private:
 
     RingBuffer<ParameterCommand> commandBuffer_;
 
-    void ProcessCommand(ParameterCommand c);
+    void ProcessCommand(ParameterCommand cmd);
 
 signals:
 
 public slots:
-    void onParameterChanged(ParameterCommand command);
+    void onParameterChanged(ParameterCommand cmd);
 
 };
 
