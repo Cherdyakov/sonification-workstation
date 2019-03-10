@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#define MAX_DATASET_DIMS 128
+
 namespace sow {
 
 struct Dataset
