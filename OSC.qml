@@ -77,7 +77,7 @@ SynthItem {
 
     Editor {
         id: editor
-        Parameter {
+        EditorParameter {
             onValueChanged: oscillator.frequency.value = value
             onFixedChanged: oscillator.frequency.fixed = fixed
             onScaledChanged: oscillator.frequency.scaled = scaled

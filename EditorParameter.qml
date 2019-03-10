@@ -38,6 +38,7 @@ Item {
             id: mapper
             label.text: qsTr("Parameter Source: ")
             maxIndexes: 128
+
         }
 
         EditorScaler {
@@ -45,5 +46,7 @@ Item {
             label.text: qsTr("Scaled: ")
             lowLabel.text: qsTr("Scale Low: ")
             highLabel.text: qsTr("Scale High: ")
+        }
     }
+
 }

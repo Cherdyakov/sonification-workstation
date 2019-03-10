@@ -25,7 +25,7 @@
         <file>EditorDoubleParam.qml</file>
         <file>VOL.qml</file>
         <file>NSE.qml</file>
-        <file>EditorMenuParam.qml</file>
+        <file>EditorMenu.qml</file>
         <file>Palette.qml</file>
         <file>images/NSE.png</file>
         <file>images/VOL.png</file>
@@ -40,6 +40,6 @@
         <file>Utils.js</file>
         <file>images/EQ.png</file>
         <file>images/alpha.png</file>
-        <file>Parameter.qml</file>
+        <file>EditorParameter.qml</file>
     </qresource>
 </RCC>
