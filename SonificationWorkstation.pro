@@ -43,7 +43,8 @@ SOURCES += \
     trackname.cpp \
     dataprocessor.cpp \
     qtsynthitem.cpp \
-    parameterinterface.cpp
+    parameterinterface.cpp \
+    parameter.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -92,7 +93,8 @@ HEADERS += \
     sowenums.h \
     sowenums.h \
     commands.h \
-    parameterinterface.h
+    parameterinterface.h \
+    parameter.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src
