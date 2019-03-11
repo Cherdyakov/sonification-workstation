@@ -10,6 +10,7 @@
 #include "qttransport.h"
 #include "ringbuffer.h"
 #include "filereader.h"
+#include "Gamma/Sync.h"
 
 #define SR 44100
 #define BLOCK_SIZE 512
