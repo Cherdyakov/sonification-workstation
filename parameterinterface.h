@@ -10,6 +10,7 @@ namespace sow {
 class ParameterInterface : public QObject
 {
     Q_OBJECT
+    // QML property bindings
     Q_PROPERTY(float value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(bool fixed READ fixed WRITE setFixed NOTIFY fixedChanged)
     Q_PROPERTY(bool scaled READ scaled WRITE setScaled NOTIFY scaledChanged)
@@ -22,6 +23,7 @@ public:
 
     explicit ParameterInterface(QObject *parent = nullptr);
 
+    // QML property bindings
     void setType(const SowEnums::PARAMETER type);
     SowEnums::PARAMETER type() const;
     void setValue(const float value);
