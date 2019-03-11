@@ -1,7 +1,7 @@
 #ifndef DATASET_H
 #define DATASET_H
 
-#include <vector>
+#include <QVector>
 
 #define MAX_DATASET_DIMS 128
 
@@ -9,8 +9,8 @@ namespace sow {
 
 struct Dataset
 {
-    unsigned int height_;
-    unsigned int width_;
+    int height_;
+    int width_;
     QVector<double> data_;
     QVector<double> mins_;
     QVector<double> maxes_;
