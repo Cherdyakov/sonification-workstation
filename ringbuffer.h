@@ -1,8 +1,7 @@
 #ifndef RingBuffer_H
 #define RingBuffer_H
 
-#include <atomic>
-#include <vector>
+#include <QAtomicInt>
 
 namespace sow
 {
@@ -24,10 +23,10 @@ public:
 
 private:
 
-    std::atomic<int> currentSize;
-    std::atomic<int> capacity;
-    std::atomic<int> head;
-    std::atomic<int> tail;
+    QAtomicInt currentSize;
+    QAtomicInt capacity;
+    QAtomicInt head;
+    QAtomicInt tail;
     T* array;
 
 };
