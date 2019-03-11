@@ -49,7 +49,7 @@ public:
         FILTER_TYPE
     };
 
-    enum class COMMAND {
+    enum class ITEM_CMD {
         DATA,
         ADD_CHILD,
         REMOVE_CHILD,
@@ -90,8 +90,8 @@ public:
         NOTCH
     };
 
-    struct SynthItemCommand {
-        COMMAND type;
+    struct ItemCommand {
+        ITEM_CMD type;
         PARAMETER parameter;
         Dataset *dataset;
         QVector<double>* data;
@@ -101,7 +101,7 @@ public:
         QVector<int> ints;
         bool bool_val;
         SynthItem* item;
-        SynthItemCommand() {
+        ItemCommand() {
             doubles.reserve(MAX_DIMENSIONS);
             ints.reserve(MAX_DIMENSIONS);
         }
@@ -129,7 +129,7 @@ public:
 protected:
 
     virtual void retrieve_commands() = 0;
-    virtual void process_command(SynthItemCommand command) = 0;
+    virtual void process_command(ItemCommand command) = 0;
     virtual void process_add_child(SynthItem* child, PARAMETER parameter) = 0;
     virtual void process_remove_child(SynthItem* child) = 0;
     virtual void process_delete() = 0;
