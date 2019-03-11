@@ -25,47 +25,47 @@ SowEnums::ITEM QtSynthItem::type() const{
 
 void QtSynthItem::connectParent(QtSynthItem *parent)
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::CONNECT_PARENT;
-    command.item = parent;
-    commandBuffer_.push(command);
+    SynthItemCommand cmd;
+    cmd.type = SowEnums::COMMAND::CONNECT_PARENT;
+    cmd.item = parent;
+    commandBuffer_.push(cmd);
 }
 
 void QtSynthItem::disconnect(QtSynthItem *item)
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::DISCONNECT;
-    command.item = item;
-    commandBuffer_.push(command);
+    SynthItemCommand cmd;
+    cmd.type = SowEnums::COMMAND::DISCONNECT;
+    cmd.item = item;
+    commandBuffer_.push(cmd);
 }
 
 bool QtSynthItem::connectChild(QtSynthItem *child)
 {
-    if(!verifyChild(child->type(), acceptedInputs_))
+    if(!acceptedInputs_.contains(child->type()))
     {
         return false;
     }
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::CONNECT_CHILD;
-    command.item = child;
-    commandBuffer_.push(command);
+    SynthItemCommand cmd;
+    cmd.type = SowEnums::COMMAND::CONNECT_CHILD;
+    cmd.item = child;
+    commandBuffer_.push(cmd);
     return true;
 }
 
 void QtSynthItem::disconnectAll()
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::DISONNECT_ALL;
-    commandBuffer_.push(command);
+    SynthItemCommand cmd;
+    cmd.type = SowEnums::COMMAND::DISONNECT_ALL;
+    commandBuffer_.push(cmd);
 }
 
 void QtSynthItem::setData(QVector<double> *data, QVector<double> *mins, QVector<double> *maxes)
 {
-    DatasetCommand command;
-    command.data = data;
-    command.mins = mins;
-    command.maxes = maxes;
-    datasetCommandBuffer_.push(command);
+    DatasetCommand cmd;
+    cmd.data = data;
+    cmd.mins = mins;
+    cmd.maxes = maxes;
+    datasetCommandBuffer_.push(cmd);
 }
 
 Frame QtSynthItem::process()
@@ -76,15 +76,9 @@ Frame QtSynthItem::process()
 
 void QtSynthItem::step()
 {
-    for (int i = 0; i < children_.size(); i++) {
-        QtSynthItem *item = children_[i];
-        item->step();
+    foreach (QtSynthItem* child, children_) {
+        child->step();
     }
-}
-
-QVector<QtSynthItem *> QtSynthItem::getParents()
-{
-    return parents_;
 }
 
 // Process outstanding ParameterCommands
@@ -125,22 +119,23 @@ void QtSynthItem::processCommand(SynthItemCommand command)
     }
 }
 
-void QtSynthItem::processDatasetCommand(const DatasetCommand command)
+void QtSynthItem::processDatasetCommand(const DatasetCommand cmd)
 {
-    *data_ = *command.data;
-    *mins_ = *command.mins;
-    *maxes_ = *command.maxes;
+    *data_ = *cmd.data;
+    *mins_ = *cmd.mins;
+    *maxes_ = *cmd.maxes;
 }
 
 void QtSynthItem::processConnectChild(QtSynthItem *child)
 {
-    insertItemUnique(child, &children_);
-    child->connectParent(this);
+    if(insertUnique(child, children_)) {
+        child->connectParent(this);
+    }
 }
 
 void QtSynthItem::processDisconnect(QtSynthItem *other) {
-    removeItem(other, &children_);
-    removeItem(other, &parents_);
+    children_.removeAll(other);
+    parents_.removeAll(other);
 }
 
 void QtSynthItem::processDisconnectAll()
