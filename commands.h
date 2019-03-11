@@ -12,18 +12,14 @@ class QtSynthItem;
 
 struct SynthItemCommand {
     SowEnums::COMMAND type;
-    SowEnums::PARAMETER parameter;
+    QtSynthItem* item;
+};
+
+struct DatasetCommand {
     Dataset *dataset;
     QVector<double>* data;
     QVector<double>* mins;
     QVector<double>* maxes;
-    QVector<double> doubles;
-    QVector<int> ints;
-    bool bool_val;
-    QtSynthItem* item;
-    SynthItemCommand() {
-        doubles.reserve(MAX_DATASET_DIMS);
-    }
 };
 
 struct ParameterCommand {
