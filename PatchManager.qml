@@ -69,7 +69,7 @@ Item {
             else {
                 //clicked on second item
                 //add startpoint to end's parents
-                item.addChild(patchingChild)
+                item.connectChild(patchingChild)
                 //stop patching
                 patchingChild = null
             }
