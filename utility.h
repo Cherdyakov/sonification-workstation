@@ -1,8 +1,9 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-#include <vector>
-#include "qtsynthitem.h"
+#include <QVector>
+#include "frame.h"
+//#include "qtsynthitem.h"
 
 namespace sow {
 
@@ -12,10 +13,18 @@ namespace sow {
 double scale(double x, double in_low,
              double in_high, double out_low,
              double out_high, double exp);
+
 Frame visitChildren(QVector<QtSynthItem*> children);
-void insertItemUnique(QtSynthItem* synth_item, QVector<QtSynthItem*> *items);
-void removeItem(QtSynthItem* synth_item, QVector<QtSynthItem *> *items);
-bool verifyChild(SowEnums::ITEM param, QVector<SowEnums::ITEM> vec);
+
+template<class T>
+bool insertUnique(T item, QVector<T> items)
+{
+    if (!items.contains(item)) {
+        items.append(item);
+        return true;
+    }
+    return false;
+}
 
 } // namespace sow
 #endif // UTILITY_H

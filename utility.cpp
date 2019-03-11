@@ -22,23 +22,6 @@ Frame visitChildren(QVector<QtSynthItem *> children)
     return frame;
 }
 
-void insertItemUnique(QtSynthItem* synth_item, QVector<QtSynthItem*>* items)
-{
-    if(std::find(items->begin(), items->end(), synth_item) == items->end())
-    {
-        items->push_back(synth_item);
-    }
-}
-
-void removeItem(QtSynthItem* synth_item, QVector<QtSynthItem*>* items)
-{
-    items->erase(std::remove(items->begin(), items->end(), synth_item), items->end());
-}
-
-bool verifyChild(SowEnums::ITEM param, QVector<SowEnums::ITEM> vec)
-{
-    return std::find(vec.begin(), vec.end(), param) != vec.end();
-}
 
 
 
