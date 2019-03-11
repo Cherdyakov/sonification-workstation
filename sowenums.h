@@ -16,15 +16,13 @@ public:
         PANNER,
         ENVELOPE,
         VOLUME,
-        NOISE,
+        NOISE_GEN,
         EQUALIZER,
         TRANSPORT
     };
     Q_ENUM(ITEM)
 
     enum class PARAMETER {
-        INPUT,
-        OUTPUT,
         AMPLITUDE,
         FREQUENCY,
         DEPTH,
@@ -32,7 +30,7 @@ public:
         PAN,
         ATTACK,
         DECAY,
-        VOLUME,
+        LEVEL,
         NOISE_TYPE,
         RESONANCE,
         FILTER_TYPE
@@ -50,11 +48,11 @@ public:
     };
     Q_ENUM(SUB_PARAMETER)
 
-    enum class NOISE_TYPE {
+    enum class NOISE {
         WHITE,
         PINK
     };
-    Q_ENUM(NOISE_TYPE)
+    Q_ENUM(NOISE)
 
     enum class FILTER {
         LOW_PASS,
@@ -70,25 +68,25 @@ public:
         AUDIO
     };
 
-    enum class COMMAND {
+    enum class ITEM_CMD {
         MUTE,
         UNMUTE,
-        DATA,
         CONNECT_CHILD,
         CONNECT_PARENT,
         DISCONNECT,
-        DISONNECT_ALL,
-        MODULATION,
-        NOISE,
-        FILTER_TYPE,
+        DISONNECT_ALL
+    };
+
+    enum class TRANSPORT_CMD {
         PAUSE,
-        POSITION,
+        POS,
         SPEED,
         LOOP,
-        LOOP_POINTS,
+        LOOP_PTS,
         INTERPOLATE,
-        SUBSCRIBE,
-        UNSUBSCRIBE
+        SUB,
+        UNSUB,
+        DELETE_ITEM
     };
 
 };
