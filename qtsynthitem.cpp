@@ -146,6 +146,8 @@ void QtSynthItem::processDatasetCommand(const DatasetCommand cmd)
 // If not already connected, connect given child
 void QtSynthItem::processConnectChild(QtSynthItem *child)
 {
+    if(child == nullptr)
+        return;
     if(insertUnique(child, children_)) {
         child->connectParent(this);
     }
