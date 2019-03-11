@@ -36,7 +36,7 @@ public:
 
 private:
 
-    QtTransport* qtTransport;
+    QtTransport* transport;
     FileReader* fileReader;
 
     //Tab widget and tabs
