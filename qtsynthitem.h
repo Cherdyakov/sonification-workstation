@@ -46,7 +46,7 @@ protected:
     bool iMute_;    // Mute interface value (used on GUI thread)
     bool mute_;     // Mute backing value (used on audio thread)
     SowEnums::ITEM type_;
-    RingBuffer<SynthItemCommand> commandBuffer_;
+    RingBuffer<ItemCommand> commandBuffer_;
     RingBuffer<DatasetCommand> datasetCommandBuffer_;
     QVector<double>* data_;
     QVector<double>* mins_;
@@ -55,8 +55,8 @@ protected:
     QVector<QtSynthItem*> parents_;
     QVector<QtSynthItem*> children_;
 
-    virtual void processCommand(SynthItemCommand command);
-    virtual void processDatasetCommand(DatasetCommand command);
+    virtual void processCommand(ItemCommand cmd);
+    virtual void processDatasetCommand(DatasetCommand cmd);
     virtual void processConnectChild(QtSynthItem* child);
     virtual void processDisconnect(QtSynthItem* other);
     virtual void processDisconnectAll();
