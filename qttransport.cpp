@@ -1,5 +1,7 @@
 #include "qttransport.h"
 #include "utility.h"
+#include <QDebug>
+#include <QString>
 
 namespace sow {
 
@@ -124,7 +126,7 @@ QtSynthItem* QtTransport::createItem(SowEnums::ITEM type)
         item = this;
         break;
     case SowEnums::ITEM::OSCILLATOR:
-        item = new QtOscillator();
+        item = new QtOscillator(this);
         break;
 //    case QtSynthItem::ITEM::AUDIFIER:
 //        item = new Audifier();
@@ -236,11 +238,6 @@ Frame QtTransport::process()
 
 void QtTransport::controlProcess()
 {
-    // Process TransportCommands first
-    TransportCommand cmd;
-    while(transportCommandBuffer_.pop(&cmd)) {
-        processTransportCommand(cmd);
-    }
     // Do the usual for controlProcess
     QtSynthItem::controlProcess();
     // Trigger subscribed SynthItems to do the same
@@ -248,6 +245,11 @@ void QtTransport::controlProcess()
     {
         QtSynthItem* item = subscribers_[i];
         item->controlProcess();
+    }
+    // Process TransportCommands
+    TransportCommand cmd;
+    while(transportCommandBuffer_.pop(&cmd)) {
+        processTransportCommand(cmd);
     }
 }
 
@@ -289,18 +291,24 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
 void QtTransport::processSubscribeItem(QtSynthItem *item)
 {
     subscribers_.push_back(item);
-    // Maybe set data here?
-    //    item->setData(&current_data_column_, &dataset_->mins_, &dataset_->maxes_);
-
+    item->setData(&currentDataColumn_, &dataset_->mins_, &dataset_->maxes_);
 }
 
 void QtTransport::processUnsubscribeItem(QtSynthItem *item)
 {
+    subscribers_.removeAll(item);
 }
 
 void QtTransport::processDeleteItem(QtSynthItem *item)
 {
-
+    // Disconnect from control process calls
+    processUnsubscribeItem(item);
+    // Disconnect item from all parents/children
+    item->disconnectAll();
+    // Process the disconnectAll() command
+    // buffered in preceeding line before del
+    item->controlProcess();
+    delete item;
 }
 
 void QtTransport::processDatasetCommand(DatasetCommand cmd)
