@@ -40,7 +40,7 @@ public slots:
     void on_saveAs();
     void on_open();
     void on_importDatasetFile();
-    void on_interpolateChanged(bool interpolate_);
+    void onInterpolateChanged(bool interpolate_);
     void on_speedChanged(int speed_);
 };
 

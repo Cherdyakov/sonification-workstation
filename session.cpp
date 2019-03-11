@@ -100,7 +100,7 @@ void Session::on_importDatasetFile()
     }
 }
 
-void Session::on_interpolateChanged(bool interpolate)
+void Session::onInterpolateChanged(bool interpolate)
 {
     this->interpolate_ = interpolate;
 }
