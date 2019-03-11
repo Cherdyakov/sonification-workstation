@@ -15,62 +15,62 @@ namespace sow {
 class QtSynthItem : public QObject
 {
     Q_OBJECT
-
+    // QML property bindings
+    Q_PROPERTY(bool mute READ mute WRITE setMute NOTIFY muteChanged)
+    Q_PROPERTY(SowEnums::ITEM type READ type)
 public:
 
     explicit QtSynthItem(QObject *parent = nullptr);
     virtual ~QtSynthItem();
 
+    // QML property bindings
+    void setMute(const bool mute);
+    bool mute() const;
+    SowEnums::ITEM type() const;
+
+    // Functions invokable from QML
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, SowEnums::PARAMETER param);
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child);
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child);
-    Q_INVOKABLE virtual void mute(bool mute);
-    Q_INVOKABLE virtual bool getMute();
+    Q_INVOKABLE virtual void disconnectAll();
 
-    virtual void deleteSelf();
-    virtual SowEnums::ITEM getType();
-    virtual void setData(std::vector<double>* data,
-                             std::vector<double>* mins,
-                             std::vector<double>* maxes);
-    virtual Frame process(); // every sample
-    virtual void step(); // every new data value (step)
-    virtual void controlProcess(); // every process block
-    virtual std::vector<QtSynthItem*> getParents();
+    virtual void setData(QVector<double>* data,
+                             QVector<double>* mins,
+                             QVector<double>* maxes);
+    virtual Frame process();        // every sample
+    virtual void step();            // every new data value (step)
+    virtual void controlProcess();  // every process block
+    virtual QVector<QtSynthItem*> getParents();
 
 protected:
 
-    virtual void retrieveCommands();
-    virtual void processCommand(SynthItemCommand command);
-    virtual void processAddChild(QtSynthItem* child, SowEnums::PARAMETER parameter);
-    virtual void processRemoveChild(QtSynthItem* child);
-    virtual void processDelete();
-    virtual void processSetData(std::vector<double>* data,
-                          std::vector<double>* mins,
-                          std::vector<double>* maxes);
-    virtual void processSetParamValue(double val, SowEnums::PARAMETER param);
-    virtual void processSetParamFixed(bool fixed, SowEnums::PARAMETER param);
-    virtual void processSetParamIndexes(std::vector<int> indexes, SowEnums::PARAMETER param);
-    virtual void processSetParamScaled(bool scaled, SowEnums::PARAMETER param);
-    virtual void processSetParamScaleLow(double low, SowEnums::PARAMETER param);
-    virtual void processSetParamScaleHigh(double high, SowEnums::PARAMETER param);
-    virtual void processSetParamScaleExponent(double exponent, SowEnums::PARAMETER param);
+    bool mute_;
+    SowEnums::ITEM type_;
+    RingBuffer<SynthItemCommand> commandBuffer_;
+    SynthItemCommand currentCommand_;
+    QVector<double>* data_;
+    QVector<double>* mins_;
+    QVector<double>* maxes_;
+    QVector<SowEnums::ITEM> acceptedChildren_;
+    QVector<QtSynthItem*> parents_;
+    QVector<QtSynthItem*> children_;
 
-    SowEnums::ITEM my_type_;
-    SowEnums::PARAMETER my_child_type_;
-    RingBuffer<SynthItemCommand> command_buffer_;
-    SynthItemCommand current_command_;
-    std::vector<SowEnums::PARAMETER> accepted_children_;
-    std::vector<double>* data_;
-    std::vector<double>* mins_;
-    std::vector<double>* maxes_;
-    std::vector<QtSynthItem*> parents_;
-    std::vector<QtSynthItem*> children_;
-    std::vector<int> audify_indexes_;
-    bool muted_;
+    virtual void processCommand(SynthItemCommand command);
+    virtual void processAddChild(QtSynthItem* child);
+    virtual void processRemoveChild(QtSynthItem* child);
+    virtual void processDisconnectAll();
+    virtual void processSetData(QVector<double>* data,
+                          QVector<double>* mins,
+                          QVector<double>* maxes);
+
+signals:
+
+    // Notify signals
+    void muteChanged();
 
 };
 
-} // Namespace sow.
+} // namespace sow
 
 #endif // QTSYNTHITEM_H

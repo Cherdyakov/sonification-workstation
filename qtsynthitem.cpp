@@ -1,19 +1,34 @@
 #include "qtsynthitem.h"
 #include "utility.h"
 
-//namespace sow {
-using namespace sow;
+namespace sow {
 
 QtSynthItem::QtSynthItem(QObject *parent) : QObject (parent) {}
 
 QtSynthItem::~QtSynthItem() {}
+
+void QtSynthItem::setMute(const bool mute)
+{
+    if (mute_ != mute) {
+       mute_ = mute;
+       emit muteChanged();
+    }
+}
+
+bool QtSynthItem::mute() const {
+    return mute_;
+}
+
+SowEnums::ITEM QtSynthItem::type() const{
+    return type_;
+}
 
 void QtSynthItem::addParent(QtSynthItem *parent)
 {
     SynthItemCommand command;
     command.type = SowEnums::COMMAND::ADD_PARENT;
     command.item = parent;
-    command_buffer_.push(command);
+    commandBuffer_.push(command);
 }
 
 void QtSynthItem::removeParent(QtSynthItem *parent)
@@ -21,20 +36,19 @@ void QtSynthItem::removeParent(QtSynthItem *parent)
     SynthItemCommand command;
     command.type = SowEnums::COMMAND::REMOVE_PARENT;
     command.item = parent;
-    command_buffer_.push(command);
+    commandBuffer_.push(command);
 }
 
-bool QtSynthItem::addChild(QtSynthItem *child, SowEnums::PARAMETER param)
+bool QtSynthItem::addChild(QtSynthItem *child)
 {
-    if(!verify_child(param, accepted_children_))
+    if(!verify_child(child->type(), acceptedChildren_))
     {
         return false;
     }
     SynthItemCommand command;
     command.type = SowEnums::COMMAND::ADD_CHILD;
-    command.parameter = param;
     command.item = child;
-    command_buffer_.push(command);
+    commandBuffer_.push(command);
     return true;
 }
 
@@ -43,42 +57,24 @@ void QtSynthItem::removeChild(QtSynthItem *child)
     SynthItemCommand command;
     command.type = SowEnums::COMMAND::REMOVE_CHILD;
     command.item = child;
-    command_buffer_.push(command);
+    commandBuffer_.push(command);
 }
 
-void QtSynthItem::mute(bool mute)
+void QtSynthItem::disconnectAll()
 {
     SynthItemCommand command;
-    command.type = SowEnums::COMMAND::MUTE;
-    command.bool_val = mute;
-    command_buffer_.push(command);
+    command.type = SowEnums::COMMAND::DISONNECT_ALL;
+    commandBuffer_.push(command);
 }
 
-bool QtSynthItem::getMute()
-{
-    return muted_;
-}
-
-void QtSynthItem::deleteSelf()
-{
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::DELETE;
-    command_buffer_.push(command);
-}
-
-SowEnums::ITEM QtSynthItem::getType()
-{
-    return my_type_;
-}
-
-void QtSynthItem::setData(std::vector<double> *data, std::vector<double> *mins, std::vector<double> *maxes)
+void QtSynthItem::setData(QVector<double> *data, QVector<double> *mins, QVector<double> *maxes)
 {
     SynthItemCommand command;
     command.type = SowEnums::COMMAND::DATA;
     command.data = data;
     command.mins = mins;
     command.maxes = maxes;
-    command_buffer_.push(command);
+    commandBuffer_.push(command);
 }
 
 Frame QtSynthItem::process()
@@ -89,30 +85,22 @@ Frame QtSynthItem::process()
 
 void QtSynthItem::step()
 {
-    for (unsigned int i = 0; i < children_.size(); i++) {
+    for (int i = 0; i < children_.size(); i++) {
         QtSynthItem *item = children_[i];
         item->step();
     }
 }
 
-void QtSynthItem::controlProcess()
-{
-    if(!command_buffer_.empty())
-    {
-        retrieveCommands();
-    }
-}
-
-std::vector<QtSynthItem *> QtSynthItem::getParents()
+QVector<QtSynthItem *> QtSynthItem::getParents()
 {
     return parents_;
 }
 
-void QtSynthItem::retrieveCommands()
+// Process outstanding ParameterCommands
+void QtSynthItem::controlProcess()
 {
-    while(command_buffer_.pop(&current_command_))
-    {
-        processCommand(current_command_);
+    while(commandBuffer_.pop(&currentCommand_)) {
+        processCommand(currentCommand_);
     }
 }
 
@@ -125,7 +113,7 @@ void QtSynthItem::processCommand(SynthItemCommand command)
         processSetData(command.data, command.mins, command.maxes);
         break;
     case SowEnums::COMMAND::ADD_CHILD:
-        processAddChild(command.item, command.parameter);
+        processAddChild(command.item);
         break;
     case SowEnums::COMMAND::REMOVE_CHILD:
         processRemoveChild(command.item);
@@ -137,38 +125,17 @@ void QtSynthItem::processCommand(SynthItemCommand command)
         remove_item(command.item, &parents_);
         break;
     case SowEnums::COMMAND::MUTE:
-        muted_ = command.bool_val;
+        mute_ = command.bool_val;
         break;
-    case SowEnums::COMMAND::PARAM:
-        processSetParamValue(command.doubles[0], command.parameter);
-        break;
-    case SowEnums::COMMAND::FIXED:
-        processSetParamFixed(command.bool_val, command.parameter);
-        break;
-    case SowEnums::COMMAND::INDEXES:
-        processSetParamIndexes(command.ints, command.parameter);
-        break;
-    case SowEnums::COMMAND::SCALED:
-        processSetParamScaled(command.bool_val, command.parameter);
-        break;
-    case SowEnums::COMMAND::SCALE_LOW:
-        processSetParamScaleLow(command.doubles[0], command.parameter);
-        break;
-    case SowEnums::COMMAND::SCALE_HIGH:
-        processSetParamScaleHigh(command.doubles[0], command.parameter);
-        break;
-    case SowEnums::COMMAND::SCALE_EXPONENT:
-        processSetParamScaleExponent(command.doubles[0], command.parameter);
-        break;
-    case SowEnums::COMMAND::DELETE:
-        processDelete();
+    case SowEnums::COMMAND::DISONNECT_ALL:
+        processDisconnectAll();
         break;
     default:
         break;
     }
 }
 
-void QtSynthItem::processAddChild(QtSynthItem *child, SowEnums::PARAMETER parameter)
+void QtSynthItem::processAddChild(QtSynthItem *child)
 {
     insert_item_unique(child, &children_);
     child->addParent(this);
@@ -179,52 +146,17 @@ void QtSynthItem::processRemoveChild(QtSynthItem *child)
     remove_item(child, &children_);
 }
 
-void QtSynthItem::processDelete()
+void QtSynthItem::processDisconnectAll()
 {
     remove_as_child(this, parents_);
     remove_as_parent(this, children_);
 }
 
-void QtSynthItem::processSetData(std::vector<double> *data, std::vector<double> *mins, std::vector<double> *maxes)
+void QtSynthItem::processSetData(QVector<double> *data, QVector<double> *mins, QVector<double> *maxes)
 {
     data_ = data;
     mins_ = mins;
     maxes_ = maxes;
 }
 
-void QtSynthItem::processSetParamValue(double val, SowEnums::PARAMETER param)
-{
-
-}
-
-void QtSynthItem::processSetParamFixed(bool fixed, SowEnums::PARAMETER param)
-{
-
-}
-
-void QtSynthItem::processSetParamIndexes(std::vector<int> indexes, SowEnums::PARAMETER param)
-{
-
-}
-
-void QtSynthItem::processSetParamScaled(bool scaled, SowEnums::PARAMETER param)
-{
-
-}
-
-void QtSynthItem::processSetParamScaleLow(double low, SowEnums::PARAMETER param)
-{
-
-}
-
-void QtSynthItem::processSetParamScaleHigh(double high, SowEnums::PARAMETER param)
-{
-
-}
-
-void QtSynthItem::processSetParamScaleExponent(double exponent, SowEnums::PARAMETER param)
-{
-
-}
-
-//}   // Namespace sow.
+}   // Namespace sow.
