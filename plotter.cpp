@@ -28,7 +28,7 @@ Plotter::Plotter()
     connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
 }
 
-void Plotter::plot(std::vector<double> *array, uint height, uint width)
+void Plotter::plot(QVector<double> *array, uint height, uint width)
 {
     clearGraphs();
 
@@ -114,7 +114,7 @@ void Plotter::resizePlayHead()
     playHead->setGeometry(rect);
 }
 
-void Plotter::on_datasetChanged(std::vector<double> *data, uint height, uint width)
+void Plotter::on_datasetChanged(QVector<double> *data, uint height, uint width)
 {
     plot(data, height, width);
 }

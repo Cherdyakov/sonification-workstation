@@ -14,11 +14,11 @@ struct SynthItemCommand {
     SowEnums::COMMAND type;
     SowEnums::PARAMETER parameter;
     Dataset *dataset;
-    std::vector<double>* data;
-    std::vector<double>* mins;
-    std::vector<double>* maxes;
-    std::vector<double> doubles;
-    std::vector<int> ints;
+    QVector<double>* data;
+    QVector<double>* mins;
+    QVector<double>* maxes;
+    QVector<double> doubles;
+    QVector<int> ints;
     bool bool_val;
     QtSynthItem* item;
     SynthItemCommand() {

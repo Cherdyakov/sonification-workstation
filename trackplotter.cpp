@@ -21,7 +21,7 @@ TrackPlotter::TrackPlotter()
 
 }
 
-void TrackPlotter::plot(std::vector<double> vec)
+void TrackPlotter::plot(QVector<double> vec)
 {
     clearGraphs();
     int len = static_cast<uint>(vec.size());

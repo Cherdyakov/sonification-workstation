@@ -11,9 +11,9 @@ struct Dataset
 {
     unsigned int height_;
     unsigned int width_;
-    std::vector<double> data_;
-    std::vector<double> mins_;
-    std::vector<double> maxes_;
+    QVector<double> data_;
+    QVector<double> mins_;
+    QVector<double> maxes_;
 
     Dataset()
     {
@@ -22,7 +22,7 @@ struct Dataset
     }
 
     // helper functions
-    void init(std::vector<double> data, unsigned int height, unsigned int width)
+    void init(QVector<double> data, unsigned int height, unsigned int width)
     {
         data_.clear();
         data_ = data;
@@ -31,8 +31,8 @@ struct Dataset
         calculate_min_max();
     }
 
-    std::vector<double> get_column(unsigned int col) {
-        std::vector<double> vec;
+    QVector<double> get_column(unsigned int col) {
+        QVector<double> vec;
         if(col > width_)
         {
             return vec;
@@ -45,8 +45,8 @@ struct Dataset
         return vec;
     }
 
-    std::vector<double> get_row(unsigned int row) {
-        std::vector<double> vec;
+    QVector<double> get_row(unsigned int row) {
+        QVector<double> vec;
         if(row > height_)
         {
             return vec;
