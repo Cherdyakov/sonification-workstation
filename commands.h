@@ -10,8 +10,8 @@ namespace sow {
 // Forward declare QtSynthItem
 class QtSynthItem;
 
-struct SynthItemCommand {
-    SowEnums::COMMAND type;
+struct ItemCommand {
+    SowEnums::ITEM_CMD type;
     QtSynthItem* item;
 };
 
@@ -26,6 +26,13 @@ struct ParameterCommand {
     SowEnums::SUB_PARAMETER subParam;
     float value;
     QChar map[MAX_DATASET_DIMS];
+};
+
+struct TransportCommand {
+    SowEnums::TRANSPORT_CMD type;
+    QtSynthItem* item;
+    float valueA;
+    float valueB;
 };
 
 } // End namespace sow.
