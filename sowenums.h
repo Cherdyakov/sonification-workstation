@@ -78,7 +78,7 @@ public:
         SCALE_LOW,
         SCALE_HIGH,
         SCALE_EXPONENT,
-        DELETE,
+        DISONNECT_ALL,
         DELETE_ITEM,
         MODULATION,
         NOISE,
