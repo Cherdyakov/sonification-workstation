@@ -14,7 +14,7 @@ double scale(double x, double in_low,
              double in_high, double out_low,
              double out_high, double exp);
 
-Frame visitChildren(QVector<QtSynthItem*> children);
+//Frame visitChildren(QVector<QtSynthItem*> children);
 
 template<class T>
 bool insertUnique(T item, QVector<T> items)

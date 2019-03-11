@@ -1,4 +1,5 @@
 #include "utility.h"
+#include "math.h"
 
 namespace sow {
 
@@ -10,17 +11,17 @@ double scale(double x, double in_low, double in_high, double out_low, double out
     return ((x-in_low)/(in_high-in_low) == 0.0) ? out_low : (((x-in_low)/(in_high-in_low)) > 0.0) ? (out_low + (out_high-out_low) * pow(((x-in_low)/(in_high-in_low)),exp)) : ( out_low + (out_high-out_low) * -(pow((((-x+in_low)/(in_high-in_low))),exp)));
 }
 
-Frame visitChildren(QVector<QtSynthItem *> children)
-{
-    Frame frame;
-    for (int i = 0; i < children.size(); ++i)
-    {
-        QtSynthItem* gen = children[i];
-        frame += gen->process();
-    }
-    frame /= children.size();
-    return frame;
-}
+//Frame visitChildren(QVector<QtSynthItem *> children)
+//{
+//    Frame frame;
+//    for (int i = 0; i < children.size(); ++i)
+//    {
+//        QtSynthItem* gen = children[i];
+//        frame += gen->process();
+//    }
+//    frame /= children.size();
+//    return frame;
+//}
 
 
 
