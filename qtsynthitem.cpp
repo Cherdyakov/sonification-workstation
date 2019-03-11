@@ -129,8 +129,6 @@ void QtSynthItem::processCommand(ItemCommand cmd)
     case SowEnums::ITEM_CMD::DISONNECT_ALL:
         processDisconnectAll();
         break;
-    default:
-        break;
     }
 }
 
