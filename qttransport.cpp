@@ -5,7 +5,7 @@ namespace sow {
 
 QtTransport::QtTransport(QObject *parent) : QtSynthItem (parent)
 {
-    // for refreshing the playhead position
+    // Timer updates playhead position
     QTimer* posTimer = new QTimer(this);
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
@@ -15,18 +15,18 @@ QtTransport::QtTransport(QObject *parent) : QtSynthItem (parent)
     type_ = SowEnums::ITEM::TRANSPORT;
     paused_ = true;
     loop_ = false;
-    loop_begin_ = 0.0;
-    loop_end_ = 0.0;
-    data_stale_ = false;
-    frame_rate_ = 44100;
-    current_index_ = 0;
+    loopBegin_ = 0.0;
+    loopEnd_ = 0.0;
+    dataStale_ = false;
+    frameRate_ = 44100;
+    currentIndex_ = 0;
     mu_ = 0.0;
     speed_ = 1;
-    return_pos_ = 0.0;
-    master_volume_ = 1.0;
+    returnPos_ = 0.0;
+    masterVolume_ = 1.0;
     interpolate_ = false;
 
-    acceptedChildren_ = {
+    acceptedInputs_ = {
 //        SowEnums::PARAMETER::INPUT
     };
 }
@@ -37,121 +37,82 @@ QtTransport::QtTransport(QObject *parent) : QtSynthItem (parent)
 
 void QtTransport::deleteItem(QtSynthItem *item)
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::DELETE_ITEM;
-    command.item = item;
-    commandBuffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = SowEnums::TRANSPORT_CMD::DELETE_ITEM;
+    cmd.item = item;
+    transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::setData(QVector<double> *data, QVector<double> *mins, QVector<double> *maxes)
+void QtTransport::onDatasetchanged(Dataset *dataset)
 {
-    (void)data;
-    (void)mins;
-    (void)maxes;
+    DatasetCommand cmd;
+    cmd.dataset = dataset;
+    datasetCommandBuffer_.push(cmd);
 }
 
-void QtTransport::addParent(QtSynthItem *parent)
+void QtTransport::onPausechanged(bool pause)
 {
-    (void)parent;
+    TransportCommand cmd;
+    cmd.type = SowEnums::TRANSPORT_CMD::PAUSE;
+    cmd.valueA = pause ? 1.0f : 0.0f;
+    transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::removeParent(QtSynthItem *parent)
+void QtTransport::onPoschanged(float pos)
 {
-    (void)parent;
+    TransportCommand cmd;
+    cmd.type = SowEnums::TRANSPORT_CMD::POS;
+    cmd.valueA = pos;
+    transportCommandBuffer_.push(cmd);
 }
 
-bool QtTransport::addChild(QtSynthItem *child)
+void QtTransport::onSpeedchanged(float speed)
 {
-    if(!verify_child(child->type(), acceptedChildren_))
-    {
-        return false;
-    }
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::ADD_CHILD;
-    command.item = child;
-    commandBuffer_.push(command);
-    return true;
+    TransportCommand cmd;
+    cmd.type = SowEnums::TRANSPORT_CMD::SPEED;
+    cmd.valueA = speed;
+    transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::removeChild(QtSynthItem *child)
+void QtTransport::onLoopingchanged(bool looping)
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::REMOVE_CHILD;
-    command.item = child;
-    commandBuffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = SowEnums::TRANSPORT_CMD::LOOP;
+    cmd.valueA = looping ? 1.0f : 0.0f;
+    transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::set_dataset(Dataset *dataset)
+void QtTransport::onLoopPointsChanged(float begin, float end)
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::DATA;
-    command.dataset = dataset;
-    commandBuffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = SowEnums::TRANSPORT_CMD::LOOP_PTS;
+    cmd.valueA = begin;
+    cmd.valueB = end;
+    transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::pause(bool pause)
+void QtTransport::onInterpolateChanged(bool interpolate)
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::PAUSE;
-    command.bool_val = pause;
-    commandBuffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = SowEnums::TRANSPORT_CMD::INTERPOLATE;
+    cmd.valueA = interpolate ? 1.0f : 0.0f;
+    transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::set_playback_position(double pos)
+void QtTransport::subscribe(QtSynthItem *item)
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::POSITION;
-    command.doubles.push_back(pos);
-    commandBuffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = SowEnums::TRANSPORT_CMD::SUB;
+    cmd.item = item;
+    transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::set_speed(int speed)
+void QtTransport::unsubscribe(QtSynthItem *item)
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::SPEED;
-    command.ints.push_back(speed);
-    commandBuffer_.push(command);
-}
-
-void QtTransport::set_looping(bool looping)
-{
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::LOOP;
-    command.bool_val = looping;
-    commandBuffer_.push(command);
-}
-
-void QtTransport::set_loop_points(double begin, double end)
-{
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::LOOP_POINTS;
-    command.doubles.push_back(begin);
-    command.doubles.push_back(end);
-    commandBuffer_.push(command);
-}
-
-void QtTransport::set_interpolate(bool interpolate)
-{
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::INTERPOLATE;
-    command.bool_val = interpolate;
-    commandBuffer_.push(command);
-}
-
-void QtTransport::subscribeItem(QtSynthItem *item)
-{
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::SUBSCRIBE;
-    command.item = item;
-    commandBuffer_.push(command);
-}
-
-void QtTransport::unsubscribe_item(QtSynthItem *item)
-{
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::UNSUBSCRIBE;
-    command.item = item;
-    commandBuffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = SowEnums::TRANSPORT_CMD::UNSUB;
+    cmd.item = item;
+    transportCommandBuffer_.push(cmd);
 }
 
 QtSynthItem* QtTransport::createItem(SowEnums::ITEM type)
@@ -187,16 +148,16 @@ QtSynthItem* QtTransport::createItem(SowEnums::ITEM type)
 //        item = new Equalizer();
 //        break;
     default:
-        item = NULL;
+        item = nullptr;
         break;
     }
 //    item->setData(&current_data_column_, &dataset_->mins_, &dataset_->maxes_);
     return item;
 }
 
-double QtTransport::get_playback_position()
+float QtTransport::pos()
 {
-    return return_pos_;
+    return returnPos_;
 }
 
 /*
@@ -218,41 +179,41 @@ Frame QtTransport::process()
     if(mu_ >= 1.0)
     {
         mu_ -= 1.0;
-        current_index_++;
+        currentIndex_++;
 
-        if((current_index_ + 1) > (dataset_->width_))
+        if((currentIndex_ + 1) > (dataset_->width_))
         {
-            current_index_ = 0;
+            currentIndex_ = 0;
         }
-        data_stale_ = true;
+        dataStale_ = true;
         stepping = true;
     }
 
-    if(loop_ && (loop_begin_ != loop_end_))
+    if(loop_ && (loopBegin_ != loopEnd_))
     {
-        if(((double)current_index_ + mu_) > loop_end_)
+        if(((double)currentIndex_ + mu_) > loopEnd_)
         {
-            current_index_ = (int)loop_begin_;
-            mu_ = (loop_begin_ - current_index_);
-            data_stale_ = true;
+            currentIndex_ = (int)loopBegin_;
+            mu_ = (loopBegin_ - currentIndex_);
+            dataStale_ = true;
         }
-        else if(((double)current_index_ + mu_) < loop_begin_)
+        else if(((double)currentIndex_ + mu_) < loopBegin_)
         {
-            current_index_ = (int)loop_begin_;
-            mu_ = (loop_begin_ - current_index_);
-            data_stale_ = true;
+            currentIndex_ = (int)loopBegin_;
+            mu_ = (loopBegin_ - currentIndex_);
+            dataStale_ = true;
         }
     }
 
     if(interpolate_)
     {
-        data_stale_ = true;
+        dataStale_ = true;
     }
 
-    if(data_stale_)
+    if(dataStale_)
     {
         retrieveNextDataColumn();
-        data_stale_ = false;
+        dataStale_ = false;
     }
 
     if(stepping)
@@ -260,7 +221,7 @@ Frame QtTransport::process()
         step();
     }
 
-    for (unsigned int i = 0; i < children_.size(); ++i)
+    for (int i = 0; i < children_.size(); ++i)
     {
         QtSynthItem* item = children_[i];
         frame += item->process();
@@ -268,184 +229,123 @@ Frame QtTransport::process()
 
     // advancing index
     calculateReturnPosition();
-    mu_ += ((double)speed_ / frame_rate_);
+    mu_ += ((double)speed_ / frameRate_);
 
     return frame;// * master_volume_;
 }
 
-void QtTransport::step()
-{
-    for (unsigned int i = 0; i < children_.size(); ++i)
-    {
-        QtSynthItem* item = children_[i];
-        item->step();
-    }
-}
-
 void QtTransport::controlProcess()
 {
-    // Process buffered transport commands first
-    while(commandBuffer_.pop(&currentCommand_))
-    {
-        processCommand(currentCommand_);
+    // Process TransportCommands first
+    TransportCommand cmd;
+    while(transportCommandBuffer_.pop(&cmd)) {
+        processTransportCommand(cmd);
     }
-    // Have all SynthItems process their buffered commands
-    for (unsigned int i = 0; i < subscribers_.size(); ++i)
+    // Do the usual for controlProcess
+    QtSynthItem::controlProcess();
+    // Trigger subscribed SynthItems to do the same
+    for (int i = 0; i < subscribers_.size(); ++i)
     {
         QtSynthItem* item = subscribers_[i];
         item->controlProcess();
     }
 }
 
-void QtTransport::on_datasetChanged(Dataset *dataset)
+void QtTransport::processTransportCommand(TransportCommand cmd)
 {
-    pause(true);
-    set_dataset(dataset);
-}
 
-void QtTransport::on_pausedChanged(bool p)
-{
-    pause(p);
-}
-
-void QtTransport::on_posChanged(double pos)
-{
-    set_playback_position(pos);
-}
-
-void QtTransport::on_speedChanged(int speed)
-{
-    set_speed(speed);
-}
-
-void QtTransport::on_loopingChanged(bool looping)
-{
-    set_looping(looping);
-}
-
-void QtTransport::on_loopPointsChanged(double begin, double end)
-{
-    set_loop_points(begin, end);
-}
-
-void QtTransport::on_interpolateChanged(bool interpolate)
-{
-    set_interpolate(interpolate);
-}
-
-double QtTransport::getPos()
-{
-    double pos;
-    pos = get_playback_position();
-    return pos;
-}
-
-void QtTransport::processCommand(SynthItemCommand command)
-{
-//    COMMAND type = command.type;
-
-//    switch (type) {
-//    case SowEnums::COMMAND::DATA:
-//        process_set_dataset(command.dataset);
-//        break;
-//    case SowEnums::COMMAND::ADD_CHILD:
-//        processAddChild(command.item, command.parameter);
-//        break;
-//    case SowEnums::COMMAND::REMOVE_CHILD:
-//        processRemoveChild(command.item);
-//        break;
-//    case SowEnums::COMMAND::MUTE:
-//        muted_ = command.bool_val;
-//        break;
-//    case SowEnums::COMMAND::PAUSE:
-//        paused_ = command.bool_val;
-//        break;
-//    case SowEnums::COMMAND::POSITION:
-//        process_set_playback_position(command.doubles[0]);
-//        break;
-//    case SowEnums::COMMAND::SPEED:
-//        speed_ = command.ints[0];
-//        break;
-//    case SowEnums::COMMAND::LOOP:
-//        loop_ = command.bool_val;
-//        break;
-//    case SowEnums::COMMAND::LOOP_POINTS:
-//        loop_begin_ = command.doubles[0];
-//        loop_end_ = command.doubles[1];
-//        break;
-//    case SowEnums::COMMAND::INTERPOLATE:
-//        interpolate_ = command.bool_val;
-//        break;
-//    case SowEnums::COMMAND::DELETE:
-//        processDelete();
-//        break;
-//    case SowEnums::COMMAND::DELETE_ITEM:
-//        process_delete_item(command.item);
-//        break;
-//    case SowEnums::COMMAND::SUBSCRIBE:
-//        process_subscribe_item(command.item);
-//        break;
-//    case SowEnums::COMMAND::UNSUBSCRIBE:
-//        process_unsubscribe_item(command.item);
-//        break;
-//    default:
-//        break;
-//    }
+    switch (cmd.type) {
+    case SowEnums::TRANSPORT_CMD::PAUSE:
+        paused_ = (cmd.valueA == 0.0f) ? false : true;
+        break;
+    case SowEnums::TRANSPORT_CMD::POS:
+        processSetPlaybackPosition(cmd.valueA);
+        break;
+    case SowEnums::TRANSPORT_CMD::SPEED:
+        speed_ = static_cast<int>(cmd.valueA);
+        break;
+    case SowEnums::TRANSPORT_CMD::LOOP:
+        loop_ = (cmd.valueA == 0.0f) ? false : true;
+        break;
+    case SowEnums::TRANSPORT_CMD::LOOP_PTS:
+        loopBegin_ = cmd.valueA;
+        loopEnd_ = cmd.valueB;
+        break;
+    case SowEnums::TRANSPORT_CMD::INTERPOLATE:
+        interpolate_ = (cmd.valueA == 0.0f) ? false : true;
+        break;
+    case SowEnums::TRANSPORT_CMD::DELETE_ITEM:
+        processDeleteItem(cmd.item);
+        break;
+    case SowEnums::TRANSPORT_CMD::SUB:
+        processSubscribeItem(cmd.item);
+        break;
+    case SowEnums::TRANSPORT_CMD::UNSUB:
+            subscribers_.removeAll(cmd.item);
+        break;
+    }
 }
 
 void QtTransport::processSubscribeItem(QtSynthItem *item)
 {
     subscribers_.push_back(item);
+    // Maybe set data here?
+    //    item->setData(&current_data_column_, &dataset_->mins_, &dataset_->maxes_);
+
 }
 
 void QtTransport::processUnsubscribeItem(QtSynthItem *item)
 {
-    remove_item(item, &subscribers_);
 }
 
-void QtTransport::processSetDataset(Dataset *dataset)
+void QtTransport::processDeleteItem(QtSynthItem *item)
+{
+
+}
+
+void QtTransport::processDatasetCommand(DatasetCommand cmd)
 {
     paused_ = true;
-    dataset_ = dataset;
-    current_data_column_.clear();
-    current_index_ = 0;
+    dataset_ = cmd.dataset;
+    currentDataColumn_.clear();
+    currentIndex_ = 0;
     mu_ = 0.0;
     calculateReturnPosition();
-    current_data_column_.resize(dataset_->height_);
+    currentDataColumn_.resize(static_cast<int>(dataset_->height_));
 }
 
-void QtTransport::processSetPlaybackPosition(double pos)
+void QtTransport::processSetPlaybackPosition(float pos)
 {
-    unsigned int newIdx = (int)pos;
-    if(current_index_ != newIdx)
+    unsigned int newIdx = static_cast<unsigned int>(pos);
+    if(currentIndex_ != newIdx)
     {
-        data_stale_ = true;
-        current_index_ = newIdx;
+        dataStale_ = true;
+        currentIndex_ = newIdx;
     }
-    mu_ = (pos - current_index_);
+    mu_ = (pos - currentIndex_);
 }
 
 void QtTransport::retrieveNextDataColumn()
 {
     if(interpolate_)
     {
-        unsigned int next_index = current_index_ + 1;
+        unsigned int next_index = currentIndex_ + 1;
         if(next_index >= dataset_->width_)
         {
             next_index = 0;
         }
-        current_data_column_ = interpolate(dataset_->get_column(current_index_), dataset_->get_column(next_index), mu_);
+        currentDataColumn_ = interpolate(dataset_->get_column(currentIndex_), dataset_->get_column(next_index), mu_);
     }
     else {
-        current_data_column_ = dataset_->get_column(current_index_);
+        currentDataColumn_ = dataset_->get_column(currentIndex_);
     }
 }
 
 void QtTransport::calculateReturnPosition()
 {
     // FIXME not on every callback
-    double pos = ((double)current_index_ + mu_);
-    return_pos_.store(pos, std::memory_order_relaxed);
+    double pos = ((double)currentIndex_ + mu_);
+    returnPos_.store(pos, std::memory_order_relaxed);
 }
 
 QVector<double> QtTransport::interpolate(QVector<double> first, QVector<double> second, double mu)
@@ -467,8 +367,8 @@ QVector<double> QtTransport::interpolate(QVector<double> first, QVector<double> 
 
 void QtTransport::updatePos()
 {
-    double pos = get_playback_position();
-    emit posChanged(pos);
+    float posVal = pos();
+    emit posChanged(posVal);
 }
 
 } // Namespace sow.
