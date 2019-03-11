@@ -76,7 +76,7 @@ private:
     QVector<double> interpolate(QVector<double> first, QVector<double> second, double mu);
 
 signals:
-    void posChanged(double pos);
+    void posChanged(float pos);
 
 private slots:
     void updatePos();
