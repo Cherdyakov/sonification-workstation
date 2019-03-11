@@ -67,6 +67,7 @@ public:
         FM,
         AUDIO
     };
+    Q_ENUM(INPUT)
 
     enum class ITEM_CMD {
         MUTE,
