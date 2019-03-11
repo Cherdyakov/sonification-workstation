@@ -12,12 +12,10 @@ namespace sow {
 double scale(double x, double in_low,
              double in_high, double out_low,
              double out_high, double exp);
-Frame visit_children(QVector<QtSynthItem*> children);
-void insert_item_unique(QtSynthItem* synth_item, QVector<QtSynthItem*> *items);
-void remove_item(QtSynthItem* synth_item, QVector<QtSynthItem *> *items);
-void remove_as_child(QtSynthItem* self, QVector<QtSynthItem *> parents);
-void remove_as_parent(QtSynthItem* self, QVector<QtSynthItem*> children);
-bool verify_child(SowEnums::ITEM param, QVector<SowEnums::ITEM> vec);
+Frame visitChildren(QVector<QtSynthItem*> children);
+void insertItemUnique(QtSynthItem* synth_item, QVector<QtSynthItem*> *items);
+void removeItem(QtSynthItem* synth_item, QVector<QtSynthItem *> *items);
+bool verifyChild(SowEnums::ITEM param, QVector<SowEnums::ITEM> vec);
 
 } // namespace sow
 #endif // UTILITY_H

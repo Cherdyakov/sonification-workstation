@@ -10,7 +10,7 @@ double scale(double x, double in_low, double in_high, double out_low, double out
     return ((x-in_low)/(in_high-in_low) == 0.0) ? out_low : (((x-in_low)/(in_high-in_low)) > 0.0) ? (out_low + (out_high-out_low) * pow(((x-in_low)/(in_high-in_low)),exp)) : ( out_low + (out_high-out_low) * -(pow((((-x+in_low)/(in_high-in_low))),exp)));
 }
 
-Frame visit_children(QVector<QtSynthItem *> children)
+Frame visitChildren(QVector<QtSynthItem *> children)
 {
     Frame frame;
     for (int i = 0; i < children.size(); ++i)
@@ -22,7 +22,7 @@ Frame visit_children(QVector<QtSynthItem *> children)
     return frame;
 }
 
-void insert_item_unique(QtSynthItem* synth_item, QVector<QtSynthItem*>* items)
+void insertItemUnique(QtSynthItem* synth_item, QVector<QtSynthItem*>* items)
 {
     if(std::find(items->begin(), items->end(), synth_item) == items->end())
     {
@@ -30,30 +30,16 @@ void insert_item_unique(QtSynthItem* synth_item, QVector<QtSynthItem*>* items)
     }
 }
 
-void remove_item(QtSynthItem* synth_item, QVector<QtSynthItem*>* items)
+void removeItem(QtSynthItem* synth_item, QVector<QtSynthItem*>* items)
 {
     items->erase(std::remove(items->begin(), items->end(), synth_item), items->end());
 }
 
-void remove_as_child(QtSynthItem* self, QVector<QtSynthItem *> parents)
-{
-    for(int i = 0; i < parents.size(); i++) {
-        QtSynthItem* parent = parents[i];
-        parent->removeChild(self);
-    }
-}
-
-void remove_as_parent(QtSynthItem* self, QVector<QtSynthItem*> children)
-{
-    for(int i = 0; i < children.size(); i++) {
-        QtSynthItem* child = children[i];
-        child->removeParent(self);
-    }
-}
-
-bool verify_child(SowEnums::ITEM param, QVector<SowEnums::ITEM> vec)
+bool verifyChild(SowEnums::ITEM param, QVector<SowEnums::ITEM> vec)
 {
     return std::find(vec.begin(), vec.end(), param) != vec.end();
 }
+
+
 
 }// namespace sow
