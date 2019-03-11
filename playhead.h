@@ -51,10 +51,12 @@ signals:
     void cursorPosChanged(double pos);
     void loopPointsChanged(double a, double b);
 
+public slots:
+    void on_cursorMoved(double pos);
+
 private slots:
     void blinker();
     void on_pausedChanged(bool pause);
-    void on_cursorMoved(double pos);
     void on_xRangeChanged(QCPRange range);
 
 };
