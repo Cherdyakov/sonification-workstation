@@ -10,7 +10,7 @@ SynthItem {
     id: root
     label: qsTr("OSC")
     type: SowEnums.OSCILLATOR
-    childType: SowEnums.INPUT
+    output: SowEnums.AUDIO
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 
@@ -71,26 +71,22 @@ SynthItem {
         id: editor
         EditorParameter {
             // Bind QML to C++ values
-            onValueChanged: oscillator.frequency.value = value
-            onFixedChanged: oscillator.frequency.fixed = fixed
-            onScaledChanged: oscillator.frequency.scaled = scaled
-            onScaleLowChanged: oscillator.frequency.scaleLo = scaleLow
-            onScaleHighChanged: oscillator.frequency.scaleHi = scaleHigh
-            onScaleExpChanged: oscillator.frequency.scaleExp = scaleExp
-            onMappingChanged: oscillator.frequency.map = mapping
+            onValueChanged: implementation.frequency.value = value
+            onFixedChanged: implementation.frequency.fixed = fixed
+            onScaledChanged: implementation.frequency.scaled = scaled
+            onScaleLowChanged: implementation.frequency.scaleLo = scaleLow
+            onScaleHighChanged: implementation.frequency.scaleHi = scaleHigh
+            onScaleExpChanged: implementation.frequency.scaleExp = scaleExp
+            onMappingChanged: implementation.frequency.map = mapping
             // Bind C++ to QML values
-            value: oscillator.frequency.value
-            fixed: oscillator.frequency.fixed
-            scaled: oscillator.frequency.scaled
-            scaleLow: oscillator.frequency.scaleLo
-            scaleHigh: oscillator.frequency.scaleHi
-            scaleExp: oscillator.frequency.scaleExp
-            mapping: oscillator.frequency.map
+            value: implementation.frequency.value
+            fixed: implementation.frequency.fixed
+            scaled: implementation.frequency.scaled
+            scaleLow: implementation.frequency.scaleLo
+            scaleHigh: implementation.frequency.scaleHi
+            scaleExp: implementation.frequency.scaleExp
+            mapping: implementation.frequency.map
         }
-    }
-
-    QtOscillator {
-        id: oscillator
     }
 
 }
