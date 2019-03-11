@@ -5,7 +5,6 @@
 #include <QVector>
 #include "frame.h"
 #include "ringbuffer.h"
-#include "Gamma/Oscillator.h"
 #include "dataset.h"
 #include "sowenums.h"
 #include "commands.h"
@@ -40,7 +39,6 @@ public:
     virtual Frame process();        // every sample
     virtual void step();            // every new data value (step)
     virtual void controlProcess();  // every process block
-    virtual QVector<QtSynthItem*> getParents();
 
 protected:
 
