@@ -56,28 +56,27 @@ public:
     };
     Q_ENUM(NOISE_TYPE)
 
-    enum class FILTER_TYPE {
+    enum class FILTER {
         LOW_PASS,
         HIGH_PASS,
         PEAK,
         NOTCH
     };
-    Q_ENUM(FILTER_TYPE)
+    Q_ENUM(FILTER)
+
+    enum class INPUT {
+        AM,
+        FM,
+        AUDIO
+    };
 
     enum class COMMAND {
+        NONE,
         DATA,
-        ADD_CHILD,
-        REMOVE_CHILD,
-        ADD_PARENT,
-        REMOVE_PARENT,
+        CONNECT_CHILD,
+        CONNECT_PARENT,
+        DISCONNECT,
         MUTE,
-        PARAM,
-        FIXED,
-        INDEXES,
-        SCALED,
-        SCALE_LOW,
-        SCALE_HIGH,
-        SCALE_EXPONENT,
         DISONNECT_ALL,
         DELETE_ITEM,
         MODULATION,

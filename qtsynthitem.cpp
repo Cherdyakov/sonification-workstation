@@ -23,41 +23,33 @@ SowEnums::ITEM QtSynthItem::type() const{
     return type_;
 }
 
-void QtSynthItem::addParent(QtSynthItem *parent)
+void QtSynthItem::connectParent(QtSynthItem *parent)
 {
     SynthItemCommand command;
-    command.type = SowEnums::COMMAND::ADD_PARENT;
+    command.type = SowEnums::COMMAND::CONNECT_PARENT;
     command.item = parent;
     commandBuffer_.push(command);
 }
 
-void QtSynthItem::removeParent(QtSynthItem *parent)
+void QtSynthItem::disconnect(QtSynthItem *item)
 {
     SynthItemCommand command;
-    command.type = SowEnums::COMMAND::REMOVE_PARENT;
-    command.item = parent;
+    command.type = SowEnums::COMMAND::DISCONNECT;
+    command.item = item;
     commandBuffer_.push(command);
 }
 
-bool QtSynthItem::addChild(QtSynthItem *child)
+bool QtSynthItem::connectChild(QtSynthItem *child)
 {
-    if(!verify_child(child->type(), acceptedChildren_))
+    if(!verifyChild(child->type(), acceptedInputs_))
     {
         return false;
     }
     SynthItemCommand command;
-    command.type = SowEnums::COMMAND::ADD_CHILD;
+    command.type = SowEnums::COMMAND::CONNECT_CHILD;
     command.item = child;
     commandBuffer_.push(command);
     return true;
-}
-
-void QtSynthItem::removeChild(QtSynthItem *child)
-{
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::REMOVE_CHILD;
-    command.item = child;
-    commandBuffer_.push(command);
 }
 
 void QtSynthItem::disconnectAll()
@@ -69,12 +61,11 @@ void QtSynthItem::disconnectAll()
 
 void QtSynthItem::setData(QVector<double> *data, QVector<double> *mins, QVector<double> *maxes)
 {
-    SynthItemCommand command;
-    command.type = SowEnums::COMMAND::DATA;
+    DatasetCommand command;
     command.data = data;
     command.mins = mins;
     command.maxes = maxes;
-    commandBuffer_.push(command);
+    datasetCommandBuffer_.push(command);
 }
 
 Frame QtSynthItem::process()
@@ -99,8 +90,13 @@ QVector<QtSynthItem *> QtSynthItem::getParents()
 // Process outstanding ParameterCommands
 void QtSynthItem::controlProcess()
 {
-    while(commandBuffer_.pop(&currentCommand_)) {
-        processCommand(currentCommand_);
+    SynthItemCommand currentCommand;
+    while(commandBuffer_.pop(&currentCommand)) {
+        processCommand(currentCommand);
+    }
+    DatasetCommand currentDatasetCommand;
+    while(datasetCommandBuffer_.pop(&currentDatasetCommand)) {
+        processDatasetCommand(currentDatasetCommand);
     }
 }
 
@@ -109,23 +105,17 @@ void QtSynthItem::processCommand(SynthItemCommand command)
     SowEnums::COMMAND type = command.type;
 
     switch (type) {
-    case SowEnums::COMMAND::DATA:
-        processSetData(command.data, command.mins, command.maxes);
-        break;
-    case SowEnums::COMMAND::ADD_CHILD:
-        processAddChild(command.item);
-        break;
-    case SowEnums::COMMAND::REMOVE_CHILD:
-        processRemoveChild(command.item);
-        break;
-    case SowEnums::COMMAND::ADD_PARENT:
-        insert_item_unique(command.item, &parents_);
-        break;
-    case SowEnums::COMMAND::REMOVE_PARENT:
-        remove_item(command.item, &parents_);
-        break;
     case SowEnums::COMMAND::MUTE:
-        mute_ = command.bool_val;
+        mute_ = !mute_;
+        break;
+    case SowEnums::COMMAND::CONNECT_CHILD:
+        processConnectChild(command.item);
+        break;
+    case SowEnums::COMMAND::CONNECT_PARENT:
+        insertItemUnique(command.item, &parents_);
+        break;
+    case SowEnums::COMMAND::DISCONNECT:
+        processDisconnect(command.item);
         break;
     case SowEnums::COMMAND::DISONNECT_ALL:
         processDisconnectAll();
@@ -135,28 +125,34 @@ void QtSynthItem::processCommand(SynthItemCommand command)
     }
 }
 
-void QtSynthItem::processAddChild(QtSynthItem *child)
+void QtSynthItem::processDatasetCommand(const DatasetCommand command)
 {
-    insert_item_unique(child, &children_);
-    child->addParent(this);
+    *data_ = *command.data;
+    *mins_ = *command.mins;
+    *maxes_ = *command.maxes;
 }
 
-void QtSynthItem::processRemoveChild(QtSynthItem *child)
+void QtSynthItem::processConnectChild(QtSynthItem *child)
 {
-    remove_item(child, &children_);
+    insertItemUnique(child, &children_);
+    child->connectParent(this);
+}
+
+void QtSynthItem::processDisconnect(QtSynthItem *other) {
+    removeItem(other, &children_);
+    removeItem(other, &parents_);
 }
 
 void QtSynthItem::processDisconnectAll()
 {
-    remove_as_child(this, parents_);
-    remove_as_parent(this, children_);
-}
-
-void QtSynthItem::processSetData(QVector<double> *data, QVector<double> *mins, QVector<double> *maxes)
-{
-    data_ = data;
-    mins_ = mins;
-    maxes_ = maxes;
+    foreach (QtSynthItem* child, children_) {
+        child->disconnect(this);
+    }
+    foreach (QtSynthItem* parent, parents_) {
+        parent->disconnect(this);
+    }
+    children_.clear();
+    parents_.clear();
 }
 
 }   // Namespace sow.

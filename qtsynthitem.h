@@ -29,10 +29,9 @@ public:
     SowEnums::ITEM type() const;
 
     // Functions invokable from QML
-    Q_INVOKABLE virtual void addParent(QtSynthItem* parent);
-    Q_INVOKABLE virtual void removeParent(QtSynthItem* parent);
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child);
-    Q_INVOKABLE virtual void removeChild(QtSynthItem *child);
+    Q_INVOKABLE virtual bool connectChild(QtSynthItem *child);
+    Q_INVOKABLE virtual void connectParent(QtSynthItem* parent);
+    Q_INVOKABLE virtual void disconnect(QtSynthItem *parent);
     Q_INVOKABLE virtual void disconnectAll();
 
     virtual void setData(QVector<double>* data,
@@ -48,17 +47,18 @@ protected:
     bool mute_;
     SowEnums::ITEM type_;
     RingBuffer<SynthItemCommand> commandBuffer_;
-    SynthItemCommand currentCommand_;
+    RingBuffer<DatasetCommand> datasetCommandBuffer_;
     QVector<double>* data_;
     QVector<double>* mins_;
     QVector<double>* maxes_;
-    QVector<SowEnums::ITEM> acceptedChildren_;
+    QVector<SowEnums::ITEM> acceptedInputs_;
     QVector<QtSynthItem*> parents_;
     QVector<QtSynthItem*> children_;
 
     virtual void processCommand(SynthItemCommand command);
-    virtual void processAddChild(QtSynthItem* child);
-    virtual void processRemoveChild(QtSynthItem* child);
+    virtual void processDatasetCommand(DatasetCommand command);
+    virtual void processConnectChild(QtSynthItem* child);
+    virtual void processDisconnect(QtSynthItem* other);
     virtual void processDisconnectAll();
     virtual void processSetData(QVector<double>* data,
                           QVector<double>* mins,
