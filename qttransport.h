@@ -25,13 +25,10 @@ public:
 
     // factory for other SynthItems
     Q_INVOKABLE sow::QtSynthItem* createItem(SowEnums::ITEM type);
-    Q_INVOKABLE virtual SowEnums::ITEM getType() override;
-    Q_INVOKABLE virtual void deleteSelf() override;
     Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
     Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) override;
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, SowEnums::PARAMETER param) override;
+    Q_INVOKABLE virtual bool addChild(QtSynthItem *child) override;
     Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
-    Q_INVOKABLE virtual void mute(bool mute) override;
     Q_INVOKABLE void deleteItem(QtSynthItem* item);
     // add or remove SynthItem from block processing
     Q_INVOKABLE void subscribeItem(QtSynthItem* item);
@@ -42,9 +39,9 @@ public:
  * From transport.h
  */
     // interface overrides
-    void setData(std::vector<double>* data,
-                  std::vector<double>* mins,
-                  std::vector<double>* maxes) override;
+    void setData(QVector<double>* data,
+                  QVector<double>* mins,
+                  QVector<double>* maxes) override;
 
     // for setting the entire dataset to be sonified
     void set_dataset(Dataset* dataset);
@@ -62,12 +59,6 @@ public:
     void step() override; // every new data value (step)
     void controlProcess() override; // every process block
 
-    // getters are not thread safe
-    bool getMute() override;
-    std::vector<QtSynthItem*> getParents() override;
-
-
-
 public slots:
 
     // slots for controlling playback
@@ -84,37 +75,24 @@ public slots:
     double getPos();
 
 private:
-    void retrieveCommands() override;
+
     void processCommand(SynthItemCommand command) override;
-    void processAddChild(QtSynthItem* child, SowEnums::PARAMETER parameter) override;
-    void processRemoveChild(QtSynthItem* child) override;
-    void processDelete() override;
-    void process_delete_item(QtSynthItem* item);
 
-    void process_subscribe_item(QtSynthItem* item);
-    void process_unsubscribe_item(QtSynthItem* item);
+    void processSubscribeItem(QtSynthItem* item);
+    void processUnsubscribeItem(QtSynthItem* item);
 
-    void process_set_dataset(Dataset *dataset);
-    void process_set_playback_position(double pos);
+    void processSetDataset(Dataset *dataset);
+    void processSetPlaybackPosition(double pos);
 
-    void retrieve_next_data_column();
-    void calculate_return_position();
-    std::vector<double> interpolate(std::vector<double> first, std::vector<double> second, double mu);
+    void retrieveNextDataColumn();
+    void calculateReturnPosition();
+    QVector<double> interpolate(QVector<double> first, QVector<double> second, double mu);
 
-    SowEnums::ITEM my_type_;
-    SowEnums::PARAMETER my_child_type_;
-    RingBuffer<SynthItemCommand> command_buffer_;
-    SynthItemCommand current_command_;
     Frame frame_buffer_[4096];
-    std::vector<QtSynthItem*> subscribers_;
-    std::vector<SowEnums::PARAMETER> accepted_children_;
+    QVector<QtSynthItem*> subscribers_;
     Dataset* dataset_;
-    std::vector<double> current_data_column_;
-    std::vector<double> mins_;
-    std::vector<double> maxes_;
+    QVector<double> current_data_column_;
     std::atomic<double> return_pos_;
-    std::vector<QtSynthItem*> inputs_;
-    std::vector<QtSynthItem*> amods_;
     float master_volume_;
     unsigned int frame_rate_;
     unsigned int current_index_;
@@ -122,7 +100,6 @@ private:
     int speed_;
     double loop_begin_;
     double loop_end_;
-    bool muted_;
     bool data_stale_;
     bool paused_;
     bool loop_;
