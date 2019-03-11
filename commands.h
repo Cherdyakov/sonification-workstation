@@ -2,7 +2,7 @@
 #define COMMANDS_H
 
 #include <QVector>
-#include "sowenums.h"
+#include "enums.h"
 #include "dataset.h"
 
 namespace sow {
@@ -11,7 +11,7 @@ namespace sow {
 class QtSynthItem;
 
 struct ItemCommand {
-    SowEnums::ITEM_CMD type;
+    ENUMS::ITEM_CMD type;
     QtSynthItem* item;
 };
 
@@ -23,13 +23,13 @@ struct DatasetCommand {
 };
 
 struct ParameterCommand {
-    SowEnums::SUB_PARAMETER subParam;
+    ENUMS::SUB_PARAMETER subParam;
     float value;
     QChar map[MAX_DATASET_DIMS];
 };
 
 struct TransportCommand {
-    SowEnums::TRANSPORT_CMD type;
+    ENUMS::TRANSPORT_CMD type;
     QtSynthItem* item;
     float valueA;
     float valueB;

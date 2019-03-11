@@ -89,12 +89,10 @@ HEADERS += \
     trackname.h \
     dataprocessor.h \
     dataset.h \
-    sowenums.h \
-    sowenums.h \
-    sowenums.h \
     commands.h \
     parameterinterface.h \
-    parameter.h
+    parameter.h \
+    enums.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

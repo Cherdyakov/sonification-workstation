@@ -2,7 +2,7 @@
 #define SOWPARAMETER_H
 
 #include <QObject>
-#include "sowenums.h"
+#include "enums.h"
 #include "commands.h"
 
 namespace sow {
@@ -24,8 +24,8 @@ public:
     explicit ParameterInterface(QObject *parent = nullptr);
 
     // QML property bindings
-    void setType(const SowEnums::PARAMETER type);
-    SowEnums::PARAMETER type() const;
+    void setType(const ENUMS::PARAMETER type);
+    ENUMS::PARAMETER type() const;
     void setValue(const float value);
     float value() const;
     void setFixed(const bool fixed);
@@ -44,7 +44,7 @@ public:
 private:
 
     // Interface variables, bound to QML
-    SowEnums::PARAMETER iType_;
+    ENUMS::PARAMETER iType_;
     float iValue_;
     bool iFixed_;
     bool iScaled_;
@@ -66,7 +66,7 @@ signals:
     void scaleExpChanged();
     void mapChanged();
     // Connect to correspoding backing Parameter
-    void iParameterChanged(const SowEnums::SUB_PARAMETER subParam, const float value);
+    void iParameterChanged(const ENUMS::SUB_PARAMETER subParam, const float value);
     void iMapChanged(const QString map);
 
 public slots:

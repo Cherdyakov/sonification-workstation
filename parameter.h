@@ -2,7 +2,7 @@
 #define PARAMETER_H
 
 #include <QObject>
-#include "sowenums.h"
+#include "enums.h"
 #include "ringbuffer.h"
 #include "commands.h"
 #include "parameterinterface.h"
@@ -21,7 +21,7 @@ public:
 private:
 
     // Backing variables, used by sow
-    SowEnums::PARAMETER type_;
+    ENUMS::PARAMETER type_;
     QString name_;
     float value_;
     bool fixed_;
@@ -40,7 +40,7 @@ private:
 signals:
 
 public slots:
-    void onParameterChanged(const SowEnums::SUB_PARAMETER subParam, const float value);
+    void onParameterChanged(const ENUMS::SUB_PARAMETER subParam, const float value);
     void onMapChanged(const QString map);
 
 };

@@ -1,11 +1,12 @@
 import QtQuick 2.7
+import ENUMS 0.1
 import "Style.js" as Style
 
 SynthItem {
 
     id: root
     label: qsTr("OUT")
-    type: 0 //OUT
+    type: ENUMS.TRANSPORT
     mainColor: Style.outColor
     textColor: Style.itemTextColor
     implementation: transport

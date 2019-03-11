@@ -2,14 +2,14 @@
 #define SOWENUMS_H
 #include <QObject>
 
-class SowEnums : public QObject
+class ENUMS : public QObject
 {
     Q_OBJECT
 
 public:
 
-    enum ITEM {
-        OUT,
+    enum class ITEM_TYPE {
+        NONE,
         OSCILLATOR,
         AUDIFIER,
         MODULATOR,
@@ -20,7 +20,15 @@ public:
         EQUALIZER,
         TRANSPORT
     };
-    Q_ENUM(ITEM)
+    Q_ENUM(ITEM_TYPE)
+
+    enum class OUTPUT_TYPE {
+        NONE,
+        AM,
+        FM,
+        AUDIO
+    };
+    Q_ENUM(OUTPUT_TYPE)
 
     enum class PARAMETER {
         AMPLITUDE,
@@ -61,13 +69,6 @@ public:
         NOTCH
     };
     Q_ENUM(FILTER)
-
-    enum class INPUT {
-        AM,
-        FM,
-        AUDIO
-    };
-    Q_ENUM(INPUT)
 
     enum class ITEM_CMD {
         MUTE,

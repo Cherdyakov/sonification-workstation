@@ -23,7 +23,7 @@ public:
     explicit QtTransport(QObject *parent = nullptr);
 
     // factory for other SynthItems
-    Q_INVOKABLE sow::QtSynthItem* createItem(SowEnums::ITEM type);
+    Q_INVOKABLE sow::QtSynthItem* createItem(ENUMS::ITEM_TYPE type);
     Q_INVOKABLE void deleteItem(QtSynthItem* item);
     // add or remove SynthItem from block processing
     Q_INVOKABLE void subscribe(QtSynthItem* item);

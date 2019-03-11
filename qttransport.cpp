@@ -12,24 +12,24 @@ QtTransport::QtTransport(QObject *parent) : QtSynthItem (parent)
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
 
+    type_ = ENUMS::ITEM_TYPE::TRANSPORT;
     dataset_ = new Dataset;
-
-    type_ = SowEnums::ITEM::TRANSPORT;
     paused_ = true;
     loop_ = false;
-    loopBegin_ = 0.0;
-    loopEnd_ = 0.0;
+    loopBegin_ = 0.0f;
+    loopEnd_ = 0.0f;
     dataStale_ = false;
     frameRate_ = 44100;
     currentIndex_ = 0;
-    mu_ = 0.0;
+    mu_ = 0.0f;
     speed_ = 1;
-    returnPos_ = 0.0;
-    masterVolume_ = 1.0;
+    returnPos_ = 0.0f;
+    masterVolume_ = 1.0f;
     interpolate_ = false;
 
     acceptedInputs_ = {
-//        SowEnums::PARAMETER::INPUT
+        ENUMS::OUTPUT_TYPE::AUDIO,
+        ENUMS::OUTPUT_TYPE::AM
     };
 }
 
@@ -40,7 +40,7 @@ QtTransport::QtTransport(QObject *parent) : QtSynthItem (parent)
 void QtTransport::deleteItem(QtSynthItem *item)
 {
     TransportCommand cmd;
-    cmd.type = SowEnums::TRANSPORT_CMD::DELETE_ITEM;
+    cmd.type = ENUMS::TRANSPORT_CMD::DELETE_ITEM;
     cmd.item = item;
     transportCommandBuffer_.push(cmd);
 }
@@ -55,7 +55,7 @@ void QtTransport::onDatasetchanged(Dataset *dataset)
 void QtTransport::onPausechanged(bool pause)
 {
     TransportCommand cmd;
-    cmd.type = SowEnums::TRANSPORT_CMD::PAUSE;
+    cmd.type = ENUMS::TRANSPORT_CMD::PAUSE;
     cmd.valueA = pause ? 1.0f : 0.0f;
     transportCommandBuffer_.push(cmd);
 }
@@ -63,7 +63,7 @@ void QtTransport::onPausechanged(bool pause)
 void QtTransport::onPoschanged(float pos)
 {
     TransportCommand cmd;
-    cmd.type = SowEnums::TRANSPORT_CMD::POS;
+    cmd.type = ENUMS::TRANSPORT_CMD::POS;
     cmd.valueA = pos;
     transportCommandBuffer_.push(cmd);
 }
@@ -71,7 +71,7 @@ void QtTransport::onPoschanged(float pos)
 void QtTransport::onSpeedchanged(float speed)
 {
     TransportCommand cmd;
-    cmd.type = SowEnums::TRANSPORT_CMD::SPEED;
+    cmd.type = ENUMS::TRANSPORT_CMD::SPEED;
     cmd.valueA = speed;
     transportCommandBuffer_.push(cmd);
 }
@@ -79,7 +79,7 @@ void QtTransport::onSpeedchanged(float speed)
 void QtTransport::onLoopingchanged(bool looping)
 {
     TransportCommand cmd;
-    cmd.type = SowEnums::TRANSPORT_CMD::LOOP;
+    cmd.type = ENUMS::TRANSPORT_CMD::LOOP;
     cmd.valueA = looping ? 1.0f : 0.0f;
     transportCommandBuffer_.push(cmd);
 }
@@ -87,7 +87,7 @@ void QtTransport::onLoopingchanged(bool looping)
 void QtTransport::onLoopPointsChanged(float begin, float end)
 {
     TransportCommand cmd;
-    cmd.type = SowEnums::TRANSPORT_CMD::LOOP_PTS;
+    cmd.type = ENUMS::TRANSPORT_CMD::LOOP_PTS;
     cmd.valueA = begin;
     cmd.valueB = end;
     transportCommandBuffer_.push(cmd);
@@ -96,7 +96,7 @@ void QtTransport::onLoopPointsChanged(float begin, float end)
 void QtTransport::onInterpolateChanged(bool interpolate)
 {
     TransportCommand cmd;
-    cmd.type = SowEnums::TRANSPORT_CMD::INTERPOLATE;
+    cmd.type = ENUMS::TRANSPORT_CMD::INTERPOLATE;
     cmd.valueA = interpolate ? 1.0f : 0.0f;
     transportCommandBuffer_.push(cmd);
 }
@@ -104,7 +104,7 @@ void QtTransport::onInterpolateChanged(bool interpolate)
 void QtTransport::subscribe(QtSynthItem *item)
 {
     TransportCommand cmd;
-    cmd.type = SowEnums::TRANSPORT_CMD::SUB;
+    cmd.type = ENUMS::TRANSPORT_CMD::SUB;
     cmd.item = item;
     transportCommandBuffer_.push(cmd);
 }
@@ -112,20 +112,20 @@ void QtTransport::subscribe(QtSynthItem *item)
 void QtTransport::unsubscribe(QtSynthItem *item)
 {
     TransportCommand cmd;
-    cmd.type = SowEnums::TRANSPORT_CMD::UNSUB;
+    cmd.type = ENUMS::TRANSPORT_CMD::UNSUB;
     cmd.item = item;
     transportCommandBuffer_.push(cmd);
 }
 
-QtSynthItem* QtTransport::createItem(SowEnums::ITEM type)
+QtSynthItem* QtTransport::createItem(ENUMS::ITEM_TYPE type)
 {
-    QtSynthItem* item;
+    QtSynthItem* item = nullptr;
 
     switch (type){
-    case SowEnums::ITEM::OUT:
+    case ENUMS::ITEM_TYPE::TRANSPORT:
         item = this;
         break;
-    case SowEnums::ITEM::OSCILLATOR:
+    case ENUMS::ITEM_TYPE::OSCILLATOR:
         item = new QtOscillator(this);
         break;
 //    case QtSynthItem::ITEM::AUDIFIER:
@@ -150,7 +150,6 @@ QtSynthItem* QtTransport::createItem(SowEnums::ITEM type)
 //        item = new Equalizer();
 //        break;
     default:
-        item = nullptr;
         break;
     }
 //    item->setData(&current_data_column_, &dataset_->mins_, &dataset_->maxes_);
@@ -257,32 +256,32 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
 {
 
     switch (cmd.type) {
-    case SowEnums::TRANSPORT_CMD::PAUSE:
+    case ENUMS::TRANSPORT_CMD::PAUSE:
         paused_ = (cmd.valueA == 0.0f) ? false : true;
         break;
-    case SowEnums::TRANSPORT_CMD::POS:
+    case ENUMS::TRANSPORT_CMD::POS:
         processSetPlaybackPosition(cmd.valueA);
         break;
-    case SowEnums::TRANSPORT_CMD::SPEED:
+    case ENUMS::TRANSPORT_CMD::SPEED:
         speed_ = static_cast<int>(cmd.valueA);
         break;
-    case SowEnums::TRANSPORT_CMD::LOOP:
+    case ENUMS::TRANSPORT_CMD::LOOP:
         loop_ = (cmd.valueA == 0.0f) ? false : true;
         break;
-    case SowEnums::TRANSPORT_CMD::LOOP_PTS:
+    case ENUMS::TRANSPORT_CMD::LOOP_PTS:
         loopBegin_ = cmd.valueA;
         loopEnd_ = cmd.valueB;
         break;
-    case SowEnums::TRANSPORT_CMD::INTERPOLATE:
+    case ENUMS::TRANSPORT_CMD::INTERPOLATE:
         interpolate_ = (cmd.valueA == 0.0f) ? false : true;
         break;
-    case SowEnums::TRANSPORT_CMD::DELETE_ITEM:
+    case ENUMS::TRANSPORT_CMD::DELETE_ITEM:
         processDeleteItem(cmd.item);
         break;
-    case SowEnums::TRANSPORT_CMD::SUB:
+    case ENUMS::TRANSPORT_CMD::SUB:
         processSubscribeItem(cmd.item);
         break;
-    case SowEnums::TRANSPORT_CMD::UNSUB:
+    case ENUMS::TRANSPORT_CMD::UNSUB:
             subscribers_.removeAll(cmd.item);
         break;
     }
