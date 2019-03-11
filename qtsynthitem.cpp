@@ -170,4 +170,4 @@ void QtSynthItem::processDisconnectAll()
     parents_.clear();
 }
 
-}   // Namespace sow.
+}   // namespace sow
