@@ -9,14 +9,17 @@ QtSynthItem::~QtSynthItem() {}
 
 void QtSynthItem::setMute(const bool mute)
 {
-    if (mute_ != mute) {
-       mute_ = mute;
-       emit muteChanged();
+    if (iMute_ != mute) {
+        iMute_ = mute;
+        emit muteChanged();
+        SynthItemCommand cmd;
+        cmd.type = iMute_ ? SowEnums::COMMAND::MUTE : SowEnums::COMMAND::UNMUTE;
+        commandBuffer_.push(cmd);
     }
 }
 
 bool QtSynthItem::mute() const {
-    return mute_;
+    return iMute_;
 }
 
 SowEnums::ITEM QtSynthItem::type() const{
@@ -94,22 +97,23 @@ void QtSynthItem::controlProcess()
     }
 }
 
-void QtSynthItem::processCommand(SynthItemCommand command)
+void QtSynthItem::processCommand(SynthItemCommand cmd)
 {
-    SowEnums::COMMAND type = command.type;
-
-    switch (type) {
+    switch (cmd.type) {
     case SowEnums::COMMAND::MUTE:
-        mute_ = !mute_;
+        mute_ = true;
+        break;
+    case SowEnums::COMMAND::UNMUTE:
+        mute_ = false;
         break;
     case SowEnums::COMMAND::CONNECT_CHILD:
-        processConnectChild(command.item);
+        processConnectChild(cmd.item);
         break;
     case SowEnums::COMMAND::CONNECT_PARENT:
-        insertItemUnique(command.item, &parents_);
+        insertUnique(cmd.item, parents_);
         break;
     case SowEnums::COMMAND::DISCONNECT:
-        processDisconnect(command.item);
+        processDisconnect(cmd.item);
         break;
     case SowEnums::COMMAND::DISONNECT_ALL:
         processDisconnectAll();

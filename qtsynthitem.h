@@ -42,7 +42,8 @@ public:
 
 protected:
 
-    bool mute_;
+    bool iMute_;    // Mute interface value
+    bool mute_;     // Mute backing value
     SowEnums::ITEM type_;
     RingBuffer<SynthItemCommand> commandBuffer_;
     RingBuffer<DatasetCommand> datasetCommandBuffer_;
