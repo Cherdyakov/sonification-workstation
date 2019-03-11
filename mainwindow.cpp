@@ -101,9 +101,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(transportWidget, SIGNAL(loopingChanged(bool)),
             qtTransport, SLOT(on_loopingChanged(bool)));
     connect(playHead, SIGNAL(loopPointsChanged(double,double)),
-            qtTransport, SLOT(on_loopPointsChanged(double,double)));
+            qtTransport, SLOT(onLoopPointsChanged(double,double)));
     connect(transportWidget, SIGNAL(interpolateChanged(bool)),
-            qtTransport, SLOT(on_interpolateChanged(bool)));
+            qtTransport, SLOT(onInterpolateChanged(bool)));
     connect(fileReader, SIGNAL(datasetChanged(sow::Dataset*)),
             transportWidget, SLOT(on_datasetChanged(sow::Dataset*)));
     connect(session, SIGNAL(newDatafile(QString,sow::Dataset*)),
@@ -115,7 +115,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(transportWidget, SIGNAL(speedChanged(int)),
             session, SLOT(on_speedChanged(int)));
     connect(transportWidget, SIGNAL(interpolateChanged(bool)),
-            session, SLOT(on_interpolateChanged(bool)));
+            session, SLOT(onInterpolateChanged(bool)));
 }
 
 MainWindow::~MainWindow()
