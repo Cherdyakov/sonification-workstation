@@ -7,6 +7,7 @@ QtSynthItem::QtSynthItem(QObject *parent) : QObject (parent) {}
 
 QtSynthItem::~QtSynthItem() {}
 
+// Set the mute value
 void QtSynthItem::setMute(const bool mute)
 {
     if (iMute_ != mute) {
@@ -18,30 +19,17 @@ void QtSynthItem::setMute(const bool mute)
     }
 }
 
+// Return the interface mute value (for use on GUI thread)
 bool QtSynthItem::mute() const {
     return iMute_;
 }
 
+// Return our SynthItem type
 SowEnums::ITEM QtSynthItem::type() const{
     return type_;
 }
 
-void QtSynthItem::connectParent(QtSynthItem *parent)
-{
-    SynthItemCommand cmd;
-    cmd.type = SowEnums::COMMAND::CONNECT_PARENT;
-    cmd.item = parent;
-    commandBuffer_.push(cmd);
-}
-
-void QtSynthItem::disconnect(QtSynthItem *item)
-{
-    SynthItemCommand cmd;
-    cmd.type = SowEnums::COMMAND::DISCONNECT;
-    cmd.item = item;
-    commandBuffer_.push(cmd);
-}
-
+// Connect the given SynthItem as a child
 bool QtSynthItem::connectChild(QtSynthItem *child)
 {
     if(!acceptedInputs_.contains(child->type()))
@@ -55,6 +43,25 @@ bool QtSynthItem::connectChild(QtSynthItem *child)
     return true;
 }
 
+// Connect to the given SynthItem as a parent
+void QtSynthItem::connectParent(QtSynthItem *parent)
+{
+    SynthItemCommand cmd;
+    cmd.type = SowEnums::COMMAND::CONNECT_PARENT;
+    cmd.item = parent;
+    commandBuffer_.push(cmd);
+}
+
+// Disconnect the given SynthItem child or parent
+void QtSynthItem::disconnect(QtSynthItem *item)
+{
+    SynthItemCommand cmd;
+    cmd.type = SowEnums::COMMAND::DISCONNECT;
+    cmd.item = item;
+    commandBuffer_.push(cmd);
+}
+
+// Disconnect all child and parent SynthItems
 void QtSynthItem::disconnectAll()
 {
     SynthItemCommand cmd;
@@ -62,6 +69,7 @@ void QtSynthItem::disconnectAll()
     commandBuffer_.push(cmd);
 }
 
+// Set the data column, dataset minumum and dataset maximum values
 void QtSynthItem::setData(QVector<double> *data, QVector<double> *mins, QVector<double> *maxes)
 {
     DatasetCommand cmd;
@@ -71,12 +79,14 @@ void QtSynthItem::setData(QVector<double> *data, QVector<double> *mins, QVector<
     datasetCommandBuffer_.push(cmd);
 }
 
+// Every audio sample
 Frame QtSynthItem::process()
 {
     Frame f = 0;
     return f;
 }
 
+// Every new data value
 void QtSynthItem::step()
 {
     foreach (QtSynthItem* child, children_) {
@@ -84,7 +94,7 @@ void QtSynthItem::step()
     }
 }
 
-// Process outstanding ParameterCommands
+// Process any buffered commands
 void QtSynthItem::controlProcess()
 {
     SynthItemCommand currentCommand;
@@ -97,6 +107,7 @@ void QtSynthItem::controlProcess()
     }
 }
 
+// Process a SynthItemCommand
 void QtSynthItem::processCommand(SynthItemCommand cmd)
 {
     switch (cmd.type) {
@@ -123,6 +134,8 @@ void QtSynthItem::processCommand(SynthItemCommand cmd)
     }
 }
 
+// Update pointers to the current data column,
+// dataset minimum and dataset maximum values.
 void QtSynthItem::processDatasetCommand(const DatasetCommand cmd)
 {
     *data_ = *cmd.data;
@@ -130,6 +143,7 @@ void QtSynthItem::processDatasetCommand(const DatasetCommand cmd)
     *maxes_ = *cmd.maxes;
 }
 
+// If not already connected, connect given child
 void QtSynthItem::processConnectChild(QtSynthItem *child)
 {
     if(insertUnique(child, children_)) {
@@ -137,11 +151,13 @@ void QtSynthItem::processConnectChild(QtSynthItem *child)
     }
 }
 
+// Disconnect the given SynthItem child or parent
 void QtSynthItem::processDisconnect(QtSynthItem *other) {
     children_.removeAll(other);
     parents_.removeAll(other);
 }
 
+// Disconnect all child and parent SynthItems
 void QtSynthItem::processDisconnectAll()
 {
     foreach (QtSynthItem* child, children_) {

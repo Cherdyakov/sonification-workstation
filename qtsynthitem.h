@@ -17,6 +17,7 @@ class QtSynthItem : public QObject
     // QML property bindings
     Q_PROPERTY(bool mute READ mute WRITE setMute NOTIFY muteChanged)
     Q_PROPERTY(SowEnums::ITEM type READ type)
+
 public:
 
     explicit QtSynthItem(QObject *parent = nullptr);
@@ -36,14 +37,14 @@ public:
     virtual void setData(QVector<double>* data,
                              QVector<double>* mins,
                              QVector<double>* maxes);
-    virtual Frame process();        // every sample
-    virtual void step();            // every new data value (step)
-    virtual void controlProcess();  // every process block
+    virtual Frame process();        // called every audio sample
+    virtual void step();            // called every new data value (step)
+    virtual void controlProcess();  // called every process block
 
 protected:
 
-    bool iMute_;    // Mute interface value
-    bool mute_;     // Mute backing value
+    bool iMute_;    // Mute interface value (used on GUI thread)
+    bool mute_;     // Mute backing value (used on audio thread)
     SowEnums::ITEM type_;
     RingBuffer<SynthItemCommand> commandBuffer_;
     RingBuffer<DatasetCommand> datasetCommandBuffer_;
@@ -59,9 +60,6 @@ protected:
     virtual void processConnectChild(QtSynthItem* child);
     virtual void processDisconnect(QtSynthItem* other);
     virtual void processDisconnectAll();
-    virtual void processSetData(QVector<double>* data,
-                          QVector<double>* mins,
-                          QVector<double>* maxes);
 
 signals:
 
