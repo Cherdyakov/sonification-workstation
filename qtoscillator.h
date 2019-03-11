@@ -4,6 +4,7 @@
 #include "qtsynthitem.h"
 #include "parameter.h"
 #include "parameterinterface.h"
+#include "Gamma/Oscillator.h"
 
 namespace sow {
 
@@ -17,10 +18,14 @@ public:
 
     ParameterInterface* frequencyInterface() const;
 
+    Frame process();
+
 private:
 
     ParameterInterface* frequencyInterface_;
     Parameter* frequency_;
+
+    gam::Sine<float> gen_;
 
 };
 
