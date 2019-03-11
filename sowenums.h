@@ -71,14 +71,13 @@ public:
     };
 
     enum class COMMAND {
-        NONE,
+        MUTE,
+        UNMUTE,
         DATA,
         CONNECT_CHILD,
         CONNECT_PARENT,
         DISCONNECT,
-        MUTE,
         DISONNECT_ALL,
-        DELETE_ITEM,
         MODULATION,
         NOISE,
         FILTER_TYPE,
