@@ -17,7 +17,7 @@ double scale(double x, double in_low,
 //Frame visitChildren(QVector<QtSynthItem*> children);
 
 template<class T>
-bool insertUnique(T item, QVector<T> items)
+bool insertUnique(T item, QVector<T> &items)
 {
     if (!items.contains(item)) {
         items.append(item);
