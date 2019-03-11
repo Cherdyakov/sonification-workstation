@@ -15,13 +15,13 @@ ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
     iMap_ = QString();
 }
 
-void sow::ParameterInterface::setType(const SowEnums::PARAMETER type) {
+void sow::ParameterInterface::setType(const ENUMS::PARAMETER type) {
     if (iType_ != type) {
         iType_ = type;
         emit typeChanged();     
     }
 }
-SowEnums::PARAMETER sow::ParameterInterface::type() const {
+ENUMS::PARAMETER sow::ParameterInterface::type() const {
     return iType_;
 }
 
@@ -29,7 +29,7 @@ void sow::ParameterInterface::setValue(const float value) {
     if (!qFuzzyCompare(iValue_, value)) {
         iValue_ =  value;
         emit valueChanged();
-        iParameterChanged(SowEnums::SUB_PARAMETER::VALUE, iValue_);
+        iParameterChanged(ENUMS::SUB_PARAMETER::VALUE, iValue_);
     }
 }
 
@@ -41,7 +41,7 @@ void sow::ParameterInterface::setFixed(const bool fixed) {
     if (iFixed_ != fixed) {
         iFixed_ =  fixed;
         emit fixedChanged();
-        iParameterChanged(SowEnums::SUB_PARAMETER::FIXED, iFixed_);
+        iParameterChanged(ENUMS::SUB_PARAMETER::FIXED, iFixed_);
     }
 }
 
@@ -53,7 +53,7 @@ void sow::ParameterInterface::setScaled(const bool scaled) {
     if (iScaled_ != scaled) {
         iScaled_ =  scaled;
         emit scaledChanged();
-        iParameterChanged(SowEnums::SUB_PARAMETER::SCALED, iScaled_);
+        iParameterChanged(ENUMS::SUB_PARAMETER::SCALED, iScaled_);
     }
 }
 
@@ -65,7 +65,7 @@ void sow::ParameterInterface::setScaleLo(const float scaleLo) {
     if (!qFuzzyCompare(iScaleLo_, scaleLo)) {
         iScaleLo_ =  scaleLo;
         emit scaleLoChanged();
-        iParameterChanged(SowEnums::SUB_PARAMETER::SCALE_LO, iScaleLo_);
+        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_LO, iScaleLo_);
     }
 }
 
@@ -77,7 +77,7 @@ void sow::ParameterInterface::setScaleHi(const float scaleHi) {
     if (!qFuzzyCompare(iScaleHi_, scaleHi)) {
         iScaleHi_ =  scaleHi;
         emit scaleHiChanged();
-        iParameterChanged(SowEnums::SUB_PARAMETER::SCALE_HI, iScaleHi_);
+        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_HI, iScaleHi_);
     }
 }
 
@@ -89,7 +89,7 @@ void sow::ParameterInterface::setScaleExp(const float scaleExp) {
     if (!qFuzzyCompare(iScaleExp_, scaleExp)) {
         iScaleExp_ =  scaleExp;
         emit scaleExpChanged();
-        iParameterChanged(SowEnums::SUB_PARAMETER::SCALE_EXP, iScaleExp_);
+        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_EXP, iScaleExp_);
     }
 }
 

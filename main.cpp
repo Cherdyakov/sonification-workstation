@@ -31,9 +31,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<QtTransport>("SonLib", 1, 0, "QtTransport");
     qmlRegisterType<ParameterInterface>("SonLib", 1, 0, "SowParameter");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
-    qmlRegisterType<SowEnums>("SowEnums", 0, 1, "SowEnums");
-    qRegisterMetaType<SowEnums::ITEM>();
-    qRegisterMetaType<SowEnums::PARAMETER>();
+    qmlRegisterType<ENUMS>("ENUMS", 0, 1, "ENUMS");
+    qRegisterMetaType<ENUMS::ITEM_TYPE>();
+    qRegisterMetaType<ENUMS::PARAMETER>();
 
     MainWindow main_window;
     UserData uData;

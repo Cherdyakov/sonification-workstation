@@ -6,7 +6,7 @@
 #include "frame.h"
 #include "ringbuffer.h"
 #include "dataset.h"
-#include "sowenums.h"
+#include "enums.h"
 #include "commands.h"
 
 namespace sow {
@@ -16,7 +16,7 @@ class QtSynthItem : public QObject
     Q_OBJECT
     // QML property bindings
     Q_PROPERTY(bool mute READ mute WRITE setMute NOTIFY muteChanged)
-    Q_PROPERTY(SowEnums::ITEM type READ type)
+    Q_PROPERTY(ENUMS::ITEM_TYPE type READ type)
 
 public:
 
@@ -26,11 +26,12 @@ public:
     // QML property bindings
     void setMute(const bool mute);
     bool mute() const;
-    SowEnums::ITEM type() const;
+    ENUMS::ITEM_TYPE type() const;
+    ENUMS::OUTPUT_TYPE outputType() const;
 
     // Functions invokable from QML
     Q_INVOKABLE virtual bool connectChild(QtSynthItem *child);
-    Q_INVOKABLE virtual void connectParent(QtSynthItem* parent);
+    Q_INVOKABLE virtual bool connectParent(QtSynthItem* parent);
     Q_INVOKABLE virtual void disconnect(QtSynthItem *parent);
     Q_INVOKABLE virtual void disconnectAll();
 
@@ -45,13 +46,14 @@ protected:
 
     bool iMute_;    // Mute interface value (used on GUI thread)
     bool mute_;     // Mute backing value (used on audio thread)
-    SowEnums::ITEM type_;
+    ENUMS::ITEM_TYPE type_;
+    ENUMS::OUTPUT_TYPE outputType_;
     RingBuffer<ItemCommand> commandBuffer_;
     RingBuffer<DatasetCommand> datasetCommandBuffer_;
     QVector<double>* data_;
     QVector<double>* mins_;
     QVector<double>* maxes_;
-    QVector<SowEnums::ITEM> acceptedInputs_;
+    QVector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
     QVector<QtSynthItem*> parents_;
     QVector<QtSynthItem*> children_;
 

@@ -2,15 +2,15 @@ import QtQuick 2.7
 import SonLib 1.0
 import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.0
-import SowEnums 0.1
+import ENUMS 0.1
 import "Style.js" as Style
 import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
     label: qsTr("OSC")
-    type: SowEnums.OSCILLATOR
-    output: SowEnums.AUDIO
+    type: ENUMS.OSCILLATOR
+    output: ENUMS.AUDIO
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 

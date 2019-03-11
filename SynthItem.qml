@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import SonLib 1.0
-import SowEnums 0.1
+import ENUMS 0.1
 import "Style.js" as Style
 
 Item {
