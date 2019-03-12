@@ -22,7 +22,7 @@ public:
 
 private:
 
-    // Backing variables, used by sow
+    // Backing variables
     ENUMS::PARAMETER type_;
     QString name_;
     float value_;
@@ -33,8 +33,6 @@ private:
 
     // For processing ParameterCommands
     RingBuffer<ParameterCommand> commandBuffer_;
-    ParameterCommand currentCommand_;
-
     void processCommand(ParameterCommand cmd);
 
 signals:

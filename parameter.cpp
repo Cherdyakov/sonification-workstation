@@ -29,6 +29,7 @@ void Parameter::connectInterface(ParameterInterface *interface)
 // Process outstanding ParameterCommands
 void Parameter::controlProcess()
 {
+    ParameterCommand currentCommand_;
     while(commandBuffer_.pop(&currentCommand_)) {
         processCommand(currentCommand_);
     }
