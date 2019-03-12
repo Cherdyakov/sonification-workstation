@@ -10,7 +10,7 @@ class ArgumentException : public QException
 {
 public:
 
-    explicit ArgumentException(const QString message)
+    explicit ArgumentException(const QString message = "Argument exception.")
     {
         what_ = message;
     }
