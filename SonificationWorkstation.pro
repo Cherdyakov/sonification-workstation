@@ -44,7 +44,8 @@ SOURCES += \
     dataprocessor.cpp \
     qtsynthitem.cpp \
     parameterinterface.cpp \
-    parameter.cpp
+    parameter.cpp \
+    dataset.cpp
 
 HEADERS += \
     mainwindow.h \

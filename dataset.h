@@ -1,21 +1,28 @@
 #ifndef DATASET_H
 #define DATASET_H
 
+#include <QObject>
 #include <QVector>
 
 #define MAX_DATASET_DIMS 128
 
 namespace sow {
 
-struct Dataset
+class Dataset : public QObject
 {
-    int height_;
-    int width_;
+    Q_OBJECT
+
+public:
+
+private:
+
+    uint height_;
+    uint width_;
     QVector<double> data_;
     QVector<double> mins_;
     QVector<double> maxes_;
 
-    Dataset()
+    explicit Dataset(QObject* parent = nullptr)
     {
         height_ = 0;
         width_ = 0;
