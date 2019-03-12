@@ -1,28 +1,21 @@
 import QtQuick 2.7
 import SonLib 1.0
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.0
+import ENUMS 0.1
 import "Style.js" as Style
 import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
     label: qsTr("OSC")
-    type: QtTransport.OSCILLATOR
-    childType: QtSynthItem.INPUT
+    type: ENUMS.OSCILLATOR
+    output: ENUMS.AUDIO
     mainColor: Style.oscColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()
-        frequencyEditor.value = implementation.getFreq()
-        fixedFrequencyEditor.fixed = implementation.getFreqFixed()
-
-        frequencyMapper.validateMappings()
-        frequencyScaler.low = implementation.getFreqScaleLow()
-        frequencyScaler.high = implementation.getFreqScaleHigh()
-        frequencyScaler.exponent = implementation.getFreqScaleExponent()
-        frequencyScaler.scaled = implementation.getFreqScaled()
     }
 
     // return json representation of self
@@ -53,7 +46,6 @@ SynthItem {
             "freqScaleHigh": implementation.getFreqScaleHigh(),
             "freqScaleExponent": implementation.getFreqScaleExponent()
         }
-
         return essence
     }
 
@@ -76,75 +68,26 @@ SynthItem {
     }
 
     Editor {
-
         id: editor
-
-        EditorLayout {
-            id: layout
-            title: label
-
-            RowLayout {
-
-                EditorDoubleParam {
-                    id: frequencyEditor
-                    label.text: "Frequency: "
-                    onValueChanged: {
-                        if(implementation !== null) {
-                            implementation.setFreq(value)
-                        }
-                    }
-                }
-
-                EditorFixedParam {
-                    id: fixedFrequencyEditor
-                    label.text: qsTr("Fixed: ")
-                    onFixedChanged: {
-                        if(implementation !== null) {
-                            implementation.setFreqFixed(fixed)
-                        }
-                    }
-                }
-            }
-
-            EditorMapper {
-                id: frequencyMapper
-                label.text: qsTr("Frequency Source: ")
-                maxIndexes: 128
-                onMappingsChanged:
-                {
-                    var implementationMappings = mappings.map(function(value) {
-                        return value - 1
-                    } )
-                    if(implementation !== null) {
-                        implementation.setFreqIndexes(implementationMappings)
-                    }
-                }
-            }
-
-            EditorScaler {
-                id: frequencyScaler
-                label.text: qsTr("Frequency Scaling: ")
-                lowLabel.text: qsTr("Frequency Low: ")
-                highLabel.text: qsTr("Frequency High: ")
-
-                onLowChanged:
-                {
-                    implementation.setFreqScaleLow(low)
-                }
-                onHighChanged:
-                {
-                    implementation.setFreqScaleHigh(high)
-                }
-                onExponentChanged:
-                {
-                    implementation.setFreqScaleExponent(exponent)
-                }
-                onScaledChanged:
-                {
-                    implementation.setFreqScaled(scaled)
-                }
-            }
+        EditorParameter {
+            // Bind QML to C++ values
+            onValueChanged: implementation.frequency.value = value
+            onFixedChanged: implementation.frequency.fixed = fixed
+            onScaledChanged: implementation.frequency.scaled = scaled
+            onScaleLowChanged: implementation.frequency.scaleLo = scaleLow
+            onScaleHighChanged: implementation.frequency.scaleHi = scaleHigh
+            onScaleExpChanged: implementation.frequency.scaleExp = scaleExp
+            onMappingChanged: implementation.frequency.map = mapping
+            // Bind C++ to QML values
+            value: implementation.frequency.value
+            fixed: implementation.frequency.fixed
+            scaled: implementation.frequency.scaled
+            scaleLow: implementation.frequency.scaleLo
+            scaleHigh: implementation.frequency.scaleHi
+            scaleExp: implementation.frequency.scaleExp
+            mapping: implementation.frequency.map
         }
     }
+
 }
 

@@ -8,7 +8,7 @@
 #include "ringbuffer.h"
 #include "utility.h"
 
-namespace son {
+namespace sow {
 
 class Oscillator final: public SynthItem
 {
@@ -100,6 +100,6 @@ private:
 
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // OSCILLATOR_H

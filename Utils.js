@@ -1,3 +1,7 @@
+// Calculates rect surrounding all
+// items in list.  Used for getting
+// rect around instantiated items
+// in the synth window
 function itemsRect(items) {
 
     var xMax = 0

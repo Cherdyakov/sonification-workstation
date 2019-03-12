@@ -1,7 +1,7 @@
 #include "equalizer.h"
 #include "utility.h"
 
-namespace son {
+namespace sow {
 
 Equalizer::Equalizer()
 {
@@ -646,4 +646,4 @@ double Equalizer::calculate_filter_resonance()
     return resonance;
 }
 
-} // namespace son
+} // namespace sow

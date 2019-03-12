@@ -1,10 +1,9 @@
 #ifndef RingBuffer_H
 #define RingBuffer_H
 
-#include <atomic>
-#include <vector>
+#include <QAtomicInt>
 
-namespace son
+namespace sow
 {
 
 template <class T>
@@ -24,10 +23,10 @@ public:
 
 private:
 
-    std::atomic<int> currentSize;
-    std::atomic<int> capacity;
-    std::atomic<int> head;
-    std::atomic<int> tail;
+    QAtomicInt currentSize;
+    QAtomicInt capacity;
+    QAtomicInt head;
+    QAtomicInt tail;
     T* array;
 
 };
@@ -112,7 +111,7 @@ bool RingBuffer<T>::full() const
     return(currentSize == capacity);
 }
 
-} //namespace son
+} //namespace sow
 
 #endif // RingBuffer_H
 

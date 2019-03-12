@@ -69,7 +69,7 @@ Item {
             else {
                 //clicked on second item
                 //add startpoint to end's parents
-                item.addChild(patchingChild)
+                item.connectChild(patchingChild)
                 //stop patching
                 patchingChild = null
             }
@@ -172,11 +172,10 @@ Item {
     function deletePatch(patch) {
         var parent = patch.parent
         var child = patch.child
-        parent.removeChild(child)
-        child.removeParent(parent)
-        var idx = patches.indexOf(patch)
-        if(idx > -1) {
-            patches.splice(idx, 1)
+        parent.disconnect(child)
+        child.disconnect(parent)
+        while(patches.indexOf(patch) > -1) {
+            patches.splice(patches.indexOf(patch), 1)
         }
     }
 

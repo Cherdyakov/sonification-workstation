@@ -1,10 +1,10 @@
 #include "granulator.h"
 
-namespace son {
+namespace sow {
 
 Granulator::Granulator()
 {
 
 }
 
-} // namespace son
+} // namespace sow

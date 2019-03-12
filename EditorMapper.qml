@@ -43,6 +43,7 @@ ColumnLayout {
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             onEditingFinished:
             {
+                mappingsChanged(text)
                 validateMappings()
             }
 
@@ -57,12 +58,12 @@ ColumnLayout {
 
     function validateMappings()
     {
-        var inString = textInput.text
-        var parsedInput = getNumbers(inString)
-        var clampedInput = parsedInput.filter(filterMax)
-        var sizedInput = clampedInput.slice(0, maxIndexes)
-        textInput.text = getStringRange(sizedInput)
-        mappingsChanged(clampedInput)
+//        var inString = textInput.text
+//        var parsedInput = getNumbers(inString)
+//        var clampedInput = parsedInput.filter(filterMax)
+//        var sizedInput = clampedInput.slice(0, maxIndexes)
+//        textInput.text = getStringRange(sizedInput)
+//        mappingsChanged(clampedInput)
     }
 
     function getNumbers(stringNumbers)

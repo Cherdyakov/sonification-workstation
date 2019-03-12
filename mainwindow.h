@@ -22,6 +22,8 @@
 #include "plotter.h"
 #include "trackview.h"
 
+using namespace sow;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -34,7 +36,7 @@ public:
 
 private:
 
-    QtTransport* qtTransport;
+    QtTransport* transport;
     FileReader* fileReader;
 
     //Tab widget and tabs

@@ -4,7 +4,7 @@
 #include "qtsynthitem.h"
 #include "noise.h"
 
-using namespace son;
+using namespace sow;
 
 class QtNoise : public QtSynthItem
 {

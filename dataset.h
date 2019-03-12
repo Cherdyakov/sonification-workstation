@@ -1,17 +1,19 @@
 #ifndef DATASET_H
 #define DATASET_H
 
-#include <vector>
+#include <QVector>
 
-namespace son {
+#define MAX_DATASET_DIMS 128
+
+namespace sow {
 
 struct Dataset
 {
-    unsigned int height_;
-    unsigned int width_;
-    std::vector<double> data_;
-    std::vector<double> mins_;
-    std::vector<double> maxes_;
+    int height_;
+    int width_;
+    QVector<double> data_;
+    QVector<double> mins_;
+    QVector<double> maxes_;
 
     Dataset()
     {
@@ -20,17 +22,17 @@ struct Dataset
     }
 
     // helper functions
-    void init(std::vector<double> data, unsigned int height, unsigned int width)
+    void init(QVector<double> data, unsigned int height, unsigned int width)
     {
         data_.clear();
         data_ = data;
         height_ = height;
         width_ = width;
-        calculate_min_max();
+        calculateMinMax();
     }
 
-    std::vector<double> get_column(unsigned int col) {
-        std::vector<double> vec;
+    QVector<double> getColumn(unsigned int col) {
+        QVector<double> vec;
         if(col > width_)
         {
             return vec;
@@ -38,13 +40,13 @@ struct Dataset
         for(unsigned int i = 0; i < height_; i++)
         {
             unsigned int idx = ((width_ * i) + col);
-            vec.push_back(data_[idx]);
+            vec.append(data_[idx]);
         }
         return vec;
     }
 
-    std::vector<double> get_row(unsigned int row) {
-        std::vector<double> vec;
+    QVector<double> getRow(unsigned int row) {
+        QVector<double> vec;
         if(row > height_)
         {
             return vec;
@@ -52,12 +54,12 @@ struct Dataset
         for(unsigned int i = 0; i < width_; i++)
         {
             unsigned int idx = ((width_ * row) + i);
-            vec.push_back(data_[idx]);
+            vec.append(data_[idx]);
         }
         return vec;
     }
 
-    void calculate_min_max()
+    void calculateMinMax()
     {
         double min;
         double max;

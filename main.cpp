@@ -4,13 +4,13 @@
 #include <QQmlContext>
 
 #include "qtsynthitem.h"
-#include "qtoscillator.h"
 #include "mainwindow.h"
 #include "portaudio.h"
 #include "callback.h"
 #include "qttransport.h"
 #include "ringbuffer.h"
 #include "filereader.h"
+#include "Gamma/Sync.h"
 
 #define SR 44100
 #define BLOCK_SIZE 512
@@ -19,18 +19,25 @@ void PrintAudioError(PaError e) {
     qDebug("PortAudio error: %s\n", Pa_GetErrorText(e));
 }
 
+using namespace sow;
+
 int main(int argc, char *argv[])
 {
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
     qmlRegisterType<QtSynthItem>("SonLib", 1, 0, "QtSynthItem");
+    qmlRegisterType<QtOscillator>("SonLib", 1, 0, "QtOscillator");
     qmlRegisterType<QtTransport>("SonLib", 1, 0, "QtTransport");
+    qmlRegisterType<ParameterInterface>("SonLib", 1, 0, "SowParameter");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
+    qmlRegisterType<ENUMS>("ENUMS", 0, 1, "ENUMS");
+    qRegisterMetaType<ENUMS::ITEM_TYPE>();
+    qRegisterMetaType<ENUMS::PARAMETER>();
 
     MainWindow main_window;
     UserData uData;
-    uData.root =  main_window.getTransport()->implementation();
+    uData.root =  main_window.getTransport();
 
     main_window.show();
 

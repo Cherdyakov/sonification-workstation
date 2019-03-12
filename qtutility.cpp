@@ -1,6 +1,6 @@
 #include "qtutility.h"
 
-QList<int> vecToQList(std::vector<int> vec)
+QList<int> vecToQList(QVector<int> vec)
 {
     QList<int> list;
     for(unsigned int i = 0; i < vec.size(); i++)
@@ -10,7 +10,7 @@ QList<int> vecToQList(std::vector<int> vec)
     return list;
 }
 
-QList<double> vecToQList(std::vector<double> vec)
+QList<double> vecToQList(QVector<double> vec)
 {
     QList<double> list;
     for(unsigned int i = 0; i < vec.size(); i++)
@@ -20,7 +20,7 @@ QList<double> vecToQList(std::vector<double> vec)
     return list;
 }
 
-QList<QString> vecToQList(std::vector<std::__cxx11::string> vec)
+QList<QString> vecToQList(QVector<std::__cxx11::string> vec)
 {
     QList<QString> list;
     for(unsigned int i = 0; i < vec.size(); i++)

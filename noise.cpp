@@ -1,6 +1,6 @@
 #include "noise.h"
 
-namespace son {
+namespace sow {
 
 Noise::Noise()
 {
@@ -234,4 +234,4 @@ void Noise::process_set_noise(NOISE noise)
     noise_type_ = noise;
 }
 
-} // namespace son
+} // namespace sow

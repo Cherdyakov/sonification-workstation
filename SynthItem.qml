@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import SonLib 1.0
+import ENUMS 0.1
 import "Style.js" as Style
 
 Item {
@@ -14,13 +15,13 @@ Item {
     property var mappedRows: []
     property bool muted: false
     property int type: -1 // OUT = 0, OSC = 1
-    property int childType: -1 // INPUT = 0
+    property int output: -1 // INPUT = 0
     property bool created: false
     property string label: "SON"
     property string mainColor
     property string textColor
     property QtSynthItem implementation: null // the CPP implementation of this SynthItem
-     property var zModifier: root.activeFocus === true ? 10 : 0
+    property var zModifier: root.activeFocus === true ? 10 : 0
 
     property alias radius: rect.radius
 
@@ -50,7 +51,6 @@ Item {
     onWidthChanged: canvas.requestPaint()
 
     states: [
-
         State {
             name: "MAXIMIZED"
             PropertyChanges {
@@ -69,7 +69,6 @@ Item {
                 enabled: true
             }
         }
-
     ]
 
     transitions: [
@@ -100,6 +99,9 @@ Item {
     function create() {
         created = true
         implementation = transport.createItem(type)
+        if(implementation === null) {
+            deleted(root);
+        }
         canvas.requestPaint()
     }
 
@@ -113,48 +115,34 @@ Item {
         // sets params of new item created from saved sesssion file
     }
 
-    function addChild(synthItem) {
-        //  add child's implementation to the children
-        //  of this item's implementation
-        var added = implementation.addChild(synthItem.implementation, synthItem.childType)
+    function connectChild(synthItem) {
+        //  connect implementation
+        var added = implementation.connectChild(synthItem.implementation)
         if(added === true)
         {
-            //  add QML child to this item's synthChildren
+            //  connect QML
             synthChildren.push(synthItem)
-            //  add this to the new child's parents
             synthItem.addParent(this)
         }
         canvas.requestPaint()
     }
 
-    function removeChild(synthItem) {
-        //  remove the child implementation from the
-        //  children of this item's implementation
-        implementation.removeChild(synthItem.implementation)
-        // remove the QML child from this item's children
-        var idx = synthChildren.indexOf(synthItem)
-        if(idx > -1)
-        {
-            synthChildren.splice(idx, 1)
-        }
-        canvas.requestPaint()
-    }
-
     function addParent(synthItem) {
-        // add QML parent to this item's synthParents
+        // add QML parent
         synthParents.push(synthItem)
     }
 
-    function removeParent(synthItem) {
-        // remove parent's implementation from
-        // this implementation's parent's
-        implementation.removeParent(synthItem.implementation);
-        // remove parent from this item's synthParents
-        var idx = synthParents.indexOf(synthItem)
-        if(idx > -1)
-        {
-            synthParents.splice(idx, 1)
+    function disconnect(synthItem) {
+        //  disconnect implementation
+        implementation.disconnect(synthItem.implementation)
+        // disconnect QML
+        while (synthChildren.indexOf(synthItem) > -1) {
+            synthChildren.splice(synthChildren.indexOf(synthItem), 1)
         }
+        while (synthParents.indexOf(synthItem) > -1) {
+            synthParents.splice(synthParents.indexOf(synthItem), 1)
+        }
+        canvas.requestPaint()
     }
 
     function mute() {
@@ -167,10 +155,6 @@ Item {
             synthItem.muted = muted
         }
         canvas.requestPaint()
-    }
-
-    function deleteThis() {
-        deleted(root)
     }
 
     Rectangle {
@@ -241,7 +225,7 @@ Item {
 
     Keys.onPressed: {
         if (event.key === Qt.Key_Backspace || event.key === Qt.Key_Delete) {
-            deleteThis()
+            deleted(root)
             event.accepted = true
         }
 

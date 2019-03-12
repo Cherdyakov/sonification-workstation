@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout* synthLayout = new QVBoxLayout(this);
 
     //synthesis tree root, transport;
-    qtTransport = new QtTransport();
+    transport = new QtTransport();
 
     //////////////////////
     //Transport section //
@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //QML View//
     ////////////
     QQuickView* quickView = new QQuickView;
-    quickView->rootContext()->setContextProperty("transport", qtTransport);
+    quickView->rootContext()->setContextProperty("transport", transport);
     quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
 
@@ -82,32 +82,34 @@ MainWindow::MainWindow(QWidget *parent) :
     createMenus();
 
     /* connect non-ui slots and signals */
-    connect(fileReader, SIGNAL(datasetChanged(son::Dataset*)),
-            qtTransport, SLOT(on_datasetChanged(son::Dataset*)));
-    connect(fileReader, SIGNAL(datasetChanged(son::Dataset*)),
-            trackView, SLOT(on_datasetChanged(son::Dataset*)));
-    connect(qtTransport, SIGNAL(posChanged(double)),
-            playHead, SLOT(on_cursorMoved(double)));
+    connect(fileReader, &FileReader::datasetChanged,
+            transport, &QtTransport::onDatasetchanged);
+    connect(transport, &QtTransport::posChanged,
+            playHead, &PlayHead::on_cursorMoved);
+    connect(transportWidget, &TransportWidget::speedChanged,
+            transport, &QtTransport::onSpeedchanged);
+    connect(transportWidget, &TransportWidget::pausedChanged,
+            transport, &QtTransport::onPausechanged);
+    connect(playHead, &PlayHead::cursorPosChanged,
+            transport, &QtTransport::onPoschanged);
+    connect(transportWidget, &TransportWidget::loopingChanged,
+            transport, &QtTransport::onLoopingchanged);
+    connect(playHead, &PlayHead::loopPointsChanged,
+            transport, &QtTransport::onLoopPointsChanged);
+    connect(transportWidget, &TransportWidget::interpolateChanged,
+            transport, &QtTransport::onInterpolateChanged);
+
+    connect(fileReader, SIGNAL(datasetChanged(sow::Dataset*)),
+            trackView, SLOT(on_datasetChanged(sow::Dataset*)));
     connect(plotter->xAxis, SIGNAL(rangeChanged(QCPRange)),
             playHead, SLOT(on_xRangeChanged(QCPRange)));
     connect(transportWidget, SIGNAL(pausedChanged(bool)),
             playHead, SLOT(on_pausedChanged(bool)));
-    connect(transportWidget, SIGNAL(speedChanged(int)),
-            qtTransport, SLOT(on_speedChanged(int)));
-    connect(transportWidget, SIGNAL(pausedChanged(bool)),
-            qtTransport, SLOT(on_pausedChanged(bool)));
-    connect(playHead, SIGNAL(cursorPosChanged(double)),
-            qtTransport, SLOT(on_posChanged(double)));
-    connect(transportWidget, SIGNAL(loopingChanged(bool)),
-            qtTransport, SLOT(on_loopingChanged(bool)));
-    connect(playHead, SIGNAL(loopPointsChanged(double,double)),
-            qtTransport, SLOT(on_loopPointsChanged(double,double)));
-    connect(transportWidget, SIGNAL(interpolateChanged(bool)),
-            qtTransport, SLOT(on_interpolateChanged(bool)));
-    connect(fileReader, SIGNAL(datasetChanged(son::Dataset*)),
-            transportWidget, SLOT(on_datasetChanged(son::Dataset*)));
-    connect(session, SIGNAL(newDatafile(QString,son::Dataset*)),
-            fileReader, SLOT(on_newDatafile(QString,son::Dataset*)));
+
+    connect(fileReader, SIGNAL(datasetChanged(sow::Dataset*)),
+            transportWidget, SLOT(on_datasetChanged(sow::Dataset*)));
+    connect(session, SIGNAL(newDatafile(QString,sow::Dataset*)),
+            fileReader, SLOT(on_newDatafile(QString,sow::Dataset*)));
     connect(session, SIGNAL(speedChanged(int)),
             transportWidget, SLOT(on_speed_changed(int)));
     connect(session, SIGNAL(interpolateChanged(bool)),
@@ -115,7 +117,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(transportWidget, SIGNAL(speedChanged(int)),
             session, SLOT(on_speedChanged(int)));
     connect(transportWidget, SIGNAL(interpolateChanged(bool)),
-            session, SLOT(on_interpolateChanged(bool)));
+            session, SLOT(onInterpolateChanged(bool)));
 }
 
 MainWindow::~MainWindow()
@@ -125,7 +127,7 @@ MainWindow::~MainWindow()
 
 QtTransport *MainWindow::getTransport()
 {
-    return qtTransport;
+    return transport;
 }
 
 void MainWindow::createMenus()

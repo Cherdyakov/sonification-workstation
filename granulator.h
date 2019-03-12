@@ -5,7 +5,7 @@
 #include "synthitem.h"
 #include "ringbuffer.h"
 
-namespace son {
+namespace sow {
 
 class Granulator final : public SynthItem
 {
@@ -54,6 +54,6 @@ public:
 
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // GRANULATOR_H

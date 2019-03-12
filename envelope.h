@@ -5,7 +5,7 @@
 #include "ringbuffer.h"
 #include "utility.h"
 
-namespace son {
+namespace sow {
 
 class Envelope final: public SynthItem
 {

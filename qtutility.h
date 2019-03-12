@@ -6,8 +6,8 @@
 
 #include <vector>
 
-QList<int> vecToQList(std::vector<int> vec);
-QList<double> vecToQList(std::vector<double> vec);
-QList<QString> vecToQList(std::vector<std::string> vec);
+QList<int> vecToQList(QVector<int> vec);
+QList<double> vecToQList(QVector<double> vec);
+QList<QString> vecToQList(QVector<std::string> vec);
 
 #endif // QTUTILITY_H

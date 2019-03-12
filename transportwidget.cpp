@@ -90,7 +90,7 @@ void TransportWidget::on_interpolateBox_stateChanged(int state)
     }
 }
 
-void TransportWidget::on_datasetChanged(son::Dataset *dataset)
+void TransportWidget::on_datasetChanged(sow::Dataset *dataset)
 {
     Q_UNUSED(dataset);
     paused = true;

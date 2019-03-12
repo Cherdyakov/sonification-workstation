@@ -3,7 +3,7 @@
 
 #include "oscillator.h"
 
-namespace son {
+namespace sow {
 
 class Modulator final: public SynthItem
 {
@@ -117,6 +117,6 @@ private:
 
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // MODULATOR_H

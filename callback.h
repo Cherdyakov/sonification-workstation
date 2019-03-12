@@ -7,7 +7,7 @@
 #include "userdata.h"
 #include "portaudio.h"
 
-namespace son {
+namespace sow {
 
 static int callback( const void *inputBuffer,
                      void *outputBuffer,
@@ -24,7 +24,7 @@ static int callback( const void *inputBuffer,
     // Cast data passed through stream to our struct.
     UserData *uData = (UserData*)userData;
     float *buffer = (float*) outputBuffer;
-    SynthItem* root = uData->root;
+    QtSynthItem* root = uData->root;
 
     // Write interleaved audio data.
     for (unsigned int i=0; i < framesPerBuffer; ++i) {
@@ -34,9 +34,9 @@ static int callback( const void *inputBuffer,
         *buffer++ = frame.right;
     }
 
-    root->control_process();
+    root->controlProcess();
 
     return 0;
 }
 
-} // namespace son
+} // namespace sow

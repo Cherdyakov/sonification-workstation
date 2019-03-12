@@ -21,7 +21,7 @@ void TrackView::setPlayHead(PlayHead *p)
     playHead = p;
 }
 
-void TrackView::plot(son::Dataset *dataset)
+void TrackView::plot(sow::Dataset *dataset)
 {
     for(uint i = 0; i < dataset->height_; i++)
     {
@@ -29,7 +29,7 @@ void TrackView::plot(son::Dataset *dataset)
         Track* track = addTrack();
         track->setTrackNumber(i + 1);
         //plot to each track
-        std::vector<double> trackData = dataset->get_row(i);
+        QVector<double> trackData = dataset->getRow(i);
         track->plot(trackData);
     }
     trackLayout->addStretch();
@@ -66,7 +66,7 @@ void TrackView::removeTrack(Track *track)
 
 }
 
-void TrackView::on_datasetChanged(son::Dataset* dataset)
+void TrackView::on_datasetChanged(sow::Dataset* dataset)
 {
     clear();
     plot(dataset);

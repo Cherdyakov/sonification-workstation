@@ -8,33 +8,32 @@ include(deployment.pri)
 SOURCES += \
     mainwindow.cpp \
     main.cpp \
-    oscillator.cpp \
-    audifier.cpp \
+#    oscillator.cpp \
+#    audifier.cpp \
     timerworker.cpp \
     filereader.cpp \
     external/qcustomplot/qcustomplot.cpp \
     plotter.cpp \
     playhead.cpp \
     qtoscillator.cpp \
-    qtsynthitem.cpp \
-    qtaudifier.cpp \
-    modulator.cpp \
-    qtmodulator.cpp \
-    transport.cpp \
+#    qtaudifier.cpp \
+#    modulator.cpp \
+#    qtmodulator.cpp \
+#    transport.cpp \
     transportwidget.cpp \
     qttransport.cpp \
     utility.cpp \
-    panner.cpp \
-    qtpanner.cpp \
-    envelope.cpp \
-    qtenvelope.cpp \
-    volume.cpp \
-    qtvolume.cpp \
-    noise.cpp \
-    qtnoise.cpp \
-    equalizer.cpp \
-    qtequalizer.cpp \
-    granulator.cpp \
+#    panner.cpp \
+#    qtpanner.cpp \
+#    envelope.cpp \
+#    qtenvelope.cpp \
+#    volume.cpp \
+#    qtvolume.cpp \
+#    noise.cpp \
+#    qtnoise.cpp \
+#    equalizer.cpp \
+#    qtequalizer.cpp \
+#    granulator.cpp \
     session.cpp \
     qtutility.cpp \
     trackview.cpp \
@@ -42,43 +41,45 @@ SOURCES += \
     trackheader.cpp \
     trackplotter.cpp \
     trackname.cpp \
-    dataprocessor.cpp
+    dataprocessor.cpp \
+    qtsynthitem.cpp \
+    parameterinterface.cpp \
+    parameter.cpp
 
 HEADERS += \
     mainwindow.h \
     synthitem.h \
     callback.h \
     userdata.h \
-    oscillator.h \
+#    oscillator.h \
     ringbuffer.h \
-    audifier.h \
+#    audifier.h \
     timerworker.h \
     filereader.h \
     external/qcustomplot/qcustomplot.h \
     plotter.h \
     playhead.h \
-    enums.h \
     qtoscillator.h \
     qtsynthitem.h \
-    qtaudifier.h \
-    modulator.h \
-    qtmodulator.h \
-    transport.h \
+#    qtaudifier.h \
+#    modulator.h \
+#    qtmodulator.h \
+#    transport.h \
     transportwidget.h \
     qttransport.h \
     utility.h \
     frame.h \
-    panner.h \
-    qtpanner.h \
-    envelope.h \
-    qtenvelope.h \
-    volume.h \
-    qtvolume.h \
-    noise.h \
-    qtnoise.h \
-    equalizer.h \
-    qtequalizer.h \
-    granulator.h \
+#    panner.h \
+#    qtpanner.h \
+#    envelope.h \
+#    qtenvelope.h \
+#    volume.h \
+#    qtvolume.h \
+#    noise.h \
+#    qtnoise.h \
+#    equalizer.h \
+#    qtequalizer.h \
+#    granulator.h \
     session.h \
     qtutility.h \
     trackview.h \
@@ -87,7 +88,12 @@ HEADERS += \
     trackplotter.h \
     trackname.h \
     dataprocessor.h \
-    dataset.h
+    dataset.h \
+    commands.h \
+    parameterinterface.h \
+    parameter.h \
+    enums.h \
+    scaler.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src
@@ -100,3 +106,10 @@ INCLUDEPATH += $${BASEPATH}/Gamma-master
 INCLUDEPATH +=  external/qcustomplot
 # PortAudio
 unix|win32: LIBS += -lportaudio
+
+# Update qrc files
+update_qml.target = qml.qrc
+update_qml.commands = echo>>$${update_qml.target} # same as touch
+update_qml.depends = $$files(path/to/resource/files/*, true) # recurse into subdirs
+QMAKE_EXTRA_TARGETS += update_qml
+PRE_TARGETDEPS += $${update_qml.target}

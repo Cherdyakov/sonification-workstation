@@ -1,6 +1,6 @@
 #include "transport.h"
 
-namespace son {
+namespace sow {
 
 Transport::Transport()
 {
@@ -183,27 +183,27 @@ SynthItem* Transport::create_item(SynthItem::ITEM type)
     case SynthItem::ITEM::OSCILLATOR:
         item = new Oscillator();
         break;
-    case SynthItem::ITEM::AUDIFIER:
-        item = new Audifier();
-        break;
-    case SynthItem::ITEM::MODULATOR:
-        item = new Modulator();
-        break;
-    case SynthItem::ITEM::PANNER:
-        item = new Panner();
-        break;
-    case SynthItem::ITEM::ENVELOPE:
-        item = new Envelope();
-        break;
-    case SynthItem::ITEM::VOLUME:
-        item = new Volume();
-        break;
-    case SynthItem::ITEM::NOISE:
-        item = new Noise();
-        break;
-    case SynthItem::ITEM::EQUALIZER:
-        item = new Equalizer();
-        break;
+//    case SynthItem::ITEM::AUDIFIER:
+//        item = new Audifier();
+//        break;
+//    case SynthItem::ITEM::MODULATOR:
+//        item = new Modulator();
+//        break;
+//    case SynthItem::ITEM::PANNER:
+//        item = new Panner();
+//        break;
+//    case SynthItem::ITEM::ENVELOPE:
+//        item = new Envelope();
+//        break;
+//    case SynthItem::ITEM::VOLUME:
+//        item = new Volume();
+//        break;
+//    case SynthItem::ITEM::NOISE:
+//        item = new Noise();
+//        break;
+//    case SynthItem::ITEM::EQUALIZER:
+//        item = new Equalizer();
+//        break;
     default:
         item = NULL;
         break;
@@ -498,4 +498,4 @@ std::vector<double> Transport::interpolate(std::vector<double> first, std::vecto
     return vec;
 }
 
-} //namespace son
+} //namespace sow

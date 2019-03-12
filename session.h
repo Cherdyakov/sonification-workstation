@@ -12,6 +12,8 @@
 
 #include "transportwidget.h"
 
+namespace sow {
+
 class Session : public QObject
 {
     Q_OBJECT
@@ -29,7 +31,7 @@ private:
     int speed_;
 
 signals:
-    void newDatafile(QString datafile, son::Dataset* dataset);
+    void newDatafile(QString datafile, sow::Dataset* dataset);
     void interpolateChanged(bool interpolate);
     void speedChanged(int speed);
 
@@ -38,8 +40,10 @@ public slots:
     void on_saveAs();
     void on_open();
     void on_importDatasetFile();
-    void on_interpolateChanged(bool interpolate_);
+    void onInterpolateChanged(bool interpolate_);
     void on_speedChanged(int speed_);
 };
+
+} // End namespace sow.
 
 #endif // SESSION_H

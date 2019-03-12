@@ -1,6 +1,6 @@
 #include "oscillator.h"
 
-namespace son {
+namespace sow {
 
 Oscillator::Oscillator()
 {

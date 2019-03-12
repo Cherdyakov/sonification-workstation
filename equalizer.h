@@ -4,7 +4,7 @@
 #include "Gamma/Filter.h"
 #include "synthitem.h"
 
-namespace son {
+namespace sow {
 
 class Equalizer : public SynthItem
 {
@@ -130,6 +130,6 @@ private:
 
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // EQUALIZER_H

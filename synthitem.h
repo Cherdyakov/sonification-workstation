@@ -15,7 +15,7 @@
 #define MAX_DIMENSIONS 128
 #define FRAME_RATE 44100
 
-namespace son {
+namespace sow {
 
 class SynthItem
 {
@@ -49,7 +49,7 @@ public:
         FILTER_TYPE
     };
 
-    enum class COMMAND {
+    enum class ITEM_CMD {
         DATA,
         ADD_CHILD,
         REMOVE_CHILD,
@@ -90,18 +90,18 @@ public:
         NOTCH
     };
 
-    struct SynthItemCommand {
-        COMMAND type;
+    struct ItemCommand {
+        ITEM_CMD type;
         PARAMETER parameter;
         Dataset *dataset;
-        std::vector<double>* data;
-        std::vector<double>* mins;
-        std::vector<double>* maxes;
-        std::vector<double> doubles;
-        std::vector<int> ints;
+        QVector<double>* data;
+        QVector<double>* mins;
+        QVector<double>* maxes;
+        QVector<double> doubles;
+        QVector<int> ints;
         bool bool_val;
         SynthItem* item;
-        SynthItemCommand() {
+        ItemCommand() {
             doubles.reserve(MAX_DIMENSIONS);
             ints.reserve(MAX_DIMENSIONS);
         }
@@ -111,9 +111,9 @@ public:
     virtual ~SynthItem() {}
     virtual void delete_self() = 0;
     virtual ITEM get_type() = 0;
-    virtual void set_data(std::vector<double>* data,
-                             std::vector<double>* mins,
-                             std::vector<double>* maxes) = 0;
+    virtual void set_data(QVector<double>* data,
+                             QVector<double>* mins,
+                             QVector<double>* maxes) = 0;
     virtual void add_parent(SynthItem* parent) = 0;
     virtual void remove_parent(SynthItem* parent) = 0;
     virtual bool add_child(SynthItem *child, PARAMETER param) = 0;
@@ -124,18 +124,18 @@ public:
     virtual void control_process() = 0; // every process block
 
     virtual bool get_mute() = 0;
-    virtual std::vector<SynthItem*> get_parents() = 0;
+    virtual QVector<SynthItem*> get_parents() = 0;
 
 protected:
 
     virtual void retrieve_commands() = 0;
-    virtual void process_command(SynthItemCommand command) = 0;
+    virtual void process_command(ItemCommand command) = 0;
     virtual void process_add_child(SynthItem* child, PARAMETER parameter) = 0;
     virtual void process_remove_child(SynthItem* child) = 0;
     virtual void process_delete() = 0;
 
 };
 
-} // namespace son
+} // namespace sow
 
 #endif // SYNTHITEM_H

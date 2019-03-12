@@ -3,74 +3,86 @@
 
 #include <QObject>
 #include <QTimer>
-
-#include "transport.h"
+#include "qtsynthitem.h"
 #include "qtoscillator.h"
-#include "qtaudifier.h"
-#include "qtmodulator.h"
-#include "qtpanner.h"
-#include "qtenvelope.h"
-#include "qtvolume.h"
-#include "qtnoise.h"
-#include "qtequalizer.h"
+//#include "qtaudifier.h"
+//#include "qtmodulator.h"
+//#include "qtpanner.h"
+//#include "qtenvelope.h"
+//#include "qtvolume.h"
+//#include "qtnoise.h"
+//#include "qtequalizer.h"
 
-using namespace son;
+namespace sow {
 
 class QtTransport : public QtSynthItem
 {
     Q_OBJECT
-    Q_ENUMS(QT_ITEM)
 public:
 
-    enum QT_ITEM {
-        OUT = (int)SynthItem::ITEM::TRANSPORT,
-        OSCILLATOR,
-        AUDIFIER,
-        MODULATOR,
-        PANNER,
-        ENVELOPE,
-        VOLUME,
-        NOISE,
-        EQUALIZER
-    };
+    explicit QtTransport(QObject *parent = nullptr);
 
-    explicit QtTransport(QObject *parent = 0);
-    virtual SynthItem* implementation() override;
-
-    Q_INVOKABLE QtSynthItem* createItem(QT_ITEM type);
-    Q_INVOKABLE virtual void deleteSelf() override;
-    Q_INVOKABLE virtual void addParent(QtSynthItem* parent) override;
-    Q_INVOKABLE virtual void removeParent(QtSynthItem* parent) override;
-    Q_INVOKABLE virtual bool addChild(QtSynthItem *child, QT_PARAMETER param) override;
-    Q_INVOKABLE virtual void removeChild(QtSynthItem *child) override;
-    Q_INVOKABLE virtual void mute(bool mute) override;
+    // factory for other SynthItems
+    Q_INVOKABLE sow::QtSynthItem* createItem(ENUMS::ITEM_TYPE type);
     Q_INVOKABLE void deleteItem(QtSynthItem* item);
-    Q_INVOKABLE void subscribeItem(QtSynthItem* item);
+    // add or remove SynthItem from block processing
+    Q_INVOKABLE void subscribe(QtSynthItem* item);
+    Q_INVOKABLE void unsubscribe(QtSynthItem* item);
+
+    float pos(); // for polling state from outside
+    Frame process() override;       // every sample
+    void controlProcess() override; // every process block
 
 public slots:
 
     // slots for controlling playback
-    void on_datasetChanged(son::Dataset *dataset);
-    void on_pausedChanged(bool on_pausedChanged);
-    void on_posChanged(double pos);
-    void on_speedChanged(int speed);
-    void on_loopingChanged(bool looping);
-    void on_loopPointsChanged(double begin, double end);
-    void on_interpolateChanged(bool interpolate);
-
-    // for polling state from outside
-    // (i.e. GUI)
-    double getPos();
+    void onDatasetchanged(sow::Dataset *dataset);
+    void onPausechanged(bool p);
+    void onPoschanged(float pos);
+    void onSpeedchanged(float speed);
+    void onLoopingchanged(bool looping);
+    void onLoopPointsChanged(float begin, float end);
+    void onInterpolateChanged(bool interpolate);
 
 private:
-    Transport transport_;
+
+    RingBuffer<TransportCommand> transportCommandBuffer_;
+    Frame frameBuffer_[4096];
+    QVector<QtSynthItem*> subscribers_;
+    Dataset* dataset_;
+    QVector<double> currentDataColumn_;
+    std::atomic<float> returnPos_;
+    float masterVolume_;
+    unsigned int frameRate_;
+    unsigned int currentIndex_;
+    float mu_;
+    int speed_;
+    float loopBegin_;
+    float loopEnd_;
+    bool dataStale_;
+    bool paused_;
+    bool loop_;
+    bool interpolate_;
+
+    virtual void processDatasetCommand(DatasetCommand cmd) override;
+    void processTransportCommand(TransportCommand cmd);
+    void processSubscribeItem(QtSynthItem* item);
+    void processUnsubscribeItem(QtSynthItem* item);
+    void processDeleteItem(QtSynthItem* item);
+    void processSetDataset(Dataset *dataset);
+    void processSetPlaybackPosition(float pos);
+    void retrieveNextDataColumn();
+    void calculateReturnPosition();
+    QVector<double> interpolate(QVector<double> first, QVector<double> second, double mu);
 
 signals:
-    void posChanged(double pos);
+    void posChanged(float pos);
 
 private slots:
     void updatePos();
 
 };
+
+} // Namespace sow.
 
 #endif // QTTRANSPORT_H
