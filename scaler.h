@@ -1,16 +1,17 @@
 #ifndef SCALER_H
 #define SCALER_H
 
-#include <QObject>
+#include "math.h"
 
 namespace sow {
 
 template<class T>
-class Scaler : public QObject
+class Scaler
 {
-    Q_OBJECT
+
 public:
-    explicit Scaler(QObject *parent = nullptr);
+
+    explicit Scaler() {}
 
     // based on the Max "Scale" object
     // https://docs.cycling74.com/max7/maxobject/scale
