@@ -8,9 +8,9 @@ ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
     // Interface variables, bound to QML
     iValue_ = 440.0f;
     iFixed_ = true;
-    iScaled_ = true;
-    iScaleLo_ = 100.0f;
-    iScaleHi_ = 8000.0f;
+    iScale_ = true;
+    iScaleOutLow_ = 100.0f;
+    iScaleOutHigh_ = 8000.0f;
     iScaleExp_ = 1.0f;
     iMap_ = QString();
 }
@@ -49,40 +49,40 @@ bool sow::ParameterInterface::fixed() const {
     return iFixed_;
 }
 
-void sow::ParameterInterface::setScaled(const bool scaled) {
-    if (iScaled_ != scaled) {
-        iScaled_ =  scaled;
+void sow::ParameterInterface::setScaled(const bool scale) {
+    if (iScale_ != scale) {
+        iScale_ =  scale;
         emit scaledChanged();
-        iParameterChanged(ENUMS::SUB_PARAMETER::SCALED, iScaled_);
+        iParameterChanged(ENUMS::SUB_PARAMETER::SCALED, iScale_);
     }
 }
 
 bool sow::ParameterInterface::scaled() const {
-    return iScaled_;
+    return iScale_;
 }
 
-void sow::ParameterInterface::setScaleLo(const float scaleLo) {
-    if (!qFuzzyCompare(iScaleLo_, scaleLo)) {
-        iScaleLo_ =  scaleLo;
+void sow::ParameterInterface::setScaleOutLow(const float scaleOutLow) {
+    if (!qFuzzyCompare(iScaleOutLow_, scaleOutLow)) {
+        iScaleOutLow_ =  scaleOutLow;
         emit scaleLoChanged();
-        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_LO, iScaleLo_);
+        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_OUT_LOW, iScaleOutLow_);
     }
 }
 
-float sow::ParameterInterface::scaleLo() const {
-    return iScaleLo_;
+float sow::ParameterInterface::scaleOutLow() const {
+    return iScaleOutLow_;
 }
 
-void sow::ParameterInterface::setScaleHi(const float scaleHi) {
-    if (!qFuzzyCompare(iScaleHi_, scaleHi)) {
-        iScaleHi_ =  scaleHi;
+void sow::ParameterInterface::setScaleOutHigh(const float scaleOutHigh) {
+    if (!qFuzzyCompare(iScaleOutHigh_, scaleOutHigh)) {
+        iScaleOutHigh_ =  scaleOutHigh;
         emit scaleHiChanged();
-        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_HI, iScaleHi_);
+        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_OUT_HIGH, iScaleOutHigh_);
     }
 }
 
-float sow::ParameterInterface::scaleHi() const {
-    return iScaleHi_;
+float sow::ParameterInterface::scaleOutHigh() const {
+    return iScaleOutHigh_;
 }
 
 void sow::ParameterInterface::setScaleExp(const float scaleExp) {
@@ -95,6 +95,32 @@ void sow::ParameterInterface::setScaleExp(const float scaleExp) {
 
 float sow::ParameterInterface::scaleExp() const {
     return iScaleExp_;
+}
+
+void ParameterInterface::setScaleInLow(const float scaleInLow)
+{
+    if (!qFuzzyCompare(iScaleInLow_, scaleInLow)) {
+        iScaleInLow_ =  scaleInLow;
+        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_IN_LOW, iScaleInLow_);
+    }
+}
+
+float ParameterInterface::scaleInLow()
+{
+    return iScaleInLow_;
+}
+
+void ParameterInterface::setScaleInHigh(const float scaleInHigh)
+{
+    if (!qFuzzyCompare(iScaleInHigh_, scaleInHigh)) {
+        iScaleInHigh_ =  scaleInHigh;
+        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_IN_HIGH, iScaleInHigh_);
+    }
+}
+
+float ParameterInterface::scaleInHigh()
+{
+    return iScaleInHigh_;
 }
 
 void sow::ParameterInterface::setMap(const QString map) {

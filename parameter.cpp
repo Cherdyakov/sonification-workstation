@@ -9,6 +9,14 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 }
 
+float Parameter::value()
+{
+    if (scale_) {
+        return scaler_.scale(value_);
+    }
+    return value_;
+}
+
 // Connect an interface to this Parameter
 void Parameter::connectInterface(ParameterInterface *interface)
 {
@@ -39,16 +47,22 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
         fixed_ = (cmd.value != 0.0f);
         break;
     case ENUMS::SUB_PARAMETER::SCALED:
-        scaled_ = (cmd.value != 0.0f);
+        scale_ = (cmd.value != 0.0f);
         break;
-    case ENUMS::SUB_PARAMETER::SCALE_LO:
-        scaleLo_ = cmd.value;
+    case ENUMS::SUB_PARAMETER::SCALE_OUT_LOW:
+        scaler_.setOutLow(cmd.value);
         break;
-    case ENUMS::SUB_PARAMETER::SCALE_HI:
-        scaleHi_ = cmd.value;
+    case ENUMS::SUB_PARAMETER::SCALE_OUT_HIGH:
+        scaler_.setOutHigh(cmd.value);
         break;
     case ENUMS::SUB_PARAMETER::SCALE_EXP:
-        scaleExp_ = cmd.value;
+        scaler_.setExp(cmd.value);
+        break;
+    case ENUMS::SUB_PARAMETER::SCALE_IN_LOW:
+        scaler_.setInLow(cmd.value);
+        break;
+    case ENUMS::SUB_PARAMETER::SCALE_IN_HIGH:
+        scaler_.setInHigh(cmd.value);
         break;
     case ENUMS::SUB_PARAMETER::MAP:
         map_ = QString(cmd.map);

@@ -49,9 +49,11 @@ public:
         VALUE,
         FIXED,
         SCALED,
-        SCALE_HI,
-        SCALE_LO,
+        SCALE_OUT_LOW,
+        SCALE_OUT_HIGH,
         SCALE_EXP,
+        SCALE_IN_LOW,
+        SCALE_IN_HIGH,
         MAP
     };
     Q_ENUM(SUB_PARAMETER)

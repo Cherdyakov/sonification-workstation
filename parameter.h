@@ -6,6 +6,7 @@
 #include "ringbuffer.h"
 #include "commands.h"
 #include "parameterinterface.h"
+#include "scaler.h"
 
 namespace sow {
 
@@ -15,8 +16,9 @@ class Parameter : public QObject
 public:
     explicit Parameter(QObject *parent = nullptr);
 
-    void connectInterface(ParameterInterface* interface);
+    float value();
     void controlProcess();
+    void connectInterface(ParameterInterface* interface);
 
 private:
 
@@ -25,10 +27,8 @@ private:
     QString name_;
     float value_;
     bool fixed_;
-    bool scaled_;
-    float scaleLo_;
-    float scaleHi_;
-    float scaleExp_;
+    bool scale_;
+    Scaler<float> scaler_;
     QString map_;
 
     // For processing ParameterCommands

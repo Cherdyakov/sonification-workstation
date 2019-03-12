@@ -14,8 +14,8 @@ class ParameterInterface : public QObject
     Q_PROPERTY(float value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(bool fixed READ fixed WRITE setFixed NOTIFY fixedChanged)
     Q_PROPERTY(bool scaled READ scaled WRITE setScaled NOTIFY scaledChanged)
-    Q_PROPERTY(float scaleLo READ scaleLo WRITE setScaleLo NOTIFY scaleLoChanged)
-    Q_PROPERTY(float scaleHi READ scaleHi WRITE setScaleHi NOTIFY scaleHiChanged)
+    Q_PROPERTY(float scaleOutLow READ scaleOutLow WRITE setScaleOutLow NOTIFY scaleLoChanged)
+    Q_PROPERTY(float scaleHigh READ scaleOutHigh WRITE setScaleOutHigh NOTIFY scaleHiChanged)
     Q_PROPERTY(float scaleExp READ scaleExp WRITE setScaleExp NOTIFY scaleExpChanged)
     Q_PROPERTY(QString map READ map WRITE setMap NOTIFY mapChanged)
 
@@ -30,16 +30,21 @@ public:
     float value() const;
     void setFixed(const bool fixed);
     bool fixed() const;
-    void setScaled(const bool scaled);
+    void setScaled(const bool scale);
     bool scaled() const;
-    void setScaleLo(const float scaleLo);
-    float scaleLo() const;
-    void setScaleHi(const float scaleHi);
-    float scaleHi() const;
+    void setScaleOutLow(const float scaleOutLow);
+    float scaleOutLow() const;
+    void setScaleOutHigh(const float scaleOutHigh);
+    float scaleOutHigh() const;
     void setScaleExp(const float scaleExp);
     float scaleExp() const;
     void setMap(const QString map);
     QString map() const;
+    // CPP only
+    void setScaleInLow(const float scaleInLow);
+    float scaleInLow();
+    void setScaleInHigh(const float scaleInHigh);
+    float scaleInHigh();
 
 private:
 
@@ -47,10 +52,12 @@ private:
     ENUMS::PARAMETER iType_;
     float iValue_;
     bool iFixed_;
-    bool iScaled_;
-    float iScaleLo_;
-    float iScaleHi_;
+    bool iScale_;
+    float iScaleOutLow_;
+    float iScaleOutHigh_;
     float iScaleExp_;
+    float iScaleInLow_;
+    float iScaleInHigh_;
     QString iMap_;
 
 signals:
