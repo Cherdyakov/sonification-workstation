@@ -341,10 +341,10 @@ void QtTransport::retrieveNextDataColumn()
         {
             next_index = 0;
         }
-        currentDataColumn_ = interpolate(dataset_->get_column(currentIndex_), dataset_->get_column(next_index), mu_);
+        currentDataColumn_ = interpolate(dataset_->getColumn(currentIndex_), dataset_->getColumn(next_index), mu_);
     }
     else {
-        currentDataColumn_ = dataset_->get_column(currentIndex_);
+        currentDataColumn_ = dataset_->getColumn(currentIndex_);
     }
 }
 

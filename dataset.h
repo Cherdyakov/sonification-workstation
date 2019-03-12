@@ -28,10 +28,10 @@ struct Dataset
         data_ = data;
         height_ = height;
         width_ = width;
-        calculate_min_max();
+        calculateMinMax();
     }
 
-    QVector<double> get_column(unsigned int col) {
+    QVector<double> getColumn(unsigned int col) {
         QVector<double> vec;
         if(col > width_)
         {
@@ -40,12 +40,12 @@ struct Dataset
         for(unsigned int i = 0; i < height_; i++)
         {
             unsigned int idx = ((width_ * i) + col);
-            vec.push_back(data_[idx]);
+            vec.append(data_[idx]);
         }
         return vec;
     }
 
-    QVector<double> get_row(unsigned int row) {
+    QVector<double> getRow(unsigned int row) {
         QVector<double> vec;
         if(row > height_)
         {
@@ -54,12 +54,12 @@ struct Dataset
         for(unsigned int i = 0; i < width_; i++)
         {
             unsigned int idx = ((width_ * row) + i);
-            vec.push_back(data_[idx]);
+            vec.append(data_[idx]);
         }
         return vec;
     }
 
-    void calculate_min_max()
+    void calculateMinMax()
     {
         double min;
         double max;
