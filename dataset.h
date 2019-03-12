@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QVector>
 
-#define MAX_DATASET_DIMS 128
+#define MAX_DATASET_WIDTH 128
 
 namespace sow {
 
