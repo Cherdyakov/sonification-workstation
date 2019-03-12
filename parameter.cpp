@@ -54,8 +54,6 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
         map_ = QString(cmd.map);
         break;
     }
-
-    qDebug() << "processCommand: " + QString::number((int)subParam) + " " + QString::number(cmd.value) + " " + map_;
 }
 
 // Slot for updated float values from the interface
@@ -65,8 +63,6 @@ void Parameter::onParameterChanged(const ENUMS::SUB_PARAMETER subParam, const fl
     cmd.subParam = subParam;
     cmd.value = value;
     commandBuffer_.push(cmd);
-    qDebug() << "onParameterChanged: " + QString::number((int)subParam) + " " + QString::number(cmd.value);
-
 }
 
 // Slot for updated parameter mapping from the interface
@@ -81,8 +77,6 @@ void Parameter::onMapChanged(const QString map)
     }
 
     commandBuffer_.push(cmd);
-    qDebug() << "onMapChanged: " + map;
-
 }
 
 } // namespace sow
