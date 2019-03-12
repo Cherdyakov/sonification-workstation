@@ -92,7 +92,8 @@ HEADERS += \
     commands.h \
     parameterinterface.h \
     parameter.h \
-    enums.h
+    enums.h \
+    scaler.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src
