@@ -37,7 +37,7 @@ int Dataset::cols() const
 // Return data value at given index
 float Dataset::operator()(const int row, const int col) const
 {
-    if ( (row > rows_) || (col > cols_)  || (row < 0) || (col < 0) )
+    if ( (row >= rows_) || (col >= cols_)  || (row < 0) || (col < 0) )
     {
         QString message = "Invalid dataset index: " + QString::number(row)
                 + ", " + QString::number(col);
@@ -49,7 +49,7 @@ float Dataset::operator()(const int row, const int col) const
 // return given col of the dataset
 QVector<float> Dataset::getCol(const int col) const {
 
-    if( (col > cols_) || (col < 0) )
+    if( (col >= cols_) || (col < 0) )
     {
         QString message = "Invalid dataset column requested: " + QString::number(col);
         throw InvalidArgumentException(message);
@@ -66,7 +66,7 @@ QVector<float> Dataset::getCol(const int col) const {
 // return given row of the dataset
 QVector<float> Dataset::getRow(const int row) const {
 
-    if( (row > rows_) || (row < 0) )
+    if( (row >= rows_) || (row < 0) )
     {
         QString message = "Invalid dataset row requested: " + QString::number(row);
         throw InvalidArgumentException(message);
@@ -90,13 +90,12 @@ void Dataset::calculateMinMax()
     float max = 0.0f;
     mins_.resize(cols_);
     maxes_.resize(cols_);
-    for(int i = 0; i < cols_; i++)
+    for(int col = 0; col < cols_; col++)
     {
-        for(int j = 0; j < rows_; j++)
+        for(int row = 0; row < rows_; row++)
         {
-            int idx = i * rows_ + j;
-            float value = data_[idx];
-            if(j == 0)
+            float value = data_[index(row, col)];
+            if(row == 0)
             {
                 min = max = value;
             }
@@ -109,14 +108,14 @@ void Dataset::calculateMinMax()
                 max = value;
             }
         }
-        mins_[i] = min;
-        maxes_[i] = max;
+        mins_[col] = min;
+        maxes_[col] = max;
     }
 }
 
 int Dataset::index(const int row, const int col) const
 {
-    return (rows_ * col) + row;
+    return (cols_ * row) + col;
 }
 
 void Dataset::clear()
