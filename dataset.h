@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+#include "exceptionclasses.h"
 
 #define MAX_DATASET_WIDTH 128
 

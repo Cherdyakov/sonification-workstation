@@ -12,8 +12,9 @@ float Dataset::operator()(unsigned int x, unsigned int y)
 {
     if ( x > height_ || y > width_ )
     {
-        QString message = "Invalid dataset index: " + QString::number(x) + ", " + QString::number(y);
-        throw std::invalid_argument(message.toStdString());
+        QString message = "Invalid dataset index: " + QString::number(x)
+                + ", " + QString::number(y);
+        throw InvalidArgumentException(message);
     }
     int idx = static_cast<int>((y * height_) + x);
     return data_[idx];
@@ -34,7 +35,7 @@ void Dataset::initialize(const QVector<float> data, const unsigned int height, c
     if(static_cast<int>((height * width)) != data.size())
     {
         QString message = "Invalid dataset size. Rows x Cols != data size.";
-        throw std::invalid_argument(message.toStdString());
+        throw InvalidArgumentException(message);
     }
 
     data_.clear();
@@ -49,7 +50,7 @@ QVector<float> Dataset::getColumn(unsigned int col) const {
     if(col > width_)
     {
         QString message = "invalid dataset column requested: " + QString::number(col);
-        throw std::invalid_argument(message.toStdString());
+        throw InvalidArgumentException(message);
     }
 
     QVector<float> vec;
@@ -66,7 +67,7 @@ QVector<float> Dataset::getRow(unsigned int row) const {
     if(row > height_)
     {
         QString message = "invalid dataset row requested: " + QString::number(row);
-        throw std::invalid_argument(message.toStdString());
+        throw InvalidArgumentException(message);
     }
 
     QVector<float> vec;
