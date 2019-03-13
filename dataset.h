@@ -17,9 +17,9 @@ public:
 
     explicit Dataset(QObject* parent = nullptr);
 
-    float operator()(unsigned int row, unsigned int col);
     unsigned int rows() const;
     unsigned int cols() const;
+    float operator()(unsigned int row, unsigned int col);
     QVector<float> getCol(unsigned int col) const;
     QVector<float> getRow(unsigned int row) const;
     // populate the dataset with data
