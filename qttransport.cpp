@@ -182,7 +182,7 @@ Frame QtTransport::process()
         mu_ -= 1.0;
         currentIndex_++;
 
-        if((currentIndex_ + 1) > (dataset_->width_))
+        if((currentIndex_ + 1) > (dataset_->cols()))
         {
             currentIndex_ = 0;
         }
@@ -230,7 +230,7 @@ Frame QtTransport::process()
 
     // advancing index
     calculateReturnPosition();
-    mu_ += ((double)speed_ / frameRate_);
+    mu_ += static_cast<float>(speed_) / frameRate_;
 
     return frame;// * master_volume_;
 }
@@ -290,7 +290,7 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
 void QtTransport::processSubscribeItem(QtSynthItem *item)
 {
     subscribers_.push_back(item);
-    item->setData(&currentDataColumn_, &dataset_->mins_, &dataset_->maxes_);
+    item->setData(currentDataColumn_, dataset_->mins(), dataset_->maxes());
 }
 
 void QtTransport::processUnsubscribeItem(QtSynthItem *item)
@@ -318,12 +318,12 @@ void QtTransport::processDatasetCommand(DatasetCommand cmd)
     currentIndex_ = 0;
     mu_ = 0.0;
     calculateReturnPosition();
-    currentDataColumn_.resize(static_cast<int>(dataset_->height_));
+    currentDataColumn_.resize(static_cast<int>(dataset_->rows()));
 }
 
 void QtTransport::processSetPlaybackPosition(float pos)
 {
-    unsigned int newIdx = static_cast<unsigned int>(pos);
+    int newIdx = static_cast<int>(pos);
     if(currentIndex_ != newIdx)
     {
         dataStale_ = true;
@@ -336,8 +336,8 @@ void QtTransport::retrieveNextDataColumn()
 {
     if(interpolate_)
     {
-        unsigned int next_index = currentIndex_ + 1;
-        if(next_index >= dataset_->width_)
+        int next_index = currentIndex_ + 1;
+        if(next_index >= dataset_->cols())
         {
             next_index = 0;
         }
@@ -362,7 +362,7 @@ QVector<double> QtTransport::interpolate(QVector<double> first, QVector<double> 
     {
         return vec;
     }
-    for(unsigned int i = 0; i < first.size(); i++)
+    for(int i = 0; i < first.size(); i++)
     {
         double val_first = first[i];
         double val_second = second[i];

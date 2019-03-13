@@ -50,11 +50,11 @@ private:
     Frame frameBuffer_[4096];
     QVector<QtSynthItem*> subscribers_;
     Dataset* dataset_;
-    QVector<double> currentDataColumn_;
+    QVector<float> currentDataColumn_;
     std::atomic<float> returnPos_;
     float masterVolume_;
-    unsigned int frameRate_;
-    unsigned int currentIndex_;
+    int frameRate_;
+    int currentIndex_;
     float mu_;
     int speed_;
     float loopBegin_;
