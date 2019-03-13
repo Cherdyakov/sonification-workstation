@@ -14,60 +14,67 @@ void FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
 
     QTextStream inFile(&file);
 
-    QList<QStringList> readData;
+    QList<QStringList> fileData;
     while (!inFile.atEnd()) {
         QString line = inFile.readLine();
-        readData.append(line.split(","));
+        fileData.append(line.split(","));
     }
+    int rows = fileData.count();  // == rows in CSV
+    int cols = fileData[0].count(); // == columns in CSV
 
-    int rows = readData.count();  // == rows in CSV
-    int cols = readData[0].count(); // == columns in CSV
 
+    ///
+    ///
+    ///
+    // TODO: Should be checking cols for even now, not rows
+    ///
+    ///
+    ///
     // Check if rows are of equal length
-    bool unEven = false;
+ /*   bool unEven = false;
     for(QStringList list : readData)
     {
-        int currentCount = static_cast<int>(list.count());
-        if(currentCount != cols)
+        uint currentCount = static_cast<uint>(list.count());
+        if(currentCount != width)
         {
             unEven = true;
-            if(cols < currentCount)
+            if(width < currentCount)
             {
-                cols = currentCount;
+                width = currentCount;
             }
         }
     }
     // Some rows were shorter than others
-    // force data to have equal cols rows
+    // force data to have equal width rows
     if(unEven)
     {
-        for(int i = 0; i < rows; i++)
+        for(uint i = 0; i < height; i++)
         {
             QStringList* list = &readData[static_cast<int>(i)];
-            int currentCount = static_cast<int>(list->count());
+            uint currentCount = static_cast<uint>(list->count());
 
-            if(currentCount < cols)
+            if(currentCount < width)
             {
                 qDebug() << "Row " << i << "is too short.  Padding with 0";
-                while(currentCount < cols)
+                while(currentCount < width)
                 {
                     list->append("0");
                     currentCount++;
                 }
             }
         }
-    }
+} */
 
-    vec.resize(static_cast<int>(rows)*static_cast<int>(cols));
+    vec.resize(rows*cols);
     int index = 0;
 
     for(int i = 0; i < rows; i++)
     {
-        QStringList rowData = readData[static_cast<int>(i)];
+        QStringList rowData = fileData[i];
         for (int j = 0; j < cols; j++)
         {
             bool isFloat = false;
-            QString temp = rowData[static_cast<int>(j)];
+            QString temp = rowData[j];
             float value = temp.toFloat(&isFloat);
             if(isFloat)
             {
