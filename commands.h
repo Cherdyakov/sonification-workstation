@@ -25,7 +25,7 @@ struct DatasetCommand {
 struct ParameterCommand {
     ENUMS::SUB_PARAMETER subParam;
     float value;
-    QChar map[MAX_DATASET_DIMS];
+    QChar map[MAX_DATASET_WIDTH];
 };
 
 struct TransportCommand {

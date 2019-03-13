@@ -1,103 +1,47 @@
 #ifndef DATASET_H
 #define DATASET_H
 
+#include <QObject>
 #include <QVector>
+#include "exceptionclasses.h"
 
-#define MAX_DATASET_DIMS 128
+#define MAX_DATASET_WIDTH 128
 
 namespace sow {
 
-struct Dataset
+class Dataset : public QObject
 {
-    int height_;
-    int width_;
-    QVector<double> data_;
-    QVector<double> mins_;
-    QVector<double> maxes_;
+    Q_OBJECT
 
-    Dataset()
-    {
-        height_ = 0;
-        width_ = 0;
-    }
+public:
 
-    // helper functions
-    void init(QVector<double> data, unsigned int height, unsigned int width)
-    {
-        data_.clear();
-        data_ = data;
-        height_ = height;
-        width_ = width;
-        calculateMinMax();
-    }
+    explicit Dataset(QObject* parent = nullptr);
 
-    QVector<double> getColumn(unsigned int col) {
-        QVector<double> vec;
-        if(col > width_)
-        {
-            return vec;
-        }
-        for(unsigned int i = 0; i < height_; i++)
-        {
-            unsigned int idx = ((width_ * i) + col);
-            vec.append(data_[idx]);
-        }
-        return vec;
-    }
+    // populate the dataset with data
+    void init(const QVector<float> data, const int rows, const int cols);
+    int rows() const;
+    int cols() const;
+    float operator()(int row, int col) const;
+    QVector<float> getCol(const int col) const;
+    QVector<float> getRow(const int row) const;
+    // erase all data and reset height, width
+    void clear();
 
-    QVector<double> getRow(unsigned int row) {
-        QVector<double> vec;
-        if(row > height_)
-        {
-            return vec;
-        }
-        for(unsigned int i = 0; i < width_; i++)
-        {
-            unsigned int idx = ((width_ * row) + i);
-            vec.append(data_[idx]);
-        }
-        return vec;
-    }
+private:
 
-    void calculateMinMax()
-    {
-        double min;
-        double max;
-        mins_.clear();
-        maxes_.clear();
-        for(unsigned int i = 0; i < height_; i++)
-        {
-            for(unsigned int j = 0; j < width_; j++)
-            {
-                unsigned int idx = i * width_ + j;
-                double value = data_.at(idx);
-                if(j == 0)
-                {
-                    min = max = value;
-                }
-                else if(value < min)
-                {
-                    min = value;
-                }
-                else if(value > max)
-                {
-                    max = value;
-                }
-            }
-            mins_.push_back(min);
-            maxes_.push_back(max);
-        }
-    }
+    int rows_;
+    int cols_;
+    QVector<float> data_;
+    QVector<float> mins_;
+    QVector<float> maxes_;
 
-    void clear()
-    {
-        data_.clear();
-        height_ = 0;
-        width_ = 0;
-    }
+    // Find min/max values for every
+    // column and store them.
+    void calculateMinMax();
+    int index(const int row, const int col) const;
 
 };
 
-}
+} // namespace sow
 
 #endif // DATASET_H
