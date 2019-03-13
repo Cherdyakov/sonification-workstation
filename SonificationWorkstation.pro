@@ -44,7 +44,8 @@ SOURCES += \
     dataprocessor.cpp \
     qtsynthitem.cpp \
     parameterinterface.cpp \
-    parameter.cpp
+    parameter.cpp \
+    exceptionclasses.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -93,7 +94,8 @@ HEADERS += \
     parameterinterface.h \
     parameter.h \
     enums.h \
-    scaler.h
+    scaler.h \
+    exceptionclasses.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src
