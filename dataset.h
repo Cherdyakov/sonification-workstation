@@ -17,20 +17,20 @@ public:
 
     explicit Dataset(QObject* parent = nullptr);
 
-    unsigned int rows() const;
-    unsigned int cols() const;
-    float operator()(unsigned int row, unsigned int col);
-    QVector<float> getCol(unsigned int col) const;
-    QVector<float> getRow(unsigned int row) const;
+    int rows() const;
+    int cols() const;
+    float operator()(int row, int col) const;
+    QVector<float> getCol(const int col) const;
+    QVector<float> getRow(const int row) const;
     // populate the dataset with data
-    void init(const QVector<float> data, const unsigned int rows, const unsigned int cols);
+    void init(const QVector<float> data, const int rows, const int cols);
     // erase all data and reset height, width
     void clear();
 
 private:
 
-    unsigned int rows_;
-    unsigned int cols_;
+    int rows_;
+    int cols_;
     QVector<float> data_;
     QVector<float> mins_;
     QVector<float> maxes_;
