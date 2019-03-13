@@ -10,8 +10,10 @@ Dataset::Dataset(QObject *parent) : QObject (parent)
 
 float Dataset::operator()(unsigned int x, unsigned int y)
 {
-    if ( x > height_ || y > width_ ) {
-        // throw an exception?
+    if ( x > height_ || y > width_ )
+    {
+        QString message = "Invalid dataset index: " + QString::number(x) + ", " + QString::number(y);
+        throw std::invalid_argument(message.toStdString());
     }
     int idx = static_cast<int>((y * height_) + x);
     return data_[idx];
@@ -29,6 +31,12 @@ unsigned int Dataset::width() const
 
 void Dataset::initialize(const QVector<float> data, const unsigned int height, const unsigned int width)
 {
+    if(static_cast<int>((height * width)) != data.size())
+    {
+        QString message = "Invalid dataset size. Rows x Cols != data size.";
+        throw std::invalid_argument(message.toStdString());
+    }
+
     data_.clear();
     data_ = data;
     height_ = height;
@@ -37,11 +45,14 @@ void Dataset::initialize(const QVector<float> data, const unsigned int height, c
 }
 
 QVector<float> Dataset::getColumn(unsigned int col) const {
-    QVector<float> vec;
+
     if(col > width_)
     {
-        return vec;
+        QString message = "invalid dataset column requested: " + QString::number(col);
+        throw std::invalid_argument(message.toStdString());
     }
+
+    QVector<float> vec;
     for(unsigned int i = 0; i < height_; i++)
     {
         unsigned int idx = ((width_ * i) + col);
@@ -51,11 +62,14 @@ QVector<float> Dataset::getColumn(unsigned int col) const {
 }
 
 QVector<float> Dataset::getRow(unsigned int row) const {
-    QVector<float> vec;
+
     if(row > height_)
     {
-        return vec;
+        QString message = "invalid dataset row requested: " + QString::number(row);
+        throw std::invalid_argument(message.toStdString());
     }
+
+    QVector<float> vec;
     for(unsigned int i = 0; i < width_; i++)
     {
         unsigned int idx = ((width_ * row) + i);
@@ -100,7 +114,5 @@ void Dataset::clear()
     height_ = 0;
     width_ = 0;
 }
-
-
 
 }
