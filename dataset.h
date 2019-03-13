@@ -17,13 +17,13 @@ public:
 
     explicit Dataset(QObject* parent = nullptr);
 
+    // populate the dataset with data
+    void init(const QVector<float> data, const int rows, const int cols);
     int rows() const;
     int cols() const;
     float operator()(int row, int col) const;
     QVector<float> getCol(const int col) const;
     QVector<float> getRow(const int row) const;
-    // populate the dataset with data
-    void init(const QVector<float> data, const int rows, const int cols);
     // erase all data and reset height, width
     void clear();
 
@@ -38,6 +38,7 @@ private:
     // Find min/max values for every
     // column and store them.
     void calculateMinMax();
+    int index(const int row, const int col) const;
 
 };
 

@@ -8,6 +8,22 @@ Dataset::Dataset(QObject *parent) : QObject (parent)
     cols_ = 0;
 }
 
+// initialize with flattened data and the number of rows, columns
+void Dataset::init(const QVector<float> data, const int rows, const int cols)
+{
+    if((rows * cols) != data.size())
+    {
+        QString message = "Invalid dataset size: rows x cols != data size";
+        throw InvalidArgumentException(message);
+    }
+
+    data_.clear();
+    data_ = data;
+    rows_ = rows;
+    cols_ = cols;
+    calculateMinMax();
+}
+
 int Dataset::rows() const
 {
     return rows_;
@@ -27,24 +43,7 @@ float Dataset::operator()(const int row, const int col) const
                 + ", " + QString::number(col);
         throw InvalidArgumentException(message);
     }
-    int idx = (col * rows_) + row;
-    return data_[idx];
-}
-
-// initialize with flattened data and the number of rows, columns
-void Dataset::init(const QVector<float> data, const int rows, const int cols)
-{
-    if((rows * cols) != data.size())
-    {
-        QString message = "Invalid dataset size: rows x cols != data size";
-        throw InvalidArgumentException(message);
-    }
-
-    data_.clear();
-    data_ = data;
-    rows_ = rows;
-    cols_ = cols;
-    calculateMinMax();
+    return data_[index(row, col)];
 }
 
 // return given col of the dataset
@@ -56,11 +55,10 @@ QVector<float> Dataset::getCol(const int col) const {
         throw InvalidArgumentException(message);
     }
 
-    QVector<float> vec;
-    for(int i = 0; i < rows_; i++)
+    QVector<float> vec(rows_);
+    for(int row = 0; row < rows_; row++)
     {
-        int idx = ((cols_ * i) + col);
-        vec.append(data_[idx]);
+        vec[row] = data_[index(row, col)];
     }
     return vec;
 }
@@ -74,11 +72,10 @@ QVector<float> Dataset::getRow(const int row) const {
         throw InvalidArgumentException(message);
     }
 
-    QVector<float> vec(rows_);
-    for(int i = 0; i < cols_; i++)
+    QVector<float> vec(cols_);
+    for(int col = 0; col < cols_; col++)
     {
-        int idx = (cols_ * row) + i;
-        vec[i] = (data_[idx]);
+        vec[col] = data_[index(row, col)];
     }
     return vec;
 }
@@ -115,6 +112,11 @@ void Dataset::calculateMinMax()
         mins_[i] = min;
         maxes_[i] = max;
     }
+}
+
+int Dataset::index(const int row, const int col) const
+{
+    return (rows_ * col) + row;
 }
 
 void Dataset::clear()
