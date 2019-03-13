@@ -9,16 +9,16 @@ Dataset::Dataset(QObject *parent) : QObject (parent)
 }
 
 // initialize with flattened data and the number of rows, columns
-void Dataset::init(const QVector<float> data, const int rows, const int cols)
+void Dataset::init(const QVector<float> *data, int rows, int cols)
 {
-    if((rows * cols) != data.size())
+    if((rows * cols) != data->size())
     {
         QString message = "Invalid dataset size: rows x cols != data size";
         throw InvalidArgumentException(message);
     }
 
     data_.clear();
-    data_ = data;
+    data_ = *data;
     rows_ = rows;
     cols_ = cols;
     calculateMinMax();
@@ -32,6 +32,16 @@ int Dataset::rows() const
 int Dataset::cols() const
 {
     return cols_;
+}
+
+QVector<float> Dataset::mins() const
+{
+    return mins_;
+}
+
+QVector<float> Dataset::maxes() const
+{
+    return maxes_;
 }
 
 // Return data value at given index

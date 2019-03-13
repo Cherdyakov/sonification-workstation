@@ -18,9 +18,11 @@ public:
     explicit Dataset(QObject* parent = nullptr);
 
     // populate the dataset with data
-    void init(const QVector<float> data, const int rows, const int cols);
+    void init(const QVector<float>* data, int rows, int cols);
     int rows() const;
     int cols() const;
+    QVector<float> mins() const;
+    QVector<float> maxes() const;
     float operator()(int row, int col) const;
     QVector<float> getCol(const int col) const;
     QVector<float> getRow(const int row) const;
