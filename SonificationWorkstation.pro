@@ -44,7 +44,7 @@ SOURCES += \
     dataprocessor.cpp \
     qtsynthitem.cpp \
     parameterinterface.cpp \
-    dataset.cpp
+    dataset.cpp \
     parameter.cpp \
     exceptionclasses.cpp
 
