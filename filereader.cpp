@@ -1,16 +1,10 @@
 #include "filereader.h"
-#include <QTime>
 
-FileReader::FileReader(QObject *parent) : QObject(parent)
+FileReader::FileReader(QObject *parent) : QObject(parent) { }
+
+void FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
 {
-
-}
-
-void FileReader::readCSV(QString filename, sow::Dataset* dataset)
-{
-    qDebug() << "Reading file: " << QTime::currentTime();
-
-    QVector<double> vec;
+    QVector<float> vec;
 
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
@@ -20,17 +14,24 @@ void FileReader::readCSV(QString filename, sow::Dataset* dataset)
 
     QTextStream inFile(&file);
 
-    QList<QStringList> readData;
+    QList<QStringList> fileData;
     while (!inFile.atEnd()) {
         QString line = inFile.readLine();
-        readData.append(line.split(","));
+        fileData.append(line.split(","));
     }
+    int rows = fileData.count();  // == rows in CSV
+    int cols = fileData[0].count(); // == columns in CSV
 
-    uint height = static_cast<uint>(readData.count());   // == rows in CSV
-    uint width = static_cast<uint>(readData[0].count()); // == columns in CSV
 
+    ///
+    ///
+    ///
+    // TODO: Should be checking cols for even now, not rows
+    ///
+    ///
+    ///
     // Check if rows are of equal length
-    bool unEven = false;
+ /*   bool unEven = false;
     for(QStringList list : readData)
     {
         uint currentCount = static_cast<uint>(list.count());
@@ -62,20 +63,20 @@ void FileReader::readCSV(QString filename, sow::Dataset* dataset)
                 }
             }
         }
-    }
+} */
 
-    vec.resize(static_cast<int>(height)*static_cast<int>(width));
+    vec.resize(rows*cols);
     int index = 0;
 
-    for(uint i = 0; i < height; i++)
+    for(int i = 0; i < rows; i++)
     {
-        QStringList rowData = readData[static_cast<int>(i)];
-        for (uint j = 0; j < width; j++)
+        QStringList rowData = fileData[i];
+        for (int j = 0; j < cols; j++)
         {
-            bool isDouble = false;
-            QString temp = rowData[static_cast<int>(j)];
-            double value = temp.toDouble(&isDouble);
-            if(isDouble)
+            bool isFloat = false;
+            QString temp = rowData[j];
+            float value = temp.toFloat(&isFloat);
+            if(isFloat)
             {
                 vec[index++] = value;
             }
@@ -88,14 +89,12 @@ void FileReader::readCSV(QString filename, sow::Dataset* dataset)
         }
     }
 
-    qDebug() << "Done reading file: " << QTime::currentTime();
-
-    dataset->init(vec, height, width);
+    dataset->init(vec, rows, cols);
     emit datasetChanged(dataset);
-    emit qmlDatasetChanged(dataset->height_, dataset->width_);
+    emit qmlDatasetChanged(dataset->rows(), dataset->cols());
 }
 
-void FileReader::on_newDatafile(QString filename, sow::Dataset *dataset)
+void FileReader::on_newDatafile(const QString filename, sow::Dataset * const dataset)
 {
     // clear the dataset
     if(filename.isEmpty()) {

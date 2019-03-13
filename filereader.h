@@ -13,17 +13,17 @@ class FileReader : public QObject
     Q_OBJECT
 
 public:
-    explicit FileReader(QObject *parent = 0);
+    explicit FileReader(QObject *parent = nullptr);
 
 private:
-    void readCSV(QString filename, sow::Dataset *dataset);
+    void readCSV(const QString filename, sow::Dataset * const dataset);
 
 signals:
-    void datasetChanged(sow::Dataset *data);
-    void qmlDatasetChanged(uint height, uint width);
+    void datasetChanged(sow::Dataset * const data);
+    void qmlDatasetChanged(const int rows, const int cols);
 
 public slots:
-    void on_newDatafile(QString filename, sow::Dataset *dataset);
+    void on_newDatafile(const QString filename, sow::Dataset * const dataset);
 
 private slots:
 
