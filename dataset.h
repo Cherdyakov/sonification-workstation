@@ -17,20 +17,20 @@ public:
 
     explicit Dataset(QObject* parent = nullptr);
 
-    float operator()(unsigned int x, unsigned int y);
-    unsigned int height() const;
-    unsigned int width() const;
-    QVector<float> getColumn(unsigned int col) const;
+    float operator()(unsigned int row, unsigned int col);
+    unsigned int rows() const;
+    unsigned int cols() const;
+    QVector<float> getCol(unsigned int col) const;
     QVector<float> getRow(unsigned int row) const;
     // populate the dataset with data
-    void initialize(const QVector<float> data, const unsigned int height, const unsigned int width);
+    void init(const QVector<float> data, const unsigned int rows, const unsigned int cols);
     // erase all data and reset height, width
     void clear();
 
 private:
 
-    unsigned int height_;
-    unsigned int width_;
+    unsigned int rows_;
+    unsigned int cols_;
     QVector<float> data_;
     QVector<float> mins_;
     QVector<float> maxes_;
@@ -41,6 +41,6 @@ private:
 
 };
 
-}
+} // namespace sow
 
 #endif // DATASET_H
