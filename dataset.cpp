@@ -21,7 +21,7 @@ int Dataset::cols() const
 // Return data value at given index
 float Dataset::operator()(const int row, const int col) const
 {
-    if ( row > rows_ || col > cols_ )
+    if ( (row > rows_) || (col > cols_)  || (row < 0) || (col < 0) )
     {
         QString message = "Invalid dataset index: " + QString::number(row)
                 + ", " + QString::number(col);
@@ -50,7 +50,7 @@ void Dataset::init(const QVector<float> data, const int rows, const int cols)
 // return given col of the dataset
 QVector<float> Dataset::getCol(const int col) const {
 
-    if(col > cols_)
+    if( (col > cols_) || (col < 0) )
     {
         QString message = "Invalid dataset column requested: " + QString::number(col);
         throw InvalidArgumentException(message);
@@ -68,7 +68,7 @@ QVector<float> Dataset::getCol(const int col) const {
 // return given row of the dataset
 QVector<float> Dataset::getRow(const int row) const {
 
-    if(row > rows_)
+    if( (row > rows_) || (row < 0) )
     {
         QString message = "Invalid dataset row requested: " + QString::number(row);
         throw InvalidArgumentException(message);
@@ -91,8 +91,8 @@ void Dataset::calculateMinMax()
 {
     float min = 0.0f;
     float max = 0.0f;
-    mins_.clear();
-    maxes_.clear();
+    mins_.resize(cols_);
+    maxes_.resize(cols_);
     for(int i = 0; i < cols_; i++)
     {
         for(int j = 0; j < rows_; j++)
@@ -112,8 +112,8 @@ void Dataset::calculateMinMax()
                 max = value;
             }
         }
-        mins_.push_back(min);
-        maxes_.push_back(max);
+        mins_[i] = min;
+        maxes_[i] = max;
     }
 }
 
