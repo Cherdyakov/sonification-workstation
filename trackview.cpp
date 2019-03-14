@@ -23,7 +23,7 @@ void TrackView::setPlayHead(PlayHead *p)
 
 void TrackView::plot(sow::Dataset *dataset)
 {
-    for(uint i = 0; i < dataset->height_; i++)
+    for(int i = 0; i < dataset->rows(); i++)
     {
         //add tracks
         Track* track = addTrack();
