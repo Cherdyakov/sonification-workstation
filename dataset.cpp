@@ -24,6 +24,11 @@ void Dataset::init(const std::vector<float> *data, unsigned int rows, unsigned i
     calculateMinMax();
 }
 
+bool Dataset::hasData() const
+{
+    return ( data_.size() > 0 );
+}
+
 unsigned int Dataset::rows() const
 {
     return rows_;

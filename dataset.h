@@ -19,6 +19,7 @@ public:
 
     // populate the dataset with data
     void init(const std::vector<float>* data, unsigned int rows, unsigned int cols);
+    bool hasData() const;
     unsigned int rows() const;
     unsigned int cols() const;
     std::vector<float> mins() const;

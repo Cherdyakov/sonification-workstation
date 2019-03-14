@@ -211,7 +211,7 @@ Frame QtTransport::process()
         dataStale_ = true;
     }
 
-    if(dataStale_)
+    if(dataStale_ && dataset_->hasData())
     {
         retrieveNextDataColumn();
         dataStale_ = false;
