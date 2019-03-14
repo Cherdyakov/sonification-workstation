@@ -13,8 +13,8 @@ void Dataset::init(const std::vector<float> *data, unsigned int rows, unsigned i
 {
     if((rows * cols) != data->size())
     {
-        QString message = "Invalid dataset size: rows x cols != data size";
-        throw InvalidArgumentException(message);
+        std::string message("Invalid dataset size: rows x cols != data size");
+        throw std::invalid_argument(message);
     }
 
     data_.clear();
@@ -49,9 +49,9 @@ float Dataset::operator()(const unsigned int row, const unsigned int col) const
 {
     if ( (row >= rows_) || (col >= cols_) )
     {
-        QString message = "Invalid dataset index: " + QString::number(row)
-                + ", " + QString::number(col);
-        throw InvalidArgumentException(message);
+        std::string message("Invalid dataset index: " + std::to_string(row)
+                + ", " + std::to_string(col));
+        throw std::invalid_argument(message);
     }
     return data_[index(row, col)];
 }
@@ -61,8 +61,8 @@ std::vector<float> Dataset::getCol(const unsigned int col) const {
 
     if( col >= cols_ )
     {
-        QString message = "Invalid dataset column requested: " + QString::number(col);
-        throw InvalidArgumentException(message);
+        std::string message("Invalid dataset column requested: " + std::to_string(col));
+        throw std::invalid_argument(message);
     }
 
     std::vector<float> vec(rows_);
@@ -78,8 +78,8 @@ std::vector<float> Dataset::getRow(const unsigned int row) const {
 
     if( row >= rows_ )
     {
-        QString message = "Invalid dataset row requested: " + QString::number(row);
-        throw InvalidArgumentException(message);
+        std::string message("Invalid dataset row requested: " + std::to_string(row));
+        throw std::invalid_argument(message);
     }
 
     std::vector<float> vec(cols_);
