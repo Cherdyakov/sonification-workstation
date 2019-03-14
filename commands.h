@@ -1,7 +1,7 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-#include <QVector>
+#include <vector>
 #include "enums.h"
 #include "dataset.h"
 
@@ -17,9 +17,9 @@ struct ItemCommand {
 
 struct DatasetCommand {
     Dataset *dataset;
-    QVector<double>* data;
-    QVector<double>* mins;
-    QVector<double>* maxes;
+    std::vector<float>* data;
+    std::vector<float>* mins;
+    std::vector<float>* maxes;
 };
 
 struct ParameterCommand {

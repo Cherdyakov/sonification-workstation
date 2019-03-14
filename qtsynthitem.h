@@ -2,7 +2,7 @@
 #define QTSYNTHITEM_H
 
 #include <QObject>
-#include <QVector>
+#include <vector>
 #include "frame.h"
 #include "ringbuffer.h"
 #include "dataset.h"
@@ -35,9 +35,9 @@ public:
     Q_INVOKABLE virtual void disconnect(QtSynthItem *parent);
     Q_INVOKABLE virtual void disconnectAll();
 
-    virtual void setData(QVector<double>* data,
-                             QVector<double>* mins,
-                             QVector<double>* maxes);
+    virtual void setData(std::vector<float>* data,
+                         std::vector<float>* mins,
+                         std::vector<float>* maxes);
     virtual Frame process();        // called every audio sample
     virtual void step();            // called every new data value (step)
     virtual void controlProcess();  // called every process block
@@ -50,12 +50,12 @@ protected:
     ENUMS::OUTPUT_TYPE outputType_;
     RingBuffer<ItemCommand> commandBuffer_;
     RingBuffer<DatasetCommand> datasetCommandBuffer_;
-    QVector<double>* data_;
-    QVector<double>* mins_;
-    QVector<double>* maxes_;
-    QVector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
-    QVector<QtSynthItem*> parents_;
-    QVector<QtSynthItem*> children_;
+    std::vector<float>* data_;
+    std::vector<float>* mins_;
+    std::vector<float>* maxes_;
+    std::vector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
+    std::vector<QtSynthItem*> parents_;
+    std::vector<QtSynthItem*> children_;
 
     virtual void processCommand(ItemCommand cmd);
     virtual void processDatasetCommand(DatasetCommand cmd);

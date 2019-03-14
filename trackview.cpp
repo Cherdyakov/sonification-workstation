@@ -23,13 +23,13 @@ void TrackView::setPlayHead(PlayHead *p)
 
 void TrackView::plot(sow::Dataset *dataset)
 {
-    for(uint i = 0; i < dataset->height_; i++)
+    for(int i = 0; i < dataset->cols(); i++)
     {
         //add tracks
         Track* track = addTrack();
         track->setTrackNumber(i + 1);
         //plot to each track
-        QVector<double> trackData = dataset->getRow(i);
+        std::vector<float> trackData = dataset->getCol(i);
         track->plot(trackData);
     }
     trackLayout->addStretch();

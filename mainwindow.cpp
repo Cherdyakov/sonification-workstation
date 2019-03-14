@@ -12,11 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // plotter Setup //
     ///////////////////
 
-    plotter = new Plotter;
+//    plotter = new Plotter;
     trackView = new TrackView;
 
     // Draws the playhead,loop points, loop shading
-    PlayHead* playHead = new PlayHead(plotter);
+    PlayHead* playHead = new PlayHead(this);
     trackView->setPlayHead(playHead);
     playHead->show();
 
@@ -101,8 +101,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(fileReader, SIGNAL(datasetChanged(sow::Dataset*)),
             trackView, SLOT(on_datasetChanged(sow::Dataset*)));
-    connect(plotter->xAxis, SIGNAL(rangeChanged(QCPRange)),
-            playHead, SLOT(on_xRangeChanged(QCPRange)));
+//    connect(plotter->xAxis, SIGNAL(rangeChanged(QCPRange)),
+//            playHead, SLOT(on_xRangeChanged(QCPRange)));
     connect(transportWidget, SIGNAL(pausedChanged(bool)),
             playHead, SLOT(on_pausedChanged(bool)));
 

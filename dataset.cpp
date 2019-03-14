@@ -9,35 +9,45 @@ Dataset::Dataset(QObject *parent) : QObject (parent)
 }
 
 // initialize with flattened data and the number of rows, columns
-void Dataset::init(const QVector<float> data, const int rows, const int cols)
+void Dataset::init(const std::vector<float> *data, unsigned int rows, unsigned int cols)
 {
-    if((rows * cols) != data.size())
+    if((rows * cols) != data->size())
     {
         QString message = "Invalid dataset size: rows x cols != data size";
         throw InvalidArgumentException(message);
     }
 
     data_.clear();
-    data_ = data;
+    data_ = *data;
     rows_ = rows;
     cols_ = cols;
     calculateMinMax();
 }
 
-int Dataset::rows() const
+unsigned int Dataset::rows() const
 {
     return rows_;
 }
 
-int Dataset::cols() const
+unsigned int Dataset::cols() const
 {
     return cols_;
 }
 
-// Return data value at given index
-float Dataset::operator()(const int row, const int col) const
+std::vector<float> Dataset::mins() const
 {
-    if ( (row >= rows_) || (col >= cols_)  || (row < 0) || (col < 0) )
+    return mins_;
+}
+
+std::vector<float> Dataset::maxes() const
+{
+    return maxes_;
+}
+
+// Return data value at given index
+float Dataset::operator()(const unsigned int row, const unsigned int col) const
+{
+    if ( (row >= rows_) || (col >= cols_) )
     {
         QString message = "Invalid dataset index: " + QString::number(row)
                 + ", " + QString::number(col);
@@ -47,16 +57,16 @@ float Dataset::operator()(const int row, const int col) const
 }
 
 // return given col of the dataset
-QVector<float> Dataset::getCol(const int col) const {
+std::vector<float> Dataset::getCol(const unsigned int col) const {
 
-    if( (col >= cols_) || (col < 0) )
+    if( col >= cols_ )
     {
         QString message = "Invalid dataset column requested: " + QString::number(col);
         throw InvalidArgumentException(message);
     }
 
-    QVector<float> vec(rows_);
-    for(int row = 0; row < rows_; row++)
+    std::vector<float> vec(rows_);
+    for(unsigned int row = 0; row < rows_; row++)
     {
         vec[row] = data_[index(row, col)];
     }
@@ -64,16 +74,16 @@ QVector<float> Dataset::getCol(const int col) const {
 }
 
 // return given row of the dataset
-QVector<float> Dataset::getRow(const int row) const {
+std::vector<float> Dataset::getRow(const unsigned int row) const {
 
-    if( (row >= rows_) || (row < 0) )
+    if( row >= rows_ )
     {
         QString message = "Invalid dataset row requested: " + QString::number(row);
         throw InvalidArgumentException(message);
     }
 
-    QVector<float> vec(cols_);
-    for(int col = 0; col < cols_; col++)
+    std::vector<float> vec(cols_);
+    for(unsigned int col = 0; col < cols_; col++)
     {
         vec[col] = data_[index(row, col)];
     }
@@ -90,9 +100,9 @@ void Dataset::calculateMinMax()
     float max = 0.0f;
     mins_.resize(cols_);
     maxes_.resize(cols_);
-    for(int col = 0; col < cols_; col++)
+    for(unsigned int col = 0; col < cols_; col++)
     {
-        for(int row = 0; row < rows_; row++)
+        for(unsigned int row = 0; row < rows_; row++)
         {
             float value = data_[index(row, col)];
             if(row == 0)
@@ -113,7 +123,7 @@ void Dataset::calculateMinMax()
     }
 }
 
-int Dataset::index(const int row, const int col) const
+unsigned int Dataset::index(const unsigned int row, const unsigned int col) const
 {
     return (cols_ * row) + col;
 }

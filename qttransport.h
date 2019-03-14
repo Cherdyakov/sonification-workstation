@@ -48,13 +48,15 @@ private:
 
     RingBuffer<TransportCommand> transportCommandBuffer_;
     Frame frameBuffer_[4096];
-    QVector<QtSynthItem*> subscribers_;
+    std::vector<QtSynthItem*> subscribers_;
     Dataset* dataset_;
-    QVector<double> currentDataColumn_;
+    std::vector<float> currentDataColumn_;
+    std::vector<float> dataMinValues_;
+    std::vector<float> dataMaxValues_;
     std::atomic<float> returnPos_;
     float masterVolume_;
-    unsigned int frameRate_;
-    unsigned int currentIndex_;
+    int frameRate_;
+    int currentIndex_;
     float mu_;
     int speed_;
     float loopBegin_;
@@ -73,7 +75,7 @@ private:
     void processSetPlaybackPosition(float pos);
     void retrieveNextDataColumn();
     void calculateReturnPosition();
-    QVector<double> interpolate(QVector<double> first, QVector<double> second, double mu);
+    std::vector<float> interpolate(std::vector<float> first, std::vector<float> second, float mu);
 
 signals:
     void posChanged(float pos);

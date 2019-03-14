@@ -20,7 +20,7 @@ Track::Track(QWidget *parent) : QWidget(parent)
             this, SLOT(on_zoomChanged(QCPRange)));
 }
 
-void Track::plot(QVector<double> vec)
+void Track::plot(std::vector<float> vec)
 {
     plotter->plot(vec);
 }

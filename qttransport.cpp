@@ -182,7 +182,7 @@ Frame QtTransport::process()
         mu_ -= 1.0;
         currentIndex_++;
 
-        if((currentIndex_ + 1) > (dataset_->width_))
+        if((currentIndex_ + 1) > (dataset_->cols()))
         {
             currentIndex_ = 0;
         }
@@ -230,7 +230,7 @@ Frame QtTransport::process()
 
     // advancing index
     calculateReturnPosition();
-    mu_ += ((double)speed_ / frameRate_);
+    mu_ += static_cast<float>(speed_) / frameRate_;
 
     return frame;// * master_volume_;
 }
@@ -282,20 +282,20 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
         processSubscribeItem(cmd.item);
         break;
     case ENUMS::TRANSPORT_CMD::UNSUB:
-            subscribers_.removeAll(cmd.item);
+        removeAll(cmd.item, subscribers_);
         break;
     }
 }
 
 void QtTransport::processSubscribeItem(QtSynthItem *item)
 {
-    subscribers_.push_back(item);
-    item->setData(&currentDataColumn_, &dataset_->mins_, &dataset_->maxes_);
+    insertUnique(item, subscribers_);
+    item->setData(&currentDataColumn_, &dataMinValues_, &dataMaxValues_);
 }
 
 void QtTransport::processUnsubscribeItem(QtSynthItem *item)
 {
-    subscribers_.removeAll(item);
+    removeAll(item, subscribers_);
 }
 
 void QtTransport::processDeleteItem(QtSynthItem *item)
@@ -318,12 +318,12 @@ void QtTransport::processDatasetCommand(DatasetCommand cmd)
     currentIndex_ = 0;
     mu_ = 0.0;
     calculateReturnPosition();
-    currentDataColumn_.resize(static_cast<int>(dataset_->height_));
+    currentDataColumn_.resize(static_cast<unsigned int>(dataset_->rows()));
 }
 
 void QtTransport::processSetPlaybackPosition(float pos)
 {
-    unsigned int newIdx = static_cast<unsigned int>(pos);
+    int newIdx = static_cast<int>(pos);
     if(currentIndex_ != newIdx)
     {
         dataStale_ = true;
@@ -336,8 +336,8 @@ void QtTransport::retrieveNextDataColumn()
 {
     if(interpolate_)
     {
-        unsigned int next_index = currentIndex_ + 1;
-        if(next_index >= dataset_->width_)
+        int next_index = currentIndex_ + 1;
+        if(next_index >= dataset_->cols())
         {
             next_index = 0;
         }
@@ -355,18 +355,18 @@ void QtTransport::calculateReturnPosition()
     returnPos_.store(pos, std::memory_order_relaxed);
 }
 
-QVector<double> QtTransport::interpolate(QVector<double> first, QVector<double> second, double mu)
+std::vector<float> QtTransport::interpolate(std::vector<float> first, std::vector<float> second, float mu)
 {
-    QVector<double> vec;
+    std::vector<float> vec;
     if(first.size() != second.size())
     {
         return vec;
     }
-    for(unsigned int i = 0; i < first.size(); i++)
+    for(int i = 0; i < first.size(); i++)
     {
-        double val_first = first[i];
-        double val_second = second[i];
-        double interpolated_val = ((1 - mu) * val_first) + (mu * val_second);
+        float val_first = first[i];
+        float val_second = second[i];
+        float interpolated_val = ((1 - mu) * val_first) + (mu * val_second);
         vec.push_back(interpolated_val);
     }
     return vec;
