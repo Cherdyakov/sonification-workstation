@@ -50,12 +50,12 @@ protected:
     ENUMS::OUTPUT_TYPE outputType_;
     RingBuffer<ItemCommand> commandBuffer_;
     RingBuffer<DatasetCommand> datasetCommandBuffer_;
-    QVector<double>* data_;
-    QVector<double>* mins_;
-    QVector<double>* maxes_;
-    QVector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
-    QVector<QtSynthItem*> parents_;
-    QVector<QtSynthItem*> children_;
+    std::vector<float>* data_;
+    std::vector<float>* mins_;
+    std::vector<float>* maxes_;
+    std::vector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
+    std::vector<QtSynthItem*> parents_;
+    std::vector<QtSynthItem*> children_;
 
     virtual void processCommand(ItemCommand cmd);
     virtual void processDatasetCommand(DatasetCommand cmd);
