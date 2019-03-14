@@ -51,6 +51,8 @@ private:
     std::vector<QtSynthItem*> subscribers_;
     Dataset* dataset_;
     std::vector<float> currentDataColumn_;
+    std::vector<float> dataMinValues_;
+    std::vector<float> dataMaxValues_;
     std::atomic<float> returnPos_;
     float masterVolume_;
     int frameRate_;

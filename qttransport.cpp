@@ -290,7 +290,7 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
 void QtTransport::processSubscribeItem(QtSynthItem *item)
 {
     insertUnique(item, subscribers_);
-    item->setData(currentDataColumn_, dataset_->mins(), dataset_->maxes());
+    item->setData(&currentDataColumn_, &dataMinValues_, &dataMaxValues_);
 }
 
 void QtTransport::processUnsubscribeItem(QtSynthItem *item)
@@ -318,7 +318,7 @@ void QtTransport::processDatasetCommand(DatasetCommand cmd)
     currentIndex_ = 0;
     mu_ = 0.0;
     calculateReturnPosition();
-    currentDataColumn_.resize(static_cast<int>(dataset_->rows()));
+    currentDataColumn_.resize(static_cast<unsigned int>(dataset_->rows()));
 }
 
 void QtTransport::processSetPlaybackPosition(float pos)
