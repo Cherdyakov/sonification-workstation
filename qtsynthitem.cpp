@@ -40,7 +40,7 @@ ENUMS::OUTPUT_TYPE QtSynthItem::outputType() const
 // Connect the given SynthItem as a child
 bool QtSynthItem::connectChild(QtSynthItem *child)
 {
-    if(!acceptedInputs_.contains(child->outputType()) || child == nullptr)
+    if( !contains(child->outputType(), acceptedInputs_) || (child == nullptr) )
     {
         return false;
     }
@@ -165,8 +165,8 @@ void QtSynthItem::processConnectChild(QtSynthItem *child)
 
 // Disconnect the given SynthItem child or parent
 void QtSynthItem::processDisconnect(QtSynthItem *other) {
-    children_.removeAll(other);
-    parents_.removeAll(other);
+    removeAll(other, children_);
+    removeAll(other, parents_);
 }
 
 // Disconnect all child and parent SynthItems

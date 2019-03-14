@@ -2,6 +2,7 @@
 #define UTILITY_H
 
 #include <vector>
+#include <algorithm>
 #include "frame.h"
 //#include "qtsynthitem.h"
 
@@ -17,13 +18,25 @@ double scale(double x, double in_low,
 //Frame visitChildren(std::vector<QtSynthItem*> children);
 
 template<class T>
-bool insertUnique(T item, std::vector<T> &items)
+bool insertUnique(const T item, std::vector<T> &vec)
 {
-    if (!items.contains(item)) {
-        items.append(item);
+    if (!contains(item, vec)) {
+        vec.push_back(item);
         return true;
     }
     return false;
+}
+
+template <class T>
+void removeAll(const T item, std::vector<T> vec)
+{
+    vec.erase(std::remove(vec.begin(), vec.end(), item), vec.end());
+}
+
+template <class T>
+bool contains(const T item, const std::vector<T> vec)
+{
+   return std::find(vec.begin(), vec.end(), item) != vec.end();
 }
 
 } // namespace sow
