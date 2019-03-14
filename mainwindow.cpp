@@ -12,12 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // plotter Setup //
     ///////////////////
 
-    trackView = new TrackView;
+    trackView = new TrackView(this);
 
     // Draws the playhead,loop points, loop shading
     PlayHead* playHead = new PlayHead(this);
     trackView->setPlayHead(playHead);
-    playHead->show();
 
     //main window layout
     QWidget *mainWidget = new QWidget;

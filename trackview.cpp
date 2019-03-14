@@ -4,22 +4,29 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
 {
     QPalette* pal = new QPalette;
 
-    // set black background
+    // set background color
     pal->setColor(QPalette::Background, QColor("light grey"));
     this->setAutoFillBackground(true);
     this->setPalette(*pal);
 
-    // set layout
-    trackLayout = new QVBoxLayout(this);
-    trackLayout->setContentsMargins(4,4,4,4);
-    trackLayout->setSpacing(4);
-    this->setLayout(trackLayout);
+    QWidget* container = new QWidget(this);
+    stackedLayout_ = new QStackedLayout(this);
+    stackedLayout_->setStackingMode(QStackedLayout::StackingMode::StackAll);
+    // set track layout and add to container widget
+    trackLayout_ = new QVBoxLayout(container);
+    trackLayout_->setContentsMargins(4,4,4,4);
+    trackLayout_->setSpacing(4);
+    container->setLayout(trackLayout_);
+    stackedLayout_->addWidget(container);
+    // set layout of this trackview
+    this->setLayout(stackedLayout_);
 }
 
-void TrackView::setPlayHead(PlayHead *p)
+void TrackView::setPlayHead(PlayHead *playHead)
 {
-    playHead = p;
-}
+    playHead_ = playHead;
+    stackedLayout_->addWidget(playHead_);
+    stackedLayout_->setCurrentWidget(playHead_);}
 
 void TrackView::plot(sow::Dataset *dataset)
 {
@@ -32,15 +39,16 @@ void TrackView::plot(sow::Dataset *dataset)
         std::vector<float> trackData = dataset->getCol(i);
         track->plot(trackData);
     }
-    trackLayout->addStretch();
+    trackLayout_->addStretch();
+    resizePlayHead();
 }
 
 void TrackView::clear()
 {
     QLayoutItem* child;
-    while (trackLayout->count() != 0)
+    while (trackLayout_->count() != 0)
     {
-        child = trackLayout->takeAt(0);
+        child = trackLayout_->takeAt(0);
         if(child->widget() != 0)
         {
             delete child->widget();
@@ -57,13 +65,21 @@ Track *TrackView::addTrack()
     connect(this, SIGNAL(zoomChanged(QCPRange)),
             track, SLOT(on_zoomChanged(QCPRange)));
     track->setFixedHeight(120);
-    trackLayout->addWidget(track);
+    trackLayout_->addWidget(track);
     return track;
 }
 
 void TrackView::removeTrack(Track *track)
 {
 
+}
+
+void TrackView::resizePlayHead()
+{
+    QPoint pos = this->pos();
+    QSize plotSize = this->size();
+    QRect rect(pos, plotSize);
+    playHead_->setGeometry(rect);
 }
 
 void TrackView::on_datasetChanged(sow::Dataset* dataset)

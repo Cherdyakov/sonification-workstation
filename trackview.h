@@ -14,15 +14,17 @@ class TrackView : public QWidget
     Q_OBJECT
 public:
     explicit TrackView(QWidget *parent = nullptr);
-    void setPlayHead(PlayHead* p);
+    void setPlayHead(PlayHead* playHead);
 
 private:
-    PlayHead* playHead;
+    PlayHead* playHead_;
     void plot(sow::Dataset* dataset);
     void clear();
     Track* addTrack();
     void removeTrack(Track* track);
-    QVBoxLayout *trackLayout;
+    QVBoxLayout *trackLayout_;
+    QStackedLayout * stackedLayout_;
+    void resizePlayHead();
 
 signals:
     void zoomChanged(QCPRange range);
