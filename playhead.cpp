@@ -4,7 +4,8 @@ PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
 {
     // for blinking cursor when paused
     QTimer* blinkTimer = new QTimer(this);
-    connect(blinkTimer, SIGNAL(timeout()), this, SLOT(blinker()));
+    connect(blinkTimer, &QTimer::timeout,
+            this, &PlayHead::blinker);
     blinkTimer->start(720);
 
     paused = true;
