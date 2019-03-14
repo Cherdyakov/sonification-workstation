@@ -28,16 +28,16 @@ Plotter::Plotter()
     connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_yRangeChanged(QCPRange)));
 }
 
-void Plotter::plot(QVector<double> *array, uint height, uint width)
+void Plotter::plot(std::vector<double> *array, uint height, uint width)
 {
     clearGraphs();
 
-    QVector<double> xTicks(static_cast<int>(width));
+    std::vector<double> xTicks(static_cast<int>(width));
     std::iota(xTicks.begin(), xTicks.end(), 0);
 
     for(uint i = 0; i < height; i++)
     {
-        QVector<double> row(static_cast<int>(width));
+        std::vector<double> row(static_cast<int>(width));
         for(uint j = 0; j < width; j++)
         {
             row[static_cast<int>(j)] = (*array)[i * width + j];
@@ -114,7 +114,7 @@ void Plotter::resizePlayHead()
     playHead->setGeometry(rect);
 }
 
-void Plotter::on_datasetChanged(QVector<double> *data, uint height, uint width)
+void Plotter::on_datasetChanged(std::vector<double> *data, uint height, uint width)
 {
     plot(data, height, width);
 }

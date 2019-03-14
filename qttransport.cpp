@@ -355,9 +355,9 @@ void QtTransport::calculateReturnPosition()
     returnPos_.store(pos, std::memory_order_relaxed);
 }
 
-QVector<double> QtTransport::interpolate(QVector<double> first, QVector<double> second, double mu)
+std::vector<double> QtTransport::interpolate(std::vector<double> first, std::vector<double> second, double mu)
 {
-    QVector<double> vec;
+    std::vector<double> vec;
     if(first.size() != second.size())
     {
         return vec;

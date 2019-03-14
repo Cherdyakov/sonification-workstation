@@ -21,18 +21,18 @@ TrackPlotter::TrackPlotter()
 
 }
 
-void TrackPlotter::plot(QVector<double> vec)
+void TrackPlotter::plot(std::vector<double> vec)
 {
     clearGraphs();
     int len = static_cast<uint>(vec.size());
 
-    QVector<double> data(len);
+    std::vector<double> data(len);
     for(int i = 0; i < len; i++)
     {
         data[i] = vec[i];
     }
 
-    QVector<double> xTicks(static_cast<int>(len));
+    std::vector<double> xTicks(static_cast<int>(len));
     std::iota(xTicks.begin(), xTicks.end(), 0);
 
     QCPGraph* graph = addGraph();

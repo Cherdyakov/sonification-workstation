@@ -82,7 +82,7 @@ void QtSynthItem::disconnectAll()
 }
 
 // Set the data column, dataset minumum and dataset maximum values
-void QtSynthItem::setData(QVector<double> *data, QVector<double> *mins, QVector<double> *maxes)
+void QtSynthItem::setData(std::vector<double> *data, std::vector<double> *mins, std::vector<double> *maxes)
 {
     DatasetCommand cmd;
     cmd.data = data;

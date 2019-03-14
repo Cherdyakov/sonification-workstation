@@ -14,7 +14,7 @@ class TrackPlotter : public QCustomPlot
 
 public:
     TrackPlotter();
-    void plot(QVector<double> vec);
+    void plot(std::vector<double> vec);
 
 private:
 

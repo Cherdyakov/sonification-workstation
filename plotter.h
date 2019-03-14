@@ -12,7 +12,7 @@ class Plotter : public QCustomPlot
 
 public:
     Plotter();
-    void plot(QVector<double>* array, uint height, uint width);
+    void plot(std::vector<double>* array, uint height, uint width);
     void setPlayHead(PlayHead* p);
 
 private:
@@ -35,7 +35,7 @@ private:
     bool isSettingLoop;
 
 private slots:
-    void on_datasetChanged(QVector<double> *data, uint height, uint width);
+    void on_datasetChanged(std::vector<double> *data, uint height, uint width);
     void on_xRangeChanged(const QCPRange &newRange);
     void on_yRangeChanged(const QCPRange &newRange);
 

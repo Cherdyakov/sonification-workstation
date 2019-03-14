@@ -2,7 +2,7 @@
 #define QTSYNTHITEM_H
 
 #include <QObject>
-#include <QVector>
+#include <vector>
 #include "frame.h"
 #include "ringbuffer.h"
 #include "dataset.h"
@@ -35,9 +35,9 @@ public:
     Q_INVOKABLE virtual void disconnect(QtSynthItem *parent);
     Q_INVOKABLE virtual void disconnectAll();
 
-    virtual void setData(QVector<double>* data,
-                             QVector<double>* mins,
-                             QVector<double>* maxes);
+    virtual void setData(std::vector<double>* data,
+                             std::vector<double>* mins,
+                             std::vector<double>* maxes);
     virtual Frame process();        // called every audio sample
     virtual void step();            // called every new data value (step)
     virtual void controlProcess();  // called every process block

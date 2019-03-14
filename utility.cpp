@@ -3,7 +3,7 @@
 
 namespace sow {
 
-//Frame visitChildren(QVector<QtSynthItem *> children)
+//Frame visitChildren(std::vector<QtSynthItem *> children)
 //{
 //    Frame frame;
 //    for (int i = 0; i < children.size(); ++i)

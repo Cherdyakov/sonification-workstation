@@ -111,9 +111,9 @@ public:
     virtual ~SynthItem() {}
     virtual void delete_self() = 0;
     virtual ITEM get_type() = 0;
-    virtual void set_data(QVector<double>* data,
-                             QVector<double>* mins,
-                             QVector<double>* maxes) = 0;
+    virtual void set_data(std::vector<double>* data,
+                             std::vector<double>* mins,
+                             std::vector<double>* maxes) = 0;
     virtual void add_parent(SynthItem* parent) = 0;
     virtual void remove_parent(SynthItem* parent) = 0;
     virtual bool add_child(SynthItem *child, PARAMETER param) = 0;
@@ -124,7 +124,7 @@ public:
     virtual void control_process() = 0; // every process block
 
     virtual bool get_mute() = 0;
-    virtual QVector<SynthItem*> get_parents() = 0;
+    virtual std::vector<SynthItem*> get_parents() = 0;
 
 protected:
 

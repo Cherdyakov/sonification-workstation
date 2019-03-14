@@ -29,7 +29,7 @@ void TrackView::plot(sow::Dataset *dataset)
         Track* track = addTrack();
         track->setTrackNumber(i + 1);
         //plot to each track
-        QVector<double> trackData = dataset->getRow(i);
+        std::vector<double> trackData = dataset->getRow(i);
         track->plot(trackData);
     }
     trackLayout->addStretch();
