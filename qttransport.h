@@ -73,7 +73,7 @@ private:
     void processSetPlaybackPosition(float pos);
     void retrieveNextDataColumn();
     void calculateReturnPosition();
-    std::vector<double> interpolate(std::vector<double> first, std::vector<double> second, double mu);
+    std::vector<double> interpolate(std::vector<float> first, std::vector<float> second, float mu);
 
 signals:
     void posChanged(float pos);
