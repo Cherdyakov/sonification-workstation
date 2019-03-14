@@ -36,8 +36,8 @@ public:
     Q_INVOKABLE virtual void disconnectAll();
 
     virtual void setData(std::vector<float>* data,
-                             std::vector<float>* mins,
-                             std::vector<float>* maxes);
+                         std::vector<float>* mins,
+                         std::vector<float>* maxes);
     virtual Frame process();        // called every audio sample
     virtual void step();            // called every new data value (step)
     virtual void controlProcess();  // called every process block
