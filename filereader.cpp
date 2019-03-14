@@ -89,7 +89,7 @@ void FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
         }
     }
 
-    dataset->init(vec, rows, cols);
+    dataset->init(&vec, rows, cols);
     emit datasetChanged(dataset);
     emit qmlDatasetChanged(dataset->rows(), dataset->cols());
 }
