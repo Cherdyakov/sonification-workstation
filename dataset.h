@@ -18,21 +18,21 @@ public:
     explicit Dataset(QObject* parent = nullptr);
 
     // populate the dataset with data
-    void init(const std::vector<float>* data, int rows, int cols);
-    int rows() const;
-    int cols() const;
+    void init(const std::vector<float>* data, unsigned int rows, unsigned int cols);
+    unsigned int rows() const;
+    unsigned int cols() const;
     std::vector<float> mins() const;
     std::vector<float> maxes() const;
-    float operator()(int row, int col) const;
-    std::vector<float> getCol(const int col) const;
-    std::vector<float> getRow(const int row) const;
+    float operator()(unsigned int row, unsigned int col) const;
+    std::vector<float> getCol(const unsigned int col) const;
+    std::vector<float> getRow(const unsigned int row) const;
     // erase all data and reset height, width
     void clear();
 
 private:
 
-    int rows_;
-    int cols_;
+    unsigned int rows_;
+    unsigned int cols_;
     std::vector<float> data_;
     std::vector<float> mins_;
     std::vector<float> maxes_;
@@ -40,7 +40,7 @@ private:
     // Find min/max values for every
     // column and store them.
     void calculateMinMax();
-    int index(const int row, const int col) const;
+    unsigned int index(const unsigned int row, const unsigned int col) const;
 
 };
 
