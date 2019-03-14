@@ -21,21 +21,23 @@ TrackPlotter::TrackPlotter()
 
 }
 
-void TrackPlotter::plot(std::vector<double> vec)
+void TrackPlotter::plot(std::vector<float> data)
+{
+    std::vector<double> doubleData(data.begin(), data.end());
+    QVector<double> qData = QVector<double>::fromStdVector(doubleData);
+    plot(qData);
+}
+
+void TrackPlotter::plot(QVector<double> data)
 {
     clearGraphs();
-    int len = static_cast<uint>(vec.size());
+    int len = static_cast<int>(data.size());
 
-    std::vector<double> data(len);
-    for(int i = 0; i < len; i++)
-    {
-        data[i] = vec[i];
-    }
-
-    std::vector<double> xTicks(static_cast<int>(len));
+    QVector<double> xTicks(len);
     std::iota(xTicks.begin(), xTicks.end(), 0);
 
     QCPGraph* graph = addGraph();
+
     graph->setData(xTicks, data);
     graph->setSelectable(QCP::stNone);
 
