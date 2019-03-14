@@ -80,41 +80,45 @@ MainWindow::MainWindow(QWidget *parent) :
     // populate menus and connect signals to slots
     createMenus();
 
-    /* connect non-ui slots and signals */
+    ///* CONNECT NON_UI SIGNALS AND SLOTS *///
+    // FileReader signals
     connect(fileReader, &FileReader::datasetChanged,
             transport, &QtTransport::onDatasetchanged);
+    connect(fileReader, &FileReader::datasetChanged,
+            trackView, &TrackView::on_datasetChanged);
+    connect(fileReader, &FileReader::datasetChanged,
+            transportWidget, &TransportWidget::on_datasetChanged);
+    // Session signals
+    connect(session, &Session::newDatafile,
+            fileReader, &FileReader::on_newDatafile);
+    connect(session, &Session::speedChanged,
+            transportWidget, &TransportWidget::on_speed_changed);
+    connect(session, &Session::interpolateChanged,
+            transportWidget, &TransportWidget::on_interpolation_changed);
+    // Connect Transport < > TransportWidget
     connect(transport, &QtTransport::posChanged,
             playHead, &PlayHead::on_cursorMoved);
     connect(transportWidget, &TransportWidget::speedChanged,
             transport, &QtTransport::onSpeedchanged);
-    connect(transportWidget, &TransportWidget::pausedChanged,
-            transport, &QtTransport::onPausechanged);
-    connect(playHead, &PlayHead::cursorPosChanged,
-            transport, &QtTransport::onPoschanged);
-    connect(transportWidget, &TransportWidget::loopingChanged,
-            transport, &QtTransport::onLoopingchanged);
-    connect(playHead, &PlayHead::loopPointsChanged,
-            transport, &QtTransport::onLoopPointsChanged);
     connect(transportWidget, &TransportWidget::interpolateChanged,
             transport, &QtTransport::onInterpolateChanged);
+    connect(transportWidget, &TransportWidget::pausedChanged,
+            transport, &QtTransport::onPausechanged);
+    connect(transportWidget, &TransportWidget::loopingChanged,
+            transport, &QtTransport::onLoopingchanged);
+    // TransportWidget signals to Session, Playhead
+    connect(transportWidget, &TransportWidget::speedChanged,
+            session, &Session::on_speedChanged);
+    connect(transportWidget, &TransportWidget::interpolateChanged,
+            session, &Session::onInterpolateChanged);
+    connect(transportWidget, &TransportWidget::pausedChanged,
+            playHead, &PlayHead::on_pausedChanged);
+    // Playhead signals
+    connect(playHead, &PlayHead::cursorPosChanged,
+            transport, &QtTransport::onPoschanged);
+    connect(playHead, &PlayHead::loopPointsChanged,
+            transport, &QtTransport::onLoopPointsChanged);
 
-    connect(fileReader, SIGNAL(datasetChanged(sow::Dataset*)),
-            trackView, SLOT(on_datasetChanged(sow::Dataset*)));
-    connect(transportWidget, SIGNAL(pausedChanged(bool)),
-            playHead, SLOT(on_pausedChanged(bool)));
-
-    connect(fileReader, SIGNAL(datasetChanged(sow::Dataset*)),
-            transportWidget, SLOT(on_datasetChanged(sow::Dataset*)));
-    connect(session, SIGNAL(newDatafile(QString,sow::Dataset*)),
-            fileReader, SLOT(on_newDatafile(QString,sow::Dataset*)));
-    connect(session, SIGNAL(speedChanged(int)),
-            transportWidget, SLOT(on_speed_changed(int)));
-    connect(session, SIGNAL(interpolateChanged(bool)),
-            transportWidget, SLOT(on_interpolation_changed(bool)));
-    connect(transportWidget, SIGNAL(speedChanged(int)),
-            session, SLOT(on_speedChanged(int)));
-    connect(transportWidget, SIGNAL(interpolateChanged(bool)),
-            session, SLOT(onInterpolateChanged(bool)));
 }
 
 MainWindow::~MainWindow()
