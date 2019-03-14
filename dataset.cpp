@@ -9,7 +9,7 @@ Dataset::Dataset(QObject *parent) : QObject (parent)
 }
 
 // initialize with flattened data and the number of rows, columns
-void Dataset::init(const QVector<float> *data, int rows, int cols)
+void Dataset::init(const std::vector<float> *data, int rows, int cols)
 {
     if((rows * cols) != data->size())
     {
@@ -34,12 +34,12 @@ int Dataset::cols() const
     return cols_;
 }
 
-QVector<float> Dataset::mins() const
+std::vector<float> Dataset::mins() const
 {
     return mins_;
 }
 
-QVector<float> Dataset::maxes() const
+std::vector<float> Dataset::maxes() const
 {
     return maxes_;
 }
@@ -57,7 +57,7 @@ float Dataset::operator()(const int row, const int col) const
 }
 
 // return given col of the dataset
-QVector<float> Dataset::getCol(const int col) const {
+std::vector<float> Dataset::getCol(const int col) const {
 
     if( (col >= cols_) || (col < 0) )
     {
@@ -65,7 +65,7 @@ QVector<float> Dataset::getCol(const int col) const {
         throw InvalidArgumentException(message);
     }
 
-    QVector<float> vec(rows_);
+    std::vector<float> vec(rows_);
     for(int row = 0; row < rows_; row++)
     {
         vec[row] = data_[index(row, col)];
@@ -74,7 +74,7 @@ QVector<float> Dataset::getCol(const int col) const {
 }
 
 // return given row of the dataset
-QVector<float> Dataset::getRow(const int row) const {
+std::vector<float> Dataset::getRow(const int row) const {
 
     if( (row >= rows_) || (row < 0) )
     {
@@ -82,7 +82,7 @@ QVector<float> Dataset::getRow(const int row) const {
         throw InvalidArgumentException(message);
     }
 
-    QVector<float> vec(cols_);
+    std::vector<float> vec(cols_);
     for(int col = 0; col < cols_; col++)
     {
         vec[col] = data_[index(row, col)];

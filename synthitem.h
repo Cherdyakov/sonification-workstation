@@ -94,11 +94,11 @@ public:
         ITEM_CMD type;
         PARAMETER parameter;
         Dataset *dataset;
-        QVector<double>* data;
-        QVector<double>* mins;
-        QVector<double>* maxes;
-        QVector<double> doubles;
-        QVector<int> ints;
+        std::vector<float>* data;
+        std::vector<float>* mins;
+        std::vector<float>* maxes;
+        std::vector<float> doubles;
+        std::vector<int> ints;
         bool bool_val;
         SynthItem* item;
         ItemCommand() {

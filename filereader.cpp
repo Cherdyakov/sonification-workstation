@@ -4,7 +4,7 @@ FileReader::FileReader(QObject *parent) : QObject(parent) { }
 
 void FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
 {
-    QVector<float> vec;
+    std::vector<float> vec;
 
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {

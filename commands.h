@@ -17,9 +17,9 @@ struct ItemCommand {
 
 struct DatasetCommand {
     Dataset *dataset;
-    QVector<float>* data;
-    QVector<float>* mins;
-    QVector<float>* maxes;
+    std::vector<float>* data;
+    std::vector<float>* mins;
+    std::vector<float>* maxes;
 };
 
 struct ParameterCommand {
