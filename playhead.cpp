@@ -2,61 +2,61 @@
 
 PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
 {
-    // for blinking cursor when paused
-    QTimer* blinkTimer = new QTimer(this);
-    connect(blinkTimer, &QTimer::timeout,
+    // for blink_ing cursor when pause_
+    QTimer* blink_Timer = new QTimer(this);
+    connect(blink_Timer, &QTimer::timeout,
             this, &PlayHead::blinker);
-    blinkTimer->start(720);
+    blink_Timer->start(720);
 
-    paused = true;
-    loopA = 0.0;
-    loopB = 0.0;
-    cursorPos = 0.0;
+    pause_ = true;
+    loopA_ = 0.0;
+    loopB_ = 0.0;
+    cursorPos_ = 0.0;
 
-    xMin = 0.0;
-    xMax = 5.0;
+    xMin_ = 0.0;
+    xMax_ = 5.0;
 }
 
-void PlayHead::setCursorPos(double pos)
+void PlayHead::setCursorPos(float pos)
 {
-    if(cursorPos != pos)
+    if(cursorPos_ != pos)
     {
-        cursorPos = pos;
+        cursorPos_ = pos;
         repaint();
     }
 }
 
-void PlayHead::setPaused(bool paused)
+void PlayHead::setPaused(bool pause)
 {
-    if(paused != paused)
+    if(pause_ != pause)
     {
-        paused = paused;
+        pause_ = pause;
     }
 }
 
-int PlayHead::valToPixel(double val)
+int PlayHead::valToPixel(float val)
 {
     int pixelPos;
-    double relVal;
-    relVal = (val - xMin) / (xMax - xMin);
+    float relVal;
+    relVal = (val - xMin_) / (xMax_ - xMin_);
     pixelPos = (relVal * (width() - 1)) + 1;
     return pixelPos;
 }
 
-double PlayHead::pixelToVal(int pixel)
+float PlayHead::pixelToVal(int pixel)
 {
-    double relVal;
-    double absVal;
-    relVal = (pixel) / (double)(geometry().width() - 1);
-    absVal = (relVal * (xMax - xMin)) + xMin;
+    float relVal;
+    float absVal;
+    relVal = (pixel) / (float)(geometry().width() - 1);
+    absVal = (relVal * (xMax_ - xMin_)) + xMin_;
     return absVal;
 }
 
 // connect to QTimer
-// blinks the cursor when paused
+// blinks the cursor when pause_
 void PlayHead::blinker()
 {
-    blink = !blink;
+    blink_ = !blink_;
     repaint();
 }
 
@@ -65,12 +65,12 @@ void PlayHead::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
 
     int lineLength = this->height();
-    int loopStartPixel = valToPixel(loopA);
-    int loopEndPixel = valToPixel(loopB);
+    int loopStartPixel = valToPixel(loopA_);
+    int loopEndPixel = valToPixel(loopB_);
 
     QPainter painter(this);
     // Draw loop area first
-    if(loopA != loopB)
+    if(loopA_ != loopB_)
     {
         painter.setPen(QPen(Qt::darkGray, 0, Qt::SolidLine));
         painter.drawLine(loopStartPixel, 0, loopStartPixel, lineLength);
@@ -78,36 +78,36 @@ void PlayHead::paintEvent(QPaintEvent *event)
         painter.fillRect(loopStartPixel, 0, loopEndPixel - loopStartPixel, lineLength, QBrush(QColor(128, 128, 255, 32)));
     }
     // Cursor goes over loop area
-    if(!paused || blink)
+    if(!pause_ || blink_)
     {
-        int cursorPosPixel = valToPixel(cursorPos);
-        painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
-        painter.drawLine(cursorPosPixel, 0, cursorPosPixel, lineLength);
+        int cursorPos_Pixel = valToPixel(cursorPos_);
+        painter.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+        painter.drawLine(cursorPos_Pixel, 0, cursorPos_Pixel, lineLength);
     }
 }
 
-void PlayHead::on_pausedChanged(bool pause)
+void PlayHead::on_pauseChanged(bool pause)
 {
-    paused = pause;
+    pause_ = pause;
 }
 
-void PlayHead::on_cursorMoved(double pos)
+void PlayHead::on_cursorMoved(float pos)
 {
     setCursorPos(pos);
 }
 
 void PlayHead::on_xRangeChanged(QCPRange range)
 {
-    double min = range.lower;
-    double max = range.upper;
+    float min = range.lower;
+    float max = range.upper;
 
-    if(xMin != min)
+    if(xMin_ != min)
     {
-        xMin = min;
+        xMin_ = min;
     }
-    if(xMax != max)
+    if(xMax_ != max)
     {
-        xMax = max;
+        xMax_ = max;
     }
 }
 
@@ -119,8 +119,8 @@ void PlayHead::mousePressEvent(QMouseEvent *e)
     case Qt::LeftButton:
     {
 
-        double pos = pixelToVal(e->pos().x());
-        blink = true;
+        float pos = pixelToVal(e->pos().x());
+        blink_ = true;
         // let Transport move cursor and
         // wait for position to update
         // the cursorMoved signal
@@ -129,9 +129,9 @@ void PlayHead::mousePressEvent(QMouseEvent *e)
     }
     case Qt::RightButton:
     {
-        double pos = pixelToVal(e->pos().x());
-        loopA = loopB = pos;
-        emit loopPointsChanged(loopA, loopB);
+        float pos = pixelToVal(e->pos().x());
+        loopA_ = loopB_ = pos;
+        emit loopPointsChanged(loopA_, loopB_);
         break;
     }
     default:
@@ -143,15 +143,15 @@ void PlayHead::mouseMoveEvent(QMouseEvent *e)
 {
     if(e->buttons() & Qt::RightButton)
     {
-        double pos = pixelToVal(e->pos().x());
-        loopB = pos;
-        if(loopB > loopA)
+        float pos = pixelToVal(e->pos().x());
+        loopB_ = pos;
+        if(loopB_ > loopA_)
         {
-            emit loopPointsChanged(loopA, loopB);
+            emit loopPointsChanged(loopA_, loopB_);
         }
         else
         {
-            emit loopPointsChanged(loopB, loopA);
+            emit loopPointsChanged(loopB_, loopA_);
         }
         repaint();
     }

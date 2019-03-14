@@ -112,7 +112,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(transportWidget, &TransportWidget::interpolateChanged,
             session, &Session::onInterpolateChanged);
     connect(transportWidget, &TransportWidget::pausedChanged,
-            playHead, &PlayHead::on_pausedChanged);
+            playHead, &PlayHead::on_pauseChanged);
     // Playhead signals
     connect(playHead, &PlayHead::cursorPosChanged,
             transport, &QtTransport::onPoschanged);

@@ -19,26 +19,26 @@ protected:
 
 private:
 
-    bool paused;
-    bool blink;
-    double cursorPos;
-    double loopA;
-    double loopB;
+    bool pause_;
+    bool blink_;
+    float cursorPos_;
+    float loopA_;
+    float loopB_;
 
-    double xMin;
-    double xMax;
+    float xMin_;
+    float xMax_;
 
     QPoint clickedPoint;
 
-    void setCursorPos(double pos);
-    void setLoopA(double a);
-    void setLoopB(double b);
+    void setCursorPos(float pos);
+    void setLoopA(float a);
+    void setLoopB(float b);
     void setPaused(bool paused);
 
     // for going back and forth between fractional
     // and screen pixel values for PlayHead positions
-    int valToPixel(double val);
-    double pixelToVal(int pixel);
+    int valToPixel(float val);
+    float pixelToVal(int pixel);
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -47,12 +47,12 @@ protected:
     void mouseReleaseEvent(QMouseEvent* e);
 
 signals:
-    void cursorPosChanged(double pos);
-    void loopPointsChanged(double a, double b);
+    void cursorPosChanged(float pos);
+    void loopPointsChanged(float a, float b);
 
 public slots:
-    void on_cursorMoved(double pos);
-    void on_pausedChanged(bool pause);
+    void on_cursorMoved(float pos);
+    void on_pauseChanged(bool pause);
 
 private slots:
     void blinker();
