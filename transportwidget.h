@@ -44,13 +44,13 @@ signals:
 public slots:
     void on_speed_changed(int speed);
     void on_interpolation_changed(bool interpolation);
+    void on_datasetChanged(sow::Dataset *dataset);
 
 private slots:
     void on_pauseButton_released();
     void on_loopButton_released();
     void on_speedBox_valueChanged(int speed);
     void on_interpolateBox_stateChanged(int state);
-    void on_datasetChanged(sow::Dataset *dataset);
 };
 
 #endif // TRANSPORTWIDGET_H

@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <QMouseEvent>
 #include <QDebug>
-#include "playhead.h"
 #include "qcustomplot.h"
 
 class PlayHead : public QWidget
@@ -53,10 +52,10 @@ signals:
 
 public slots:
     void on_cursorMoved(double pos);
+    void on_pausedChanged(bool pause);
 
 private slots:
     void blinker();
-    void on_pausedChanged(bool pause);
     void on_xRangeChanged(QCPRange range);
 
 };
