@@ -19,7 +19,7 @@
 #include "filereader.h"
 #include "qcustomplot.h"
 #include "session.h"
-#include "plotter.h"
+//#include "plotter.h"
 #include "trackview.h"
 
 using namespace sow;
@@ -55,7 +55,7 @@ private:
     QPushButton* playButton;
     //Main graphical widgets
     QTableView* tableView;
-    Plotter* plotter;
+//    Plotter* plotter;
     TrackView* trackView;
 
     //convenience functions to create and populate menus

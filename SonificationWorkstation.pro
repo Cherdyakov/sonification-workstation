@@ -13,7 +13,6 @@ SOURCES += \
     timerworker.cpp \
     filereader.cpp \
     external/qcustomplot/qcustomplot.cpp \
-    plotter.cpp \
     playhead.cpp \
     qtoscillator.cpp \
 #    qtaudifier.cpp \
@@ -59,7 +58,6 @@ HEADERS += \
     timerworker.h \
     filereader.h \
     external/qcustomplot/qcustomplot.h \
-    plotter.h \
     playhead.h \
     qtoscillator.h \
     qtsynthitem.h \
