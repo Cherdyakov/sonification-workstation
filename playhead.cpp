@@ -17,6 +17,7 @@ PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
     blink_Timer->start(720);
 
     pause_ = true;
+    blink_ = true;
     loopA_ = 0.0;
     loopB_ = 0.0;
     cursorPos_ = 0.0;
