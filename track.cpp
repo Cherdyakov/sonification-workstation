@@ -6,7 +6,9 @@ Track::Track(QWidget *parent) : QWidget(parent)
     header = new TrackHeader;
     name = new TrackName;
 
-    QVBoxLayout *headerLayout = new QVBoxLayout;
+    QVBoxLayout *headerLayout = new QVBoxLayout;  
+    // set this track header's width
+    header->setFixedWidth(TrackHeaderWidth);
     headerLayout->addWidget(name);
     headerLayout->addWidget(header);
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -15,6 +17,7 @@ Track::Track(QWidget *parent) : QWidget(parent)
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
     this->setLayout(layout);
+    this->setFixedHeight(TrackHeight);
 
     connect(plotter, SIGNAL(zoomChanged(QCPRange)),
             this, SLOT(on_zoomChanged(QCPRange)));

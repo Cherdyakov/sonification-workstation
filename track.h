@@ -14,7 +14,11 @@ public:
     void plot(std::vector<float> vec);
     void setTrackNumber(uint num);
 
+    static const int TrackHeight = 120;
+    static const int TrackHeaderWidth = 140;
+
 private:
+
     uint trackNumber;
     TrackPlotter* plotter;
     TrackHeader* header;

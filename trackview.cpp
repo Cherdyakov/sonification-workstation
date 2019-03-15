@@ -9,13 +9,14 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
     this->setAutoFillBackground(true);
     this->setPalette(*pal);
 
+    // create container widget for the trackview alyout
     QWidget* container = new QWidget(this);
     stackedLayout_ = new QStackedLayout(this);
     stackedLayout_->setStackingMode(QStackedLayout::StackingMode::StackAll);
     // set track layout and add to container widget
     trackLayout_ = new QVBoxLayout(container);
-    trackLayout_->setContentsMargins(4,4,4,4);
-    trackLayout_->setSpacing(4);
+    trackLayout_->setContentsMargins(Margin, Margin, Margin, Margin);
+    trackLayout_->setSpacing(TrackSpacing);
     container->setLayout(trackLayout_);
     stackedLayout_->addWidget(container);
     // set layout of this trackview
@@ -25,8 +26,17 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
 void TrackView::setPlayHead(PlayHead *playHead)
 {
     playHead_ = playHead;
-    stackedLayout_->addWidget(playHead_);
-    stackedLayout_->setCurrentWidget(playHead_);}
+
+    // Create a layout and container for the PlayHead
+    QWidget* container = new QWidget(this);
+    playheadLayout_ = new QHBoxLayout(this);
+    playheadLayout_->setContentsMargins(Margin + Track::TrackHeaderWidth, 0, Margin, 0);
+    playheadLayout_->addWidget(playHead_);
+    container->setLayout(playheadLayout_);
+
+    stackedLayout_->addWidget(container);
+    stackedLayout_->setCurrentWidget(container);
+}
 
 void TrackView::plot(sow::Dataset *dataset)
 {
@@ -40,7 +50,6 @@ void TrackView::plot(sow::Dataset *dataset)
         track->plot(trackData);
     }
     trackLayout_->addStretch();
-    resizePlayHead();
 }
 
 void TrackView::clear()
@@ -72,14 +81,6 @@ Track *TrackView::addTrack()
 void TrackView::removeTrack(Track *track)
 {
 
-}
-
-void TrackView::resizePlayHead()
-{
-    QPoint pos = this->pos();
-    QSize plotSize = this->size();
-    QRect rect(pos, plotSize);
-    playHead_->setGeometry(rect);
 }
 
 void TrackView::on_datasetChanged(sow::Dataset* dataset)
