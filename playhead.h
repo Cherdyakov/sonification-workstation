@@ -14,9 +14,6 @@ class PlayHead : public QWidget
 public:
     explicit PlayHead(QWidget *parent = 0);
 
-protected:
-
-
 private:
 
     bool pause_;
