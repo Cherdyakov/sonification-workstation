@@ -28,7 +28,7 @@ PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
 
 void PlayHead::setCursorPos(float pos)
 {
-    if(cursorPos_ != pos)
+    if(!qFuzzyCompare(cursorPos_, pos))
     {
         cursorPos_ = pos;
         repaint();
@@ -79,7 +79,7 @@ void PlayHead::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     // Draw loop area first
-    if(loopA_ != loopB_)
+    if(!qFuzzyCompare(loopA_, loopB_))
     {
         painter.setPen(QPen(Qt::darkGray, 0, Qt::SolidLine));
         painter.drawLine(loopStartPixel, 0, loopStartPixel, lineLength);
@@ -110,11 +110,11 @@ void PlayHead::on_xRangeChanged(QCPRange range)
     float min = range.lower;
     float max = range.upper;
 
-    if(xMin_ != min)
+    if(!qFuzzyCompare(xMin_, min))
     {
         xMin_ = min;
     }
-    if(xMax_ != max)
+    if(!qFuzzyCompare(xMax_, max))
     {
         xMax_ = max;
     }
