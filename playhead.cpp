@@ -110,7 +110,7 @@ void PlayHead::onXRangeChanged(QCPRange range)
     {
         xMax_ = max;
     }
-    repaint();
+    update();
 }
 
 void PlayHead::mousePressEvent(QMouseEvent *e)
@@ -155,7 +155,7 @@ void PlayHead::mouseMoveEvent(QMouseEvent *e)
         {
             emit loopPointsChanged(loopB_, loopA_);
         }
-        repaint();
+        update();
     }
 }
 
