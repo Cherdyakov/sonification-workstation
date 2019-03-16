@@ -12,12 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // plotter Setup //
     ///////////////////
 
-    trackView = new TrackView;
+    trackView = new TrackView(this);
 
     // Draws the playhead,loop points, loop shading
     PlayHead* playHead = new PlayHead(this);
     trackView->setPlayHead(playHead);
-    playHead->show();
 
     //main window layout
     QWidget *mainWidget = new QWidget;
@@ -85,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(fileReader, &FileReader::datasetChanged,
             transport, &QtTransport::onDatasetchanged);
     connect(fileReader, &FileReader::datasetChanged,
-            trackView, &TrackView::on_datasetChanged);
+            trackView, &TrackView::onDatasetChanged);
     connect(fileReader, &FileReader::datasetChanged,
             transportWidget, &TransportWidget::on_datasetChanged);
     // Session signals
@@ -97,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent) :
             transportWidget, &TransportWidget::on_interpolation_changed);
     // Connect Transport < > TransportWidget
     connect(transport, &QtTransport::posChanged,
-            playHead, &PlayHead::on_cursorMoved);
+            playHead, &PlayHead::onCursorMoved);
     connect(transportWidget, &TransportWidget::speedChanged,
             transport, &QtTransport::onSpeedchanged);
     connect(transportWidget, &TransportWidget::interpolateChanged,
@@ -112,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(transportWidget, &TransportWidget::interpolateChanged,
             session, &Session::onInterpolateChanged);
     connect(transportWidget, &TransportWidget::pausedChanged,
-            playHead, &PlayHead::on_pausedChanged);
+            playHead, &PlayHead::onPauseChanged);
     // Playhead signals
     connect(playHead, &PlayHead::cursorPosChanged,
             transport, &QtTransport::onPoschanged);

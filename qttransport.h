@@ -50,7 +50,7 @@ private:
     Frame frameBuffer_[4096];
     std::vector<QtSynthItem*> subscribers_;
     Dataset* dataset_;
-    std::vector<float> currentDataColumn_;
+    std::vector<float> currentData_;
     std::vector<float> dataMinValues_;
     std::vector<float> dataMaxValues_;
     std::atomic<float> returnPos_;
@@ -73,7 +73,7 @@ private:
     void processDeleteItem(QtSynthItem* item);
     void processSetDataset(Dataset *dataset);
     void processSetPlaybackPosition(float pos);
-    void retrieveNextDataColumn();
+    void refreshCurrentData();
     void calculateReturnPosition();
     std::vector<float> interpolate(std::vector<float> first, std::vector<float> second, float mu);
 

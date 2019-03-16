@@ -18,10 +18,12 @@ public:
     explicit TrackHeader(QWidget *parent = nullptr);
 
 private:
+
     uint trackNumber;
     QDoubleSpinBox *display;
     QComboBox *procComboBox;
     QSpinBox *alphaSpinBox;
+
 
 signals:
 

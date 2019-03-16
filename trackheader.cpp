@@ -59,9 +59,6 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     mainLayout->addStretch();
     this->setLayout(mainLayout);
 
-    // set this track header's width
-    this->setFixedWidth(140);
-
     // connect signals and slots
     connect(procComboBox, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(on_processingChanged(QString)));

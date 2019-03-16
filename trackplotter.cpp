@@ -17,7 +17,7 @@ TrackPlotter::TrackPlotter()
     xAxis->setTicks(false);
     yAxis->setTicks(false);
 
-    connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
+    connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(onXRangeChanged(QCPRange)));
 
 }
 
@@ -75,9 +75,9 @@ void TrackPlotter::plot(QVector<double> data)
     yBounds = yAxis->range();
 }
 
-void TrackPlotter::resizeEvent(QResizeEvent *event)
+void TrackPlotter::resizeEvent(QResizeEvent *e)
 {
-    QCustomPlot::resizeEvent(event);
+    QCustomPlot::resizeEvent(e);
 }
 
 void TrackPlotter::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
@@ -102,10 +102,31 @@ void TrackPlotter::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
     }
 }
 
-void TrackPlotter::on_xRangeChanged(QCPRange range)
+void TrackPlotter::wheelEvent(QWheelEvent *e)
+{
+    qDebug() << "global: " << e->pos();
+
+    QPoint localPt = mapFromGlobal(e->globalPos());
+    qDebug() << "local: " << localPt << "\n";
+
+    QWheelEvent newEvent(localPt,
+                         e->globalPos(),
+                         e->pixelDelta(),
+                         e->angleDelta(),
+                         e->buttons(),
+                         e->modifiers(),
+                         e->phase(),
+                         e->inverted(),
+                         e->source());
+
+    QCustomPlot::wheelEvent(&newEvent);
+    e->accept();
+}
+
+void TrackPlotter::onXRangeChanged(QCPRange range)
 {
     rangeBounder(xAxis, range, xBounds);
-    emit zoomChanged(xAxis->range());
+    emit xRangeChanged(xAxis->range());
 }
 
 

@@ -15,7 +15,8 @@
 #define SR 44100
 #define BLOCK_SIZE 512
 
-void PrintAudioError(PaError e) {
+void PrintAudioError(PaError e)
+{
     qDebug("PortAudio error: %s\n", Pa_GetErrorText(e));
 }
 

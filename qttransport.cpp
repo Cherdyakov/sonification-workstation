@@ -182,7 +182,7 @@ Frame QtTransport::process()
         mu_ -= 1.0;
         currentIndex_++;
 
-        if((currentIndex_ + 1) > (dataset_->cols()))
+        if((currentIndex_ + 1) > (dataset_->rows()))
         {
             currentIndex_ = 0;
         }
@@ -213,7 +213,7 @@ Frame QtTransport::process()
 
     if(dataStale_ && dataset_->hasData())
     {
-        retrieveNextDataColumn();
+        refreshCurrentData();
         dataStale_ = false;
     }
 
@@ -290,7 +290,7 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
 void QtTransport::processSubscribeItem(QtSynthItem *item)
 {
     insertUnique(item, subscribers_);
-    item->setData(&currentDataColumn_, &dataMinValues_, &dataMaxValues_);
+    item->setData(&currentData_, &dataMinValues_, &dataMaxValues_);
 }
 
 void QtTransport::processUnsubscribeItem(QtSynthItem *item)
@@ -314,11 +314,11 @@ void QtTransport::processDatasetCommand(DatasetCommand cmd)
 {
     paused_ = true;
     dataset_ = cmd.dataset;
-    currentDataColumn_.clear();
+    currentData_.clear();
     currentIndex_ = 0;
     mu_ = 0.0;
     calculateReturnPosition();
-    currentDataColumn_.resize(static_cast<unsigned int>(dataset_->rows()));
+    currentData_.resize(static_cast<unsigned int>(dataset_->rows()));
 }
 
 void QtTransport::processSetPlaybackPosition(float pos)
@@ -332,19 +332,19 @@ void QtTransport::processSetPlaybackPosition(float pos)
     mu_ = (pos - currentIndex_);
 }
 
-void QtTransport::retrieveNextDataColumn()
+void QtTransport::refreshCurrentData()
 {
     if(interpolate_)
     {
         int next_index = currentIndex_ + 1;
-        if(next_index >= dataset_->cols())
+        if(next_index >= dataset_->rows())
         {
             next_index = 0;
         }
-        currentDataColumn_ = interpolate(dataset_->getCol(currentIndex_), dataset_->getCol(next_index), mu_);
+        currentData_ = interpolate(dataset_->getRow(currentIndex_), dataset_->getRow(next_index), mu_);
     }
     else {
-        currentDataColumn_ = dataset_->getCol(currentIndex_);
+        currentData_ = dataset_->getRow(currentIndex_);
     }
 }
 

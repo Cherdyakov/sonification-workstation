@@ -14,49 +14,49 @@ class PlayHead : public QWidget
 public:
     explicit PlayHead(QWidget *parent = 0);
 
-protected:
-
-
 private:
 
-    bool paused;
-    bool blink;
-    double cursorPos;
-    double loopA;
-    double loopB;
+    bool pause_;
+    bool blink_;
+    float cursorPos_;
+    float loopA_;
+    float loopB_;
 
-    double xMin;
-    double xMax;
+    float xMin_;
+    float xMax_;
 
     QPoint clickedPoint;
 
-    void setCursorPos(double pos);
-    void setLoopA(double a);
-    void setLoopB(double b);
+    void setCursorPos(float pos);
+    void setLoopA(float a);
+    void setLoopB(float b);
     void setPaused(bool paused);
 
     // for going back and forth between fractional
     // and screen pixel values for PlayHead positions
-    int valToPixel(double val);
-    double pixelToVal(int pixel);
+    int valToPixel(float val);
+    float pixelToVal(int pixel);
 
 protected:
+
     void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent* e);
     void mouseMoveEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
 
 signals:
-    void cursorPosChanged(double pos);
-    void loopPointsChanged(double a, double b);
+
+    void cursorPosChanged(float pos);
+    void loopPointsChanged(float a, float b);
 
 public slots:
-    void on_cursorMoved(double pos);
-    void on_pausedChanged(bool pause);
+
+    void onCursorMoved(float pos);
+    void onPauseChanged(bool pause);
+    void onXRangeChanged(QCPRange range);
 
 private slots:
+
     void blinker();
-    void on_xRangeChanged(QCPRange range);
 
 };
 

@@ -1,37 +1,49 @@
 #ifndef TRACKVIEW_H
 #define TRACKVIEW_H
 
-#include <QObject>
 #include <QWidget>
 #include "track.h"
 #include "playhead.h"
 #include "dataset.h"
 
-// Containter widget for tracks
+// Container widget for tracks
 
 class TrackView : public QWidget
 {
     Q_OBJECT
+
 public:
+
     explicit TrackView(QWidget *parent = nullptr);
-    void setPlayHead(PlayHead* p);
+    void setPlayHead(PlayHead* playHead);
+
+protected:
+
+    void wheelEvent(QWheelEvent* e) override;
 
 private:
-    PlayHead* playHead;
+
+    const int Margin = 4;
+    const int TrackSpacing = 4;
+    PlayHead* playHead_;
+    QStackedLayout* stackedLayout_;
+    QVBoxLayout* trackLayout_;
+    QHBoxLayout* playheadLayout_;
+
     void plot(sow::Dataset* dataset);
     void clear();
     Track* addTrack();
     void removeTrack(Track* track);
-    QVBoxLayout *trackLayout;
 
 signals:
-    void zoomChanged(QCPRange range);
+
+    void xRangeChanged(QCPRange range);
+    void wheelChanged(QWheelEvent* e);
 
 public slots:
-    void on_datasetChanged(sow::Dataset *dataset);
-    void on_zoomChanged(QCPRange range);
-//    void addTrack();
-//    void removeTrack();
+
+    void onDatasetChanged(sow::Dataset *dataset);
+    void onXRangeChanged(QCPRange range);
 
 };
 
