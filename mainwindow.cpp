@@ -1,75 +1,66 @@
 #include "mainwindow.h"
-//#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    //title and size window
+
+    // Set the title and size of the application window
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.95);
 
-    ///////////////////
-    // plotter Setup //
-    ///////////////////
 
-    trackView = new TrackView(this);
+    PlayHead* playHead = new PlayHead(this);                                // Playback cursor
+    QWidget *centralWidget = new QWidget;                                   // Application top-level widget
+    QHBoxLayout* centralLayout = new QHBoxLayout(this);                     // Application top-level layout
+    QSplitter *splitter = new QSplitter(this);                              // Application window divided in two
+    QWidget *leftSide = new QWidget;                                        // Container for left side of splitter
+    QWidget *rightSide = new QWidget;                                       // Container for right side of splitter
+    QVBoxLayout* layoutLeft = new QVBoxLayout(this);                        // Left side of spliitter layout
+    QVBoxLayout* layoutRight = new QVBoxLayout(this);                       // Right side of splitter layout
+    TransportWidget* transportWidget = new TransportWidget(this);           // Transport controls (Play/Pause etc)
+    QQuickView* quickView = new QQuickView;                                 // Renders Qt Quick patcher interface
+    QWidget *container = QWidget::createWindowContainer(quickView, this);   // Caontainerr widget for QQuickView
 
-    // Draws the playhead,loop points, loop shading
-    PlayHead* playHead = new PlayHead(this);
+    trackView = new TrackView(this);                                        // Contains Tracks and PlayHead
+    transport = new QtTransport(this);                                      // Synthesis tree root, Transport
+    fileReader = new FileReader(this);                                      // Reads CSV files into Dataset
+    session = new Session((QObject*)quickView->rootObject());               // Session holds data, path, synth tree
+
+    centralWidget->setLayout(centralLayout);
     trackView->setPlayHead(playHead);
 
-    //main window layout
-    QWidget *mainWidget = new QWidget;
-    QHBoxLayout* mainLayout = new QHBoxLayout(this);
-    mainWidget->setLayout(mainLayout);
-    //data layout
-    QVBoxLayout* dataLayout = new QVBoxLayout(this);
-    QVBoxLayout* synthLayout = new QVBoxLayout(this);
 
-    //synthesis tree root, transport;
-    transport = new QtTransport();
-
-    //////////////////////
-    //Transport section //
-    //////////////////////
-    TransportWidget* transportWidget = new TransportWidget(this);
     transportWidget->setMaximumHeight(40);
 
-    fileReader = new FileReader;
 
     ////////////
     //QML View//
     ////////////
-    QQuickView* quickView = new QQuickView;
     quickView->rootContext()->setContextProperty("transport", transport);
     quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
 
-    QWidget *container = QWidget::createWindowContainer(quickView, this);
 
     // session
-    session = new Session((QObject*)quickView->rootObject());
 
     //insert quickView into synthWindow layout
-    synthLayout->addWidget(container);
+    layoutRight->addWidget(container);
     //inset tab widget into window layout
-    dataLayout->addWidget(trackView);
+    layoutLeft->addWidget(trackView);
     //insert transport into window layout
-    dataLayout->addWidget(transportWidget);
+    layoutLeft->addWidget(transportWidget);
 
-    QSplitter *splitter = new QSplitter(this);
-    QWidget *leftSide = new QWidget;
-    QWidget *rightSide = new QWidget;
-    leftSide->setLayout(dataLayout);
-    rightSide->setLayout(synthLayout);
+
+    leftSide->setLayout(layoutLeft);
+    rightSide->setLayout(layoutRight);
     splitter->addWidget(leftSide);
     splitter->addWidget(rightSide);
     splitter->setCollapsible(0, false);
     splitter->setCollapsible(1, false);
-    mainLayout->addWidget(splitter);
+    centralLayout->addWidget(splitter);
 
     //make windowLayout our central widget
-    this->setCentralWidget(mainWidget);
+    this->setCentralWidget(centralWidget);
 
     QList<int> sizes;
     sizes.append(this->width() * 0.65);
