@@ -1,73 +1,62 @@
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-
     // Set the title and size of the application window
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.95);
 
 
-    PlayHead* playHead = new PlayHead(this);                                // Playback cursor
-    QWidget *centralWidget = new QWidget;                                   // Application top-level widget
-    QHBoxLayout* centralLayout = new QHBoxLayout(this);                     // Application top-level layout
-    QSplitter *splitter = new QSplitter(this);                              // Application window divided in two
-    QWidget *leftSide = new QWidget;                                        // Container for left side of splitter
-    QWidget *rightSide = new QWidget;                                       // Container for right side of splitter
-    QVBoxLayout* layoutLeft = new QVBoxLayout(this);                        // Left side of spliitter layout
-    QVBoxLayout* layoutRight = new QVBoxLayout(this);                       // Right side of splitter layout
-    TransportWidget* transportWidget = new TransportWidget(this);           // Transport controls (Play/Pause etc)
-    QQuickView* quickView = new QQuickView;                                 // Renders Qt Quick patcher interface
-    QWidget *container = QWidget::createWindowContainer(quickView, this);   // Caontainerr widget for QQuickView
+    PlayHead* playHead = new PlayHead(this);                                            // Playback cursor
+    QWidget *centralWidget = new QWidget;                                               // Application top-level widget
+    QHBoxLayout* centralLayout = new QHBoxLayout(this);                                 // Application top-level layout
+    QSplitter *splitter = new QSplitter(this);                                          // Application window divided in two
+    QWidget *leftSide = new QWidget(this);                                              // Container for left side of splitter
+    QWidget *rightSide = new QWidget(this);                                             // Container for right side of splitter
+    QVBoxLayout* layoutLeft = new QVBoxLayout(this);                                    // Left side of spliitter layout
+    QVBoxLayout* layoutRight = new QVBoxLayout(this);                                   // Right side of splitter layout
+    TransportWidget* transportWidget = new TransportWidget(this);                       // Transport controls (Play/Pause etc)
+    QQuickView* quickView = new QQuickView;                                             // Renders Qt Quick patcher interface
+    QWidget *quickViewContainer = QWidget::createWindowContainer(quickView, this);      // Caontainer widget for QQuickView
+    TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
 
-    trackView = new TrackView(this);                                        // Contains Tracks and PlayHead
-    transport = new QtTransport(this);                                      // Synthesis tree root, Transport
-    fileReader = new FileReader(this);                                      // Reads CSV files into Dataset
-    session = new Session((QObject*)quickView->rootObject());               // Session holds data, path, synth tree
+    transport = new QtTransport(this);                                                  // Synthesis tree root, Transport
+    fileReader = new FileReader(this);                                                  // Reads CSV files into Dataset
+    session = new Session(reinterpret_cast<QObject*>(quickView->rootObject()), this);   // Represents loaded project
 
-    centralWidget->setLayout(centralLayout);
+    /// Initiazlize and insert main widgets
     trackView->setPlayHead(playHead);
-
-
+    centralWidget->setLayout(centralLayout);
     transportWidget->setMaximumHeight(40);
-
-
-    ////////////
-    //QML View//
-    ////////////
+    // QQuickView setup
     quickView->rootContext()->setContextProperty("transport", transport);
     quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
 
-
-    // session
-
-    //insert quickView into synthWindow layout
-    layoutRight->addWidget(container);
-    //inset tab widget into window layout
+    // Setup left side
     layoutLeft->addWidget(trackView);
-    //insert transport into window layout
     layoutLeft->addWidget(transportWidget);
-
-
     leftSide->setLayout(layoutLeft);
+    // Setup right side
     rightSide->setLayout(layoutRight);
+    layoutRight->addWidget(quickViewContainer);
+    // Add both sides to splitter
     splitter->addWidget(leftSide);
     splitter->addWidget(rightSide);
     splitter->setCollapsible(0, false);
     splitter->setCollapsible(1, false);
-    centralLayout->addWidget(splitter);
+    // Size for left and right sides of splitter
+    int leftWidth = static_cast<int>((this->width() * 0.65));
+    int rightWidth = static_cast<int>((this->width() * 0.35));
+    splitter->setSizes(QList<int>( { leftWidth, rightWidth } ));
 
-    //make windowLayout our central widget
+    // Add the prepared splitter to the central widget's
+    // layout and then insert them into application window
+    centralLayout->addWidget(splitter);
     this->setCentralWidget(centralWidget);
 
-    QList<int> sizes;
-    sizes.append(this->width() * 0.65);
-    sizes.append(this->width() * 0.35);
-    splitter->setSizes(sizes);
-
-    // populate menus and connect signals to slots
+    // Populate appliation menus
+    // and connect their signals
     createMenus();
 
     ///* CONNECT NON_UI SIGNALS AND SLOTS *///
@@ -108,7 +97,6 @@ MainWindow::MainWindow(QWidget *parent) :
             transport, &QtTransport::onPoschanged);
     connect(playHead, &PlayHead::loopPointsChanged,
             transport, &QtTransport::onLoopPointsChanged);
-
 }
 
 MainWindow::~MainWindow()
