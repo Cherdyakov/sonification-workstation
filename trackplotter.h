@@ -34,11 +34,11 @@ protected:
 
 private slots:
 
-    void on_xRangeChanged(QCPRange range);
+    void onXRangeChanged(QCPRange range);
 
 signals:
 
-    void zoomChanged(QCPRange range);
+    void xRangeChanged(QCPRange range);
 };
 
 #endif // TRACK_H

@@ -26,6 +26,9 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
 void TrackView::setPlayHead(PlayHead *playHead)
 {
     playHead_ = playHead;
+    //
+    connect(this, &TrackView::xRangeChanged,
+            playHead_, &PlayHead::onXRangeChanged);
     // Create a layout and container for the PlayHead
     QWidget* container = new QWidget(this);
     playheadLayout_ = new QHBoxLayout(this);
@@ -81,15 +84,14 @@ void TrackView::clear()
 Track *TrackView::addTrack()
 {
     Track *track = new Track;
-    connect(track, SIGNAL(zoomChanged(QCPRange)),
-            this, SLOT(on_zoomChanged(QCPRange)));
-    connect(this, SIGNAL(zoomChanged(QCPRange)),
-            track, SLOT(on_zoomChanged(QCPRange)));
-
+    connect(track, &Track::xRangeChanged,
+            this, &TrackView::onXRangeChanged);
+    connect(this, &TrackView::xRangeChanged,
+            track, &Track::onXRangeChanged);
     connect(this, &TrackView::wheelChanged,
             track, &Track::onWheelChanged);
-
     trackLayout_->addWidget(track);
+
     return track;
 }
 
@@ -98,13 +100,13 @@ void TrackView::removeTrack(Track *track)
 
 }
 
-void TrackView::on_datasetChanged(sow::Dataset* dataset)
+void TrackView::onDatasetChanged(sow::Dataset* dataset)
 {
     clear();
     plot(dataset);
 }
 
-void TrackView::on_zoomChanged(QCPRange range)
+void TrackView::onXRangeChanged(QCPRange range)
 {
-    emit zoomChanged(range);
+    emit xRangeChanged(range);
 }

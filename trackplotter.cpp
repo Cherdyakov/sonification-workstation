@@ -17,7 +17,7 @@ TrackPlotter::TrackPlotter()
     xAxis->setTicks(false);
     yAxis->setTicks(false);
 
-    connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(on_xRangeChanged(QCPRange)));
+    connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(onXRangeChanged(QCPRange)));
 
 }
 
@@ -123,10 +123,10 @@ void TrackPlotter::wheelEvent(QWheelEvent *e)
     e->accept();
 }
 
-void TrackPlotter::on_xRangeChanged(QCPRange range)
+void TrackPlotter::onXRangeChanged(QCPRange range)
 {
     rangeBounder(xAxis, range, xBounds);
-    emit zoomChanged(xAxis->range());
+    emit xRangeChanged(xAxis->range());
 }
 
 

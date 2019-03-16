@@ -50,13 +50,13 @@ signals:
 
 public slots:
 
-    void on_cursorMoved(float pos);
-    void on_pauseChanged(bool pause);
+    void onCursorMoved(float pos);
+    void onPauseChanged(bool pause);
+    void onXRangeChanged(QCPRange range);
 
 private slots:
 
     void blinker();
-    void on_xRangeChanged(QCPRange range);
 
 };
 

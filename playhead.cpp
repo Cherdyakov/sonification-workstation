@@ -87,17 +87,17 @@ void PlayHead::paintEvent(QPaintEvent *event)
     }
 }
 
-void PlayHead::on_pauseChanged(bool pause)
+void PlayHead::onPauseChanged(bool pause)
 {
     pause_ = pause;
 }
 
-void PlayHead::on_cursorMoved(float pos)
+void PlayHead::onCursorMoved(float pos)
 {
     setCursorPos(pos);
 }
 
-void PlayHead::on_xRangeChanged(QCPRange range)
+void PlayHead::onXRangeChanged(QCPRange range)
 {
     float min = range.lower;
     float max = range.upper;
@@ -110,6 +110,7 @@ void PlayHead::on_xRangeChanged(QCPRange range)
     {
         xMax_ = max;
     }
+    repaint();
 }
 
 void PlayHead::mousePressEvent(QMouseEvent *e)

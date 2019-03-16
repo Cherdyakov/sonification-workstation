@@ -19,8 +19,8 @@ Track::Track(QWidget *parent) : QWidget(parent)
     this->setLayout(layout);
     this->setFixedHeight(TrackHeight);
 
-    connect(plotter, &TrackPlotter::zoomChanged,
-            this, &Track::on_zoomChanged);
+    connect(plotter, &TrackPlotter::xRangeChanged,
+            this, &Track::onXRangeChanged);
 }
 
 void Track::plot(std::vector<float> vec)
@@ -37,14 +37,14 @@ void Track::setTrackNumber(uint num)
     }
 }
 
-void Track::on_zoomChanged(QCPRange range)
+void Track::onXRangeChanged(QCPRange range)
 {
     if(range != zoomRange)
     {
         zoomRange = range;
         plotter->xAxis->setRange(range);
         plotter->replot();
-        emit zoomChanged(zoomRange);
+        emit xRangeChanged(zoomRange);
     }
 }
 

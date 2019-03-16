@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(fileReader, &FileReader::datasetChanged,
             transport, &QtTransport::onDatasetchanged);
     connect(fileReader, &FileReader::datasetChanged,
-            trackView, &TrackView::on_datasetChanged);
+            trackView, &TrackView::onDatasetChanged);
     connect(fileReader, &FileReader::datasetChanged,
             transportWidget, &TransportWidget::on_datasetChanged);
     // Session signals
@@ -96,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent) :
             transportWidget, &TransportWidget::on_interpolation_changed);
     // Connect Transport < > TransportWidget
     connect(transport, &QtTransport::posChanged,
-            playHead, &PlayHead::on_cursorMoved);
+            playHead, &PlayHead::onCursorMoved);
     connect(transportWidget, &TransportWidget::speedChanged,
             transport, &QtTransport::onSpeedchanged);
     connect(transportWidget, &TransportWidget::interpolateChanged,
@@ -111,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(transportWidget, &TransportWidget::interpolateChanged,
             session, &Session::onInterpolateChanged);
     connect(transportWidget, &TransportWidget::pausedChanged,
-            playHead, &PlayHead::on_pauseChanged);
+            playHead, &PlayHead::onPauseChanged);
     // Playhead signals
     connect(playHead, &PlayHead::cursorPosChanged,
             transport, &QtTransport::onPoschanged);

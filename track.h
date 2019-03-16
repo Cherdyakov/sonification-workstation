@@ -28,11 +28,11 @@ private:
 
 signals:
 
-    void zoomChanged(QCPRange range);
+    void xRangeChanged(QCPRange range);
 
 public slots:
 
-    void on_zoomChanged(QCPRange range);
+    void onXRangeChanged(QCPRange range);
     void onWheelChanged(QWheelEvent* e);
 
 private slots:

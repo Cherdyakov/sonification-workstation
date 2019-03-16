@@ -37,13 +37,13 @@ private:
 
 signals:
 
-    void zoomChanged(QCPRange range);
+    void xRangeChanged(QCPRange range);
     void wheelChanged(QWheelEvent* e);
 
 public slots:
 
-    void on_datasetChanged(sow::Dataset *dataset);
-    void on_zoomChanged(QCPRange range);
+    void onDatasetChanged(sow::Dataset *dataset);
+    void onXRangeChanged(QCPRange range);
 
 };
 
