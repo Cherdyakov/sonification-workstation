@@ -119,31 +119,36 @@ void MainWindow::createMenus()
     QAction *openSessionAct = new QAction(tr("Open"), this);
     openSessionAct->setShortcut(QKeySequence::Open);
     openSessionAct->setStatusTip(tr("Open an existing SOW session"));
-    connect(openSessionAct, SIGNAL(triggered(bool)), session, SLOT(on_open()));
+    connect(openSessionAct, &QAction::triggered,
+            session, &Session::on_open);
 
     // save session
     QAction *saveSessionAct = new QAction(tr("Save"), this);
     saveSessionAct->setShortcut(QKeySequence::Save);
     saveSessionAct->setStatusTip(tr("Save the current session to a file"));
-    connect(saveSessionAct, SIGNAL(triggered(bool)), session, SLOT(on_save()));
+    connect(saveSessionAct, &QAction::triggered,
+            session, &Session::on_save);
 
     // save session as
     QAction *saveSessionAsAct = new QAction(tr("Save As"), this);
     saveSessionAsAct->setShortcut(QKeySequence::SaveAs);
     saveSessionAsAct->setStatusTip(tr("Save the current session with a new name"));
-    connect(saveSessionAsAct, SIGNAL(triggered(bool)), session, SLOT(on_saveAs()));
+    connect(saveSessionAsAct, &QAction::triggered,
+            session, &Session::on_saveAs);
 
     // import dataset
     QAction *importDatasetFileAct = new QAction(tr("Import Dataset"), this);
     importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     importDatasetFileAct->setStatusTip(tr("Import CSV data into the data window"));
-    connect(importDatasetFileAct, SIGNAL(triggered(bool)), session, SLOT(on_importDatasetFile()));
+    connect(importDatasetFileAct, &QAction::triggered,
+            session, &Session::on_importDatasetFile);
 
     // quit application
     QAction *quitAct = new QAction(tr("Quit"), this);
     quitAct->setShortcut(QKeySequence::Quit);
     quitAct->setStatusTip(tr("Quit") + " " + tr("Sonification Workstation"));
-    connect(quitAct, SIGNAL(triggered(bool)), this, SLOT(on_quit()));
+    connect(quitAct, &QAction::triggered,
+            this, &MainWindow::onQuit);
 
     // create and populate the menus
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
@@ -154,7 +159,7 @@ void MainWindow::createMenus()
     fileMenu->addAction(quitAct);
 }
 
-void MainWindow::on_quit()
+void MainWindow::onQuit()
 {
     QApplication::quit();
 }

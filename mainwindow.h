@@ -38,7 +38,7 @@ private:
 
 private slots:
 
-    void on_quit();
+    void onQuit();
 
 };
 
