@@ -24,7 +24,6 @@ private:
     QComboBox *procComboBox;
     QSpinBox *alphaSpinBox;
 
-
 signals:
 
 public slots:

@@ -1,82 +1,61 @@
 #include "mainwindow.h"
-//#include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    //title and size window
+    // Set the title and size of the application window
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.95);
 
-    ///////////////////
-    // plotter Setup //
-    ///////////////////
+    PlayHead* playHead = new PlayHead(this);                                            // Playback cursor
+    QWidget *centralWidget = new QWidget;                                               // Application top-level widget
+    QHBoxLayout* centralLayout = new QHBoxLayout(this);                                 // Application top-level layout
+    QSplitter *splitter = new QSplitter(this);                                          // Application window divided in two
+    QWidget *leftSide = new QWidget(this);                                              // Container for left side of splitter
+    QWidget *rightSide = new QWidget(this);                                             // Container for right side of splitter
+    QVBoxLayout* layoutLeft = new QVBoxLayout(this);                                    // Left side of spliitter layout
+    QVBoxLayout* layoutRight = new QVBoxLayout(this);                                   // Right side of splitter layout
+    TransportWidget* transportWidget = new TransportWidget(this);                       // Transport controls (Play/Pause etc)
+    QQuickView* quickView = new QQuickView;                                             // Renders Qt Quick patcher interface
+    QWidget *quickViewContainer = QWidget::createWindowContainer(quickView, this);      // Caontainer widget for QQuickView
+    TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
 
-    trackView = new TrackView(this);
+    transport = new QtTransport(this);                                                  // Synthesis tree root, Transport
+    fileReader = new FileReader(this);                                                  // Reads CSV files into Dataset
+    session = new Session(reinterpret_cast<QObject*>(quickView->rootObject()), this);   // Represents loaded project
 
-    // Draws the playhead,loop points, loop shading
-    PlayHead* playHead = new PlayHead(this);
+    /// Initiazlize and insert main widgets
     trackView->setPlayHead(playHead);
-
-    //main window layout
-    QWidget *mainWidget = new QWidget;
-    QHBoxLayout* mainLayout = new QHBoxLayout(this);
-    mainWidget->setLayout(mainLayout);
-    //data layout
-    QVBoxLayout* dataLayout = new QVBoxLayout(this);
-    QVBoxLayout* synthLayout = new QVBoxLayout(this);
-
-    //synthesis tree root, transport;
-    transport = new QtTransport();
-
-    //////////////////////
-    //Transport section //
-    //////////////////////
-    TransportWidget* transportWidget = new TransportWidget(this);
+    centralWidget->setLayout(centralLayout);
     transportWidget->setMaximumHeight(40);
-
-    fileReader = new FileReader;
-
-    ////////////
-    //QML View//
-    ////////////
-    QQuickView* quickView = new QQuickView;
+    // QQuickView setup
     quickView->rootContext()->setContextProperty("transport", transport);
     quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
 
-    QWidget *container = QWidget::createWindowContainer(quickView, this);
-
-    // session
-    session = new Session((QObject*)quickView->rootObject());
-
-    //insert quickView into synthWindow layout
-    synthLayout->addWidget(container);
-    //inset tab widget into window layout
-    dataLayout->addWidget(trackView);
-    //insert transport into window layout
-    dataLayout->addWidget(transportWidget);
-
-    QSplitter *splitter = new QSplitter(this);
-    QWidget *leftSide = new QWidget;
-    QWidget *rightSide = new QWidget;
-    leftSide->setLayout(dataLayout);
-    rightSide->setLayout(synthLayout);
+    // Setup left side
+    layoutLeft->addWidget(trackView);
+    layoutLeft->addWidget(transportWidget);
+    leftSide->setLayout(layoutLeft);
+    // Setup right side
+    rightSide->setLayout(layoutRight);
+    layoutRight->addWidget(quickViewContainer);
+    // Add both sides to splitter
     splitter->addWidget(leftSide);
     splitter->addWidget(rightSide);
     splitter->setCollapsible(0, false);
     splitter->setCollapsible(1, false);
-    mainLayout->addWidget(splitter);
+    // Size for left and right sides of splitter
+    int leftWidth = static_cast<int>((this->width() * 0.65));
+    int rightWidth = static_cast<int>((this->width() * 0.35));
+    splitter->setSizes(QList<int>( { leftWidth, rightWidth } ));
 
-    //make windowLayout our central widget
-    this->setCentralWidget(mainWidget);
+    // Add the prepared splitter to the central widget's
+    // layout and then insert them into application window
+    centralLayout->addWidget(splitter);
+    this->setCentralWidget(centralWidget);
 
-    QList<int> sizes;
-    sizes.append(this->width() * 0.65);
-    sizes.append(this->width() * 0.35);
-    splitter->setSizes(sizes);
-
-    // populate menus and connect signals to slots
+    // Populate appliation menus
+    // and connect their signals
     createMenus();
 
     ///* CONNECT NON_UI SIGNALS AND SLOTS *///
@@ -117,7 +96,6 @@ MainWindow::MainWindow(QWidget *parent) :
             transport, &QtTransport::onPoschanged);
     connect(playHead, &PlayHead::loopPointsChanged,
             transport, &QtTransport::onLoopPointsChanged);
-
 }
 
 MainWindow::~MainWindow()
@@ -132,39 +110,41 @@ QtTransport *MainWindow::getTransport()
 
 void MainWindow::createMenus()
 {
-    ////////////////
-    //Menu actions//
-    ////////////////
-
+    /// "File" menu actions
     // open session
     QAction *openSessionAct = new QAction(tr("Open"), this);
     openSessionAct->setShortcut(QKeySequence::Open);
     openSessionAct->setStatusTip(tr("Open an existing SOW session"));
-    connect(openSessionAct, SIGNAL(triggered(bool)), session, SLOT(on_open()));
+    connect(openSessionAct, &QAction::triggered,
+            session, &Session::on_open);
 
     // save session
     QAction *saveSessionAct = new QAction(tr("Save"), this);
     saveSessionAct->setShortcut(QKeySequence::Save);
     saveSessionAct->setStatusTip(tr("Save the current session to a file"));
-    connect(saveSessionAct, SIGNAL(triggered(bool)), session, SLOT(on_save()));
+    connect(saveSessionAct, &QAction::triggered,
+            session, &Session::on_save);
 
     // save session as
     QAction *saveSessionAsAct = new QAction(tr("Save As"), this);
     saveSessionAsAct->setShortcut(QKeySequence::SaveAs);
     saveSessionAsAct->setStatusTip(tr("Save the current session with a new name"));
-    connect(saveSessionAsAct, SIGNAL(triggered(bool)), session, SLOT(on_saveAs()));
+    connect(saveSessionAsAct, &QAction::triggered,
+            session, &Session::on_saveAs);
 
     // import dataset
     QAction *importDatasetFileAct = new QAction(tr("Import Dataset"), this);
     importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     importDatasetFileAct->setStatusTip(tr("Import CSV data into the data window"));
-    connect(importDatasetFileAct, SIGNAL(triggered(bool)), session, SLOT(on_importDatasetFile()));
+    connect(importDatasetFileAct, &QAction::triggered,
+            session, &Session::on_importDatasetFile);
 
     // quit application
     QAction *quitAct = new QAction(tr("Quit"), this);
     quitAct->setShortcut(QKeySequence::Quit);
     quitAct->setStatusTip(tr("Quit") + " " + tr("Sonification Workstation"));
-    connect(quitAct, SIGNAL(triggered(bool)), this, SLOT(on_quit()));
+    connect(quitAct, &QAction::triggered,
+            this, &MainWindow::onQuit);
 
     // create and populate the menus
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
@@ -175,7 +155,7 @@ void MainWindow::createMenus()
     fileMenu->addAction(quitAct);
 }
 
-void MainWindow::on_quit()
+void MainWindow::onQuit()
 {
     QApplication::quit();
 }

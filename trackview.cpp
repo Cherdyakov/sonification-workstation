@@ -2,25 +2,44 @@
 
 TrackView::TrackView(QWidget *parent) : QWidget(parent)
 {
-    QPalette* pal = new QPalette;
+
+    QHBoxLayout* centralLayout = new QHBoxLayout(this); // Top-level layout for this widget
+    QWidget* plotsContainer = new QWidget(this);        // Widget for TrackPlotters layout
+    QWidget* tracksContainer = new QWidget(this);       // Widget for Tracks layout (headers)
+    QWidget* stackedContainer = new QWidget(this);      // Widget for StackedLayouts of TrackPlotters and PlayHead
+    stackedLayout_ = new QStackedLayout(this);          // Layout with TrackPlotters behind PlayHead
+    plotsLayout_ = new QVBoxLayout(this);               // Layout for the TrackPlotters
+    tracksLayout_ = new QVBoxLayout(this);              // Layout for the Tracks (headers)
+
+    stackedLayout_->setStackingMode(QStackedLayout::StackingMode::StackAll);
+
+    // Set margins and spacing
+    centralLayout->setContentsMargins(Margin, Margin, Margin, Margin);
+    centralLayout->setSpacing(0);
+    plotsLayout_->setContentsMargins(0, 0, 0, 0);
+    plotsLayout_->setSpacing(TrackSpacing);
+    tracksLayout_->setContentsMargins(0, 0, 0, 0);
+    tracksLayout_->setSpacing(TrackSpacing);
+
+
+    // Add layouts to respective containers
+    plotsContainer->setLayout(plotsLayout_);
+    tracksContainer->setLayout(tracksLayout_);
+
+
+    stackedContainer->setLayout(stackedLayout_);
+    stackedLayout_->addWidget(plotsContainer);
+
+
+    centralLayout->addWidget(tracksContainer);
+    centralLayout->addWidget(stackedContainer);
+    this->setLayout(centralLayout);
 
     // set background color
+    QPalette* pal = new QPalette;
     pal->setColor(QPalette::Background, QColor("light grey"));
     this->setAutoFillBackground(true);
     this->setPalette(*pal);
-
-    // create container widget for the trackview layout
-    QWidget* container = new QWidget(this);
-    stackedLayout_ = new QStackedLayout(this);
-    stackedLayout_->setStackingMode(QStackedLayout::StackingMode::StackAll);
-    // set track layout and add to container widget
-    trackLayout_ = new QVBoxLayout(container);
-    trackLayout_->setContentsMargins(Margin, Margin, Margin, Margin);
-    trackLayout_->setSpacing(TrackSpacing);
-    container->setLayout(trackLayout_);
-    stackedLayout_->addWidget(container);
-    // set layout of this trackview
-    this->setLayout(stackedLayout_);
 }
 
 void TrackView::setPlayHead(PlayHead *playHead)
@@ -34,7 +53,7 @@ void TrackView::setPlayHead(PlayHead *playHead)
     playheadLayout_ = new QHBoxLayout(this);
     // Margin to the left ensures Playheead lines up
     // with the start of the track plot, not the header
-    playheadLayout_->setContentsMargins(Margin + Track::TrackHeaderWidth, 0, Margin, 0);
+    playheadLayout_->setContentsMargins(0, 0, 0, 0);
     playheadLayout_->addWidget(playHead_);
     container->setLayout(playheadLayout_);
     // Insert playhead container into the stacked
@@ -64,15 +83,16 @@ void TrackView::plot(sow::Dataset *dataset)
         std::vector<float> trackData = dataset->getCol(i);
         track->plot(trackData);
     }
-    trackLayout_->addStretch();
+    plotsLayout_->addStretch();
+    tracksLayout_->addStretch();
 }
 
 void TrackView::clear()
 {
     QLayoutItem* child;
-    while (trackLayout_->count() != 0)
+    while (plotsLayout_->count() != 0)
     {
-        child = trackLayout_->takeAt(0);
+        child = plotsLayout_->takeAt(0);
         if(child->widget() != 0)
         {
             delete child->widget();
@@ -83,14 +103,18 @@ void TrackView::clear()
 
 Track *TrackView::addTrack()
 {
-    Track *track = new Track;
+    Track* track = new Track(this);
+    TrackPlotter* plotter = new TrackPlotter(track);
+    track->setPlotter(plotter);
+    plotsLayout_->addWidget(plotter);
+    tracksLayout_->addWidget(track);
+
     connect(track, &Track::xRangeChanged,
             this, &TrackView::onXRangeChanged);
     connect(this, &TrackView::xRangeChanged,
             track, &Track::onXRangeChanged);
     connect(this, &TrackView::wheelChanged,
-            track, &Track::onWheelChanged);
-    trackLayout_->addWidget(track);
+            plotter, &TrackPlotter::onWheelChanged);
 
     return track;
 }

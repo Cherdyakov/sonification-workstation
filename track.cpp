@@ -2,53 +2,55 @@
 
 Track::Track(QWidget *parent) : QWidget(parent)
 {
-    plotter = new TrackPlotter;
-    header = new TrackHeader;
-    name = new TrackName;
 
-    QVBoxLayout *headerLayout = new QVBoxLayout;  
+    TrackHeader* header = new TrackHeader(this);
+//    plotter_ = new TrackPlotter(this);
+    name_ = new TrackName(this);
+
+    QVBoxLayout *centralLayout = new QVBoxLayout(this);
+    centralLayout->setContentsMargins(0,0,0,0);
+    centralLayout->setSpacing(0);
     // set this track header's width
     header->setFixedWidth(TrackHeaderWidth);
-    headerLayout->addWidget(name);
-    headerLayout->addWidget(header);
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->addLayout(headerLayout);
-    layout->addWidget(plotter);
-    layout->setContentsMargins(0,0,0,0);
-    layout->setSpacing(0);
-    this->setLayout(layout);
+    centralLayout->addWidget(name_);
+    centralLayout->addWidget(header);
+    this->setLayout(centralLayout);
     this->setFixedHeight(TrackHeight);
+}
 
-    connect(plotter, &TrackPlotter::xRangeChanged,
-            this, &Track::onXRangeChanged);
+void Track::setPlotter(TrackPlotter *plotter)
+{
+   if(plotter_ != plotter)
+   {
+       plotter_ = plotter;
+       plotter_->setFixedHeight(TrackHeight);
+       connect(plotter_, &TrackPlotter::xRangeChanged,
+               this, &Track::onXRangeChanged);
+   }
+}
+
+TrackPlotter *Track::plotter() const
+{
+    return plotter_;
 }
 
 void Track::plot(std::vector<float> vec)
 {
-    plotter->plot(vec);
+    plotter_->plot(vec);
 }
 
 void Track::setTrackNumber(uint num)
 {
-    if(trackNumber != num)
-    {
-        trackNumber = num;
-        name->setTrackNumber(num);
-    }
+    name_->setTrackNumber(num);
 }
 
 void Track::onXRangeChanged(QCPRange range)
 {
-    if(range != zoomRange)
+    if(range != xRange_)
     {
-        zoomRange = range;
-        plotter->xAxis->setRange(range);
-        plotter->replot();
-        emit xRangeChanged(zoomRange);
+        xRange_ = range;
+        plotter_->xAxis->setRange(range);
+        plotter_->replot();
+        emit xRangeChanged(xRange_);
     }
-}
-
-void Track::onWheelChanged(QWheelEvent *e)
-{
-    QCoreApplication::sendEvent(plotter, e);
 }
