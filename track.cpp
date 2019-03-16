@@ -7,12 +7,14 @@ Track::Track(QWidget *parent) : QWidget(parent)
 //    plotter_ = new TrackPlotter(this);
     name_ = new TrackName(this);
 
-    QVBoxLayout *headerLayout = new QVBoxLayout(this);
+    QVBoxLayout *centralLayout = new QVBoxLayout(this);
+    centralLayout->setContentsMargins(0,0,0,0);
+    centralLayout->setSpacing(0);
     // set this track header's width
     header->setFixedWidth(TrackHeaderWidth);
-    headerLayout->addWidget(name_);
-    headerLayout->addWidget(header);   
-    this->setLayout(headerLayout);
+    centralLayout->addWidget(name_);
+    centralLayout->addWidget(header);
+    this->setLayout(centralLayout);
     this->setFixedHeight(TrackHeight);
 }
 

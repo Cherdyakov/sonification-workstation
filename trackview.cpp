@@ -3,24 +3,22 @@
 TrackView::TrackView(QWidget *parent) : QWidget(parent)
 {
 
-
-    // create container widget for the trackview layout
-    QHBoxLayout* centralLayout = new QHBoxLayout(this);
-    QWidget* plotsContainer = new QWidget(this);
-    QWidget* tracksContainer = new QWidget(this);
-    QWidget* stackedContainer = new QWidget(this);
-
-    stackedLayout_ = new QStackedLayout(this);
-
-    plotsLayout_ = new QVBoxLayout(this);
-    tracksLayout_ = new QVBoxLayout(this);
+    QHBoxLayout* centralLayout = new QHBoxLayout(this); // Top-level layout for this widget
+    QWidget* plotsContainer = new QWidget(this);        // Widget for TrackPlotters layout
+    QWidget* tracksContainer = new QWidget(this);       // Widget for Tracks layout (headers)
+    QWidget* stackedContainer = new QWidget(this);      // Widget for StackedLayouts of TrackPlotters and PlayHead
+    stackedLayout_ = new QStackedLayout(this);          // Layout with TrackPlotters behind PlayHead
+    plotsLayout_ = new QVBoxLayout(this);               // Layout for the TrackPlotters
+    tracksLayout_ = new QVBoxLayout(this);              // Layout for the Tracks (headers)
 
     stackedLayout_->setStackingMode(QStackedLayout::StackingMode::StackAll);
 
     // Set margins and spacing
-    plotsLayout_->setContentsMargins(Margin, Margin, Margin, Margin);
+    centralLayout->setContentsMargins(Margin, Margin, Margin, Margin);
+    centralLayout->setSpacing(0);
+    plotsLayout_->setContentsMargins(0, 0, 0, 0);
     plotsLayout_->setSpacing(TrackSpacing);
-    tracksLayout_->setContentsMargins(Margin, Margin, Margin, Margin);
+    tracksLayout_->setContentsMargins(0, 0, 0, 0);
     tracksLayout_->setSpacing(TrackSpacing);
 
 
@@ -42,18 +40,6 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
     pal->setColor(QPalette::Background, QColor("light grey"));
     this->setAutoFillBackground(true);
     this->setPalette(*pal);
-
-    // set background color
-    QPalette* pinkPal = new QPalette;
-    pinkPal->setColor(QPalette::Background, QColor("pink"));
-    tracksContainer->setAutoFillBackground(true);
-    tracksContainer->setPalette(*pinkPal);
-
-    // set background color
-    QPalette* yellowPal = new QPalette;
-    yellowPal->setColor(QPalette::Background, QColor("yellow"));
-    plotsContainer->setAutoFillBackground(true);
-    plotsContainer->setPalette(*yellowPal);
 }
 
 void TrackView::setPlayHead(PlayHead *playHead)
@@ -67,7 +53,7 @@ void TrackView::setPlayHead(PlayHead *playHead)
     playheadLayout_ = new QHBoxLayout(this);
     // Margin to the left ensures Playheead lines up
     // with the start of the track plot, not the header
-    playheadLayout_->setContentsMargins(Margin, 0, Margin, 0);
+    playheadLayout_->setContentsMargins(0, 0, 0, 0);
     playheadLayout_->addWidget(playHead_);
     container->setLayout(playheadLayout_);
     // Insert playhead container into the stacked
@@ -118,7 +104,7 @@ void TrackView::clear()
 Track *TrackView::addTrack()
 {
     Track* track = new Track(this);
-    TrackPlotter* plotter = new TrackPlotter(this);
+    TrackPlotter* plotter = new TrackPlotter(track);
     track->setPlotter(plotter);
     plotsLayout_->addWidget(plotter);
     tracksLayout_->addWidget(track);
