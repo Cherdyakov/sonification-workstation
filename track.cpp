@@ -19,8 +19,8 @@ Track::Track(QWidget *parent) : QWidget(parent)
     this->setLayout(layout);
     this->setFixedHeight(TrackHeight);
 
-    connect(plotter, SIGNAL(zoomChanged(QCPRange)),
-            this, SLOT(on_zoomChanged(QCPRange)));
+    connect(plotter, &TrackPlotter::zoomChanged,
+            this, &Track::on_zoomChanged);
 }
 
 void Track::plot(std::vector<float> vec)
@@ -48,7 +48,7 @@ void Track::on_zoomChanged(QCPRange range)
     }
 }
 
-void Track::on_dataValueChanged(double val)
+void Track::onWheelChanged(QWheelEvent *e)
 {
-
+    QCoreApplication::sendEvent(plotter, e);
 }

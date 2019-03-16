@@ -10,6 +10,7 @@ class Track : public QWidget
 {
     Q_OBJECT
 public:
+
     explicit Track(QWidget *parent = nullptr);
     void plot(std::vector<float> vec);
     void setTrackNumber(uint num);
@@ -26,11 +27,13 @@ private:
     QCPRange zoomRange;
 
 signals:
+
     void zoomChanged(QCPRange range);
 
 public slots:
+
     void on_zoomChanged(QCPRange range);
-    void on_dataValueChanged(double val);
+    void onWheelChanged(QWheelEvent* e);
 
 private slots:
 

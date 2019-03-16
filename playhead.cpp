@@ -2,14 +2,6 @@
 
 PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
 {
-    ///
-    /// DEBEG BG COLORING
-    // set background color
-//    QPalette* pal = new QPalette;
-//    pal->setColor(QPalette::Background, QColor("yellow"));
-//    this->setAutoFillBackground(true);
-//    this->setPalette(*pal);
-
     // for blink_ing cursor when pause_
     QTimer* blink_Timer = new QTimer(this);
     connect(blink_Timer, &QTimer::timeout,
@@ -164,11 +156,6 @@ void PlayHead::mouseMoveEvent(QMouseEvent *e)
         }
         repaint();
     }
-}
-
-void PlayHead::mouseReleaseEvent(QMouseEvent *e)
-{
-    Q_UNUSED(e);
 }
 
 

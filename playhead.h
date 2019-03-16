@@ -38,20 +38,23 @@ private:
     float pixelToVal(int pixel);
 
 protected:
+
     void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent* e);
     void mouseMoveEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
 
 signals:
+
     void cursorPosChanged(float pos);
     void loopPointsChanged(float a, float b);
 
 public slots:
+
     void on_cursorMoved(float pos);
     void on_pauseChanged(bool pause);
 
 private slots:
+
     void blinker();
     void on_xRangeChanged(QCPRange range);
 

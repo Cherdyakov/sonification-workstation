@@ -13,6 +13,7 @@ class TrackPlotter : public QCustomPlot
     Q_OBJECT
 
 public:
+
     TrackPlotter();
     void plot(std::vector<float> data);
     void plot(QVector<double> data);
@@ -24,18 +25,21 @@ private:
     QCPRange xBounds;
     QCPRange yBounds;
 
-    void resizeEvent(QResizeEvent *event) override;
+    void resizeEvent(QResizeEvent *e) override;
     void rangeBounder(QCPAxis *axis, QCPRange newRange, QCPRange bounds);
 
+protected:
+
+    void wheelEvent(QWheelEvent *e) override;
+
 private slots:
+
     void on_xRangeChanged(QCPRange range);
 
 signals:
+
     void zoomChanged(QCPRange range);
-
-
 };
-
 
 #endif // TRACK_H
 

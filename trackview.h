@@ -11,9 +11,15 @@
 class TrackView : public QWidget
 {
     Q_OBJECT
+
 public:
+
     explicit TrackView(QWidget *parent = nullptr);
     void setPlayHead(PlayHead* playHead);
+
+protected:
+
+    void wheelEvent(QWheelEvent* e) override;
 
 private:
 
@@ -30,9 +36,12 @@ private:
     void removeTrack(Track* track);
 
 signals:
+
     void zoomChanged(QCPRange range);
+    void wheelChanged(QWheelEvent* e);
 
 public slots:
+
     void on_datasetChanged(sow::Dataset *dataset);
     void on_zoomChanged(QCPRange range);
 
