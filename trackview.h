@@ -6,7 +6,7 @@
 #include "playhead.h"
 #include "dataset.h"
 
-// Container widget for tracks
+// Container widget for tracks and track headers
 
 class TrackView : public QWidget
 {
@@ -26,9 +26,10 @@ private:
     const int Margin = 4;
     const int TrackSpacing = 4;
     PlayHead* playHead_;
-    QStackedLayout* stackedLayout_;
-    QVBoxLayout* trackLayout_;
+    QVBoxLayout* plotsLayout_;
+    QVBoxLayout* tracksLayout_;
     QHBoxLayout* playheadLayout_;
+    QStackedLayout* stackedLayout_;
 
     void plot(sow::Dataset* dataset);
     void clear();
