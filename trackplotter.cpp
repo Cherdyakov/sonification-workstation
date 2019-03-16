@@ -104,10 +104,7 @@ void TrackPlotter::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
 
 void TrackPlotter::wheelEvent(QWheelEvent *e)
 {
-    qDebug() << "global: " << e->pos();
-
     QPoint localPt = mapFromGlobal(e->globalPos());
-    qDebug() << "local: " << localPt << "\n";
 
     QWheelEvent newEvent(localPt,
                          e->globalPos(),
