@@ -12,19 +12,21 @@ class Track : public QWidget
 public:
 
     explicit Track(QWidget *parent = nullptr);
-    void plot(std::vector<float> vec);
-    void setTrackNumber(uint num);
 
     static const int TrackHeight = 120;
     static const int TrackHeaderWidth = 140;
 
+    void setPlotter(TrackPlotter* plotter);
+    TrackPlotter* plotter() const;
+    void plot(std::vector<float> vec);
+    void setTrackNumber(uint num);
+
 private:
 
-    uint trackNumber;
-    TrackPlotter* plotter;
-    TrackHeader* header;
-    TrackName* name;
-    QCPRange zoomRange;
+    uint trackNumber_;
+    TrackPlotter* plotter_;
+    TrackName* name_;
+    QCPRange xRange_;
 
 signals:
 
@@ -33,9 +35,6 @@ signals:
 public slots:
 
     void onXRangeChanged(QCPRange range);
-    void onWheelChanged(QWheelEvent* e);
-
-private slots:
 
 };
 

@@ -8,12 +8,15 @@
 class TrackName : public QWidget
 {
     Q_OBJECT
+
 public:
+
     explicit TrackName(QWidget *parent = nullptr);
     void setTrackNumber(uint num);
     void setTrackName(QString name);
 
 private:
+
     QLabel *label;
 
 signals:

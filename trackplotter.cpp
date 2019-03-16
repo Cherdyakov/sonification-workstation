@@ -1,6 +1,6 @@
 #include "trackplotter.h"
 
-TrackPlotter::TrackPlotter()
+TrackPlotter::TrackPlotter(QWidget *parent) : QCustomPlot (parent)
 {
 
     QCP::Interactions qcpInteractions;
@@ -118,6 +118,11 @@ void TrackPlotter::wheelEvent(QWheelEvent *e)
 
     QCustomPlot::wheelEvent(&newEvent);
     e->accept();
+}
+
+void TrackPlotter::onWheelChanged(QWheelEvent *e)
+{
+    wheelEvent(e);
 }
 
 void TrackPlotter::onXRangeChanged(QCPRange range)

@@ -14,7 +14,7 @@ class TrackPlotter : public QCustomPlot
 
 public:
 
-    TrackPlotter();
+    explicit TrackPlotter(QWidget* parent = nullptr);
     void plot(std::vector<float> data);
     void plot(QVector<double> data);
 
@@ -31,6 +31,10 @@ private:
 protected:
 
     void wheelEvent(QWheelEvent *e) override;
+
+public slots:
+
+    void onWheelChanged(QWheelEvent* e);
 
 private slots:
 
