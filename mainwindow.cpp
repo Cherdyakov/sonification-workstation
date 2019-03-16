@@ -111,10 +111,7 @@ QtTransport *MainWindow::getTransport()
 
 void MainWindow::createMenus()
 {
-    ////////////////
-    //Menu actions//
-    ////////////////
-
+    /// "File" menu actions
     // open session
     QAction *openSessionAct = new QAction(tr("Open"), this);
     openSessionAct->setShortcut(QKeySequence::Open);
