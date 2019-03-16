@@ -23,7 +23,7 @@ void PlayHead::setCursorPos(float pos)
     if(!qFuzzyCompare(cursorPos_, pos))
     {
         cursorPos_ = pos;
-        repaint();
+        update();
     }
 }
 
@@ -58,7 +58,7 @@ float PlayHead::pixelToVal(int pixel)
 void PlayHead::blinker()
 {
     blink_ = !blink_;
-    repaint();
+    update();
 }
 
 void PlayHead::paintEvent(QPaintEvent *event)
@@ -110,7 +110,7 @@ void PlayHead::onXRangeChanged(QCPRange range)
     {
         xMax_ = max;
     }
-    repaint();
+    update();
 }
 
 void PlayHead::mousePressEvent(QMouseEvent *e)
@@ -155,7 +155,7 @@ void PlayHead::mouseMoveEvent(QMouseEvent *e)
         {
             emit loopPointsChanged(loopB_, loopA_);
         }
-        repaint();
+        update();
     }
 }
 
