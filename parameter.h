@@ -5,7 +5,6 @@
 #include "enums.h"
 #include "ringbuffer.h"
 #include "commands.h"
-#include "parameterinterface.h"
 #include "scaler.h"
 
 namespace sow {
@@ -14,11 +13,12 @@ class Parameter : public QObject
 {
     Q_OBJECT
 public:
+
     explicit Parameter(QObject *parent = nullptr);
 
     float value();
     void controlProcess();
-    void connectInterface(ParameterInterface* interface);
+    bool setMap(const QString map);
 
 private:
 
@@ -38,8 +38,8 @@ private:
 signals:
 
 public slots:
+
     void onParameterChanged(const ENUMS::SUB_PARAMETER subParam, const float value);
-    void onMapChanged(const QString map);
 
 };
 

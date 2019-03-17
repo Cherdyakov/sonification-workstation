@@ -17,6 +17,7 @@ Item {
     property alias scaleLow: scaler.low
     property alias scaleHigh: scaler.high
     property alias scaleExp: scaler.exponent
+    property alias mapper: mapper
 
     EditorLayout {
         id: layout
@@ -39,7 +40,6 @@ Item {
             id: mapper
             label.text: qsTr("Parameter Source: ")
             maxIndexes: 128
-
         }
 
         EditorScaler {

@@ -9,9 +9,10 @@ ColumnLayout {
 
     property alias label: label
     property alias text: textInput.text
+    property alias textColor: textInput.color
     property int maxIndexes: 1
 
-    signal mappingsChanged(var mappings)
+    signal mappingChanged(var mappings)
 
     Connections {
         target: fileReader
@@ -43,7 +44,7 @@ ColumnLayout {
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             onEditingFinished:
             {
-                mappingsChanged(text)
+                mappingChanged(text)
                 validateMappings()
             }
 

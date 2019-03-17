@@ -15,10 +15,19 @@ ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
     iMap_ = QString();
 }
 
+void ParameterInterface::connectInterface(Parameter* parameter)
+{
+    parameter_ = parameter;
+
+    // Connect this interface to a backing parameter
+    connect(this, &ParameterInterface::iParameterChanged,
+            parameter, &Parameter::onParameterChanged);
+}
+
 void sow::ParameterInterface::setType(const ENUMS::PARAMETER type) {
     if (iType_ != type) {
         iType_ = type;
-        emit typeChanged();     
+        emit typeChanged();
     }
 }
 ENUMS::PARAMETER sow::ParameterInterface::type() const {
@@ -123,12 +132,12 @@ float ParameterInterface::scaleInHigh()
     return iScaleInHigh_;
 }
 
-void sow::ParameterInterface::setMap(const QString map) {
+bool sow::ParameterInterface::setMap(const QString map) {
     if (iMap_ != map) {
         iMap_ = map;
-        emit nameChanged();
-        iMapChanged(iMap_);
+        return parameter_->setMap(iMap_);
     }
+    return true;
 }
 
 QString sow::ParameterInterface::map() const {

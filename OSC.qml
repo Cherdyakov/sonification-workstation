@@ -77,7 +77,6 @@ SynthItem {
             onScaleLowChanged: implementation.frequency.scaleLo = scaleLow
             onScaleHighChanged: implementation.frequency.scaleHi = scaleHigh
             onScaleExpChanged: implementation.frequency.scaleExp = scaleExp
-            onMappingChanged: implementation.frequency.map = mapping
             // Bind C++ to QML values
             value: implementation.frequency.value
             fixed: implementation.frequency.fixed
@@ -86,6 +85,16 @@ SynthItem {
             scaleHigh: implementation.frequency.scaleHi
             scaleExp: implementation.frequency.scaleExp
             mapping: implementation.frequency.map
+
+            // Set map with Q_INVOKABLE function call
+            onMappingChanged: {
+                if(!implementation.frequency.setMap(mapping)) {
+                    mapper.textColor = "tomato"
+                }
+                else {
+                    mapper.textColor = "black"
+                }
+            }
         }
     }
 
