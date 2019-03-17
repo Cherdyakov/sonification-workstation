@@ -282,20 +282,20 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
         processSubscribeItem(cmd.item);
         break;
     case ENUMS::TRANSPORT_CMD::UNSUB:
-        removeAll(cmd.item, subscribers_);
+        utility::removeAll(cmd.item, subscribers_);
         break;
     }
 }
 
 void QtTransport::processSubscribeItem(QtSynthItem *item)
 {
-    insertUnique(item, subscribers_);
+    utility::insertUnique(item, subscribers_);
     item->setData(&currentData_, &dataMinValues_, &dataMaxValues_);
 }
 
 void QtTransport::processUnsubscribeItem(QtSynthItem *item)
 {
-    removeAll(item, subscribers_);
+    utility::removeAll(item, subscribers_);
 }
 
 void QtTransport::processDeleteItem(QtSynthItem *item)

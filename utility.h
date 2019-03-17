@@ -1,12 +1,15 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#include <string>
 #include <vector>
 #include <algorithm>
-#include "frame.h"
-//#include "qtsynthitem.h"
+
+#include <QDebug>
 
 namespace sow {
+
+namespace utility {
 
 // based on the Max "Scale" object
 // https://docs.cycling74.com/max7/maxobject/scale
@@ -16,6 +19,11 @@ double scale(double x, double in_low,
              double out_high, double exp);
 
 //Frame visitChildren(std::vector<QtSynthItem*> children);
+template <class T>
+bool contains(const T item, const std::vector<T> vec)
+{
+    return std::find(vec.begin(), vec.end(), item) != vec.end();
+}
 
 template<class T>
 bool insertUnique(const T item, std::vector<T> &vec)
@@ -33,11 +41,25 @@ void removeAll(const T item, std::vector<T> vec)
     vec.erase(std::remove(vec.begin(), vec.end(), item), vec.end());
 }
 
-template <class T>
-bool contains(const T item, const std::vector<T> vec)
-{
-   return std::find(vec.begin(), vec.end(), item) != vec.end();
+inline std::string intToAlphabet(int i) {
+    std::string result = "";
+    std::string alphas("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    int dividend = i;
+    int rem;
+    char c;
+
+    while (dividend > 0)
+    {
+        rem = (dividend - 1) % 26;
+        c = alphas[static_cast<size_t>(rem)];
+        result.insert(0, 1, c);
+        dividend = ((dividend - rem) / 26);
+    }
+
+    return result;
 }
+
+} // namespace utility
 
 } // namespace sow
 #endif // UTILITY_H

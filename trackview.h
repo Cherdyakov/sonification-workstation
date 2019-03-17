@@ -6,7 +6,7 @@
 #include "playhead.h"
 #include "dataset.h"
 
-// Container widget for tracks and track headers
+namespace sow {
 
 class TrackView : public QWidget
 {
@@ -47,5 +47,7 @@ public slots:
     void onXRangeChanged(QCPRange range);
 
 };
+
+} // namespace sow
 
 #endif // TRACKVIEW_H

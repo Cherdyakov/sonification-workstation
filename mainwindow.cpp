@@ -18,22 +18,22 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QQuickView* quickView = new QQuickView;                                             // Renders Qt Quick patcher interface
     QWidget *quickViewContainer = QWidget::createWindowContainer(quickView, this);      // Caontainer widget for QQuickView
     TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
+    QScrollArea* scrollArea = new QScrollArea(this);                                    // Scroll area for the TrackView
 
     transport = new QtTransport(this);                                                  // Synthesis tree root, Transport
     fileReader = new FileReader(this);                                                  // Reads CSV files into Dataset
     session = new Session(reinterpret_cast<QObject*>(quickView->rootObject()), this);   // Represents loaded project
 
-    /// Initiazlize and insert main widgets
-    trackView->setPlayHead(playHead);
-    centralWidget->setLayout(centralLayout);
-    transportWidget->setMaximumHeight(40);
-    // QQuickView setup
     quickView->rootContext()->setContextProperty("transport", transport);
     quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
 
     // Setup left side
-    layoutLeft->addWidget(trackView);
+    trackView->setPlayHead(playHead);
+    transportWidget->setMaximumHeight(40);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(trackView);
+    layoutLeft->addWidget(scrollArea);
     layoutLeft->addWidget(transportWidget);
     leftSide->setLayout(layoutLeft);
     // Setup right side
@@ -51,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // Add the prepared splitter to the central widget's
     // layout and then insert them into application window
+    centralWidget->setLayout(centralLayout);
     centralLayout->addWidget(splitter);
     this->setCentralWidget(centralWidget);
 

@@ -1,12 +1,14 @@
 #include "trackname.h"
 
+namespace sow {
+
 TrackName::TrackName(QWidget *parent) : QWidget(parent)
 {
     // set label properties
-    label = new QLabel;
-    label->setContentsMargins(2,2,2,2);
-    label->setFixedHeight(20);
-    label->setStyleSheet("font: 16pt");
+    label_ = new QLabel;
+    label_->setContentsMargins(2,2,2,2);
+    label_->setFixedHeight(20);
+    label_->setStyleSheet("font: 16pt");
 
     // set dark background for this widget
     QPalette* pal = new QPalette;
@@ -16,18 +18,26 @@ TrackName::TrackName(QWidget *parent) : QWidget(parent)
 
     // create layout
     QHBoxLayout *layout = new QHBoxLayout;
-    layout->addWidget(label);
+    layout->addWidget(label_);
     layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 }
 
-void TrackName::setTrackNumber(uint num)
+void TrackName::setNumber(unsigned int num)
 {
-    QString name = "Dimension " + QString::number(num);
-    label->setText(name);
+    std::string alpha = utility::intToAlphabet(num);
+    QString name = QString::fromStdString(alpha);
+    label_->setText(name);
 }
 
-void TrackName::setTrackName(QString name)
+void TrackName::setText(const QString name)
 {
-    label->setText(name);
+    label_->setText(name);
 }
+
+QString TrackName::text() const
+{
+    return text_;
+}
+
+} // namespace sow

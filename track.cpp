@@ -1,17 +1,17 @@
 #include "track.h"
 
+namespace sow {
+
 Track::Track(QWidget *parent) : QWidget(parent)
 {
-
+    QVBoxLayout *centralLayout = new QVBoxLayout(this);
     TrackHeader* header = new TrackHeader(this);
-//    plotter_ = new TrackPlotter(this);
     name_ = new TrackName(this);
 
-    QVBoxLayout *centralLayout = new QVBoxLayout(this);
     centralLayout->setContentsMargins(0,0,0,0);
     centralLayout->setSpacing(0);
-    // set this track header's width
     header->setFixedWidth(TrackHeaderWidth);
+
     centralLayout->addWidget(name_);
     centralLayout->addWidget(header);
     this->setLayout(centralLayout);
@@ -41,7 +41,7 @@ void Track::plot(std::vector<float> vec)
 
 void Track::setTrackNumber(uint num)
 {
-    name_->setTrackNumber(num);
+    name_->setNumber(num);
 }
 
 void Track::onXRangeChanged(QCPRange range)
@@ -54,3 +54,5 @@ void Track::onXRangeChanged(QCPRange range)
         emit xRangeChanged(xRange_);
     }
 }
+
+} // namespace sow
