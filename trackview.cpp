@@ -23,16 +23,11 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
     tracksLayout_->setContentsMargins(0, 0, 0, 0);
     tracksLayout_->setSpacing(TrackSpacing);
 
-
     // Add layouts to respective containers
     plotsContainer->setLayout(plotsLayout_);
     tracksContainer->setLayout(tracksLayout_);
-
-
     stackedContainer->setLayout(stackedLayout_);
     stackedLayout_->addWidget(plotsContainer);
-
-
     centralLayout->addWidget(tracksContainer);
     centralLayout->addWidget(stackedContainer);
     this->setLayout(centralLayout);
