@@ -18,6 +18,11 @@ Track::Track(QWidget *parent) : QWidget(parent)
     this->setFixedHeight(TrackHeight);
 }
 
+Track::~Track()
+{
+    delete plotter_;
+}
+
 void Track::setPlotter(TrackPlotter *plotter)
 {
    if(plotter_ != plotter)
