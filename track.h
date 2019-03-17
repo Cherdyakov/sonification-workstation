@@ -15,6 +15,7 @@ class Track : public QWidget
 public:
 
     explicit Track(QWidget *parent = nullptr);
+    ~Track();
 
     static const int TrackHeight = 120;
     static const int TrackHeaderWidth = 140;

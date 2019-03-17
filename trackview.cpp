@@ -87,13 +87,24 @@ void TrackView::plot(sow::Dataset *dataset)
 void TrackView::clear()
 {
     QLayoutItem* child;
+    // Delete all tracks
+    while (tracksLayout_->count() != 0)
+    {
+        child = tracksLayout_->takeAt(0);
+        QWidget* widget = child->widget();
+        if(widget != nullptr)
+        {
+            delete widget;
+        }
+        delete child;
+    }
+
+    // Tracks will delete their plotters,
+    // but make sure any spacers etc. are
+    // deleted from plotsLayout
     while (plotsLayout_->count() != 0)
     {
         child = plotsLayout_->takeAt(0);
-        if(child->widget() != 0)
-        {
-            delete child->widget();
-        }
         delete child;
     }
 }
