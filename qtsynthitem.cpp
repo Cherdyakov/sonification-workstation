@@ -40,7 +40,7 @@ ENUMS::OUTPUT_TYPE QtSynthItem::outputType() const
 // Connect the given SynthItem as a child
 bool QtSynthItem::connectChild(QtSynthItem *child)
 {
-    if( !contains(child->outputType(), acceptedInputs_) || (child == nullptr) )
+    if( !utility::contains(child->outputType(), acceptedInputs_) || (child == nullptr) )
     {
         return false;
     }
@@ -133,7 +133,7 @@ void QtSynthItem::processCommand(ItemCommand cmd)
         processConnectChild(cmd.item);
         break;
     case ENUMS::ITEM_CMD::CONNECT_PARENT:
-        insertUnique(cmd.item, parents_);
+        utility::insertUnique(cmd.item, parents_);
         break;
     case ENUMS::ITEM_CMD::DISCONNECT:
         processDisconnect(cmd.item);
@@ -158,15 +158,15 @@ void QtSynthItem::processConnectChild(QtSynthItem *child)
 {
     if(child == nullptr)
         return;
-    if(insertUnique(child, children_)) {
+    if(utility::insertUnique(child, children_)) {
         child->connectParent(this);
     }
 }
 
 // Disconnect the given SynthItem child or parent
 void QtSynthItem::processDisconnect(QtSynthItem *other) {
-    removeAll(other, children_);
-    removeAll(other, parents_);
+    utility::removeAll(other, children_);
+    utility::removeAll(other, parents_);
 }
 
 // Disconnect all child and parent SynthItems

@@ -1,5 +1,7 @@
 #include "trackview.h"
 
+namespace sow {
+
 TrackView::TrackView(QWidget *parent) : QWidget(parent)
 {
 
@@ -134,3 +136,5 @@ void TrackView::onXRangeChanged(QCPRange range)
 {
     emit xRangeChanged(range);
 }
+
+} // namespace sow

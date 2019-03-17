@@ -6,9 +6,12 @@
 #include "trackheader.h"
 #include "trackname.h"
 
+namespace sow {
+
 class Track : public QWidget
 {
     Q_OBJECT
+
 public:
 
     explicit Track(QWidget *parent = nullptr);
@@ -28,14 +31,16 @@ private:
     TrackName* name_;
     QCPRange xRange_;
 
-signals:
-
-    void xRangeChanged(QCPRange range);
-
 public slots:
 
     void onXRangeChanged(QCPRange range);
 
+signals:
+
+    void xRangeChanged(QCPRange range);
+
 };
+
+} // namespace sow
 
 #endif // TRACK_H

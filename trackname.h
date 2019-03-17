@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
+#include "utility.h"
+
+namespace sow {
 
 class TrackName : public QWidget
 {
@@ -12,16 +15,23 @@ class TrackName : public QWidget
 public:
 
     explicit TrackName(QWidget *parent = nullptr);
-    void setTrackNumber(uint num);
-    void setTrackName(QString name);
+
+    void setNumber(unsigned int num);
+    void setText(const QString name);
+    QString text() const;
 
 private:
 
-    QLabel *label;
+    QLabel *label_;
+    QString text_;
+
+    QString intToChar(const unsigned int num);
 
 signals:
 
 public slots:
 };
+
+} // namespace sow
 
 #endif // TRACKNAME_H
