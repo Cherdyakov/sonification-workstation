@@ -47,7 +47,6 @@ Rectangle
         if(idx > -1) {
             synthItems.splice(idx, 1)
         }
-        transport.deleteItem(item.implementation)
         item.destroy()
     }
 

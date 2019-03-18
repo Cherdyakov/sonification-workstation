@@ -171,6 +171,7 @@ Item {
     Keys.onPressed: {
         if (event.key === Qt.Key_Backspace || event.key === Qt.Key_Delete) {
             created = false;
+            transport.deleteItem(implementation)
             deleted(root)
             event.accepted = true
         }
