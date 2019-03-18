@@ -36,7 +36,7 @@ bool insertUnique(const T item, std::vector<T> &vec)
 }
 
 template <class T>
-void removeAll(const T item, std::vector<T> vec)
+void removeAll(const T item, std::vector<T> &vec)
 {
     vec.erase(std::remove(vec.begin(), vec.end(), item), vec.end());
 }
