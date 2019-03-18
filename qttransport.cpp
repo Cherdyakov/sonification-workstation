@@ -127,32 +127,32 @@ QtSynthItem* QtTransport::createItem(ENUMS::ITEM_TYPE type)
         break;
     case ENUMS::ITEM_TYPE::OSCILLATOR:
         item = new QtOscillator(this);
+        processSubscribeItem(item);
         break;
-//    case QtSynthItem::ITEM::AUDIFIER:
+    case ENUMS::ITEM_TYPE::AUDIFIER:
 //        item = new Audifier();
-//        break;
-//    case QtSynthItem::ITEM::MODULATOR:
+        break;
+    case ENUMS::ITEM_TYPE::MODULATOR:
 //        item = new Modulator();
-//        break;
-//    case QtSynthItem::ITEM::PANNER:
+        break;
+    case ENUMS::ITEM_TYPE::PANNER:
 //        item = new Panner();
-//        break;
-//    case QtSynthItem::ITEM::ENVELOPE:
+        break;
+    case ENUMS::ITEM_TYPE::ENVELOPE:
 //        item = new Envelope();
-//        break;
-//    case QtSynthItem::ITEM::VOLUME:
+        break;
+    case ENUMS::ITEM_TYPE::VOLUME:
 //        item = new Volume();
-//        break;
-//    case QtSynthItem::ITEM::NOISE:
+        break;
+    case ENUMS::ITEM_TYPE::NOISE_GEN:
 //        item = new Noise();
-//        break;
-//    case QtSynthItem::ITEM::EQUALIZER:
+        break;
+    case ENUMS::ITEM_TYPE::EQUALIZER:
 //        item = new Equalizer();
-//        break;
-    default:
+        break;
+    case ENUMS::ITEM_TYPE::NONE:
         break;
     }
-//    item->setData(&current_data_column_, &dataset_->mins_, &dataset_->maxes_);
     return item;
 }
 

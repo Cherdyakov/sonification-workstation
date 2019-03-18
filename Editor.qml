@@ -11,7 +11,7 @@ Rectangle {
     width: childrenRect.width + Style.editorMargin
     radius: Style.editorRadius
     anchors.centerIn: parent
-    color: muted ? Style.itemMuteColor : mainColor
+    color: mute ? Style.itemMuteColor : mainColor
     opacity: 0
 
     enabled: false
