@@ -6,14 +6,14 @@ import "Style.js" as Style
 Item {
 
     id: root
-     z: Style.itemZ + zModifier
-     width: Style.itemHeight; height: Style.itemWidth
+    z: Style.itemZ + zModifier
+    width: Style.itemHeight; height: Style.itemWidth
 
     property int identifier: 0
     property var synthChildren: []
     property var synthParents: []
     property var mappedRows: []
-    property bool muted: false
+    property bool mute: false
     property int type: -1 // OUT = 0, OSC = 1
     property int output: -1 // INPUT = 0
     property bool created: false
@@ -29,25 +29,31 @@ Item {
     signal selected(var item)
     signal deleted(var item)
 
-     Component.onCompleted: {
-         synthItems.push(root)
-         patching.connect(patchManager.patchBegin)
-         deleted.connect(patchManager.itemDeleted)
-         deleted.connect(deleteItem)
-         parent = workspace.contentItem
-     }
-
-    onMutedChanged: {
-        mute()
+    Component.onCompleted: {
+        synthItems.push(root)
+        patching.connect(patchManager.patchBegin)
+        deleted.connect(patchManager.itemDeleted)
+        deleted.connect(deleteItem)
+        parent = workspace.contentItem
     }
+
+    // Property bindings
+    onMuteChanged: {
+        implementation.mute = mute
+        muteChildren()
+    }
+//    mute: implementation.mute
+
     onXChanged:  {
         canvas.requestPaint()
         workspace.updateRect()
     }
+
     onYChanged: {
         canvas.requestPaint()
         workspace.updateRect()
     }
+
     onWidthChanged: canvas.requestPaint()
 
     states: [
@@ -96,71 +102,10 @@ Item {
 
     ]
 
-    function create() {
-        created = true
-        implementation = transport.createItem(type)
-        if(implementation === null) {
-            deleted(root);
-        }
-        canvas.requestPaint()
-    }
-
-    function read() {
-        // must override
-        // returns params for saving in session file
-    }
-
-    function init(obj) {
-        // must override
-        // sets params of new item created from saved sesssion file
-    }
-
-    function connectChild(synthItem) {
-        //  connect implementation
-        var added = implementation.connectChild(synthItem.implementation)
-        if(added === true)
-        {
-            //  connect QML
-            synthChildren.push(synthItem)
-            synthItem.addParent(this)
-        }
-        canvas.requestPaint()
-    }
-
-    function addParent(synthItem) {
-        // add QML parent
-        synthParents.push(synthItem)
-    }
-
-    function disconnect(synthItem) {
-        //  disconnect implementation
-        implementation.disconnect(synthItem.implementation)
-        // disconnect QML
-        while (synthChildren.indexOf(synthItem) > -1) {
-            synthChildren.splice(synthChildren.indexOf(synthItem), 1)
-        }
-        while (synthParents.indexOf(synthItem) > -1) {
-            synthParents.splice(synthParents.indexOf(synthItem), 1)
-        }
-        canvas.requestPaint()
-    }
-
-    function mute() {
-        // mute cpp counterpart
-        implementation.mute(muted)
-
-        // mute children
-        for(var i = 0; i < synthChildren.length; i++) {
-            var synthItem = synthChildren[i]
-            synthItem.muted = muted
-        }
-        canvas.requestPaint()
-    }
-
     Rectangle {
         id: rect
         anchors.fill: parent
-        color: muted ? Style.itemMuteColor : mainColor
+        color: mute ? Style.itemMuteColor : mainColor
         radius: Style.itemMinRadius
         border.color: root.activeFocus ? Style.itemActiveFocusColor : textColor
         border.width: 4
@@ -228,11 +173,69 @@ Item {
             deleted(root)
             event.accepted = true
         }
-
         if (event.key === Qt.Key_M) {
-            muted = !muted
+            mute = !mute
             event.accepted = true
         }
+    }
+
+    /// FUNCTIONS
+    function create() {
+        created = true
+        implementation = transport.createItem(type)
+        if(implementation === null) {
+            deleted(root);
+        }
+        canvas.requestPaint()
+    }
+
+    function read() {
+        // must override
+        // returns params for saving in session file
+    }
+
+    function init(obj) {
+        // must override
+        // sets params of new item created from saved sesssion file
+    }
+
+    function connectChild(synthItem) {
+        //  connect implementation
+        var added = implementation.connectChild(synthItem.implementation)
+        if(added === true)
+        {
+            //  connect QML
+            synthChildren.push(synthItem)
+            synthItem.addParent(this)
+        }
+        canvas.requestPaint()
+    }
+
+    function addParent(synthItem) {
+        // add QML parent
+        synthParents.push(synthItem)
+    }
+
+    function disconnect(synthItem) {
+        //  disconnect implementation
+        implementation.disconnect(synthItem.implementation)
+        // disconnect QML
+        while (synthChildren.indexOf(synthItem) > -1) {
+            synthChildren.splice(synthChildren.indexOf(synthItem), 1)
+        }
+        while (synthParents.indexOf(synthItem) > -1) {
+            synthParents.splice(synthParents.indexOf(synthItem), 1)
+        }
+        canvas.requestPaint()
+    }
+
+    function muteChildren() {
+        // set mute on children
+        for(var i = 0; i < synthChildren.length; i++) {
+            var synthItem = synthChildren[i]
+            synthItem.mute = mute
+        }
+        canvas.requestPaint()
     }
 
 }
