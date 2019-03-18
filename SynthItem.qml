@@ -9,13 +9,12 @@ Item {
     z: Style.itemZ + zModifier
     width: Style.itemHeight; height: Style.itemWidth
 
-    property int identifier: 0
     property var synthChildren: []
     property var synthParents: []
     property var mappedRows: []
     property bool mute: false
-    property int type: -1 // OUT = 0, OSC = 1
-    property int output: -1 // INPUT = 0
+    property int type: ENUMS.NONE
+    property int output: ENUMS.NONE
     property bool created: false
     property string label: "SON"
     property string mainColor
@@ -143,7 +142,8 @@ Item {
             }
 
             onDoubleClicked: {
-                if(type === 0) { //  item is OUT, has no editor
+                //  OUT item has no editor
+                if(type === ENUMS.TRANSPORT) {
                     return
                 }
                 switch(root.state) {
