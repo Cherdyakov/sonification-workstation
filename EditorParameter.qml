@@ -25,9 +25,22 @@ Item {
 
         RowLayout {
 
-            EditorDoubleParam {
-                id: parameter
-                label.text: "Parameter: "
+            ColumnLayout {
+                Layout.maximumHeight: Style.editorRowHeight * 2
+
+                EditorLabel {
+                    id: label
+                    text: qsTr("Value: ")
+                    Layout.maximumHeight: Style.editorRowHeight
+                    Layout.fillWidth: true
+                }
+
+                EditorDoubleSpinBox {
+                    id: spinBox
+                    Layout.maximumHeight: Style.editorRowHeight
+                    Layout.preferredWidth: Style.editorControlWidth
+                }
+
             }
 
             EditorFixedParam {
