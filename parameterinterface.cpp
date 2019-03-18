@@ -12,8 +12,7 @@ ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
     setScaleOutLow(100.0f);
     setScaleOutHigh(8000.0f);
     setScaleExp(1);
-    setMap("ASDF");
-
+    setMap("");
 }
 
 void ParameterInterface::connectInterface(Parameter* parameter)

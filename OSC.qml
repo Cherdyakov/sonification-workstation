@@ -72,34 +72,23 @@ SynthItem {
         EditorParameter {
             id: frequency
             // Value changed from QML
-            onRealValueChanged: implementation.frequency.value = realValue
-            onFixedChanged: implementation.frequency.fixed = fixed
-            onScaledChanged: implementation.frequency.scaled = scaled
-            onScaleRealLowChanged: implementation.frequency.scaleLo = scaleRealLow
-            onScaleRealHighChanged: implementation.frequency.scaleHi = scaleRealHigh
-            onScaleRealExpChanged: implementation.frequency.scaleExp = scaleRealExp
+            onRealValueChanged: created ? implementation.frequency.value = realValue : {}
+            onFixedChanged: created ? implementation.frequency.fixed = fixed : {}
+            onScaledChanged: created ? implementation.frequency.scaled = scaled : {}
+            onScaleRealLowChanged: created ? implementation.frequency.scaleLo = scaleRealLow : {}
+            onScaleRealHighChanged: created ? implementation.frequency.scaleHi = scaleRealHigh : {}
+            onScaleRealExpChanged: created ? implementation.frequency.scaleExp = scaleRealExp : {}
             // Value changed from C++
-            value: implementation.frequency.value * 100
-            fixed: implementation.frequency.fixed
-            scaled: implementation.frequency.scaled
-            scaleLow: implementation.frequency.scaleLow * 100
-            scaleHigh: implementation.frequency.scaleHigh * 100
-            scaleExp: implementation.frequency.scaleExp * 100
-            mapping: implementation.frequency.map
-
-
-            // Value changed from C++
-//            Connections {
-//                 target: implementation.frequency
-
-//                 //Either
-//                 onValueChanged: frequency.value = implementation.frequency.value * 100
-//                 //Or with the "setter"
-////                 onValueChanged: mySpinBox.value.setRealValue(value)
-//            }
+            value: created ? implementation.frequency.value * 100 : 0
+            fixed: created ? implementation.frequency.fixed : 0
+            scaled: created ? implementation.frequency.scaled : 0
+            scaleLow: created ? implementation.frequency.scaleLow * 100 : 0
+            scaleHigh: created ? implementation.frequency.scaleHigh * 100 : 0
+            scaleExp: created ? implementation.frequency.scaleExp * 100 : 0
+            mapping: created ? implementation.frequency.map : 0
 
             // Set map with Q_INVOKABLE function call
-            onMappingChanged: {
+            mapper.onMapChanged: {
                 if(!implementation.frequency.setMap(mapping)) {
                     mapper.textColor = "tomato"
                 }

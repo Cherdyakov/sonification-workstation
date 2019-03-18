@@ -170,6 +170,7 @@ Item {
 
     Keys.onPressed: {
         if (event.key === Qt.Key_Backspace || event.key === Qt.Key_Delete) {
+            created = false;
             deleted(root)
             event.accepted = true
         }
@@ -181,12 +182,12 @@ Item {
 
     /// FUNCTIONS
     function create() {
-        created = true
         implementation = transport.createItem(type)
         if(implementation === null) {
             deleted(root);
         }
         canvas.requestPaint()
+        created = true
     }
 
     function read() {
