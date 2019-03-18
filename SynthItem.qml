@@ -169,9 +169,7 @@ Item {
 
     Keys.onPressed: {
         if (event.key === Qt.Key_Backspace || event.key === Qt.Key_Delete) {
-            created = false;
-            transport.deleteItem(implementation)
-            deleted(root)
+            deleteThis()
             event.accepted = true
         }
         if (event.key === Qt.Key_M) {
@@ -198,6 +196,12 @@ Item {
     function init(obj) {
         // must override
         // sets params of new item created from saved sesssion file
+    }
+
+    function deleteThis() {
+        created = false
+        transport.deleteItem(implementation)
+        deleted(root)
     }
 
     function connectChild(synthItem) {

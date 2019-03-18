@@ -130,25 +130,25 @@ QtSynthItem* QtTransport::createItem(ENUMS::ITEM_TYPE type)
         processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::AUDIFIER:
-//        item = new Audifier();
+        //        item = new Audifier();
         break;
     case ENUMS::ITEM_TYPE::MODULATOR:
-//        item = new Modulator();
+        //        item = new Modulator();
         break;
     case ENUMS::ITEM_TYPE::PANNER:
-//        item = new Panner();
+        //        item = new Panner();
         break;
     case ENUMS::ITEM_TYPE::ENVELOPE:
-//        item = new Envelope();
+        //        item = new Envelope();
         break;
     case ENUMS::ITEM_TYPE::VOLUME:
-//        item = new Volume();
+        //        item = new Volume();
         break;
     case ENUMS::ITEM_TYPE::NOISE_GEN:
-//        item = new Noise();
+        //        item = new Noise();
         break;
     case ENUMS::ITEM_TYPE::EQUALIZER:
-//        item = new Equalizer();
+        //        item = new Equalizer();
         break;
     case ENUMS::ITEM_TYPE::NONE:
         break;
@@ -237,6 +237,11 @@ Frame QtTransport::process()
 
 void QtTransport::controlProcess()
 {
+    // Process TransportCommands
+    TransportCommand cmd;
+    while(transportCommandBuffer_.pop(&cmd)) {
+        processTransportCommand(cmd);
+    }
     // Do the usual for controlProcess
     QtSynthItem::controlProcess();
     // Trigger subscribed SynthItems to do the same
@@ -244,11 +249,6 @@ void QtTransport::controlProcess()
     {
         QtSynthItem* item = subscribers_[i];
         item->controlProcess();
-    }
-    // Process TransportCommands
-    TransportCommand cmd;
-    while(transportCommandBuffer_.pop(&cmd)) {
-        processTransportCommand(cmd);
     }
 }
 
@@ -307,7 +307,9 @@ void QtTransport::processDeleteItem(QtSynthItem *item)
     // Process the disconnectAll() command
     // buffered in preceeding line before del
     item->controlProcess();
-    delete item;
+    if(item != this) {
+        delete item;
+    }
 }
 
 void QtTransport::processDatasetCommand(DatasetCommand cmd)
