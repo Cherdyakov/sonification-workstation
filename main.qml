@@ -14,40 +14,15 @@ Rectangle
     property int dataHeight: 0
     // holds every item in the workspace for iterating
     property var synthItems: []
-    //canvas for drawing connections
+    // canvas for drawing patches
     property alias canvas: canvas
     property alias workspace: workspace
-
-    Component.onCompleted: {
-//        dac.patching.connect(patchManager.patchBegin)
-//        synthItems.push(dac)
-    }
 
     Connections {
         target: fileReader
         onQmlDatasetChanged: {
             dataHeight = height
         }
-    }
-
-    // get tree as json and return to C++ land
-    function readTree() {
-        var treeData = SessionCode.readTree(synthItems)
-        var stringTree = JSON.stringify(treeData)
-        return stringTree
-    }
-
-    function createTree(obj) {
-        SessionCode.destroyItems(synthItems)
-        SessionCode.createTree(obj)
-    }
-
-    function deleteItem(item) {
-        var idx = synthItems.indexOf(item)
-        if(idx > -1) {
-            synthItems.splice(idx, 1)
-        }
-        item.destroy()
     }
 
     Flickable {
@@ -75,8 +50,8 @@ Rectangle
             canvas.requestPaint()
         }
 
-        //This item establishes the upper left
-        //corner of the contentItem.childrenRect
+        // This item establishes the upper left
+        // corner of the contentItem.childrenRect
         Item {
             x: 0
             y: 0
@@ -136,8 +111,7 @@ Rectangle
         }
     }
 
-
-    //canvas on which the connections are drawn
+    // canvas on which the connections are drawn
     Canvas {
         id: canvas
         z: 0
@@ -205,14 +179,24 @@ Rectangle
         }
     }
 
-//    //Audio output (root of transport)
-//    OUT {
-//        type: 0
-//        id: dac
-//        created: true
-//        x: workspace.width / 2 - dac.width / 2
-//        y: workspace.height - 100
-//    }
+    // get tree as json and return to C++ land
+    function readTree() {
+        var treeData = SessionCode.readTree(synthItems)
+        var stringTree = JSON.stringify(treeData)
+        return stringTree
+    }
+
+    function createTree(obj) {
+        SessionCode.destroyItems(synthItems)
+        SessionCode.createTree(obj)
+    }
+
+    function deleteItem(item) {
+        while (synthItems.indexOf(item) > -1) {
+            synthItems.splice(synthItems.indexOf(item), 1)
+        }
+        item.destroy()
+    }
 
 }
 
