@@ -6,7 +6,7 @@ namespace sow {
 QtSynthItem::QtSynthItem(QObject *parent) : QObject (parent) {
     type_ = ENUMS::ITEM_TYPE::NONE;
     outputType_ = ENUMS::OUTPUT_TYPE::NONE;
-    mute_ = iMute_ = false;
+    setMute(false);
 }
 
 QtSynthItem::~QtSynthItem() {}
@@ -149,9 +149,9 @@ void QtSynthItem::processCommand(ItemCommand cmd)
 // dataset minimum and dataset maximum values.
 void QtSynthItem::processDatasetCommand(const DatasetCommand cmd)
 {
-    *data_ = *cmd.data;
-    *mins_ = *cmd.mins;
-    *maxes_ = *cmd.maxes;
+    data_ = cmd.data;
+    mins_ = cmd.mins;
+    maxes_ = cmd.maxes;
 }
 
 // If not already connected, connect given child
