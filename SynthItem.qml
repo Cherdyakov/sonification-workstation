@@ -41,7 +41,6 @@ Item {
         implementation.mute = mute
         muteChildren()
     }
-//    mute: implementation.mute
 
     onXChanged:  {
         canvas.requestPaint()
