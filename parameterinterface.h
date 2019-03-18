@@ -16,7 +16,7 @@ class ParameterInterface : public QObject
     Q_PROPERTY(float value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(bool fixed READ fixed WRITE setFixed NOTIFY fixedChanged)
     Q_PROPERTY(bool scaled READ scaled WRITE setScaled NOTIFY scaledChanged)
-    Q_PROPERTY(float scaleOutLow READ scaleOutLow WRITE setScaleOutLow NOTIFY scaleLoChanged)
+    Q_PROPERTY(float scaleLow READ scaleOutLow WRITE setScaleOutLow NOTIFY scaleLoChanged)
     Q_PROPERTY(float scaleHigh READ scaleOutHigh WRITE setScaleOutHigh NOTIFY scaleHiChanged)
     Q_PROPERTY(float scaleExp READ scaleExp WRITE setScaleExp NOTIFY scaleExpChanged)
     Q_PROPERTY(QString map READ map NOTIFY mapChanged)

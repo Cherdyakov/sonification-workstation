@@ -6,19 +6,17 @@ import "Style.js" as Style
 ColumnLayout {
     id: root
     Layout.maximumHeight: Style.editorRowHeight * 6
+
     property alias label: label
     property alias lowLabel: lowLabel
     property alias highLabel: highLabel
-    property alias low: lowSpinBox.doubleValue
-    property alias high: highSpinBox.doubleValue
-    property alias exponent: expSpinBox.doubleValue
     property alias scaled: checkBox.checked
-    property alias lowFrom: lowSpinBox.doubleFrom
-    property alias lowTo: lowSpinBox.doubleTo
-    property alias lowStepSize: lowSpinBox.doubleStepSize
-    property alias highFrom: highSpinBox.doubleFrom
-    property alias highTo: highSpinBox.doubleTo
-    property alias highStepSize: highSpinBox.doubleStepSize
+    property alias low: lowSpinBox.value
+    property alias realLow: lowSpinBox.realValue
+    property alias high: highSpinBox.value
+    property alias realHigh: highSpinBox.realValue
+    property alias exp: expSpinBox.value
+    property alias realExp: expSpinBox.realValue
 
     RowLayout {
         EditorLabel {
@@ -46,7 +44,6 @@ ColumnLayout {
             id: lowSpinBox
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onDoubleValueChanged: lowChanged(doubleValue)
         }
     }
     RowLayout {
@@ -61,7 +58,6 @@ ColumnLayout {
             id: highSpinBox
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onDoubleValueChanged: highChanged(doubleValue)
         }
     }
     RowLayout {
@@ -74,12 +70,11 @@ ColumnLayout {
 
         EditorDoubleSpinBox {
             id: expSpinBox
-            doubleFrom: 1
-            doubleTo: 6400
-            doubleStepSize: 1
+            from: 100
+            to: 6400
+            stepSize: 10
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorControlWidth
-            onDoubleValueChanged: exponentChanged(doubleValue)
         }
     }
 }

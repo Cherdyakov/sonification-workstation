@@ -70,21 +70,33 @@ SynthItem {
     Editor {
         id: editor
         EditorParameter {
-            // Bind QML to C++ values
-            onValueChanged: implementation.frequency.value = value
+            id: frequency
+            // Value changed from QML
+            onRealValueChanged: implementation.frequency.value = realValue
             onFixedChanged: implementation.frequency.fixed = fixed
             onScaledChanged: implementation.frequency.scaled = scaled
-            onScaleLowChanged: implementation.frequency.scaleLo = scaleLow
-            onScaleHighChanged: implementation.frequency.scaleHi = scaleHigh
-            onScaleExpChanged: implementation.frequency.scaleExp = scaleExp
-            // Bind C++ to QML values
-            value: implementation.frequency.value
+            onScaleRealLowChanged: implementation.frequency.scaleLo = scaleRealLow
+            onScaleRealHighChanged: implementation.frequency.scaleHi = scaleRealHigh
+            onScaleRealExpChanged: implementation.frequency.scaleExp = scaleRealExp
+            // Value changed from C++
+            value: implementation.frequency.value * 100
             fixed: implementation.frequency.fixed
             scaled: implementation.frequency.scaled
-            scaleLow: implementation.frequency.scaleLo
-            scaleHigh: implementation.frequency.scaleHi
-            scaleExp: implementation.frequency.scaleExp
+            scaleLow: implementation.frequency.scaleLow * 100
+            scaleHigh: implementation.frequency.scaleHigh * 100
+            scaleExp: implementation.frequency.scaleExp * 100
             mapping: implementation.frequency.map
+
+
+            // Value changed from C++
+//            Connections {
+//                 target: implementation.frequency
+
+//                 //Either
+//                 onValueChanged: frequency.value = implementation.frequency.value * 100
+//                 //Or with the "setter"
+////                 onValueChanged: mySpinBox.value.setRealValue(value)
+//            }
 
             // Set map with Q_INVOKABLE function call
             onMappingChanged: {

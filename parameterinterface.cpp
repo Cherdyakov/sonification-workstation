@@ -6,13 +6,14 @@ namespace sow {
 ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
 {
     // Interface variables, bound to QML
-    iValue_ = 440.0f;
-    iFixed_ = true;
-    iScale_ = true;
-    iScaleOutLow_ = 100.0f;
-    iScaleOutHigh_ = 8000.0f;
-    iScaleExp_ = 1.0f;
-    iMap_ = QString();
+    setValue(440.0f);
+    setFixed(true);
+    setScaled(true);
+    setScaleOutLow(100.0f);
+    setScaleOutHigh(8000.0f);
+    setScaleExp(1);
+    setMap("ASDF");
+
 }
 
 void ParameterInterface::connectInterface(Parameter* parameter)
