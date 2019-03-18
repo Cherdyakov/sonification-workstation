@@ -2,8 +2,10 @@
 #define SOWPARAMETER_H
 
 #include <QObject>
+#include <QPointer>
 #include "enums.h"
 #include "commands.h"
+#include "parameter.h"
 
 namespace sow {
 
@@ -14,10 +16,10 @@ class ParameterInterface : public QObject
     Q_PROPERTY(float value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(bool fixed READ fixed WRITE setFixed NOTIFY fixedChanged)
     Q_PROPERTY(bool scaled READ scaled WRITE setScaled NOTIFY scaledChanged)
-    Q_PROPERTY(float scaleOutLow READ scaleOutLow WRITE setScaleOutLow NOTIFY scaleLoChanged)
+    Q_PROPERTY(float scaleLow READ scaleOutLow WRITE setScaleOutLow NOTIFY scaleLoChanged)
     Q_PROPERTY(float scaleHigh READ scaleOutHigh WRITE setScaleOutHigh NOTIFY scaleHiChanged)
     Q_PROPERTY(float scaleExp READ scaleExp WRITE setScaleExp NOTIFY scaleExpChanged)
-    Q_PROPERTY(QString map READ map WRITE setMap NOTIFY mapChanged)
+    Q_PROPERTY(QString map READ map NOTIFY mapChanged)
 
 public:
 
@@ -38,9 +40,11 @@ public:
     float scaleOutHigh() const;
     void setScaleExp(const float scaleExp);
     float scaleExp() const;
-    void setMap(const QString map);
-    QString map() const;
+    // QML Invokable functions
+    Q_INVOKABLE bool setMap(const QString map);
+    Q_INVOKABLE QString map() const;
     // CPP only
+    void connectInterface(Parameter* parameter);
     void setScaleInLow(const float scaleInLow);
     float scaleInLow();
     void setScaleInHigh(const float scaleInHigh);
@@ -60,10 +64,12 @@ private:
     float iScaleInHigh_;
     QString iMap_;
 
+    // The backing parameter
+    QPointer<Parameter> parameter_;
+
 signals:
 
     // Notify signals
-    void nameChanged();
     void typeChanged();
     void valueChanged();
     void fixedChanged();

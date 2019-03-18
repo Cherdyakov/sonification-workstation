@@ -9,7 +9,7 @@ QtOscillator::QtOscillator(QObject *parent) : QtSynthItem(parent)
 
     frequencyInterface_ = new ParameterInterface(this);
     frequency_ = new Parameter(this);
-    frequency_->connectInterface(frequencyInterface_);
+    frequencyInterface_->connectInterface(frequency_);
 }
 
 ParameterInterface* QtOscillator::frequencyInterface() const

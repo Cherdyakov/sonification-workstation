@@ -34,7 +34,6 @@ private:
     void plot(sow::Dataset* dataset);
     void clear();
     Track* addTrack();
-    void removeTrack(Track* track);
 
 signals:
 

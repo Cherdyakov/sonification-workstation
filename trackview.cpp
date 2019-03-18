@@ -42,7 +42,6 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
 void TrackView::setPlayHead(PlayHead *playHead)
 {
     playHead_ = playHead;
-    //
     connect(this, &TrackView::xRangeChanged,
             playHead_, &PlayHead::onXRangeChanged);
     // Create a layout and container for the PlayHead
@@ -73,10 +72,10 @@ void TrackView::plot(sow::Dataset *dataset)
 {
     for(int i = 0; i < dataset->cols(); i++)
     {
-        //add tracks
+        // add tracks
         Track* track = addTrack();
         track->setTrackNumber(i + 1);
-        //plot to each track
+        // plot to each track
         std::vector<float> trackData = dataset->getCol(i);
         track->plot(trackData);
     }
@@ -87,7 +86,8 @@ void TrackView::plot(sow::Dataset *dataset)
 void TrackView::clear()
 {
     QLayoutItem* child;
-    // Delete all tracks
+    // Delete tracksLayout_ items and tracks.
+    // Tracks will delete their plotters.
     while (tracksLayout_->count() != 0)
     {
         child = tracksLayout_->takeAt(0);
@@ -99,9 +99,8 @@ void TrackView::clear()
         delete child;
     }
 
-    // Tracks will delete their plotters,
-    // but make sure any spacers etc. are
-    // deleted from plotsLayout
+    // Ensure all non-track items are
+    // cleared from PlotsLayout.
     while (plotsLayout_->count() != 0)
     {
         child = plotsLayout_->takeAt(0);
@@ -125,11 +124,6 @@ Track *TrackView::addTrack()
             plotter, &TrackPlotter::onWheelChanged);
 
     return track;
-}
-
-void TrackView::removeTrack(Track *track)
-{
-
 }
 
 void TrackView::onDatasetChanged(sow::Dataset* dataset)

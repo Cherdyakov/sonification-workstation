@@ -17,15 +17,6 @@ float Parameter::value()
     return value_;
 }
 
-// Connect an interface to this Parameter
-void Parameter::connectInterface(ParameterInterface *interface)
-{
-    connect(interface, &ParameterInterface::iParameterChanged,
-            this, &Parameter::onParameterChanged);
-    connect(interface, &ParameterInterface::iMapChanged,
-            this, &Parameter::onMapChanged);
-}
-
 // Process outstanding ParameterCommands
 void Parameter::controlProcess()
 {
@@ -33,6 +24,26 @@ void Parameter::controlProcess()
     while(commandBuffer_.pop(&currentCommand_)) {
         processCommand(currentCommand_);
     }
+}
+
+bool Parameter::setMap(const QString map)
+{
+
+    /// TODO: tokenize and validate/compile map
+
+//     ParameterCommand cmd;
+//     cmd.subParam = ENUMS::SUB_PARAMETER::MAP;
+//     // QString to QChar array to pass through command buffer
+//     const QChar* unicode = map.unicode();
+//     for(int i = 0; i < map.length(); i++) {
+//         cmd.map[i] = unicode[i];
+//     }
+
+//     commandBuffer_.push(cmd);
+
+     qDebug() << map;
+
+    return false;
 }
 
 // Execute commands pulled from the command buffer
@@ -77,20 +88,6 @@ void Parameter::onParameterChanged(const ENUMS::SUB_PARAMETER subParam, const fl
     ParameterCommand cmd;
     cmd.subParam = subParam;
     cmd.value = value;
-    commandBuffer_.push(cmd);
-}
-
-// Slot for updated parameter mapping from the interface
-void Parameter::onMapChanged(const QString map)
-{
-    ParameterCommand cmd;
-    cmd.subParam = ENUMS::SUB_PARAMETER::MAP;
-    // QString to QChar array to pass through command buffer
-    const QChar* unicode = map.unicode();
-    for(int i = 0; i < map.length(); i++) {
-        cmd.map[i] = unicode[i];
-    }
-
     commandBuffer_.push(cmd);
 }
 

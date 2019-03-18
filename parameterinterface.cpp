@@ -6,19 +6,29 @@ namespace sow {
 ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
 {
     // Interface variables, bound to QML
-    iValue_ = 440.0f;
-    iFixed_ = true;
-    iScale_ = true;
-    iScaleOutLow_ = 100.0f;
-    iScaleOutHigh_ = 8000.0f;
-    iScaleExp_ = 1.0f;
-    iMap_ = QString();
+    setValue(440.0f);
+    setFixed(true);
+    setScaled(true);
+    setScaleOutLow(100.0f);
+    setScaleOutHigh(8000.0f);
+    setScaleExp(1);
+    setMap("ASDF");
+
+}
+
+void ParameterInterface::connectInterface(Parameter* parameter)
+{
+    parameter_ = parameter;
+
+    // Connect this interface to a backing parameter
+    connect(this, &ParameterInterface::iParameterChanged,
+            parameter, &Parameter::onParameterChanged);
 }
 
 void sow::ParameterInterface::setType(const ENUMS::PARAMETER type) {
     if (iType_ != type) {
         iType_ = type;
-        emit typeChanged();     
+        emit typeChanged();
     }
 }
 ENUMS::PARAMETER sow::ParameterInterface::type() const {
@@ -123,12 +133,12 @@ float ParameterInterface::scaleInHigh()
     return iScaleInHigh_;
 }
 
-void sow::ParameterInterface::setMap(const QString map) {
+bool sow::ParameterInterface::setMap(const QString map) {
     if (iMap_ != map) {
         iMap_ = map;
-        emit nameChanged();
-        iMapChanged(iMap_);
+        return parameter_->setMap(iMap_);
     }
+    return true;
 }
 
 QString sow::ParameterInterface::map() const {

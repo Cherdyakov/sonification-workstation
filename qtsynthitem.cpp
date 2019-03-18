@@ -6,6 +6,7 @@ namespace sow {
 QtSynthItem::QtSynthItem(QObject *parent) : QObject (parent) {
     type_ = ENUMS::ITEM_TYPE::NONE;
     outputType_ = ENUMS::OUTPUT_TYPE::NONE;
+    mute_ = iMute_ = false;
 }
 
 QtSynthItem::~QtSynthItem() {}

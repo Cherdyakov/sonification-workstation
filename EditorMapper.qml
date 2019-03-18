@@ -9,9 +9,11 @@ ColumnLayout {
 
     property alias label: label
     property alias text: textInput.text
+    property alias textColor: textInput.color
     property int maxIndexes: 1
+    property string map: ""
 
-    signal mappingsChanged(var mappings)
+    signal mapEntered(var map)
 
     Connections {
         target: fileReader
@@ -39,12 +41,8 @@ ColumnLayout {
             id: textInput
             anchors.fill: parent
             font.pixelSize: 14
-
-            inputMethodHints: Qt.ImhFormattedNumbersOnly
-            onEditingFinished:
-            {
-                mappingsChanged(text)
-                validateMappings()
+            onEditingFinished: {
+                map = text
             }
 
             MouseArea {
