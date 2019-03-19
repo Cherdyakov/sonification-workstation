@@ -1,14 +1,9 @@
 #include <QApplication>
-#include <QDebug>
-#include <QThread>
 #include <QQmlContext>
-
-#include "qtsynthitem.h"
 #include "mainwindow.h"
 #include "portaudio.h"
 #include "callback.h"
 #include "qttransport.h"
-#include "ringbuffer.h"
 #include "filereader.h"
 #include "Gamma/Sync.h"
 
