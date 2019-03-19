@@ -13,7 +13,7 @@
         <file>EditorDoubleSpinBox.qml</file>
         <file>EditorWaveform.qml</file>
         <file>Editor.qml</file>
-        <file>EditorFixedParam.qml</file>
+        <file>EditorFixed.qml</file>
         <file>EditorLayout.qml</file>
         <file>EditorMapper.qml</file>
         <file>AUD.qml</file>

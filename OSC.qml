@@ -69,8 +69,11 @@ SynthItem {
 
     Editor {
         id: editor
+
         EditorFloatParameter {
             id: frequency
+            itemName: "OSC"
+            paramName: "Frequency: "
             // Value changed from QML
             onRealValueChanged: created ? implementation.frequency.value = realValue : {}
             onFixedChanged: created ? implementation.frequency.fixed = fixed : {}

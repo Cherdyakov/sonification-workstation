@@ -113,9 +113,7 @@ Item {
             id: mouseArea
             z: Style.itemZ
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-
             anchors.fill: rect
-
             drag.target: root
             drag.axis: Drag.XAndYAxis
             drag.minimumX: 0
@@ -129,11 +127,11 @@ Item {
             }
 
             onClicked: {
-                // left clicked
+                // Left clicked.
                 if(mouse.button & Qt.LeftButton) {
                     root.forceActiveFocus()
                 }
-                // right clicked
+                // Right clicked.
                 if(mouse.button & Qt.RightButton) {
                     root.patching(root)
                     root.forceActiveFocus()
@@ -141,7 +139,7 @@ Item {
             }
 
             onDoubleClicked: {
-                //  OUT item has no editor
+                //  OUT item has no editor.
                 if(type === ENUMS.TRANSPORT) {
                     return
                 }
@@ -165,7 +163,7 @@ Item {
                 centerIn: parent
             }
         }
-    }
+    } // rect
 
     Keys.onPressed: {
         if (event.key === Qt.Key_Backspace || event.key === Qt.Key_Delete) {
@@ -178,7 +176,9 @@ Item {
         }
     }
 
-    /// FUNCTIONS
+    /// FUNCTIONS ///
+
+    // Initialized and ready to use.
     function create() {
         implementation = transport.createItem(type)
         if(implementation === null) {
@@ -205,25 +205,25 @@ Item {
     }
 
     function connectChild(synthItem) {
-        //  connect implementation
+        //  Connect implementations.
         var added = implementation.connectChild(synthItem.implementation)
         if(added === true)
         {
-            //  connect QML
+            // Connect QML.
             synthChildren.push(synthItem)
             synthItem.addParent(this)
         }
     }
 
+    // Add QML SynthItem parent
     function addParent(synthItem) {
-        // add QML parent
         synthParents.push(synthItem)
     }
 
     function disconnect(synthItem) {
-        //  disconnect implementation
+        //  Disconnect a SynthItem from this item's implementation.
         implementation.disconnect(synthItem.implementation)
-        // disconnect QML
+        // Disconnect QML item from this.
         while (synthChildren.indexOf(synthItem) > -1) {
             synthChildren.splice(synthChildren.indexOf(synthItem), 1)
         }
@@ -233,7 +233,7 @@ Item {
     }
 
     function muteChildren() {
-        // set mute on children
+        // Set mute on children.
         for(var i = 0; i < synthChildren.length; i++) {
             var synthItem = synthChildren[i]
             synthItem.mute = mute
@@ -241,4 +241,4 @@ Item {
         canvas.requestPaint()
     }
 
-}
+} // root

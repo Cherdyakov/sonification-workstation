@@ -9,7 +9,8 @@ Item {
     width: childrenRect.width
     height: childrenRect.height
 
-    property alias name: layout.title
+    property alias itemName: layout.title
+    property alias paramName: label.text
     property alias value: spinBox.value
     property alias realValue: spinBox.realValue
     property alias fixed: fixed.fixed
@@ -33,7 +34,6 @@ Item {
 
                 EditorLabel {
                     id: label
-                    text: qsTr("Value: ")
                     Layout.maximumHeight: Style.editorRowHeight
                     Layout.fillWidth: true
                 }
@@ -46,23 +46,18 @@ Item {
 
             }
 
-            EditorFixedParam {
+            EditorFixed {
                 id: fixed
-                label.text: qsTr("Fixed: ")
             }
         }
 
         EditorMapper {
             id: mapper
-            label.text: qsTr("Parameter Source: ")
             maxIndexes: 128
         }
 
         EditorScaler {
             id: scaler
-            label.text: qsTr("Scaled: ")
-            lowLabel.text: qsTr("Scale Low: ")
-            highLabel.text: qsTr("Scale High: ")
         }
     }
 

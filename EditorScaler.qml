@@ -21,7 +21,7 @@ ColumnLayout {
     RowLayout {
         EditorLabel {
             id: label
-            text: qsTr("Frequncey Scaling: ")
+            text: qsTr("Scaled: ")
             Layout.maximumHeight: Style.editorRowHeight
             Layout.preferredWidth: Style.editorLabelWidth
             Layout.fillWidth: true
@@ -35,7 +35,7 @@ ColumnLayout {
     RowLayout {
         EditorLabel {
             id: lowLabel
-            text: qsTr("Low: ")
+            text: qsTr("Scale Low: ")
             Layout.maximumHeight: Style.editorRowHeight
             Layout.fillWidth: true
         }
@@ -49,7 +49,7 @@ ColumnLayout {
     RowLayout {
         EditorLabel {
             id: highLabel
-            text: qsTr("High: ")
+            text: qsTr("Scale High: ")
             Layout.maximumHeight: Style.editorRowHeight
             Layout.fillWidth: true
         }
@@ -63,7 +63,7 @@ ColumnLayout {
     RowLayout {
         EditorLabel {
             id: expLabel
-            text: qsTr("Scaling Exponent: ")
+            text: qsTr("Scale Exponent: ")
             Layout.maximumHeight: Style.editorRowHeight
             Layout.fillWidth: true
         }

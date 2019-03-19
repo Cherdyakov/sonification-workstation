@@ -25,7 +25,7 @@ ColumnLayout {
 
     EditorLabel {
         id: label
-        text: qsTr("Source: ")
+        text: qsTr("Source Mapping: ")
         Layout.maximumHeight: Style.editorRowHeight
         Layout.preferredWidth: Style.editorLabelWidth
         Layout.fillWidth: true
