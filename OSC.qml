@@ -1,8 +1,8 @@
-import QtQuick 2.7
-import SonLib 1.0
+import QtQuick 2.12
 import QtQuick.Layouts 1.11
-import QtQuick.Controls 2.0
-import ENUMS 0.1
+import QtQuick.Controls 2.12
+import SoW 1.0
+import ENUMS 1.0
 import "Style.js" as Style
 import "SessionCode.js" as SessionCode
 

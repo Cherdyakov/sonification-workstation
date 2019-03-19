@@ -1,5 +1,5 @@
 import QtQuick.Controls 2.2
-import QtQuick 2.7
+import QtQuick 2.12
 import QtQuick.Layouts 1.0
 import "SessionCode.js" as SessionCode
 import "Style.js" as Style

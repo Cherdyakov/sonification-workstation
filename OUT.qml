@@ -1,5 +1,5 @@
-import QtQuick 2.7
-import ENUMS 0.1
+import QtQuick 2.12
+import ENUMS 1.0
 import "Style.js" as Style
 
 SynthItem {

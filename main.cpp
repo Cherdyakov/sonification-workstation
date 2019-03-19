@@ -27,14 +27,13 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
-    qmlRegisterType<QtSynthItem>("SonLib", 1, 0, "QtSynthItem");
-    qmlRegisterType<QtOscillator>("SonLib", 1, 0, "QtOscillator");
-    qmlRegisterType<QtTransport>("SonLib", 1, 0, "QtTransport");
-    qmlRegisterType<ParameterInterface>("SonLib", 1, 0, "SowParameter");
+    qmlRegisterType<QtSynthItem>("SoW", 1, 0, "QtSynthItem");
+    qmlRegisterType<QtOscillator>("SoW", 1, 0, "QtOscillator");
+    qmlRegisterType<QtTransport>("SoW", 1, 0, "QtTransport");
+    qmlRegisterType<ParameterInterface>("SoW", 1, 0, "SowParameter");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
-    qmlRegisterType<ENUMS>("ENUMS", 0, 1, "ENUMS");
-    qRegisterMetaType<ENUMS::ITEM_TYPE>();
-    qRegisterMetaType<ENUMS::PARAMETER>();
+    qmlRegisterType<ENUMS>("ENUMS", 1, 0, "ENUMS");
+    qRegisterMetaType<ENUMS::ITEM_TYPE>();    qRegisterMetaType<ENUMS::PARAMETER>();
 
     MainWindow main_window;
     UserData uData;
