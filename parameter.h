@@ -6,7 +6,7 @@
 #include "ringbuffer.h"
 #include "commands.h"
 #include "scaler.h"
-#include "external/exprtk/exprtk.hpp"
+#include "mapevaluator.h"
 
 namespace sow {
 

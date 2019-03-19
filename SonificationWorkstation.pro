@@ -44,7 +44,8 @@ SOURCES += \
     qtsynthitem.cpp \
     parameterinterface.cpp \
     dataset.cpp \
-    parameter.cpp
+    parameter.cpp \
+    mapevaluator.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -93,7 +94,8 @@ HEADERS += \
     parameter.h \
     enums.h \
     scaler.h \
-    external/exprtk/exprtk.hpp
+    external/exprtk/exprtk.hpp \
+    mapevaluator.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

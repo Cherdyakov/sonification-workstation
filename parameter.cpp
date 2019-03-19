@@ -41,7 +41,15 @@ bool Parameter::setMap(const QString map)
 
 //     commandBuffer_.push(cmd);
 
-     qDebug() << map;
+    MapEvaluator<float> evaluator;
+
+    std::vector<char> variables = evaluator.extractVariables(map.toStdString());
+
+     qDebug() << "Map: " << map;
+     qDebug() << "Variables: " << variables;
+
+     // identify variables and set their values
+
 
     return false;
 }
