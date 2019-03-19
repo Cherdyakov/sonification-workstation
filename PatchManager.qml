@@ -102,8 +102,8 @@ Item {
             var mousePoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
         }
         return {
-            begin: childPoint,
-            end: mousePoint
+            child: childPoint,
+            parent: mousePoint
         }
     }
 
@@ -114,8 +114,8 @@ Item {
         var parentPoint = centerPoint(patch.parent)
 
         return {
-            begin: childPoint,
-            end: parentPoint
+            child: childPoint,
+            parent: parentPoint
         }
     }
 
@@ -159,7 +159,7 @@ Item {
     // The distance from given point to a given patch.
     function distanceToPatch(point, patch) {
         var pointPair = pointsFromPatch(patch)
-        var distance = distToSegment(point, pointPair.begin, pointPair.end)
+        var distance = distToSegment(point, pointPair.child, pointPair.parent)
         return distance
     }
 

@@ -56,8 +56,7 @@ Rectangle
             x: 0
             y: 0
         }
-
-    }
+    } // workspace
 
     MouseArea {
         id: workspaceMouseArea
@@ -108,8 +107,9 @@ Rectangle
                 height: childrenRect.height
                 width: childrenRect.width
             }
-        }
-    }
+        } // itemPopup
+
+    } // workspaceMouseArea
 
     // canvas on which the connections are drawn
     Canvas {
@@ -128,10 +128,6 @@ Rectangle
             // clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-
-            // get coordinate pairs of all items and their children
-
-
             var patchPoints = patchManager.getPatchPoints()
 
             for (var i = 0; i < patchPoints.length; i++)
@@ -140,9 +136,8 @@ Rectangle
                 drawPatch(ctx, points, false)
             }
 
-            var selectedPatch = patchManager.selectedPatch
-            if(selectedPatch !== null) {
-                points = patchManager.pointsFromPatch(selectedPatch)
+            if(patchManager.selectedPatch !== null) {
+                points = patchManager.pointsFromPatch(patchManager.selectedPatch)
                 drawPatch(ctx, points, true)
             }
         }
@@ -161,10 +156,10 @@ Rectangle
                 inColor = Style.patchInColor
             }
 
-            var x0 = points.begin.x
-            var y0 = points.begin.y
-            var x1 = points.end.x
-            var y1 = points.end.y
+            var x0 = points.child.x
+            var y0 = points.child.y
+            var x1 = points.parent.x
+            var y1 = points.parent.y
 
             var gradient = ctx.createLinearGradient(x0, y0, x1, y1);
             gradient.addColorStop(Style.patchInColorStop, outColor);
@@ -181,7 +176,7 @@ Rectangle
             // stroke using line width and stroke style
             ctx.stroke()
         }
-    }
+    } // canvas
 
     // get tree as json and return to C++ land
     function readTree() {
