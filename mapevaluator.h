@@ -1,6 +1,7 @@
 #ifndef MAPEVALUATOR_H
 #define MAPEVALUATOR_H
 
+#include <algorithm>
 #include "external/exprtk/exprtk.hpp"
 
 namespace sow {
@@ -12,11 +13,12 @@ public:
 
     MapEvaluator();
     ~MapEvaluator();
-    std::vector<char> extractVariables(std::string expression);
+    std::vector<std::string> extractVariables(std::string expression);
 
 private:
 
     bool isCapital(char c);
+    void unique(std::vector<std::string> &vec);
 
 };
 
@@ -26,16 +28,40 @@ template<class T>
 MapEvaluator<T>::~MapEvaluator() {}
 
 template<class T>
-std::vector<char> MapEvaluator<T>::extractVariables(std::string expression) {
-    std::vector<char> variables = {};
-    for (size_t i = 0;i < expression.length() ;i++)
+std::vector<std::string> MapEvaluator<T>::extractVariables(std::string expression) {
+    expression = expression + " ";
+    std::vector<std::string> variables = {};
+    std::string substring;
+    size_t consecutiveCharsCaps = 0;
+    bool previousCharCaps = false;
+    for (size_t i = 0; i < expression.length(); i++)
     {
         if (isCapital(expression[i]))
         {
-            variables.push_back(expression[i]);
+            consecutiveCharsCaps++;
+            previousCharCaps = true;
+        }
+        else {
+            if(previousCharCaps) {
+                substring = expression.substr(i - consecutiveCharsCaps, consecutiveCharsCaps);
+                variables.push_back(substring);
+                consecutiveCharsCaps = 0;
+                previousCharCaps = false;
+            }
         }
     }
+    unique(variables);
     return variables;
+}
+
+template <class T>
+void MapEvaluator<T>::unique(std::vector<std::string> &vec)
+{
+    auto end = vec.end();
+    for (auto it = vec.begin(); it != end; ++it) {
+        end = std::remove(it + 1, end, *it);
+    }
+    vec.erase(end, vec.end());
 }
 
 template<class T>
