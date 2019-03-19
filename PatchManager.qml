@@ -35,23 +35,16 @@ Item {
 
     // find closest patch to point
     function selectPatch(point) {
-        var selectPatch = null
+        var selectedPatch = null
         var distance = Number.MAX_VALUE
         for(var i = 0; i < patches.length; i++) {
-            var currentPatch = patches[i]
-            var patchPoints = pointsFromPatch(currentPatch)
-            var currentDistance = distanceToPatch(point, patchPoints)
+            var currentDistance = distanceToPatch(point, patches[i])
             if(currentDistance < distance) {
                 distance = currentDistance
-                selectPatch = currentPatch
+                selectedPatch = patches[i]
             }
         }
-        if(distance < margin) {
-            return selectPatch
-        }
-        else {
-            return null
-        }
+        return selectedPatch
     }
 
     // a patch in progress
@@ -79,6 +72,7 @@ Item {
                 patches.push(patch)
                 //stop patching
                 patchingChild = null
+                canvas.requestPaint()
             }
         }
     }
@@ -99,12 +93,12 @@ Item {
 
     function getPatchInProgressPoints() {
         if(patchingChild !== null) {
-            var endPoint = centerPoint(patchingChild)
-            var beginPoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
+            var childPoint = centerPoint(patchingChild)
+            var mousePoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
         }
         return {
-            begin: beginPoint,
-            end: endPoint
+            begin: childPoint,
+            end: mousePoint
         }
     }
 
@@ -112,12 +106,12 @@ Item {
     // returns pair of points
     function pointsFromPatch(patch)
     {
-        var beginPoint = centerPoint(patch.parent)
-        var endPoint = centerPoint(patch.child)
+        var childPoint = centerPoint(patch.child)
+        var parentPoint = centerPoint(patch.parent)
 
         return {
-            begin: beginPoint,
-            end: endPoint
+            begin: childPoint,
+            end: parentPoint
         }
     }
 
@@ -154,8 +148,8 @@ Item {
     }
 
     function distanceToPatch(point, patchPoints) {
-        var v = patchPoints.begin
-        var w = patchPoints.end
+        var v = patchPoints.child
+        var w = patchPoints.parent
 
         var distance = distToSegment(point, v, w)
         return distance
