@@ -44,8 +44,7 @@ SOURCES += \
     qtsynthitem.cpp \
     parameterinterface.cpp \
     dataset.cpp \
-    parameter.cpp \
-    mapevaluator.cpp
+    parameter.cpp
 
 HEADERS += \
     mainwindow.h \
