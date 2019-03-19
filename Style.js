@@ -21,8 +21,8 @@ var patchOutColorStop = 0.2
 var patchInColorStop = 0.5
 var patchOutColor = "rgba(255, 255, 255, 1)"
 var patchInColor = "rgba(127, 255, 0, 1)"
-var patchActiveOutColor = "rgba(255, 165, 0, 1)"
-var patchActiveInColor = "rgba(255, 165, 0, 0.5)"
+var patchSelectedOutColor = "rgba(255, 165, 0, 1)"
+var patchSelectedInColor = "rgba(255, 165, 0, 0.5)"
 var patchWidth = 4
 
 // SynthItem.qml editor style

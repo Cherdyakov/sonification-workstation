@@ -12,9 +12,9 @@ Rectangle
     anchors.fill: parent
 
     property int dataHeight: 0
-    // holds every item in the workspace for iterating
+    // Holds every item in the workspace for iterating.
     property var synthItems: []
-    // canvas for drawing patches
+    // Canvas for drawing patches.
     property alias canvas: canvas
     property alias workspace: workspace
 
@@ -25,6 +25,7 @@ Rectangle
         }
     }
 
+    // Flickable widget container, where SynthItems are manipulated.
     Flickable {
         id: workspace
         z: Style.workspaceZ
@@ -58,6 +59,7 @@ Rectangle
         }
     } // workspace
 
+    // Activate the workspace with mouse input.
     MouseArea {
         id: workspaceMouseArea
         z: -100
@@ -92,6 +94,8 @@ Rectangle
             }
         }
 
+        // Popup menu of SynthItems, drag and drop from the menu
+        // into workspace to instantiate.
         Popup {
             id: itemPopup
             height: palette.height
@@ -111,21 +115,22 @@ Rectangle
 
     } // workspaceMouseArea
 
-    // canvas on which the connections are drawn
+    // Canvas on which patches between synthItems are drawn.
     Canvas {
         id: canvas
         z: 0
         anchors.fill: workspace
 
+        // Actually tracks and holds patches between SynthItems.
         PatchManager {
             id: patchManager
             anchors.fill: parent
         }
 
         onPaint: {
-            // get context to draw with
+            // Get context to draw with.
             var ctx = getContext("2d")
-            // clear canvas
+            // Clear canvas, so we aren't drawing on top of last frame.
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
             var patchPoints = patchManager.getPatchPoints()
@@ -136,20 +141,22 @@ Rectangle
                 drawPatch(ctx, points, false)
             }
 
+            // Draw the currently selected patch in a different color.
             if(patchManager.selectedPatch !== null) {
                 points = patchManager.pointsFromPatch(patchManager.selectedPatch)
                 drawPatch(ctx, points, true)
             }
         }
 
-        function drawPatch(ctx, points, active) {
+        function drawPatch(ctx, points, selected) {
 
             var outColor
             var inColor
 
-            if(active) {
-                outColor = Style.patchActiveOutColor
-                inColor = Style.patchActiveInColor
+            // Draw the currently selected patch in a different color.
+            if(selected) {
+                outColor = Style.patchSelectedOutColor
+                inColor = Style.patchSelectedInColor
             }
             else {
                 outColor = Style.patchOutColor
@@ -178,18 +185,7 @@ Rectangle
         }
     } // canvas
 
-    // get tree as json and return to C++ land
-    function readTree() {
-        var treeData = SessionCode.readTree(synthItems)
-        var stringTree = JSON.stringify(treeData)
-        return stringTree
-    }
-
-    function createTree(obj) {
-        SessionCode.destroyItems(synthItems)
-        SessionCode.createTree(obj)
-    }
-
+    // Connected to the deleted() signal of SynthItems.
     function deleteItem(item) {
         while (synthItems.indexOf(item) > -1) {
             synthItems.splice(synthItems.indexOf(item), 1)
@@ -197,5 +193,19 @@ Rectangle
         item.destroy()
     }
 
-}
+    // Get the SynthTree as json and return to C++.
+    function readTree() {
+        var treeData = SessionCode.readTree(synthItems)
+        var stringTree = JSON.stringify(treeData)
+        return stringTree
+    }
+
+    // Wipe the current SynthItem tree and create a new
+    // one from a json object.
+    function createTree(obj) {
+        SessionCode.destroyItems(synthItems)
+        SessionCode.createTree(obj)
+    }
+
+} // root
 
