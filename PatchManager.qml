@@ -8,8 +8,7 @@ Item {
     property var patchingChild: null
     property var selectedPatch: null
     property var patches: []
-    property int margin: 1 + (Style.patchWidth / 2) // distance from patch considered "clicked"
-
+    property int selectionErrorMargin: 1 + (Style.patchWidth / 2) // distance from patch considered "clicked"
     property bool patching: patchingChild ? true : false
 
     onActiveFocusChanged: {
@@ -20,6 +19,7 @@ Item {
     }
 
     Keys.onDeletePressed: {
+        disconnectPatch(selectedPatch)
         deletePatch(selectedPatch)
         selectedPatch = null
         canvas.requestPaint()
@@ -32,79 +32,56 @@ Item {
         }
     }
 
-    // find closest patch to point
+    // Find the closest patch to point that is also
+    // within the clickErrorMargin.
     function selectPatch(point) {
-        var selectPatch = null
+        var selectedPatch = null
         var distance = Number.MAX_VALUE
         for(var i = 0; i < patches.length; i++) {
-            var currentPatch = patches[i]
-            var patchPoints = pointsFromPatch(currentPatch)
-            var currentDistance = distanceToPatch(point, patchPoints)
-            if(currentDistance < distance) {
+            var currentDistance = distanceToPatch(point, patches[i])
+            if( (currentDistance < distance) && (currentDistance < selectionErrorMargin) ) {
                 distance = currentDistance
-                selectPatch = currentPatch
+                selectedPatch = patches[i]
             }
         }
-        if(distance < margin) {
-            return selectPatch
-        }
-        else {
-            return null
-        }
+        return selectedPatch
     }
 
-    // a patch in progress
+    // Start the process of pathing an item.
     function patchBegin(item) {
-        //not currently patching, start one
+        // Not currently patching, start one.
         if(patchingChild === null) {
-            if(item.type !== 0) { //item is OUT, cannot have parent
+            if(item.type !== 0) { // Item is OUT (Transport), which cannot have parents.
                 patchingChild = item
             }
         }
         else {
-            //clicked on same item, cancel patching
+            // Clicked again on the item at the start of
+            // the patch, cancel patching.
             if (patchingChild === item) {
                 patchingChild = null
             }
             else {
-                //clicked on second item
-                //add startpoint to end's parents
+                // Clicked on a second item. Connect first
+                // item as synthChild of second.
                 item.connectChild(patchingChild)
-                //stop patching
-                patchingChild = null
-            }
-        }
-    }
 
-    // returns array of point pairs
-    function getDrawPoints(items) {
-        patches = []
-        patches = getPatches(items)
-        var points = getPatchPoints(patches)
-        return points
-    }
-
-    // takes array of Synthitems
-    // returns array of patches between them
-    function getPatches(items) {
-        var newPatches = []
-        for(var i = 0; i < items.length; i++)
-        {
-            var parentItem = items[i]
-            for (var j = 0; j < parentItem.synthChildren.length; j++)
-            {
-                var childItem = parentItem.synthChildren[j]
                 var patch = {
-                    parent: parentItem,
-                    child: childItem
+                    parent: item,
+                    child: patchingChild
                 }
-                newPatches.push(patch)
+
+                patches.push(patch)
+                // Stop patching and paint.
+                patchingChild = null
+                canvas.requestPaint()
             }
         }
-        return newPatches
     }
 
-    function getPatchPoints(patches) {
+    // Returns a list of all point pairs of existing patches.
+    // Used by main.qml to draw the patches on screen.
+    function getPatchPoints() {
         var patchPoints = []
         for(var i = 0; i < patches.length; i++) {
             var patch = patches[i]
@@ -118,31 +95,31 @@ Item {
         return patchPoints
     }
 
+    // Returns points for any patch that is currenlty being created.
     function getPatchInProgressPoints() {
         if(patchingChild !== null) {
-            var endPoint = centerPoint(patchingChild)
-            var beginPoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
+            var childPoint = centerPoint(patchingChild)
+            var mousePoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
         }
         return {
-            begin: beginPoint,
-            end: endPoint
+            child: childPoint,
+            parent: mousePoint
         }
     }
 
-    // takes a patch
-    // returns pair of points
+    // Returns pair of points for given patch.
     function pointsFromPatch(patch)
     {
-        var beginPoint = centerPoint(patch.parent)
-        var endPoint = centerPoint(patch.child)
+        var childPoint = centerPoint(patch.child)
+        var parentPoint = centerPoint(patch.parent)
 
         return {
-            begin: beginPoint,
-            end: endPoint
+            child: childPoint,
+            parent: parentPoint
         }
     }
 
-    // return point at center of item
+    // Return point at center of item.
     function centerPoint(item)
     {
         var xCentered = item.x + item.width / 2
@@ -151,42 +128,42 @@ Item {
         return mappedPoint
     }
 
+    // Connected to deleted() signal in SynthItem.
+    // Deletes all patches the item was a part of.
+    // Transport handles disconnection of deleted items.
     function itemDeleted(item) {
-        var patchesToDelete = []
         for(var i = 0; i < patches.length; i++) {
             var patch = patches[i]
             if(patch.parent === item || patch.child === item) {
-                patchesToDelete.push(patch)
+                deletePatch(patch)
             }
         }
-        deletePatches(patchesToDelete)
+        canvas.requestPaint()
     }
 
-    function deletePatches(patchesToDelete) {
-        for(var i = 0; i < patchesToDelete.length; i++) {
-            var toDelete = patchesToDelete[i]
-            deletePatch(toDelete)
-        }
-    }
-
-    function deletePatch(patch) {
+    // Disconnect the parent and child in a patch.
+    function disconnectPatch(patch) {
         var parent = patch.parent
         var child = patch.child
         parent.disconnect(child)
         child.disconnect(parent)
+    }
+
+    // Delete an existing patch (does not disconnect).
+    function deletePatch(patch) {
         while(patches.indexOf(patch) > -1) {
             patches.splice(patches.indexOf(patch), 1)
         }
     }
 
-    function distanceToPatch(point, patchPoints) {
-        var v = patchPoints.begin
-        var w = patchPoints.end
-
-        var distance = distToSegment(point, v, w)
+    // The distance from given point to a given patch.
+    function distanceToPatch(point, patch) {
+        var pointPair = pointsFromPatch(patch)
+        var distance = distToSegment(point, pointPair.child, pointPair.parent)
         return distance
     }
 
+    // Math functions used by distanceToPatch()
     function distToSegment(p, v, w) {
         return Math.sqrt(distToSegmentSquared(p, v, w))
     }

@@ -213,7 +213,6 @@ Item {
             synthChildren.push(synthItem)
             synthItem.addParent(this)
         }
-        canvas.requestPaint()
     }
 
     function addParent(synthItem) {
@@ -231,7 +230,6 @@ Item {
         while (synthParents.indexOf(synthItem) > -1) {
             synthParents.splice(synthParents.indexOf(synthItem), 1)
         }
-        canvas.requestPaint()
     }
 
     function muteChildren() {
