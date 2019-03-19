@@ -20,6 +20,7 @@ Item {
     }
 
     Keys.onDeletePressed: {
+        disconnectPatch(selectedPatch)
         deletePatch(selectedPatch)
         selectedPatch = null
         canvas.requestPaint()
@@ -70,41 +71,19 @@ Item {
                 //clicked on second item
                 //add startpoint to end's parents
                 item.connectChild(patchingChild)
+
+                var patch = {
+                    parent: item,
+                    child: patchingChild
+                }
+                patches.push(patch)
                 //stop patching
                 patchingChild = null
             }
         }
     }
 
-    // returns array of point pairs
-    function getDrawPoints(items) {
-        patches = []
-        patches = getPatches(items)
-        var points = getPatchPoints(patches)
-        return points
-    }
-
-    // takes array of Synthitems
-    // returns array of patches between them
-    function getPatches(items) {
-        var newPatches = []
-        for(var i = 0; i < items.length; i++)
-        {
-            var parentItem = items[i]
-            for (var j = 0; j < parentItem.synthChildren.length; j++)
-            {
-                var childItem = parentItem.synthChildren[j]
-                var patch = {
-                    parent: parentItem,
-                    child: childItem
-                }
-                newPatches.push(patch)
-            }
-        }
-        return newPatches
-    }
-
-    function getPatchPoints(patches) {
+    function getPatchPoints() {
         var patchPoints = []
         for(var i = 0; i < patches.length; i++) {
             var patch = patches[i]
@@ -152,28 +131,23 @@ Item {
     }
 
     function itemDeleted(item) {
-        var patchesToDelete = []
         for(var i = 0; i < patches.length; i++) {
             var patch = patches[i]
             if(patch.parent === item || patch.child === item) {
-                patchesToDelete.push(patch)
+                deletePatch(patch)
             }
         }
-        deletePatches(patchesToDelete)
+        canvas.requestPaint()
     }
 
-    function deletePatches(patchesToDelete) {
-        for(var i = 0; i < patchesToDelete.length; i++) {
-            var toDelete = patchesToDelete[i]
-            deletePatch(toDelete)
-        }
-    }
-
-    function deletePatch(patch) {
+    function disconnectPatch(patch) {
         var parent = patch.parent
         var child = patch.child
         parent.disconnect(child)
         child.disconnect(parent)
+    }
+
+    function deletePatch(patch) {
         while(patches.indexOf(patch) > -1) {
             patches.splice(patches.indexOf(patch), 1)
         }

@@ -128,7 +128,11 @@ Rectangle
             // clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-            var patchPoints = patchManager.getDrawPoints(synthItems)
+
+            // get coordinate pairs of all items and their children
+
+
+            var patchPoints = patchManager.getPatchPoints()
 
             for (var i = 0; i < patchPoints.length; i++)
             {
