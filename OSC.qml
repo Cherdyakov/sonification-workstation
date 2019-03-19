@@ -69,7 +69,7 @@ SynthItem {
 
     Editor {
         id: editor
-        EditorParameter {
+        EditorFloatParameter {
             id: frequency
             // Value changed from QML
             onRealValueChanged: created ? implementation.frequency.value = realValue : {}
@@ -85,7 +85,7 @@ SynthItem {
             scaleLow: created ? implementation.frequency.scaleLow * 100 : 0
             scaleHigh: created ? implementation.frequency.scaleHigh * 100 : 0
             scaleExp: created ? implementation.frequency.scaleExp * 100 : 0
-            mapping: created ? implementation.frequency.map : 0
+            map: created ? implementation.frequency.map : 0
 
             // Set map with Q_INVOKABLE function call and check if it is valid.
             mapper.onMapChanged: {

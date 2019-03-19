@@ -39,6 +39,6 @@
         <file>Utils.js</file>
         <file>images/EQ.png</file>
         <file>images/alpha.png</file>
-        <file>EditorParameter.qml</file>
+        <file>EditorFloatParameter.qml</file>
     </qresource>
 </RCC>

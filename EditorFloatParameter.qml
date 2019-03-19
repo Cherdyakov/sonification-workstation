@@ -13,7 +13,7 @@ Item {
     property alias value: spinBox.value
     property alias realValue: spinBox.realValue
     property alias fixed: fixed.fixed
-    property alias mapping: mapper.text
+    property alias map: mapper.text
     property alias scaled: scaler.scaled
     property alias scaleLow: scaler.low
     property alias scaleRealLow: scaler.realLow
