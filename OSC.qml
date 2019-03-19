@@ -92,7 +92,7 @@ SynthItem {
 
             // Set map with Q_INVOKABLE function call and check if it is valid.
             mapper.onMapChanged: {
-                if(!implementation.frequency.setMap(mapping)) {
+                if(!implementation.frequency.setMap(map)) {
                     mapper.textColor = "tomato"
                 }
                 else {
