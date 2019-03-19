@@ -8,6 +8,7 @@
 #include "dataset.h"
 #include "enums.h"
 #include "commands.h"
+#include "parameter.h"
 
 namespace sow {
 
@@ -56,6 +57,7 @@ protected:
     std::vector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
     std::vector<QtSynthItem*> parents_;
     std::vector<QtSynthItem*> children_;
+    std::vector<Parameter*> parameters_;
 
     virtual void processCommand(ItemCommand cmd);
     virtual void processDatasetCommand(DatasetCommand cmd);

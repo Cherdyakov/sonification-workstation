@@ -5,7 +5,7 @@ namespace sow {
 
 ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
 {
-    // Interface variables, bound to QML
+    // Interface variables, bound to QML.
     setValue(440.0f);
     setFixed(true);
     setScaled(true);
@@ -19,9 +19,19 @@ void ParameterInterface::connectInterface(Parameter* parameter)
 {
     parameter_ = parameter;
 
-    // Connect this interface to a backing parameter
+    // Connect this interface to a backing Parameter.
     connect(this, &ParameterInterface::iParameterChanged,
             parameter, &Parameter::onParameterChanged);
+
+    // Signal the backing Parameter with the initial values.
+    iParameterChanged(ENUMS::SUB_PARAMETER::VALUE, iValue_);
+    iParameterChanged(ENUMS::SUB_PARAMETER::FIXED, iFixed_);
+    iParameterChanged(ENUMS::SUB_PARAMETER::SCALED, iScale_);
+    iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_OUT_LOW, iScaleOutLow_);
+    iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_OUT_HIGH, iScaleOutHigh_);
+    iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_EXP, iScaleExp_);
+    iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_IN_LOW, iScaleInLow_);
+    iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_IN_HIGH, iScaleInHigh_);
 }
 
 void sow::ParameterInterface::setType(const ENUMS::PARAMETER type) {

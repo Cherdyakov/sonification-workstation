@@ -110,6 +110,9 @@ void QtSynthItem::step()
 // Process any buffered commands
 void QtSynthItem::controlProcess()
 {
+    foreach (Parameter* parameter, parameters_) {
+        parameter->controlProcess();
+    }
     ItemCommand currentCommand;
     while(commandBuffer_.pop(&currentCommand)) {
         processCommand(currentCommand);

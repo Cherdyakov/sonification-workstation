@@ -2,7 +2,6 @@
 #define QTOSCILLATOR_H
 
 #include "qtsynthitem.h"
-#include "parameter.h"
 #include "parameterinterface.h"
 #include "Gamma/Oscillator.h"
 

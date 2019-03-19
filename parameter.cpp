@@ -11,9 +11,9 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 float Parameter::value()
 {
-    if (scale_) {
-        return scaler_.scale(value_);
-    }
+//    if (scale_) {
+//        return scaler_.scale(value_);
+//    }
     return value_;
 }
 
