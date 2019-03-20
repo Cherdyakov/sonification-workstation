@@ -67,7 +67,7 @@ inline size_t alphaToInt(const std::string str) {
 
     for (auto rit = str.crbegin(); rit != str.crend(); ++rit) {
         char c = *rit;
-        size_t alphaVal = alphas.find(*rit) + 1;
+        size_t alphaVal = alphas.find(*rit);
         size_t place = rit - str.rbegin();
         size_t factor = pow(26, place);
         result += alphaVal * factor;
