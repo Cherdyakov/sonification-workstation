@@ -83,13 +83,17 @@ void QtSynthItem::disconnectAll()
 }
 
 // Set the data column, dataset minumum and dataset maximum values
-void QtSynthItem::setData(std::vector<float> *data, std::vector<float> *mins, std::vector<float> *maxes)
+void QtSynthItem::setData(std::vector<float> * const data, std::vector<float> * const mins, std::vector<float> * const maxes)
 {
     DatasetCommand cmd;
     cmd.data = data;
     cmd.mins = mins;
     cmd.maxes = maxes;
     datasetCommandBuffer_.push(cmd);
+
+    for (Parameter*& parameter : parameters_) {
+        parameter->setData(data, mins, maxes);
+    }
 }
 
 // Every audio sample

@@ -20,6 +20,9 @@ public:
     float value();
     void controlProcess();
     bool setMap(const QString map);
+    virtual void setData(std::vector<float>* const data,
+                         std::vector<float>* const mins,
+                         std::vector<float>* const maxes);
 
 private:
 
@@ -31,10 +34,14 @@ private:
     bool scale_;
     Scaler<float> scaler_;
     QString map_;
-
-    // For processing ParameterCommands
+    std::vector<float>* data_ = nullptr;
+    std::vector<float>* mins_ = nullptr;
+    std::vector<float>* maxes_ = nullptr;
     RingBuffer<ParameterCommand> commandBuffer_;
-    void processCommand(ParameterCommand cmd);
+    RingBuffer<DatasetCommand> datasetCommandBuffer_;
+
+    virtual void processCommand(ParameterCommand cmd);
+    virtual void processDatasetCommand(DatasetCommand cmd);
 
 signals:
 

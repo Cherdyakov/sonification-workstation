@@ -24,6 +24,10 @@ void Parameter::controlProcess()
     while(commandBuffer_.pop(&currentCommand_)) {
         processCommand(currentCommand_);
     }
+    DatasetCommand currentDatasetCommand_;
+    while(datasetCommandBuffer_.pop(&currentDatasetCommand_)) {
+        processDatasetCommand(currentDatasetCommand_);
+    }
 }
 
 bool Parameter::setMap(const QString map)
@@ -43,7 +47,24 @@ bool Parameter::setMap(const QString map)
 
     MapEvaluator<float> evaluator;
 
+    // Extract variables from the user expression.
     std::vector<std::string> variables = evaluator.extractVariables(map.toStdString());
+
+    // Assign values to variables.
+
+
+    // Create expression.
+
+    // Register symbol table.
+
+    // Create parser.
+
+    // Attempt expression compilation.
+
+    // If (success) pass map to Parameter backing class.
+
+
+    // Return success.
 
      qDebug() << "Map: " << map;
      qDebug() << "Variables: ";
@@ -52,10 +73,16 @@ bool Parameter::setMap(const QString map)
          qDebug() << QString::fromStdString(variable);
      }
 
-     // identify variables and set their values
+     return false;
+}
 
-
-    return false;
+void Parameter::setData(std::vector<float>* const data, std::vector<float>* const mins, std::vector<float>* const maxes)
+{
+    DatasetCommand cmd;
+    cmd.data = data;
+    cmd.mins = mins;
+    cmd.maxes = maxes;
+    datasetCommandBuffer_.push(cmd);
 }
 
 // Execute commands pulled from the command buffer
@@ -92,6 +119,13 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
         map_ = QString(cmd.map);
         break;
     }
+}
+
+void Parameter::processDatasetCommand(DatasetCommand cmd)
+{
+    data_ = cmd.data;
+    mins_ = cmd.mins;
+    maxes_ = cmd.maxes;
 }
 
 // Slot for updated float values from the interface
