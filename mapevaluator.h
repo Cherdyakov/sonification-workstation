@@ -29,44 +29,28 @@ MapEvaluator<T>::~MapEvaluator() {}
 
 template<class T>
 std::vector<std::string> MapEvaluator<T>::extractVariables(std::string expression) {
-    expression = expression + " ";
-    std::vector<std::string> variables = {};
-    std::string substring;
-    size_t consecutiveCharsCaps = 0;
-    bool previousCharCaps = false;
-    for (size_t i = 0; i < expression.length(); i++)
-    {
-        if (isCapital(expression[i]))
+
+    std::set<std::string> vars;
+
+        for (auto first = expression.cbegin(); first != expression.cend(); )
         {
-            consecutiveCharsCaps++;
-            previousCharCaps = true;
-        }
-        else {
-            if(previousCharCaps) {
-                substring = expression.substr(i - consecutiveCharsCaps, consecutiveCharsCaps);
-                variables.push_back(substring);
-                consecutiveCharsCaps = 0;
-                previousCharCaps = false;
+            auto var_end = std::adjacent_find(first, expression.cend(),
+                [](char a, char b) { return std::isupper(a) != std::isupper(b); });
+
+            if (var_end != expression.cend())
+            {
+                ++var_end;
             }
+
+            if (std::isupper(*first))
+            {
+                vars.insert(std::string(first, var_end));
+            }
+
+            first = var_end;
         }
-    }
-    unique(variables);
-    return variables;
-}
 
-template <class T>
-void MapEvaluator<T>::unique(std::vector<std::string> &vec)
-{
-    auto end = vec.end();
-    for (auto it = vec.begin(); it != end; ++it) {
-        end = std::remove(it + 1, end, *it);
-    }
-    vec.erase(end, vec.end());
-}
-
-template<class T>
-bool MapEvaluator<T>::isCapital(char c) {
-    return (c >='A' && c <= 'Z');
+        return std::vector<std::string>(vars.cbegin(), vars.cend());
 }
 
 //    void evaluate()
