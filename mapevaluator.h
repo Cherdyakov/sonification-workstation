@@ -2,9 +2,19 @@
 #define MAPEVALUATOR_H
 
 #include <algorithm>
+#include <QDebug>
+#include <tuple>
 #include "external/exprtk/exprtk.hpp"
+#include "utility.h"
 
 namespace sow {
+
+template<class T>
+struct MapVariable {
+    std::string alpha;
+    size_t idx;
+    T value;
+};
 
 template<class T>
 class MapEvaluator
@@ -13,12 +23,12 @@ public:
 
     MapEvaluator();
     ~MapEvaluator();
-    std::vector<std::string> extractVariables(std::string expression);
+    bool compileExpression(const std::string expression, const std::vector<T> * const data);
 
 private:
 
-    bool isCapital(char c);
-    void unique(std::vector<std::string> &vec);
+    std::vector<std::string> extractVariables(std::string expression);
+    std::vector<MapVariable<T>> createVariables(const std::string expression);
 
 };
 
@@ -28,29 +38,98 @@ template<class T>
 MapEvaluator<T>::~MapEvaluator() {}
 
 template<class T>
+bool MapEvaluator<T>::compileExpression(const std::string expression, const std::vector<T> * const data) {
+
+    //    std::vector<std::string> variables = extractVariables(expression);
+
+    std::vector<MapVariable<T>> variables = createVariables(expression);
+
+    // Get index values for the variables names;
+    for (MapVariable<T>& var : variables) {
+        var.idx = utility::alphaToInt(var.alpha);
+    }
+
+    // Get data values with the indexes.
+    for (MapVariable<T>& var : variables) {
+        var.value = data->at(var.idx);
+    }
+
+
+
+    //    for(size_t& idx : indexes) {
+
+    //    }
+
+    // Create expression.
+
+    // Register symbol table.
+
+    // Create parser.
+
+    // Attempt expression compilation.
+
+    // If (success) pass map to Parameter backing class.
+
+    qDebug() << "Variables: ";
+    for(MapVariable<T>& var : variables) {
+        qDebug() << QString::fromStdString(var.alpha) << " " << var.idx << " " << var.value;
+    }
+
+
+    // Return success.
+}
+
+template<class T>
+std::vector<MapVariable<T>> MapEvaluator<T>::createVariables(const std::string expression) {
+    std::vector<MapVariable<T>> variables;
+
+    for (auto first = expression.cbegin(); first != expression.cend(); )
+    {
+        auto var_end = std::adjacent_find(first, expression.cend(),
+                                          [](char a, char b) { return std::isupper(a) != std::isupper(b); });
+
+        if (var_end != expression.cend())
+        {
+            ++var_end;
+        }
+
+        if (std::isupper(*first))
+        {
+            MapVariable<T> variable = { std::string(first, var_end), 0, 0.0f };
+            variables.push_back(variable);
+        }
+
+        first = var_end;
+    }
+
+    return variables;
+}
+
+
+template<class T>
 std::vector<std::string> MapEvaluator<T>::extractVariables(std::string expression) {
 
     std::set<std::string> vars;
 
-        for (auto first = expression.cbegin(); first != expression.cend(); )
+    for (auto first = expression.cbegin(); first != expression.cend(); )
+    {
+        auto var_end = std::adjacent_find(first, expression.cend(),
+                                          [](char a, char b) { return std::isupper(a) != std::isupper(b); });
+
+        if (var_end != expression.cend())
         {
-            auto var_end = std::adjacent_find(first, expression.cend(),
-                [](char a, char b) { return std::isupper(a) != std::isupper(b); });
-
-            if (var_end != expression.cend())
-            {
-                ++var_end;
-            }
-
-            if (std::isupper(*first))
-            {
-                vars.insert(std::string(first, var_end));
-            }
-
-            first = var_end;
+            ++var_end;
         }
 
-        return std::vector<std::string>(vars.cbegin(), vars.cend());
+        if (std::isupper(*first))
+        {
+            vars.insert(std::string(first, var_end));
+        }
+
+        first = var_end;
+    }
+
+    return std::vector<std::string>(vars.cbegin(), vars.cend());
 }
 
 //    void evaluate()
