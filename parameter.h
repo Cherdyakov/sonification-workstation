@@ -7,6 +7,7 @@
 #include "commands.h"
 #include "scaler.h"
 #include "mapevaluator.h"
+#include "utility.h"
 
 namespace sow {
 

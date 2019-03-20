@@ -50,8 +50,14 @@ bool Parameter::setMap(const QString map)
     // Extract variables from the user expression.
     std::vector<std::string> variables = evaluator.extractVariables(map.toStdString());
 
-    // Assign values to variables.
+    // Get index values for the variables names;
+    std::vector<size_t> indexes;
 
+    for (std::string& variable : variables) {
+        indexes.push_back(utility::alphaToInt(variable));
+    }
+
+    // Get data values with the indexes.
 
     // Create expression.
 
@@ -71,6 +77,11 @@ bool Parameter::setMap(const QString map)
 
      foreach (std::string variable, variables) {
          qDebug() << QString::fromStdString(variable);
+     }
+
+     qDebug() << "Indexes: ";
+     for(size_t& idx : indexes) {
+         qDebug() << idx;
      }
 
      return false;

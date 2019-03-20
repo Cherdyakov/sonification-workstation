@@ -25,7 +25,7 @@ TrackName::TrackName(QWidget *parent) : QWidget(parent)
 
 void TrackName::setNumber(unsigned int num)
 {
-    std::string alpha = utility::intToAlphabet(num);
+    std::string alpha = utility::intToAlpha(num);
     QString name = QString::fromStdString(alpha);
     label_->setText(name);
 }
