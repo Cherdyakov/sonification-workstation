@@ -11,7 +11,7 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 float Parameter::value()
 {
-    return evaluator_.value(data_);
+    return evaluator_.value();
 }
 
 // Process outstanding ParameterCommands

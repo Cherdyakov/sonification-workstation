@@ -29,12 +29,14 @@ public:
 
     MapEvaluator();
     ~MapEvaluator();
-    bool compileExpression(const std::string expressionStr, const std::vector<T> * const data);
+    bool compileExpression(const std::string expressionStr, const std::vector<T> * data);
     bool testCompileExpression(const std::string expressionStr, const std::vector<T> * const data);
-    T value(const std::vector<T> * const data);
+    T value();
+    T scaledValue(T outLow, T outHigh);
 
 private:
 
+    const std::vector<T>* currentData_ = nullptr;
     exprtkSymbolTable* symbolTable_ = nullptr;
     exprtkExpression* expression_ = nullptr;
     exprtkParser parser_;
@@ -42,6 +44,7 @@ private:
 
     std::vector<std::string> extractVariables(std::string expression);
     std::vector<MapVariable<T>> createVariables(const std::string expression);
+    T scale(T x, T inLow, T inHigh, T outLow, T outHigh, T exp);
 
 };
 
@@ -51,10 +54,10 @@ template<class T>
 MapEvaluator<T>::~MapEvaluator() {}
 
 template<class T>
-T MapEvaluator<T>::value(const std::vector<T> * const data) {
+T MapEvaluator<T>::value() {
     // Update variable values.
     for(MapVariable<T>& var : currentVariables_) {
-        var.value = data->at(var.idx);
+        var.value = currentData_->at(var.idx);
     }
     // Re-evaluate current expression.
     float val = expression_->value();
@@ -62,7 +65,18 @@ T MapEvaluator<T>::value(const std::vector<T> * const data) {
 }
 
 template<class T>
-bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const std::vector<T> * const data) {
+T MapEvaluator<T>::scale(T x, T inLow, T inHigh, T outLow, T outHigh, T exp)
+{
+    return ((x-inLow)/(inHigh-inLow) == 0.0) ? outLow :
+           (((x-inLow)/(inHigh-inLow)) > 0.0) ?
+           (outLow + (outHigh-outLow) * pow(((x-inLow)/(inHigh-inLow)),exp)) :
+           (outLow + (outHigh-outLow) * -(pow((((-x+inLow)/(inHigh-inLow))),exp)));
+}
+
+template<class T>
+bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const std::vector<T>* data) {
+
+    currentData_ = data;
 
     if(expression_ != nullptr) {
         delete expression_;
@@ -77,7 +91,7 @@ bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const s
     currentVariables_ = createVariables(expressionStr);
 
     // Can't have more variables than there are data columns.
-    if(currentVariables_.size() > (data ? data->size() : 0)) return false;
+    if(currentVariables_.size() > (currentData_ ? data->size() : 0)) return false;
 
     // Get index values for the variables names;
     for (MapVariable<T>& var : currentVariables_) {
@@ -86,12 +100,12 @@ bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const s
 
     // Check that all indexes are valid.
     for (MapVariable<T>& var : currentVariables_) {
-        if (var.idx > data->size() - 1) return false;
+        if (var.idx > currentData_->size() - 1) return false;
     }
 
     // Get data values with the indexes.
     for (MapVariable<T>& var : currentVariables_) {
-        var.value = data->at(var.idx);
+        var.value = currentData_->at(var.idx);
     }
 
     // Add variables to the exprtk symbol table.
