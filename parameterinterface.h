@@ -13,8 +13,6 @@ class ParameterInterface : public QObject
 {
     Q_OBJECT
     // QML property bindings
-    Q_PROPERTY(float value READ value WRITE setValue NOTIFY valueChanged)
-    Q_PROPERTY(bool fixed READ fixed WRITE setFixed NOTIFY fixedChanged)
     Q_PROPERTY(bool scaled READ scaled WRITE setScaled NOTIFY scaledChanged)
     Q_PROPERTY(float scaleLow READ scaleOutLow WRITE setScaleOutLow NOTIFY scaleLoChanged)
     Q_PROPERTY(float scaleHigh READ scaleOutHigh WRITE setScaleOutHigh NOTIFY scaleHiChanged)
@@ -28,10 +26,6 @@ public:
     // QML property bindings
     void setType(const ENUMS::PARAMETER type);
     ENUMS::PARAMETER type() const;
-    void setValue(const float value);
-    float value() const;
-    void setFixed(const bool fixed);
-    bool fixed() const;
     void setScaled(const bool scale);
     bool scaled() const;
     void setScaleOutLow(const float scaleOutLow);
@@ -54,8 +48,6 @@ private:
 
     // Interface variables, bound to QML
     ENUMS::PARAMETER iType_;
-    float iValue_;
-    bool iFixed_;
     bool iScale_;
     float iScaleOutLow_;
     float iScaleOutHigh_;
@@ -71,8 +63,6 @@ signals:
 
     // Notify signals
     void typeChanged();
-    void valueChanged();
-    void fixedChanged();
     void scaledChanged();
     void scaleHiChanged();
     void scaleLoChanged();

@@ -46,8 +46,6 @@ public:
     Q_ENUM(PARAMETER)
 
     enum class SUB_PARAMETER {
-        VALUE,
-        FIXED,
         SCALED,
         SCALE_OUT_LOW,
         SCALE_OUT_HIGH,

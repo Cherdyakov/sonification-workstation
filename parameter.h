@@ -30,8 +30,6 @@ private:
     // Backing variables.
     ENUMS::PARAMETER type_;
     QString name_ = "";
-    float value_ = 0.0f;
-    bool fixed_ = true;
     bool scale_ = true;
     Scaler<float> scaler_;
     QString map_;

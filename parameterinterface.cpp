@@ -6,8 +6,6 @@ namespace sow {
 ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
 {
     // Interface variables, bound to QML.
-    //    setValue(440.0f);
-    setFixed(true);
     setScaled(true);
     setScaleOutLow(100.0f);
     setScaleOutHigh(8000.0f);
@@ -24,8 +22,6 @@ void ParameterInterface::connectInterface(Parameter* parameter)
             parameter, &Parameter::onParameterChanged);
 
     // Signal the backing Parameter with the initial values.
-    iParameterChanged(ENUMS::SUB_PARAMETER::VALUE, iValue_);
-    iParameterChanged(ENUMS::SUB_PARAMETER::FIXED, iFixed_);
     iParameterChanged(ENUMS::SUB_PARAMETER::SCALED, iScale_);
     iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_OUT_LOW, iScaleOutLow_);
     iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_OUT_HIGH, iScaleOutHigh_);
@@ -43,30 +39,6 @@ void sow::ParameterInterface::setType(const ENUMS::PARAMETER type) {
 }
 ENUMS::PARAMETER sow::ParameterInterface::type() const {
     return iType_;
-}
-
-void sow::ParameterInterface::setValue(const float value) {
-    if (!qFuzzyCompare(iValue_, value)) {
-        iValue_ =  value;
-        emit valueChanged();
-        iParameterChanged(ENUMS::SUB_PARAMETER::VALUE, iValue_);
-    }
-}
-
-float sow::ParameterInterface::value() const {
-    return iValue_;
-}
-
-void sow::ParameterInterface::setFixed(const bool fixed) {
-    if (iFixed_ != fixed) {
-        iFixed_ =  fixed;
-        emit fixedChanged();
-        iParameterChanged(ENUMS::SUB_PARAMETER::FIXED, iFixed_);
-    }
-}
-
-bool sow::ParameterInterface::fixed() const {
-    return iFixed_;
 }
 
 void sow::ParameterInterface::setScaled(const bool scale) {

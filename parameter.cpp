@@ -11,8 +11,7 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 float Parameter::value()
 {
-    float val = evaluator_.value(data_);
-    return val;
+    return evaluator_.value(data_);
 }
 
 // Process outstanding ParameterCommands
@@ -61,12 +60,6 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
     ENUMS::SUB_PARAMETER subParam = cmd.subParam;
 
     switch (subParam) {
-    case ENUMS::SUB_PARAMETER::VALUE:
-        value_ = cmd.value;
-        break;
-    case ENUMS::SUB_PARAMETER::FIXED:
-        fixed_ = (cmd.value != 0.0f);
-        break;
     case ENUMS::SUB_PARAMETER::SCALED:
         scale_ = (cmd.value != 0.0f);
         break;
