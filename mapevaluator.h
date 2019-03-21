@@ -77,7 +77,7 @@ bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const s
     currentVariables_ = createVariables(expressionStr);
 
     // Can't have more variables than there are data columns.
-    if(currentVariables_.size() > data->size()) return false;
+    if(currentVariables_.size() > (data ? data->size() : 0)) return false;
 
     // Get index values for the variables names;
     for (MapVariable<T>& var : currentVariables_) {
@@ -118,7 +118,7 @@ bool MapEvaluator<T>::testCompileExpression(const std::string expressionStr, con
     testVariables = createVariables(expressionStr);
 
     // Can't have more variables than there are data columns.
-    if(testVariables.size() > data->size()) return false;
+    if(testVariables.size() > (data ? data->size() : 0)) return false;
 
     // Get index values for the variables names;
     for (MapVariable<T>& var : testVariables) {
