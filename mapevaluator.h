@@ -19,6 +19,12 @@ struct MapVariable {
 template<class T>
 class MapEvaluator
 {
+
+    // exprtk types.
+    typedef exprtk::symbol_table<T>   exprtkSymbolTable;
+    typedef exprtk::expression<T>     exprtkExpression;
+    typedef exprtk::parser<T>             exprtkParser;
+
 public:
 
     MapEvaluator();
@@ -26,6 +32,12 @@ public:
     bool compileExpression(const std::string expressionStr, const std::vector<T> * const data);
 
 private:
+
+    exprtkSymbolTable symbolTable_;
+    exprtkExpression expression_;
+    exprtkParser parser_;
+
+    std::vector<MapVariable<T>> currentVariables;
 
     std::vector<std::string> extractVariables(std::string expression);
     std::vector<MapVariable<T>> createVariables(const std::string expression);
@@ -40,56 +52,39 @@ MapEvaluator<T>::~MapEvaluator() {}
 template<class T>
 bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const std::vector<T> * const data) {
 
-    std::vector<MapVariable<T>> variables = createVariables(expressionStr);
+    currentVariables = createVariables(expressionStr);
 
     // Can't have more variables than there are data columns.
-    if(variables.size() > data->size()) return false;
+    if(currentVariables.size() > data->size()) return false;
 
     // Get index values for the variables names;
-    for (MapVariable<T>& var : variables) {
+    for (MapVariable<T>& var : currentVariables) {
         var.idx = utility::alphaToInt(var.alpha);
     }
 
     // Check that all indexes are valid.
-    for (MapVariable<T>& var : variables) {
+    for (MapVariable<T>& var : currentVariables) {
         if (var.idx > data->size() - 1) return false;
     }
 
     // Get data values with the indexes.
-    for (MapVariable<T>& var : variables) {
+    for (MapVariable<T>& var : currentVariables) {
         var.value = data->at(var.idx);
     }
 
-    typedef exprtk::symbol_table<T> symbol_table_t;
-    typedef exprtk::expression<T>     expression_t;
-    typedef exprtk::parser<T>             parser_t;
-
-    symbol_table_t symbol_table;
-
-    for (MapVariable<T>& var : variables) {
-        symbol_table.add_variable(var.alpha, var.value);
+    for (MapVariable<T>& var : currentVariables) {
+        symbolTable_.add_variable(var.alpha, var.value);
     }
 
-    symbol_table.add_constants();
+    symbolTable_.add_constants();
 
-    expression_t expression;
-    expression.register_symbol_table(symbol_table);
+    expression_.register_symbol_table(symbolTable_);
 
-    parser_t parser;
+    bool success = parser_.compile(expressionStr, expression_);
 
-    bool success = parser.compile(expressionStr, expression);
-
-    T y = expression.value();
-
-
-    // If (success) pass map to Parameter backing class.
-
-    qDebug() << "Variables: ";
-    for(MapVariable<T>& var : variables) {
-        qDebug() << QString::fromStdString(var.alpha) << " " << var.idx << " " << var.value;
+    if (success) {
+        qDebug() << expression_.value();
     }
-
-    qDebug() << "Value: " << y;
 
     return success;
 }
