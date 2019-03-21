@@ -73,17 +73,13 @@ SynthItem {
         EditorFloatParameter {
             id: frequency
             itemName: "OSC"
-            paramName: "Frequency: "
+            paramName: "Frequency"
             // Value changed from QML
-            onRealValueChanged: implementation ? implementation.frequency.value = realValue : {}
-            onFixedChanged: implementation ? implementation.frequency.fixed = fixed : {}
             onScaledChanged: implementation ? implementation.frequency.scaled = scaled : {}
             onScaleRealLowChanged: implementation ? implementation.frequency.scaleLo = scaleRealLow : {}
             onScaleRealHighChanged: implementation ? implementation.frequency.scaleHi = scaleRealHigh : {}
             onScaleRealExpChanged: implementation ? implementation.frequency.scaleExp = scaleRealExp : {}
             // Value changed from C++
-            value: implementation ? implementation.frequency.value * 100 : 0
-            fixed: implementation ? implementation.frequency.fixed : 0
             scaled: implementation ? implementation.frequency.scaled : 0
             scaleLow: implementation ? implementation.frequency.scaleLow * 100 : 0
             scaleHigh: implementation ? implementation.frequency.scaleHigh * 100 : 0

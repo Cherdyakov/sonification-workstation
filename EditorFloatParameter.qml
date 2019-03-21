@@ -10,10 +10,7 @@ Item {
     height: childrenRect.height
 
     property alias itemName: layout.title
-    property alias paramName: label.text
-    property alias value: spinBox.value
-    property alias realValue: spinBox.realValue
-    property alias fixed: fixed.fixed
+    property string paramName: "Parameter"
     property alias scaled: scaler.scaled
     property alias scaleLow: scaler.low
     property alias scaleRealLow: scaler.realLow
@@ -26,33 +23,10 @@ Item {
     EditorLayout {
         id: layout
 
-        RowLayout {
-
-            ColumnLayout {
-                Layout.maximumHeight: Style.editorRowHeight * 2
-
-                EditorLabel {
-                    id: label
-                    Layout.maximumHeight: Style.editorRowHeight
-                    Layout.fillWidth: true
-                }
-
-                EditorDoubleSpinBox {
-                    id: spinBox
-                    Layout.maximumHeight: Style.editorRowHeight
-                    Layout.preferredWidth: Style.editorControlWidth
-                }
-
-            }
-
-            EditorFixed {
-                id: fixed
-            }
-        }
-
         EditorMapper {
             id: mapper
             maxIndexes: 128
+            label.text: paramName + " source: "
         }
 
         EditorScaler {
