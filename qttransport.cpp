@@ -320,7 +320,7 @@ void QtTransport::processDatasetCommand(DatasetCommand cmd)
     currentIndex_ = 0;
     mu_ = 0.0;
     calculateReturnPosition();
-    currentData_.resize(static_cast<unsigned int>(dataset_->rows()));
+    currentData_.resize(static_cast<unsigned int>(dataset_->cols()));
 }
 
 void QtTransport::processSetPlaybackPosition(float pos)

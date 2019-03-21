@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <math.h>
 
 #include <QDebug>
 
@@ -41,7 +42,7 @@ void removeAll(const T item, std::vector<T> &vec)
     vec.erase(std::remove(vec.begin(), vec.end(), item), vec.end());
 }
 
-inline std::string intToAlphabet(int i) {
+inline std::string intToAlpha(int i) {
     std::string result = "";
     std::string alphas("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     int dividend = i;
@@ -54,6 +55,22 @@ inline std::string intToAlphabet(int i) {
         c = alphas[static_cast<size_t>(rem)];
         result.insert(0, 1, c);
         dividend = ((dividend - rem) / 26);
+    }
+
+    return result;
+}
+
+inline size_t alphaToInt(const std::string str) {
+
+    size_t result = 0;
+    std::string alphas("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
+    for (auto rit = str.crbegin(); rit != str.crend(); ++rit) {
+        char c = *rit;
+        size_t alphaVal = alphas.find(*rit);
+        size_t place = rit - str.rbegin();
+        size_t factor = pow(26, place);
+        result += alphaVal * factor;
     }
 
     return result;

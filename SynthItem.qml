@@ -184,8 +184,8 @@ Item {
         if(implementation === null) {
             deleted(root);
         }
-        canvas.requestPaint()
         created = true
+        canvas.requestPaint()
     }
 
     function read() {

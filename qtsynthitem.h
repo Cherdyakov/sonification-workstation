@@ -8,6 +8,7 @@
 #include "dataset.h"
 #include "enums.h"
 #include "commands.h"
+#include "parameter.h"
 
 namespace sow {
 
@@ -35,9 +36,9 @@ public:
     Q_INVOKABLE virtual void disconnect(QtSynthItem *parent);
     Q_INVOKABLE virtual void disconnectAll();
 
-    virtual void setData(std::vector<float>* data,
-                         std::vector<float>* mins,
-                         std::vector<float>* maxes);
+    virtual void setData(std::vector<float>* const data,
+                         std::vector<float>* const mins,
+                         std::vector<float>* const maxes);
     virtual Frame process();        // called every audio sample
     virtual void step();            // called every new data value (step)
     virtual void controlProcess();  // called every process block
@@ -50,12 +51,13 @@ protected:
     ENUMS::OUTPUT_TYPE outputType_;
     RingBuffer<ItemCommand> commandBuffer_;
     RingBuffer<DatasetCommand> datasetCommandBuffer_;
-    std::vector<float>* data_;
-    std::vector<float>* mins_;
-    std::vector<float>* maxes_;
+    std::vector<float>* data_ = nullptr;
+    std::vector<float>* mins_ = nullptr;
+    std::vector<float>* maxes_ = nullptr;
     std::vector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
     std::vector<QtSynthItem*> parents_;
     std::vector<QtSynthItem*> children_;
+    std::vector<Parameter*> parameters_;
 
     virtual void processCommand(ItemCommand cmd);
     virtual void processDatasetCommand(DatasetCommand cmd);

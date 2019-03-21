@@ -11,10 +11,8 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 float Parameter::value()
 {
-    if (scale_) {
-        return scaler_.scale(value_);
-    }
-    return value_;
+    float val = evaluator_.value(data_);
+    return val;
 }
 
 // Process outstanding ParameterCommands
@@ -24,26 +22,37 @@ void Parameter::controlProcess()
     while(commandBuffer_.pop(&currentCommand_)) {
         processCommand(currentCommand_);
     }
+    DatasetCommand currentDatasetCommand_;
+    while(datasetCommandBuffer_.pop(&currentDatasetCommand_)) {
+        processDatasetCommand(currentDatasetCommand_);
+    }
 }
 
 bool Parameter::setMap(const QString map)
 {
+    if(!evaluator_.testCompileExpression(map.toStdString(), data_)) {
+        return false;
+    }
 
-    /// TODO: tokenize and validate/compile map
+    ParameterCommand cmd;
+    cmd.subParam = ENUMS::SUB_PARAMETER::MAP;
+    // QString to QChar array to pass through command buffer
+    const QChar* unicode = map.unicode();
+    for(int i = 0; i < map.length(); i++) {
+        cmd.map[i] = unicode[i];
+    }
+    commandBuffer_.push(cmd);
 
-//     ParameterCommand cmd;
-//     cmd.subParam = ENUMS::SUB_PARAMETER::MAP;
-//     // QString to QChar array to pass through command buffer
-//     const QChar* unicode = map.unicode();
-//     for(int i = 0; i < map.length(); i++) {
-//         cmd.map[i] = unicode[i];
-//     }
+    return true;
+}
 
-//     commandBuffer_.push(cmd);
-
-     qDebug() << map;
-
-    return false;
+void Parameter::setData(std::vector<float>* const data, std::vector<float>* const mins, std::vector<float>* const maxes)
+{
+    DatasetCommand cmd;
+    cmd.data = data;
+    cmd.mins = mins;
+    cmd.maxes = maxes;
+    datasetCommandBuffer_.push(cmd);
 }
 
 // Execute commands pulled from the command buffer
@@ -78,8 +87,21 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
         break;
     case ENUMS::SUB_PARAMETER::MAP:
         map_ = QString(cmd.map);
+        processSetMap(map_.toStdString());
         break;
     }
+}
+
+void Parameter::processDatasetCommand(DatasetCommand cmd)
+{
+    data_ = cmd.data;
+    mins_ = cmd.mins;
+    maxes_ = cmd.maxes;
+}
+
+void Parameter::processSetMap(std::string expression)
+{
+    evaluator_.compileExpression(expression, data_);
 }
 
 // Slot for updated float values from the interface

@@ -33,17 +33,6 @@ public:
     Frame process() override;       // every sample
     void controlProcess() override; // every process block
 
-public slots:
-
-    // slots for controlling playback
-    void onDatasetchanged(sow::Dataset *dataset);
-    void onPausechanged(bool p);
-    void onPoschanged(float pos);
-    void onSpeedchanged(float speed);
-    void onLoopingchanged(bool looping);
-    void onLoopPointsChanged(float begin, float end);
-    void onInterpolateChanged(bool interpolate);
-
 private:
 
     RingBuffer<TransportCommand> transportCommandBuffer_;
@@ -79,6 +68,17 @@ private:
 
 signals:
     void posChanged(float pos);
+
+public slots:
+
+    // slots for controlling playback
+    void onDatasetchanged(sow::Dataset *dataset);
+    void onPausechanged(bool p);
+    void onPoschanged(float pos);
+    void onSpeedchanged(float speed);
+    void onLoopingchanged(bool looping);
+    void onLoopPointsChanged(float begin, float end);
+    void onInterpolateChanged(bool interpolate);
 
 private slots:
     void updatePos();

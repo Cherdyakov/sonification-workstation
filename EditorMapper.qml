@@ -13,6 +13,8 @@ ColumnLayout {
     property int maxIndexes: 1
     property string map: ""
 
+    onMapChanged: textInput.text = map;
+
     // Force map re-evaluation on new Dataset.
     Connections {
         target: fileReader

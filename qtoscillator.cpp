@@ -7,9 +7,10 @@ QtOscillator::QtOscillator(QObject *parent) : QtSynthItem(parent)
     type_ = ENUMS::ITEM_TYPE::OSCILLATOR;
     outputType_ = ENUMS::OUTPUT_TYPE::AUDIO;
 
-    frequencyInterface_ = new ParameterInterface(this);
     frequency_ = new Parameter(this);
+    frequencyInterface_ = new ParameterInterface(this);
     frequencyInterface_->connectInterface(frequency_);
+    parameters_ = { frequency_ };
 }
 
 ParameterInterface* QtOscillator::frequencyInterface() const
@@ -27,7 +28,7 @@ Frame QtOscillator::process()
     }
 
     //set frequency of generator
-    gen_.freq(frequencyInterface_->value());
+    gen_.freq(frequency_->value());
 
     //generate frame
 

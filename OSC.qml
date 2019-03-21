@@ -75,28 +75,30 @@ SynthItem {
             itemName: "OSC"
             paramName: "Frequency: "
             // Value changed from QML
-            onRealValueChanged: created ? implementation.frequency.value = realValue : {}
-            onFixedChanged: created ? implementation.frequency.fixed = fixed : {}
-            onScaledChanged: created ? implementation.frequency.scaled = scaled : {}
-            onScaleRealLowChanged: created ? implementation.frequency.scaleLo = scaleRealLow : {}
-            onScaleRealHighChanged: created ? implementation.frequency.scaleHi = scaleRealHigh : {}
-            onScaleRealExpChanged: created ? implementation.frequency.scaleExp = scaleRealExp : {}
+            onRealValueChanged: implementation ? implementation.frequency.value = realValue : {}
+            onFixedChanged: implementation ? implementation.frequency.fixed = fixed : {}
+            onScaledChanged: implementation ? implementation.frequency.scaled = scaled : {}
+            onScaleRealLowChanged: implementation ? implementation.frequency.scaleLo = scaleRealLow : {}
+            onScaleRealHighChanged: implementation ? implementation.frequency.scaleHi = scaleRealHigh : {}
+            onScaleRealExpChanged: implementation ? implementation.frequency.scaleExp = scaleRealExp : {}
             // Value changed from C++
-            value: created ? implementation.frequency.value * 100 : 0
-            fixed: created ? implementation.frequency.fixed : 0
-            scaled: created ? implementation.frequency.scaled : 0
-            scaleLow: created ? implementation.frequency.scaleLow * 100 : 0
-            scaleHigh: created ? implementation.frequency.scaleHigh * 100 : 0
-            scaleExp: created ? implementation.frequency.scaleExp * 100 : 0
-            map: created ? implementation.frequency.map : 0
+            value: implementation ? implementation.frequency.value * 100 : 0
+            fixed: implementation ? implementation.frequency.fixed : 0
+            scaled: implementation ? implementation.frequency.scaled : 0
+            scaleLow: implementation ? implementation.frequency.scaleLow * 100 : 0
+            scaleHigh: implementation ? implementation.frequency.scaleHigh * 100 : 0
+            scaleExp: implementation ? implementation.frequency.scaleExp * 100 : 0
+            mapper.map: implementation ? implementation.frequency.map : ""
 
             // Set map with Q_INVOKABLE function call and check if it is valid.
             mapper.onMapChanged: {
-                if(!implementation.frequency.setMap(mapping)) {
-                    mapper.textColor = "tomato"
-                }
-                else {
-                    mapper.textColor = "black"
+                if(implementation) {
+                    if(!implementation.frequency.setMap(mapper.map)) {
+                        mapper.textColor = "tomato"
+                    }
+                    else {
+                        mapper.textColor = "black"
+                    }
                 }
             }
         }
