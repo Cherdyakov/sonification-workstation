@@ -88,11 +88,11 @@ SynthItem {
             scaleLow: created ? implementation.frequency.scaleLow * 100 : 0
             scaleHigh: created ? implementation.frequency.scaleHigh * 100 : 0
             scaleExp: created ? implementation.frequency.scaleExp * 100 : 0
-            map: created ? implementation.frequency.map : 0
+            mapper.map: created ? implementation.frequency.map : ""
 
             // Set map with Q_INVOKABLE function call and check if it is valid.
             mapper.onMapChanged: {
-                if(!implementation.frequency.setMap(map)) {
+                if(!implementation.frequency.setMap(mapper.map)) {
                     mapper.textColor = "tomato"
                 }
                 else {
