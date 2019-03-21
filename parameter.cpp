@@ -11,10 +11,8 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 float Parameter::value()
 {
-    //    if (scale_) {
-    //        return scaler_.scale(value_);
-    //    }
-    return value_;
+    float val = evaluator_.value(data_);
+    return val;
 }
 
 // Process outstanding ParameterCommands
@@ -32,9 +30,7 @@ void Parameter::controlProcess()
 
 bool Parameter::setMap(const QString map)
 {
-    MapEvaluator<float> evaluator;
-
-    if(!evaluator.compileExpression(map.toStdString(), data_)) {
+    if(!evaluator_.testCompileExpression(map.toStdString(), data_)) {
         return false;
     }
 
@@ -91,6 +87,7 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
         break;
     case ENUMS::SUB_PARAMETER::MAP:
         map_ = QString(cmd.map);
+        processSetMap(map_.toStdString());
         break;
     }
 }
@@ -100,6 +97,11 @@ void Parameter::processDatasetCommand(DatasetCommand cmd)
     data_ = cmd.data;
     mins_ = cmd.mins;
     maxes_ = cmd.maxes;
+}
+
+void Parameter::processSetMap(std::string expression)
+{
+    evaluator_.compileExpression(expression, data_);
 }
 
 // Slot for updated float values from the interface

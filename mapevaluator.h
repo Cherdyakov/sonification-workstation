@@ -30,14 +30,15 @@ public:
     MapEvaluator();
     ~MapEvaluator();
     bool compileExpression(const std::string expressionStr, const std::vector<T> * const data);
+    bool testCompileExpression(const std::string expressionStr, const std::vector<T> * const data);
+    T value(const std::vector<T> * const data);
 
 private:
 
-    exprtkSymbolTable symbolTable_;
-    exprtkExpression expression_;
+    exprtkSymbolTable* symbolTable_ = nullptr;
+    exprtkExpression* expression_ = nullptr;
     exprtkParser parser_;
-
-    std::vector<MapVariable<T>> currentVariables;
+    std::vector<MapVariable<T>> currentVariables_;
 
     std::vector<std::string> extractVariables(std::string expression);
     std::vector<MapVariable<T>> createVariables(const std::string expression);
@@ -50,42 +51,100 @@ template<class T>
 MapEvaluator<T>::~MapEvaluator() {}
 
 template<class T>
+T MapEvaluator<T>::value(const std::vector<T> * const data) {
+    // Update variable values.
+    for(MapVariable<T>& var : currentVariables_) {
+        var.value = data->at(var.idx);
+    }
+    // Re-evaluate current expression.
+    float val = expression_->value();
+    return val;
+}
+
+template<class T>
 bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const std::vector<T> * const data) {
 
-    currentVariables = createVariables(expressionStr);
+    if(expression_ != nullptr) {
+        delete expression_;
+    }
+    if(symbolTable_ != nullptr) {
+        delete symbolTable_;
+    }
+
+    expression_ = new exprtkExpression;
+    symbolTable_ = new exprtkSymbolTable;
+
+    currentVariables_ = createVariables(expressionStr);
 
     // Can't have more variables than there are data columns.
-    if(currentVariables.size() > data->size()) return false;
+    if(currentVariables_.size() > data->size()) return false;
 
     // Get index values for the variables names;
-    for (MapVariable<T>& var : currentVariables) {
+    for (MapVariable<T>& var : currentVariables_) {
         var.idx = utility::alphaToInt(var.alpha);
     }
 
     // Check that all indexes are valid.
-    for (MapVariable<T>& var : currentVariables) {
+    for (MapVariable<T>& var : currentVariables_) {
         if (var.idx > data->size() - 1) return false;
     }
 
     // Get data values with the indexes.
-    for (MapVariable<T>& var : currentVariables) {
+    for (MapVariable<T>& var : currentVariables_) {
         var.value = data->at(var.idx);
     }
 
-    for (MapVariable<T>& var : currentVariables) {
-        symbolTable_.add_variable(var.alpha, var.value);
+    // Add variables to the exprtk symbol table.
+    for (MapVariable<T>& var : currentVariables_) {
+        symbolTable_->add_variable(var.alpha, var.value);
     }
 
-    symbolTable_.add_constants();
+    symbolTable_->add_constants();
+    expression_->register_symbol_table(*symbolTable_);
+    // Attempt compilation and return success.
+    bool success = parser_.compile(expressionStr, *expression_);
+    float val = expression_->value();
+    return success;
+}
 
-    expression_.register_symbol_table(symbolTable_);
+template<class T>
+bool MapEvaluator<T>::testCompileExpression(const std::string expressionStr, const std::vector<T> * const data) {
 
-    bool success = parser_.compile(expressionStr, expression_);
+    exprtkSymbolTable testTable;
+    exprtkExpression testExpression;
+    exprtkParser testParser;
+    std::vector<MapVariable<T>> testVariables;
 
-    if (success) {
-        qDebug() << expression_.value();
+    testVariables = createVariables(expressionStr);
+
+    // Can't have more variables than there are data columns.
+    if(testVariables.size() > data->size()) return false;
+
+    // Get index values for the variables names;
+    for (MapVariable<T>& var : testVariables) {
+        var.idx = utility::alphaToInt(var.alpha);
     }
 
+    // Check that all indexes are valid.
+    for (MapVariable<T>& var : testVariables) {
+        if (var.idx > data->size() - 1) return false;
+    }
+
+    // Get data values with the indexes.
+    for (MapVariable<T>& var : testVariables) {
+        var.value = data->at(var.idx);
+    }
+
+    // Add variables to the exprtk symbol table.
+    for (MapVariable<T>& var : testVariables) {
+        testTable.add_variable(var.alpha, var.value);
+    }
+
+    testTable.add_constants();
+    testExpression.register_symbol_table(testTable);
+    // Attempt compilation and return success.
+    bool success = testParser.compile(expressionStr, testExpression);
+    float val = testExpression.value();
     return success;
 }
 

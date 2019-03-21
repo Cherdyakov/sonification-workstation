@@ -27,7 +27,7 @@ public:
 
 private:
 
-    // Backing variables
+    // Backing variables.
     ENUMS::PARAMETER type_;
     QString name_;
     float value_;
@@ -41,8 +41,12 @@ private:
     RingBuffer<ParameterCommand> commandBuffer_;
     RingBuffer<DatasetCommand> datasetCommandBuffer_;
 
+    // Map expression evaulator.
+    MapEvaluator<float> evaluator_;
+
     virtual void processCommand(ParameterCommand cmd);
     virtual void processDatasetCommand(DatasetCommand cmd);
+    virtual void processSetMap(std::string expression);
 
 signals:
 
