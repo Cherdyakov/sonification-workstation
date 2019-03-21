@@ -23,7 +23,7 @@ public:
 
     MapEvaluator();
     ~MapEvaluator();
-    bool compileExpression(const std::string expression, const std::vector<T> * const data);
+    bool compileExpression(const std::string expressionStr, const std::vector<T> * const data);
 
 private:
 
@@ -48,6 +48,11 @@ bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const s
     // Get index values for the variables names;
     for (MapVariable<T>& var : variables) {
         var.idx = utility::alphaToInt(var.alpha);
+    }
+
+    // Check that all indexes are valid.
+    for (MapVariable<T>& var : variables) {
+        if (var.idx > data->size() - 1) return false;
     }
 
     // Get data values with the indexes.
@@ -114,34 +119,6 @@ std::vector<MapVariable<T>> MapEvaluator<T>::createVariables(const std::string e
 
     return variables;
 }
-
-
-//    void evaluate()
-//    {
-//        typedef exprtk::symbol_table<T> symbol_table_t;
-//        typedef exprtk::expression<T>     expression_t;
-//        typedef exprtk::parser<T>             parser_t;
-
-//        std::string expression_string = "clamp(-1.0,sin(2 * pi * x) + cos(x / 2 * pi),+1.0)";
-
-//        T x;
-
-//        symbol_table_t symbol_table;
-//        symbol_table.add_variable("x",x);
-//        symbol_table.add_constants();
-
-//        expression_t expression;
-//        expression.register_symbol_table(symbol_table);
-
-//        parser_t parser;
-//        parser.compile(expression_string,expression);
-
-//        for (x = T(-5); x <= T(+5); x += T(0.001))
-//        {
-//            T y = expression.value();
-//            printf("%19.15f\t%19.15f\n",x,y);
-//        }
-//    }
 
 } // namespace sow
 

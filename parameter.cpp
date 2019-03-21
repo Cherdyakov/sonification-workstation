@@ -11,9 +11,9 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 float Parameter::value()
 {
-//    if (scale_) {
-//        return scaler_.scale(value_);
-//    }
+    //    if (scale_) {
+    //        return scaler_.scale(value_);
+    //    }
     return value_;
 }
 
@@ -32,24 +32,22 @@ void Parameter::controlProcess()
 
 bool Parameter::setMap(const QString map)
 {
-
-    /// TODO: tokenize and validate/compile map
-
-//     ParameterCommand cmd;
-//     cmd.subParam = ENUMS::SUB_PARAMETER::MAP;
-//     // QString to QChar array to pass through command buffer
-//     const QChar* unicode = map.unicode();
-//     for(int i = 0; i < map.length(); i++) {
-//         cmd.map[i] = unicode[i];
-//     }
-
-//     commandBuffer_.push(cmd);
-
     MapEvaluator<float> evaluator;
 
-    evaluator.compileExpression(map.toStdString(), data_);
+    if(!evaluator.compileExpression(map.toStdString(), data_)) {
+        return false;
+    }
 
-     return false;
+    ParameterCommand cmd;
+    cmd.subParam = ENUMS::SUB_PARAMETER::MAP;
+    // QString to QChar array to pass through command buffer
+    const QChar* unicode = map.unicode();
+    for(int i = 0; i < map.length(); i++) {
+        cmd.map[i] = unicode[i];
+    }
+    commandBuffer_.push(cmd);
+
+    return true;
 }
 
 void Parameter::setData(std::vector<float>* const data, std::vector<float>* const mins, std::vector<float>* const maxes)
