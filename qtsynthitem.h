@@ -51,9 +51,6 @@ protected:
     ENUMS::OUTPUT_TYPE outputType_;
     RingBuffer<ItemCommand> commandBuffer_;
     RingBuffer<DatasetCommand> datasetCommandBuffer_;
-    std::vector<float>* data_ = nullptr;
-    std::vector<float>* mins_ = nullptr;
-    std::vector<float>* maxes_ = nullptr;
     std::vector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
     std::vector<QtSynthItem*> parents_;
     std::vector<QtSynthItem*> children_;

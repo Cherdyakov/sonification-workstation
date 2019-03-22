@@ -156,9 +156,7 @@ void QtSynthItem::processCommand(ItemCommand cmd)
 // dataset minimum and dataset maximum values.
 void QtSynthItem::processDatasetCommand(const DatasetCommand cmd)
 {
-    data_ = cmd.data;
-    mins_ = cmd.mins;
-    maxes_ = cmd.maxes;
+
 }
 
 // If not already connected, connect given child

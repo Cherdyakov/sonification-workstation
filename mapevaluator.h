@@ -6,6 +6,8 @@
 #include <tuple>
 #include "external/exprtk/exprtk.hpp"
 #include "utility.h"
+#include "dataset.h"
+#include "commands.h"
 
 namespace sow {
 
@@ -29,21 +31,30 @@ public:
 
     MapEvaluator();
     ~MapEvaluator();
-    bool compileExpression(const std::string expressionStr, const std::vector<T> * data);
+    void setData(DatasetCommand cmd);
+    bool compileExpression(const std::string expressionStr);
     bool testCompileExpression(const std::string expressionStr, const std::vector<T> * const data);
     T value();
     T scaledValue(T outLow, T outHigh);
 
 private:
 
+    // Dataset and related values.
     const std::vector<T>* currentData_ = nullptr;
+    const Dataset* dataset_ = nullptr;
+    T expressionMin_;
+    T expressionMax_;
+    // exprtk variables.
     exprtkSymbolTable* symbolTable_ = nullptr;
+    exprtkSymbolTable* minMaxTable_ = nullptr;
     exprtkExpression* expression_ = nullptr;
     exprtkParser parser_;
     std::vector<MapVariable<T>> currentVariables_;
 
     std::vector<std::string> extractVariables(std::string expression);
     std::vector<MapVariable<T>> createVariables(const std::string expression);
+    T calculateValue();
+    void calculateMinMax();
     T scale(T x, T inLow, T inHigh, T outLow, T outHigh, T exp);
 
 };
@@ -52,6 +63,13 @@ template<class T>
 MapEvaluator<T>::MapEvaluator() { }
 template<class T>
 MapEvaluator<T>::~MapEvaluator() {}
+
+template<class T>
+void MapEvaluator<T>::setData(DatasetCommand cmd)
+{
+    dataset_ = cmd.dataset;
+    currentData_ = cmd.data;
+}
 
 template<class T>
 T MapEvaluator<T>::value() {
@@ -74,9 +92,45 @@ T MapEvaluator<T>::scale(T x, T inLow, T inHigh, T outLow, T outHigh, T exp)
 }
 
 template<class T>
-bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const std::vector<T>* data) {
+T MapEvaluator<T>::scaledValue(T outLow, T outHigh)
+{
+//    return scale(value(), );
+}
 
-    currentData_ = data;
+template<class T>
+void MapEvaluator<T>::calculateMinMax()
+{
+    // Create new table for min/max test vars.
+    if(minMaxTable_ != nullptr) {
+        delete minMaxTable_;
+    }
+    minMaxTable_ = new exprtkSymbolTable;
+
+    // Get first row of dataset and populate table.
+    std::vector<T> row = dataset_->getRow(0);
+    for(size_t i = 0; i < row.size(); i++) {
+        symbolTable_->add_variable(std::to_string(i), row[i]);
+    }
+
+    // Set initial min/max values from first row.
+    expressionMin_ = expressionMax_ = expression_->value();
+
+    // Calculate min and max value for entire dataset with
+    // the current expression.
+    for(size_t i = 1; i < dataset_->rows(); i++) {
+        row = dataset_->getRow(i);
+        float val = expression_->value();
+        if(val > expressionMax_) {
+            expressionMax_ = val;
+        } else if (val < expressionMin_) {
+            expressionMin_ = val;
+        }
+    }
+    qDebug() << "Min: " << expressionMin_ << "Max: " << expressionMax_;
+}
+
+template<class T>
+bool MapEvaluator<T>::compileExpression(const std::string expressionStr) {
 
     if(expression_ != nullptr) {
         delete expression_;
@@ -91,7 +145,7 @@ bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const s
     currentVariables_ = createVariables(expressionStr);
 
     // Can't have more variables than there are data columns.
-    if(currentVariables_.size() > (currentData_ ? data->size() : 0)) return false;
+    if(currentVariables_.size() > (currentData_ ? currentData_->size() : 0)) return false;
 
     // Get index values for the variables names;
     for (MapVariable<T>& var : currentVariables_) {
@@ -103,13 +157,9 @@ bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const s
         if (var.idx > currentData_->size() - 1) return false;
     }
 
-    // Get data values with the indexes.
+    // Get data values from indexes and add vars to table.
     for (MapVariable<T>& var : currentVariables_) {
         var.value = currentData_->at(var.idx);
-    }
-
-    // Add variables to the exprtk symbol table.
-    for (MapVariable<T>& var : currentVariables_) {
         symbolTable_->add_variable(var.alpha, var.value);
     }
 
@@ -117,7 +167,11 @@ bool MapEvaluator<T>::compileExpression(const std::string expressionStr, const s
     expression_->register_symbol_table(*symbolTable_);
     // Attempt compilation and return success.
     bool success = parser_.compile(expressionStr, *expression_);
-    float val = expression_->value();
+
+    if(success) {
+        calculateMinMax();
+    }
+
     return success;
 }
 
@@ -144,13 +198,9 @@ bool MapEvaluator<T>::testCompileExpression(const std::string expressionStr, con
         if (var.idx > data->size() - 1) return false;
     }
 
-    // Get data values with the indexes.
+    // Get data values from indexes and add vars to table.
     for (MapVariable<T>& var : testVariables) {
         var.value = data->at(var.idx);
-    }
-
-    // Add variables to the exprtk symbol table.
-    for (MapVariable<T>& var : testVariables) {
         testTable.add_variable(var.alpha, var.value);
     }
 
@@ -158,7 +208,7 @@ bool MapEvaluator<T>::testCompileExpression(const std::string expressionStr, con
     testExpression.register_symbol_table(testTable);
     // Attempt compilation and return success.
     bool success = testParser.compile(expressionStr, testExpression);
-    float val = testExpression.value();
+
     return success;
 }
 

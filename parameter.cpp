@@ -94,7 +94,7 @@ void Parameter::processDatasetCommand(DatasetCommand cmd)
 
 void Parameter::processSetMap(std::string expression)
 {
-    evaluator_.compileExpression(expression, data_);
+    evaluator_.compileExpression(expression);
 }
 
 // Slot for updated float values from the interface
