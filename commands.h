@@ -15,13 +15,6 @@ struct ItemCommand {
     QtSynthItem* item;
 };
 
-struct DatasetCommand {
-    Dataset *dataset;
-    std::vector<float>* data;
-    std::vector<float>* mins;
-    std::vector<float>* maxes;
-};
-
 struct ParameterCommand {
     ENUMS::SUB_PARAMETER subParam;
     float value;

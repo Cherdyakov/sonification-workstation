@@ -11,7 +11,14 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 float Parameter::value()
 {
-    return evaluator_.value(data_);
+    float val;
+    if(scale_) {
+        val = mapEvaluator_.scaledValue(scaleOutLow_, scaleOutHigh_, scaleExponent_);
+    } else {
+        val = mapEvaluator_.value();
+
+    }
+    return val;
 }
 
 // Process outstanding ParameterCommands
@@ -21,15 +28,11 @@ void Parameter::controlProcess()
     while(commandBuffer_.pop(&currentCommand_)) {
         processCommand(currentCommand_);
     }
-    DatasetCommand currentDatasetCommand_;
-    while(datasetCommandBuffer_.pop(&currentDatasetCommand_)) {
-        processDatasetCommand(currentDatasetCommand_);
-    }
 }
 
 bool Parameter::setMap(const QString map)
 {
-    if(!evaluator_.testCompileExpression(map.toStdString(), data_)) {
+    if(!mapEvaluator_.testCompileExpression(map.toStdString())) {
         return false;
     }
 
@@ -45,13 +48,9 @@ bool Parameter::setMap(const QString map)
     return true;
 }
 
-void Parameter::setData(std::vector<float>* const data, std::vector<float>* const mins, std::vector<float>* const maxes)
+void Parameter::setData(const Dataset *dataset, const std::vector<float> *currentData)
 {
-    DatasetCommand cmd;
-    cmd.data = data;
-    cmd.mins = mins;
-    cmd.maxes = maxes;
-    datasetCommandBuffer_.push(cmd);
+    mapEvaluator_.setData(dataset, currentData);
 }
 
 // Execute commands pulled from the command buffer
@@ -63,20 +62,14 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
     case ENUMS::SUB_PARAMETER::SCALED:
         scale_ = (cmd.value != 0.0f);
         break;
+    case ENUMS::SUB_PARAMETER::SCALE_EXP:
+        scaleExponent_ = cmd.value;
+        break;
     case ENUMS::SUB_PARAMETER::SCALE_OUT_LOW:
-        scaler_.setOutLow(cmd.value);
+        scaleOutLow_ = cmd.value;
         break;
     case ENUMS::SUB_PARAMETER::SCALE_OUT_HIGH:
-        scaler_.setOutHigh(cmd.value);
-        break;
-    case ENUMS::SUB_PARAMETER::SCALE_EXP:
-        scaler_.setExp(cmd.value);
-        break;
-    case ENUMS::SUB_PARAMETER::SCALE_IN_LOW:
-        scaler_.setInLow(cmd.value);
-        break;
-    case ENUMS::SUB_PARAMETER::SCALE_IN_HIGH:
-        scaler_.setInHigh(cmd.value);
+        scaleOutHigh_ = cmd.value;
         break;
     case ENUMS::SUB_PARAMETER::MAP:
         map_ = QString(cmd.map);
@@ -85,16 +78,9 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
     }
 }
 
-void Parameter::processDatasetCommand(DatasetCommand cmd)
-{
-    data_ = cmd.data;
-    mins_ = cmd.mins;
-    maxes_ = cmd.maxes;
-}
-
 void Parameter::processSetMap(std::string expression)
 {
-    evaluator_.compileExpression(expression, data_);
+    mapEvaluator_.compileExpression(expression);
 }
 
 // Slot for updated float values from the interface

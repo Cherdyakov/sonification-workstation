@@ -82,20 +82,6 @@ void QtSynthItem::disconnectAll()
     commandBuffer_.push(cmd);
 }
 
-// Set the data column, dataset minumum and dataset maximum values
-void QtSynthItem::setData(std::vector<float> * const data, std::vector<float> * const mins, std::vector<float> * const maxes)
-{
-    DatasetCommand cmd;
-    cmd.data = data;
-    cmd.mins = mins;
-    cmd.maxes = maxes;
-    datasetCommandBuffer_.push(cmd);
-
-    for (Parameter*& parameter : parameters_) {
-        parameter->setData(data, mins, maxes);
-    }
-}
-
 // Every audio sample
 Frame QtSynthItem::process()
 {
@@ -120,10 +106,6 @@ void QtSynthItem::controlProcess()
     ItemCommand currentCommand;
     while(commandBuffer_.pop(&currentCommand)) {
         processCommand(currentCommand);
-    }
-    DatasetCommand currentDatasetCommand;
-    while(datasetCommandBuffer_.pop(&currentDatasetCommand)) {
-        processDatasetCommand(currentDatasetCommand);
     }
 }
 
@@ -152,13 +134,12 @@ void QtSynthItem::processCommand(ItemCommand cmd)
     }
 }
 
-// Update pointers to the current data column,
-// dataset minimum and dataset maximum values.
-void QtSynthItem::processDatasetCommand(const DatasetCommand cmd)
+// Set the data column, dataset minumum and dataset maximum values
+void QtSynthItem::setData(const Dataset *dataset, const std::vector<float> *currentData)
 {
-    data_ = cmd.data;
-    mins_ = cmd.mins;
-    maxes_ = cmd.maxes;
+    for (Parameter*& parameter : parameters_) {
+        parameter->setData(dataset, currentData);
+    }
 }
 
 // If not already connected, connect given child

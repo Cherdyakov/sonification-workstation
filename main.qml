@@ -11,19 +11,11 @@ Rectangle
     color: Style.workspaceColor
     anchors.fill: parent
 
-    property int dataHeight: 0
     // Holds every item in the workspace for iterating.
     property var synthItems: []
     // Canvas for drawing patches.
     property alias canvas: canvas
     property alias workspace: workspace
-
-    Connections {
-        target: fileReader
-        onQmlDatasetChanged: {
-            dataHeight = height
-        }
-    }
 
     // Flickable widget container, where SynthItems are manipulated.
     Flickable {

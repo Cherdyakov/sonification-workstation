@@ -13,8 +13,7 @@ QtTransport::QtTransport(QObject *parent) : QtSynthItem (parent)
     posTimer->start(33);
 
     type_ = ENUMS::ITEM_TYPE::TRANSPORT;
-    dataset_ = new Dataset;
-    paused_ = true;
+    pause_ = true;
     loop_ = false;
     loopBegin_ = 0.0f;
     loopEnd_ = 0.0f;
@@ -45,11 +44,17 @@ void QtTransport::deleteItem(QtSynthItem *item)
     transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::onDatasetchanged(Dataset *dataset)
+
+void QtTransport::onImportDataset(QString file)
 {
-    DatasetCommand cmd;
-    cmd.dataset = dataset;
-    datasetCommandBuffer_.push(cmd);
+    if (filepath_ != file) {
+        fileMutex_.lock();
+        filepath_ = file;
+        fileMutex_.unlock();
+    }
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::IMPORT_DATASET;
+    transportCommandBuffer_.push(cmd);
 }
 
 void QtTransport::onPausechanged(bool pause)
@@ -170,7 +175,7 @@ Frame QtTransport::process()
     Frame frame;
     bool stepping = false;
 
-    if(paused_)
+    if(pause_)
     {
         calculateReturnPosition();
         return frame;
@@ -182,7 +187,7 @@ Frame QtTransport::process()
         mu_ -= 1.0;
         currentIndex_++;
 
-        if((currentIndex_ + 1) > (dataset_->rows()))
+        if((currentIndex_ + 1) > (dataset_.rows()))
         {
             currentIndex_ = 0;
         }
@@ -211,7 +216,7 @@ Frame QtTransport::process()
         dataStale_ = true;
     }
 
-    if(dataStale_ && dataset_->hasData())
+    if(dataStale_ && dataset_.hasData())
     {
         refreshCurrentData();
         dataStale_ = false;
@@ -257,7 +262,7 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
 
     switch (cmd.type) {
     case ENUMS::TRANSPORT_CMD::PAUSE:
-        paused_ = (cmd.valueA == 0.0f) ? false : true;
+        pause_ = (cmd.valueA == 0.0f) ? false : true;
         break;
     case ENUMS::TRANSPORT_CMD::POS:
         processSetPlaybackPosition(cmd.valueA);
@@ -284,13 +289,16 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
     case ENUMS::TRANSPORT_CMD::UNSUB:
         utility::removeAll(cmd.item, subscribers_);
         break;
+    case ENUMS::TRANSPORT_CMD::IMPORT_DATASET:
+        processImportDataset();
+        break;
     }
 }
 
 void QtTransport::processSubscribeItem(QtSynthItem *item)
 {
     utility::insertUnique(item, subscribers_);
-    item->setData(&currentData_, &dataMinValues_, &dataMaxValues_);
+    item->setData(&dataset_, &currentData_);
 }
 
 void QtTransport::processUnsubscribeItem(QtSynthItem *item)
@@ -312,16 +320,23 @@ void QtTransport::processDeleteItem(QtSynthItem *item)
     }
 }
 
-void QtTransport::processDatasetCommand(DatasetCommand cmd)
+void QtTransport::processImportDataset()
 {
-    paused_ = true;
-    dataset_ = cmd.dataset;
+    pause_ = true;
     currentData_.clear();
     currentIndex_ = 0;
-    mu_ = 0.0;
+    mu_ = 0.0f;
     calculateReturnPosition();
-    currentData_.resize(static_cast<unsigned int>(dataset_->cols()));
+
+    FileReader reader;
+    fileMutex_.lock();
+    reader.readCSV(filepath_, &dataset_);
+    currentData_.resize(dataset_.rows());
+    currentData_ = dataset_.getRow(currentIndex_);
+    fileMutex_.unlock();
+    emit datasetImported(&dataset_);
 }
+
 
 void QtTransport::processSetPlaybackPosition(float pos)
 {
@@ -339,14 +354,14 @@ void QtTransport::refreshCurrentData()
     if(interpolate_)
     {
         int next_index = currentIndex_ + 1;
-        if(next_index >= dataset_->rows())
+        if(next_index >= dataset_.rows())
         {
             next_index = 0;
         }
-        currentData_ = interpolate(dataset_->getRow(currentIndex_), dataset_->getRow(next_index), mu_);
+        currentData_ = interpolate(dataset_.getRow(currentIndex_), dataset_.getRow(next_index), mu_);
     }
     else {
-        currentData_ = dataset_->getRow(currentIndex_);
+        currentData_ = dataset_.getRow(currentIndex_);
     }
 }
 

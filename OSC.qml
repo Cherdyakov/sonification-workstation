@@ -76,8 +76,8 @@ SynthItem {
             paramName: "Frequency"
             // Value changed from QML
             onScaledChanged: implementation ? implementation.frequency.scaled = scaled : {}
-            onScaleRealLowChanged: implementation ? implementation.frequency.scaleLo = scaleRealLow : {}
-            onScaleRealHighChanged: implementation ? implementation.frequency.scaleHi = scaleRealHigh : {}
+            onScaleRealLowChanged: implementation ? implementation.frequency.scaleLow = scaleRealLow : {}
+            onScaleRealHighChanged: implementation ? implementation.frequency.scaleHigh = scaleRealHigh : {}
             onScaleRealExpChanged: implementation ? implementation.frequency.scaleExp = scaleRealExp : {}
             // Value changed from C++
             scaled: implementation ? implementation.frequency.scaled : 0

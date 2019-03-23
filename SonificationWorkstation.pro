@@ -92,7 +92,6 @@ HEADERS += \
     parameterinterface.h \
     parameter.h \
     enums.h \
-    scaler.h \
     external/exprtk/exprtk.hpp \
     mapevaluator.h
 

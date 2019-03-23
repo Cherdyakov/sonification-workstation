@@ -50,8 +50,6 @@ public:
         SCALE_OUT_LOW,
         SCALE_OUT_HIGH,
         SCALE_EXP,
-        SCALE_IN_LOW,
-        SCALE_IN_HIGH,
         MAP
     };
     Q_ENUM(SUB_PARAMETER)
@@ -88,7 +86,8 @@ public:
         INTERPOLATE,
         SUB,
         UNSUB,
-        DELETE_ITEM
+        DELETE_ITEM,
+        IMPORT_DATASET
     };
 
 };

@@ -6,7 +6,7 @@ namespace sow {
 ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
 {
     // Interface variables, bound to QML.
-    setScaled(true);
+    setScaled(false);
     setScaleOutLow(100.0f);
     setScaleOutHigh(8000.0f);
     setScaleExp(1);
@@ -26,8 +26,6 @@ void ParameterInterface::connectInterface(Parameter* parameter)
     iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_OUT_LOW, iScaleOutLow_);
     iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_OUT_HIGH, iScaleOutHigh_);
     iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_EXP, iScaleExp_);
-    iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_IN_LOW, iScaleInLow_);
-    iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_IN_HIGH, iScaleInHigh_);
     parameter_->setMap(iMap_);
 }
 
@@ -87,32 +85,6 @@ void sow::ParameterInterface::setScaleExp(const float scaleExp) {
 
 float sow::ParameterInterface::scaleExp() const {
     return iScaleExp_;
-}
-
-void ParameterInterface::setScaleInLow(const float scaleInLow)
-{
-    if (!qFuzzyCompare(iScaleInLow_, scaleInLow)) {
-        iScaleInLow_ =  scaleInLow;
-        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_IN_LOW, iScaleInLow_);
-    }
-}
-
-float ParameterInterface::scaleInLow()
-{
-    return iScaleInLow_;
-}
-
-void ParameterInterface::setScaleInHigh(const float scaleInHigh)
-{
-    if (!qFuzzyCompare(iScaleInHigh_, scaleInHigh)) {
-        iScaleInHigh_ =  scaleInHigh;
-        iParameterChanged(ENUMS::SUB_PARAMETER::SCALE_IN_HIGH, iScaleInHigh_);
-    }
-}
-
-float ParameterInterface::scaleInHigh()
-{
-    return iScaleInHigh_;
 }
 
 bool sow::ParameterInterface::setMap(const QString map) {

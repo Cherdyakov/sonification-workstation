@@ -39,10 +39,6 @@ public:
     Q_INVOKABLE QString map() const;
     // CPP only
     void connectInterface(Parameter* parameter);
-    void setScaleInLow(const float scaleInLow);
-    float scaleInLow();
-    void setScaleInHigh(const float scaleInHigh);
-    float scaleInHigh();
 
 private:
 
@@ -52,8 +48,6 @@ private:
     float iScaleOutLow_;
     float iScaleOutHigh_;
     float iScaleExp_;
-    float iScaleInLow_;
-    float iScaleInHigh_;
     QString iMap_;
 
     // The backing parameter

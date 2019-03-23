@@ -12,12 +12,16 @@ namespace sow {
 
 namespace utility {
 
-// based on the Max "Scale" object
+// based on the Max "Scale" object, exp = 1 is linear.
 // https://docs.cycling74.com/max7/maxobject/scale
-// default exp = 1 is linear
-double scale(double x, double in_low,
-             double in_high, double out_low,
-             double out_high, double exp);
+template<class T>
+T scale(T x, T inLow, T inHigh, T outLow, T outHigh, T exponent)
+{
+    return ((x-inLow)/(inHigh-inLow) == 0.0) ? outLow :
+                                               (((x-inLow)/(inHigh-inLow)) > 0.0) ?
+                                                   (outLow + (outHigh-outLow) * pow(((x-inLow)/(inHigh-inLow)),exponent)) :
+                                                   (outLow + (outHigh-outLow) * -(pow((((-x+inLow)/(inHigh-inLow))),exponent)));
+}
 
 //Frame visitChildren(std::vector<QtSynthItem*> children);
 template <class T>
