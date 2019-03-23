@@ -88,7 +88,8 @@ public:
         INTERPOLATE,
         SUB,
         UNSUB,
-        DELETE_ITEM
+        DELETE_ITEM,
+        IMPORT_DATASET
     };
 
 };
