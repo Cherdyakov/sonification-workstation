@@ -35,7 +35,7 @@ public:
     bool compileExpression(const std::string expressionStr);
     bool testCompileExpression(const std::string expressionStr);
     T value();
-    T scaledValue(T outLow, T outHigh);
+    T scaledValue(T outLow, T outHigh, T exp);
 
 private:
 
@@ -46,17 +46,14 @@ private:
     T expressionMax_;
     // exprtk variables.
     exprtkSymbolTable* symbolTable_ = nullptr;
-    exprtkSymbolTable* minMaxTable_ = nullptr;
     exprtkExpression* expression_ = nullptr;
     exprtkParser parser_;
     std::vector<MapVariable<T>> currentVariables_;
     std::string currentExpressionString_;
 
-    std::vector<std::string> extractVariables(std::string expression);
     std::vector<MapVariable<T>> createVariables(const std::string expression);
     T calculateValue();
     void calculateMinMax();
-    T scale(T x, T inLow, T inHigh, T outLow, T outHigh, T exp);
 
 };
 
@@ -84,18 +81,16 @@ T MapEvaluator<T>::value() {
 }
 
 template<class T>
-T MapEvaluator<T>::scale(T x, T inLow, T inHigh, T outLow, T outHigh, T exp)
+T MapEvaluator<T>::scaledValue(T outLow, T outHigh, T exponent)
 {
-    return ((x-inLow)/(inHigh-inLow) == 0.0) ? outLow :
-                                               (((x-inLow)/(inHigh-inLow)) > 0.0) ?
-                                                   (outLow + (outHigh-outLow) * pow(((x-inLow)/(inHigh-inLow)),exp)) :
-                                                   (outLow + (outHigh-outLow) * -(pow((((-x+inLow)/(inHigh-inLow))),exp)));
-}
-
-template<class T>
-T MapEvaluator<T>::scaledValue(T outLow, T outHigh)
-{
-    //    return scale(value(), );
+    T val;
+    // Constant expressions cannot be scaled.
+    if(expressionMin_ != expressionMax_) {
+        val = utility::scale(value(), expressionMin_, expressionMax_, outLow, outHigh, exponent);
+    } else {
+        val = expression_->value();
+    }
+    return val;
 }
 
 template<class T>

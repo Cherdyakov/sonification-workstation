@@ -6,7 +6,7 @@ namespace sow {
 ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
 {
     // Interface variables, bound to QML.
-    setScaled(true);
+    setScaled(false);
     setScaleOutLow(100.0f);
     setScaleOutHigh(8000.0f);
     setScaleExp(1);

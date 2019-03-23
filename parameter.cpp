@@ -11,7 +11,14 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 float Parameter::value()
 {
-    return mapEvaluator_.value();
+    float val;
+    if(scale_) {
+        val = mapEvaluator_.scaledValue(scaleOutLow_, scaleOutHigh_, scaleExponent_);
+    } else {
+        val = mapEvaluator_.value();
+
+    }
+    return val;
 }
 
 // Process outstanding ParameterCommands
@@ -55,20 +62,14 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
     case ENUMS::SUB_PARAMETER::SCALED:
         scale_ = (cmd.value != 0.0f);
         break;
+    case ENUMS::SUB_PARAMETER::SCALE_EXP:
+        scaleExponent_ = cmd.value;
+        break;
     case ENUMS::SUB_PARAMETER::SCALE_OUT_LOW:
-        scaler_.setOutLow(cmd.value);
+        scaleOutLow_ = cmd.value;
         break;
     case ENUMS::SUB_PARAMETER::SCALE_OUT_HIGH:
-        scaler_.setOutHigh(cmd.value);
-        break;
-    case ENUMS::SUB_PARAMETER::SCALE_EXP:
-        scaler_.setExp(cmd.value);
-        break;
-    case ENUMS::SUB_PARAMETER::SCALE_IN_LOW:
-        scaler_.setInLow(cmd.value);
-        break;
-    case ENUMS::SUB_PARAMETER::SCALE_IN_HIGH:
-        scaler_.setInHigh(cmd.value);
+        scaleOutHigh_ = cmd.value;
         break;
     case ENUMS::SUB_PARAMETER::MAP:
         map_ = QString(cmd.map);
