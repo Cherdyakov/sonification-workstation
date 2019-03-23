@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QMutex>
+#include "filereader.h"
 #include "qtsynthitem.h"
 #include "qtoscillator.h"
 //#include "qtaudifier.h"
@@ -30,6 +32,7 @@ public:
     Q_INVOKABLE void unsubscribe(QtSynthItem* item);
 
     float pos(); // for polling state from outside
+    void loadDataset(QString file);
     Frame process() override;       // every sample
     void controlProcess() override; // every process block
 
@@ -38,7 +41,9 @@ private:
     RingBuffer<TransportCommand> transportCommandBuffer_;
     Frame frameBuffer_[4096];
     std::vector<QtSynthItem*> subscribers_;
-    Dataset* dataset_;
+    Dataset dataset_;
+    QString filepath_;
+    QMutex fileMutex_;
     std::vector<float> currentData_;
     std::vector<float> dataMinValues_;
     std::vector<float> dataMaxValues_;
@@ -51,16 +56,15 @@ private:
     float loopBegin_;
     float loopEnd_;
     bool dataStale_;
-    bool paused_;
+    bool pause_;
     bool loop_;
     bool interpolate_;
 
-    virtual void processDatasetCommand(DatasetCommand cmd) override;
     void processTransportCommand(TransportCommand cmd);
     void processSubscribeItem(QtSynthItem* item);
     void processUnsubscribeItem(QtSynthItem* item);
     void processDeleteItem(QtSynthItem* item);
-    void processSetDataset(Dataset *dataset);
+    void processImportDataset();
     void processSetPlaybackPosition(float pos);
     void refreshCurrentData();
     void calculateReturnPosition();
@@ -68,11 +72,12 @@ private:
 
 signals:
     void posChanged(float pos);
+    void datasetImported(Dataset* dataset);
 
 public slots:
 
     // slots for controlling playback
-    void onDatasetchanged(sow::Dataset *dataset);
+    void onImportDataset(QString file);
     void onPausechanged(bool p);
     void onPoschanged(float pos);
     void onSpeedchanged(float speed);

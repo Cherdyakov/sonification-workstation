@@ -36,9 +36,7 @@ public:
     Q_INVOKABLE virtual void disconnect(QtSynthItem *parent);
     Q_INVOKABLE virtual void disconnectAll();
 
-    virtual void setData(std::vector<float>* const data,
-                         std::vector<float>* const mins,
-                         std::vector<float>* const maxes);
+    virtual void setData(const Dataset* dataset, const std::vector<float>* currentData);
     virtual Frame process();        // called every audio sample
     virtual void step();            // called every new data value (step)
     virtual void controlProcess();  // called every process block
@@ -50,14 +48,12 @@ protected:
     ENUMS::ITEM_TYPE type_;
     ENUMS::OUTPUT_TYPE outputType_;
     RingBuffer<ItemCommand> commandBuffer_;
-    RingBuffer<DatasetCommand> datasetCommandBuffer_;
     std::vector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
     std::vector<QtSynthItem*> parents_;
     std::vector<QtSynthItem*> children_;
     std::vector<Parameter*> parameters_;
 
     virtual void processCommand(ItemCommand cmd);
-    virtual void processDatasetCommand(DatasetCommand cmd);
     virtual void processConnectChild(QtSynthItem* child);
     virtual void processDisconnect(QtSynthItem* other);
     virtual void processDisconnectAll();

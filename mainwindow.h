@@ -29,7 +29,6 @@ public:
 private:
 
     QtTransport* transport;
-    FileReader* fileReader;
     Session* session;
 
     //convenience functions to create and populate menus

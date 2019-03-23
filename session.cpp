@@ -68,7 +68,7 @@ void Session::on_open()
         // load the new dataset
         QJsonValue value = jsonObject.value("dataset");
         datafile_ = value.toString();
-        emit newDatafile(datafile_, &dataset_);
+        emit newDatafile(datafile_);
 
         // set playback speed
         speed_ = jsonObject.value("speed").toInt();
@@ -96,7 +96,7 @@ void Session::on_importDatasetFile()
 
     if(!datafile_.isEmpty())
     {
-        emit newDatafile(datafile_, &dataset_);
+        emit newDatafile(datafile_);
     }
 }
 

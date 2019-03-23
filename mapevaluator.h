@@ -31,9 +31,9 @@ public:
 
     MapEvaluator();
     ~MapEvaluator();
-    void setData(DatasetCommand cmd);
+    void setData(const Dataset *dataset, const std::vector<T> *currentData);
     bool compileExpression(const std::string expressionStr);
-    bool testCompileExpression(const std::string expressionStr, const std::vector<T> * const data);
+    bool testCompileExpression(const std::string expressionStr);
     T value();
     T scaledValue(T outLow, T outHigh);
 
@@ -65,10 +65,10 @@ template<class T>
 MapEvaluator<T>::~MapEvaluator() {}
 
 template<class T>
-void MapEvaluator<T>::setData(DatasetCommand cmd)
+void MapEvaluator<T>::setData(const Dataset* dataset, const std::vector<T>* currentData)
 {
-    dataset_ = cmd.dataset;
-    currentData_ = cmd.data;
+    dataset_ = dataset;
+    currentData_ = currentData;
 }
 
 template<class T>

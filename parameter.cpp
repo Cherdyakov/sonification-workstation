@@ -11,7 +11,7 @@ Parameter::Parameter(QObject *parent) : QObject(parent)
 
 float Parameter::value()
 {
-    return evaluator_.value();
+    return mapEvaluator_.value();
 }
 
 // Process outstanding ParameterCommands
@@ -21,15 +21,11 @@ void Parameter::controlProcess()
     while(commandBuffer_.pop(&currentCommand_)) {
         processCommand(currentCommand_);
     }
-    DatasetCommand currentDatasetCommand_;
-    while(datasetCommandBuffer_.pop(&currentDatasetCommand_)) {
-        processDatasetCommand(currentDatasetCommand_);
-    }
 }
 
 bool Parameter::setMap(const QString map)
 {
-    if(!evaluator_.testCompileExpression(map.toStdString(), data_)) {
+    if(!mapEvaluator_.testCompileExpression(map.toStdString())) {
         return false;
     }
 
@@ -45,13 +41,9 @@ bool Parameter::setMap(const QString map)
     return true;
 }
 
-void Parameter::setData(std::vector<float>* const data, std::vector<float>* const mins, std::vector<float>* const maxes)
+void Parameter::setData(const Dataset *dataset, const std::vector<float> *currentData)
 {
-    DatasetCommand cmd;
-    cmd.data = data;
-    cmd.mins = mins;
-    cmd.maxes = maxes;
-    datasetCommandBuffer_.push(cmd);
+    mapEvaluator_.setData(dataset, currentData);
 }
 
 // Execute commands pulled from the command buffer
@@ -85,16 +77,9 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
     }
 }
 
-void Parameter::processDatasetCommand(DatasetCommand cmd)
-{
-    data_ = cmd.data;
-    mins_ = cmd.mins;
-    maxes_ = cmd.maxes;
-}
-
 void Parameter::processSetMap(std::string expression)
 {
-    evaluator_.compileExpression(expression);
+    mapEvaluator_.compileExpression(expression);
 }
 
 // Slot for updated float values from the interface

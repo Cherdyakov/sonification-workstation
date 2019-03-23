@@ -2,7 +2,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    // Set the title and size of the application window
+    // Set the title and size of the application window.
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.8);
 
@@ -20,15 +20,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
     QScrollArea* scrollArea = new QScrollArea(this);                                    // Scroll area for the TrackView
 
-    transport = new QtTransport(this);                                                  // Synthesis tree root, Transport
-    fileReader = new FileReader(this);                                                  // Reads CSV files into Dataset
+    transport = new QtTransport(this);                                                   // Reads CSV files into Dataset
     session = new Session(reinterpret_cast<QObject*>(quickView->rootObject()), this);   // Represents loaded project
 
     quickView->rootContext()->setContextProperty("transport", transport);
-    quickView->rootContext()->setContextProperty("fileReader", fileReader);
     quickView->setSource(QUrl("qrc:/main.qml"));
 
-    // Setup left side
+    // Setup left side.
     trackView->setPlayHead(playHead);
     transportWidget->setMaximumHeight(40);
     scrollArea->setWidgetResizable(true);
@@ -36,10 +34,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     layoutLeft->addWidget(scrollArea);
     layoutLeft->addWidget(transportWidget);
     leftSide->setLayout(layoutLeft);
-    // Setup right side
+    // Setup right side.
     rightSide->setLayout(layoutRight);
     layoutRight->addWidget(quickViewContainer);
-    // Add both sides to splitter
+    // Add both sides to splitter.
     splitter->addWidget(leftSide);
     splitter->addWidget(rightSide);
     splitter->setCollapsible(0, false);
@@ -50,31 +48,29 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     splitter->setSizes(QList<int>( { leftWidth, rightWidth } ));
 
     // Add the prepared splitter to the central widget's
-    // layout and then insert them into application window
+    // layout and then insert them into application window.
     centralWidget->setLayout(centralLayout);
     centralLayout->addWidget(splitter);
     this->setCentralWidget(centralWidget);
 
-    // Populate appliation menus
-    // and connect their signals
+    // Populate application menus
+    // and connect their signals.
     createMenus();
 
     ///* CONNECT NON_UI SIGNALS AND SLOTS *///
-    // FileReader signals
-    connect(fileReader, &FileReader::datasetChanged,
-            transport, &QtTransport::onDatasetchanged);
-    connect(fileReader, &FileReader::datasetChanged,
+    // Transport Dataset signals.
+    connect(transport, &QtTransport::datasetImported,
             trackView, &TrackView::onDatasetChanged);
-    connect(fileReader, &FileReader::datasetChanged,
+    connect(transport, &QtTransport::datasetImported,
             transportWidget, &TransportWidget::on_datasetChanged);
-    // Session signals
+    // Session signals.
     connect(session, &Session::newDatafile,
-            fileReader, &FileReader::on_newDatafile);
+            transport, &QtTransport::onImportDataset);
     connect(session, &Session::speedChanged,
             transportWidget, &TransportWidget::on_speed_changed);
     connect(session, &Session::interpolateChanged,
             transportWidget, &TransportWidget::on_interpolation_changed);
-    // Connect Transport < > TransportWidget
+    // Connect Transport < > TransportWidget.
     connect(transport, &QtTransport::posChanged,
             playHead, &PlayHead::onCursorMoved);
     connect(transportWidget, &TransportWidget::speedChanged,
@@ -85,14 +81,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport, &QtTransport::onPausechanged);
     connect(transportWidget, &TransportWidget::loopingChanged,
             transport, &QtTransport::onLoopingchanged);
-    // TransportWidget signals to Session, Playhead
+    // TransportWidget signals to Session, Playhead.
     connect(transportWidget, &TransportWidget::speedChanged,
             session, &Session::on_speedChanged);
     connect(transportWidget, &TransportWidget::interpolateChanged,
             session, &Session::onInterpolateChanged);
     connect(transportWidget, &TransportWidget::pausedChanged,
             playHead, &PlayHead::onPauseChanged);
-    // Playhead signals
+    // Playhead signals.
     connect(playHead, &PlayHead::cursorPosChanged,
             transport, &QtTransport::onPoschanged);
     connect(playHead, &PlayHead::loopPointsChanged,
