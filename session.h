@@ -24,14 +24,13 @@ private:
     void write();
 
     QObject* qmlRoot_;
-    Dataset dataset_;
     QString sessionfile_;
     QString datafile_;
     bool interpolate_;
     int speed_;
 
 signals:
-    void newDatafile(QString datafile, sow::Dataset* dataset);
+    void newDatafile(QString datafile);
     void interpolateChanged(bool interpolate);
     void speedChanged(int speed);
 

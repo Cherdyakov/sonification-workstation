@@ -17,8 +17,8 @@ ColumnLayout {
 
     // Force map re-evaluation on new Dataset.
     Connections {
-        target: fileReader
-        onQmlDatasetChanged: {
+        target: transport
+        onDatasetImported: {
             var tempMap = map
             map = ""
             map = tempMap

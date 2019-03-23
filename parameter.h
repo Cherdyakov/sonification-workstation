@@ -21,9 +21,8 @@ public:
     float value();
     void controlProcess();
     bool setMap(const QString map);
-    virtual void setData(std::vector<float>* const data,
-                         std::vector<float>* const mins,
-                         std::vector<float>* const maxes);
+    void setData(const Dataset* dataset, const std::vector<float>* currentData);
+
 
 private:
 
@@ -37,13 +36,11 @@ private:
     std::vector<float>* mins_ = nullptr;
     std::vector<float>* maxes_ = nullptr;
     RingBuffer<ParameterCommand> commandBuffer_;
-    RingBuffer<DatasetCommand> datasetCommandBuffer_;
 
     // Map expression evaulator.
-    MapEvaluator<float> evaluator_;
+    MapEvaluator<float> mapEvaluator_;
 
     virtual void processCommand(ParameterCommand cmd);
-    virtual void processDatasetCommand(DatasetCommand cmd);
     virtual void processSetMap(std::string expression);
 
 signals:
