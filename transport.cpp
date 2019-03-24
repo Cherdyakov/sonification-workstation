@@ -6,13 +6,18 @@
 namespace sow {
 
 Transport::Transport(QObject *parent) : SynthItem (parent)
-{
+{  
+    type_ = ENUMS::ITEM_TYPE::TRANSPORT;
+    acceptedInputs_ = {
+        ENUMS::OUTPUT_TYPE::AUDIO,
+        ENUMS::OUTPUT_TYPE::AM
+    };
+
     // Timer updates playhead position
     QTimer* posTimer = new QTimer(this);
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
 
-    type_ = ENUMS::ITEM_TYPE::TRANSPORT;
     pause_ = true;
     loop_ = false;
     loopBegin_ = 0.0f;
@@ -25,11 +30,6 @@ Transport::Transport(QObject *parent) : SynthItem (parent)
     returnPos_ = 0.0f;
     masterVolume_ = 1.0f;
     interpolate_ = false;
-
-    acceptedInputs_ = {
-        ENUMS::OUTPUT_TYPE::AUDIO,
-        ENUMS::OUTPUT_TYPE::AM
-    };
 }
 
 /*
