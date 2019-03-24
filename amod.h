@@ -13,11 +13,6 @@ public:
 
     explicit Amod(QObject *parent = nullptr);
 
-
-
-signals:
-
-public slots:
 };
 
 } // namespace sow
