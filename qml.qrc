@@ -40,5 +40,6 @@
         <file>images/alpha.png</file>
         <file>EditorFloatParameter.qml</file>
         <file>AM.qml</file>
+        <file>FM.qml</file>
     </qresource>
 </RCC>
