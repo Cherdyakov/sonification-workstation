@@ -28,16 +28,23 @@ Rectangle {
         }
 
         PaletteItem {
-            id: aud
-            componentFile: "AUD.qml"
-            source: "images/AUD.png"
+            id: am
+            componentFile: "AM.qml"
+            source: "images/MOD.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: mod
-            componentFile: "MOD.qml"
+            id: fm
+            componentFile: "FM.qml"
             source: "images/MOD.png"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
+            id: aud
+            componentFile: "AUD.qml"
+            source: "images/AUD.png"
             onItemCreated: root.itemCreated(item)
         }
 

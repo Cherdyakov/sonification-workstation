@@ -9,8 +9,6 @@ Item {
     width: childrenRect.width
     height: childrenRect.height
 
-    property alias itemName: layout.title
-    property string paramName: "Parameter"
     property alias scaled: scaler.scaled
     property alias scaleLow: scaler.low
     property alias scaleRealLow: scaler.realLow
@@ -20,13 +18,11 @@ Item {
     property alias scaleRealExp: scaler.realExp
     property alias mapper: mapper
 
-    EditorLayout {
+    ColumnLayout {
         id: layout
 
         EditorMapper {
             id: mapper
-            maxIndexes: 128
-            label.text: paramName
         }
 
         EditorScaler {

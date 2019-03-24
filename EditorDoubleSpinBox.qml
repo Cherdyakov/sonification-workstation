@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.11
 import "Style.js" as Style
 
 SpinBox {
@@ -11,6 +12,8 @@ SpinBox {
     editable: true
     padding: 0
     font.pointSize: Style.editorFontSize
+    Layout.maximumHeight: Style.editorRowHeight + 2
+    Layout.preferredWidth: Style.editorControlWidth
 
     property int decimals: 2
     property real realValue: value / 100

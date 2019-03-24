@@ -7,13 +7,8 @@
 #include "filereader.h"
 #include "synthitem.h"
 #include "oscillator.h"
-//#include "qtaudifier.h"
-//#include "qtmodulator.h"
-//#include "qtpanner.h"
-//#include "qtenvelope.h"
-//#include "qtvolume.h"
-//#include "qtnoise.h"
-//#include "qtequalizer.h"
+#include "amod.h"
+#include "fmod.h"
 
 namespace sow {
 

@@ -8,10 +8,10 @@ import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
-    label: qsTr("OSC")
-    type: ENUMS.OSCILLATOR
-    output: ENUMS.AUDIO
-    mainColor: Style.oscColor
+    label: qsTr("AM")
+    type: ENUMS.AMOD
+    output: ENUMS.AM
+    mainColor: Style.amColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
@@ -24,7 +24,7 @@ SynthItem {
         EditorLayout {
 
             EditorTitle {
-                text: qsTr("OSC");
+                text: qsTr("AM");
             }
 
             EditorParameterHeader {
@@ -57,6 +57,7 @@ SynthItem {
                     }
                 }
             }
+
         }
     }
 

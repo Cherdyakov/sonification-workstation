@@ -23,8 +23,6 @@ ColumnLayout {
         EditorLabel {
             id: label
             text: qsTr("Scaled: ")
-            Layout.maximumHeight: Style.editorRowHeight
-            Layout.fillWidth: true
             horizontalAlignment: Text.AlignRight
         }
 
@@ -54,36 +52,26 @@ ColumnLayout {
         EditorLabel {
             id: lowLabel
             text: qsTr("Scale Low: ")
-            Layout.maximumHeight: Style.editorRowHeight
-            Layout.fillWidth: true
         }
 
         EditorDoubleSpinBox {
             id: lowSpinBox
-            Layout.maximumHeight: Style.editorRowHeight + 2
-            Layout.preferredWidth: Style.editorControlWidth
         }
     }
     RowLayout {
         EditorLabel {
             id: highLabel
             text: qsTr("Scale High: ")
-            Layout.maximumHeight: Style.editorRowHeight
-            Layout.fillWidth: true
         }
 
         EditorDoubleSpinBox {
             id: highSpinBox
-            Layout.maximumHeight: Style.editorRowHeight + 2
-            Layout.preferredWidth: Style.editorControlWidth
         }
     }
     RowLayout {
         EditorLabel {
             id: expLabel
             text: qsTr("Scale Exponent: ")
-            Layout.maximumHeight: Style.editorRowHeight
-            Layout.fillWidth: true
         }
 
         EditorDoubleSpinBox {
@@ -91,8 +79,6 @@ ColumnLayout {
             from: 100
             to: 6400
             stepSize: 10
-            Layout.maximumHeight: Style.editorRowHeight + 2
-            Layout.preferredWidth: Style.editorControlWidth
         }
     }
 }

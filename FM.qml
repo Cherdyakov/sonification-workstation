@@ -8,10 +8,10 @@ import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
-    label: qsTr("OSC")
-    type: ENUMS.OSCILLATOR
-    output: ENUMS.AUDIO
-    mainColor: Style.oscColor
+    label: qsTr("FM")
+    type: ENUMS.FMOD
+    output: ENUMS.FM
+    mainColor: Style.amColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
@@ -24,7 +24,7 @@ SynthItem {
         EditorLayout {
 
             EditorTitle {
-                text: qsTr("OSC");
+                text: qsTr("FM");
             }
 
             EditorParameterHeader {
@@ -57,7 +57,39 @@ SynthItem {
                     }
                 }
             }
+
+            EditorParameterHeader {
+                text: "Depth"
+            }
+
+            EditorFloatParameter {
+                id: depth
+                // Value changed from QML
+                onScaledChanged: implementation ? implementation.depth.scaled = scaled : {}
+                onScaleRealLowChanged: implementation ? implementation.depth.scaleLow = scaleRealLow : {}
+                onScaleRealHighChanged: implementation ? implementation.depth.scaleHigh = scaleRealHigh : {}
+                onScaleRealExpChanged: implementation ? implementation.depth.scaleExp = scaleRealExp : {}
+                // Value changed from C++
+                scaled: implementation ? implementation.depth.scaled : 0
+                scaleLow: implementation ? implementation.depth.scaleLow * 100 : 0
+                scaleHigh: implementation ? implementation.depth.scaleHigh * 100 : 0
+                scaleExp: implementation ? implementation.depth.scaleExp * 100 : 0
+                mapper.map: implementation ? implementation.depth.map : ""
+
+                // Set map with Q_INVOKABLE function call and check if it is valid.
+                mapper.onMapChanged: {
+                    if(implementation) {
+                        if(!implementation.depth.setMap(mapper.map)) {
+                            mapper.textColor = "tomato"
+                        }
+                        else {
+                            mapper.textColor = "black"
+                        }
+                    }
+                }
+            }
         }
+
     }
 
     // return json representation of self

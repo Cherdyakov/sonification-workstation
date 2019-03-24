@@ -17,9 +17,9 @@ public:
 
     ParameterInterface* frequencyInterface() const;
 
-    Frame process();
+    virtual Frame process() override;
 
-private:
+protected:
 
     ParameterInterface* frequencyInterface_;
     Parameter* frequency_;

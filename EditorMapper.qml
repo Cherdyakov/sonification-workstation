@@ -7,10 +7,8 @@ ColumnLayout {
     id: root
     Layout.maximumHeight: Style.editorRowHeight * 2
 
-    property alias label: label
     property alias text: textInput.text
     property alias textColor: textInput.color
-    property int maxIndexes: 1
     property string map: ""
 
     onMapChanged: textInput.text = map;
@@ -24,14 +22,6 @@ ColumnLayout {
             map = tempMap
         }
     }
-
-    EditorLabel {
-        id: label
-        text: qsTr("Source Mapping: ")
-        Layout.maximumHeight: Style.editorRowHeight
-        Layout.preferredWidth: Style.editorLabelWidth
-        Layout.fillWidth: true
-    } // label
 
     Rectangle {
         id: textInputRect

@@ -43,7 +43,9 @@ SOURCES += \
     parameter.cpp \
     synthitem.cpp \
     transport.cpp \
-    oscillator.cpp
+    oscillator.cpp \
+    amod.cpp \
+    fmod.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -91,7 +93,9 @@ HEADERS += \
     mapevaluator.h \
     synthitem.h \
     transport.h \
-    oscillator.h
+    oscillator.h \
+    amod.h \
+    fmod.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

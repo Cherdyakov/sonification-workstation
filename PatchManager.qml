@@ -64,14 +64,15 @@ Item {
             else {
                 // Clicked on a second item. Connect first
                 // item as synthChild of second.
-                item.connectChild(patchingChild)
+                if(item.connectChild(patchingChild)) {
 
-                var patch = {
-                    parent: item,
-                    child: patchingChild
+                    var patch = {
+                        parent: item,
+                        child: patchingChild
+                    }
+
+                    patches.push(patch)
                 }
-
-                patches.push(patch)
                 // Stop patching and paint.
                 patchingChild = null
                 canvas.requestPaint()

@@ -213,6 +213,7 @@ Item {
             synthChildren.push(synthItem)
             synthItem.addParent(this)
         }
+        return added
     }
 
     // Add QML SynthItem parent

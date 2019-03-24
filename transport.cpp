@@ -6,13 +6,18 @@
 namespace sow {
 
 Transport::Transport(QObject *parent) : SynthItem (parent)
-{
+{  
+    type_ = ENUMS::ITEM_TYPE::TRANSPORT;
+    acceptedInputs_ = {
+        ENUMS::OUTPUT_TYPE::AUDIO,
+        ENUMS::OUTPUT_TYPE::AM
+    };
+
     // Timer updates playhead position
     QTimer* posTimer = new QTimer(this);
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
 
-    type_ = ENUMS::ITEM_TYPE::TRANSPORT;
     pause_ = true;
     loop_ = false;
     loopBegin_ = 0.0f;
@@ -25,11 +30,6 @@ Transport::Transport(QObject *parent) : SynthItem (parent)
     returnPos_ = 0.0f;
     masterVolume_ = 1.0f;
     interpolate_ = false;
-
-    acceptedInputs_ = {
-        ENUMS::OUTPUT_TYPE::AUDIO,
-        ENUMS::OUTPUT_TYPE::AM
-    };
 }
 
 /*
@@ -126,9 +126,10 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
 {
     SynthItem* item = nullptr;
 
+    qDebug() << type;
+
     switch (type){
-    case ENUMS::ITEM_TYPE::TRANSPORT:
-        item = this;
+    case ENUMS::ITEM_TYPE::NONE:
         break;
     case ENUMS::ITEM_TYPE::OSCILLATOR:
         item = new Oscillator(this);
@@ -137,8 +138,13 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
     case ENUMS::ITEM_TYPE::AUDIFIER:
         //        item = new Audifier();
         break;
-    case ENUMS::ITEM_TYPE::MODULATOR:
-        //        item = new Modulator();
+    case ENUMS::ITEM_TYPE::AMOD:
+        item = new Amod(this);
+        processSubscribeItem(item);
+        break;
+    case ENUMS::ITEM_TYPE::FMOD:
+        item = new Fmod(this);
+        processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::PANNER:
         //        item = new Panner();
@@ -155,7 +161,8 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
     case ENUMS::ITEM_TYPE::EQUALIZER:
         //        item = new Equalizer();
         break;
-    case ENUMS::ITEM_TYPE::NONE:
+    case ENUMS::ITEM_TYPE::TRANSPORT:
+        item = this;
         break;
     }
     return item;
