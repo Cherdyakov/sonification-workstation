@@ -28,11 +28,22 @@ Frame Oscillator::process()
     Frame frame;
     if(mute_) return frame;
 
+    float freq = frequency_->value();
     bool aMod = false;
     bool fMod = false;
 
+    // Frequency modulation.
+    Frame fmFrame = 0.0f;
+    for (SynthItem*& child : children_) {
+        if(child->outputType() == ENUMS::OUTPUT_TYPE::FM) {
+            fMod = true;
+            fmFrame += child->process();
+        }
+    }
+    if(fMod) freq += fmFrame.left;
+
     //set frequency of generator
-    gen_.freq(frequency_->value());
+    gen_.freq(freq);
 
     //Generate frame.
     frame = gen_();
