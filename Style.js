@@ -28,6 +28,7 @@ var patchWidth = 4
 var editorTitleSize = 14
 var editorBackgroundColor = "white"
 var editorFontSize = 10
+var editorParameterHeaderFontSize = 12
 var editorTextColor = "black"
 var editorRowHeight = 16
 var editorRowWidth = 120

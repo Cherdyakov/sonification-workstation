@@ -21,34 +21,75 @@ SynthItem {
     Editor {
         id: editor
 
-        EditorFloatParameter {
-            id: frequency
-            itemName: "FM"
-            paramName: "Frequency:"
-            // Value changed from QML
-            onScaledChanged: implementation ? implementation.frequency.scaled = scaled : {}
-            onScaleRealLowChanged: implementation ? implementation.frequency.scaleLow = scaleRealLow : {}
-            onScaleRealHighChanged: implementation ? implementation.frequency.scaleHigh = scaleRealHigh : {}
-            onScaleRealExpChanged: implementation ? implementation.frequency.scaleExp = scaleRealExp : {}
-            // Value changed from C++
-            scaled: implementation ? implementation.frequency.scaled : 0
-            scaleLow: implementation ? implementation.frequency.scaleLow * 100 : 0
-            scaleHigh: implementation ? implementation.frequency.scaleHigh * 100 : 0
-            scaleExp: implementation ? implementation.frequency.scaleExp * 100 : 0
-            mapper.map: implementation ? implementation.frequency.map : ""
+        EditorLayout {
 
-            // Set map with Q_INVOKABLE function call and check if it is valid.
-            mapper.onMapChanged: {
-                if(implementation) {
-                    if(!implementation.frequency.setMap(mapper.map)) {
-                        mapper.textColor = "tomato"
+            EditorTitle {
+                text: qsTr("FM");
+            }
+
+            EditorParameterHeader {
+                text: "Frequency"
+            }
+
+            EditorFloatParameter {
+                id: frequency
+                // Value changed from QML
+                onScaledChanged: implementation ? implementation.frequency.scaled = scaled : {}
+                onScaleRealLowChanged: implementation ? implementation.frequency.scaleLow = scaleRealLow : {}
+                onScaleRealHighChanged: implementation ? implementation.frequency.scaleHigh = scaleRealHigh : {}
+                onScaleRealExpChanged: implementation ? implementation.frequency.scaleExp = scaleRealExp : {}
+                // Value changed from C++
+                scaled: implementation ? implementation.frequency.scaled : 0
+                scaleLow: implementation ? implementation.frequency.scaleLow * 100 : 0
+                scaleHigh: implementation ? implementation.frequency.scaleHigh * 100 : 0
+                scaleExp: implementation ? implementation.frequency.scaleExp * 100 : 0
+                mapper.map: implementation ? implementation.frequency.map : ""
+
+                // Set map with Q_INVOKABLE function call and check if it is valid.
+                mapper.onMapChanged: {
+                    if(implementation) {
+                        if(!implementation.frequency.setMap(mapper.map)) {
+                            mapper.textColor = "tomato"
+                        }
+                        else {
+                            mapper.textColor = "black"
+                        }
                     }
-                    else {
-                        mapper.textColor = "black"
+                }
+            }
+
+            EditorParameterHeader {
+                text: "Depth"
+            }
+
+            EditorFloatParameter {
+                id: depth
+                // Value changed from QML
+                onScaledChanged: implementation ? implementation.depth.scaled = scaled : {}
+                onScaleRealLowChanged: implementation ? implementation.depth.scaleLow = scaleRealLow : {}
+                onScaleRealHighChanged: implementation ? implementation.depth.scaleHigh = scaleRealHigh : {}
+                onScaleRealExpChanged: implementation ? implementation.depth.scaleExp = scaleRealExp : {}
+                // Value changed from C++
+                scaled: implementation ? implementation.depth.scaled : 0
+                scaleLow: implementation ? implementation.depth.scaleLow * 100 : 0
+                scaleHigh: implementation ? implementation.depth.scaleHigh * 100 : 0
+                scaleExp: implementation ? implementation.depth.scaleExp * 100 : 0
+                mapper.map: implementation ? implementation.depth.map : ""
+
+                // Set map with Q_INVOKABLE function call and check if it is valid.
+                mapper.onMapChanged: {
+                    if(implementation) {
+                        if(!implementation.depth.setMap(mapper.map)) {
+                            mapper.textColor = "tomato"
+                        }
+                        else {
+                            mapper.textColor = "black"
+                        }
                     }
                 }
             }
         }
+
     }
 
     // return json representation of self

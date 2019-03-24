@@ -6,6 +6,8 @@ import "Style.js" as Style
 Rectangle {
     id: rect
     z: 300
+    x: Style.editorMargin / 2
+    y: Style.editorMargin / 2
     height: childrenRect.height + Style.editorMargin
     width: childrenRect.width + Style.editorMargin
     radius: Style.editorRadius

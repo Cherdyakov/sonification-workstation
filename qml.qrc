@@ -41,5 +41,7 @@
         <file>EditorFloatParameter.qml</file>
         <file>AM.qml</file>
         <file>FM.qml</file>
+        <file>EditorParameterHeader.qml</file>
+        <file>EditorTitle.qml</file>
     </qresource>
 </RCC>
