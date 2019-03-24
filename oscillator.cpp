@@ -26,19 +26,27 @@ ParameterInterface* Oscillator::frequencyInterface() const
 Frame Oscillator::process()
 {
     Frame frame;
+    if(mute_) return frame;
 
-    if(mute_)
-    {
-        return frame;
-    }
+    bool aMod = false;
+    bool fMod = false;
 
     //set frequency of generator
     gen_.freq(frequency_->value());
 
-    //generate frame
-
-    // TODO: visit childreen and Apply AM or FM
+    //Generate frame.
     frame = gen_();
+
+    // Amplitude modulation.
+    Frame amFrame = 0.0f;
+    for (SynthItem*& child : children_) {
+        if(child->outputType() == ENUMS::OUTPUT_TYPE::AM) {
+            aMod = true;
+            amFrame += child->process();
+        }
+    }
+
+    if(aMod) frame *= amFrame;
 
     return frame;
 }
