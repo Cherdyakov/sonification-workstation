@@ -9,6 +9,7 @@ SpinBox {
     to: 20000 * 100
     stepSize: 100
     editable: true
+    padding: 0
     font.pointSize: Style.editorFontSize
 
     property int decimals: 2
