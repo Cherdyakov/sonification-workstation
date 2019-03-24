@@ -18,7 +18,6 @@
         <file>EditorMapper.qml</file>
         <file>AUD.qml</file>
         <file>EditorScaler.qml</file>
-        <file>MOD.qml</file>
         <file>EditorModulation.qml</file>
         <file>PAN.qml</file>
         <file>ENV.qml</file>
