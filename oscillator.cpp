@@ -6,11 +6,16 @@ Oscillator::Oscillator(QObject *parent) : SynthItem(parent)
 {
     type_ = ENUMS::ITEM_TYPE::OSCILLATOR;
     outputType_ = ENUMS::OUTPUT_TYPE::AUDIO;
+    acceptedInputs_ = {
+        ENUMS::OUTPUT_TYPE::AM,
+        ENUMS::OUTPUT_TYPE::FM
+    };
 
     frequency_ = new Parameter(this);
     frequencyInterface_ = new ParameterInterface(this);
     frequencyInterface_->connectInterface(frequency_);
     parameters_ = { frequency_ };
+
 }
 
 ParameterInterface* Oscillator::frequencyInterface() const
