@@ -19,7 +19,7 @@ public:
 
     Frame process();
 
-private:
+protected:
 
     ParameterInterface* frequencyInterface_;
     Parameter* frequency_;
