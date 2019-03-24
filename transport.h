@@ -1,116 +1,95 @@
-#ifndef SYNTHGRAPH_H
-#define SYNTHGRAPH_H
+#ifndef TRANSPORT_H
+#define TRANSPORT_H
 
-#include <atomic>
-#include <mutex>
-
-#include "dataset.h"
+#include <QObject>
+#include <QTimer>
+#include <QMutex>
+#include "filereader.h"
+#include "synthitem.h"
 #include "oscillator.h"
-//#include "audifier.h"
-//#include "modulator.h"
-//#include "panner.h"
-//#include "envelope.h"
-//#include "volume.h"
-//#include "noise.h"
-//#include "equalizer.h"
-#include "ringbuffer.h"
+//#include "qtaudifier.h"
+//#include "qtmodulator.h"
+//#include "qtpanner.h"
+//#include "qtenvelope.h"
+//#include "qtvolume.h"
+//#include "qtnoise.h"
+//#include "qtequalizer.h"
 
 namespace sow {
 
-class Transport final: public SynthItem
+class Transport : public SynthItem
 {
-
+    Q_OBJECT
 public:
 
-    explicit Transport();
-    virtual ~Transport();
-    // interface overrides
-    void delete_self() override;
-    void delete_item(SynthItem* item);
-    SynthItem::ITEM get_type();
-    void set_data(std::vector<double>* data,
-                  std::vector<double>* mins,
-                  std::vector<double>* maxes) override;
-    void add_parent(SynthItem* parent) override;
-    void remove_parent(SynthItem* parent) override;
-    bool add_child(SynthItem *child, PARAMETER param) override;
-    void remove_child(SynthItem *child) override;
-    void mute(bool mute) override;
-    // for setting the entire dataset to be sonified
-    void set_dataset(Dataset* dataset);
-    // functions for controlling playback
-    void pause(bool pause);
-    void set_playback_position(double pos);
-    void set_speed(int speed_);
-    void set_looping(bool loop_);
-    void set_loop_points(double begin, double end);
-    void set_interpolate(bool interpolate_);
+    explicit Transport(QObject *parent = nullptr);
+
+    // factory for other SynthItems
+    Q_INVOKABLE sow::SynthItem* createItem(ENUMS::ITEM_TYPE type);
+    Q_INVOKABLE void deleteItem(SynthItem* item);
     // add or remove SynthItem from block processing
-    void subscribe_item(SynthItem* item);
-    void unsubscribe_item(SynthItem* item);
-    // factory for other SynthItems (probably should do something else)
-    SynthItem *create_item(SynthItem::ITEM type);
-    // for polling state from outside
-    double get_playback_position();
-    // generate frame
-    Frame process() override; // every sample
-    void step() override; // every new data value (step)
-    void control_process() override; // every process block
+    Q_INVOKABLE void subscribe(SynthItem* item);
+    Q_INVOKABLE void unsubscribe(SynthItem* item);
 
-    // getters are not thread safe
-    bool get_mute();
-    std::vector<SynthItem*> get_parents() override;
-
-
+    float pos(); // for polling state from outside
+    void loadDataset(QString file);
+    Frame process() override;       // every sample
+    void controlProcess() override; // every process block
 
 private:
-    void retrieve_commands() override;
-    void process_command(SynthItemCommand command) override;
-    void process_add_child(SynthItem* child, PARAMETER parameter) override;
-    void process_remove_child(SynthItem* child) override;
-    void process_delete() override;
-    void process_delete_item(SynthItem* item);
 
-    void process_subscribe_item(SynthItem* item);
-    void process_unsubscribe_item(SynthItem* item);
-
-    void process_set_dataset(Dataset *dataset);
-    void process_set_playback_position(double pos);
-    void process_set_interpolate(bool interpolate_);
-
-    void retrieve_next_data_column();
-    void calculate_return_position();
-    std::vector<double> interpolate(std::vector<double> first, std::vector<double> second, double mu);
-
-    ITEM my_type_;
-    PARAMETER my_child_type_;
-    RingBuffer<SynthItemCommand> command_buffer_;
-    SynthItemCommand current_command_;
-    Frame frame_buffer_[4096];
+    RingBuffer<TransportCommand> transportCommandBuffer_;
+    Frame frameBuffer_[4096];
     std::vector<SynthItem*> subscribers_;
-    std::vector<SynthItem::PARAMETER> accepted_children_;
-    Dataset* dataset_;
-    std::vector<double> current_data_column_;
-    std::vector<double> mins_;
-    std::vector<double> maxes_;
-    std::atomic<double> return_pos_;
-    std::vector<SynthItem*> inputs_;
-    std::vector<SynthItem*> amods_;
-    float master_volume_;
-    unsigned int frame_rate_;
-    unsigned int current_index_;
-    double mu_;
+    Dataset dataset_;
+    QString filepath_;
+    QMutex fileMutex_;
+    std::vector<float> currentData_;
+    std::vector<float> dataMinValues_;
+    std::vector<float> dataMaxValues_;
+    std::atomic<float> returnPos_;
+    float masterVolume_;
+    int frameRate_;
+    int currentIndex_;
+    float mu_;
     int speed_;
-    double loop_begin_;
-    double loop_end_;
-    bool muted_;
-    bool data_stale_;
-    bool paused_;
+    float loopBegin_;
+    float loopEnd_;
+    bool dataStale_;
+    bool pause_;
     bool loop_;
     bool interpolate_;
 
+    void processTransportCommand(TransportCommand cmd);
+    void processSubscribeItem(SynthItem* item);
+    void processUnsubscribeItem(SynthItem* item);
+    void processDeleteItem(SynthItem* item);
+    void processImportDataset();
+    void processSetPlaybackPosition(float pos);
+    void refreshCurrentData();
+    void calculateReturnPosition();
+    std::vector<float> interpolate(std::vector<float> first, std::vector<float> second, float mu);
+
+signals:
+    void posChanged(float pos);
+    void datasetImported(Dataset* dataset);
+
+public slots:
+
+    // slots for controlling playback
+    void onImportDataset(QString file);
+    void onPausechanged(bool p);
+    void onPoschanged(float pos);
+    void onSpeedchanged(float speed);
+    void onLoopingchanged(bool looping);
+    void onLoopPointsChanged(float begin, float end);
+    void onInterpolateChanged(bool interpolate);
+
+private slots:
+    void updatePos();
+
 };
 
-} // namespace sow
+} // Namespace sow.
 
-#endif // SYNTHGRAPH_H
+#endif // TRANSPORT_H

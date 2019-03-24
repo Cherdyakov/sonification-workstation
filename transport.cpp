@@ -1,220 +1,169 @@
 #include "transport.h"
+#include "utility.h"
+#include <QDebug>
+#include <QString>
 
 namespace sow {
 
-Transport::Transport()
+Transport::Transport(QObject *parent) : SynthItem (parent)
 {
-    dataset_ = new Dataset;
+    // Timer updates playhead position
+    QTimer* posTimer = new QTimer(this);
+    connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
+    posTimer->start(33);
 
-    my_type_ = ITEM::TRANSPORT;
-    my_child_type_ = PARAMETER::OUTPUT;
-    paused_ = true;
+    type_ = ENUMS::ITEM_TYPE::TRANSPORT;
+    pause_ = true;
     loop_ = false;
-    loop_begin_ = 0.0;
-    loop_end_ = 0.0;
-    data_stale_ = false;
-    frame_rate_ = 44100;
-    current_index_ = 0;
-    mu_ = 0.0;
+    loopBegin_ = 0.0f;
+    loopEnd_ = 0.0f;
+    dataStale_ = false;
+    frameRate_ = 44100;
+    currentIndex_ = 0;
+    mu_ = 0.0f;
     speed_ = 1;
-    return_pos_ = 0.0;
-    master_volume_ = 1.0;
+    returnPos_ = 0.0f;
+    masterVolume_ = 1.0f;
     interpolate_ = false;
 
-    accepted_children_ = {
-        SynthItem::PARAMETER::INPUT
+    acceptedInputs_ = {
+        ENUMS::OUTPUT_TYPE::AUDIO,
+        ENUMS::OUTPUT_TYPE::AM
     };
-}
-
-Transport::~Transport()
-{
-
 }
 
 /*
  Functions called from user thread
  */
 
-void Transport::delete_self()
+void Transport::deleteItem(SynthItem *item)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::DELETE;
-    command_buffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::DELETE_ITEM;
+    cmd.item = item;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::delete_item(SynthItem *item)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::DELETE_ITEM;
-    command.item = item;
-    command_buffer_.push(command);
-}
 
-SynthItem::ITEM Transport::get_type()
+void Transport::onImportDataset(QString file)
 {
-    return my_type_;
-}
-
-void Transport::set_data(std::vector<double> *data, std::vector<double> *mins, std::vector<double> *maxes)
-{
-    (void)data;
-    (void)mins;
-    (void)maxes;
-}
-
-void Transport::add_parent(SynthItem *parent)
-{
-    (void)parent;
-}
-
-void Transport::remove_parent(SynthItem *parent)
-{
-    (void)parent;
-}
-
-bool Transport::add_child(SynthItem *child, PARAMETER param)
-{
-    if(!verify_child(param, accepted_children_))
-    {
-        return false;
+    if (filepath_ != file) {
+        fileMutex_.lock();
+        filepath_ = file;
+        fileMutex_.unlock();
     }
-    SynthItemCommand command;
-    command.type = COMMAND::ADD_CHILD;
-    command.parameter = param;
-    command.item = child;
-    command_buffer_.push(command);
-    return true;
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::IMPORT_DATASET;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::remove_child(SynthItem *child)
+void Transport::onPausechanged(bool pause)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::REMOVE_CHILD;
-    command.item = child;
-    command_buffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::PAUSE;
+    cmd.valueA = pause ? 1.0f : 0.0f;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::mute(bool mute)
+void Transport::onPoschanged(float pos)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::MUTE;
-    command.bool_val = mute;
-    command_buffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::POS;
+    cmd.valueA = pos;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::set_dataset(Dataset *dataset)
+void Transport::onSpeedchanged(float speed)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::DATA;
-    command.dataset = dataset;
-    command_buffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::SPEED;
+    cmd.valueA = speed;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::pause(bool pause)
+void Transport::onLoopingchanged(bool looping)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::PAUSE;
-    command.bool_val = pause;
-    command_buffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::LOOP;
+    cmd.valueA = looping ? 1.0f : 0.0f;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::set_playback_position(double pos)
+void Transport::onLoopPointsChanged(float begin, float end)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::POSITION;
-    command.doubles.push_back(pos);
-    command_buffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::LOOP_PTS;
+    cmd.valueA = begin;
+    cmd.valueB = end;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::set_speed(int speed)
+void Transport::onInterpolateChanged(bool interpolate)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::SPEED;
-    command.ints.push_back(speed);
-    command_buffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::INTERPOLATE;
+    cmd.valueA = interpolate ? 1.0f : 0.0f;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::set_looping(bool looping)
+void Transport::subscribe(SynthItem *item)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::LOOP;
-    command.bool_val = looping;
-    command_buffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::SUB;
+    cmd.item = item;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::set_loop_points(double begin, double end)
+void Transport::unsubscribe(SynthItem *item)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::LOOP_POINTS;
-    command.doubles.push_back(begin);
-    command.doubles.push_back(end);
-    command_buffer_.push(command);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::UNSUB;
+    cmd.item = item;
+    transportCommandBuffer_.push(cmd);
 }
 
-void Transport::set_interpolate(bool interpolate)
+SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
 {
-    SynthItemCommand command;
-    command.type = COMMAND::INTERPOLATE;
-    command.bool_val = interpolate;
-    command_buffer_.push(command);
-}
-
-void Transport::subscribe_item(SynthItem *item)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::SUBSCRIBE;
-    command.item = item;
-    command_buffer_.push(command);
-}
-
-void Transport::unsubscribe_item(SynthItem *item)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::UNSUBSCRIBE;
-    command.item = item;
-    command_buffer_.push(command);
-}
-
-SynthItem* Transport::create_item(SynthItem::ITEM type)
-{
-    SynthItem* item;
+    SynthItem* item = nullptr;
 
     switch (type){
-    case SynthItem::ITEM::OSCILLATOR:
-        item = new Oscillator();
+    case ENUMS::ITEM_TYPE::TRANSPORT:
+        item = this;
         break;
-//    case SynthItem::ITEM::AUDIFIER:
-//        item = new Audifier();
-//        break;
-//    case SynthItem::ITEM::MODULATOR:
-//        item = new Modulator();
-//        break;
-//    case SynthItem::ITEM::PANNER:
-//        item = new Panner();
-//        break;
-//    case SynthItem::ITEM::ENVELOPE:
-//        item = new Envelope();
-//        break;
-//    case SynthItem::ITEM::VOLUME:
-//        item = new Volume();
-//        break;
-//    case SynthItem::ITEM::NOISE:
-//        item = new Noise();
-//        break;
-//    case SynthItem::ITEM::EQUALIZER:
-//        item = new Equalizer();
-//        break;
-    default:
-        item = NULL;
+    case ENUMS::ITEM_TYPE::OSCILLATOR:
+        item = new Oscillator(this);
+        processSubscribeItem(item);
+        break;
+    case ENUMS::ITEM_TYPE::AUDIFIER:
+        //        item = new Audifier();
+        break;
+    case ENUMS::ITEM_TYPE::MODULATOR:
+        //        item = new Modulator();
+        break;
+    case ENUMS::ITEM_TYPE::PANNER:
+        //        item = new Panner();
+        break;
+    case ENUMS::ITEM_TYPE::ENVELOPE:
+        //        item = new Envelope();
+        break;
+    case ENUMS::ITEM_TYPE::VOLUME:
+        //        item = new Volume();
+        break;
+    case ENUMS::ITEM_TYPE::NOISE_GEN:
+        //        item = new Noise();
+        break;
+    case ENUMS::ITEM_TYPE::EQUALIZER:
+        //        item = new Equalizer();
+        break;
+    case ENUMS::ITEM_TYPE::NONE:
         break;
     }
-    item->set_data(&current_data_column_, &dataset_->mins_, &dataset_->maxes_);
     return item;
 }
 
-double Transport::get_playback_position()
+float Transport::pos()
 {
-    return return_pos_;
+    return returnPos_;
 }
 
 /*
@@ -226,9 +175,9 @@ Frame Transport::process()
     Frame frame;
     bool stepping = false;
 
-    if(paused_)
+    if(pause_)
     {
-        calculate_return_position();
+        calculateReturnPosition();
         return frame;
     }
 
@@ -236,41 +185,41 @@ Frame Transport::process()
     if(mu_ >= 1.0)
     {
         mu_ -= 1.0;
-        current_index_++;
+        currentIndex_++;
 
-        if((current_index_ + 1) > (dataset_->width_))
+        if((currentIndex_ + 1) > (dataset_.rows()))
         {
-            current_index_ = 0;
+            currentIndex_ = 0;
         }
-        data_stale_ = true;
+        dataStale_ = true;
         stepping = true;
     }
 
-    if(loop_ && (loop_begin_ != loop_end_))
+    if(loop_ && (loopBegin_ != loopEnd_))
     {
-        if(((double)current_index_ + mu_) > loop_end_)
+        if(((double)currentIndex_ + mu_) > loopEnd_)
         {
-            current_index_ = (int)loop_begin_;
-            mu_ = (loop_begin_ - current_index_);
-            data_stale_ = true;
+            currentIndex_ = (int)loopBegin_;
+            mu_ = (loopBegin_ - currentIndex_);
+            dataStale_ = true;
         }
-        else if(((double)current_index_ + mu_) < loop_begin_)
+        else if(((double)currentIndex_ + mu_) < loopBegin_)
         {
-            current_index_ = (int)loop_begin_;
-            mu_ = (loop_begin_ - current_index_);
-            data_stale_ = true;
+            currentIndex_ = (int)loopBegin_;
+            mu_ = (loopBegin_ - currentIndex_);
+            dataStale_ = true;
         }
     }
 
     if(interpolate_)
     {
-        data_stale_ = true;
+        dataStale_ = true;
     }
 
-    if(data_stale_)
+    if(dataStale_ && dataset_.hasData())
     {
-        retrieve_next_data_column();
-        data_stale_ = false;
+        refreshCurrentData();
+        dataStale_ = false;
     }
 
     if(stepping)
@@ -278,224 +227,172 @@ Frame Transport::process()
         step();
     }
 
-    for (unsigned int i = 0; i < inputs_.size(); ++i)
+    for (int i = 0; i < children_.size(); ++i)
     {
-        SynthItem* item = inputs_[i];
+        SynthItem* item = children_[i];
         frame += item->process();
     }
 
     // advancing index
-    calculate_return_position();
-    mu_ += ((double)speed_ / frame_rate_);
+    calculateReturnPosition();
+    mu_ += static_cast<float>(speed_) / frameRate_;
 
     return frame;// * master_volume_;
 }
 
-void Transport::step()
+void Transport::controlProcess()
 {
-    for (unsigned int i = 0; i < inputs_.size(); ++i)
-    {
-        SynthItem* item = inputs_[i];
-        item->step();
+    // Process TransportCommands
+    TransportCommand cmd;
+    while(transportCommandBuffer_.pop(&cmd)) {
+        processTransportCommand(cmd);
     }
-}
-
-void Transport::control_process()
-{
-    for (unsigned int i = 0; i < subscribers_.size(); ++i)
+    // Do the usual for controlProcess
+    SynthItem::controlProcess();
+    // Trigger subscribed SynthItems to do the same
+    for (int i = 0; i < subscribers_.size(); ++i)
     {
         SynthItem* item = subscribers_[i];
-        item->control_process();
+        item->controlProcess();
     }
-    if(!command_buffer_.empty())
+}
+
+void Transport::processTransportCommand(TransportCommand cmd)
+{
+
+    switch (cmd.type) {
+    case ENUMS::TRANSPORT_CMD::PAUSE:
+        pause_ = (cmd.valueA == 0.0f) ? false : true;
+        break;
+    case ENUMS::TRANSPORT_CMD::POS:
+        processSetPlaybackPosition(cmd.valueA);
+        break;
+    case ENUMS::TRANSPORT_CMD::SPEED:
+        speed_ = static_cast<int>(cmd.valueA);
+        break;
+    case ENUMS::TRANSPORT_CMD::LOOP:
+        loop_ = (cmd.valueA == 0.0f) ? false : true;
+        break;
+    case ENUMS::TRANSPORT_CMD::LOOP_PTS:
+        loopBegin_ = cmd.valueA;
+        loopEnd_ = cmd.valueB;
+        break;
+    case ENUMS::TRANSPORT_CMD::INTERPOLATE:
+        interpolate_ = (cmd.valueA == 0.0f) ? false : true;
+        break;
+    case ENUMS::TRANSPORT_CMD::DELETE_ITEM:
+        processDeleteItem(cmd.item);
+        break;
+    case ENUMS::TRANSPORT_CMD::SUB:
+        processSubscribeItem(cmd.item);
+        break;
+    case ENUMS::TRANSPORT_CMD::UNSUB:
+        utility::removeAll(cmd.item, subscribers_);
+        break;
+    case ENUMS::TRANSPORT_CMD::IMPORT_DATASET:
+        processImportDataset();
+        break;
+    }
+}
+
+void Transport::processSubscribeItem(SynthItem *item)
+{
+    utility::insertUnique(item, subscribers_);
+    item->setData(&dataset_, &currentData_);
+}
+
+void Transport::processUnsubscribeItem(SynthItem *item)
+{
+    utility::removeAll(item, subscribers_);
+}
+
+void Transport::processDeleteItem(SynthItem *item)
+{
+    // Disconnect from control process calls
+    processUnsubscribeItem(item);
+    // Disconnect item from all parents/children
+    item->disconnectAll();
+    // Process the disconnectAll() command
+    // buffered in preceeding line before del
+    item->controlProcess();
+    if(item != this) {
+        delete item;
+    }
+}
+
+void Transport::processImportDataset()
+{
+    pause_ = true;
+    currentData_.clear();
+    currentIndex_ = 0;
+    mu_ = 0.0f;
+    calculateReturnPosition();
+
+    FileReader reader;
+    fileMutex_.lock();
+    reader.readCSV(filepath_, &dataset_);
+    currentData_.resize(dataset_.rows());
+    currentData_ = dataset_.getRow(currentIndex_);
+    fileMutex_.unlock();
+    emit datasetImported(&dataset_);
+}
+
+
+void Transport::processSetPlaybackPosition(float pos)
+{
+    int newIdx = static_cast<int>(pos);
+    if(currentIndex_ != newIdx)
     {
-        retrieve_commands();
+        dataStale_ = true;
+        currentIndex_ = newIdx;
     }
+    mu_ = (pos - currentIndex_);
 }
 
-bool Transport::get_mute()
-{
-    return muted_;
-}
-
-std::vector<SynthItem *> Transport::get_parents()
-{
-    std::vector<SynthItem*> vec;
-    return vec;
-}
-
-void Transport::retrieve_commands()
-{
-    while(command_buffer_.pop(&current_command_))
-    {
-        process_command(current_command_);
-    }
-}
-
-void Transport::process_command(SynthItemCommand command)
-{
-    COMMAND type = command.type;
-
-    switch (type) {
-    case COMMAND::DATA:
-        process_set_dataset(command.dataset);
-        break;
-    case COMMAND::ADD_CHILD:
-        process_add_child(command.item, command.parameter);
-        break;
-    case COMMAND::REMOVE_CHILD:
-        process_remove_child(command.item);
-        break;
-    case COMMAND::MUTE:
-        muted_ = command.bool_val;
-        break;
-    case COMMAND::PAUSE:
-        paused_ = command.bool_val;
-        break;
-    case COMMAND::POSITION:
-        process_set_playback_position(command.doubles[0]);
-        break;
-    case COMMAND::SPEED:
-        speed_ = command.ints[0];
-        break;
-    case COMMAND::LOOP:
-        loop_ = command.bool_val;
-        break;
-    case COMMAND::LOOP_POINTS:
-        loop_begin_ = command.doubles[0];
-        loop_end_ = command.doubles[1];
-        break;
-    case COMMAND::INTERPOLATE:
-        interpolate_ = command.bool_val;
-        break;
-    case COMMAND::DELETE:
-        process_delete();
-        break;
-    case COMMAND::DELETE_ITEM:
-        process_delete_item(command.item);
-        break;
-    case COMMAND::SUBSCRIBE:
-        process_subscribe_item(command.item);
-        break;
-    case COMMAND::UNSUBSCRIBE:
-        process_unsubscribe_item(command.item);
-        break;
-    default:
-        break;
-    }
-}
-
-void Transport::process_add_child(SynthItem *child, SynthItem::PARAMETER parameter)
-{
-    switch (parameter){
-    case PARAMETER::INPUT:
-        insert_item_unique(child, &inputs_);
-        break;
-    case PARAMETER::AMPLITUDE:
-        insert_item_unique(child, &inputs_);
-        break;
-    default:
-        break; //incompatible child type
-    }
-    child->add_parent(this);
-}
-
-void Transport::process_remove_child(SynthItem *child)
-{
-    remove_item(child, &inputs_);
-    remove_item(child, &amods_);
-}
-
-void Transport::process_delete()
-{
-    for(unsigned int i = 0; i < inputs_.size(); i++) {
-        SynthItem* child = inputs_[i];
-        child->remove_parent(this);
-    }
-    for(unsigned int i = 0; i < amods_.size(); i++) {
-        SynthItem* child = amods_[i];
-        child->remove_parent(this);
-    }
-    delete this;
-}
-
-void Transport::process_delete_item(SynthItem *item)
-{
-    process_unsubscribe_item(item);
-    item->delete_self();
-    item->control_process();
-}
-
-void Transport::process_subscribe_item(SynthItem *item)
-{
-    subscribers_.push_back(item);
-}
-
-void Transport::process_unsubscribe_item(SynthItem *item)
-{
-    remove_item(item, &subscribers_);
-}
-
-void Transport::process_set_dataset(Dataset *dataset)
-{
-    paused_ = true;
-    dataset_ = dataset;
-    current_data_column_.clear();
-    current_index_ = 0;
-    mu_ = 0.0;
-    calculate_return_position();
-    current_data_column_.resize(dataset_->height_);
-}
-
-void Transport::process_set_playback_position(double pos)
-{
-    unsigned int newIdx = (int)pos;
-    if(current_index_ != newIdx)
-    {
-        data_stale_ = true;
-        current_index_ = newIdx;
-    }
-    mu_ = (pos - current_index_);
-}
-
-void Transport::retrieve_next_data_column()
+void Transport::refreshCurrentData()
 {
     if(interpolate_)
     {
-        unsigned int next_index = current_index_ + 1;
-        if(next_index >= dataset_->width_)
+        int next_index = currentIndex_ + 1;
+        if(next_index >= dataset_.rows())
         {
             next_index = 0;
         }
-        current_data_column_ = interpolate(dataset_->get_column(current_index_), dataset_->get_column(next_index), mu_);
+        currentData_ = interpolate(dataset_.getRow(currentIndex_), dataset_.getRow(next_index), mu_);
     }
     else {
-        current_data_column_ = dataset_->get_column(current_index_);
+        currentData_ = dataset_.getRow(currentIndex_);
     }
 }
 
-void Transport::calculate_return_position()
+void Transport::calculateReturnPosition()
 {
     // FIXME not on every callback
-    double pos = ((double)current_index_ + mu_);
-    return_pos_.store(pos, std::memory_order_relaxed);
+    double pos = ((double)currentIndex_ + mu_);
+    returnPos_.store(pos, std::memory_order_relaxed);
 }
 
-std::vector<double> Transport::interpolate(std::vector<double> first, std::vector<double> second, double mu)
+std::vector<float> Transport::interpolate(std::vector<float> first, std::vector<float> second, float mu)
 {
-    std::vector<double> vec;
+    std::vector<float> vec;
     if(first.size() != second.size())
     {
         return vec;
     }
-    for(unsigned int i = 0; i < first.size(); i++)
+    for(int i = 0; i < first.size(); i++)
     {
-        double val_first = first[i];
-        double val_second = second[i];
-        double interpolated_val = ((1 - mu) * val_first) + (mu * val_second);
+        float val_first = first[i];
+        float val_second = second[i];
+        float interpolated_val = ((1 - mu) * val_first) + (mu * val_second);
         vec.push_back(interpolated_val);
     }
     return vec;
 }
 
-} //namespace sow
+void Transport::updatePos()
+{
+    float posVal = pos();
+    emit posChanged(posVal);
+}
+
+} // Namespace sow.

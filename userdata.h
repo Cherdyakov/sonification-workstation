@@ -3,12 +3,12 @@
 
 #endif // USERDATA_H
 
-#include "qttransport.h"
+#include "transport.h"
 
 namespace sow {
 
 typedef struct {
-    QtSynthItem* root;
+    SynthItem* root;
 } UserData;
 
 } // End namespace sow.

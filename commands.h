@@ -8,11 +8,11 @@
 namespace sow {
 
 // Forward declare QtSynthItem
-class QtSynthItem;
+class SynthItem;
 
 struct ItemCommand {
     ENUMS::ITEM_CMD type;
-    QtSynthItem* item;
+    SynthItem* item;
 };
 
 struct ParameterCommand {
@@ -23,7 +23,7 @@ struct ParameterCommand {
 
 struct TransportCommand {
     ENUMS::TRANSPORT_CMD type;
-    QtSynthItem* item;
+    SynthItem* item;
     float valueA;
     float valueB;
 };

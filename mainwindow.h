@@ -8,7 +8,7 @@
 #include <QLayout>
 
 #include "trackview.h"
-#include "qttransport.h"
+#include "transport.h"
 #include "transportwidget.h"
 #include "filereader.h"
 #include "session.h"
@@ -24,11 +24,11 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QtTransport* getTransport();
+    Transport* getTransport();
 
 private:
 
-    QtTransport* transport;
+    Transport* transport;
     Session* session;
 
     //convenience functions to create and populate menus

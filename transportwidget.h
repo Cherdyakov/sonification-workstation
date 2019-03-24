@@ -11,7 +11,7 @@
 #include <QTimer>
 #include <QCheckBox>
 
-#include "qttransport.h"
+#include "transport.h"
 
 using namespace sow;
 
@@ -20,7 +20,7 @@ class TransportWidget : public QWidget
     Q_OBJECT
 public:
     explicit TransportWidget(QWidget *parent = 0);
-    void setTransport(QtTransport* qtTransport);
+    void setTransport(Transport* qtTransport);
 
 private:
 

@@ -24,7 +24,7 @@ static int callback( const void *inputBuffer,
     // Cast data passed through stream to our struct.
     UserData *uData = (UserData*)userData;
     float *buffer = (float*) outputBuffer;
-    QtSynthItem* root = uData->root;
+    SynthItem* root = uData->root;
 
     // Write interleaved audio data.
     for (unsigned int i=0; i < framesPerBuffer; ++i) {

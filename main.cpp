@@ -3,7 +3,7 @@
 #include "mainwindow.h"
 #include "portaudio.h"
 #include "callback.h"
-#include "qttransport.h"
+#include "transport.h"
 #include "filereader.h"
 #include "Gamma/Sync.h"
 
@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
-    qmlRegisterType<QtSynthItem>("SoW", 1, 0, "QtSynthItem");
-    qmlRegisterType<QtOscillator>("SoW", 1, 0, "QtOscillator");
-    qmlRegisterType<QtTransport>("SoW", 1, 0, "QtTransport");
+    qmlRegisterType<SynthItem>("SoW", 1, 0, "QtSynthItem");
+    qmlRegisterType<Oscillator>("SoW", 1, 0, "QtOscillator");
+    qmlRegisterType<Transport>("SoW", 1, 0, "QtTransport");
     qmlRegisterType<ParameterInterface>("SoW", 1, 0, "SowParameter");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
     qmlRegisterType<ENUMS>("ENUMS", 1, 0, "ENUMS");
