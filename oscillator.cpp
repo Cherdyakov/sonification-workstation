@@ -14,7 +14,7 @@ Oscillator::Oscillator(QObject *parent) : SynthItem(parent)
     frequency_ = new Parameter(this);
     frequencyInterface_ = new ParameterInterface(this);
     frequencyInterface_->connectInterface(frequency_);
-    parameters_ = { frequency_ };
+    parameters_.push_back(frequency_);
 
 }
 
