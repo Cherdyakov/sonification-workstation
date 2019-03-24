@@ -8,10 +8,9 @@ var itemZ = 300
 var itemEditorZ = 400
 
 // SynthItem.qml style
-var itemHeight = 64
-var itemWidth = 64
-var itemMinRadius = 40
-var itemMaxRadius = 10
+var itemHeight = 60
+var itemWidth = 60
+var itemRadius = 40
 var itemTextColor = "white"
 var itemMuteColor = "dark gray"
 var itemActiveFocusColor = "orange"
@@ -26,14 +25,14 @@ var patchSelectedInColor = "rgba(255, 165, 0, 0.5)"
 var patchWidth = 4
 
 // SynthItem.qml editor style
-var editorTitleSize = 12
+var editorTitleSize = 14
 var editorBackgroundColor = "white"
-var editorFontSize = 12
+var editorFontSize = 10
 var editorTextColor = "black"
-var editorRowHeight = 24
-var editorRowWidth = 200
-var editorLabelWidth = 70
-var editorControlWidth = 150
+var editorRowHeight = 16
+var editorRowWidth = 120
+var editorLabelWidth = 60
+var editorControlWidth = 84
 var editorMargin = 8
 var editorRadius = 6
 var editorTextInputColor = "white"

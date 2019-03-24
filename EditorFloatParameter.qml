@@ -26,7 +26,7 @@ Item {
         EditorMapper {
             id: mapper
             maxIndexes: 128
-            label.text: paramName + " source: "
+            label.text: paramName
         }
 
         EditorScaler {

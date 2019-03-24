@@ -9,9 +9,13 @@ SpinBox {
     to: 20000 * 100
     stepSize: 100
     editable: true
+    font.pointSize: Style.editorFontSize
 
     property int decimals: 2
     property real realValue: value / 100
+
+    up.indicator.implicitWidth: 16
+    down.indicator.implicitWidth: 16
 
     validator: DoubleValidator {
         bottom: Math.min(spinbox.from, spinbox.to)
@@ -25,6 +29,7 @@ SpinBox {
     valueFromText: function(text, locale) {
         return Number.fromLocaleString(locale, text) * 100
     }
+
 }
 
 

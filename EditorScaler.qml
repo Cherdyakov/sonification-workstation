@@ -19,16 +19,34 @@ ColumnLayout {
     property alias realExp: expSpinBox.realValue
 
     RowLayout {
+
         EditorLabel {
             id: label
             text: qsTr("Scaled: ")
             Layout.maximumHeight: Style.editorRowHeight
-            Layout.preferredWidth: Style.editorLabelWidth
             Layout.fillWidth: true
+            horizontalAlignment: Text.AlignRight
         }
 
         CheckBox {
             id: checkBox
+            implicitHeight: Style.editorRowHeight
+            implicitWidth: implicitHeight
+
+            indicator: Rectangle {
+
+                implicitHeight: Style.editorRowHeight
+                implicitWidth: implicitHeight
+
+                Rectangle {
+                    width: parent.width - 4
+                    height: parent.height - 4
+                    x: 2
+                    y: 2
+                    color: checkBox.down ? "grey" : "black"
+                    visible: checkBox.checked
+                }
+            }
         }
     }
 
@@ -42,7 +60,7 @@ ColumnLayout {
 
         EditorDoubleSpinBox {
             id: lowSpinBox
-            Layout.maximumHeight: Style.editorRowHeight
+            Layout.maximumHeight: Style.editorRowHeight + 2
             Layout.preferredWidth: Style.editorControlWidth
         }
     }
@@ -56,7 +74,7 @@ ColumnLayout {
 
         EditorDoubleSpinBox {
             id: highSpinBox
-            Layout.maximumHeight: Style.editorRowHeight
+            Layout.maximumHeight: Style.editorRowHeight + 2
             Layout.preferredWidth: Style.editorControlWidth
         }
     }
@@ -73,7 +91,7 @@ ColumnLayout {
             from: 100
             to: 6400
             stepSize: 10
-            Layout.maximumHeight: Style.editorRowHeight
+            Layout.maximumHeight: Style.editorRowHeight + 2
             Layout.preferredWidth: Style.editorControlWidth
         }
     }
