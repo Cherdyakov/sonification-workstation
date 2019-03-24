@@ -29,11 +29,10 @@ Frame Oscillator::process()
     if(mute_) return frame;
 
     float freq = frequency_->value();
-    bool aMod = false;
-    bool fMod = false;
 
     // Frequency modulation.
     Frame fmFrame = 0.0f;
+    bool fMod = false;
     for (SynthItem*& child : children_) {
         if(child->outputType() == ENUMS::OUTPUT_TYPE::FM) {
             fMod = true;
@@ -50,6 +49,7 @@ Frame Oscillator::process()
 
     // Amplitude modulation.
     Frame amFrame = 0.0f;
+    bool aMod = false;
     for (SynthItem*& child : children_) {
         if(child->outputType() == ENUMS::OUTPUT_TYPE::AM) {
             aMod = true;

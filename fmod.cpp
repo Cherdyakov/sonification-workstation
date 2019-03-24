@@ -29,7 +29,6 @@ Frame Fmod::process()
     if(mute_) return frame;
 
     float freq = frequency_->value();
-    bool aMod = false;
 
     //set frequency of generator
     gen_.freq(freq);
@@ -39,6 +38,7 @@ Frame Fmod::process()
 
     // Amplitude modulation.
     Frame amFrame = 0.0f;
+    bool aMod = false;
     for (SynthItem*& child : children_) {
         if(child->outputType() == ENUMS::OUTPUT_TYPE::AM) {
             aMod = true;
