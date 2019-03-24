@@ -2,16 +2,19 @@
 #define FMOD_H
 
 #include <QObject>
+#include "oscillator.h"
 
-class Fmod : public QObject
+namespace sow {
+
+class Fmod : public Oscillator
 {
     Q_OBJECT
 public:
+
     explicit Fmod(QObject *parent = nullptr);
 
-signals:
-
-public slots:
 };
+
+} // namespace sow
 
 #endif // FMOD_H
