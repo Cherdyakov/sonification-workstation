@@ -65,7 +65,7 @@ Item {
             }
             PropertyChanges {
                 target: rect
-                radius: Style.itemMaxRadius
+                radius: Style.editorRadius
             }
             PropertyChanges {
                 target: editor
@@ -104,7 +104,7 @@ Item {
         id: rect
         anchors.fill: parent
         color: mute ? Style.itemMuteColor : mainColor
-        radius: Style.itemMinRadius
+        radius: Style.itemRadius
         border.color: root.activeFocus ? Style.itemActiveFocusColor : textColor
         border.width: 4
         opacity: created ? 1 : 0.4

@@ -18,6 +18,39 @@ SynthItem {
         create()
     }
 
+    Editor {
+        id: editor
+
+        EditorFloatParameter {
+            id: frequency
+            itemName: "OSC"
+            paramName: "Frequency:"
+            // Value changed from QML
+            onScaledChanged: implementation ? implementation.frequency.scaled = scaled : {}
+            onScaleRealLowChanged: implementation ? implementation.frequency.scaleLow = scaleRealLow : {}
+            onScaleRealHighChanged: implementation ? implementation.frequency.scaleHigh = scaleRealHigh : {}
+            onScaleRealExpChanged: implementation ? implementation.frequency.scaleExp = scaleRealExp : {}
+            // Value changed from C++
+            scaled: implementation ? implementation.frequency.scaled : 0
+            scaleLow: implementation ? implementation.frequency.scaleLow * 100 : 0
+            scaleHigh: implementation ? implementation.frequency.scaleHigh * 100 : 0
+            scaleExp: implementation ? implementation.frequency.scaleExp * 100 : 0
+            mapper.map: implementation ? implementation.frequency.map : ""
+
+            // Set map with Q_INVOKABLE function call and check if it is valid.
+            mapper.onMapChanged: {
+                if(implementation) {
+                    if(!implementation.frequency.setMap(mapper.map)) {
+                        mapper.textColor = "tomato"
+                    }
+                    else {
+                        mapper.textColor = "black"
+                    }
+                }
+            }
+        }
+    }
+
     // return json representation of self
     function read() {
 
@@ -65,39 +98,6 @@ SynthItem {
         frequencyScaler.low = essence["freqScaleLow"]
         frequencyScaler.high = essence["freqScaleHigh"]
         frequencyScaler.exponent = essence["freqScaleExponent"]
-    }
-
-    Editor {
-        id: editor
-
-        EditorFloatParameter {
-            id: frequency
-            itemName: "OSC"
-            paramName: "Frequency"
-            // Value changed from QML
-            onScaledChanged: implementation ? implementation.frequency.scaled = scaled : {}
-            onScaleRealLowChanged: implementation ? implementation.frequency.scaleLow = scaleRealLow : {}
-            onScaleRealHighChanged: implementation ? implementation.frequency.scaleHigh = scaleRealHigh : {}
-            onScaleRealExpChanged: implementation ? implementation.frequency.scaleExp = scaleRealExp : {}
-            // Value changed from C++
-            scaled: implementation ? implementation.frequency.scaled : 0
-            scaleLow: implementation ? implementation.frequency.scaleLow * 100 : 0
-            scaleHigh: implementation ? implementation.frequency.scaleHigh * 100 : 0
-            scaleExp: implementation ? implementation.frequency.scaleExp * 100 : 0
-            mapper.map: implementation ? implementation.frequency.map : ""
-
-            // Set map with Q_INVOKABLE function call and check if it is valid.
-            mapper.onMapChanged: {
-                if(implementation) {
-                    if(!implementation.frequency.setMap(mapper.map)) {
-                        mapper.textColor = "tomato"
-                    }
-                    else {
-                        mapper.textColor = "black"
-                    }
-                }
-            }
-        }
     }
 
 }
