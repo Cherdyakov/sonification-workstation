@@ -137,7 +137,10 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
     case ENUMS::ITEM_TYPE::AUDIFIER:
         //        item = new Audifier();
         break;
-    case ENUMS::ITEM_TYPE::MODULATOR:
+    case ENUMS::ITEM_TYPE::AMOD:
+        //        item = new Modulator();
+        break;
+    case ENUMS::ITEM_TYPE::FMOD:
         //        item = new Modulator();
         break;
     case ENUMS::ITEM_TYPE::PANNER:
