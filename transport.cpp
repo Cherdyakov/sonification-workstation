@@ -139,11 +139,12 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
         //        item = new Audifier();
         break;
     case ENUMS::ITEM_TYPE::AMOD:
-        item = new Amod();
+        item = new Amod(this);
         processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::FMOD:
-        //        item = new Modulator();
+        item = new Fmod(this);
+        processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::PANNER:
         //        item = new Panner();

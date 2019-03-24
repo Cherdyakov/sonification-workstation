@@ -8,6 +8,7 @@
 #include "synthitem.h"
 #include "oscillator.h"
 #include "amod.h"
+#include "fmod.h"
 
 namespace sow {
 

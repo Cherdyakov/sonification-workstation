@@ -35,6 +35,13 @@ Rectangle {
         }
 
         PaletteItem {
+            id: fm
+            componentFile: "FM.qml"
+            source: "images/MOD.png"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
             id: aud
             componentFile: "AUD.qml"
             source: "images/AUD.png"
