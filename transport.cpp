@@ -136,7 +136,8 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
         processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::AUDIFIER:
-        //        item = new Audifier();
+        item = new Audifier(this);
+        processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::AMOD:
         item = new Amod(this);
