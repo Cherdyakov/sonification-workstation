@@ -40,5 +40,6 @@
         <file>images/EQ.png</file>
         <file>images/alpha.png</file>
         <file>EditorFloatParameter.qml</file>
+        <file>AM.qml</file>
     </qresource>
 </RCC>
