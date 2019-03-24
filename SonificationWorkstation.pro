@@ -47,7 +47,7 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
-    synthitem.h \
+#    synthitem.h \
     callback.h \
     userdata.h \
 #    oscillator.h \
