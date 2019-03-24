@@ -126,9 +126,10 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
 {
     SynthItem* item = nullptr;
 
+    qDebug() << type;
+
     switch (type){
-    case ENUMS::ITEM_TYPE::TRANSPORT:
-        item = this;
+    case ENUMS::ITEM_TYPE::NONE:
         break;
     case ENUMS::ITEM_TYPE::OSCILLATOR:
         item = new Oscillator(this);
@@ -138,7 +139,8 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
         //        item = new Audifier();
         break;
     case ENUMS::ITEM_TYPE::AMOD:
-        //        item = new Modulator();
+        item = new Amod();
+        processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::FMOD:
         //        item = new Modulator();
@@ -158,7 +160,8 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
     case ENUMS::ITEM_TYPE::EQUALIZER:
         //        item = new Equalizer();
         break;
-    case ENUMS::ITEM_TYPE::NONE:
+    case ENUMS::ITEM_TYPE::TRANSPORT:
+        item = this;
         break;
     }
     return item;
