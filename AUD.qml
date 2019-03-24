@@ -11,7 +11,7 @@ SynthItem {
     label: qsTr("AUD")
     type: ENUMS.AUDIFIER
     output: ENUMS.AUDIO
-    mainColor: Style.oscColor
+    mainColor: Style.audColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
@@ -33,16 +33,7 @@ SynthItem {
 
             EditorFloatParameter {
                 id: amplitude
-                // Value changed from QML
-                onScaledChanged: implementation ? implementation.amplitude.scaled = scaled : {}
-                onScaleRealLowChanged: implementation ? implementation.amplitude.scaleLow = scaleRealLow : {}
-                onScaleRealHighChanged: implementation ? implementation.amplitude.scaleHigh = scaleRealHigh : {}
-                onScaleRealExpChanged: implementation ? implementation.amplitude.scaleExp = scaleRealExp : {}
-                // Value changed from C++
-                scaled: implementation ? implementation.amplitude.scaled : 0
-                scaleLow: implementation ? implementation.amplitude.scaleLow * 100 : 0
-                scaleHigh: implementation ? implementation.amplitude.scaleHigh * 100 : 0
-                scaleExp: implementation ? implementation.amplitude.scaleExp * 100 : 0
+                 // Value changed from C++
                 mapper.map: implementation ? implementation.amplitude.map : ""
 
                 // Set map with Q_INVOKABLE function call and check if it is valid.
@@ -56,6 +47,8 @@ SynthItem {
                         }
                     }
                 }
+                scaler.enabled: false;
+                scaler.visible: false;
             }
         }
     }

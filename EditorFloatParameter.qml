@@ -17,6 +17,7 @@ Item {
     property alias scaleExp: scaler.exp
     property alias scaleRealExp: scaler.realExp
     property alias mapper: mapper
+    property alias scaler: scaler
 
     ColumnLayout {
         id: layout
