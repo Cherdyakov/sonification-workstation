@@ -14,13 +14,11 @@ SOURCES += \
     filereader.cpp \
     external/qcustomplot/qcustomplot.cpp \
     playhead.cpp \
-    qtoscillator.cpp \
 #    qtaudifier.cpp \
 #    modulator.cpp \
 #    qtmodulator.cpp \
 #    transport.cpp \
     transportwidget.cpp \
-    qttransport.cpp \
     utility.cpp \
 #    panner.cpp \
 #    qtpanner.cpp \
@@ -40,10 +38,12 @@ SOURCES += \
     trackplotter.cpp \
     trackname.cpp \
     dataprocessor.cpp \
-    qtsynthitem.cpp \
     parameterinterface.cpp \
     dataset.cpp \
-    parameter.cpp
+    parameter.cpp \
+    synthitem.cpp \
+    transport.cpp \
+    oscillator.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -57,14 +57,11 @@ HEADERS += \
     filereader.h \
     external/qcustomplot/qcustomplot.h \
     playhead.h \
-    qtoscillator.h \
-    qtsynthitem.h \
 #    qtaudifier.h \
 #    modulator.h \
 #    qtmodulator.h \
 #    transport.h \
     transportwidget.h \
-    qttransport.h \
     utility.h \
     frame.h \
 #    panner.h \
@@ -91,7 +88,10 @@ HEADERS += \
     parameter.h \
     enums.h \
     external/exprtk/exprtk.hpp \
-    mapevaluator.h
+    mapevaluator.h \
+    synthitem.h \
+    transport.h \
+    oscillator.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

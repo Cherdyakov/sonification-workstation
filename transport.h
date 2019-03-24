@@ -1,12 +1,12 @@
-#ifndef QTTRANSPORT_H
-#define QTTRANSPORT_H
+#ifndef TRANSPORT_H
+#define TRANSPORT_H
 
 #include <QObject>
 #include <QTimer>
 #include <QMutex>
 #include "filereader.h"
-#include "qtsynthitem.h"
-#include "qtoscillator.h"
+#include "synthitem.h"
+#include "oscillator.h"
 //#include "qtaudifier.h"
 //#include "qtmodulator.h"
 //#include "qtpanner.h"
@@ -17,19 +17,19 @@
 
 namespace sow {
 
-class QtTransport : public QtSynthItem
+class Transport : public SynthItem
 {
     Q_OBJECT
 public:
 
-    explicit QtTransport(QObject *parent = nullptr);
+    explicit Transport(QObject *parent = nullptr);
 
     // factory for other SynthItems
-    Q_INVOKABLE sow::QtSynthItem* createItem(ENUMS::ITEM_TYPE type);
-    Q_INVOKABLE void deleteItem(QtSynthItem* item);
+    Q_INVOKABLE sow::SynthItem* createItem(ENUMS::ITEM_TYPE type);
+    Q_INVOKABLE void deleteItem(SynthItem* item);
     // add or remove SynthItem from block processing
-    Q_INVOKABLE void subscribe(QtSynthItem* item);
-    Q_INVOKABLE void unsubscribe(QtSynthItem* item);
+    Q_INVOKABLE void subscribe(SynthItem* item);
+    Q_INVOKABLE void unsubscribe(SynthItem* item);
 
     float pos(); // for polling state from outside
     void loadDataset(QString file);
@@ -40,7 +40,7 @@ private:
 
     RingBuffer<TransportCommand> transportCommandBuffer_;
     Frame frameBuffer_[4096];
-    std::vector<QtSynthItem*> subscribers_;
+    std::vector<SynthItem*> subscribers_;
     Dataset dataset_;
     QString filepath_;
     QMutex fileMutex_;
@@ -61,9 +61,9 @@ private:
     bool interpolate_;
 
     void processTransportCommand(TransportCommand cmd);
-    void processSubscribeItem(QtSynthItem* item);
-    void processUnsubscribeItem(QtSynthItem* item);
-    void processDeleteItem(QtSynthItem* item);
+    void processSubscribeItem(SynthItem* item);
+    void processUnsubscribeItem(SynthItem* item);
+    void processDeleteItem(SynthItem* item);
     void processImportDataset();
     void processSetPlaybackPosition(float pos);
     void refreshCurrentData();
@@ -92,4 +92,4 @@ private slots:
 
 } // Namespace sow.
 
-#endif // QTTRANSPORT_H
+#endif // TRANSPORT_H

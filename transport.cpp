@@ -1,11 +1,11 @@
-#include "qttransport.h"
+#include "transport.h"
 #include "utility.h"
 #include <QDebug>
 #include <QString>
 
 namespace sow {
 
-QtTransport::QtTransport(QObject *parent) : QtSynthItem (parent)
+Transport::Transport(QObject *parent) : SynthItem (parent)
 {
     // Timer updates playhead position
     QTimer* posTimer = new QTimer(this);
@@ -36,7 +36,7 @@ QtTransport::QtTransport(QObject *parent) : QtSynthItem (parent)
  Functions called from user thread
  */
 
-void QtTransport::deleteItem(QtSynthItem *item)
+void Transport::deleteItem(SynthItem *item)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::DELETE_ITEM;
@@ -45,7 +45,7 @@ void QtTransport::deleteItem(QtSynthItem *item)
 }
 
 
-void QtTransport::onImportDataset(QString file)
+void Transport::onImportDataset(QString file)
 {
     if (filepath_ != file) {
         fileMutex_.lock();
@@ -57,7 +57,7 @@ void QtTransport::onImportDataset(QString file)
     transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::onPausechanged(bool pause)
+void Transport::onPausechanged(bool pause)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::PAUSE;
@@ -65,7 +65,7 @@ void QtTransport::onPausechanged(bool pause)
     transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::onPoschanged(float pos)
+void Transport::onPoschanged(float pos)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::POS;
@@ -73,7 +73,7 @@ void QtTransport::onPoschanged(float pos)
     transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::onSpeedchanged(float speed)
+void Transport::onSpeedchanged(float speed)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::SPEED;
@@ -81,7 +81,7 @@ void QtTransport::onSpeedchanged(float speed)
     transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::onLoopingchanged(bool looping)
+void Transport::onLoopingchanged(bool looping)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::LOOP;
@@ -89,7 +89,7 @@ void QtTransport::onLoopingchanged(bool looping)
     transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::onLoopPointsChanged(float begin, float end)
+void Transport::onLoopPointsChanged(float begin, float end)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::LOOP_PTS;
@@ -98,7 +98,7 @@ void QtTransport::onLoopPointsChanged(float begin, float end)
     transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::onInterpolateChanged(bool interpolate)
+void Transport::onInterpolateChanged(bool interpolate)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::INTERPOLATE;
@@ -106,7 +106,7 @@ void QtTransport::onInterpolateChanged(bool interpolate)
     transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::subscribe(QtSynthItem *item)
+void Transport::subscribe(SynthItem *item)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::SUB;
@@ -114,7 +114,7 @@ void QtTransport::subscribe(QtSynthItem *item)
     transportCommandBuffer_.push(cmd);
 }
 
-void QtTransport::unsubscribe(QtSynthItem *item)
+void Transport::unsubscribe(SynthItem *item)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::UNSUB;
@@ -122,16 +122,16 @@ void QtTransport::unsubscribe(QtSynthItem *item)
     transportCommandBuffer_.push(cmd);
 }
 
-QtSynthItem* QtTransport::createItem(ENUMS::ITEM_TYPE type)
+SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
 {
-    QtSynthItem* item = nullptr;
+    SynthItem* item = nullptr;
 
     switch (type){
     case ENUMS::ITEM_TYPE::TRANSPORT:
         item = this;
         break;
     case ENUMS::ITEM_TYPE::OSCILLATOR:
-        item = new QtOscillator(this);
+        item = new Oscillator(this);
         processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::AUDIFIER:
@@ -161,7 +161,7 @@ QtSynthItem* QtTransport::createItem(ENUMS::ITEM_TYPE type)
     return item;
 }
 
-float QtTransport::pos()
+float Transport::pos()
 {
     return returnPos_;
 }
@@ -170,7 +170,7 @@ float QtTransport::pos()
  Functions called from audio callback thread
  */
 
-Frame QtTransport::process()
+Frame Transport::process()
 {
     Frame frame;
     bool stepping = false;
@@ -229,7 +229,7 @@ Frame QtTransport::process()
 
     for (int i = 0; i < children_.size(); ++i)
     {
-        QtSynthItem* item = children_[i];
+        SynthItem* item = children_[i];
         frame += item->process();
     }
 
@@ -240,7 +240,7 @@ Frame QtTransport::process()
     return frame;// * master_volume_;
 }
 
-void QtTransport::controlProcess()
+void Transport::controlProcess()
 {
     // Process TransportCommands
     TransportCommand cmd;
@@ -248,16 +248,16 @@ void QtTransport::controlProcess()
         processTransportCommand(cmd);
     }
     // Do the usual for controlProcess
-    QtSynthItem::controlProcess();
+    SynthItem::controlProcess();
     // Trigger subscribed SynthItems to do the same
     for (int i = 0; i < subscribers_.size(); ++i)
     {
-        QtSynthItem* item = subscribers_[i];
+        SynthItem* item = subscribers_[i];
         item->controlProcess();
     }
 }
 
-void QtTransport::processTransportCommand(TransportCommand cmd)
+void Transport::processTransportCommand(TransportCommand cmd)
 {
 
     switch (cmd.type) {
@@ -295,18 +295,18 @@ void QtTransport::processTransportCommand(TransportCommand cmd)
     }
 }
 
-void QtTransport::processSubscribeItem(QtSynthItem *item)
+void Transport::processSubscribeItem(SynthItem *item)
 {
     utility::insertUnique(item, subscribers_);
     item->setData(&dataset_, &currentData_);
 }
 
-void QtTransport::processUnsubscribeItem(QtSynthItem *item)
+void Transport::processUnsubscribeItem(SynthItem *item)
 {
     utility::removeAll(item, subscribers_);
 }
 
-void QtTransport::processDeleteItem(QtSynthItem *item)
+void Transport::processDeleteItem(SynthItem *item)
 {
     // Disconnect from control process calls
     processUnsubscribeItem(item);
@@ -320,7 +320,7 @@ void QtTransport::processDeleteItem(QtSynthItem *item)
     }
 }
 
-void QtTransport::processImportDataset()
+void Transport::processImportDataset()
 {
     pause_ = true;
     currentData_.clear();
@@ -338,7 +338,7 @@ void QtTransport::processImportDataset()
 }
 
 
-void QtTransport::processSetPlaybackPosition(float pos)
+void Transport::processSetPlaybackPosition(float pos)
 {
     int newIdx = static_cast<int>(pos);
     if(currentIndex_ != newIdx)
@@ -349,7 +349,7 @@ void QtTransport::processSetPlaybackPosition(float pos)
     mu_ = (pos - currentIndex_);
 }
 
-void QtTransport::refreshCurrentData()
+void Transport::refreshCurrentData()
 {
     if(interpolate_)
     {
@@ -365,14 +365,14 @@ void QtTransport::refreshCurrentData()
     }
 }
 
-void QtTransport::calculateReturnPosition()
+void Transport::calculateReturnPosition()
 {
     // FIXME not on every callback
     double pos = ((double)currentIndex_ + mu_);
     returnPos_.store(pos, std::memory_order_relaxed);
 }
 
-std::vector<float> QtTransport::interpolate(std::vector<float> first, std::vector<float> second, float mu)
+std::vector<float> Transport::interpolate(std::vector<float> first, std::vector<float> second, float mu)
 {
     std::vector<float> vec;
     if(first.size() != second.size())
@@ -389,7 +389,7 @@ std::vector<float> QtTransport::interpolate(std::vector<float> first, std::vecto
     return vec;
 }
 
-void QtTransport::updatePos()
+void Transport::updatePos()
 {
     float posVal = pos();
     emit posChanged(posVal);

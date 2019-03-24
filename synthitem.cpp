@@ -1,18 +1,18 @@
-#include "qtsynthitem.h"
+#include "synthitem.h"
 #include "utility.h"
 
 namespace sow {
 
-QtSynthItem::QtSynthItem(QObject *parent) : QObject (parent) {
+SynthItem::SynthItem(QObject *parent) : QObject (parent) {
     type_ = ENUMS::ITEM_TYPE::NONE;
     outputType_ = ENUMS::OUTPUT_TYPE::NONE;
     setMute(false);
 }
 
-QtSynthItem::~QtSynthItem() {}
+SynthItem::~SynthItem() {}
 
 // Set the mute value
-void QtSynthItem::setMute(const bool mute)
+void SynthItem::setMute(const bool mute)
 {
     if (iMute_ != mute) {
         iMute_ = mute;
@@ -24,22 +24,22 @@ void QtSynthItem::setMute(const bool mute)
 }
 
 // Return the interface mute value (for use on GUI thread)
-bool QtSynthItem::mute() const {
+bool SynthItem::mute() const {
     return iMute_;
 }
 
 // Return our SynthItem type
-ENUMS::ITEM_TYPE QtSynthItem::type() const{
+ENUMS::ITEM_TYPE SynthItem::type() const{
     return type_;
 }
 
-ENUMS::OUTPUT_TYPE QtSynthItem::outputType() const
+ENUMS::OUTPUT_TYPE SynthItem::outputType() const
 {
     return outputType_;
 }
 
 // Connect the given SynthItem as a child
-bool QtSynthItem::connectChild(QtSynthItem *child)
+bool SynthItem::connectChild(SynthItem *child)
 {
     if( !utility::contains(child->outputType(), acceptedInputs_) || (child == nullptr) )
     {
@@ -53,7 +53,7 @@ bool QtSynthItem::connectChild(QtSynthItem *child)
 }
 
 // Connect to the given SynthItem as a parent
-bool QtSynthItem::connectParent(QtSynthItem *parent)
+bool SynthItem::connectParent(SynthItem *parent)
 {
     if(parent == nullptr) {
         return false;
@@ -66,7 +66,7 @@ bool QtSynthItem::connectParent(QtSynthItem *parent)
 }
 
 // Disconnect the given SynthItem child or parent
-void QtSynthItem::disconnect(QtSynthItem *item)
+void SynthItem::disconnect(SynthItem *item)
 {
     ItemCommand cmd;
     cmd.type = ENUMS::ITEM_CMD::DISCONNECT;
@@ -75,7 +75,7 @@ void QtSynthItem::disconnect(QtSynthItem *item)
 }
 
 // Disconnect all child and parent SynthItems
-void QtSynthItem::disconnectAll()
+void SynthItem::disconnectAll()
 {
     ItemCommand cmd;
     cmd.type = ENUMS::ITEM_CMD::DISONNECT_ALL;
@@ -83,22 +83,22 @@ void QtSynthItem::disconnectAll()
 }
 
 // Every audio sample
-Frame QtSynthItem::process()
+Frame SynthItem::process()
 {
     Frame f = 0;
     return f;
 }
 
 // Every new data value
-void QtSynthItem::step()
+void SynthItem::step()
 {
-    foreach (QtSynthItem* child, children_) {
+    foreach (SynthItem* child, children_) {
         child->step();
     }
 }
 
 // Process any buffered commands
-void QtSynthItem::controlProcess()
+void SynthItem::controlProcess()
 {
     foreach (Parameter* parameter, parameters_) {
         parameter->controlProcess();
@@ -110,7 +110,7 @@ void QtSynthItem::controlProcess()
 }
 
 // Process a ItemCommand
-void QtSynthItem::processCommand(ItemCommand cmd)
+void SynthItem::processCommand(ItemCommand cmd)
 {
     switch (cmd.type) {
     case ENUMS::ITEM_CMD::MUTE:
@@ -135,7 +135,7 @@ void QtSynthItem::processCommand(ItemCommand cmd)
 }
 
 // Set the data column, dataset minumum and dataset maximum values
-void QtSynthItem::setData(const Dataset *dataset, const std::vector<float> *currentData)
+void SynthItem::setData(const Dataset *dataset, const std::vector<float> *currentData)
 {
     for (Parameter*& parameter : parameters_) {
         parameter->setData(dataset, currentData);
@@ -143,7 +143,7 @@ void QtSynthItem::setData(const Dataset *dataset, const std::vector<float> *curr
 }
 
 // If not already connected, connect given child
-void QtSynthItem::processConnectChild(QtSynthItem *child)
+void SynthItem::processConnectChild(SynthItem *child)
 {
     if(child == nullptr)
         return;
@@ -153,18 +153,18 @@ void QtSynthItem::processConnectChild(QtSynthItem *child)
 }
 
 // Disconnect the given SynthItem child or parent
-void QtSynthItem::processDisconnect(QtSynthItem *other) {
+void SynthItem::processDisconnect(SynthItem *other) {
     utility::removeAll(other, children_);
     utility::removeAll(other, parents_);
 }
 
 // Disconnect all child and parent SynthItems
-void QtSynthItem::processDisconnectAll()
+void SynthItem::processDisconnectAll()
 {
-    foreach (QtSynthItem* child, children_) {
+    foreach (SynthItem* child, children_) {
         child->disconnect(this);
     }
-    foreach (QtSynthItem* parent, parents_) {
+    foreach (SynthItem* parent, parents_) {
         parent->disconnect(this);
     }
     children_.clear();

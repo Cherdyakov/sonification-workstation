@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
     QScrollArea* scrollArea = new QScrollArea(this);                                    // Scroll area for the TrackView
 
-    transport = new QtTransport(this);                                                   // Reads CSV files into Dataset
+    transport = new Transport(this);                                                   // Reads CSV files into Dataset
     session = new Session(reinterpret_cast<QObject*>(quickView->rootObject()), this);   // Represents loaded project
 
     quickView->rootContext()->setContextProperty("transport", transport);
@@ -59,28 +59,28 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     ///* CONNECT NON_UI SIGNALS AND SLOTS *///
     // Transport Dataset signals.
-    connect(transport, &QtTransport::datasetImported,
+    connect(transport, &Transport::datasetImported,
             trackView, &TrackView::onDatasetChanged);
-    connect(transport, &QtTransport::datasetImported,
+    connect(transport, &Transport::datasetImported,
             transportWidget, &TransportWidget::on_datasetChanged);
     // Session signals.
     connect(session, &Session::newDatafile,
-            transport, &QtTransport::onImportDataset);
+            transport, &Transport::onImportDataset);
     connect(session, &Session::speedChanged,
             transportWidget, &TransportWidget::on_speed_changed);
     connect(session, &Session::interpolateChanged,
             transportWidget, &TransportWidget::on_interpolation_changed);
     // Connect Transport < > TransportWidget.
-    connect(transport, &QtTransport::posChanged,
+    connect(transport, &Transport::posChanged,
             playHead, &PlayHead::onCursorMoved);
     connect(transportWidget, &TransportWidget::speedChanged,
-            transport, &QtTransport::onSpeedchanged);
+            transport, &Transport::onSpeedchanged);
     connect(transportWidget, &TransportWidget::interpolateChanged,
-            transport, &QtTransport::onInterpolateChanged);
+            transport, &Transport::onInterpolateChanged);
     connect(transportWidget, &TransportWidget::pausedChanged,
-            transport, &QtTransport::onPausechanged);
+            transport, &Transport::onPausechanged);
     connect(transportWidget, &TransportWidget::loopingChanged,
-            transport, &QtTransport::onLoopingchanged);
+            transport, &Transport::onLoopingchanged);
     // TransportWidget signals to Session, Playhead.
     connect(transportWidget, &TransportWidget::speedChanged,
             session, &Session::on_speedChanged);
@@ -90,9 +90,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             playHead, &PlayHead::onPauseChanged);
     // Playhead signals.
     connect(playHead, &PlayHead::cursorPosChanged,
-            transport, &QtTransport::onPoschanged);
+            transport, &Transport::onPoschanged);
     connect(playHead, &PlayHead::loopPointsChanged,
-            transport, &QtTransport::onLoopPointsChanged);
+            transport, &Transport::onLoopPointsChanged);
 }
 
 MainWindow::~MainWindow()
@@ -100,7 +100,7 @@ MainWindow::~MainWindow()
 
 }
 
-QtTransport *MainWindow::getTransport()
+Transport *MainWindow::getTransport()
 {
     return transport;
 }

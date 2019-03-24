@@ -1,141 +1,70 @@
 #ifndef SYNTHITEM_H
 #define SYNTHITEM_H
 
-#include <atomic>
+#include <QObject>
 #include <vector>
-#include <algorithm>
-#include <memory>
-
 #include "frame.h"
 #include "ringbuffer.h"
-#include "Gamma/Oscillator.h"
 #include "dataset.h"
-
-// Library definitions
-#define MAX_DIMENSIONS 128
-#define FRAME_RATE 44100
+#include "enums.h"
+#include "commands.h"
+#include "parameter.h"
 
 namespace sow {
 
-class SynthItem
+class SynthItem : public QObject
 {
+    Q_OBJECT
+    // QML property bindings
+    Q_PROPERTY(bool mute READ mute WRITE setMute NOTIFY muteChanged)
+    Q_PROPERTY(ENUMS::ITEM_TYPE type READ type)
+
 public:
 
-    enum class ITEM {
-        TRANSPORT,
-        OSCILLATOR,
-        AUDIFIER,
-        MODULATOR,
-        PANNER,
-        ENVELOPE,
-        VOLUME,
-        NOISE,
-        EQUALIZER
-    };
+    explicit SynthItem(QObject *parent = nullptr);
+    virtual ~SynthItem();
 
-    enum class PARAMETER {
-        INPUT,
-        OUTPUT,
-        AMPLITUDE,
-        FREQUENCY,
-        DEPTH,
-        AUDIFICATION,
-        PAN,
-        ATTACK,
-        DECAY,
-        VOLUME,
-        NOISE,
-        RESONANCE,
-        FILTER_TYPE
-    };
+    // QML property bindings
+    void setMute(const bool mute);
+    bool mute() const;
+    ENUMS::ITEM_TYPE type() const;
+    ENUMS::OUTPUT_TYPE outputType() const;
 
-    enum class ITEM_CMD {
-        DATA,
-        ADD_CHILD,
-        REMOVE_CHILD,
-        ADD_PARENT,
-        REMOVE_PARENT,
-        MUTE,
-        PARAM,
-        FIXED,
-        INDEXES,
-        SCALED,
-        SCALE_LOW,
-        SCALE_HIGH,
-        SCALE_EXPONENT,
-        DELETE,
-        DELETE_ITEM,
-        MODULATION,
-        NOISE,
-        FILTER_TYPE,
-        PAUSE,
-        POSITION,
-        SPEED,
-        LOOP,
-        LOOP_POINTS,
-        INTERPOLATE,
-        SUBSCRIBE,
-        UNSUBSCRIBE
-    };
+    // Functions invokable from QML
+    Q_INVOKABLE virtual bool connectChild(SynthItem *child);
+    Q_INVOKABLE virtual bool connectParent(SynthItem* parent);
+    Q_INVOKABLE virtual void disconnect(SynthItem *parent);
+    Q_INVOKABLE virtual void disconnectAll();
 
-    enum class NOISE {
-        WHITE,
-        PINK
-    };
-
-    enum class FILTER_TYPE {
-        LOW_PASS,
-        HIGH_PASS,
-        PEAK,
-        NOTCH
-    };
-
-    struct ItemCommand {
-        ITEM_CMD type;
-        PARAMETER parameter;
-        Dataset *dataset;
-        std::vector<float>* data;
-        std::vector<float>* mins;
-        std::vector<float>* maxes;
-        std::vector<float> doubles;
-        std::vector<int> ints;
-        bool bool_val;
-        SynthItem* item;
-        ItemCommand() {
-            doubles.reserve(MAX_DIMENSIONS);
-            ints.reserve(MAX_DIMENSIONS);
-        }
-    };
-
-    explicit SynthItem() {}
-    virtual ~SynthItem() {}
-    virtual void delete_self() = 0;
-    virtual ITEM get_type() = 0;
-    virtual void set_data(std::vector<double>* data,
-                             std::vector<double>* mins,
-                             std::vector<double>* maxes) = 0;
-    virtual void add_parent(SynthItem* parent) = 0;
-    virtual void remove_parent(SynthItem* parent) = 0;
-    virtual bool add_child(SynthItem *child, PARAMETER param) = 0;
-    virtual void remove_child(SynthItem *child) = 0;
-    virtual void mute(bool mute) = 0;
-    virtual Frame process() = 0; // every sample
-    virtual void step() = 0; // every new data value (step)
-    virtual void control_process() = 0; // every process block
-
-    virtual bool get_mute() = 0;
-    virtual std::vector<SynthItem*> get_parents() = 0;
+    virtual void setData(const Dataset* dataset, const std::vector<float>* currentData);
+    virtual Frame process();        // called every audio sample
+    virtual void step();            // called every new data value (step)
+    virtual void controlProcess();  // called every process block
 
 protected:
 
-    virtual void retrieve_commands() = 0;
-    virtual void process_command(ItemCommand command) = 0;
-    virtual void process_add_child(SynthItem* child, PARAMETER parameter) = 0;
-    virtual void process_remove_child(SynthItem* child) = 0;
-    virtual void process_delete() = 0;
+    bool iMute_;    // Mute interface value (used on GUI thread)
+    bool mute_;     // Mute backing value (used on audio thread)
+    ENUMS::ITEM_TYPE type_;
+    ENUMS::OUTPUT_TYPE outputType_;
+    RingBuffer<ItemCommand> commandBuffer_;
+    std::vector<ENUMS::OUTPUT_TYPE> acceptedInputs_;
+    std::vector<SynthItem*> parents_;
+    std::vector<SynthItem*> children_;
+    std::vector<Parameter*> parameters_;
+
+    virtual void processCommand(ItemCommand cmd);
+    virtual void processConnectChild(SynthItem* child);
+    virtual void processDisconnect(SynthItem* other);
+    virtual void processDisconnectAll();
+
+signals:
+
+    // Notify signals
+    void muteChanged();
 
 };
 
 } // namespace sow
 
-#endif // SYNTHITEM_H
+#endif // QTSYNTHITEM_H
