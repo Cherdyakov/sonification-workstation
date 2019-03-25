@@ -18,7 +18,7 @@ Audifier::Audifier(QObject *parent) : SynthItem (parent)
     // Amplitude should always scale from -1.0f to 1.0f.
     amplitudeInterface_->setScaleOutLow(-1.0f);
     amplitudeInterface_->setScaleOutHigh(1.0f);
-    amplitudeInterface_->setMap("");
+    amplitudeInterface_->setMap("0.0");
     amplitudeInterface_->setScaled(true);
 }
 
