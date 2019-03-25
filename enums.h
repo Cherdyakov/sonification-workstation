@@ -35,7 +35,6 @@ public:
         AMPLITUDE,
         FREQUENCY,
         DEPTH,
-        AUDIFICATION,
         PAN,
         ATTACK,
         DECAY,

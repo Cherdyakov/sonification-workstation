@@ -1,7 +1,7 @@
 QT += qml quick widgets printsupport
 RESOURCES += qml.qrc
 TEMPLATE = app
-CONFIG += c++11
+CONFIG += c++17
 # Default rules for deployment.
 include(deployment.pri)
 
@@ -45,7 +45,8 @@ SOURCES += \
     transport.cpp \
     oscillator.cpp \
     amod.cpp \
-    fmod.cpp
+    fmod.cpp \
+    audifier.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -95,7 +96,9 @@ HEADERS += \
     transport.h \
     oscillator.h \
     amod.h \
-    fmod.h
+    fmod.h \
+    audifier.h \
+    constants.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

@@ -2,239 +2,51 @@
 
 namespace sow {
 
-Audifier::Audifier()
+Audifier::Audifier(QObject *parent) : SynthItem (parent)
 {
-    my_type_ = ITEM::AUDIFIER;
-    muted_ = false;
-
-    accepted_children_ = {
-        PARAMETER::AMPLITUDE
+    type_ = ENUMS::ITEM_TYPE::AUDIFIER;
+    outputType_ = ENUMS::OUTPUT_TYPE::AUDIO;
+    acceptedInputs_ = {
+        ENUMS::OUTPUT_TYPE::AUDIO
     };
+
+    amplitude_ = new Parameter(this);
+    amplitudeInterface_ = new ParameterInterface(this);
+    amplitudeInterface_->connectInterface(amplitude_);
+    parameters_.push_back(amplitude_);
+
+    // Amplitude should always scale from -1.0f to 1.0f.
+    amplitudeInterface_->setScaleOutLow(-1.0f);
+    amplitudeInterface_->setScaleOutHigh(1.0f);
+    amplitudeInterface_->setMap("0.0");
+    amplitudeInterface_->setScaled(true);
 }
 
-Audifier::~Audifier()
+ParameterInterface *Audifier::amplitudeInterface() const
 {
-
-}
-
-void Audifier::delete_self()
-{
-    SynthItemCommand command;
-    command.type = COMMAND::DELETE;
-    command_buffer_.push(command);
-}
-
-SynthItem::ITEM Audifier::get_type()
-{
-    return my_type_;
-}
-
-void Audifier::set_data(std::vector<double> *data, std::vector<double>* mins, std::vector<double>* maxes)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::DATA;
-    command.data = data;
-    command.mins = mins;
-    command.maxes = maxes;
-    command_buffer_.push(command);
-}
-
-void Audifier::add_parent(SynthItem *parent)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::ADD_PARENT;
-    command.item = parent;
-    command_buffer_.push(command);
-}
-
-void Audifier::remove_parent(SynthItem *parent)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::REMOVE_PARENT;
-    command.item = parent;
-    command_buffer_.push(command);
-}
-
-bool Audifier::add_child(SynthItem *child, PARAMETER param)
-{
-    if(!verify_child(param, accepted_children_))
-    {
-        return false;
-    }
-    SynthItemCommand command;
-    command.type = COMMAND::ADD_CHILD;
-    command.parameter = param;
-    command.item = child;
-    command_buffer_.push(command);
-    return true;
-}
-
-void Audifier::remove_child(SynthItem *child)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::REMOVE_CHILD;
-    command.item = child;
-    command_buffer_.push(command);
-}
-
-void Audifier::mute(bool mute)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::MUTE;
-    command.bool_val = mute;
-    command_buffer_.push(command);
-}
-
-void Audifier::set_aud_indexes(std::vector<int> indexes)
-{
-    SynthItemCommand command;
-    command.type = COMMAND::INDEXES;
-    command.parameter = PARAMETER::AUDIFICATION;
-    command.ints = indexes;
-    command_buffer_.push(command);
-}
-
-bool Audifier::get_mute()
-{
-    return muted_;
-}
-
-std::vector<SynthItem *> Audifier::get_parents()
-{
-    return parents_;
-}
-
-std::vector<int> Audifier::get_aud_indexes()
-{
-    return audify_indexes_;
+    return amplitudeInterface_;
 }
 
 Frame Audifier::process()
 {
-    Frame frame = 0.0;
+    Frame frame;
+    if(mute_) return frame;
 
-    if(muted_)
-    {
-        return frame;
-    }
-    else if(audify_indexes_.size() < 1)
-    {
-        return frame;
-    }
+    frame = amplitude_->value();
 
-    for(unsigned int i = 0; i < audify_indexes_.size(); i++)
-    {
-        // Audifier always scales datasets to range -1.0 to 1.0
-        frame += scale((data_->at(static_cast<unsigned int>(audify_indexes_[i]))),
-                       mins_->at(i), maxes_->at(i),
-                       -1.0, 1.0, 1.0);
+    // Amplitude modulation.
+    bool aMod = false;
+    Frame amFrame = 0.0f;
+    for (SynthItem*& child : children_) {
+        if(child->outputType() == ENUMS::OUTPUT_TYPE::AM) {
+            aMod = true;
+            amFrame += child->process();
+        }
     }
 
-    // visit amplitude modulating children
-    if(!amods_.empty())
-    {
-        Frame am_frame = visit_children(amods_);
-        frame *= am_frame;
-    }
+    if(aMod) frame *= amFrame;
 
-    // divide by total number of datasets mapped (rows)
-    // to prevent clipping
-    return frame /  audify_indexes_.size();
+    return frame;
 }
 
-void Audifier::step()
-{
-    for (unsigned int i = 0; i < amods_.size(); i++) {
-        SynthItem *item = amods_[i];
-        item->step();
-    }
 }
-
-void Audifier::control_process()
-{
-    if(!command_buffer_.empty())
-    {
-        retrieve_commands();
-    }
-}
-
-void Audifier::retrieve_commands()
-{
-    while(command_buffer_.pop(&current_command_))
-    {
-        process_command(current_command_);
-    }
-}
-
-void Audifier::process_command(SynthItemCommand command)
-{
-    COMMAND type = command.type;
-
-    switch (type) {
-    case COMMAND::DATA:
-        process_set_data(command.data, command.mins, command.maxes);
-        break;
-    case COMMAND::ADD_CHILD:
-        process_add_child(command.item, command.parameter);
-        break;
-    case COMMAND::REMOVE_CHILD:
-        process_remove_child(command.item);
-        break;
-    case COMMAND::ADD_PARENT:
-        insert_item_unique(command.item, &parents_);
-        break;
-    case COMMAND::REMOVE_PARENT:
-        remove_item(command.item, &parents_);
-        break;
-    case COMMAND::MUTE:
-        muted_ = command.bool_val;
-        break;
-    case COMMAND::INDEXES:
-        process_set_param_indexes(command.ints, command.parameter);
-        break;
-    case COMMAND::DELETE:
-        process_delete();
-        break;
-    default:
-        break;
-    }
-}
-
-void Audifier::process_add_child(SynthItem *child, PARAMETER param)
-{
-    if(param == PARAMETER::AMPLITUDE)
-    {
-        insert_item_unique(child, &amods_);
-        child->add_parent(this);
-    }
-}
-
-void Audifier::process_remove_child(SynthItem *child)
-{
-    amods_.erase(std::remove(amods_.begin(), amods_.end(), child), amods_.end());
-}
-
-void Audifier::process_delete()
-{
-    remove_as_child(this, parents_);
-    remove_as_parent(this, amods_);
-    delete this;
-}
-
-void Audifier::process_set_data(std::vector<double> *data, std::vector<double>* mins, std::vector<double>* maxes)
-{
-    data_ = data;
-    mins_ = mins;
-    maxes_ = maxes;
-}
-
-void Audifier::process_set_param_indexes(std::vector<int> indexes, PARAMETER param)
-{
-    if(param == PARAMETER::AUDIFICATION)
-    {
-        audify_indexes_ = indexes;
-    }
-}
-
-
-} // namespace sow

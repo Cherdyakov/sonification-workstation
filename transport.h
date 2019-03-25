@@ -9,6 +9,7 @@
 #include "oscillator.h"
 #include "amod.h"
 #include "fmod.h"
+#include "audifier.h"
 
 namespace sow {
 
