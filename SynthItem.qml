@@ -39,7 +39,6 @@ Item {
     // Property bindings
     onMuteChanged: {
         implementation.mute = mute
-        muteChildren()
     }
 
     onXChanged:  {
@@ -231,15 +230,6 @@ Item {
         while (synthParents.indexOf(synthItem) > -1) {
             synthParents.splice(synthParents.indexOf(synthItem), 1)
         }
-    }
-
-    function muteChildren() {
-        // Set mute on children.
-        for(var i = 0; i < synthChildren.length; i++) {
-            var synthItem = synthChildren[i]
-            synthItem.mute = mute
-        }
-        canvas.requestPaint()
     }
 
 } // root
