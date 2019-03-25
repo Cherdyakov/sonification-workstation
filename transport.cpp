@@ -149,7 +149,8 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
         processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::PANNER:
-        //        item = new Panner();
+        item = new Panner(this);
+        processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::ENVELOPE:
         //        item = new Envelope();
