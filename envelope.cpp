@@ -21,8 +21,13 @@ Envelope::Envelope(QObject *parent) : SynthItem(parent)
     decayInterface_->connectInterface(decay_);
     parameters_.push_back(decay_);
 
-    attackInterface_->setMap("10");
-    decayInterface_->setMap("90");
+    attackInterface_->setMap("0.1");
+    attackInterface_->setScaleOutLow(0.01f);
+    attackInterface_->setScaleOutHigh(0.99f);
+
+    decayInterface_->setMap("0.5");
+    decayInterface_->setScaleOutLow(0.01f);
+    decayInterface_->setScaleOutHigh(0.99f);
 }
 
 ParameterInterface *Envelope::attackInterface() const

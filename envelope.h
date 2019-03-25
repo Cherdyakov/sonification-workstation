@@ -11,6 +11,8 @@ namespace sow {
 class Envelope : public SynthItem
 {
     Q_OBJECT
+    Q_PROPERTY(ParameterInterface* attack READ attackInterface CONSTANT)
+    Q_PROPERTY(ParameterInterface* decay READ decayInterface CONSTANT)
 public:
 
     explicit Envelope(QObject *parent = nullptr);
