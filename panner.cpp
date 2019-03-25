@@ -50,7 +50,7 @@ Frame Panner::process()
             fmFrame += child->process();
         }
     }
-    if(fMod) pan += fmFrame.left;
+    if(fMod) pan += std::clamp<float>(fmFrame.left, -1.0f, 1.0f);
 
     // Amplitude modulation.
     Frame amFrame = 0.0f;
