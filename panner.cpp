@@ -16,6 +16,10 @@ Panner::Panner(QObject *parent) : SynthItem(parent)
     amplitudeInterface_ = new ParameterInterface(this);
     amplitudeInterface_->connectInterface(amplitude_);
     parameters_.push_back(amplitude_);
+
+    amplitudeInterface_->setMap("0.0");
+    amplitudeInterface_->setScaleOutLow(-1.0f);
+    amplitudeInterface_->setScaleOutHigh(1.0f);
 }
 
 ParameterInterface *Panner::amplitudeInterface() const
