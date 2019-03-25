@@ -14,6 +14,12 @@ Audifier::Audifier(QObject *parent) : SynthItem (parent)
     amplitudeInterface_ = new ParameterInterface(this);
     amplitudeInterface_->connectInterface(amplitude_);
     parameters_.push_back(amplitude_);
+
+    // Amplitude should always scale from -1.0f to 1.0f.
+    amplitudeInterface_->setScaleOutLow(-1.0f);
+    amplitudeInterface_->setScaleOutHigh(1.0f);
+    amplitudeInterface_->setMap("");
+    amplitudeInterface_->setScaled(true);
 }
 
 ParameterInterface *Audifier::amplitudeInterface() const
