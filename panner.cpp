@@ -12,19 +12,19 @@ Panner::Panner(QObject *parent) : SynthItem(parent)
         ENUMS::OUTPUT_TYPE::AUDIO
     };
 
-    amplitude_ = new Parameter(this);
-    amplitudeInterface_ = new ParameterInterface(this);
-    amplitudeInterface_->connectInterface(amplitude_);
-    parameters_.push_back(amplitude_);
+    pan_ = new Parameter(this);
+    panInterface_ = new ParameterInterface(this);
+    panInterface_->connectInterface(pan_);
+    parameters_.push_back(pan_);
 
-    amplitudeInterface_->setMap("0.0");
-    amplitudeInterface_->setScaleOutLow(-1.0f);
-    amplitudeInterface_->setScaleOutHigh(1.0f);
+    panInterface_->setMap("0.0");
+    panInterface_->setScaleOutLow(-1.0f);
+    panInterface_->setScaleOutHigh(1.0f);
 }
 
-ParameterInterface *Panner::amplitudeInterface() const
+ParameterInterface *Panner::panInterface() const
 {
-    return amplitudeInterface_;
+    return panInterface_;
 }
 
 Frame Panner::process()
@@ -32,7 +32,7 @@ Frame Panner::process()
     Frame frame;
     if(mute_) return frame;
 
-    float pan = amplitude_->value();
+    float pan = pan_->value();
 
     // Input frame.
     for (SynthItem*& child : children_) {
