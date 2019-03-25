@@ -12,6 +12,7 @@
 #include "audifier.h"
 #include "panner.h"
 #include "volume.h"
+#include "envelope.h"
 
 namespace sow {
 
