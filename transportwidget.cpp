@@ -1,4 +1,5 @@
 #include "transportwidget.h"
+#include "constants.h"
 
 TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 {
@@ -17,8 +18,8 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 
     speedLabel->setText(tr("Steps per second:"));
     speedBox->setValue(1.0);
-    speedBox->setMaximum(48000);
     speedBox->setMinimum(0.0);
+    speedBox->setMaximum(constants::SR);
     transportLayout->addWidget(loopButton);
     transportLayout->addWidget(pauseButton);
     transportLayout->addWidget(speedLabel);

@@ -1,7 +1,8 @@
-#include "transport.h"
-#include "utility.h"
 #include <QDebug>
 #include <QString>
+#include "constants.h"
+#include "transport.h"
+#include "utility.h"
 
 namespace sow {
 
@@ -23,7 +24,7 @@ Transport::Transport(QObject *parent) : SynthItem (parent)
     loopBegin_ = 0.0f;
     loopEnd_ = 0.0f;
     dataStale_ = false;
-    frameRate_ = 44100;
+    frameRate_ = constants::SR;
     currentIndex_ = 0;
     mu_ = 0.0f;
     speed_ = 1;

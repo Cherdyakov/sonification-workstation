@@ -6,9 +6,7 @@
 #include "transport.h"
 #include "filereader.h"
 #include "Gamma/Sync.h"
-
-#define SR 48000
-#define BLOCK_SIZE 512
+#include "constants.h"
 
 void PrintAudioError(PaError e)
 {
@@ -37,7 +35,7 @@ int main(int argc, char *argv[])
     main_window.show();
 
     //initialize Gamma
-    gam::Sync::master().spu(SR);
+    gam::Sync::master().spu();
 
     PaStream *stream;
     PaError err;
@@ -50,8 +48,8 @@ int main(int argc, char *argv[])
                                 0,
                                 2,
                                 paFloat32,
-                                SR,
-                                BLOCK_SIZE,
+                                constants::SR,
+                                constants::BLOCK_SIZE,
                                 callback,
                                 &uData );
 
