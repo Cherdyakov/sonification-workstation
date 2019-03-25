@@ -56,7 +56,8 @@ public:
 
     enum class NOISE {
         WHITE,
-        PINK
+        PINK,
+        BROWNIAN
     };
     Q_ENUM(NOISE)
 
