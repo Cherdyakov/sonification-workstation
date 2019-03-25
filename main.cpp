@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     main_window.show();
 
     //initialize Gamma
-    gam::Sync::master().spu();
+    gam::Sync::master().spu(constants::SR);
 
     PaStream *stream;
     PaError err;
