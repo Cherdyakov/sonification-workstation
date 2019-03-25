@@ -11,23 +11,28 @@ namespace sow {
 class Noise : public SynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterInterface* noise READ noiseInterface CONSTANT)
+    Q_PROPERTY(ENUMS::NOISE noiseType READ noiseType WRITE setNoiseType NOTIFY noiseTypeChanged)
 public:
 
     explicit Noise(QObject *parent = nullptr);
 
-    ParameterInterface* noiseInterface() const;
+    ENUMS::NOISE noiseType() const;
+    void setNoiseType(ENUMS::NOISE noiseType);
 
     virtual Frame process() override;
 
 private:
 
-    ParameterInterface* noiseInterface_;
-    Parameter* noise_;
+    ENUMS::NOISE noiseType_;
 
     gam::NoiseWhite<> whiteNoise_;
     gam::NoisePink<> pinkNoise_;
     gam::NoiseBrown<> brownianNoise_;
+
+signals:
+
+    void noiseTypeChanged(ENUMS::NOISE noise);
+
 };
 
 } // namespace sow

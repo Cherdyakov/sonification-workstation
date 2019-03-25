@@ -7,7 +7,12 @@ Noise::Noise(QObject *parent) : SynthItem(parent)
 
 }
 
-ParameterInterface *Noise::noiseInterface() const
+ENUMS::NOISE Noise::noiseType() const
+{
+    return noiseType_;
+}
+
+void Noise::setNoiseType(ENUMS::NOISE noiseType)
 {
 
 }
