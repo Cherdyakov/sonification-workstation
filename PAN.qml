@@ -33,6 +33,11 @@ SynthItem {
 
             EditorFloatParameter {
                 id: pan
+                scaler.lowSpinBox.from: -100.0
+                scaler.lowSpinBox.to: 100.0
+                scaler.highSpinBox.from: -100.0
+                scaler.highSpinBox.to: 100.0
+
                 // Value changed from QML
                 onScaledChanged: implementation ? implementation.pan.scaled = scaled : {}
                 onScaleRealLowChanged: implementation ? implementation.pan.scaleLow = scaleRealLow : {}

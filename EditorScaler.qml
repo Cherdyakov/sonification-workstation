@@ -18,6 +18,11 @@ ColumnLayout {
     property alias exp: expSpinBox.value
     property alias realExp: expSpinBox.realValue
 
+    // For setting properties of the SpinBoxes.
+    property alias lowSpinBox: lowSpinBox
+    property alias highSpinBox: highSpinBox
+    property alias expSpinBox: expSpinBox
+
     RowLayout {
 
         EditorLabel {
@@ -78,7 +83,7 @@ ColumnLayout {
             id: expSpinBox
             from: 100
             to: 6400
-            stepSize: 10
+//            stepSize: 10
         }
     }
 }
