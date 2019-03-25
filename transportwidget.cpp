@@ -17,7 +17,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 
     speedLabel->setText(tr("Steps per second:"));
     speedBox->setValue(1.0);
-    speedBox->setMaximum(44100);
+    speedBox->setMaximum(48000);
     speedBox->setMinimum(0.0);
     transportLayout->addWidget(loopButton);
     transportLayout->addWidget(pauseButton);

@@ -7,7 +7,7 @@
 #include "filereader.h"
 #include "Gamma/Sync.h"
 
-#define SR 44100
+#define SR 48000
 #define BLOCK_SIZE 512
 
 void PrintAudioError(PaError e)
