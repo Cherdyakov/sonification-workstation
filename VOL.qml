@@ -11,7 +11,7 @@ SynthItem {
     label: qsTr("VOL")
     type: ENUMS.VOLUME
     output: ENUMS.AUDIO
-    mainColor: Style.audColor
+    mainColor: Style.volColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
@@ -33,10 +33,10 @@ SynthItem {
 
             EditorFloatParameter {
                 id: amplitude
-                scaler.lowSpinBox.from: -1.0
-                scaler.lowSpinBox.to: 1.0
-                scaler.highSpinBox.from: -1.0
-                scaler.highSpinBox.to: 1.0
+                scaler.lowSpinBox.from: -100.0
+                scaler.lowSpinBox.to: 100.0
+                scaler.highSpinBox.from: -100.0
+                scaler.highSpinBox.to: 100.0
 
                 // Value changed from QML
                 onScaledChanged: implementation ? implementation.amplitude.scaled = scaled : {}
