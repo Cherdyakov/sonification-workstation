@@ -11,6 +11,7 @@
 #include "fmod.h"
 #include "audifier.h"
 #include "panner.h"
+#include "volume.h"
 
 namespace sow {
 
