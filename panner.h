@@ -9,19 +9,19 @@ namespace sow {
 class Panner : public SynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterInterface* amplitude READ amplitudeInterface CONSTANT)
+    Q_PROPERTY(ParameterInterface* pan READ panInterface CONSTANT)
 public:
 
     explicit Panner(QObject *parent = nullptr);
 
-    ParameterInterface* amplitudeInterface() const;
+    ParameterInterface* panInterface() const;
 
     virtual Frame process() override;
 
 private:
 
-    ParameterInterface* amplitudeInterface_;
-    Parameter* amplitude_;
+    ParameterInterface* panInterface_;
+    Parameter* pan_;
 
 signals:
 
