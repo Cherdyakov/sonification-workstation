@@ -7,7 +7,7 @@ Audifier::Audifier(QObject *parent) : SynthItem (parent)
     type_ = ENUMS::ITEM_TYPE::AUDIFIER;
     outputType_ = ENUMS::OUTPUT_TYPE::AUDIO;
     acceptedInputs_ = {
-        ENUMS::OUTPUT_TYPE::AUDIO
+        ENUMS::OUTPUT_TYPE::AM
     };
 
     amplitude_ = new Parameter(this);
