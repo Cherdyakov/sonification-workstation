@@ -13,6 +13,8 @@ public:
 
     explicit Amod(QObject *parent = nullptr);
 
+    virtual Frame process() override;
+
 };
 
 } // namespace sow
