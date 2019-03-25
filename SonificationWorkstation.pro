@@ -49,7 +49,8 @@ SOURCES += \
     audifier.cpp \
     panner.cpp \
     volume.cpp \
-    envelope.cpp
+    envelope.cpp \
+    noise.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -104,7 +105,8 @@ HEADERS += \
     constants.h \
     panner.h \
     volume.h \
-    envelope.h
+    envelope.h \
+    noise.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src
