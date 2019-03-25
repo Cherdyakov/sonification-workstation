@@ -15,7 +15,7 @@ Fmod::Fmod(QObject *parent) : Oscillator(parent)
     depthInterface_->connectInterface(depth_);
     parameters_.push_back(depth_);
 
-    depth_->setMap("100");
+    depthInterface_->setMap("100");
 }
 
 ParameterInterface *Fmod::depthInterface() const
