@@ -247,7 +247,7 @@ Frame Transport::process()
     calculateReturnPosition();
     mu_ += static_cast<float>(speed_) / frameRate_;
 
-    return frame;// * master_volume_;
+    return frame * masterVolume_ * !mute_;
 }
 
 void Transport::controlProcess()
