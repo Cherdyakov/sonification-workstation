@@ -47,7 +47,8 @@ SOURCES += \
     amod.cpp \
     fmod.cpp \
     audifier.cpp \
-    panner.cpp
+    panner.cpp \
+    volume.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -100,7 +101,8 @@ HEADERS += \
     fmod.h \
     audifier.h \
     constants.h \
-    panner.h
+    panner.h \
+    volume.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src
