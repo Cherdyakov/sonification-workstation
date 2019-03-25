@@ -1,32 +1,95 @@
 import QtQuick 2.12
-import SoW 1.0
 import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.12
+import SoW 1.0
+import ENUMS 1.0
 import "Style.js" as Style
 import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
     label: qsTr("ENV")
-    type: QtTransport.ENVELOPE
-    childType: QtSynthItem.INPUT
-    mainColor: Style.envColor
+    type: ENUMS.ENVELOPE
+    output: ENUMS.AUDIO
+    mainColor: Style.amColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()
-        attackEditor.value = implementation.getAttack()
-        attackFixedEditor.fixed = implementation.getAttackFixed()
-        attackScaler.scaled = implementation.getAttackScaled()
-        attackScaler.low = implementation.getAttackScaleLow()
-        attackScaler.high = implementation.getAttackScaleHigh()
-        attackScaler.exponent = implementation.getAttackScaleExponent()
-        decayEditor.value = implementation.getDecay()
-        decayFixedEditor.fixed = implementation.getDecayFixed()
-        decayScaler.scaled = implementation.getDecayScaled()
-        decayScaler.low = implementation.getDecayScaleLow()
-        decayScaler.high = implementation.getDecayScaleHigh()
-        decayScaler.exponent = implementation.getDecayScaleExponent()
+    }
+
+    Editor {
+        id: editor
+
+        EditorLayout {
+
+            EditorTitle {
+                text: qsTr("ENV");
+            }
+
+            EditorParameterHeader {
+                text: "Envelope"
+            }
+
+            EditorFloatParameter {
+                id: attack
+                // Value changed from QML
+                onScaledChanged: implementation ? implementation.attack.scaled = scaled : {}
+                onScaleRealLowChanged: implementation ? implementation.attack.scaleLow = scaleRealLow : {}
+                onScaleRealHighChanged: implementation ? implementation.attack.scaleHigh = scaleRealHigh : {}
+                onScaleRealExpChanged: implementation ? implementation.attack.scaleExp = scaleRealExp : {}
+                // Value changed from C++
+                scaled: implementation ? implementation.attack.scaled : 0
+                scaleLow: implementation ? implementation.attack.scaleLow * 100 : 0
+                scaleHigh: implementation ? implementation.attack.scaleHigh * 100 : 0
+                scaleExp: implementation ? implementation.attack.scaleExp * 100 : 0
+                mapper.map: implementation ? implementation.attack.map : ""
+
+                // Set map with Q_INVOKABLE function call and check if it is valid.
+                mapper.onMapChanged: {
+                    if(implementation) {
+                        if(!implementation.attack.setMap(mapper.map)) {
+                            mapper.textColor = "tomato"
+                        }
+                        else {
+                            mapper.textColor = "black"
+                        }
+                    }
+                }
+            }
+
+            EditorParameterHeader {
+                text: "Decay"
+            }
+
+            EditorFloatParameter {
+                id: decay
+                // Value changed from QML
+                onScaledChanged: implementation ? implementation.decay.scaled = scaled : {}
+                onScaleRealLowChanged: implementation ? implementation.decay.scaleLow = scaleRealLow : {}
+                onScaleRealHighChanged: implementation ? implementation.decay.scaleHigh = scaleRealHigh : {}
+                onScaleRealExpChanged: implementation ? implementation.decay.scaleExp = scaleRealExp : {}
+                // Value changed from C++
+                scaled: implementation ? implementation.decay.scaled : 0
+                scaleLow: implementation ? implementation.decay.scaleLow * 100 : 0
+                scaleHigh: implementation ? implementation.decay.scaleHigh * 100 : 0
+                scaleExp: implementation ? implementation.decay.scaleExp * 100 : 0
+                mapper.map: implementation ? implementation.decay.map : ""
+
+                // Set map with Q_INVOKABLE function call and check if it is valid.
+                mapper.onMapChanged: {
+                    if(implementation) {
+                        if(!implementation.decay.setMap(mapper.map)) {
+                            mapper.textColor = "tomato"
+                        }
+                        else {
+                            mapper.textColor = "black"
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     // return json representation of self
@@ -38,14 +101,9 @@ SynthItem {
             parents.push(parent)
         }
 
-        var attackIndexes = implementation.getAttackIndexes()
-        // remove keys from attackIndexes and store in js array
-        var attackIndexesArray = Object.keys(attackIndexes).map(function(k) { return attackIndexes[k] });
-
-        var decayIndexes = implementation.getDecayIndexes()
-        // remove keys from decayIndexes and store in js array
-        var decayIndexesArray = Object.keys(decayIndexes).map(function(k) { return decayIndexes[k] });
-
+        var freqIndexes = implementation.getFreqIndexes()
+        // remove keys from freqIndexes and store in js array
+        var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
 
         var essence = {
             "identifier": identifier,
@@ -54,22 +112,14 @@ SynthItem {
             "y": y,
             "muted": implementation.getMute(),
             "parents": parents,
-            "attack": implementation.getAttack(),
-            "attackIndexes": attackIndexesArray,
-            "attackFixed": implementation.getAttackFixed(),
-            "attackScaled": implementation.getAttackScaled(),
-            "attackScaleLow": implementation.getAttackScaleLow(),
-            "attackScaleHigh": implementation.getAttackScaleHigh(),
-            "attackScaleExponent": implementation.getAttackScaleExponent(),
-            "decay": implementation.getDecay(),
-            "decayIndexes": decayIndexesArray,
-            "decayFixed": implementation.getDecayFixed(),
-            "decayScaled": implementation.getDecayScaled(),
-            "decayScaleLow": implementation.getDecayScaleLow(),
-            "decayScaleHigh": implementation.getDecayScaleHigh(),
-            "decayScaleExponent": implementation.getDecayScaleExponent()
+            "freq": implementation.getFreq(),
+            "freqIndexes": freqIndexesArray,
+            "freqFixed": implementation.getFreqFixed(),
+            "freqScaled": implementation.getFreqScaled(),
+            "freqScaleLow": implementation.getFreqScaleLow(),
+            "freqScaleHigh": implementation.getFreqScaleHigh(),
+            "freqScaleExponent": implementation.getFreqScaleExponent()
         }
-
         return essence
     }
 
@@ -79,178 +129,17 @@ SynthItem {
         y = essence["y"]
         identifier = essence["identifier"]
         muted = essence["muted"]
-        attackEditor.value = essence["attack"]
-        attackFixedEditor.fixed = essence["attackFixed"]
-        var indexes = essence["attackIndexes"]
+        attackEditor.value = essence["freq"]
+        fixedAttackEditor.fixed = essence["freqFixed"]
+        var indexes = essence["freqIndexes"]
         var stringIndexes = SessionCode.indexesToString(indexes)
         attackMapper.text = stringIndexes
         attackMapper.validateMappings()
-        attackScaler.scaled = essence["attackScaled"]
-        attackScaler.low = essence["attackScaleLow"]
-        attackScaler.high = essence["attackScaleHigh"]
-        attackScaler.exponent = essence["attackScaleExponent"]
-        decayEditor.value = essence["decay"]
-        decayFixedEditor.fixed = essence["decayFixed"]
-        indexes = essence["decayIndexes"]
-        stringIndexes = SessionCode.indexesToString(indexes)
-        decayMapper.text = stringIndexes
-        decayMapper.validateMappings()
-        decayScaler.scaled = essence["decayScaled"]
-        decayScaler.low = essence["decayScaleLow"]
-        decayScaler.high = essence["decayScaleHigh"]
-        decayScaler.exponent = essence["decayScaleExponent"]
-    }
-
-    Editor {
-
-        id: editor
-
-        EditorLayout {
-            id: layout
-            title: label
-
-            //
-            // ATTACK PARAMETER
-            //
-            RowLayout {
-
-                EditorDoubleParam {
-                    id: attackEditor
-                    label.text: "Attack: "
-                    from: 0
-                    to: 100
-                    stepSize: 0.1
-                    onValueChanged: {
-                        implementation.setAttack(value)
-                    }
-                }
-
-                EditorFixedParam {
-                    id: attackFixedEditor
-                    label.text: qsTr("Fixed: ")
-                    onFixedChanged: {
-                        implementation.setAttackFixed(fixed)
-                    }
-                }
-
-            }
-
-            EditorMapper {
-                id: attackMapper
-                label.text: qsTr("Attack Source: ")
-                maxIndexes: 128
-                onMappingsChanged:
-                {
-                    var implementationMappings = mappings.map(function(value) {
-                        return value - 1
-                    } )
-                    if(implementation !== null) {
-                        implementation.setAttackIndexes(implementationMappings)
-                    }
-                }
-            }
-
-            EditorScaler {
-                id: attackScaler
-                label.text: qsTr("Attack Scaling: ")
-                lowLabel.text: qsTr("Attack Low: ")
-                highLabel.text: qsTr("Attack High: ")
-                lowFrom: 0
-                lowTo: 100
-                lowStepSize: 0.1
-                highFrom: 0
-                highTo: 100
-                highStepSize: 0.1
-
-                onLowChanged:
-                {
-                    implementation.setAttackScaleLow(low)
-                }
-                onHighChanged:
-                {
-                    implementation.setAttackScaleHigh(high)
-                }
-                onExponentChanged:
-                {
-                    implementation.setAttackScaleExponent(exponent)
-                }
-                onScaledChanged:
-                {
-                    implementation.setAttackScaled(scaled)
-                }
-            }
-
-            //
-            // DECAY PARAMETER
-            //
-            RowLayout {
-
-                EditorDoubleParam {
-                    id: decayEditor
-                    label.text: "Decay: "
-                    from: -100
-                    to: 100
-                    stepSize: 0.1
-                    onValueChanged: {
-                        implementation.setDecay(value)
-                    }
-                }
-
-                EditorFixedParam {
-                    id: decayFixedEditor
-                    label.text: qsTr("Fixed: ")
-                    onFixedChanged: {
-                        implementation.setDecayFixed(fixed)
-                    }
-                }
-
-            }
-
-            EditorMapper {
-                id: decayMapper
-                label.text: qsTr("Decay Source: ")
-                maxIndexes: 128
-                onMappingsChanged:
-                {
-                    var implementationMappings = mappings.map(function(value) {
-                        return value - 1
-                    } )
-                    if(implementation !== null) {
-                        implementation.setDecayIndexes(implementationMappings)
-                    }
-                }
-            }
-
-            EditorScaler {
-                id: decayScaler
-                label.text: qsTr("Decay Scaling: ")
-                lowLabel.text: qsTr("Decay Low: ")
-                highLabel.text: qsTr("Decay High: ")
-                lowFrom: 0
-                lowTo: 100
-                lowStepSize: 0.1
-                highFrom: 0
-                highTo: 100
-                highStepSize: 0.1
-
-                onLowChanged:
-                {
-                    implementation.setDecayScaleLow(low)
-                }
-                onHighChanged:
-                {
-                    implementation.setDecayScaleHigh(high)
-                }
-                onExponentChanged:
-                {
-                    implementation.setDecayScaleExponent(exponent)
-                }
-                onScaledChanged:
-                {
-                    implementation.setDecayScaled(scaled)
-                }
-            }
-        }
+        attackScaler.scaled = essence["freqScaled"]
+        attackScaler.low = essence["freqScaleLow"]
+        attackScaler.high = essence["freqScaleHigh"]
+        attackScaler.exponent = essence["freqScaleExponent"]
     }
 
 }
+
