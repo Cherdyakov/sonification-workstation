@@ -10,6 +10,7 @@
 #include "amod.h"
 #include "fmod.h"
 #include "audifier.h"
+#include "panner.h"
 
 namespace sow {
 
