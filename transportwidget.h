@@ -38,7 +38,7 @@ private:
 signals:
     void pausedChanged(bool pause);
     void loopingChanged(bool loop);
-    void speedChanged(int speed);
+    void speedChanged(float speed);
     void interpolateChanged(bool interpolate);
 
 public slots:

@@ -53,7 +53,7 @@ private:
     int frameRate_;
     int currentIndex_;
     float mu_;
-    int speed_;
+    float speed_;
     float loopBegin_;
     float loopEnd_;
     bool dataStale_;

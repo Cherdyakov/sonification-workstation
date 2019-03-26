@@ -27,7 +27,7 @@ private:
     QString sessionfile_;
     QString datafile_;
     bool interpolate_;
-    int speed_;
+    float speed_;
 
 signals:
     void newDatafile(QString datafile);

@@ -249,7 +249,7 @@ Frame Transport::process()
 
     // advancing index
     calculateReturnPosition();
-    mu_ += static_cast<float>(speed_) / frameRate_;
+    mu_ += speed_ / frameRate_;
 
     return frame * masterVolume_ * !mute_;
 }
