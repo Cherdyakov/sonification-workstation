@@ -8,28 +8,11 @@ include(deployment.pri)
 SOURCES += \
     mainwindow.cpp \
     main.cpp \
-#    oscillator.cpp \
-#    audifier.cpp \
     filereader.cpp \
     external/qcustomplot/qcustomplot.cpp \
     playhead.cpp \
-#    qtaudifier.cpp \
-#    modulator.cpp \
-#    qtmodulator.cpp \
-#    transport.cpp \
     transportwidget.cpp \
     utility.cpp \
-#    panner.cpp \
-#    qtpanner.cpp \
-#    envelope.cpp \
-#    qtenvelope.cpp \
-#    volume.cpp \
-#    qtvolume.cpp \
-#    noise.cpp \
-#    qtnoise.cpp \
-#    equalizer.cpp \
-#    qtequalizer.cpp \
-#    granulator.cpp \
     session.cpp \
     trackview.cpp \
     track.cpp \
@@ -57,33 +40,15 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
-#    synthitem.h \
     callback.h \
     userdata.h \
-#    oscillator.h \
     ringbuffer.h \
-#    audifier.h \
     filereader.h \
     external/qcustomplot/qcustomplot.h \
     playhead.h \
-#    qtaudifier.h \
-#    modulator.h \
-#    qtmodulator.h \
-#    transport.h \
     transportwidget.h \
     utility.h \
     frame.h \
-#    panner.h \
-#    qtpanner.h \
-#    envelope.h \
-#    qtenvelope.h \
-#    volume.h \
-#    qtvolume.h \
-#    noise.h \
-#    qtnoise.h \
-#    equalizer.h \
-#    qtequalizer.h \
-#    granulator.h \
     session.h \
     trackview.h \
     track.h \
