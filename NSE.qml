@@ -33,6 +33,8 @@ SynthItem {
 
             ComboBox {
                 id: noiseType
+                Layout.maximumHeight: Style.editorComboBoxHeight
+                Layout.fillWidth: true
                 model: [qsTr("White"), qsTr("Pink"), qsTr("Brown")]
                 // Value changed from QML.
                 onCurrentIndexChanged: implementation ? implementation.noise.idx = currentIndex : {}
