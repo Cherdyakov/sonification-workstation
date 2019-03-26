@@ -1,32 +1,110 @@
 import QtQuick 2.12
-import SoW 1.0
 import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.12
+import SoW 1.0
+import ENUMS 1.0
 import "Style.js" as Style
 import "SessionCode.js" as SessionCode
 
 SynthItem {
     id: root
     label: qsTr("EQ")
-    type: QtTransport.EQUALIZER
-    childType: QtSynthItem.INPUT
+    type: ENUMS.EQUALIZER
+    output: ENUMS.AUDIO
     mainColor: Style.eqColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()
-        frequencyEditor.value = implementation.getFrequency()
-        fixedFrequencyEditor.fixed = implementation.getFrequencyFixed()
-        frequencyScaler.scaled = implementation.getFrequencyScaled()
-        frequencyScaler.low = implementation.getFrequencyScaleLow()
-        frequencyScaler.high = implementation.getFrequencyScaleHigh()
-        frequencyScaler.exponent = implementation.getFrequencyScaleExponent()
-        resonanceEditor.value = implementation.getResonance()
-        fixedResonanceEditor.fixed = implementation.getResonanceFixed()
-        resonanceScaler.scaled = implementation.getResonanceScaled()
-        resonanceScaler.low = implementation.getResonanceScaleLow()
-        resonanceScaler.high = implementation.getResonanceScaleHigh()
-        resonanceScaler.exponent = implementation.getResonanceScaleExponent()
+    }
+
+    Editor {
+        id: editor
+
+        EditorLayout {
+
+            EditorTitle {
+                text: qsTr("EQ");
+            }
+
+            EditorParameterHeader {
+                text: qsTr("Filter Type")
+            }
+
+            ComboBox {
+                id: filterType
+                Layout.maximumHeight: Style.editorComboBoxHeight
+                Layout.fillWidth: true
+                model: [qsTr("Low Pass"), qsTr("High Pass"), qsTr("Peak"), qsTr("Notch")]
+                // Value changed from QML.
+                onCurrentIndexChanged: implementation ? implementation.type.idx = currentIndex : {}
+                // Value changed from C++.
+                currentIndex: implementation ? implementation.type.idx : 0
+            }
+
+            EditorParameterHeader {
+                text: qsTr("Frequency")
+            }
+
+            EditorFloatParameter {
+                id: frequency
+                // Value changed from QML
+                onScaledChanged: implementation ? implementation.frequency.scaled = scaled : {}
+                onScaleRealLowChanged: implementation ? implementation.frequency.scaleLow = scaleRealLow : {}
+                onScaleRealHighChanged: implementation ? implementation.frequency.scaleHigh = scaleRealHigh : {}
+                onScaleRealExpChanged: implementation ? implementation.frequency.scaleExp = scaleRealExp : {}
+                // Value changed from C++
+                scaled: implementation ? implementation.frequency.scaled : 0
+                scaleLow: implementation ? implementation.frequency.scaleLow * 100 : 0
+                scaleHigh: implementation ? implementation.frequency.scaleHigh * 100 : 0
+                scaleExp: implementation ? implementation.frequency.scaleExp * 100 : 0
+                mapper.map: implementation ? implementation.frequency.map : ""
+
+                // Set map with Q_INVOKABLE function call and check if it is valid.
+                mapper.onMapChanged: {
+                    if(implementation) {
+                        if(!implementation.frequency.setMap(mapper.map)) {
+                            mapper.textColor = "tomato"
+                        }
+                        else {
+                            mapper.textColor = "black"
+                        }
+                    }
+                }
+            }
+
+            EditorParameterHeader {
+                text: qsTr("Resonance")
+            }
+
+            EditorFloatParameter {
+                id: resonance
+                // Value changed from QML
+                onScaledChanged: implementation ? implementation.resonance.scaled = scaled : {}
+                onScaleRealLowChanged: implementation ? implementation.resonance.scaleLow = scaleRealLow : {}
+                onScaleRealHighChanged: implementation ? implementation.resonance.scaleHigh = scaleRealHigh : {}
+                onScaleRealExpChanged: implementation ? implementation.resonance.scaleExp = scaleRealExp : {}
+                // Value changed from C++
+                scaled: implementation ? implementation.resonance.scaled : 0
+                scaleLow: implementation ? implementation.resonance.scaleLow * 100 : 0
+                scaleHigh: implementation ? implementation.resonance.scaleHigh * 100 : 0
+                scaleExp: implementation ? implementation.resonance.scaleExp * 100 : 0
+                mapper.map: implementation ? implementation.resonance.map : ""
+
+                // Set map with Q_INVOKABLE function call and check if it is valid.
+                mapper.onMapChanged: {
+                    if(implementation) {
+                        if(!implementation.resonance.setMap(mapper.map)) {
+                            mapper.textColor = "tomato"
+                        }
+                        else {
+                            mapper.textColor = "black"
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     // return json representation of self
@@ -38,13 +116,9 @@ SynthItem {
             parents.push(parent)
         }
 
-        var frequencyIndexes = implementation.getFrequencyIndexes()
+        var freqIndexes = implementation.getFreqIndexes()
         // remove keys from freqIndexes and store in js array
-        var frequencyIndexesArray = Object.keys(frequencyIndexes).map(function(k) { return frequencyIndexes[k] });
-
-        var resonanceIndexes = implementation.getResonanceIndexes()
-        // remove keys from freqIndexes and store in js array
-        var resonanceIndexesArray = Object.keys(resonanceIndexes).map(function(k) { return resonanceIndexes[k] });
+        var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
 
         var essence = {
             "identifier": identifier,
@@ -52,22 +126,14 @@ SynthItem {
             "x": x,
             "y": y,
             "muted": implementation.getMute(),
-            "modType": childType,
-            "frequencyIndexes": frequencyIndexesArray,
-            "resonanceIndexes": resonanceIndexesArray,
             "parents": parents,
-            "frequency": implementation.getFrequency(),
-            "frequencyFixed": implementation.getFrequencyFixed(),
-            "frequencyScaled": implementation.getFrequencyScaled(),
-            "frequencyScaleLow": implementation.getFrequencyScaleLow(),
-            "frequencyScaleHigh": implementation.getFrequencyScaleHigh(),
-            "frequencyScaleExponent": implementation.getFrequencyScaleExponent(),
-            "resonance": implementation.getResonance(),
-            "resonanceFixed": implementation.getResonanceFixed(),
-            "resonanceScaled": implementation.getResonanceScaled(),
-            "resonanceScaleLow": implementation.getResonanceScaleLow(),
-            "resonanceScaleHigh": implementation.getResonanceScaleHigh(),
-            "resonanceScaleExponent": implementation.getResonanceScaleExponent()
+            "freq": implementation.getFreq(),
+            "freqIndexes": freqIndexesArray,
+            "freqFixed": implementation.getFreqFixed(),
+            "freqScaled": implementation.getFreqScaled(),
+            "freqScaleLow": implementation.getFreqScaleLow(),
+            "freqScaleHigh": implementation.getFreqScaleHigh(),
+            "freqScaleExponent": implementation.getFreqScaleExponent()
         }
         return essence
     }
@@ -78,176 +144,17 @@ SynthItem {
         y = essence["y"]
         identifier = essence["identifier"]
         muted = essence["muted"]
-        frequencyEditor.value = essence["frequency"]
-        fixedFrequencyEditor.fixed = essence["frequencyFixed"]
-        var indexes = essence["frequencyIndexes"]
+        frequencyEditor.value = essence["freq"]
+        fixedFrequencyEditor.fixed = essence["freqFixed"]
+        var indexes = essence["freqIndexes"]
         var stringIndexes = SessionCode.indexesToString(indexes)
         frequencyMapper.text = stringIndexes
         frequencyMapper.validateMappings()
-        frequencyScaler.scaled = essence["frequencyScaled"]
-        frequencyScaler.low = essence["frequencyScaleLow"]
-        frequencyScaler.high = essence["frequencyScaleHigh"]
-        frequencyScaler.exponent = essence["frequencyScaleExponent"]
-        resonanceEditor.value = essence["resonance"]
-        fixedResonanceEditor.fixed = essence["resonanceFixed"]
-        indexes = essence["resonanceIndexes"]
-        stringIndexes = SessionCode.indexesToString(indexes)
-        resonanceMapper.text = stringIndexes
-        resonanceMapper.validateMappings()
-        resonanceScaler.scaled = essence["resonanceScaled"]
-        resonanceScaler.low = essence["resonanceScaleLow"]
-        resonanceScaler.high = essence["resonanceScaleHigh"]
-        resonanceScaler.exponent = essence["resonanceScaleExponent"]
-    }
-
-    Editor {
-
-        id: editor
-
-        EditorLayout {
-            id: layout
-            title: label
-
-            EditorMenuParam {
-                id: typeEditor
-                label.text: qsTr("Type: ")
-                model: [qsTr("Low Pass"), qsTr("High Pass"), qsTr("Peak"), qsTr("Notch")]
-                onIndexChanged: {
-                    if(implementation !== null) {
-                        implementation.setFilterType(index)
-                    }
-                }
-            }
-
-            RowLayout {
-
-                EditorDoubleParam {
-                    id: frequencyEditor
-                    label.text: qsTr("Frequency: ")
-                    onValueChanged: {
-                        implementation.setFrequency(value)
-                    }
-                }
-
-                EditorFixedParam {
-                    id: fixedFrequencyEditor
-                    label.text: qsTr("Fixed: ")
-                    onFixedChanged: {
-                        implementation.setFrequencyFixed(fixed)
-                    }
-                }
-
-            }
-
-            EditorMapper {
-                id: frequencyMapper
-                label.text: qsTr("Frequency Source: ")
-                maxIndexes: 1
-                onMappingsChanged:
-                {
-                    var implementationMappings = mappings.map(function(value) {
-                        return value - 1
-                    } )
-                    if(implementation !== null) {
-                        implementation.setFrequencyIndexes(implementationMappings)
-                    }
-                }
-            }
-
-            EditorScaler {
-                id: frequencyScaler
-                label.text: qsTr("Frequency Scaling: ")
-                lowLabel.text: qsTr("Frequency Low: ")
-                highLabel.text: qsTr("Frequency High: ")
-
-                onLowChanged:
-                {
-                    implementation.setFrequencyScaleLow(low)
-                }
-                onHighChanged:
-                {
-                    implementation.setFrequencyScaleHigh(high)
-                }
-                onExponentChanged:
-                {
-                    implementation.setFrequencyScaleExponent(exponent)
-                }
-                onScaledChanged:
-                {
-                    implementation.setFrequencyScaled(scaled)
-                }
-            }
-
-
-            EditorDoubleParam {
-                id: resonanceEditor
-                label.text: "Resonance: "
-                from: 1
-                to: 10
-                stepSize: 0.1
-                onValueChanged: {
-                    implementation.setResonance(value)
-                }
-            }
-
-            RowLayout {
-
-                EditorMapper {
-                    id: resonanceMapper
-                    label.text: qsTr("Resonance Source: ")
-                    maxIndexes: 1
-                    onMappingsChanged:
-                    {
-                        var implementationMappings = mappings.map(function(value) {
-                            return value - 1
-                        } )
-                        if(implementation !== null) {
-                            implementation.setResonanceIndexes(implementationMappings)
-                        }
-                    }
-                }
-
-                EditorFixedParam {
-                    id: fixedResonanceEditor
-                    label.text: qsTr("Fixed: ")
-                    onFixedChanged: {
-                        implementation.setResonanceFixed(fixed)
-                    }
-                }
-            }
-
-            EditorScaler {
-                id: resonanceScaler
-                label.text: qsTr("Resonance Scaling: ")
-                lowLabel.text: qsTr("Resonance Low: ")
-                highLabel.text: qsTr("Resonance High: ")
-                lowFrom: 1
-                lowTo: 10
-                lowStepSize: 0.1
-                highFrom: 1
-                highTo: 10
-                highStepSize: 0.1
-
-                onLowChanged:
-                {
-                    implementation.setResonanceScaleLow(low)
-                }
-                onHighChanged:
-                {
-                    implementation.setResonanceScaleHigh(high)
-                }
-                onExponentChanged:
-                {
-                    implementation.setResonanceScaleExponent(exponent)
-                }
-                onScaledChanged:
-                {
-                    implementation.setResonanceScaled(scaled)
-                }
-            }
-        }
+        frequencyScaler.scaled = essence["freqScaled"]
+        frequencyScaler.low = essence["freqScaleLow"]
+        frequencyScaler.high = essence["freqScaleHigh"]
+        frequencyScaler.exponent = essence["freqScaleExponent"]
     }
 
 }
-
 

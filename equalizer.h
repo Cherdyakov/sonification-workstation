@@ -14,7 +14,7 @@ class Equalizer : public SynthItem
     Q_OBJECT
     Q_PROPERTY(ParameterFloatInterface* frequency READ frequencyInterface CONSTANT)
     Q_PROPERTY(ParameterFloatInterface* resonance READ resonanceInterface CONSTANT)
-    Q_PROPERTY(ParameterIndexInterface* filterType READ filterTypeInterface CONSTANT)
+    Q_PROPERTY(ParameterIndexInterface* type READ filterTypeInterface CONSTANT)
 public:
     explicit Equalizer(QObject* parent);
 
