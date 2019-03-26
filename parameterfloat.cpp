@@ -4,10 +4,7 @@
 
 namespace sow {
 
-ParameterFloat::ParameterFloat(QObject *parent) : QObject(parent)
-{
-
-}
+ParameterFloat::ParameterFloat(QObject *parent) : Parameter(parent) { }
 
 float ParameterFloat::value()
 {
@@ -19,15 +16,6 @@ float ParameterFloat::value()
 
     }
     return val;
-}
-
-// Process outstanding ParameterCommands
-void ParameterFloat::controlProcess()
-{
-    ParameterCommand currentCommand_;
-    while(commandBuffer_.pop(&currentCommand_)) {
-        processCommand(currentCommand_);
-    }
 }
 
 bool ParameterFloat::setMap(const QString map)
@@ -54,7 +42,7 @@ void ParameterFloat::setData(const Dataset *dataset, const std::vector<float> *c
 }
 
 // Execute commands pulled from the command buffer
-void ParameterFloat::processCommand(sow::ParameterCommand cmd)
+void ParameterFloat::processCommand(const ParameterCommand cmd)
 {
     ENUMS::SUB_PARAMETER subParam = cmd.subParam;
 
@@ -81,15 +69,6 @@ void ParameterFloat::processCommand(sow::ParameterCommand cmd)
 void ParameterFloat::processSetMap(std::string expression)
 {
     mapEvaluator_.compileExpression(expression);
-}
-
-// Slot for updated float values from the interface
-void ParameterFloat::onParameterChanged(const ENUMS::SUB_PARAMETER subParam, const float value)
-{
-    ParameterCommand cmd;
-    cmd.subParam = subParam;
-    cmd.value = value;
-    commandBuffer_.push(cmd);
 }
 
 } // namespace sow

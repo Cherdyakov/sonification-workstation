@@ -50,7 +50,8 @@ SOURCES += \
     envelope.cpp \
     noise.cpp \
     parameterfloat.cpp \
-    parameterfloatinterface.cpp
+    parameterfloatinterface.cpp \
+    parameter.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -106,7 +107,8 @@ HEADERS += \
     envelope.h \
     noise.h \
     parameterfloat.h \
-    parameterfloatinterface.h
+    parameterfloatinterface.h \
+    parameter.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

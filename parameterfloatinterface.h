@@ -1,5 +1,5 @@
-#ifndef SOWPARAMETER_H
-#define SOWPARAMETER_H
+#ifndef PARAMETERFLOATINTERFACE_H
+#define PARAMETERFLOATINTERFACE_H
 
 #include <QObject>
 #include <QPointer>
@@ -71,4 +71,4 @@ public slots:
 
 } // Namespace sow.
 
-#endif // SOWPARAMETER_H
+#endif // PARAMETERFLOATINTERFACE_H
