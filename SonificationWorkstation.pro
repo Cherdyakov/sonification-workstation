@@ -53,7 +53,8 @@ SOURCES += \
     parameterfloatinterface.cpp \
     parameter.cpp \
     parameterindex.cpp \
-    parameterindexinterface.cpp
+    parameterindexinterface.cpp \
+    equalizer.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -112,7 +113,8 @@ HEADERS += \
     parameterfloatinterface.h \
     parameter.h \
     parameterindex.h \
-    parameterindexinterface.h
+    parameterindexinterface.h \
+    equalizer.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

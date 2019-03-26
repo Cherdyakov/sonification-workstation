@@ -14,7 +14,6 @@ class Envelope : public SynthItem
     Q_PROPERTY(ParameterFloatInterface* attack READ attackInterface CONSTANT)
     Q_PROPERTY(ParameterFloatInterface* decay READ decayInterface CONSTANT)
 public:
-
     explicit Envelope(QObject *parent = nullptr);
 
     ParameterFloatInterface* attackInterface() const;
@@ -29,8 +28,8 @@ protected:
 private:
 
     ParameterFloatInterface* attackInterface_;
-    ParameterFloatInterface* decayInterface_;
     ParameterFloat* attack_;
+    ParameterFloatInterface* decayInterface_;
     ParameterFloat* decay_;
 
     gam::AD<float> env_;
