@@ -1,7 +1,6 @@
 #ifndef PARAMETERFLOAT_H
 #define PARAMETERFLOAT_H
 
-#include <QObject>
 #include "parameter.h"
 #include "mapevaluator.h"
 #include "utility.h"
