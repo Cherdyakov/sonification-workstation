@@ -11,7 +11,7 @@ namespace sow {
 class Noise : public SynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterIndexInterface* noiseType READ noiseTypeInterface CONSTANT)
+    Q_PROPERTY(ParameterIndexInterface* noise READ noiseTypeInterface CONSTANT)
 public:
 
     explicit Noise(QObject *parent = nullptr);
