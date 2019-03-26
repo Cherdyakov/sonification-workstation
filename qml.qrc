@@ -9,16 +9,13 @@
         <file>OSC.qml</file>
         <file>Style.js</file>
         <file>EditorLabel.qml</file>
-        <file>EditorComboBox.qml</file>
         <file>EditorDoubleSpinBox.qml</file>
-        <file>EditorWaveform.qml</file>
         <file>Editor.qml</file>
         <file>EditorFixed.qml</file>
         <file>EditorLayout.qml</file>
         <file>EditorMapper.qml</file>
         <file>AUD.qml</file>
         <file>EditorScaler.qml</file>
-        <file>EditorModulation.qml</file>
         <file>PAN.qml</file>
         <file>ENV.qml</file>
         <file>VOL.qml</file>
