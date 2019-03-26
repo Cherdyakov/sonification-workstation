@@ -10,7 +10,6 @@ SOURCES += \
     main.cpp \
 #    oscillator.cpp \
 #    audifier.cpp \
-    timerworker.cpp \
     filereader.cpp \
     external/qcustomplot/qcustomplot.cpp \
     playhead.cpp \
@@ -64,7 +63,6 @@ HEADERS += \
 #    oscillator.h \
     ringbuffer.h \
 #    audifier.h \
-    timerworker.h \
     filereader.h \
     external/qcustomplot/qcustomplot.h \
     playhead.h \
