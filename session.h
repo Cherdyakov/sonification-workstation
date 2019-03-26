@@ -35,12 +35,12 @@ signals:
     void speedChanged(int speed);
 
 public slots:
-    void on_save();
-    void on_saveAs();
-    void on_open();
-    void on_importDatasetFile();
+    void onSave();
+    void onSaveAs();
+    void onOpen();
+    void onImportDataset();
     void onInterpolateChanged(bool interpolate_);
-    void on_speedChanged(int speed_);
+    void onSpeedChanged(int speed_);
 };
 
 } // End namespace sow.

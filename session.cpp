@@ -29,17 +29,17 @@ void Session::write()
     file.write(sessionDocument.toJson());
 }
 
-void Session::on_save()
+void Session::onSave()
 {
     if(sessionfile_ == NULL) {
-        on_saveAs();
+        onSaveAs();
     }
     else {
         write();
     }
 }
 
-void Session::on_saveAs()
+void Session::onSaveAs()
 {
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
@@ -52,7 +52,7 @@ void Session::on_saveAs()
     }
 }
 
-void Session::on_open()
+void Session::onOpen()
 {
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
@@ -88,7 +88,7 @@ void Session::on_open()
 
 }
 
-void Session::on_importDatasetFile()
+void Session::onImportDataset()
 {
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
@@ -105,7 +105,7 @@ void Session::onInterpolateChanged(bool interpolate)
     this->interpolate_ = interpolate;
 }
 
-void Session::on_speedChanged(int speed)
+void Session::onSpeedChanged(int speed)
 {
     this->speed_ = speed;
 }

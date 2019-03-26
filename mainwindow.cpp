@@ -83,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport, &Transport::onLoopingchanged);
     // TransportWidget signals to Session, Playhead.
     connect(transportWidget, &TransportWidget::speedChanged,
-            session, &Session::on_speedChanged);
+            session, &Session::onSpeedChanged);
     connect(transportWidget, &TransportWidget::interpolateChanged,
             session, &Session::onInterpolateChanged);
     connect(transportWidget, &TransportWidget::pausedChanged,
@@ -113,28 +113,28 @@ void MainWindow::createMenus()
     openSessionAct->setShortcut(QKeySequence::Open);
     openSessionAct->setStatusTip(tr("Open an existing SOW session"));
     connect(openSessionAct, &QAction::triggered,
-            session, &Session::on_open);
+            session, &Session::onOpen);
 
     // save session
     QAction *saveSessionAct = new QAction(tr("Save"), this);
     saveSessionAct->setShortcut(QKeySequence::Save);
     saveSessionAct->setStatusTip(tr("Save the current session to a file"));
     connect(saveSessionAct, &QAction::triggered,
-            session, &Session::on_save);
+            session, &Session::onSave);
 
     // save session as
     QAction *saveSessionAsAct = new QAction(tr("Save As"), this);
     saveSessionAsAct->setShortcut(QKeySequence::SaveAs);
     saveSessionAsAct->setStatusTip(tr("Save the current session with a new name"));
     connect(saveSessionAsAct, &QAction::triggered,
-            session, &Session::on_saveAs);
+            session, &Session::onSaveAs);
 
     // import dataset
     QAction *importDatasetFileAct = new QAction(tr("Import Dataset"), this);
     importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     importDatasetFileAct->setStatusTip(tr("Import CSV data into the data window"));
     connect(importDatasetFileAct, &QAction::triggered,
-            session, &Session::on_importDatasetFile);
+            session, &Session::onImportDataset);
 
     // quit application
     QAction *quitAct = new QAction(tr("Quit"), this);
