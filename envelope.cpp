@@ -11,13 +11,13 @@ Envelope::Envelope(QObject *parent) : SynthItem(parent)
         ENUMS::OUTPUT_TYPE::AM
     };
 
-    attack_ = new Parameter(this);
-    attackInterface_ = new ParameterInterface(this);
+    attack_ = new ParameterFloat(this);
+    attackInterface_ = new ParameterFloatInterface(this);
     attackInterface_->connectInterface(attack_);
     parameters_.push_back(attack_);
 
-    decay_ = new Parameter(this);
-    decayInterface_ = new ParameterInterface(this);
+    decay_ = new ParameterFloat(this);
+    decayInterface_ = new ParameterFloatInterface(this);
     decayInterface_->connectInterface(decay_);
     parameters_.push_back(decay_);
 
@@ -30,12 +30,12 @@ Envelope::Envelope(QObject *parent) : SynthItem(parent)
     decayInterface_->setScaleOutHigh(0.99f);
 }
 
-ParameterInterface *Envelope::attackInterface() const
+ParameterFloatInterface *Envelope::attackInterface() const
 {
     return attackInterface_;
 }
 
-ParameterInterface *Envelope::decayInterface() const
+ParameterFloatInterface *Envelope::decayInterface() const
 {
     return decayInterface_;
 }

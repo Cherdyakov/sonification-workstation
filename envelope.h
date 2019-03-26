@@ -4,21 +4,21 @@
 #include <QObject>
 #include "Gamma/Envelope.h"
 #include "synthitem.h"
-#include "parameterinterface.h"
+#include "parameterfloatinterface.h"
 
 namespace sow {
 
 class Envelope : public SynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterInterface* attack READ attackInterface CONSTANT)
-    Q_PROPERTY(ParameterInterface* decay READ decayInterface CONSTANT)
+    Q_PROPERTY(ParameterFloatInterface* attack READ attackInterface CONSTANT)
+    Q_PROPERTY(ParameterFloatInterface* decay READ decayInterface CONSTANT)
 public:
 
     explicit Envelope(QObject *parent = nullptr);
 
-    ParameterInterface* attackInterface() const;
-    ParameterInterface* decayInterface() const;
+    ParameterFloatInterface* attackInterface() const;
+    ParameterFloatInterface* decayInterface() const;
 
     virtual Frame process() override;
 
@@ -28,10 +28,10 @@ protected:
 
 private:
 
-    ParameterInterface* attackInterface_;
-    ParameterInterface* decayInterface_;
-    Parameter* attack_;
-    Parameter* decay_;
+    ParameterFloatInterface* attackInterface_;
+    ParameterFloatInterface* decayInterface_;
+    ParameterFloat* attack_;
+    ParameterFloat* decay_;
 
     gam::AD<float> env_;
 

@@ -1,70 +1,38 @@
 #ifndef NOISE_H
 #define NOISE_H
 
-#include "utility.h"
+#include <QObject>
 #include "synthitem.h"
 #include "Gamma/Noise.h"
+#include "parameterindexinterface.h"
 
 namespace sow {
 
 class Noise : public SynthItem
 {
+    Q_OBJECT
+    Q_PROPERTY(ParameterIndexInterface* noise READ noiseTypeInterface CONSTANT)
 public:
-    Noise();
 
-    // helper when deleting item contained in synth tree
-    void delete_self() override;
-    // interface overrides
-    ITEM get_type() override;
-    void set_data(std::vector<double>* data,
-                  std::vector<double>* mins,
-                  std::vector<double>* maxes) override;
-    void add_parent(SynthItem* parent) override;
-    void remove_parent(SynthItem* parent) override;
-    bool add_child(SynthItem *child, PARAMETER param) override;
-    void remove_child(SynthItem *child) override;
-    void mute(bool mute) override;
-    // noise parameter accessors
-    void set_noise(NOISE noise);
+    explicit Noise(QObject *parent = nullptr);
 
-    // getters are not thread-safe
-    bool get_mute();
-    std::vector<SynthItem*> get_parents();
-    // frequency parameter getters
-    NOISE get_noise();
+    ParameterIndexInterface* noiseTypeInterface() const;
 
-    // generate a frame
-    Frame process() override; // every sample
-    void step() override; // every new data value (step)
-    void control_process() override; // every process block
+    virtual Frame process() override;
 
 private:
-    void retrieve_commands() override;
-    void process_command(SynthItemCommand command) override;
-    void process_add_child(SynthItem* child, PARAMETER parameter) override;
-    void process_remove_child(SynthItem* child) override;
-    void process_delete() override;
 
-    void process_set_data(std::vector<double>* data,
-                          std::vector<double>* mins,
-                          std::vector<double>* maxes);
-    void process_set_noise(NOISE noise);
+    ParameterIndexInterface* noiseTypeInterface_;
+    ParameterIndex* noiseType_;
 
-    ITEM my_type_;
-    RingBuffer<SynthItemCommand> command_buffer_;
-    SynthItemCommand current_command_;
-    std::vector<SynthItem::PARAMETER> accepted_children_;
-    std::vector<double>* data_;
-    std::vector<double>* mins_;
-    std::vector<double>* maxes_;
-    std::vector<SynthItem*> parents_;
-    std::vector<SynthItem*> inputs_;
-    std::vector<SynthItem*> amods_;
-    bool muted_;
+    gam::NoiseWhite<> whiteNoise_;
+    gam::NoisePink<> pinkNoise_;
+    gam::NoiseBrown<> brownianNoise_;
 
-    gam::NoiseWhite<> white_;
-    gam::NoisePink<> pink_;
-    NOISE noise_type_;
+signals:
+
+    void noiseTypeChanged(ENUMS::NOISE noise);
+
 };
 
 } // namespace sow

@@ -13,6 +13,7 @@
 #include "panner.h"
 #include "volume.h"
 #include "envelope.h"
+#include "noise.h"
 
 namespace sow {
 

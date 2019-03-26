@@ -10,15 +10,15 @@ Fmod::Fmod(QObject *parent) : Oscillator(parent)
         ENUMS::OUTPUT_TYPE::AM
     };
 
-    depth_ = new Parameter(this);
-    depthInterface_ = new ParameterInterface(this);
+    depth_ = new ParameterFloat(this);
+    depthInterface_ = new ParameterFloatInterface(this);
     depthInterface_->connectInterface(depth_);
     parameters_.push_back(depth_);
 
     depthInterface_->setMap("100");
 }
 
-ParameterInterface *Fmod::depthInterface() const
+ParameterFloatInterface *Fmod::depthInterface() const
 {
     return depthInterface_;
 }

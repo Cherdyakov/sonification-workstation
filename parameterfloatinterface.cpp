@@ -1,9 +1,9 @@
-#include "parameterinterface.h"
+#include "parameterfloatinterface.h"
 #include <QDebug>
 
 namespace sow {
 
-ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
+ParameterFloatInterface::ParameterFloatInterface(QObject *parent) : QObject(parent)
 {
     // Interface variables, bound to QML.
     setScaled(false);
@@ -13,13 +13,13 @@ ParameterInterface::ParameterInterface(QObject *parent) : QObject(parent)
     setMap("440.0");
 }
 
-void ParameterInterface::connectInterface(Parameter* parameter)
+void ParameterFloatInterface::connectInterface(ParameterFloat* parameter)
 {
     parameter_ = parameter;
 
     // Connect this interface to a backing Parameter.
-    connect(this, &ParameterInterface::iParameterChanged,
-            parameter, &Parameter::onParameterChanged);
+    connect(this, &ParameterFloatInterface::iParameterChanged,
+            parameter, &ParameterFloat::onParameterChanged);
 
     // Signal the backing Parameter with the initial values.
     iParameterChanged(ENUMS::SUB_PARAMETER::SCALED, iScale_);
@@ -29,17 +29,17 @@ void ParameterInterface::connectInterface(Parameter* parameter)
     parameter_->setMap(iMap_);
 }
 
-void sow::ParameterInterface::setType(const ENUMS::PARAMETER type) {
+void sow::ParameterFloatInterface::setType(const ENUMS::PARAMETER type) {
     if (iType_ != type) {
         iType_ = type;
         emit typeChanged();
     }
 }
-ENUMS::PARAMETER sow::ParameterInterface::type() const {
+ENUMS::PARAMETER sow::ParameterFloatInterface::type() const {
     return iType_;
 }
 
-void sow::ParameterInterface::setScaled(const bool scale) {
+void sow::ParameterFloatInterface::setScaled(const bool scale) {
     if (iScale_ != scale) {
         iScale_ =  scale;
         emit scaledChanged();
@@ -47,11 +47,11 @@ void sow::ParameterInterface::setScaled(const bool scale) {
     }
 }
 
-bool sow::ParameterInterface::scaled() const {
+bool sow::ParameterFloatInterface::scaled() const {
     return iScale_;
 }
 
-void sow::ParameterInterface::setScaleOutLow(const float scaleOutLow) {
+void sow::ParameterFloatInterface::setScaleOutLow(const float scaleOutLow) {
     if (!qFuzzyCompare(iScaleOutLow_, scaleOutLow)) {
         iScaleOutLow_ =  scaleOutLow;
         emit scaleLoChanged();
@@ -59,11 +59,11 @@ void sow::ParameterInterface::setScaleOutLow(const float scaleOutLow) {
     }
 }
 
-float sow::ParameterInterface::scaleOutLow() const {
+float sow::ParameterFloatInterface::scaleOutLow() const {
     return iScaleOutLow_;
 }
 
-void sow::ParameterInterface::setScaleOutHigh(const float scaleOutHigh) {
+void sow::ParameterFloatInterface::setScaleOutHigh(const float scaleOutHigh) {
     if (!qFuzzyCompare(iScaleOutHigh_, scaleOutHigh)) {
         iScaleOutHigh_ =  scaleOutHigh;
         emit scaleHiChanged();
@@ -71,11 +71,11 @@ void sow::ParameterInterface::setScaleOutHigh(const float scaleOutHigh) {
     }
 }
 
-float sow::ParameterInterface::scaleOutHigh() const {
+float sow::ParameterFloatInterface::scaleOutHigh() const {
     return iScaleOutHigh_;
 }
 
-void sow::ParameterInterface::setScaleExp(const float scaleExp) {
+void sow::ParameterFloatInterface::setScaleExp(const float scaleExp) {
     if (!qFuzzyCompare(iScaleExp_, scaleExp)) {
         iScaleExp_ =  scaleExp;
         emit scaleExpChanged();
@@ -83,11 +83,11 @@ void sow::ParameterInterface::setScaleExp(const float scaleExp) {
     }
 }
 
-float sow::ParameterInterface::scaleExp() const {
+float sow::ParameterFloatInterface::scaleExp() const {
     return iScaleExp_;
 }
 
-bool sow::ParameterInterface::setMap(const QString map) {
+bool sow::ParameterFloatInterface::setMap(const QString map) {
     if (iMap_ != map) {
         iMap_ = map;
         emit mapChanged();
@@ -98,7 +98,7 @@ bool sow::ParameterInterface::setMap(const QString map) {
     return false;
 }
 
-QString sow::ParameterInterface::map() const {
+QString sow::ParameterFloatInterface::map() const {
     return iMap_;
 }
 

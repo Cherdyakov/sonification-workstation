@@ -50,13 +50,15 @@ public:
         SCALE_OUT_LOW,
         SCALE_OUT_HIGH,
         SCALE_EXP,
-        MAP
+        MAP,
+        INDEX
     };
     Q_ENUM(SUB_PARAMETER)
 
     enum class NOISE {
         WHITE,
-        PINK
+        PINK,
+        BROWNIAN
     };
     Q_ENUM(NOISE)
 
