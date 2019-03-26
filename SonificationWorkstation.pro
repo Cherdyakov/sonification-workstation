@@ -38,9 +38,7 @@ SOURCES += \
     trackplotter.cpp \
     trackname.cpp \
     dataprocessor.cpp \
-    parameterinterface.cpp \
     dataset.cpp \
-    parameter.cpp \
     synthitem.cpp \
     transport.cpp \
     oscillator.cpp \
@@ -50,7 +48,12 @@ SOURCES += \
     panner.cpp \
     volume.cpp \
     envelope.cpp \
-    noise.cpp
+    noise.cpp \
+    parameterfloat.cpp \
+    parameterfloatinterface.cpp \
+    parameter.cpp \
+    parameterindex.cpp \
+    parameterindexinterface.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -91,8 +94,6 @@ HEADERS += \
     dataprocessor.h \
     dataset.h \
     commands.h \
-    parameterinterface.h \
-    parameter.h \
     enums.h \
     external/exprtk/exprtk.hpp \
     mapevaluator.h \
@@ -106,7 +107,12 @@ HEADERS += \
     panner.h \
     volume.h \
     envelope.h \
-    noise.h
+    noise.h \
+    parameterfloat.h \
+    parameterfloatinterface.h \
+    parameter.h \
+    parameterindex.h \
+    parameterindexinterface.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

@@ -4,7 +4,7 @@
 #include <QObject>
 #include "synthitem.h"
 #include "Gamma/Noise.h"
-#include "parameterinterface.h"
+#include "parameterfloatinterface.h"
 
 namespace sow {
 

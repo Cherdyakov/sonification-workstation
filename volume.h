@@ -2,26 +2,26 @@
 #define VOLUME_H
 
 #include "synthitem.h"
-#include "parameterinterface.h"
+#include "parameterfloatinterface.h"
 
 namespace sow {
 
 class Volume : public SynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterInterface* amplitude READ amplitudeInterface CONSTANT)
+    Q_PROPERTY(ParameterFloatInterface* amplitude READ amplitudeInterface CONSTANT)
 public:
 
     explicit Volume(QObject *parent = nullptr);
 
-    ParameterInterface* amplitudeInterface() const;
+    ParameterFloatInterface* amplitudeInterface() const;
 
     virtual Frame process() override;
 
 private:
 
-    ParameterInterface* amplitudeInterface_;
-    Parameter* amplitude_;
+    ParameterFloatInterface* amplitudeInterface_;
+    ParameterFloat* amplitude_;
 
 };
 

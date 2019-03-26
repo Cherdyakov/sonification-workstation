@@ -11,14 +11,14 @@ Oscillator::Oscillator(QObject *parent) : SynthItem(parent)
         ENUMS::OUTPUT_TYPE::FM
     };
 
-    frequency_ = new Parameter(this);
-    frequencyInterface_ = new ParameterInterface(this);
+    frequency_ = new ParameterFloat(this);
+    frequencyInterface_ = new ParameterFloatInterface(this);
     frequencyInterface_->connectInterface(frequency_);
     parameters_.push_back(frequency_);
 
 }
 
-ParameterInterface* Oscillator::frequencyInterface() const
+ParameterFloatInterface* Oscillator::frequencyInterface() const
 {
     return frequencyInterface_;
 }

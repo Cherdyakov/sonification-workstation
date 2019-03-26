@@ -2,26 +2,26 @@
 #define PANNER_H
 
 #include "synthitem.h"
-#include "parameterinterface.h"
+#include "parameterfloatinterface.h"
 
 namespace sow {
 
 class Panner : public SynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterInterface* pan READ panInterface CONSTANT)
+    Q_PROPERTY(ParameterFloatInterface* pan READ panInterface CONSTANT)
 public:
 
     explicit Panner(QObject *parent = nullptr);
 
-    ParameterInterface* panInterface() const;
+    ParameterFloatInterface* panInterface() const;
 
     virtual Frame process() override;
 
 private:
 
-    ParameterInterface* panInterface_;
-    Parameter* pan_;
+    ParameterFloatInterface* panInterface_;
+    ParameterFloat* pan_;
 
 signals:
 

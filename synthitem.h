@@ -8,7 +8,7 @@
 #include "dataset.h"
 #include "enums.h"
 #include "commands.h"
-#include "parameter.h"
+#include "parameterfloat.h"
 
 namespace sow {
 

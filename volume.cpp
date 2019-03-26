@@ -11,8 +11,8 @@ Volume::Volume(QObject *parent) : SynthItem(parent)
         ENUMS::OUTPUT_TYPE::AM
     };
 
-    amplitude_ = new Parameter(this);
-    amplitudeInterface_ = new ParameterInterface(this);
+    amplitude_ = new ParameterFloat(this);
+    amplitudeInterface_ = new ParameterFloatInterface(this);
     amplitudeInterface_->connectInterface(amplitude_);
     parameters_.push_back(amplitude_);
 
@@ -22,7 +22,7 @@ Volume::Volume(QObject *parent) : SynthItem(parent)
     amplitudeInterface_->setMap("1.0");
 }
 
-ParameterInterface *Volume::amplitudeInterface() const
+ParameterFloatInterface *Volume::amplitudeInterface() const
 {
     return amplitudeInterface_;
 }
