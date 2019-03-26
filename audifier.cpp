@@ -10,8 +10,8 @@ Audifier::Audifier(QObject *parent) : SynthItem (parent)
         ENUMS::OUTPUT_TYPE::AM
     };
 
-    amplitude_ = new Parameter(this);
-    amplitudeInterface_ = new ParameterInterface(this);
+    amplitude_ = new ParameterFloat(this);
+    amplitudeInterface_ = new ParameterFloatInterface(this);
     amplitudeInterface_->connectInterface(amplitude_);
     parameters_.push_back(amplitude_);
 
@@ -22,7 +22,7 @@ Audifier::Audifier(QObject *parent) : SynthItem (parent)
     amplitudeInterface_->setScaled(true);
 }
 
-ParameterInterface *Audifier::amplitudeInterface() const
+ParameterFloatInterface *Audifier::amplitudeInterface() const
 {
     return amplitudeInterface_;
 }

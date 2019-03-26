@@ -9,19 +9,19 @@ namespace sow {
 class Fmod : public Oscillator
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterInterface* depth READ depthInterface CONSTANT)
+    Q_PROPERTY(ParameterFloatInterface* depth READ depthInterface CONSTANT)
 public:
 
     explicit Fmod(QObject *parent = nullptr);
 
-    ParameterInterface* depthInterface() const;
+    ParameterFloatInterface* depthInterface() const;
 
     virtual Frame process() override;
 
 protected:
 
-    ParameterInterface* depthInterface_;
-    Parameter* depth_;
+    ParameterFloatInterface* depthInterface_;
+    ParameterFloat* depth_;
 
 };
 

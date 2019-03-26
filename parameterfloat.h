@@ -10,12 +10,12 @@
 
 namespace sow {
 
-class Parameter : public QObject
+class ParameterFloat : public QObject
 {
     Q_OBJECT
 public:
 
-    explicit Parameter(QObject *parent = nullptr);
+    explicit ParameterFloat(QObject *parent = nullptr);
 
     float value();
     void controlProcess();

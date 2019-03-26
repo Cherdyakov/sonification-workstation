@@ -5,11 +5,11 @@
 #include <QPointer>
 #include "enums.h"
 #include "commands.h"
-#include "parameter.h"
+#include "parameterfloat.h"
 
 namespace sow {
 
-class ParameterInterface : public QObject
+class ParameterFloatInterface : public QObject
 {
     Q_OBJECT
     // QML property bindings
@@ -21,7 +21,7 @@ class ParameterInterface : public QObject
 
 public:
 
-    explicit ParameterInterface(QObject *parent = nullptr);
+    explicit ParameterFloatInterface(QObject *parent = nullptr);
 
     // QML property bindings
     void setType(const ENUMS::PARAMETER type);
@@ -38,7 +38,7 @@ public:
     Q_INVOKABLE bool setMap(const QString map);
     Q_INVOKABLE QString map() const;
     // CPP only
-    void connectInterface(Parameter* parameter);
+    void connectInterface(ParameterFloat* parameter);
 
 private:
 
@@ -51,7 +51,7 @@ private:
     QString iMap_;
 
     // The backing parameter
-    QPointer<Parameter> parameter_;
+    QPointer<ParameterFloat> parameter_;
 
 signals:
 

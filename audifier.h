@@ -3,27 +3,27 @@
 
 #include <QObject>
 #include "synthitem.h"
-#include "parameterinterface.h"
-#include "parameter.h"
+#include "parameterfloatinterface.h"
+#include "parameterfloat.h"
 
 namespace sow {
 
 class Audifier : public SynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterInterface* amplitude READ amplitudeInterface CONSTANT)
+    Q_PROPERTY(ParameterFloatInterface* amplitude READ amplitudeInterface CONSTANT)
 public:
 
     explicit Audifier(QObject *parent = nullptr);
 
-    ParameterInterface* amplitudeInterface() const;
+    ParameterFloatInterface* amplitudeInterface() const;
 
     virtual Frame process() override;
 
 protected:
 
-    ParameterInterface* amplitudeInterface_;
-    Parameter* amplitude_;
+    ParameterFloatInterface* amplitudeInterface_;
+    ParameterFloat* amplitude_;
 
 };
 

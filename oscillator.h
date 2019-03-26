@@ -2,7 +2,7 @@
 #define QTOSCILLATOR_H
 
 #include "synthitem.h"
-#include "parameterinterface.h"
+#include "parameterfloatinterface.h"
 #include "Gamma/Oscillator.h"
 
 namespace sow {
@@ -10,19 +10,19 @@ namespace sow {
 class Oscillator : public SynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ParameterInterface* frequency READ frequencyInterface CONSTANT)
+    Q_PROPERTY(ParameterFloatInterface* frequency READ frequencyInterface CONSTANT)
 public:
 
     explicit Oscillator(QObject *parent = nullptr);
 
-    ParameterInterface* frequencyInterface() const;
+    ParameterFloatInterface* frequencyInterface() const;
 
     virtual Frame process() override;
 
 protected:
 
-    ParameterInterface* frequencyInterface_;
-    Parameter* frequency_;
+    ParameterFloatInterface* frequencyInterface_;
+    ParameterFloat* frequency_;
 
     gam::Sine<float> gen_;
 

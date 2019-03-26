@@ -12,8 +12,8 @@ Panner::Panner(QObject *parent) : SynthItem(parent)
         ENUMS::OUTPUT_TYPE::AUDIO
     };
 
-    pan_ = new Parameter(this);
-    panInterface_ = new ParameterInterface(this);
+    pan_ = new ParameterFloat(this);
+    panInterface_ = new ParameterFloatInterface(this);
     panInterface_->connectInterface(pan_);
     parameters_.push_back(pan_);
 
@@ -22,7 +22,7 @@ Panner::Panner(QObject *parent) : SynthItem(parent)
     panInterface_->setScaleOutHigh(1.0f);
 }
 
-ParameterInterface *Panner::panInterface() const
+ParameterFloatInterface *Panner::panInterface() const
 {
     return panInterface_;
 }

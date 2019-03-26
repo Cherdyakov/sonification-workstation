@@ -1,15 +1,15 @@
-#include "parameter.h"
+#include "parameterfloat.h"
 #include <QString>
 #include <QDebug>
 
 namespace sow {
 
-Parameter::Parameter(QObject *parent) : QObject(parent)
+ParameterFloat::ParameterFloat(QObject *parent) : QObject(parent)
 {
 
 }
 
-float Parameter::value()
+float ParameterFloat::value()
 {
     float val;
     if(scale_) {
@@ -22,7 +22,7 @@ float Parameter::value()
 }
 
 // Process outstanding ParameterCommands
-void Parameter::controlProcess()
+void ParameterFloat::controlProcess()
 {
     ParameterCommand currentCommand_;
     while(commandBuffer_.pop(&currentCommand_)) {
@@ -30,7 +30,7 @@ void Parameter::controlProcess()
     }
 }
 
-bool Parameter::setMap(const QString map)
+bool ParameterFloat::setMap(const QString map)
 {
     if(!mapEvaluator_.testCompileExpression(map.toStdString())) {
         return false;
@@ -48,13 +48,13 @@ bool Parameter::setMap(const QString map)
     return true;
 }
 
-void Parameter::setData(const Dataset *dataset, const std::vector<float> *currentData)
+void ParameterFloat::setData(const Dataset *dataset, const std::vector<float> *currentData)
 {
     mapEvaluator_.setData(dataset, currentData);
 }
 
 // Execute commands pulled from the command buffer
-void Parameter::processCommand(sow::ParameterCommand cmd)
+void ParameterFloat::processCommand(sow::ParameterCommand cmd)
 {
     ENUMS::SUB_PARAMETER subParam = cmd.subParam;
 
@@ -78,13 +78,13 @@ void Parameter::processCommand(sow::ParameterCommand cmd)
     }
 }
 
-void Parameter::processSetMap(std::string expression)
+void ParameterFloat::processSetMap(std::string expression)
 {
     mapEvaluator_.compileExpression(expression);
 }
 
 // Slot for updated float values from the interface
-void Parameter::onParameterChanged(const ENUMS::SUB_PARAMETER subParam, const float value)
+void ParameterFloat::onParameterChanged(const ENUMS::SUB_PARAMETER subParam, const float value)
 {
     ParameterCommand cmd;
     cmd.subParam = subParam;
