@@ -4,26 +4,26 @@
 #include <QObject>
 #include "synthitem.h"
 #include "Gamma/Noise.h"
-#include "parameterfloatinterface.h"
+#include "parameterindexinterface.h"
 
 namespace sow {
 
 class Noise : public SynthItem
 {
     Q_OBJECT
-    Q_PROPERTY(ENUMS::NOISE noiseType READ noiseType WRITE setNoiseType NOTIFY noiseTypeChanged)
+    Q_PROPERTY(ParameterIndexInterface* noiseType READ noiseTypeInterface CONSTANT)
 public:
 
     explicit Noise(QObject *parent = nullptr);
 
-    ENUMS::NOISE noiseType() const;
-    void setNoiseType(ENUMS::NOISE noiseType);
+    ParameterIndexInterface* noiseTypeInterface() const;
 
     virtual Frame process() override;
 
 private:
 
-    ENUMS::NOISE noiseType_;
+    ParameterIndexInterface* noiseTypeInterface_;
+    ParameterIndex* noiseType_;
 
     gam::NoiseWhite<> whiteNoise_;
     gam::NoisePink<> pinkNoise_;
