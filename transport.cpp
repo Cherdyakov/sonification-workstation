@@ -165,7 +165,8 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
         processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::EQUALIZER:
-        //        item = new Equalizer();
+        item = new Equalizer(this);
+        processSubscribeItem(item);
         break;
     case ENUMS::ITEM_TYPE::TRANSPORT:
         item = this;

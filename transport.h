@@ -14,6 +14,7 @@
 #include "volume.h"
 #include "envelope.h"
 #include "noise.h"
+#include "equalizer.h"
 
 namespace sow {
 

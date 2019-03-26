@@ -65,7 +65,7 @@ public:
     enum class FILTER {
         LOW_PASS,
         HIGH_PASS,
-        PEAK,
+        BAND_PASS,
         NOTCH
     };
     Q_ENUM(FILTER)
