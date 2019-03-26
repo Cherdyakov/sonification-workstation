@@ -26,13 +26,13 @@ Equalizer::Equalizer(QObject* parent) : SynthItem (parent)
     filterTypeInterface_->connectInterface(filterType_);
     parameters_.push_back(filterType_);
 
-    resonanceInterface_->setMap("0.1");
-    resonanceInterface_->setScaleOutLow(0.01f);
-    resonanceInterface_->setScaleOutHigh(0.99f);
+    frequencyInterface_->setMap("1000");
+    frequencyInterface_->setScaleOutLow(100.0f);
+    frequencyInterface_->setScaleOutHigh(16000.0f);
 
-    resonanceInterface_->setMap("0.5");
-    resonanceInterface_->setScaleOutLow(0.01f);
-    resonanceInterface_->setScaleOutHigh(0.99f);
+    resonanceInterface_->setMap("1");
+    resonanceInterface_->setScaleOutLow(1.0f);
+    resonanceInterface_->setScaleOutHigh(20.0f);
 
     filterTypeInterface_->setIdx(0);
 }
@@ -52,6 +52,8 @@ ParameterIndexInterface *Equalizer::filterTypeInterface()
     return filterTypeInterface_;
 }
 
+
+
 Frame Equalizer::process()
 {
     Frame frame;
@@ -63,6 +65,27 @@ Frame Equalizer::process()
             frame += child->process();
         }
     }
+
+    ENUMS::FILTER type = static_cast<ENUMS::FILTER>(filterType_->idx());
+    gam::FilterType gamType;
+
+    switch (type) {
+    case ENUMS::FILTER::LOW_PASS:
+        gamType = gam::FilterType::LOW_PASS;
+        break;
+    case ENUMS::FILTER::HIGH_PASS:
+        gamType = gam::FilterType::HIGH_PASS;
+        break;
+    case ENUMS::FILTER::BAND_PASS:
+        gamType = gam::FilterType::BAND_PASS;
+        break;
+    case ENUMS::FILTER::NOTCH:
+        gamType = gam::FilterType::BAND_REJECT;
+        break;
+    }
+
+    biquadLeft.set(frequency_->value(), resonance_->value(), gamType);
+    biquadRight.set(frequency_->value(), resonance_->value(), gamType);
 
     frame.left = biquadLeft(frame.left);
     frame.right = biquadRight(frame.right);

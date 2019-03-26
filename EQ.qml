@@ -35,7 +35,7 @@ SynthItem {
                 id: filterType
                 Layout.maximumHeight: Style.editorComboBoxHeight
                 Layout.fillWidth: true
-                model: [qsTr("Low Pass"), qsTr("High Pass"), qsTr("Peak"), qsTr("Notch")]
+                model: [qsTr("Low Pass"), qsTr("High Pass"), qsTr("Band Pass"), qsTr("Notch")]
                 // Value changed from QML.
                 onCurrentIndexChanged: implementation ? implementation.type.idx = currentIndex : {}
                 // Value changed from C++.
@@ -79,6 +79,8 @@ SynthItem {
 
             EditorFloatParameter {
                 id: resonance
+                scaler.lowSpinBox.from: 100
+                scaler.highSpinBox.from: 100
                 // Value changed from QML
                 onScaledChanged: implementation ? implementation.resonance.scaled = scaled : {}
                 onScaleRealLowChanged: implementation ? implementation.resonance.scaleLow = scaleRealLow : {}
