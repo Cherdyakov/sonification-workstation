@@ -9,7 +9,7 @@ import "SessionCode.js" as SessionCode
 SynthItem {
     id: root
     label: qsTr("NSE")
-    type: ENUMS.NOISE
+    type: ENUMS.NOISE_GEN
     output: ENUMS.AUDIO
     mainColor: Style.nseColor
     textColor: Style.itemTextColor

@@ -43,6 +43,5 @@
         <file>FM.qml</file>
         <file>EditorParameterHeader.qml</file>
         <file>EditorTitle.qml</file>
-        <file>EditorIndexParameter.qml</file>
     </qresource>
 </RCC>
