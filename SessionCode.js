@@ -20,47 +20,25 @@ function treeToJson(items) {
 
 // accepts json array of SynthItem descriptions
 function jsonToTree(essences) {
-    var newItems = []
+    var newSynthItems = {}
+    console.log("string that doesn't exist elsewhere")
     essences.forEach(function(essence) {
         var synthItem = createItem(essence["type"])
         synthItem.fromEssence(essence)
-        var newItem = { "name" : essence["name"], "parents": essence["parents"] }
-        newItems.push(newItem)
+        newSynthItems[essence["name"]] = { "item" : synthItem, "parentNames" :essence["parentNames"] }
     })
-//    patchTree(newItems)
+    patchTree(newSynthItems)
 }
 
 // patch newly created items together
-function patchTree(newItems) {
-    newItems.forEach(function(newItem) {
-        var parents = newItem["parents"]
-        parents.forEach(function(parent) {
-
-        })
-
-        if (itemDict.hasOwnProperty(key)) {
-            var obj = itemDict[key];
-            var item = obj["synthItem"]
-            var parents = obj["parents"]
-            for(var parent in parents) {
-                var pID = parents[parent]
-                var pObj = itemDict[pID]
-                var pItem = pObj["synthItem"]
-                pItem.addChild(item)
-            }
-        }
-    })
-
-    for(var key in itemDict) {
-        if (itemDict.hasOwnProperty(key)) {
-            var obj = itemDict[key];
-            var item = obj["synthItem"]
-            var parents = obj["parents"]
-            for(var parent in parents) {
-                var pID = parents[parent]
-                var pObj = itemDict[pID]
-                var pItem = pObj["synthItem"]
-                pItem.addChild(item)
+function patchTree(newSynthItems) {
+    for (var childName in newSynthItems) {
+        var parents = newSynthItems[childName]["parentNames"]
+        if(parents) {
+            for (var key in parents) {
+                var parentName = parents[key]
+                var parentSynthItem = newSynthItems[parentName]["item"]
+                parentSynthItem.connectChild(newSynthItems[childName]["item"])
             }
         }
     }
@@ -70,7 +48,7 @@ function createItem(type) {
     var componentFile
     switch(type) {
     case 0:
-        componentFile = "OUT.qml"
+        componentFile = ""
         break
     case 1:
         componentFile = "OSC.qml"
@@ -95,6 +73,9 @@ function createItem(type) {
         break
     case 8:
         componentFile = "EQ.qml"
+        break
+    case 10:
+        componentFile = "OUT.qml"
         break
     default:
         return null
