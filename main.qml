@@ -186,9 +186,10 @@ Rectangle
     }
 
     // Get the SynthTree as json and return to C++.
-    function readTree() {
-        var treeData = SessionCode.readTree(synthItems)
+    function synthTreeToString() {
+        var treeData = SessionCode.treeToJson(synthItems)
         var stringTree = JSON.stringify(treeData)
+        console.log(stringTree)
         return stringTree
     }
 
