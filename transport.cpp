@@ -329,6 +329,7 @@ void Transport::processDeleteItem(SynthItem *item)
     // Process the disconnectAll() command
     // buffered in preceeding line before del
     item->controlProcess();
+    SynthItem::controlProcess();
     if(item != this) {
         delete item;
     }
