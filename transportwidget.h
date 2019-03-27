@@ -21,13 +21,17 @@ class TransportWidget : public QWidget
 public:
     explicit TransportWidget(QWidget *parent = 0);
     void setTransport(Transport* qtTransport);
+    bool interpolate();
+    void setInterpolate(bool interpolate);
+    float speed();
+    void setSpeed(float speed);
 
 private:
 
     bool paused;
-    bool looping;
-    bool interpolate;
-    double stepsPerSecond;
+    bool looping_;
+    bool interpolate_;
+    float speed_;
     QPushButton* pauseButton;
     QPushButton* loopButton;
     QCheckBox* interpolateBox;
@@ -38,8 +42,8 @@ private:
 signals:
     void pausedChanged(bool pause);
     void loopingChanged(bool loop);
-    void speedChanged(int speed);
-    void interpolateChanged(bool interpolate);
+    void speedChanged(float speed);
+    void interpolateChanged(bool interpolate_);
 
 public slots:
     void on_speed_changed(int speed);

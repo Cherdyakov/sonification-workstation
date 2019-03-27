@@ -9,6 +9,8 @@ Item {
     z: Style.itemZ + zModifier
     width: Style.itemHeight; height: Style.itemWidth
 
+    // Random name for identifying in session files.
+    property string name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     property var synthChildren: []
     property var synthParents: []
     property var mappedRows: []
@@ -187,12 +189,12 @@ Item {
         canvas.requestPaint()
     }
 
-    function read() {
+    function toEssence() {
         // must override
         // returns params for saving in session file
     }
 
-    function init(obj) {
+    function fromEssence(obj) {
         // must override
         // sets params of new item created from saved sesssion file
     }

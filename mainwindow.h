@@ -11,7 +11,6 @@
 #include "transport.h"
 #include "transportwidget.h"
 #include "filereader.h"
-#include "session.h"
 
 using namespace sow;
 
@@ -28,16 +27,29 @@ public:
 
 private:
 
-    Transport* transport;
-    Session* session;
+    Transport* transport_;
+    TransportWidget* transportWidget_;
+    QQuickView* quickView_;
+
+    QString datafile_;
+    QString sessionfile_;
 
     //convenience functions to create and populate menus
     void createActions();
     void createMenus();
+    void writeSessionFile();
+
+signals:
+
+    void saveSession();
 
 private slots:
 
     void onQuit();
+    void onSave();
+    void onSaveAs();
+    void onOpen();
+    void onImportDataset();
 
 };
 

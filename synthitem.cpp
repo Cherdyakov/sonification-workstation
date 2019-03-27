@@ -7,6 +7,7 @@ SynthItem::SynthItem(QObject *parent) : QObject (parent) {
     type_ = ENUMS::ITEM_TYPE::NONE;
     outputType_ = ENUMS::OUTPUT_TYPE::NONE;
     setMute(false);
+    mute_ = false;
 }
 
 SynthItem::~SynthItem() {}
@@ -14,7 +15,10 @@ SynthItem::~SynthItem() {}
 // Set the mute value
 void SynthItem::setMute(const bool mute)
 {
+    qDebug() << type_ << mute;
     if (iMute_ != mute) {
+
+        qDebug() << type_ << "mute changed";
         iMute_ = mute;
         emit muteChanged();
         ItemCommand cmd;

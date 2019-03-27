@@ -96,6 +96,26 @@ Item {
         return patchPoints
     }
 
+    // Re-creates patches from an exisiting
+    // tree of connected items, e.g. on Session load.
+    function recreatePatches(items) {
+        // Clear current state.
+        patches = []
+        patchingChild = null
+        selectedPatch = null
+        // Iterate all SynthItems passed and add
+        // all the patches found.
+        items.forEach(function(childItem) {
+            childItem.synthParents.forEach(function(parentItem) {
+                var patch = {
+                    parent: parentItem,
+                    child: childItem
+                }
+                patches.push(patch)
+            })
+        })
+    }
+
     // Returns points for any patch that is currenlty being created.
     function getPatchInProgressPoints() {
         if(patchingChild !== null) {
@@ -133,12 +153,12 @@ Item {
     // Deletes all patches the item was a part of.
     // Transport handles disconnection of deleted items.
     function itemDeleted(item) {
-        for(var i = 0; i < patches.length; i++) {
-            var patch = patches[i]
+        patches.forEach(function(patch) {
             if(patch.parent === item || patch.child === item) {
                 deletePatch(patch)
             }
-        }
+        })
+
         canvas.requestPaint()
     }
 

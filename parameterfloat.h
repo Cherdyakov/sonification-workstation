@@ -30,7 +30,7 @@ private:
     float scaleOutLow_ = 200.0f;
     float scaleOutHigh_ = 8000.0f;
     float scaleExponent_ = 1.0f;
-    QString map_;
+    QString map_ = "";
     std::vector<float>* data_ = nullptr;
     std::vector<float>* mins_ = nullptr;
     std::vector<float>* maxes_ = nullptr;

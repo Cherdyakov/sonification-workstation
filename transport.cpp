@@ -127,8 +127,6 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
 {
     SynthItem* item = nullptr;
 
-    qDebug() << type;
-
     switch (type){
     case ENUMS::ITEM_TYPE::NONE:
         break;
@@ -249,7 +247,7 @@ Frame Transport::process()
 
     // advancing index
     calculateReturnPosition();
-    mu_ += static_cast<float>(speed_) / frameRate_;
+    mu_ += speed_ / frameRate_;
 
     return frame * masterVolume_ * !mute_;
 }
@@ -329,6 +327,7 @@ void Transport::processDeleteItem(SynthItem *item)
     // Process the disconnectAll() command
     // buffered in preceeding line before del
     item->controlProcess();
+    SynthItem::controlProcess();
     if(item != this) {
         delete item;
     }
@@ -344,9 +343,13 @@ void Transport::processImportDataset()
 
     FileReader reader;
     fileMutex_.lock();
-    reader.readCSV(filepath_, &dataset_);
-    currentData_.resize(dataset_.rows());
-    currentData_ = dataset_.getRow(currentIndex_);
+    if(reader.readCSV(filepath_, &dataset_)) {
+        currentData_.resize(dataset_.rows());
+        currentData_ = dataset_.getRow(currentIndex_);
+    }
+    else {
+        dataset_.clear();
+    }
     fileMutex_.unlock();
     emit datasetImported(&dataset_);
 }
