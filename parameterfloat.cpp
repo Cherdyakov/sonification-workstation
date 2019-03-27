@@ -63,6 +63,8 @@ void ParameterFloat::processCommand(const ParameterCommand cmd)
         map_ = QString(cmd.map);
         processSetMap(map_.toStdString());
         break;
+    case ENUMS::SUB_PARAMETER::INDEX:
+        break;
     }
 }
 

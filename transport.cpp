@@ -127,8 +127,6 @@ SynthItem* Transport::createItem(ENUMS::ITEM_TYPE type)
 {
     SynthItem* item = nullptr;
 
-    qDebug() << type;
-
     switch (type){
     case ENUMS::ITEM_TYPE::NONE:
         break;
