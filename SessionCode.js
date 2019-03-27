@@ -1,28 +1,25 @@
-// create unique id for all SynthItems
-// needed before reading tree to save session
-function setIdentifiers(items) {
-    for(var i = 0; i < items.length; i++) {
-        var item = items[i]
-        item.identifier = i
-    }
+function getItemNames(items) {
+    var names = []
+    items.forEach(function(item) {
+        names.push(item.name)
+    })
+    return names
 }
 
-function readTree(items) {
-    setIdentifiers(items)
+function treeToJson(items) {
     var synthTree = {};
     var synthItems = []
     synthTree.synthItems = synthItems
 
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i]
-        var jsonItem = item.read()
-        synthTree.synthItems.push(jsonItem)
-    }
+    items.forEach(function(item) {
+        var json = item.toEssence()
+        synthTree.synthItems.push(json)
+    })
     return synthTree
 }
 
 // accepts json array of SynthItem descriptions
-function createTree(arr) {
+function stringToSynthTree(arr) {
     var itemDict = {}
     for (var i = 0; i < arr.length; i++) {
         var essence = arr[i]
