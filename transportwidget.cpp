@@ -4,7 +4,9 @@
 TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 {
     paused = true;
-    looping = false;
+    looping_ = false;
+    interpolate_ = false;
+    speed_ = 0.0f;
 
     //transport layout
     QHBoxLayout* transportLayout = new QHBoxLayout;
@@ -38,6 +40,16 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
             this, SLOT(on_interpolateBox_stateChanged(int)));
 }
 
+bool TransportWidget::interpolate()
+{
+    return interpolate_;
+}
+
+float TransportWidget::speed()
+{
+    return speed_;
+}
+
 void TransportWidget::on_speed_changed(int speed)
 {
     this->speedBox->setValue(speed);
@@ -63,10 +75,10 @@ void TransportWidget::on_pauseButton_released()
 
 void TransportWidget::on_loopButton_released()
 {
-    looping = !looping;
-    emit loopingChanged(looping);
+    looping_ = !looping_;
+    emit loopingChanged(looping_);
 
-    if(looping) {
+    if(looping_) {
         loopButton->setText(tr("Looping: ON"));
     }
     else {
@@ -74,20 +86,20 @@ void TransportWidget::on_loopButton_released()
     }
 }
 
-void TransportWidget::on_speedBox_valueChanged(int speed)
+void TransportWidget::on_speedBox_valueChanged(float speed)
 {
-    if(stepsPerSecond != speed)
+    if(!qFuzzyCompare(speed_, speed))
     {
-        stepsPerSecond = speed;
-        emit speedChanged(stepsPerSecond);
+        speed_ = speed;
+        emit speedChanged(speed_);
     }
 }
 
 void TransportWidget::on_interpolateBox_stateChanged(int state)
 {
-    if(interpolate != state) {
-        interpolate = state;
-        emit interpolateChanged(interpolate);
+    if(interpolate_ != state) {
+        interpolate_ = state;
+        emit interpolateChanged(interpolate_);
     }
 }
 
