@@ -96,23 +96,24 @@ Item {
         return patchPoints
     }
 
-    // Generates patches from an exisiting
-    // tree, e.g. on Session load.
-    function regeneratePatches(items) {
+    // Re-creates patches from an exisiting
+    // tree of connected items, e.g. on Session load.
+    function recreatePatches(items) {
+        // Clear current state.
         patches = []
-        for(var i = 0; i < items.length; i++)
-        {
-            var parentItem = items[i]
-            for (var j = 0; j < parentItem.synthChildren.length; j++)
-            {
-                var childItem = parentItem.synthChildren[j]
+        patchingChild = null
+        selectedPatch = null
+        // Iterate all SynthItems passed and add
+        // all the patches found.
+        items.forEach(function(childItem) {
+            childItem.synthParents.forEach(function(parentItem) {
                 var patch = {
                     parent: parentItem,
                     child: childItem
                 }
                 patches.push(patch)
-            }
-        }
+            })
+        })
     }
 
     // Returns points for any patch that is currenlty being created.
