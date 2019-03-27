@@ -68,7 +68,7 @@ SynthItem {
             "x": x,
             "y": y,
             "mute": mute,
-            "parents": SessionCode.getItemNames(synthParents),
+            "parentNames": SessionCode.getItemNames(synthParents),
             "freqMap": frequency.mapper.map,
             "freqScaled": frequency.scaled,
             "freqScaleLow": frequency.scaleLow,
