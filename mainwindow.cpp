@@ -198,7 +198,8 @@ void MainWindow::onOpen()
     QString filename = QFileDialog::getOpenFileName(this, tr(("Open Session")), documents, ("JSON(*.json)"));
 
     if(!filename.isEmpty()) {
-        QFile file(filename);
+        sessionfile_ = filename;
+        QFile file(sessionfile_);
         file.open(QFile::ReadOnly);
         QString input = file.readAll();
         QJsonDocument jsonDocument = QJsonDocument::fromJson(input.toUtf8());
