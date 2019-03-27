@@ -13,7 +13,6 @@ SOURCES += \
     playhead.cpp \
     transportwidget.cpp \
     utility.cpp \
-    session.cpp \
     trackview.cpp \
     track.cpp \
     trackheader.cpp \
@@ -49,7 +48,6 @@ HEADERS += \
     transportwidget.h \
     utility.h \
     frame.h \
-    session.h \
     trackview.h \
     track.h \
     trackheader.h \
