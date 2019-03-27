@@ -15,27 +15,24 @@ SynthItem {
         create()
     }
 
-    function read() {
-
-        var parents = []
-
+    // Return essence in JSON.
+    function toEssence() {
         var essence = {
-            "identifier": identifier,
             "type": type,
+            "name": name,
             "x": x,
             "y": y,
-            "muted": muted,
-            "parents": parents
+            "mute": mute
         }
-
         return essence
     }
 
-    function init(essence) {
+    // Initialize self from JSON essence.
+    function fromEssence(essence) {
         x = essence["x"]
         y = essence["y"]
-        identifier = essence["identifier"]
-        muted = essence["muted"]
+        name = essence["name"]
+        mute = essence["mute"]
     }
 
 }

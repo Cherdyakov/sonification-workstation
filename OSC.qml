@@ -60,7 +60,7 @@ SynthItem {
         }
     }
 
-    // return json representation of self
+    // Return essence in JSON.
     function toEssence() {
         var essence = {
             "type": type,
@@ -78,7 +78,7 @@ SynthItem {
         return essence
     }
 
-    // initialize self from json
+    // Initialize self from JSON essence.
     function fromEssence(essence) {
         x = essence["x"]
         y = essence["y"]
