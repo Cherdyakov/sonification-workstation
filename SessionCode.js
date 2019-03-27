@@ -27,18 +27,19 @@ function jsonToTree(essences) {
         synthItem.fromEssence(essence)
         newSynthItems[essence["name"]] = { "item" : synthItem, "parentNames" :essence["parentNames"] }
     })
-    patchTree(newSynthItems)
+    connectTree(newSynthItems)
 }
 
 // patch newly created items together
-function patchTree(newSynthItems) {
+function connectTree(newSynthItems) {
     for (var childName in newSynthItems) {
         var parents = newSynthItems[childName]["parentNames"]
         if(parents) {
             for (var key in parents) {
                 var parentName = parents[key]
                 var parentSynthItem = newSynthItems[parentName]["item"]
-                parentSynthItem.connectChild(newSynthItems[childName]["item"])
+                var childSynthItem = newSynthItems[childName]["item"]
+                parentSynthItem.connectChild(childSynthItem)
             }
         }
     }

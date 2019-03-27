@@ -96,6 +96,25 @@ Item {
         return patchPoints
     }
 
+    // Generates patches from an exisiting
+    // tree, e.g. on Session load.
+    function regeneratePatches(items) {
+        patches = []
+        for(var i = 0; i < items.length; i++)
+        {
+            var parentItem = items[i]
+            for (var j = 0; j < parentItem.synthChildren.length; j++)
+            {
+                var childItem = parentItem.synthChildren[j]
+                var patch = {
+                    parent: parentItem,
+                    child: childItem
+                }
+                patches.push(patch)
+            }
+        }
+    }
+
     // Returns points for any patch that is currenlty being created.
     function getPatchInProgressPoints() {
         if(patchingChild !== null) {

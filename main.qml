@@ -200,6 +200,7 @@ Rectangle
             item.deleteThis()
         })
         SessionCode.jsonToTree(json)
+        patchManager.regeneratePatches(synthItems)
     }
 
 } // root
