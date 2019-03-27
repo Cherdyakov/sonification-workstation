@@ -153,12 +153,12 @@ Item {
     // Deletes all patches the item was a part of.
     // Transport handles disconnection of deleted items.
     function itemDeleted(item) {
-        for(var i = 0; i < patches.length; i++) {
-            var patch = patches[i]
+        patches.forEach(function(patch) {
             if(patch.parent === item || patch.child === item) {
                 deletePatch(patch)
             }
-        }
+        })
+
         canvas.requestPaint()
     }
 

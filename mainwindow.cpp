@@ -144,7 +144,7 @@ void MainWindow::writeSessionFile()
 {
     QVariant returnedValue;
     QMetaObject::invokeMethod(reinterpret_cast<QObject*>(quickView_->rootObject()),
-                              "synthTreeString",
+                              "readTree",
                               Q_RETURN_ARG(QVariant, returnedValue));
 
     qDebug() << returnedValue.toString();
@@ -220,7 +220,7 @@ void MainWindow::onOpen()
         QJsonValue synthTree = jsonObject.value("synthItems");
         QVariant synthTreeVariant = synthTree.toVariant();
         QMetaObject::invokeMethod(reinterpret_cast<QObject*>(quickView_->rootObject()),
-                                  "synthTreeFromJson",
+                                  "generateTree",
                                   Q_ARG(QVariant, synthTreeVariant));
     }
 }

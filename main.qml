@@ -1,6 +1,7 @@
 import QtQuick.Controls 2.2
 import QtQuick 2.12
 import QtQuick.Layouts 1.0
+import ENUMS 1.0
 import "SessionCode.js" as SessionCode
 import "Style.js" as Style
 import "Utils.js" as Utils
@@ -186,21 +187,98 @@ Rectangle
     }
 
     // Get the SynthTree as json and return to C++.
-    function synthTreeString() {
-        var treeData = SessionCode.treeToJson(synthItems)
-        var stringTree = JSON.stringify(treeData)
+    function readTree() {
+        var synthTree = {};
+        synthTree.synthItems = []
+
+        synthItems.forEach(function(item) {
+            var json = item.toEssence()
+            synthTree.synthItems.push(json)
+        })
+
+        var stringTree = JSON.stringify(synthTree)
         return stringTree
     }
 
     // Wipe the current SynthItem tree and create a new
     // one from a json object.
-    function synthTreeFromJson(json) {
-        // Destroy all existing SynthItems.
-        synthItems.forEach(function(item) {
-            item.deleteThis()
+    function generateTree(array) {
+
+        for(var i = synthItems.length -1; i >= 0; i--) {
+            synthItems[i].deleteThis()
+        }
+
+        var newSynthItems = {}
+
+        array.forEach(function(essence) {
+            var synthItem = createItem(essence["type"])
+            synthItem.fromEssence(essence)
+            newSynthItems[essence["name"]] = { "item" : synthItem, "parentNames" :essence["parentNames"] }
         })
-        SessionCode.jsonToTree(json)
-        patchManager.regeneratePatches(synthItems)
+
+        connectTree(newSynthItems)
+        patchManager.recreatePatches(synthItems)
+    }
+
+    // Connect newly created items together.
+    // Does not create the patches inside PatchManager.
+    // Use PatchManager.recreatePatches for that.
+    function connectTree(newSynthItems) {
+        for (var childName in newSynthItems) {
+            var parents = newSynthItems[childName]["parentNames"]
+            if(parents) {
+                for (var key in parents) {
+                    var parentName = parents[key]
+                    var parentSynthItem = newSynthItems[parentName]["item"]
+                    var childSynthItem = newSynthItems[childName]["item"]
+                    parentSynthItem.connectChild(childSynthItem)
+                }
+            }
+        }
+    }
+
+    function createItem(type) {
+        var componentFile
+        switch(type) {
+        case ENUMS.OSCILLATOR:
+            componentFile = "OSC.qml"
+            break
+        case ENUMS.AUDIFIER:
+            componentFile = "AUD.qml"
+            break
+        case ENUMS.AMOD:
+            componentFile = "AM.qml"
+            break
+        case ENUMS.FMOD:
+            componentFile = "FM.qml"
+            break
+        case ENUMS.PANNER:
+            componentFile = "PAN.qml"
+            break
+        case ENUMS.ENVELOPE:
+            componentFile = "ENV.qml"
+            break
+        case ENUMS.VOLUME:
+            componentFile = "VOL.qml"
+            break
+        case ENUMS.NOISE_GEN:
+            componentFile = "NSE.qml"
+            break
+        case ENUMS.EQUALIZER:
+            componentFile = "EQ.qml"
+            break
+        case ENUMS.TRANSPORT:
+            componentFile = "OUT.qml"
+            break
+        default:
+            console.log("Invalid Item Created")
+            return null
+        }
+        var component = Qt.createComponent(componentFile);
+        if(component.status === Component.Ready) {
+            var item = component.createObject(root)
+        }
+        return item
     }
 
 } // root
