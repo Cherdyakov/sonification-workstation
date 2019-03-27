@@ -2,14 +2,14 @@
 
 FileReader::FileReader(QObject *parent) : QObject(parent) { }
 
-void FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
+bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
 {
     std::vector<float> vec;
 
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
         qDebug() << file.errorString();
-        return;
+        return false;
     }
 
     QTextStream inFile(&file);
@@ -92,6 +92,7 @@ void FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
     dataset->init(&vec, rows, cols);
     emit datasetChanged(dataset);
     emit qmlDatasetChanged(dataset->rows(), dataset->cols());
+    return true;
 }
 
 void FileReader::on_newDatafile(const QString filename, sow::Dataset * const dataset)

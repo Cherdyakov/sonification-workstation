@@ -343,9 +343,13 @@ void Transport::processImportDataset()
 
     FileReader reader;
     fileMutex_.lock();
-    reader.readCSV(filepath_, &dataset_);
-    currentData_.resize(dataset_.rows());
-    currentData_ = dataset_.getRow(currentIndex_);
+    if(reader.readCSV(filepath_, &dataset_)) {
+        currentData_.resize(dataset_.rows());
+        currentData_ = dataset_.getRow(currentIndex_);
+    }
+    else {
+        dataset_.clear();
+    }
     fileMutex_.unlock();
     emit datasetImported(&dataset_);
 }

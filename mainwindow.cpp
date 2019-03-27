@@ -206,8 +206,9 @@ void MainWindow::onOpen()
         QJsonObject jsonObject = jsonDocument.object();
 
         // Load the dataset.
-//        QJsonValue value = jsonObject.value("dataset");
-//        datafile_ = value.toString();
+        QJsonValue value = jsonObject.value("dataset");
+        datafile_ = value.toString();
+        transport_->onImportDataset(datafile_);
 
         // Set playback speed.
         float speed = jsonObject.value("speed").toInt();
@@ -228,7 +229,14 @@ void MainWindow::onOpen()
 
 void MainWindow::onImportDataset()
 {
+    QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+    QString documents = docDirs[0];
+    datafile_ = QFileDialog::getOpenFileName(this, tr("Import Dataset"), documents, ("csv File(*.csv)"));
 
+    if(!datafile_.isEmpty())
+    {
+        transport_->onImportDataset(datafile_);
+    }
 }
 
 
