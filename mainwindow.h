@@ -28,16 +28,26 @@ public:
 
 private:
 
-    Transport* transport;
-    Session* session;
+    Transport* transport_;
+    Session* session_;
+    QQuickView* quickView_;
+
+    QString datafile_;
+    QString sessionfile_;
 
     //convenience functions to create and populate menus
     void createActions();
     void createMenus();
 
+signals:
+
+    void saveSession();
+
 private slots:
 
     void onQuit();
+    void onSave();
+    void onSaveAs();
 
 };
 
