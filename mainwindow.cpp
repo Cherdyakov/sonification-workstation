@@ -14,14 +14,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QWidget *rightSide = new QWidget(this);                                             // Container for right side of splitter
     QVBoxLayout* layoutLeft = new QVBoxLayout(this);                                    // Left side of spliitter layout
     QVBoxLayout* layoutRight = new QVBoxLayout(this);                                   // Right side of splitter layout
-    TransportWidget* transportWidget = new TransportWidget(this);                       // Transport controls (Play/Pause etc)
+    transportWidget_ = new TransportWidget(this);                                       // Transport controls (Play/Pause etc)
     quickView_ = new QQuickView;                                                        // Renders Qt Quick patcher interface
     QWidget *quickViewContainer = QWidget::createWindowContainer(quickView_, this);     // Caontainer widget for QQuickView
     TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
     QScrollArea* scrollArea = new QScrollArea(this);                                    // Scroll area for the TrackView
 
-    transport_ = new Transport(this);                                                    // Reads CSV files into Dataset
-    session_ = new Session(this);                                                        // Represents loaded project
+    transport_ = new Transport(this);                                                    // Represents loaded project
 
     quickView_->rootContext()->setContextProperty("transport", transport_);
     quickView_->rootContext()->setContextProperty("mainwindow", this);
@@ -29,11 +28,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // Setup left side.
     trackView->setPlayHead(playHead);
-    transportWidget->setMaximumHeight(40);
+    transportWidget_->setMaximumHeight(40);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(trackView);
     layoutLeft->addWidget(scrollArea);
-    layoutLeft->addWidget(transportWidget);
+    layoutLeft->addWidget(transportWidget_);
     leftSide->setLayout(layoutLeft);
     // Setup right side.
     rightSide->setLayout(layoutRight);
@@ -63,33 +62,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(transport_, &Transport::datasetImported,
             trackView, &TrackView::onDatasetChanged);
     connect(transport_, &Transport::datasetImported,
-            transportWidget, &TransportWidget::on_datasetChanged);
-    // Session signals.
-    connect(session_, &Session::newDatafile,
-            transport_, &Transport::onImportDataset);
-    connect(session_, &Session::speedChanged,
-            transportWidget, &TransportWidget::on_speed_changed);
-    connect(session_, &Session::interpolateChanged,
-            transportWidget, &TransportWidget::on_interpolation_changed);
+            transportWidget_, &TransportWidget::on_datasetChanged);
     // Connect Transport < > TransportWidget.
     connect(transport_, &Transport::posChanged,
             playHead, &PlayHead::onCursorMoved);
-    connect(transportWidget, &TransportWidget::speedChanged,
+    connect(transportWidget_, &TransportWidget::speedChanged,
             transport_, &Transport::onSpeedchanged);
-    connect(transportWidget, &TransportWidget::interpolateChanged,
+    connect(transportWidget_, &TransportWidget::interpolateChanged,
             transport_, &Transport::onInterpolateChanged);
-    connect(transportWidget, &TransportWidget::pausedChanged,
+    connect(transportWidget_, &TransportWidget::pausedChanged,
             transport_, &Transport::onPausechanged);
-    connect(transportWidget, &TransportWidget::loopingChanged,
+    connect(transportWidget_, &TransportWidget::loopingChanged,
             transport_, &Transport::onLoopingchanged);
-    // TransportWidget signals to Session, Playhead.
-    connect(transportWidget, &TransportWidget::speedChanged,
-            session_, &Session::onSpeedChanged);
-    connect(transportWidget, &TransportWidget::interpolateChanged,
-            session_, &Session::onInterpolateChanged);
-    connect(transportWidget, &TransportWidget::pausedChanged,
-            playHead, &PlayHead::onPauseChanged);
     // Playhead signals.
+    connect(transportWidget_, &TransportWidget::pausedChanged,
+            playHead, &PlayHead::onPauseChanged);
     connect(playHead, &PlayHead::cursorPosChanged,
             transport_, &Transport::onPoschanged);
     connect(playHead, &PlayHead::loopPointsChanged,
@@ -109,48 +96,69 @@ Transport *MainWindow::getTransport()
 void MainWindow::createMenus()
 {
     /// "File" menu actions
-    // open session
+    // Open session.
     QAction *openSessionAct = new QAction(tr("Open"), this);
     openSessionAct->setShortcut(QKeySequence::Open);
     openSessionAct->setStatusTip(tr("Open an existing SOW session"));
     connect(openSessionAct, &QAction::triggered,
-            session_, &Session::onOpen);
+            this, &MainWindow::onOpen);
 
-    // save session
+    // Save session.
     QAction *saveSessionAct = new QAction(tr("Save"), this);
     saveSessionAct->setShortcut(QKeySequence::Save);
     saveSessionAct->setStatusTip(tr("Save the current session to a file"));
     connect(saveSessionAct, &QAction::triggered,
             this, &MainWindow::onSave);
 
-    // save session as
+    // Save session as.
     QAction *saveSessionAsAct = new QAction(tr("Save As"), this);
     saveSessionAsAct->setShortcut(QKeySequence::SaveAs);
     saveSessionAsAct->setStatusTip(tr("Save the current session with a new name"));
     connect(saveSessionAsAct, &QAction::triggered,
-            session_, &Session::onSaveAs);
+            this, &MainWindow::onSaveAs);
 
-    // import dataset
+    // Import dataset.
     QAction *importDatasetFileAct = new QAction(tr("Import Dataset"), this);
     importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     importDatasetFileAct->setStatusTip(tr("Import CSV data into the data window"));
     connect(importDatasetFileAct, &QAction::triggered,
-            session_, &Session::onImportDataset);
+            this, &MainWindow::onImportDataset);
 
-    // quit application
+    // Quit application.
     QAction *quitAct = new QAction(tr("Quit"), this);
     quitAct->setShortcut(QKeySequence::Quit);
     quitAct->setStatusTip(tr("Quit") + " " + tr("Sonification Workstation"));
     connect(quitAct, &QAction::triggered,
             this, &MainWindow::onQuit);
 
-    // create and populate the menus
+    // Create and populate the menus.
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
     fileMenu->addAction(openSessionAct);
     fileMenu->addAction(saveSessionAct);
     fileMenu->addAction(saveSessionAsAct);
     fileMenu->addAction(importDatasetFileAct);
     fileMenu->addAction(quitAct);
+}
+
+void MainWindow::writeSessionFile()
+{
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(reinterpret_cast<QObject*>(quickView_->rootObject()),
+                              "synthTreeToString",
+                              Q_RETURN_ARG(QVariant, returnedValue));
+
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(returnedValue.toString().toUtf8());
+    QJsonObject jsonObject = jsonDocument.object();
+    jsonObject.insert("dataset", datafile_);
+    jsonObject.insert("interpolate", transportWidget_->interpolate());
+    jsonObject.insert("speed", static_cast<double>(transportWidget_->speed()));
+
+    QJsonDocument sessionDocument;
+    sessionDocument.setObject(jsonObject);
+
+    QFile file(sessionfile_);
+    file.open(QFile::WriteOnly);
+    file.write(sessionDocument.toJson());
 }
 
 void MainWindow::onQuit()
@@ -160,17 +168,35 @@ void MainWindow::onQuit()
 
 void MainWindow::onSave()
 {
-    QVariant returnedValue;
-    QMetaObject::invokeMethod(reinterpret_cast<QObject*>(quickView_->rootObject()),
-                              "synthTreeToString",
-                              Q_RETURN_ARG(QVariant, returnedValue));
-
-    QString synthTreeString = returnedValue.toString();
-    qDebug() << synthTreeString;
-
+    if(sessionfile_.isEmpty()) {
+        onSaveAs();
+    }
+    else {
+        writeSessionFile();
+    }
 }
 
 void MainWindow::onSaveAs()
 {
+    QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+    QString documents = docDirs[0];
+    sessionfile_ = QFileDialog::getSaveFileName(this, tr(("Save Session")), documents, ("JSON(*.json)"));
+    if(!sessionfile_.isEmpty()) {
+        if(!sessionfile_.endsWith(".json")) {
+            sessionfile_ += ".json";
+        }
+        writeSessionFile();
+    }
+}
+
+void MainWindow::onOpen()
+{
 
 }
+
+void MainWindow::onImportDataset()
+{
+
+}
+
+
