@@ -87,12 +87,3 @@ function createItem(type) {
     }
     return item
 }
-
-function indexesToString(arr) {
-    var stringArr = ""
-    for(var i = 0; i < arr.length; i++) {
-        arr[i] = arr[i] + 1
-        stringArr += String(arr[i]) + ","
-    }
-    return stringArr
-}
