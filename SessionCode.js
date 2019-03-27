@@ -19,25 +19,38 @@ function treeToJson(items) {
 }
 
 // accepts json array of SynthItem descriptions
-function stringToSynthTree(arr) {
-    var itemDict = {}
-    for (var i = 0; i < arr.length; i++) {
-        var essence = arr[i]
-        var id = essence["identifier"]
+function jsonToTree(essences) {
+    var newItems = []
+    essences.forEach(function(essence) {
         var synthItem = createItem(essence["type"])
-        if(synthItem !== null) {
-            synthItem.init(essence)
-            var obj = {}
-            obj["parents"] = essence["parents"]
-            obj["synthItem"] = synthItem
-            itemDict[id] = obj
-        }
-    }
-    connectTree(itemDict)
+        synthItem.fromEssence(essence)
+        var newItem = { "name" : essence["name"], "parents": essence["parents"] }
+        newItems.push(newItem)
+    })
+//    patchTree(newItems)
 }
 
 // patch newly created items together
-function connectTree(itemDict) {
+function patchTree(newItems) {
+    newItems.forEach(function(newItem) {
+        var parents = newItem["parents"]
+        parents.forEach(function(parent) {
+
+        })
+
+        if (itemDict.hasOwnProperty(key)) {
+            var obj = itemDict[key];
+            var item = obj["synthItem"]
+            var parents = obj["parents"]
+            for(var parent in parents) {
+                var pID = parents[parent]
+                var pObj = itemDict[pID]
+                var pItem = pObj["synthItem"]
+                pItem.addChild(item)
+            }
+        }
+    })
+
     for(var key in itemDict) {
         if (itemDict.hasOwnProperty(key)) {
             var obj = itemDict[key];
@@ -50,15 +63,6 @@ function connectTree(itemDict) {
                 pItem.addChild(item)
             }
         }
-    }
-}
-
-// clear the existing tree
-function destroyItems(items) {
-    while (items.length > 0) {
-        console.log("items.length: " + items.length)
-        var item = items.pop()
-        item.deleteThis()
     }
 }
 

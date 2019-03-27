@@ -22,7 +22,9 @@ public:
     explicit TransportWidget(QWidget *parent = 0);
     void setTransport(Transport* qtTransport);
     bool interpolate();
+    void setInterpolate(bool interpolate);
     float speed();
+    void setSpeed(float speed);
 
 private:
 
@@ -51,7 +53,7 @@ public slots:
 private slots:
     void on_pauseButton_released();
     void on_loopButton_released();
-    void on_speedBox_valueChanged(float speed);
+    void on_speedBox_valueChanged(int speed);
     void on_interpolateBox_stateChanged(int state);
 };
 

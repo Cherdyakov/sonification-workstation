@@ -186,18 +186,20 @@ Rectangle
     }
 
     // Get the SynthTree as json and return to C++.
-    function synthTreeToString() {
+    function synthTreeString() {
         var treeData = SessionCode.treeToJson(synthItems)
         var stringTree = JSON.stringify(treeData)
-        console.log(stringTree)
         return stringTree
     }
 
     // Wipe the current SynthItem tree and create a new
     // one from a json object.
-    function createTree(obj) {
-        SessionCode.destroyItems(synthItems)
-        SessionCode.createTree(obj)
+    function synthTreeFromJson(json) {
+        // Destroy all existing SynthItems.
+        synthItems.forEach(function(item) {
+            item.deleteThis()
+        })
+        SessionCode.jsonToTree(json)
     }
 
 } // root

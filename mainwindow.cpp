@@ -144,8 +144,10 @@ void MainWindow::writeSessionFile()
 {
     QVariant returnedValue;
     QMetaObject::invokeMethod(reinterpret_cast<QObject*>(quickView_->rootObject()),
-                              "synthTreeToString",
+                              "synthTreeString",
                               Q_RETURN_ARG(QVariant, returnedValue));
+
+    qDebug() << returnedValue.toString();
 
     QJsonDocument jsonDocument = QJsonDocument::fromJson(returnedValue.toString().toUtf8());
     QJsonObject jsonObject = jsonDocument.object();
@@ -191,7 +193,36 @@ void MainWindow::onSaveAs()
 
 void MainWindow::onOpen()
 {
+    QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+    QString documents = docDirs[0];
+    QString filename = QFileDialog::getOpenFileName(this, tr(("Open Session")), documents, ("JSON(*.json)"));
 
+    if(!filename.isEmpty()) {
+        QFile file(filename);
+        file.open(QFile::ReadOnly);
+        QString input = file.readAll();
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(input.toUtf8());
+        QJsonObject jsonObject = jsonDocument.object();
+
+        // Load the dataset.
+//        QJsonValue value = jsonObject.value("dataset");
+//        datafile_ = value.toString();
+
+        // Set playback speed.
+        float speed = jsonObject.value("speed").toInt();
+        transportWidget_->setSpeed(speed);
+
+        // Set interpolation state.
+        bool interpolate = jsonObject.value("interpolate").toBool();
+        transportWidget_->setInterpolate(interpolate);
+
+        // Re-construct the Synth Tree.
+        QJsonValue synthTree = jsonObject.value("synthItems");
+        QVariant synthTreeVariant = synthTree.toVariant();
+        QMetaObject::invokeMethod(reinterpret_cast<QObject*>(quickView_->rootObject()),
+                                  "synthTreeFromJson",
+                                  Q_ARG(QVariant, synthTreeVariant));
+    }
 }
 
 void MainWindow::onImportDataset()

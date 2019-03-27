@@ -69,7 +69,7 @@ SynthItem {
             "y": y,
             "mute": mute,
             "parents": SessionCode.getItemNames(synthParents),
-            "freq": frequency.mapper.map,
+            "freqMap": frequency.mapper.map,
             "freqScaled": frequency.scaled,
             "freqScaleLow": frequency.scaleLow,
             "freqScaleHigh": frequency.scaleHigh,
@@ -84,7 +84,7 @@ SynthItem {
         y = essence["y"]
         name = essence["name"]
         mute = essence["mute"]
-        frequency.mapper.map = essence["map"]
+        frequency.mapper.map = essence["freqMap"]
         frequency.scaler.scaled = essence["freqScaled"]
         frequency.scaler.low = essence["freqScaleLow"]
         frequency.scaler.high = essence["freqScaleHigh"]

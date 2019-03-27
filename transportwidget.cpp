@@ -45,9 +45,25 @@ bool TransportWidget::interpolate()
     return interpolate_;
 }
 
+void TransportWidget::setInterpolate(bool interpolate)
+{
+    if(interpolate_ != interpolate) {
+        interpolate_ = interpolate;
+        emit interpolateChanged(interpolate_);
+    }
+}
+
 float TransportWidget::speed()
 {
     return speed_;
+}
+
+void TransportWidget::setSpeed(float speed)
+{
+    if(!qFuzzyCompare(speed_, speed)) {
+        speed_ = speed;
+        emit speedChanged(speed_);
+    }
 }
 
 void TransportWidget::on_speed_changed(int speed)
@@ -86,9 +102,9 @@ void TransportWidget::on_loopButton_released()
     }
 }
 
-void TransportWidget::on_speedBox_valueChanged(float speed)
+void TransportWidget::on_speedBox_valueChanged(int speed)
 {
-    if(!qFuzzyCompare(speed_, speed))
+    if(!qFuzzyCompare(speed_, speed)) // Plan to change speed to float
     {
         speed_ = speed;
         emit speedChanged(speed_);
