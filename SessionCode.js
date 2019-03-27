@@ -30,7 +30,9 @@ function jsonToTree(essences) {
     connectTree(newSynthItems)
 }
 
-// patch newly created items together
+// Connect newly created items together.
+// Does not create the patches inside PatchManager.
+// Use PatchManager.recreatePatches for that.
 function connectTree(newSynthItems) {
     for (var childName in newSynthItems) {
         var parents = newSynthItems[childName]["parentNames"]
