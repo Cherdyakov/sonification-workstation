@@ -1,5 +1,7 @@
 #include "playhead.h"
 
+namespace sow {
+
 PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
 {
     // for blink_ing cursor when pause_
@@ -8,6 +10,7 @@ PlayHead::PlayHead(QWidget *parent) : QWidget(parent)
             this, &PlayHead::blinker);
     blink_Timer->start(720);
 
+    dataLoaded_ = false;
     pause_ = true;
     blink_ = true;
     loopA_ = 0.0;
@@ -79,10 +82,10 @@ void PlayHead::paintEvent(QPaintEvent *event)
         painter.fillRect(loopStartPixel, 0, loopEndPixel - loopStartPixel, lineLength, QBrush(QColor(128, 128, 255, 32)));
     }
     // Cursor goes over loop area
-    if(!pause_ || blink_)
+    if((!pause_ || blink_) && dataLoaded_)
     {
         int cursorPos_Pixel = valToPixel(cursorPos_);
-        painter.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+        painter.setPen(QPen(QColor(190,0,50), 1, Qt::SolidLine));
         painter.drawLine(cursorPos_Pixel, 0, cursorPos_Pixel, lineLength);
     }
 }
@@ -111,6 +114,11 @@ void PlayHead::onXRangeChanged(QCPRange range)
         xMax_ = max;
     }
     update();
+}
+
+void PlayHead::onDatasetChanged(Dataset *dataset)
+{
+    dataLoaded_ = dataset->hasData();
 }
 
 void PlayHead::mousePressEvent(QMouseEvent *e)
@@ -158,5 +166,7 @@ void PlayHead::mouseMoveEvent(QMouseEvent *e)
         update();
     }
 }
+
+} // namespace sow
 
 

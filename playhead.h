@@ -7,6 +7,9 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include "qcustomplot.h"
+#include "dataset.h"
+
+namespace sow {
 
 class PlayHead : public QWidget
 {
@@ -18,6 +21,7 @@ private:
 
     bool pause_;
     bool blink_;
+    bool dataLoaded_;
     float cursorPos_;
     float loopA_;
     float loopB_;
@@ -25,7 +29,7 @@ private:
     float xMin_;
     float xMax_;
 
-    QPoint clickedPoint;
+    QPoint clickedPoint_;
 
     void setCursorPos(float pos);
     void setLoopA(float a);
@@ -53,11 +57,14 @@ public slots:
     void onCursorMoved(float pos);
     void onPauseChanged(bool pause);
     void onXRangeChanged(QCPRange range);
+    void onDatasetChanged(Dataset* dataset);
 
 private slots:
 
     void blinker();
 
 };
+
+} // namespace sow
 
 #endif // PLAYHEAD_H

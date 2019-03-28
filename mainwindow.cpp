@@ -77,6 +77,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             trackView, &TrackView::onDatasetChanged);
     connect(transport_, &Transport::datasetImported,
             transportWidget_, &TransportWidget::onDatasetChanged);
+    connect(transport_, &Transport::datasetImported,
+            playHead, &PlayHead::onDatasetChanged);
+
     // Connect Transport < > TransportWidget.
     connect(transport_, &Transport::posChanged,
             playHead, &PlayHead::onCursorMoved);
