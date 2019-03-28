@@ -41,11 +41,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // Setup left side.
     trackView->setPlayHead(playHead);
-    transportWidget_->setMaximumHeight(40);
+    transportWidget_->setMaximumHeight(50);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(trackView);
     layoutLeft->addWidget(scrollArea);
     layoutLeft->addWidget(transportWidget_);
+    layoutLeft->setSpacing(8);
     leftSide->setLayout(layoutLeft);
     // Setup right side.
     rightSide->setLayout(layoutRight);
@@ -75,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(transport_, &Transport::datasetImported,
             trackView, &TrackView::onDatasetChanged);
     connect(transport_, &Transport::datasetImported,
-            transportWidget_, &TransportWidget::on_datasetChanged);
+            transportWidget_, &TransportWidget::onDatasetChanged);
     // Connect Transport < > TransportWidget.
     connect(transport_, &Transport::posChanged,
             playHead, &PlayHead::onCursorMoved);

@@ -13,6 +13,8 @@ public:
     explicit Style(QObject *parent = nullptr): QObject(parent) {
 
         map_.insert("textColor", "#f9f9f9");
+        map_.insert("interfaceGreen", "#8DB600");
+        map_.insert("grey", "#888888");
         map_.insert("windowGrey", "#424242");
         map_.insert("middleGrey", "#393939");
         map_.insert("darkGrey", "#303030");

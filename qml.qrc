@@ -40,5 +40,13 @@
         <file>FM.qml</file>
         <file>EditorParameterHeader.qml</file>
         <file>EditorTitle.qml</file>
+        <file>images/play.svg</file>
+        <file>images/pause.svg</file>
+        <file>images/down-arrow.svg</file>
+        <file>images/up-arrow.svg</file>
+        <file>images/interpolate-off.svg</file>
+        <file>images/interpolate-on.svg</file>
+        <file>images/loop-off.svg</file>
+        <file>images/loop-on.svg</file>
     </qresource>
 </RCC>

@@ -4,29 +4,13 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
 {
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    QHBoxLayout *displayLayout = new QHBoxLayout;
     QVBoxLayout *processingLayout = new QVBoxLayout;
-    display = new QDoubleSpinBox;
     alphaSpinBox = new QSpinBox;
     procComboBox = new QComboBox;
 
-    // Stylesheet name.
-    this->setObjectName("TrackHeader");
-    this->setAutoFillBackground(true);
-
-    // data display section
-    //    Qlabel *label = new QLabel;
-    // set up data display
-    display->setReadOnly(true);
-    display->setButtonSymbols(QAbstractSpinBox::NoButtons);
-    //    label->setText("");
-    //    displayLayout->addWidget(label);
-    displayLayout->setContentsMargins(4,4,4,4);
-    displayLayout->addWidget(display);
-
-    // data processing section
+    // Data processing section.
     QLabel *procLabel = new QLabel;
-    procLabel->setText("Data processing:");
+    procLabel->setText("Data smoothing:");
     QLabel *alphaLabel = new QLabel;
     QPixmap pixmap;
     if (!pixmap.load( ":/images/alpha.png" )) {
@@ -34,7 +18,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     }
     alphaLabel->setPixmap(pixmap);
     alphaLabel->setScaledContents(true);
-    alphaLabel->setFixedSize(16, 16);
+    alphaLabel->setFixedSize(14, 14);
 
     QHBoxLayout *alphaLayout = new QHBoxLayout;
     alphaLayout->addWidget(alphaLabel);
@@ -43,16 +27,21 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     procComboBox->addItem("None");
     procComboBox->addItem("Simple Average");
     procComboBox->addItem("Exponential Average");
-    procComboBox->addItem("Cumulative Average");
     processingLayout->setContentsMargins(4,4,4,4);
     processingLayout->addWidget(procLabel);
     processingLayout->addWidget(procComboBox);
     processingLayout->addLayout(alphaLayout);
 
-    // add everything to main layout
+    // Stylesheet.
+    this->setObjectName("TrackHeader");
+    this->setAutoFillBackground(true);
+    alphaSpinBox->setObjectName("AlphaSpinBox");
+    procComboBox->setObjectName("ProcComboBox");
+    procLabel->setObjectName("ProcLabel");
+
+    // Add everything to main layout.
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(2);
-    mainLayout->addLayout(displayLayout);
     mainLayout->addLayout(processingLayout);
     mainLayout->addStretch();
     this->setLayout(mainLayout);
