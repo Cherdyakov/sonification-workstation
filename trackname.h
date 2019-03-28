@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QStyleOption>
+#include <QPainter>
 #include "utility.h"
 
 namespace sow {
@@ -19,6 +21,10 @@ public:
     void setNumber(unsigned int num);
     void setText(const QString name);
     QString text() const;
+
+protected:
+
+    void paintEvent(QPaintEvent* event) override;
 
 private:
 

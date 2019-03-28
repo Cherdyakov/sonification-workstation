@@ -12,10 +12,10 @@ class Style : public QObject
 public:
     explicit Style(QObject *parent = nullptr): QObject(parent) {
 
-        map_.insert("windowGrey", "#424242");
-        map_.insert("middleGrey", "#383838");
-        map_.insert("darkGrey", "#323232");
         map_.insert("textColor", "#f9f9f9");
+        map_.insert("windowGrey", "#424242");
+        map_.insert("middleGrey", "#393939");
+        map_.insert("darkGrey", "#303030");
         map_.insert("nearBlack", "#202020");
     }
 

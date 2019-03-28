@@ -10,11 +10,8 @@ TrackName::TrackName(QWidget *parent) : QWidget(parent)
     label_->setFixedHeight(20);
     label_->setStyleSheet("font: 16pt");
 
-    // set dark background for this widget
-    QPalette* pal = new QPalette;
-    pal->setColor(QPalette::Background, QColor("gray"));
     this->setAutoFillBackground(true);
-    this->setPalette(*pal);
+    this->setObjectName("TrackName");
 
     // create layout
     QHBoxLayout *layout = new QHBoxLayout;
@@ -38,6 +35,14 @@ void TrackName::setText(const QString name)
 QString TrackName::text() const
 {
     return text_;
+}
+
+void TrackName::paintEvent(QPaintEvent *event)
+{
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
 } // namespace sow

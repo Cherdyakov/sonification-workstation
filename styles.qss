@@ -28,17 +28,27 @@ QMenu:item:selected
 background-color: nearBlack;
 }
 
-QLabel
-{
-color: textColor;
-}
-
-QScrollArea
+QScrollArea#ScrollArea
 {
 background-color: darkGrey;
 }
 
 QWidget#TrackView
 {
-background-color: darkGrey;
+background-color: windowGrey;
+}
+
+TrackHeader
+{
+background-color: grey;
+}
+
+QWidget#TrackName
+{
+background-color: middleGrey;
+}
+
+Track
+{
+background-color: #FF0000;
 }
