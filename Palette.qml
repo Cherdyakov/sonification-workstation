@@ -30,14 +30,14 @@ Rectangle {
         PaletteItem {
             id: am
             componentFile: "AM.qml"
-            source: "images/MOD.png"
+            source: "images/AM.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             id: fm
             componentFile: "FM.qml"
-            source: "images/MOD.png"
+            source: "images/FM.png"
             onItemCreated: root.itemCreated(item)
         }
 
