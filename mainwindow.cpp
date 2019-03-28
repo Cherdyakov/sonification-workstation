@@ -5,6 +5,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // Set the title and size of the application window.
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.8);
+    style_.setStyle();
+
 
     PlayHead* playHead = new PlayHead(this);                                            // Playback cursor
     QWidget *centralWidget = new QWidget;                                               // Application top-level widget
@@ -25,6 +27,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     quickView_->rootContext()->setContextProperty("transport", transport_);
     quickView_->rootContext()->setContextProperty("mainwindow", this);
     quickView_->setSource(QUrl("qrc:/main.qml"));
+
+    // Stylesheets
+    this->setObjectName("MainWindow");
+    scrollArea->setObjectName("ScrollArea");
+    this->menuBar()->setObjectName("Menu");
+    trackView->setObjectName("TrackView");
+
+
+
+//    leftSide->setObjectName("LeftSide");
+//    leftSide->setStyleSheet("QWidget#LeftSide { background-color:#2800FF }");
 
     // Setup left side.
     trackView->setPlayHead(playHead);

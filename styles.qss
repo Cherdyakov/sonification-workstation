@@ -1,0 +1,54 @@
+MainWindow
+{
+background-color: windowGrey;
+}
+
+QMenuBar
+{
+color: textColor;
+background-color: windowGrey;
+border-bottom-width: 1px;
+border-bottom-style: solid;
+border-bottom-color: darkGrey;
+}
+
+QWidget
+{
+color: textColor;
+}
+
+QMenu
+{
+color: textColor;
+background-color: middleGrey;
+}
+
+QMenu:item:selected
+{
+background-color: nearBlack;
+}
+
+QScrollArea#ScrollArea
+{
+background-color: darkGrey;
+}
+
+QWidget#TrackView
+{
+background-color: windowGrey;
+}
+
+TrackHeader
+{
+background-color: grey;
+}
+
+QWidget#TrackName
+{
+background-color: middleGrey;
+}
+
+Track
+{
+background-color: #FF0000;
+}

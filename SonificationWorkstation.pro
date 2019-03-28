@@ -1,5 +1,6 @@
 QT += qml quick widgets printsupport
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc \
+    styles.qrc
 TEMPLATE = app
 CONFIG += c++17
 # Default rules for deployment.
@@ -75,7 +76,8 @@ HEADERS += \
     parameter.h \
     parameterindex.h \
     parameterindexinterface.h \
-    equalizer.h
+    equalizer.h \
+    style.h
 
 #Sean Ubuntu
 BASEPATH = /home/sean/Documents/src

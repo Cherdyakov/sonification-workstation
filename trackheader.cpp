@@ -9,12 +9,10 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     display = new QDoubleSpinBox;
     alphaSpinBox = new QSpinBox;
     procComboBox = new QComboBox;
-    QPalette* pal = new QPalette;
 
-    // set background color for header
-    pal->setColor(QPalette::Background, QColor("dark grey"));
+    // Stylesheet name.
+    this->setObjectName("TrackHeader");
     this->setAutoFillBackground(true);
-    this->setPalette(*pal);
 
     // data display section
     //    Qlabel *label = new QLabel;
@@ -63,6 +61,14 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     connect(procComboBox, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(on_processingChanged(QString)));
 
+}
+
+void TrackHeader::paintEvent(QPaintEvent *event)
+{
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
 void TrackHeader::on_processingChanged(QString text)

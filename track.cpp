@@ -16,6 +16,9 @@ Track::Track(QWidget *parent) : QWidget(parent)
     centralLayout->addWidget(header);
     this->setLayout(centralLayout);
     this->setFixedHeight(TrackHeight);
+
+    // Stylesheet name.
+    this->setObjectName("Track");
 }
 
 Track::~Track()
