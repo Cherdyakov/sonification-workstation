@@ -36,8 +36,8 @@ background: none;
 
 QCheckBox#InterpolateBox::indicator
 {
-height: 30;
-width: 30;
+height: 28;
+width: 28;
 }
 
 QCheckBox#InterpolateBox::indicator::checked

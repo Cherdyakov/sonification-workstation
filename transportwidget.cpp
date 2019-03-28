@@ -28,7 +28,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     loopOffIcon_.addFile(":/images/loop-off.svg");
 
     pauseButton_->setIcon(playIcon_);
-    pauseButton_->setIconSize(QSize(this->height() + 12, this->height() + 12));
+    pauseButton_->setIconSize(QSize(this->height() + 20, this->height() + 20));
     loopButton_->setIcon(loopOffIcon_);
     loopButton_->setIconSize(QSize(this->height(), this->height()));
 
@@ -152,5 +152,5 @@ void TransportWidget::onDatasetChanged(sow::Dataset *dataset)
 {
     Q_UNUSED(dataset);
     pause_ = true;
-    pauseButton_->setText(tr("Play"));
+    pauseButton_->setIcon(playIcon_);
 }
