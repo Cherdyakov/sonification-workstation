@@ -10,6 +10,7 @@
 #include <QComboBox>
 #include <QPixmap>
 #include <QBitmap>
+#include <QPainter>
 
 class TrackHeader : public QWidget
 {
@@ -23,6 +24,10 @@ private:
     QDoubleSpinBox *display;
     QComboBox *procComboBox;
     QSpinBox *alphaSpinBox;
+
+protected:
+
+    void paintEvent(QPaintEvent* event) override;
 
 signals:
 
