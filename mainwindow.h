@@ -11,6 +11,7 @@
 #include "transport.h"
 #include "transportwidget.h"
 #include "filereader.h"
+#include "style.h"
 
 using namespace sow;
 
@@ -33,6 +34,7 @@ private:
 
     QString datafile_;
     QString sessionfile_;
+    Style style_;
 
     //convenience functions to create and populate menus
     void createActions();
