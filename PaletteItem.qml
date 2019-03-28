@@ -9,8 +9,8 @@ Image {
 
     source: image
 
-    width: 50
-    height: 50
+    width: 34
+    height: 34
 
     signal itemCreated(var item)
 
