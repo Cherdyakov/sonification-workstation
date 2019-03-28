@@ -3,7 +3,7 @@
 
 TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 {
-    paused = true;
+    pause_ = true;
     looping_ = false;
     interpolate_ = false;
     speed_ = 0.0f;
@@ -11,33 +11,33 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     //transport layout
     QHBoxLayout* transportLayout = new QHBoxLayout;
     //transport controls
-    pauseButton = new QPushButton(tr("Play"));
-    speedDial = new QDial;
-    speedBox = new QSpinBox;
+    pauseButton_ = new QPushButton(tr("Play"));
+    pauseButton_->setObjectName("PauseButton");
+    speedBox_ = new QSpinBox;
     QLabel* speedLabel = new QLabel;
-    loopButton = new QPushButton(tr("Looping: OFF"));
-    interpolateBox = new QCheckBox(tr("Interpolation"));
+    loopButton_ = new QPushButton(tr("Looping: OFF"));
+    interpolateBox_ = new QCheckBox(tr("Interpolation"));
 
     speedLabel->setText(tr("Steps per second:"));
-    speedBox->setValue(1.0);
-    speedBox->setMinimum(0.0);
-    speedBox->setMaximum(constants::SR);
-    transportLayout->addWidget(loopButton);
-    transportLayout->addWidget(pauseButton);
+    speedBox_->setValue(1.0);
+    speedBox_->setMinimum(0.0);
+    speedBox_->setMaximum(constants::SR);
+    transportLayout->addWidget(loopButton_);
+    transportLayout->addWidget(pauseButton_);
     transportLayout->addWidget(speedLabel);
-    transportLayout->addWidget(speedBox);
-    transportLayout->addWidget(interpolateBox);
+    transportLayout->addWidget(speedBox_);
+    transportLayout->addWidget(interpolateBox_);
     //set layout of transport
     this->setLayout(transportLayout);
 
-    connect(pauseButton, SIGNAL(released()),
-            this, SLOT(on_pauseButton_released()));
-    connect(loopButton, SIGNAL(released()),
-            this, SLOT(on_loopButton_released()));
-    connect(speedBox, SIGNAL(valueChanged(int)),
-            this,SLOT(on_speedBox_valueChanged(int)));
-    connect(interpolateBox, SIGNAL(stateChanged(int)),
-            this, SLOT(on_interpolateBox_stateChanged(int)));
+    connect(pauseButton_, SIGNAL(released()),
+            this, SLOT(onPauseButtonReleased()));
+    connect(loopButton_, SIGNAL(released()),
+            this, SLOT(onLoopButtonReleased()));
+    connect(speedBox_, SIGNAL(valueChanged(int)),
+            this,SLOT(onSpeedBoxValueChanged(int)));
+    connect(interpolateBox_, SIGNAL(stateChanged(int)),
+            this, SLOT(onInterpolateBoxStateChanged(int)));
 }
 
 bool TransportWidget::interpolate()
@@ -66,43 +66,43 @@ void TransportWidget::setSpeed(float speed)
     }
 }
 
-void TransportWidget::on_speed_changed(int speed)
+void TransportWidget::onSpeedChanged(int speed)
 {
-    this->speedBox->setValue(speed);
+    this->speedBox_->setValue(speed);
 }
 
-void TransportWidget::on_interpolation_changed(bool interpolation)
+void TransportWidget::onInterpolateChanged(bool interpolation)
 {
-    this->interpolateBox->setChecked(interpolation);
+    this->interpolateBox_->setChecked(interpolation);
 }
 
-void TransportWidget::on_pauseButton_released()
+void TransportWidget::onPauseButtonReleased()
 {
-    paused = !paused;
-    emit pausedChanged(paused);
+    pause_ = !pause_;
+    emit pausedChanged(pause_);
 
-    if(paused) {
-        pauseButton->setText(tr("Play"));
+    if(pause_) {
+        pauseButton_->setText(tr("Play"));
     }
     else {
-        pauseButton->setText(tr("Pause"));
+        pauseButton_->setText(tr("Pause"));
     }
 }
 
-void TransportWidget::on_loopButton_released()
+void TransportWidget::onLoopButtonReleased()
 {
     looping_ = !looping_;
     emit loopingChanged(looping_);
 
     if(looping_) {
-        loopButton->setText(tr("Looping: ON"));
+        loopButton_->setText(tr("Looping: ON"));
     }
     else {
-        loopButton->setText(tr("Looping: OFF"));
+        loopButton_->setText(tr("Looping: OFF"));
     }
 }
 
-void TransportWidget::on_speedBox_valueChanged(int speed)
+void TransportWidget::onSpeedBoxValueChanged(int speed)
 {
     if(!qFuzzyCompare(speed_, speed)) // Plan to change speed to float
     {
@@ -111,7 +111,7 @@ void TransportWidget::on_speedBox_valueChanged(int speed)
     }
 }
 
-void TransportWidget::on_interpolateBox_stateChanged(int state)
+void TransportWidget::onInterpolateBoxStateChanged(int state)
 {
     if(interpolate_ != state) {
         interpolate_ = state;
@@ -119,9 +119,9 @@ void TransportWidget::on_interpolateBox_stateChanged(int state)
     }
 }
 
-void TransportWidget::on_datasetChanged(sow::Dataset *dataset)
+void TransportWidget::onDatasetChanged(sow::Dataset *dataset)
 {
     Q_UNUSED(dataset);
-    paused = true;
-    pauseButton->setText(tr("Play"));
+    pause_ = true;
+    pauseButton_->setText(tr("Play"));
 }

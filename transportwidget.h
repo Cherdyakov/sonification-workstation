@@ -28,15 +28,14 @@ public:
 
 private:
 
-    bool paused;
+    bool pause_;
     bool looping_;
     bool interpolate_;
     float speed_;
-    QPushButton* pauseButton;
-    QPushButton* loopButton;
-    QCheckBox* interpolateBox;
-    QDial* speedDial;
-    QSpinBox* speedBox;
+    QPushButton* pauseButton_;
+    QPushButton* loopButton_;
+    QCheckBox* interpolateBox_;
+    QSpinBox* speedBox_;
 
 
 signals:
@@ -46,15 +45,15 @@ signals:
     void interpolateChanged(bool interpolate_);
 
 public slots:
-    void on_speed_changed(int speed);
-    void on_interpolation_changed(bool interpolation);
-    void on_datasetChanged(sow::Dataset *dataset);
+    void onSpeedChanged(int speed);
+    void onInterpolateChanged(bool interpolation);
+    void onDatasetChanged(sow::Dataset *dataset);
 
 private slots:
-    void on_pauseButton_released();
-    void on_loopButton_released();
-    void on_speedBox_valueChanged(int speed);
-    void on_interpolateBox_stateChanged(int state);
+    void onPauseButtonReleased();
+    void onLoopButtonReleased();
+    void onSpeedBoxValueChanged(int speed);
+    void onInterpolateBoxStateChanged(int state);
 };
 
 #endif // TRANSPORTWIDGET_H
