@@ -10,6 +10,8 @@
 #include <QDebug>
 #include <QTimer>
 #include <QCheckBox>
+#include <QPainter>
+#include <QStyleOption>
 
 #include "transport.h"
 
@@ -32,11 +34,20 @@ private:
     bool looping_;
     bool interpolate_;
     float speed_;
+    QIcon playIcon_;
+    QIcon pauseIcon_;
+    QIcon loopOnIcon_;
+    QIcon loopOffIcon_;
+    QIcon interpolateOnIcon_;
+    QIcon interpolateOffIcon_;
     QPushButton* pauseButton_;
     QPushButton* loopButton_;
     QCheckBox* interpolateBox_;
     QSpinBox* speedBox_;
 
+protected:
+
+    void paintEvent(QPaintEvent* event) override;
 
 signals:
     void pausedChanged(bool pause);

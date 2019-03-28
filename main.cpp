@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
 {
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
     QApplication a(argc, argv);
     qmlRegisterType<SynthItem>("SoW", 1, 0, "QtSynthItem");
     qmlRegisterType<Oscillator>("SoW", 1, 0, "QtOscillator");

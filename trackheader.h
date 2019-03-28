@@ -21,7 +21,6 @@ public:
 private:
 
     uint trackNumber;
-    QDoubleSpinBox *display;
     QComboBox *procComboBox;
     QSpinBox *alphaSpinBox;
 

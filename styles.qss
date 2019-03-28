@@ -28,19 +28,76 @@ QMenu:item:selected
 background-color: nearBlack;
 }
 
+QCheckBox#InterpolateBox
+{
+border: none;
+background: none;
+}
+
+QCheckBox#InterpolateBox::indicator
+{
+height: 30;
+width: 30;
+}
+
+QCheckBox#InterpolateBox::indicator::checked
+{
+image: url(:/images/interpolate-on.svg);
+}
+
+QCheckBox#InterpolateBox::indicator::unchecked
+{
+image: url(:/images/interpolate-off.svg);
+}
+
+QSpinBox#SpeedBox
+{
+height: 20px;
+width: 60px;
+background-color: windowGrey;
+border-width: 1px;
+border-style: solid;
+border-color: nearBlack;
+}
+
+QSpinBox#SpeedBox::up-button
+{
+image: url(:/images/up-arrow.svg);
+height: 10px;
+width: 10px;
+padding: 2px;
+}
+
+QSpinBox#SpeedBox::down-button
+{
+image: url(:/images/down-arrow.svg);
+height: 10px;
+width: 10px;
+padding: 2px;
+}
+
 QScrollArea#ScrollArea
 {
 background-color: darkGrey;
 }
 
+QPushButton#PauseButton
+{
+background-image: ;
+border-width: 0px;
+border-radius: 0px;
+}
+
+QPushButton#LoopButton
+{
+background-image: ;
+border-width: 0px;
+border-radius: 0px;
+}
+
 QWidget#TrackView
 {
 background-color: windowGrey;
-}
-
-TrackHeader
-{
-background-color: grey;
 }
 
 QWidget#TrackName
@@ -51,4 +108,24 @@ background-color: middleGrey;
 Track
 {
 background-color: #FF0000;
+}
+
+QWidget#TrackHeader
+{
+background-color: grey;
+}
+
+QSpinBox#AlphaSpinBox
+{
+color: nearBlack;
+}
+
+QComboBox#ProcComboBox
+{
+color: nearBlack;
+}
+
+QLabel#ProcLabel
+{
+color: nearBlack;
 }
