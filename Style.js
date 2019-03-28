@@ -39,8 +39,11 @@ var editorMargin = 8
 var editorRadius = 6
 var editorTextInputColor = "white"
 
+// Main color scheme.
+var quickViewColor = "#323232"
+
 // SynthItem derived class styles
-var oscColor = "light blue"
+var oscColor = "#875692"
 var outColor = "cadetblue"
 var audColor = "light green"
 var amColor = "plum"
@@ -55,5 +58,3 @@ var eqColor = "medium turquoise"
 var paletteColor = "dark grey"
 var paletteOpacity = 1
 
-// workspace
-var workspaceColor = "light grey"

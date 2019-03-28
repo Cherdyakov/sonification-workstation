@@ -9,7 +9,7 @@ import "Utils.js" as Utils
 Rectangle
 {
     id: root
-    color: Style.workspaceColor
+    color: Style.quickViewColor
     anchors.fill: parent
 
     // Holds every item in the workspace for iterating.
