@@ -40,5 +40,9 @@
         <file>FM.qml</file>
         <file>EditorParameterHeader.qml</file>
         <file>EditorTitle.qml</file>
+        <file>images/looping_off.png</file>
+        <file>images/looping_on.png</file>
+        <file>images/pause.png</file>
+        <file>images/play.png</file>
     </qresource>
 </RCC>
