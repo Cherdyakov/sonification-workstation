@@ -15,11 +15,28 @@ SpinBox {
     Layout.maximumHeight: Style.editorRowHeight + 2
     Layout.preferredWidth: Style.editorControlWidth
 
+
     property int decimals: 2
     property real realValue: value / 100
 
     up.indicator.implicitWidth: 16
     down.indicator.implicitWidth: 16
+
+    contentItem: TextInput {
+            z: 2
+            text: spinbox.textFromValue(spinbox.value, spinbox.locale)
+
+//            font: spinbox.font
+//            color: "#21be2b"
+            selectionColor: "#21be2b"
+//            selectedTextColor: "#ffffff"
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+
+//            readOnly: !spinbox.editable
+//            validator: spinbox.validator
+//            inputMethodHints: Qt.ImhFormattedNumbersOnly
+        }
 
     validator: DoubleValidator {
         bottom: Math.min(spinbox.from, spinbox.to)
