@@ -65,53 +65,35 @@ SynthItem {
         }
     }
 
-    // return json representation of self
-    function read() {
-
-        var parents = []
-        for(var i = 0; i < synthParents.length; i++) {
-            var parent = synthParents[i].identifier
-            parents.push(parent)
-        }
-
-        var freqIndexes = implementation.getFreqIndexes()
-        // remove keys from freqIndexes and store in js array
-        var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
-
+    // Return essence in JSON.
+    function toEssence() {
         var essence = {
-            "identifier": identifier,
             "type": type,
+            "name": name,
             "x": x,
             "y": y,
-            "muted": implementation.getMute(),
-            "parents": parents,
-            "freq": implementation.getFreq(),
-            "freqIndexes": freqIndexesArray,
-            "freqFixed": implementation.getFreqFixed(),
-            "freqScaled": implementation.getFreqScaled(),
-            "freqScaleLow": implementation.getFreqScaleLow(),
-            "freqScaleHigh": implementation.getFreqScaleHigh(),
-            "freqScaleExponent": implementation.getFreqScaleExponent()
+            "mute": mute,
+            "parentNames": SessionCode.getItemNames(synthParents),
+            "panMap": pan.mapper.map,
+            "panScaled": pan.scaled,
+            "panScaleLow": pan.scaleLow,
+            "panScaleHigh": pan.scaleHigh,
+            "panScaleExponent": pan.scaleExp
         }
         return essence
     }
 
-    // initialize self from json
-    function init(essence) {
+    // Initialize self from JSON essence.
+    function fromEssence(essence) {
         x = essence["x"]
         y = essence["y"]
-        identifier = essence["identifier"]
-        muted = essence["muted"]
-        panEditor.value = essence["freq"]
-        fixedPanEditor.fixed = essence["freqFixed"]
-        var indexes = essence["freqIndexes"]
-        var stringIndexes = SessionCode.indexesToString(indexes)
-        panMapper.text = stringIndexes
-        panMapper.validateMappings()
-        panScaler.scaled = essence["freqScaled"]
-        panScaler.low = essence["freqScaleLow"]
-        panScaler.high = essence["freqScaleHigh"]
-        panScaler.exponent = essence["freqScaleExponent"]
+        name = essence["name"]
+        mute = essence["mute"]
+        pan.mapper.map = essence["panMap"]
+        pan.scaler.scaled = essence["panScaled"]
+        pan.scaler.low = essence["panScaleLow"]
+        pan.scaler.high = essence["panScaleHigh"]
+        pan.scaler.exp = essence["panScaleExponent"]
     }
 
 }

@@ -46,6 +46,29 @@ SynthItem {
         }
     }
 
+    // Return essence in JSON.
+    function toEssence() {
+        var essence = {
+            "type": type,
+            "name": name,
+            "x": x,
+            "y": y,
+            "mute": mute,
+            "parentNames": SessionCode.getItemNames(synthParents),
+            "noise": noiseType.currentIndex
+        }
+        return essence
+    }
+
+    // Initialize self from JSON essence.
+    function fromEssence(essence) {
+        x = essence["x"]
+        y = essence["y"]
+        name = essence["name"]
+        mute = essence["mute"]
+        noiseType.currentIndex = essence["noise"]
+    }
+
 
 
 }

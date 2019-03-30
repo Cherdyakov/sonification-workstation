@@ -54,7 +54,7 @@ SynthItem {
     }
 
     // return json representation of self
-    function read() {
+    function toEssence() {
 
         var parents = []
         for(var i = 0; i < synthParents.length; i++) {
