@@ -85,7 +85,7 @@ void PlayHead::paintEvent(QPaintEvent *event)
     if((!pause_ || blink_) && dataLoaded_)
     {
         int cursorPos_Pixel = valToPixel(cursorPos_);
-        painter.setPen(QPen(QColor(190,0,50), 1, Qt::SolidLine));
+        painter.setPen(QPen(QColor(32,32,32), 1, Qt::SolidLine));
         painter.drawLine(cursorPos_Pixel, 0, cursorPos_Pixel, lineLength);
     }
 }
