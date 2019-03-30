@@ -1,3 +1,3 @@
-# README #
+# Sonification Workstation #
 
-MS Project for UCSB Department of Media Arts and Technology 2017
+https://www.youtube.com
