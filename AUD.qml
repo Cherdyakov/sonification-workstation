@@ -53,53 +53,27 @@ SynthItem {
         }
     }
 
-    // return json representation of self
+    // Return essence in JSON.
     function toEssence() {
-
-        var parents = []
-        for(var i = 0; i < synthParents.length; i++) {
-            var parent = synthParents[i].identifier
-            parents.push(parent)
-        }
-
-        var freqIndexes = implementation.getFreqIndexes()
-        // remove keys from freqIndexes and store in js array
-        var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
-
         var essence = {
-            "identifier": identifier,
             "type": type,
+            "name": name,
             "x": x,
             "y": y,
-            "muted": implementation.getMute(),
-            "parents": parents,
-            "freq": implementation.getFreq(),
-            "freqIndexes": freqIndexesArray,
-            "freqFixed": implementation.getFreqFixed(),
-            "freqScaled": implementation.getFreqScaled(),
-            "freqScaleLow": implementation.getFreqScaleLow(),
-            "freqScaleHigh": implementation.getFreqScaleHigh(),
-            "freqScaleExponent": implementation.getFreqScaleExponent()
+            "mute": mute,
+            "parentNames": SessionCode.getItemNames(synthParents),
+            "ampMap": amplitude.mapper.map
         }
         return essence
     }
 
-    // initialize self from json
-    function init(essence) {
+    // Initialize self from JSON essence.
+    function fromEssence(essence) {
         x = essence["x"]
         y = essence["y"]
-        identifier = essence["identifier"]
-        muted = essence["muted"]
-        amplitudeEditor.value = essence["freq"]
-        fixedAmplitudeEditor.fixed = essence["freqFixed"]
-        var indexes = essence["freqIndexes"]
-        var stringIndexes = SessionCode.indexesToString(indexes)
-        amplitudeMapper.text = stringIndexes
-        amplitudeMapper.validateMappings()
-        amplitudeScaler.scaled = essence["freqScaled"]
-        amplitudeScaler.low = essence["freqScaleLow"]
-        amplitudeScaler.high = essence["freqScaleHigh"]
-        amplitudeScaler.exponent = essence["freqScaleExponent"]
+        name = essence["name"]
+        mute = essence["mute"]
+        frequency.mapper.map = essence["ampMap"]
     }
 
 }

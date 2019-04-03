@@ -109,53 +109,54 @@ SynthItem {
 
     }
 
-    // return json representation of self
+    // Return essence in JSON.
     function toEssence() {
-
-        var parents = []
-        for(var i = 0; i < synthParents.length; i++) {
-            var parent = synthParents[i].identifier
-            parents.push(parent)
-        }
-
-        var freqIndexes = implementation.getFreqIndexes()
-        // remove keys from freqIndexes and store in js array
-        var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
-
         var essence = {
-            "identifier": identifier,
             "type": type,
+            "name": name,
             "x": x,
             "y": y,
-            "muted": implementation.getMute(),
-            "parents": parents,
-            "freq": implementation.getFreq(),
-            "freqIndexes": freqIndexesArray,
-            "freqFixed": implementation.getFreqFixed(),
-            "freqScaled": implementation.getFreqScaled(),
-            "freqScaleLow": implementation.getFreqScaleLow(),
-            "freqScaleHigh": implementation.getFreqScaleHigh(),
-            "freqScaleExponent": implementation.getFreqScaleExponent()
+            "mute": mute,
+            "parentNames": SessionCode.getItemNames(synthParents),
+            // Filter type.
+            "type:": filterType.currentIndex,
+            // Frequency parameter.
+            "freqMap": frequency.mapper.map,
+            "freqScaled": frequency.scaled,
+            "freqScaleLow": frequency.scaleLow,
+            "freqScaleHigh": frequency.scaleHigh,
+            "freqScaleExponent": frequency.scaleExp,
+            // Resonance Parameter.
+            "resMap": resonance.mapper.map,
+            "resScaled": resonance.scaled,
+            "resScaleLow": resonance.scaleLow,
+            "resScaleHigh": resonance.scaleHigh,
+            "resScaleExponent": resonance.scaleExp
         }
         return essence
     }
 
-    // initialize self from json
-    function init(essence) {
+    // Initialize self from JSON essence.
+    function fromEssence(essence) {
         x = essence["x"]
         y = essence["y"]
-        identifier = essence["identifier"]
-        muted = essence["muted"]
-        frequencyEditor.value = essence["freq"]
-        fixedFrequencyEditor.fixed = essence["freqFixed"]
-        var indexes = essence["freqIndexes"]
-        var stringIndexes = SessionCode.indexesToString(indexes)
-        frequencyMapper.text = stringIndexes
-        frequencyMapper.validateMappings()
-        frequencyScaler.scaled = essence["freqScaled"]
-        frequencyScaler.low = essence["freqScaleLow"]
-        frequencyScaler.high = essence["freqScaleHigh"]
-        frequencyScaler.exponent = essence["freqScaleExponent"]
+        name = essence["name"]
+        mute = essence["mute"]
+        // Filter type.
+        filterType.currentIndex = essence["type"]
+        // frequency parameter.
+        frequency.mapper.map = essence["freqMap"]
+        frequency.scaler.scaled = essence["freqScaled"]
+        frequency.scaler.low = essence["freqScaleLow"]
+        frequency.scaler.high = essence["freqScaleHigh"]
+        frequency.scaler.exp = essence["freqScaleExponent"]
+        // Resonance parameter.
+        resonance.mapper.map = essence["resMap"]
+        resonance.scaler.scaled = essence["resScaled"]
+        resonance.scaler.low = essence["resScaleLow"]
+        resonance.scaler.high = essence["resScaleHigh"]
+        resonance.scaler.exp = essence["resScaleExponent"]
+
     }
 
 }

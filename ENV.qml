@@ -92,53 +92,35 @@ SynthItem {
 
     }
 
-    // return json representation of self
+    // Return essence in JSON.
     function toEssence() {
-
-        var parents = []
-        for(var i = 0; i < synthParents.length; i++) {
-            var parent = synthParents[i].identifier
-            parents.push(parent)
-        }
-
-        var freqIndexes = implementation.getFreqIndexes()
-        // remove keys from freqIndexes and store in js array
-        var freqIndexesArray = Object.keys(freqIndexes).map(function(k) { return freqIndexes[k] });
-
         var essence = {
-            "identifier": identifier,
             "type": type,
+            "name": name,
             "x": x,
             "y": y,
-            "muted": implementation.getMute(),
-            "parents": parents,
-            "freq": implementation.getFreq(),
-            "freqIndexes": freqIndexesArray,
-            "freqFixed": implementation.getFreqFixed(),
-            "freqScaled": implementation.getFreqScaled(),
-            "freqScaleLow": implementation.getFreqScaleLow(),
-            "freqScaleHigh": implementation.getFreqScaleHigh(),
-            "freqScaleExponent": implementation.getFreqScaleExponent()
+            "mute": mute,
+            "parentNames": SessionCode.getItemNames(synthParents),
+            "attMap": attack.mapper.map,
+            "attScaled": attack.scaled,
+            "attScaleLow": attack.scaleLow,
+            "attScaleHigh": attack.scaleHigh,
+            "attScaleExponent": attack.scaleExp
         }
         return essence
     }
 
-    // initialize self from json
-    function init(essence) {
+    // Initialize self from JSON essence.
+    function fromEssence(essence) {
         x = essence["x"]
         y = essence["y"]
-        identifier = essence["identifier"]
-        muted = essence["muted"]
-        attackEditor.value = essence["freq"]
-        fixedAttackEditor.fixed = essence["freqFixed"]
-        var indexes = essence["freqIndexes"]
-        var stringIndexes = SessionCode.indexesToString(indexes)
-        attackMapper.text = stringIndexes
-        attackMapper.validateMappings()
-        attackScaler.scaled = essence["freqScaled"]
-        attackScaler.low = essence["freqScaleLow"]
-        attackScaler.high = essence["freqScaleHigh"]
-        attackScaler.exponent = essence["freqScaleExponent"]
+        name = essence["name"]
+        mute = essence["mute"]
+        attack.mapper.map = essence["attMap"]
+        attack.scaler.scaled = essence["attScaled"]
+        attack.scaler.low = essence["attScaleLow"]
+        attack.scaler.high = essence["attScaleHigh"]
+        attack.scaler.exp = essence["attScaleExponent"]
     }
 
 }
