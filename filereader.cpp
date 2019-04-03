@@ -4,8 +4,6 @@ FileReader::FileReader(QObject *parent) : QObject(parent) { }
 
 bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
 {
-    std::vector<float> vec;
-
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
         qDebug() << file.errorString();
@@ -19,54 +17,29 @@ bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
         QString line = inFile.readLine();
         fileData.append(line.split(","));
     }
-    int rows = fileData.count();  // == rows in CSV
-    int cols = fileData[0].count(); // == columns in CSV
 
+    // Zero pad any short rows.
+    int rows = fileData.count();
+    int cols = 0;
 
-    ///
-    ///
-    ///
-    // TODO: Should be checking cols for even now, not rows
-    ///
-    ///
-    ///
-    // Check if rows are of equal length
- /*   bool unEven = false;
-    for(QStringList list : readData)
+    // Get number of columns in widest row.
+    for(QStringList list : fileData)
     {
-        uint currentCount = static_cast<uint>(list.count());
-        if(currentCount != width)
+        if(list.count() > cols) cols = list.count();
+    }
+
+    QList<QStringList>::iterator it;
+
+    for(it = fileData.begin(); it != fileData.end(); it++)
+    {
+        while(it->count() < cols)
         {
-            unEven = true;
-            if(width < currentCount)
-            {
-                width = currentCount;
-            }
+            it->append("0");
         }
     }
-    // Some rows were shorter than others
-    // force data to have equal width rows
-    if(unEven)
-    {
-        for(uint i = 0; i < height; i++)
-        {
-            QStringList* list = &readData[static_cast<int>(i)];
-            uint currentCount = static_cast<uint>(list->count());
 
-            if(currentCount < width)
-            {
-                qDebug() << "Row " << i << "is too short.  Padding with 0";
-                while(currentCount < width)
-                {
-                    list->append("0");
-                    currentCount++;
-                }
-            }
-        }
-} */
-
-    vec.resize(rows*cols);
-    int index = 0;
+    std::vector<float> vec(static_cast<size_t>(rows*cols));
+    size_t index = 0;
 
     for(int i = 0; i < rows; i++)
     {
@@ -82,7 +55,7 @@ bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
             }
             else
             {
-                qDebug() << "FileReader: bad value. row: "
+                qDebug() << "Substituting 0 for bad CSV value. row: "
                          << i << "col: " << j;
                 vec[index++] = 0;
             }
