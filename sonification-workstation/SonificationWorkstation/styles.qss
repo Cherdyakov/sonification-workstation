@@ -12,6 +12,16 @@ border-bottom-style: solid;
 border-bottom-color: darkGrey;
 }
 
+QMenuBar::item::selected
+{
+background-color: nearBlack;
+}
+
+QMenu::item::selected
+{
+background-color: nearBlack;
+}
+
 QWidget
 {
 color: textColor;
@@ -23,10 +33,7 @@ color: textColor;
 background-color: middleGrey;
 }
 
-QMenu:item:selected
-{
-background-color: nearBlack;
-}
+
 
 QSplitter::handle {
 background-color: windowGrey;
