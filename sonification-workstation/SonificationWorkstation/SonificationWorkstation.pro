@@ -1,7 +1,10 @@
-# Created by and for Qt Creator This file was created for editing the project sources only.
-# You may attempt to use it for building too, by modifying this file here.
-
-#TARGET = SonificationWorkstation
+QT += qml quick widgets printsupport
+RESOURCES += qml.qrc \
+    styles.qrc
+TEMPLATE = app
+CONFIG += c++17
+# Default rules for deployment.
+include(deployment.pri)
 
 HEADERS = \
    $$PWD/external/exprtk/exprtk.hpp \
@@ -11,7 +14,7 @@ HEADERS = \
    $$PWD/callback.h \
    $$PWD/commands.h \
    $$PWD/constants.h \
-   $$PWD/dataprocessor.h \
+#   $$PWD/dataprocessor.h \
    $$PWD/dataset.h \
    $$PWD/enums.h \
    $$PWD/envelope.h \
@@ -73,7 +76,7 @@ SOURCES = \
    $$PWD/amod.cpp \
    $$PWD/AUD.qml \
    $$PWD/audifier.cpp \
-   $$PWD/dataprocessor.cpp \
+#   $$PWD/dataprocessor.cpp \
    $$PWD/dataset.cpp \
    $$PWD/deployment.pri \
    $$PWD/Editor.qml \
