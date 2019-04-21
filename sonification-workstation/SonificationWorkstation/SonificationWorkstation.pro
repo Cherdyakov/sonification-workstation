@@ -7,7 +7,8 @@ TEMPLATE = app
 
 CONFIG += c++17
 
-QMAKE_CXXFLAGS += -bigobj
+# For large object files in MSVCC
+win32: QMAKE_CXXFLAGS += -bigobj
 
 # Default rules for deployment.
 include(deployment.pri)
@@ -98,7 +99,7 @@ INCLUDEPATH = \
 # PortAudio (until we re-write with Gamma callback)
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64d
-else:unix: LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
+else:unix: LIBS += -lportaudio
 
 INCLUDEPATH += $$PWD/../Gamma/external/lib_win64
 DEPENDPATH += $$PWD/../Gamma/external/lib_win64
