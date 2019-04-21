@@ -10,8 +10,14 @@ CONFIG += c++17
 # For large object files in MSVCC
 win32: QMAKE_CXXFLAGS += -bigobj
 
-# Default rules for deployment.
-include(deployment.pri)
+# Default rules for deployment
+!include(deployment.pri) {
+    error("deployment.pri not found")
+}
+# Common includes
+!include(../common.pri) {
+    error("common.pri not found")
+}
 
 HEADERS = \
    $$PWD/external/exprtk/exprtk.hpp \
@@ -92,18 +98,6 @@ INCLUDEPATH = \
     $$PWD/. \
     $$PWD/external/qcustomplot
 
-!include(../common.pri) {
-    error("common.pri not found")
-}
-
-# PortAudio (until we re-write with Gamma callback)
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64d
-else:unix: LIBS += -lportaudio
-
-INCLUDEPATH += $$PWD/../Gamma/external/lib_win64
-DEPENDPATH += $$PWD/../Gamma/external/lib_win64
-
 # Gamma
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Gamma/release/ -lGamma
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Gamma/debug/ -lGamma
@@ -112,4 +106,15 @@ else:unix: LIBS += -L$$OUT_PWD/../Gamma/ -lGamma
 INCLUDEPATH += $$PWD/../Gamma
 DEPENDPATH += $$PWD/../Gamma
 
+# PortAudio (required for Gamma)
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64d
+else:unix: LIBS += -lportaudio
 
+INCLUDEPATH += $$PWD/../Gamma/external/lib_win64
+DEPENDPATH += $$PWD/../Gamma/external/lib_win64
+
+# LibSndFile (required for Gamma)
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1d
+#else:unix: LIBS += -llibsndfile-1

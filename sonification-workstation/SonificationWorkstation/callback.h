@@ -5,38 +5,36 @@
 
 #include <QDebug>
 #include "userdata.h"
-#include "portaudio.h"
+#include "Gamma/AudioIO.h"
+
+using namespace gam;
 
 namespace sow {
 
-static int callback( const void *inputBuffer,
-                     void *outputBuffer,
-                     unsigned long framesPerBuffer,
-                     const PaStreamCallbackTimeInfo* timeInfo,
-                     PaStreamCallbackFlags statusFlags,
-                     void *userData )
+void callback(AudioIOData& io)
 {
-    // Prevent unused parameter warnings.
-    Q_UNUSED(timeInfo)
-    Q_UNUSED(inputBuffer)
-    Q_UNUSED(statusFlags)
 
     // Cast data passed through stream to our struct.
-    UserData *uData = (UserData*)userData;
-    float *buffer = (float*) outputBuffer;
-    SynthItem* root = uData->root;
+    UserData& uData = io.user<UserData>();
+    SynthItem* root = uData.root;
+
+    while(io()) {
+        Frame frame = root->process();
+        frame *= 0.1f;
+        io.out(0) = frame.left;
+        io.out(1) = frame.right;
+    }
 
     // Write interleaved audio data.
-    for (unsigned int i=0; i < framesPerBuffer; ++i) {
-        Frame frame = root->process();
-        frame *= 0.1;
-        *buffer++ = frame.left;
-        *buffer++ = frame.right;
-    }
+//    for (unsigned int i=0; i < framesPerBuffer; ++i) {
+//        Frame frame = root->process();
+//        frame *= 0.1;
+//        *buffer++ = frame.left;
+//        *buffer++ = frame.right;
+//    }
 
     root->controlProcess();
 
-    return 0;
 }
 
 } // namespace sow

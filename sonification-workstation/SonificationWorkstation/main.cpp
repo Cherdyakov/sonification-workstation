@@ -6,12 +6,8 @@
 #include "transport.h"
 #include "filereader.h"
 #include "Gamma/Sync.h"
+#include "Gamma/AudioIO.h"
 #include "constants.h"
-
-void PrintAudioError(PaError e)
-{
-    qDebug("PortAudio error: %s\n", Pa_GetErrorText(e));
-}
 
 using namespace sow;
 
@@ -34,44 +30,24 @@ int main(int argc, char *argv[])
     UserData uData;
     uData.root =  main_window.getTransport();
 
-    main_window.show();
-
-    //initialize Gamma
+    // Initialize Gamma
     gam::Sync::master().spu(constants::SR);
 
-    PaStream *stream;
-    PaError err;
+    AudioIO audioIO(
+    128,        // block size
+    44100,      // sample rate (Hz)
+    callback,   // user-defined callback
+    &uData,     // user data
+    2,          // input channels to open
+    2           // output
+    );
+    audioIO.start();
 
-    err = Pa_Initialize();
-    if(err != paNoError) PrintAudioError(err);
-
-    // Open an audio I/O stream
-    err = Pa_OpenDefaultStream( &stream,
-                                0,
-                                2,
-                                paFloat32,
-                                constants::SR,
-                                constants::BLOCK_SIZE,
-                                callback,
-                                &uData );
-
-    if(err != paNoError) PrintAudioError(err);
-
-    err = Pa_StartStream( stream );
-    if(err != paNoError) PrintAudioError(err);
+    // Launch the GUI
+    main_window.show();
 
     // Place cleanup code after a.exec, before returning exit code
     const int ret = a.exec();
-
-    // Cleanup PortAudio
-    err = Pa_AbortStream( stream );
-    if(err != paNoError) PrintAudioError(err);
-
-    err = Pa_CloseStream( stream );
-    printf( "Pa_CloseStream PortAudio error: %s\n", Pa_GetErrorText(err));
-
-    err = Pa_Terminate();
-    if(err != paNoError) PrintAudioError(err);
 
     // Return
     return ret;

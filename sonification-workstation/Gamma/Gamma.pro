@@ -11,6 +11,10 @@ CONFIG+= staticlib
 
 DEFINES += GAMMA_LIBRARY
 
+!include(../common.pri) {
+    error("common.pri not found")
+}
+
 HEADERS = \
    $$PWD/external/include/portaudio.h \
    $$PWD/external/include/sndfile.h \
@@ -86,23 +90,3 @@ DEPENDPATH = \
     $$PWD/external/include \
     $$PWD/Gamma \
     $$PWD/src
-
-#LibSndFile
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1d
-else:unix: LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
-
-INCLUDEPATH += $$PWD/external/lib_win64
-DEPENDPATH += $$PWD/external/lib_win64
-
-#PortAudio
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -lportaudio_x64
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/external/lib_win64/ -lportaudio_x64d
-else:unix: LIBS += -L$$PWD/external/lib_win64/ -lportaudio_x64
-
-INCLUDEPATH += $$PWD/external/lib_win64
-DEPENDPATH += $$PWD/external/lib_win64
-
-!include(../common.pri) {
-    error("common.pri not found")
-}
