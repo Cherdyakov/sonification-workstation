@@ -3,14 +3,6 @@
 
 #TARGET = SonificationWorkstation
 
-TEMPLATE = app
-CONFIG += c++17
-RESOURCES += qml.qrc \
-            styles.qrc
-
-# Default rules for deployment
-include(deployment.pri)
-
 HEADERS = \
    $$PWD/external/exprtk/exprtk.hpp \
    $$PWD/external/qcustomplot/qcustomplot.h \

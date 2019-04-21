@@ -1,12 +1,7 @@
 # Created by and for Qt Creator This file was created for editing the project sources only.
 # You may attempt to use it for building too, by modifying this file here.
 
-QT       -= core gui
-
-TARGET = Gamma
-TEMPLATE = lib
-
-DEFINES += GAMMA_LIBRARY
+#TARGET = Gamma
 
 HEADERS = \
    $$PWD/external/include/portaudio.h \
@@ -57,6 +52,8 @@ HEADERS = \
    $$PWD/gamma.h
 
 SOURCES = \
+   $$PWD/external/lib_win64/libsndfile-1.lib \
+   $$PWD/external/lib_win64/portaudio_x64.lib \
    $$PWD/src/arr.cpp \
    $$PWD/src/AudioIO.cpp \
    $$PWD/src/Conversion.cpp \
@@ -80,18 +77,3 @@ INCLUDEPATH = \
 
 #DEFINES = 
 
-#LibSndFile
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1d
-else:unix: LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
-
-INCLUDEPATH += $$PWD/external/lib_win64
-DEPENDPATH += $$PWD/external/lib_win64
-
-#PortAudio
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -lportaudio_x64
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/external/lib_win64/ -lportaudio_x64d
-else:unix: LIBS += -L$$PWD/external/lib_win64/ -lportaudio_x64
-
-INCLUDEPATH += $$PWD/external/lib_win64
-DEPENDPATH += $$PWD/external/lib_win64
