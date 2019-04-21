@@ -142,5 +142,9 @@ INCLUDEPATH = \
     $$PWD/. \
     $$PWD/external/qcustomplot
 
+!include(../common.pri) {
+    error("common.pri not found")
+}
+
 #DEFINES = 
 

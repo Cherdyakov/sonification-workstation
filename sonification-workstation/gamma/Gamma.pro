@@ -78,6 +78,12 @@ INCLUDEPATH = \
     $$PWD/Gamma \
     $$PWD/src
 
+DEPENDPATH = \
+    $$PWD/. \
+    $$PWD/external/include \
+    $$PWD/Gamma \
+    $$PWD/src
+
 #LibSndFile
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1d
@@ -93,3 +99,7 @@ else:unix: LIBS += -L$$PWD/external/lib_win64/ -lportaudio_x64
 
 INCLUDEPATH += $$PWD/external/lib_win64
 DEPENDPATH += $$PWD/external/lib_win64
+
+!include(../common.pri) {
+    error("common.pri not found")
+}
