@@ -28,6 +28,10 @@ QMenu:item:selected
 background-color: nearBlack;
 }
 
+QSplitter::handle {
+background-color: windowGrey;
+}
+
 QCheckBox#InterpolateBox
 {
 border: none;
