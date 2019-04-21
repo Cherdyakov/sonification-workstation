@@ -7,6 +7,8 @@ TEMPLATE = app
 
 CONFIG += c++17
 
+RC_ICONS = sow.ico
+
 # For large object files in MSVCC
 win32: QMAKE_CXXFLAGS += -bigobj
 
@@ -118,3 +120,7 @@ DEPENDPATH += $$PWD/../Gamma/external/lib_win64
 #win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
 #else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1d
 #else:unix: LIBS += -llibsndfile-1
+
+DISTFILES += \
+    sow.ico \
+    sow.ico
