@@ -1,8 +1,14 @@
 QT += qml quick widgets printsupport
+
 RESOURCES += qml.qrc \
     styles.qrc
+
 TEMPLATE = app
+
 CONFIG += c++17
+
+QMAKE_CXXFLAGS += -bigobj
+
 # Default rules for deployment.
 include(deployment.pri)
 
@@ -50,82 +56,27 @@ HEADERS = \
 
 SOURCES = \
    $$PWD/external/qcustomplot/qcustomplot.cpp \
-   $$PWD/images/alpha.png \
-   $$PWD/images/AM.png \
-   $$PWD/images/AUD.png \
-   $$PWD/images/down-arrow.svg \
-   $$PWD/images/ENV.png \
-   $$PWD/images/EQ.png \
-   $$PWD/images/FM.png \
-   $$PWD/images/interpolate-off.svg \
-   $$PWD/images/interpolate-on.svg \
-   $$PWD/images/logo.png \
-   $$PWD/images/logo.svg \
-   $$PWD/images/loop-off.svg \
-   $$PWD/images/loop-on.svg \
-   $$PWD/images/MOD.png \
-   $$PWD/images/NSE.png \
-   $$PWD/images/OSC.png \
-   $$PWD/images/OUT.png \
-   $$PWD/images/PAN.png \
-   $$PWD/images/pause.svg \
-   $$PWD/images/play.svg \
-   $$PWD/images/up-arrow.svg \
-   $$PWD/images/VOL.png \
-   $$PWD/AM.qml \
    $$PWD/amod.cpp \
-   $$PWD/AUD.qml \
    $$PWD/audifier.cpp \
 #   $$PWD/dataprocessor.cpp \
    $$PWD/dataset.cpp \
-   $$PWD/deployment.pri \
-   $$PWD/Editor.qml \
-   $$PWD/EditorDoubleSpinBox.qml \
-   $$PWD/EditorFixed.qml \
-   $$PWD/EditorFloatParameter.qml \
-   $$PWD/EditorLabel.qml \
-   $$PWD/EditorLayout.qml \
-   $$PWD/EditorMapper.qml \
-   $$PWD/EditorMenu.qml \
-   $$PWD/EditorParameterHeader.qml \
-   $$PWD/EditorScaler.qml \
-   $$PWD/EditorTitle.qml \
-   $$PWD/ENV.qml \
    $$PWD/envelope.cpp \
-   $$PWD/EQ.qml \
    $$PWD/equalizer.cpp \
    $$PWD/filereader.cpp \
-   $$PWD/FM.qml \
    $$PWD/fmod.cpp \
    $$PWD/granulator.cpp \
-   $$PWD/ItemCreation.js \
    $$PWD/main.cpp \
-   $$PWD/main.qml \
    $$PWD/mainwindow.cpp \
    $$PWD/noise.cpp \
-   $$PWD/NSE.qml \
-   $$PWD/OSC.qml \
    $$PWD/oscillator.cpp \
-   $$PWD/OUT.qml \
-   $$PWD/Palette.qml \
-   $$PWD/PaletteItem.qml \
-   $$PWD/PAN.qml \
    $$PWD/panner.cpp \
    $$PWD/parameter.cpp \
    $$PWD/parameterfloat.cpp \
    $$PWD/parameterfloatinterface.cpp \
    $$PWD/parameterindex.cpp \
    $$PWD/parameterindexinterface.cpp \
-   $$PWD/PatchManager.qml \
    $$PWD/playhead.cpp \
-   $$PWD/qml.qrc \
-   $$PWD/README.md \
-   $$PWD/SessionCode.js \
-   $$PWD/Style.js \
-   $$PWD/styles.qrc \
-   $$PWD/styles.qss \
    $$PWD/synthitem.cpp \
-   $$PWD/SynthItem.qml \
    $$PWD/track.cpp \
    $$PWD/trackheader.cpp \
    $$PWD/trackname.cpp \
@@ -134,8 +85,6 @@ SOURCES = \
    $$PWD/transport.cpp \
    $$PWD/transportwidget.cpp \
    $$PWD/utility.cpp \
-   $$PWD/Utils.js \
-   $$PWD/VOL.qml \
    $$PWD/volume.cpp
 
 INCLUDEPATH = \
@@ -146,5 +95,20 @@ INCLUDEPATH = \
     error("common.pri not found")
 }
 
-#DEFINES = 
+# PortAudio (until we re-write with Gamma callback)
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64d
+else:unix: LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
+
+INCLUDEPATH += $$PWD/../Gamma/external/lib_win64
+DEPENDPATH += $$PWD/../Gamma/external/lib_win64
+
+# Gamma
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Gamma/release/ -lGamma
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Gamma/debug/ -lGamma
+else:unix: LIBS += -L$$OUT_PWD/../Gamma/ -lGamma
+
+INCLUDEPATH += $$PWD/../Gamma
+DEPENDPATH += $$PWD/../Gamma
+
 

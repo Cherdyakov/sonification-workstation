@@ -4,7 +4,10 @@
 QT       -= core gui
 
 TARGET = Gamma
+
 TEMPLATE = lib
+
+CONFIG+= staticlib
 
 DEFINES += GAMMA_LIBRARY
 
