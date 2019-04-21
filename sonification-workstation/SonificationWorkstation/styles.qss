@@ -83,6 +83,7 @@ padding: 2px;
 QScrollArea#ScrollArea
 {
 background-color: darkGrey;
+border-style: none;
 }
 
 QPushButton#PauseButton
