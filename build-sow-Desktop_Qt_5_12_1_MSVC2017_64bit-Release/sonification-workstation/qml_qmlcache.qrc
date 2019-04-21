@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<RCC>
+    <qresource prefix="/">
+        <file alias="images/NSE.png">../../sow/sonification-workstation/images/NSE.png</file>
+        <file alias="images/VOL.png">../../sow/sonification-workstation/images/VOL.png</file>
+        <file alias="images/PAN.png">../../sow/sonification-workstation/images/PAN.png</file>
+        <file alias="images/OSC.png">../../sow/sonification-workstation/images/OSC.png</file>
+        <file alias="images/MOD.png">../../sow/sonification-workstation/images/MOD.png</file>
+        <file alias="images/ENV.png">../../sow/sonification-workstation/images/ENV.png</file>
+        <file alias="images/AUD.png">../../sow/sonification-workstation/images/AUD.png</file>
+        <file alias="images/OUT.png">../../sow/sonification-workstation/images/OUT.png</file>
+        <file alias="images/EQ.png">../../sow/sonification-workstation/images/EQ.png</file>
+        <file alias="images/alpha.png">../../sow/sonification-workstation/images/alpha.png</file>
+        <file alias="images/play.svg">../../sow/sonification-workstation/images/play.svg</file>
+        <file alias="images/pause.svg">../../sow/sonification-workstation/images/pause.svg</file>
+        <file alias="images/down-arrow.svg">../../sow/sonification-workstation/images/down-arrow.svg</file>
+        <file alias="images/up-arrow.svg">../../sow/sonification-workstation/images/up-arrow.svg</file>
+        <file alias="images/interpolate-off.svg">../../sow/sonification-workstation/images/interpolate-off.svg</file>
+        <file alias="images/interpolate-on.svg">../../sow/sonification-workstation/images/interpolate-on.svg</file>
+        <file alias="images/loop-off.svg">../../sow/sonification-workstation/images/loop-off.svg</file>
+        <file alias="images/loop-on.svg">../../sow/sonification-workstation/images/loop-on.svg</file>
+        <file alias="images/AM.png">../../sow/sonification-workstation/images/AM.png</file>
+        <file alias="images/FM.png">../../sow/sonification-workstation/images/FM.png</file>
+    </qresource>
+</RCC>
