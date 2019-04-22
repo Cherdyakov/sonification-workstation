@@ -5,6 +5,8 @@ RESOURCES += qml.qrc \
 
 TEMPLATE = app
 
+TARGET = "Sonification Workstation"
+
 CONFIG += c++17
 
 RC_ICONS = sow.ico
@@ -122,5 +124,4 @@ DEPENDPATH += $$PWD/../Gamma/external/lib_win64
 #else:unix: LIBS += -llibsndfile-1
 
 DISTFILES += \
-    sow.ico \
     sow.ico
