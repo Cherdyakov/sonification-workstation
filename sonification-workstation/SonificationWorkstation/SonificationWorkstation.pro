@@ -9,7 +9,9 @@ TARGET = "Sonification Workstation"
 
 CONFIG += c++17
 
-RC_ICONS = sow.ico
+# Application icons
+win32: RC_ICONS = sow.ico
+macx: ICON = sow.icns
 
 # For large object files in MSVCC
 win32: QMAKE_CXXFLAGS += -bigobj
@@ -113,10 +115,13 @@ DEPENDPATH += $$PWD/../Gamma
 # PortAudio (required for Gamma)
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64d
-else:unix: LIBS += -lportaudio
+else:unix:!macx: LIBS += -lportaudio
+else:macx: LIBS += -L$$PWD/../Gamma/external/lib_osx/ -lportaudio.2
 
 INCLUDEPATH += $$PWD/../Gamma/external/lib_win64
 DEPENDPATH += $$PWD/../Gamma/external/lib_win64
+INCLUDEPATH += $$PWD/../Gamma/external/lib_osx
+DEPENDPATH += $$PWD/../Gamma/external/lib_osx
 
 # LibSndFile (required for Gamma)
 #win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
