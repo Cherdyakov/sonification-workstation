@@ -7,7 +7,9 @@ TEMPLATE = app
 
 CONFIG += c++17
 
-RC_ICONS = sow.ico
+# Application icons
+win32: RC_ICONS = sow.ico
+macx: ICON = sow.icns
 
 # For large object files in MSVCC
 win32: QMAKE_CXXFLAGS += -bigobj
