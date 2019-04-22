@@ -111,10 +111,16 @@ DEPENDPATH += $$PWD/../Gamma
 # PortAudio (required for Gamma)
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64d
-else:unix: LIBS += -lportaudio
+else:unix:!macx: LIBS += -lportaudio
+else:macx: LIBS += -L$$PWD/../Gamma/external/lib_osx/ -lportaudio.2
+
+
+macx:QMAKE_LFLAGS += -framework CoreAudio
 
 INCLUDEPATH += $$PWD/../Gamma/external/lib_win64
 DEPENDPATH += $$PWD/../Gamma/external/lib_win64
+INCLUDEPATH += $$PWD/../Gamma/external/lib_osx
+DEPENDPATH += $$PWD/../Gamma/external/lib_osx
 
 # LibSndFile (required for Gamma)
 #win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
@@ -122,5 +128,10 @@ DEPENDPATH += $$PWD/../Gamma/external/lib_win64
 #else:unix: LIBS += -llibsndfile-1
 
 DISTFILES += \
-    sow.ico \
     sow.ico
+
+#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../Gamma/external/lib_osx/release/libportaudio.a
+#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../Gamma/external/lib_osx/debug/libportaudio.a
+#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../Gamma/external/lib_osx/release/portaudio.lib
+#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../Gamma/external/lib_osx/debug/portaudio.lib
+#else:unix: PRE_TARGETDEPS += $$PWD/../Gamma/external/lib_osx/libportaudio.a
