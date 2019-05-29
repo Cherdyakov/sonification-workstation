@@ -81,3 +81,4 @@ var quickViewColor = "#323232"
 // Palette
 var paletteColor = "dark grey"
 var paletteOpacity = 1
+var paletteItemDiameter = 32
