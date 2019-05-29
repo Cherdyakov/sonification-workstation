@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Window 2.12
 import SoW 1.0
 import ENUMS 1.0
 import "Style.js" as Style
@@ -7,7 +8,8 @@ Item {
 
     id: root
     z: Style.itemZ + zModifier
-    width: Style.itemHeight; height: Style.itemWidth
+    width: Style.itemDiameter * Screen.devicePixelRatio
+    height: Style.itemDiameter * Screen.devicePixelRatio
 
     // Random name for identifying in session files.
     property string name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -105,7 +107,7 @@ Item {
         id: rect
         anchors.fill: parent
         color: mute ? Style.itemMuteColor : mainColor
-        radius: Style.itemRadius
+        radius: width * 0.5
         border.color: root.activeFocus ? Style.itemActiveFocusColor : textColor
         border.width: 4
         opacity: created ? 1 : 0.4

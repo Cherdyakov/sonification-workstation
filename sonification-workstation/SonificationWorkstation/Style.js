@@ -44,9 +44,8 @@ var itemZ = 300
 var itemEditorZ = 400
 
 // SynthItem.qml style
-var itemHeight = 60
-var itemWidth = 60
-var itemRadius = 40
+var itemDiameter = 32
+var itemRadius = itemDiameter * 0.5
 var itemTextColor = kWhite
 var itemMuteColor = kGrey
 var itemActiveFocusColor = kOrange
@@ -81,4 +80,4 @@ var quickViewColor = "#323232"
 // Palette
 var paletteColor = "dark grey"
 var paletteOpacity = 1
-var paletteItemDiameter = 32
+var paletteItemDiameter = itemDiameter * 0.8
