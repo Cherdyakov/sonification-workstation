@@ -1,5 +1,7 @@
 import QtQuick 2.12
+import QtQuick.Window 2.12
 import "ItemCreation.js" as Code
+import "Style.js" as Style
 
 Image {
     id: paletteItem
@@ -9,8 +11,8 @@ Image {
 
     source: image
 
-    width: 34
-    height: 34
+    width: Style.paletteItemDiameter * Screen.devicePixelRatio
+    height: Style.paletteItemDiameter * Screen.devicePixelRatio
 
     signal itemCreated(var item)
 

@@ -114,7 +114,7 @@ DEPENDPATH += $$PWD/../Gamma
 
 # PortAudio (required for Gamma)
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64d
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
 else:unix:!macx: LIBS += -lportaudio
 else:macx: LIBS += -L$$PWD/../Gamma/external/lib_osx/ -lportaudio.2
 
