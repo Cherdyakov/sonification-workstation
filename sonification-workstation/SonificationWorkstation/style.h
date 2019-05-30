@@ -21,9 +21,11 @@ public:
         map_.insert("nearBlack", "#202020");
     }
 
-    void setStyle() const
+    void setStyle(const QString theme) const
     {
-        QString style = readStyleSheet();
+
+        QString path = ":/" + theme + ".qss";
+        QString style = readStyleSheet(path);
 
         // Replace all variables (keys) in style with values.
         QMap<QString, QString>::ConstIterator it = map_.constBegin();
@@ -36,10 +38,10 @@ public:
 
 private:
 
-    QString readStyleSheet() const
+    QString readStyleSheet(const QString path) const
     {
         // Load stylesheet.
-        QFile file(":/styles.qss");
+        QFile file(path);
         file.open(QFile::ReadOnly);
         QString stylesheet = QLatin1String(file.readAll());
         return stylesheet;

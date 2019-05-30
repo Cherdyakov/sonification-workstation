@@ -6,6 +6,7 @@
 #include <QQuickView>
 #include <QAction>
 #include <QLayout>
+#include <QSettings>
 
 #include "trackview.h"
 #include "transport.h"

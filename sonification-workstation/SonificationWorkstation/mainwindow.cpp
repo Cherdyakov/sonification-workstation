@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // Set the title and size of the application window.
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.8);
-    style_.setStyle();
+    style_.setStyle("kelly");
 
 
     PlayHead* playHead = new PlayHead(this);                                            // Playback cursor
