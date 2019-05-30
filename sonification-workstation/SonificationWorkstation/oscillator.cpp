@@ -41,6 +41,13 @@ Frame Oscillator::process()
     }
     if(fMod) freq += fmFrame.left;
 
+    // Guard against freq = 0.0f,
+    // which will break the Gamma oscillator.
+    if(freq == 0.0f) {
+        frame = 0.0f;
+        return frame;
+    }
+
     //set frequency of generator
     gen_.freq(freq);
 
