@@ -158,13 +158,29 @@ void MainWindow::createMenus()
     connect(quitAct, &QAction::triggered,
             this, &MainWindow::onQuit);
 
-    // Create and populate the menus.
+    // Set default theme.
+    QAction *defaultThemeAct = new QAction(tr("Default"), this);
+    connect(defaultThemeAct, &QAction::triggered,
+            this, &MainWindow::onDefaultThemeSet);
+
+    // Set high-contrast (Kelly-color) theme.
+    QAction *kellyThemeAct = new QAction(tr("High Contrast"), this);
+    connect(kellyThemeAct, &QAction::triggered,
+            this, &MainWindow::onContrastThemeSet);
+
+    // Create and populate File menu.
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
     fileMenu->addAction(openSessionAct);
     fileMenu->addAction(saveSessionAct);
     fileMenu->addAction(saveSessionAsAct);
     fileMenu->addAction(importDatasetFileAct);
     fileMenu->addAction(quitAct);
+
+    // Create and populate Edit menu.
+    QMenu *editMenu = menuBar()->addMenu(tr("Edit"));
+    QMenu *themeMenu = editMenu->addMenu(tr("Set Theme"));
+     themeMenu->addAction(defaultThemeAct);
+     themeMenu->addAction(kellyThemeAct);
 }
 
 void MainWindow::writeSessionFile()
@@ -265,5 +281,17 @@ void MainWindow::onImportDataset()
         transport_->onImportDataset(datafile_);
     }
 }
+
+void MainWindow::onDefaultThemeSet()
+{
+    style_.setStyle("default");
+}
+
+void MainWindow::onContrastThemeSet()
+{
+    style_.setStyle("kelly");
+}
+
+
 
 

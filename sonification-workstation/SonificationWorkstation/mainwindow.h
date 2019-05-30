@@ -53,6 +53,8 @@ private slots:
     void onSaveAs();
     void onOpen();
     void onImportDataset();
+    void onDefaultThemeSet();
+    void onContrastThemeSet();
 
 };
 
