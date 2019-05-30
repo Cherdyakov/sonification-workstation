@@ -17,6 +17,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
+    QCoreApplication::setOrganizationName("Sonification Workstation");
+    QCoreApplication::setOrganizationDomain("sonificationworkstation.org");
+    QCoreApplication::setApplicationName("Sonification Workstation");
+
     QApplication a(argc, argv);
     qmlRegisterType<SynthItem>("SoW", 1, 0, "QtSynthItem");
     qmlRegisterType<Oscillator>("SoW", 1, 0, "QtOscillator");
