@@ -70,7 +70,7 @@ void TrackPlotter::plot(QVector<double> data)
     yBounds.lower = -(yAxis->range().maxRange);
     rescaleAxes();
     // Add a little padding to the yRange
-    yAxis->scaleRange(1.05, yAxis->range().center());
+    yAxis->scaleRange(1.03, yAxis->range().center());
     replot();
     // set bounds based on new data
     xBounds = xAxis->range();
