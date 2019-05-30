@@ -1,13 +1,23 @@
 #include "mainwindow.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     // Set the title and size of the application window.
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.8);
-    style_.setStyle("kelly");
 
+    // Set application styles (from theme setting).
+    QSettings settings;
+    if(!settings.contains("theme"))
+    {
+        settings.setValue("theme", "default");
+        qDebug() << "Setting default theme.";
+    }
+    QString style = settings.value("theme").toString();
+    style_.setStyle(style);
 
+    // Construct the application window.
     PlayHead* playHead = new PlayHead(this);                                            // Playback cursor
     QWidget *centralWidget = new QWidget;                                               // Application top-level widget
     QHBoxLayout* centralLayout = new QHBoxLayout(this);                                 // Application top-level layout
