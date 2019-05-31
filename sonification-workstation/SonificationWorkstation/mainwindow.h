@@ -42,6 +42,7 @@ private:
     void createMenus();
     void writeSessionFile();
     void setTheme(const QString theme);
+
 signals:
 
     void saveSession();

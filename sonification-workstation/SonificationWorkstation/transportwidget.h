@@ -59,9 +59,9 @@ public slots:
     void onSpeedChanged(int speed);
     void onInterpolateChanged(bool interpolation);
     void onDatasetChanged(sow::Dataset *dataset);
+    void onPauseButtonReleased();
 
 private slots:
-    void onPauseButtonReleased();
     void onLoopButtonReleased();
     void onSpeedBoxValueChanged(int speed);
     void onInterpolateBoxStateChanged(int state);

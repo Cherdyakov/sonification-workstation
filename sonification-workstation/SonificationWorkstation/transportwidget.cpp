@@ -1,5 +1,6 @@
 #include "transportwidget.h"
 #include "constants.h"
+#include <QDebug>
 
 TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 {

@@ -146,14 +146,14 @@ void MainWindow::createMenus()
             this, &MainWindow::onImportDataset);
 
     // Quit application.
-    QAction *quitAct = new QAction(tr("Exit"), this);
+    QAction *quitAct = new QAction(tr("Quit"), this);
 #ifdef Q_OS_WIN32
     // There is no default Quit key command on Windows
     quitAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
 #else
     quitAct->setShortcut(QKeySequence::Quit);
 #endif
-    quitAct->setStatusTip(tr("Exit"));
+    quitAct->setStatusTip(tr("Quit Sonification Workstation"));
     connect(quitAct, &QAction::triggered,
             this, &MainWindow::onQuit);
 
@@ -186,6 +186,12 @@ void MainWindow::createMenus()
      themeMenu->addAction(defaultThemeAct);
      themeMenu->addAction(kellyThemeAct);
      themeMenu->addAction(simpleThemeAct);
+
+     // Global keyboard shortcuts.
+     QShortcut* pauseShortcut = new QShortcut(this);
+     pauseShortcut->setKey(Qt::Key_Space);
+     connect(pauseShortcut, &QShortcut::activated,
+             transportWidget_, &TransportWidget::onPauseButtonReleased);
 }
 
 void MainWindow::writeSessionFile()
@@ -311,7 +317,6 @@ void MainWindow::onSimpleThemeSet()
 {
     setTheme("simple");
 }
-
 
 
 
