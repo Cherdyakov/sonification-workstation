@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     transport_ = new Transport(this);                                                    // Represents loaded project
 
     quickView_->rootContext()->setContextProperty("transport", transport_);
+    quickView_->rootContext()->setContextProperty("themeManager", themeManager_);
     quickView_->rootContext()->setContextProperty("mainwindow", this);
     quickView_->setSource(QUrl("qrc:/main.qml"));
 

@@ -7,7 +7,8 @@ namespace sow {
 
 ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
 {
-
+    textColor_ = "#FFFFFF";
+    oscColor_ = "FF0000";
 }
 
 void ThemeManager::setOscColor(const QString &oscColor)
@@ -172,12 +173,27 @@ void ThemeManager::setBoundProperties(QString style)
     int top;
     int tail;
 
+    QStringList keys = {
+        "oscColor",
+        "amColor",
+        "fmColor",
+        "audColor",
+        "panColor",
+        "envColor",
+        "volColor",
+        "nseColor",
+        "eqColor",
+        "outColor",
+        "textColor",
+    };
+
     style.remove(" ");
     QString key = "oscColor:";
     top = style.indexOf(key) + key.length();
     tail = style.indexOf(";", top);
-    QStringRef oscColor(&style, top, tail - top);
-    qDebug() << "OSC COLOR: " << oscColor;
+    QStringRef osc(&style, top, tail - top);
+    setOscColor(osc.toString());
+    qDebug() << "OSC COLOR: " << oscColor();
 }
 
 } // End namespace sow.

@@ -22,7 +22,7 @@ Item {
     property bool created: false
     property string label: "SON"
     property string mainColor
-    property string textColor: themeManager.itemTextColor
+    property string textColor: themeManager.textColor
     property QtSynthItem implementation: null // the CPP implementation of this SynthItem
     property var zModifier: root.activeFocus === true ? 10 : 0
 

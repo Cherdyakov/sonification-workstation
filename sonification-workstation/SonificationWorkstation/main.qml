@@ -19,11 +19,6 @@ Rectangle
     property alias canvas: canvas
     property alias workspace: workspace
 
-    // C++ class that manages UI themes.
-    QtThemeManager {
-        id: themeManager
-    }
-
     // Flickable widget container, where SynthItems are manipulated.
     Flickable {
         id: workspace
