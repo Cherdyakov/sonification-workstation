@@ -65,7 +65,8 @@ HEADERS = \
    $$PWD/transportwidget.h \
    $$PWD/userdata.h \
    $$PWD/utility.h \
-   $$PWD/volume.h
+   $$PWD/volume.h \
+    thememanager.h
 
 SOURCES = \
    $$PWD/external/qcustomplot/qcustomplot.cpp \
@@ -98,7 +99,8 @@ SOURCES = \
    $$PWD/transport.cpp \
    $$PWD/transportwidget.cpp \
    $$PWD/utility.cpp \
-   $$PWD/volume.cpp
+   $$PWD/volume.cpp \
+    thememanager.cpp
 
 INCLUDEPATH = \
     $$PWD/. \
