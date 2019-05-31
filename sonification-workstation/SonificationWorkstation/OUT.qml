@@ -7,8 +7,6 @@ SynthItem {
     id: root
     label: qsTr("OUT")
     type: ENUMS.TRANSPORT
-    mainColor: Style.outColor
-    textColor: Style.itemTextColor
     implementation: transport
 
     Component.onCompleted: {

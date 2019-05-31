@@ -10,7 +10,7 @@ import "Utils.js" as Utils
 Rectangle
 {
     id: root
-    color: Style.quickViewColor
+    color: themeManager.themeMap["backgroundColor"]
     anchors.fill: parent
 
     // Holds every item in the workspace for iterating.

@@ -11,8 +11,6 @@ SynthItem {
     label: qsTr("ENV")
     type: ENUMS.ENVELOPE
     output: ENUMS.AUDIO
-    mainColor: Style.envColor
-    textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()

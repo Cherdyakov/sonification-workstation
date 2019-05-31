@@ -11,8 +11,6 @@ SynthItem {
     label: qsTr("AUD")
     type: ENUMS.AUDIFIER
     output: ENUMS.AUDIO
-    mainColor: Style.audColor
-    textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()

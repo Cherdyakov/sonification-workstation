@@ -143,14 +143,15 @@ color: #202020;
 SynthItemColors
 {
 OSC: #A1CAF1;
-amColor: #F99379;
-fmColor: #E68FAC;
-audColor: #C2B280;
-panColor: #875692;
-envColor: #0067A5;
-volColor: #F3C300;
-nseColor: #BE0032;
-eqColor: #008856;
-outColor: #222222;
+AM: #F99379;
+FM: #E68FAC;
+AUD: #C2B280;
+PAN: #875692;
+ENV: #0067A5;
+VOL: #F3C300;
+NSE: #BE0032;
+EQ: #008856;
+OUT: #222222;
 textColor: #F2F3F4;
+backgroundColor: #323232;
 }

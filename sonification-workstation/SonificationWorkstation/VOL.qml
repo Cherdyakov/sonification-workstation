@@ -11,8 +11,6 @@ SynthItem {
     label: qsTr("VOL")
     type: ENUMS.VOLUME
     output: ENUMS.AUDIO
-    mainColor: Style.volColor
-    textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()

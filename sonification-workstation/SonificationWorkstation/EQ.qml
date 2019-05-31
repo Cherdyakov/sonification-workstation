@@ -11,8 +11,6 @@ SynthItem {
     label: qsTr("EQ")
     type: ENUMS.EQUALIZER
     output: ENUMS.AUDIO
-    mainColor: Style.eqColor
-    textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()

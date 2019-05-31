@@ -11,8 +11,6 @@ SynthItem {
     label: qsTr("PAN")
     type: ENUMS.PANNER
     output: ENUMS.AUDIO
-    mainColor: Style.panColor
-    textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()

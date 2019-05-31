@@ -14,31 +14,8 @@ class ThemeManager : public QObject
 public:
     explicit ThemeManager(QObject *parent = nullptr);
 
-    // QL property binding functions
-//    void setOscColor(const QString &oscColor);
-//    QString oscColor();
-//    void setAmColor(const QString &amColor);
-//    QString amColor();
-//    void setFmColor(const QString &fmColor);
-//    QString fmColor();
-//    void setAudColor(const QString &audColor);
-//    QString audColor();
-//    void setPanColor(const QString &panColor);
-//    QString panColor();
-//    void setEnvColor(const QString &panColor);
-//    QString envColor();
-//    void setVolColor(const QString &volColor);
-//    QString volColor();
-//    void setEqColor(const QString &eqColor);
-//    QString eqColor();
-//    void setNseColor(const QString &nseColor);
-//    QString nseColor();
-//    void setOutColor(const QString &outColor);
-//    QString outColor();
-//    void setTextColor(const QString &textColor);
-//    QString textColor();
-
-    void setThemeMap(const QVariantMap &map);
+    // QML property binding functions
+    void setThemeMap(const QVariantMap &themeMap);
     QVariantMap themeMap();
 
     void loadTheme(QString path);
@@ -47,23 +24,11 @@ private:
 
     QVariantMap themeMap_;
 
-    void setBoundProperties(QString style);
+    void setQmlTheme(QString style);
 
 signals:
 
     // Notify signals
-    void oscColorChanged();
-    void amColorChanged();
-    void fmColorChanged();
-    void audColorChanged();
-    void panColorChanged();
-    void envColorChanged();
-    void volColorChanged();
-    void nseColorChanged();
-    void eqColorChanged();
-    void outColorChanged();
-    void textColorChanged();
-
     void themeMapChanged();
 
 public slots:
