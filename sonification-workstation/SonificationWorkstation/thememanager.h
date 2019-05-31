@@ -63,6 +63,8 @@ private:
     QString outColor_;
     QString textColor_;
 
+    void setBoundProperties(QString style);
+
 signals:
 
     // Notify signals

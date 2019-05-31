@@ -1,12 +1,13 @@
 #include "thememanager.h"
 #include <QFile>
 #include <QApplication>
+#include <QDebug>
 
 namespace sow {
 
 ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
 {
-    oscColor_ = "#FFFFFF";
+
 }
 
 void ThemeManager::setOscColor(const QString &oscColor)
@@ -157,13 +158,18 @@ void ThemeManager::loadTheme(QString path)
     // Read the stylesheet from disk
     QFile file(path);
     file.open(QFile::ReadOnly);
-    QString style = QLatin1String(file.readAll());
+    QString fileText = QLatin1String(file.readAll());
     // Split into the QML section and the genuine Qt Stylesheet
-
+    QStringList styles = fileText.split("SynthItems");
     // Set all bound QML properties
-
+    setBoundProperties(styles[1]);
     // Apply the StyleSheet
-    qApp->setStyleSheet(style);
+    qApp->setStyleSheet(styles[0]);
+}
+
+void ThemeManager::setBoundProperties(QString style)
+{
+    qDebug() << style;
 }
 
 } // End namespace sow.
