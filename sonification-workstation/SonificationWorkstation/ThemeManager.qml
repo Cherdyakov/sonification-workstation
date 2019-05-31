@@ -26,30 +26,18 @@ QtObject {
 //    property var kRedOrange  : "#E25822"
 //    property var kOliveGreen : "#2B3D26"
 
-    property  var oscColor: kLtBlue
-    property  var amColor: ""
-    property  var fmColor: ""
-    property  var audColor: ""
-    property  var panColor: ""
-    property  var envColor: ""
-    property  var volColor: ""
-    property  var nseColor: ""
-    property  var eqColor: ""
-    property  var outColor: ""
+    property var oscColor: "#A1CAF1"
+    property var amColor: "#F99379"
+    property var fmColor: ""
+    property var audColor: ""
+    property var panColor: ""
+    property var envColor: ""
+    property var volColor: ""
+    property var nseColor: ""
+    property var eqColor: ""
+    property var outColor: ""
 
-    function getItemColor(item)
-    {
-        var color;
-        switch(item) {
-            case "OSC":
-            color = oscColor
-            break;
-            default:
-                color = kYlloGreen
-        }
-
-        return color;
-    }
+    property var itemTextColor: "#FFFFFF"
 
 
 }

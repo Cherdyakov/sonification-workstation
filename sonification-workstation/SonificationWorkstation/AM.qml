@@ -11,7 +11,7 @@ SynthItem {
     label: qsTr("AM")
     type: ENUMS.AMOD
     output: ENUMS.AM
-    mainColor: Style.amColor
+    mainColor: themeManager.amColor
     textColor: Style.itemTextColor
 
     Component.onCompleted: {
