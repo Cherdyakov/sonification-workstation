@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     resize(QDesktopWidget().availableGeometry(this).size() * 0.8);
 
     // Set application theme (stylesheet).
+    themeManager_ = new ThemeManager(this);
     QSettings settings;
     if(!settings.contains("theme"))
     {
@@ -205,10 +206,7 @@ void MainWindow::setTheme(const QString theme)
     settings.setValue("theme", theme);
     // Read the stylesheet from disk and apply it.
     QString path = ":/" + theme + ".qss";
-    QFile file(path);
-    file.open(QFile::ReadOnly);
-    QString style = QLatin1String(file.readAll());
-    qApp->setStyleSheet(style);
+    themeManager_->loadTheme(path);
 }
 
 void MainWindow::onQuit()

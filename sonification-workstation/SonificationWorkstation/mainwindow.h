@@ -12,6 +12,7 @@
 #include "transport.h"
 #include "transportwidget.h"
 #include "filereader.h"
+#include "thememanager.h"
 
 using namespace sow;
 
@@ -31,6 +32,7 @@ private:
     Transport* transport_;
     TransportWidget* transportWidget_;
     QQuickView* quickView_;
+    ThemeManager* themeManager_;
 
     QString datafile_;
     QString sessionfile_;

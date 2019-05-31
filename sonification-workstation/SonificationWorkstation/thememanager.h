@@ -10,7 +10,7 @@ class ThemeManager : public QObject
     Q_OBJECT
     Q_PROPERTY(QString oscColor READ oscColor WRITE setOscColor NOTIFY oscColorChanged)
     Q_PROPERTY(QString amColor READ amColor WRITE setAmColor NOTIFY amColorChanged)
-    Q_PROPERTY(QString fmColor READ fmColor WRITE setFmColorr NOTIFY fmColorChanged)
+    Q_PROPERTY(QString fmColor READ fmColor WRITE setFmColor NOTIFY fmColorChanged)
     Q_PROPERTY(QString audColor READ audColor WRITE setAudColor NOTIFY audColorChanged)
     Q_PROPERTY(QString panColor READ panColor WRITE setPanColor NOTIFY panColorChanged)
     Q_PROPERTY(QString envColor READ envColor WRITE setEnvColor NOTIFY envColorChanged)
@@ -34,18 +34,20 @@ public:
     QString audColor();
     void setPanColor(const QString &panColor);
     QString panColor();
-    void setEnvColor(const QString &envColor);
+    void setEnvColor(const QString &panColor);
     QString envColor();
-    void setVolColor(const QString &envColor);
+    void setVolColor(const QString &volColor);
     QString volColor();
-    void setEqColor(const QString &envColor);
+    void setEqColor(const QString &eqColor);
     QString eqColor();
-    void setNseColor(const QString &envColor);
+    void setNseColor(const QString &nseColor);
     QString nseColor();
-    void setOutColor(const QString &envColor);
+    void setOutColor(const QString &outColor);
     QString outColor();
-    void setTextColor(const QString &envColor);
+    void setTextColor(const QString &textColor);
     QString textColor();
+
+    void loadTheme(QString path);
 
 private:
 

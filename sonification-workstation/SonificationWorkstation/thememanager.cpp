@@ -1,4 +1,6 @@
 #include "thememanager.h"
+#include <QFile>
+#include <QApplication>
 
 namespace sow {
 
@@ -148,6 +150,20 @@ void ThemeManager::setTextColor(const QString &textColor)
 QString ThemeManager::textColor()
 {
     return textColor_;
+}
+
+void ThemeManager::loadTheme(QString path)
+{
+    // Read the stylesheet from disk
+    QFile file(path);
+    file.open(QFile::ReadOnly);
+    QString style = QLatin1String(file.readAll());
+    // Split into the QML section and the genuine Qt Stylesheet
+
+    // Set all bound QML properties
+
+    // Apply the StyleSheet
+    qApp->setStyleSheet(style);
 }
 
 } // End namespace sow.
