@@ -1,6 +1,7 @@
 import QtQuick.Controls 2.2
 import QtQuick 2.12
 import QtQuick.Layouts 1.0
+import SoW 1.0
 import ENUMS 1.0
 import "SessionCode.js" as SessionCode
 import "Style.js" as Style
@@ -18,8 +19,8 @@ Rectangle
     property alias canvas: canvas
     property alias workspace: workspace
 
-    // Interfaces with C++ and controls UI themes.
-    ThemeManager {
+    // C++ class that manages UI themes.
+    QtThemeManager {
         id: themeManager
     }
 

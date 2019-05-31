@@ -50,6 +50,5 @@
         <file>images/loop-on.svg</file>
         <file>images/AM.png</file>
         <file>images/FM.png</file>
-        <file>ThemeManager.qml</file>
     </qresource>
 </RCC>
