@@ -12,6 +12,8 @@ Rectangle {
     property var componentFile
     // Physical properties of this item on the Palette
     property var textColor: themeManager.themeMap["textColor"]
+    border.color: textColor
+    border.width: 4
     color: themeManager.themeMap[label]
     width: Style.paletteItemDiameter * Screen.devicePixelRatio
     height: Style.paletteItemDiameter * Screen.devicePixelRatio
