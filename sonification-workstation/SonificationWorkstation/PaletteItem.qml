@@ -3,18 +3,29 @@ import QtQuick.Window 2.12
 import "ItemCreation.js" as Code
 import "Style.js" as Style
 
-Image {
+Rectangle {
+
     id: paletteItem
-
-    property string componentFile
-    property string image
-
-    source: image
-
+    // Name of SynthItem, e.g. "OSC"
+    property var label
+    // QML file to load when creating item
+    property var componentFile
+    // Physical properties of this item on the Palette
+    property var textColor: themeManager.themeMap["textColor"]
+    color: themeManager.themeMap[label]
     width: Style.paletteItemDiameter * Screen.devicePixelRatio
     height: Style.paletteItemDiameter * Screen.devicePixelRatio
+    radius: width * 0.5
 
     signal itemCreated(var item)
+
+    Text {
+        text: label
+        color: textColor
+        anchors {
+            centerIn: parent
+        }
+    }
 
     MouseArea {
         anchors.fill: parent

@@ -18,78 +18,63 @@ Rectangle {
 
     Column {
 
-        //        Row {
-
         PaletteItem {
-            id: osc
+            label: "OSC"
             componentFile: "OSC.qml"
-            source: "images/OSC.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: am
+            label: "AM"
             componentFile: "AM.qml"
-            source: "images/AM.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: fm
+            label: "FM"
             componentFile: "FM.qml"
-            source: "images/FM.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: aud
+            label: "AUD"
             componentFile: "AUD.qml"
-            source: "images/AUD.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: pan
+            label: "PAN"
             componentFile: "PAN.qml"
-            source: "images/PAN.png"
             onItemCreated: root.itemCreated(item)
         }
-        //        }
-
-        //        Row {
 
         PaletteItem {
-            id: env
+            label: "ENV"
             componentFile: "ENV.qml"
-            source: "images/ENV.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: vol
+            label: "VOL"
             componentFile: "VOL.qml"
-            source: "images/VOL.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: nse
+            label: "OSC"
             componentFile: "NSE.qml"
-            source: "images/NSE.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: eq
+            label: "EQ"
             componentFile: "EQ.qml"
-            source: "images/EQ.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: out
+            label: "OUT"
             componentFile: "OUT.qml"
-            source: "images/OUT.png"
             onItemCreated: root.itemCreated(item)
         }
 
