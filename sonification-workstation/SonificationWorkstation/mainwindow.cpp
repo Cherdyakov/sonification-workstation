@@ -146,9 +146,14 @@ void MainWindow::createMenus()
             this, &MainWindow::onImportDataset);
 
     // Quit application.
-    QAction *quitAct = new QAction(tr("Quit"), this);
+    QAction *quitAct = new QAction(tr("Exit"), this);
+#ifdef Q_OS_WIN32
+    // There is no default Quit key command on Windows
+    quitAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
+#else
     quitAct->setShortcut(QKeySequence::Quit);
-    quitAct->setStatusTip(tr("Quit") + " " + tr("Sonification Workstation"));
+#endif
+    quitAct->setStatusTip(tr("Exit"));
     connect(quitAct, &QAction::triggered,
             this, &MainWindow::onQuit);
 
