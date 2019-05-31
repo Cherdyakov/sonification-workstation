@@ -169,7 +169,15 @@ void ThemeManager::loadTheme(QString path)
 
 void ThemeManager::setBoundProperties(QString style)
 {
-    qDebug() << style;
+    int top;
+    int tail;
+
+    style.remove(" ");
+    QString key = "oscColor:";
+    top = style.indexOf(key) + key.length();
+    tail = style.indexOf(";", top);
+    QStringRef oscColor(&style, top, tail - top);
+    qDebug() << "OSC COLOR: " << oscColor;
 }
 
 } // End namespace sow.
