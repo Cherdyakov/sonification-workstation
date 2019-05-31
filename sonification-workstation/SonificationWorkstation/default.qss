@@ -87,7 +87,7 @@ padding: 2px;
 
 QScrollArea#ScrollArea
 {
-background-color: #EEEEEE;
+background-color: #BDBDBD;
 border-style: none;
 }
 
