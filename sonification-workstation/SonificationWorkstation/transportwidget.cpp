@@ -14,12 +14,16 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     //transport controls
     pauseButton_ = new QPushButton;
     pauseButton_->setObjectName("PauseButton");
+    pauseButton_->setFocusPolicy(Qt::NoFocus);
     loopButton_ = new QPushButton;
     loopButton_->setObjectName("LoopButton");
+    loopButton_->setFocusPolicy(Qt::NoFocus);
     interpolateBox_ = new QCheckBox;
     interpolateBox_->setObjectName("InterpolateBox");
+    interpolateBox_->setFocusPolicy(Qt::NoFocus);
     speedBox_ = new QSpinBox;
     speedBox_->setObjectName("SpeedBox");
+    speedBox_->setFocusPolicy(Qt::ClickFocus);
     QLabel* speedLabel = new QLabel;
 
     // Button icons.
