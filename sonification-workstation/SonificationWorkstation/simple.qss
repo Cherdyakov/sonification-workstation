@@ -142,16 +142,16 @@ color: #424242;
 
 SynthItemColors
 {
-OSC: #78b4c6;
-AM: #52ef99;
-FM: #5e904e;
-AUD: #45817f;
-PAN: #de4f86;
-ENV: #f2a966;
-VOL: #a2676f;
-NSE: #56ebd3;
-EQ: #f3c011;
-OUT: #444444;
+OSC: #879390;
+AM: #879390;
+FM: #879390;
+AUD: #879390;
+PAN: #879390;
+ENV: #879390;
+VOL: #879390;
+NSE: #879390;
+EQ: #879390;
+OUT: #333333;
 textColor: #F2F3F4;
 backgroundColor: #BDBDBD;
 }

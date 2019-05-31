@@ -162,6 +162,11 @@ void MainWindow::createMenus()
     connect(kellyThemeAct, &QAction::triggered,
             this, &MainWindow::onContrastThemeSet);
 
+    // Set simple theme.
+    QAction *simpleThemeAct = new QAction(tr("Simple"), this);
+    connect(simpleThemeAct, &QAction::triggered,
+            this, &MainWindow::onSimpleThemeSet);
+
     // Create and populate File menu.
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
     fileMenu->addAction(openSessionAct);
@@ -175,6 +180,7 @@ void MainWindow::createMenus()
     QMenu *themeMenu = editMenu->addMenu(tr("Set Theme"));
      themeMenu->addAction(defaultThemeAct);
      themeMenu->addAction(kellyThemeAct);
+     themeMenu->addAction(simpleThemeAct);
 }
 
 void MainWindow::writeSessionFile()
@@ -294,6 +300,11 @@ void MainWindow::onDefaultThemeSet()
 void MainWindow::onContrastThemeSet()
 {
     setTheme("kelly");
+}
+
+void MainWindow::onSimpleThemeSet()
+{
+    setTheme("simple");
 }
 
 

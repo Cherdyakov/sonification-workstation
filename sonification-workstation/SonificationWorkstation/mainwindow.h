@@ -42,7 +42,6 @@ private:
     void createMenus();
     void writeSessionFile();
     void setTheme(const QString theme);
-
 signals:
 
     void saveSession();
@@ -56,6 +55,7 @@ private slots:
     void onImportDataset();
     void onDefaultThemeSet();
     void onContrastThemeSet();
+    void onSimpleThemeSet();
 
 };
 
