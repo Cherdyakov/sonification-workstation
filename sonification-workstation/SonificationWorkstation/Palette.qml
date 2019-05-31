@@ -25,6 +25,18 @@ Rectangle {
         }
 
         PaletteItem {
+            label: "NSE"
+            componentFile: "NSE.qml"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
+            label: "AUD"
+            componentFile: "AUD.qml"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
             label: "AM"
             componentFile: "AM.qml"
             onItemCreated: root.itemCreated(item)
@@ -37,8 +49,8 @@ Rectangle {
         }
 
         PaletteItem {
-            label: "AUD"
-            componentFile: "AUD.qml"
+            label: "VOL"
+            componentFile: "VOL.qml"
             onItemCreated: root.itemCreated(item)
         }
 
@@ -51,18 +63,6 @@ Rectangle {
         PaletteItem {
             label: "ENV"
             componentFile: "ENV.qml"
-            onItemCreated: root.itemCreated(item)
-        }
-
-        PaletteItem {
-            label: "VOL"
-            componentFile: "VOL.qml"
-            onItemCreated: root.itemCreated(item)
-        }
-
-        PaletteItem {
-            label: "OSC"
-            componentFile: "NSE.qml"
             onItemCreated: root.itemCreated(item)
         }
 
