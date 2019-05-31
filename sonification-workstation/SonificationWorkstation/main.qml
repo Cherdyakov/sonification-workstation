@@ -18,6 +18,11 @@ Rectangle
     property alias canvas: canvas
     property alias workspace: workspace
 
+    // Interfaces with C++ and controls UI themes.
+    ThemeManager {
+        id: themeManager
+    }
+
     // Flickable widget container, where SynthItems are manipulated.
     Flickable {
         id: workspace
