@@ -68,15 +68,20 @@ Rectangle
         onClicked: {
             workspace.forceActiveFocus()
             if(mouse.button === Qt.RightButton) {
-                if(itemPopup.visible) {
-                    itemPopup.close()
-                }
-                else {
-                    itemPopup.x = mouse.x
-                    itemPopup.y = mouse.y - (itemPopup.height / 2)
-                    palette.spawnX = mouse.x
-                    palette.spawnY = mouse.y
-                    itemPopup.open()
+                // If patching and right c
+                if(patchManager.patching) {
+                    patchManager.patchStop()
+                } else {
+                    if(itemPopup.visible) {
+                        itemPopup.close()
+                    }
+                    else {
+                        itemPopup.x = mouse.x
+                        itemPopup.y = mouse.y - (itemPopup.height / 2)
+                        palette.spawnX = mouse.x
+                        palette.spawnY = mouse.y
+                        itemPopup.open()
+                    }
                 }
             }
             else if(mouse.button === Qt.LeftButton) {

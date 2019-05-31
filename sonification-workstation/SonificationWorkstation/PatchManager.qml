@@ -80,6 +80,12 @@ Item {
         }
     }
 
+    function patchStop()
+    {
+        patchingChild = null
+        canvas.requestPaint()
+    }
+
     // Returns a list of all point pairs of existing patches.
     // Used by main.qml to draw the patches on screen.
     function getPatchPoints() {
