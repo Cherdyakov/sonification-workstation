@@ -41,6 +41,7 @@ private:
     void createActions();
     void createMenus();
     void writeSessionFile();
+    void setTheme(const QString theme);
 
 signals:
 

@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -7,15 +6,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.8);
 
-    // Set application styles (from theme setting).
+    // Set application theme (stylesheet).
     QSettings settings;
     if(!settings.contains("theme"))
     {
         settings.setValue("theme", "default");
-        qDebug() << "Setting default theme.";
     }
-    QString style = settings.value("theme").toString();
-    style_.setStyle(style);
+    setTheme(settings.value("theme").toString());
 
     // Construct the application window.
     PlayHead* playHead = new PlayHead(this);                                            // Playback cursor
@@ -43,11 +40,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     scrollArea->setObjectName("ScrollArea");
     this->menuBar()->setObjectName("Menu");
     trackView->setObjectName("TrackView");
-
-
-
-//    leftSide->setObjectName("LeftSide");
-//    leftSide->setStyleSheet("QWidget#LeftSide { background-color:#2800FF }");
 
     // Setup left side.
     trackView->setPlayHead(playHead);
@@ -206,6 +198,19 @@ void MainWindow::writeSessionFile()
     file.write(sessionDocument.toJson());
 }
 
+void MainWindow::setTheme(const QString theme)
+{
+    // Save for next application launch.
+    QSettings settings;
+    settings.setValue("theme", theme);
+    // Read the stylesheet from disk and apply it.
+    QString path = ":/" + theme + ".qss";
+    QFile file(path);
+    file.open(QFile::ReadOnly);
+    QString style = QLatin1String(file.readAll());
+    qApp->setStyleSheet(style);
+}
+
 void MainWindow::onQuit()
 {
     QApplication::quit();
@@ -284,12 +289,12 @@ void MainWindow::onImportDataset()
 
 void MainWindow::onDefaultThemeSet()
 {
-    style_.setStyle("default");
+    setTheme("default");
 }
 
 void MainWindow::onContrastThemeSet()
 {
-    style_.setStyle("kelly");
+    setTheme("kelly");
 }
 
 
