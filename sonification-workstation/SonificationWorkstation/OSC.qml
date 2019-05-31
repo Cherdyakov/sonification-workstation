@@ -11,7 +11,6 @@ SynthItem {
     label: qsTr("OSC")
     type: ENUMS.OSCILLATOR
     output: ENUMS.AUDIO
-    mainColor: themeManager.oscColor
 
     Component.onCompleted: {
         create()

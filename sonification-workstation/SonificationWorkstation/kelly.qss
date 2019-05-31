@@ -140,9 +140,9 @@ QLabel#ProcLabel
 color: #202020;
 }
 
-SynthItems
+SynthItemColors
 {
-oscColor: #A1CAF1;
+OSC: #A1CAF1;
 amColor: #F99379;
 fmColor: #E68FAC;
 audColor: #C2B280;

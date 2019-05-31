@@ -21,8 +21,8 @@ Item {
     property int output: ENUMS.NONE
     property bool created: false
     property string label: "SON"
-    property string mainColor
-    property string textColor: themeManager.textColor
+    property string mainColor: themeManager.themeMap[label]
+    property string textColor: themeManager.themeMap["textColor"]
     property QtSynthItem implementation: null // the CPP implementation of this SynthItem
     property var zModifier: root.activeFocus === true ? 10 : 0
 
