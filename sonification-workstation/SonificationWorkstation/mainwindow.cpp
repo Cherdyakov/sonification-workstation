@@ -102,6 +102,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport:: onPoschanged);
     connect(playhead_, &PlayHead::loopPointsChanged,
             transport_, &Transport::onLoopPointsChanged);
+
+    // For catching keyboard shortcuts.
+    qApp->installEventFilter(this);
 }
 
 MainWindow::~MainWindow()
@@ -139,8 +142,8 @@ void MainWindow::createMenus()
             this, &MainWindow::onSaveAs);
 
     // Import dataset.
-    QAction *importDatasetFileAct = new QAction(tr("Import Dataset"), this);
-    importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    QAction *importDatasetFileAct = new QAction(tr("Dataset Import"), this);
+    importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
     importDatasetFileAct->setStatusTip(tr("Import CSV data into the data window"));
     connect(importDatasetFileAct, &QAction::triggered,
             this, &MainWindow::onImportDataset);
@@ -183,31 +186,31 @@ void MainWindow::createMenus()
     // Create and populate Edit menu.
     QMenu *editMenu = menuBar()->addMenu(tr("Edit"));
     QMenu *themeMenu = editMenu->addMenu(tr("Set Theme"));
-     themeMenu->addAction(defaultThemeAct);
-     themeMenu->addAction(kellyThemeAct);
-     themeMenu->addAction(simpleThemeAct);
+    themeMenu->addAction(defaultThemeAct);
+    themeMenu->addAction(kellyThemeAct);
+    themeMenu->addAction(simpleThemeAct);
 
-     // Global keyboard shortcuts.
-     // Play/Pause shortcut
-     QShortcut* pauseShortcut = new QShortcut(this);
-     pauseShortcut->setKey(Qt::Key_Space);
-     connect(pauseShortcut, &QShortcut::activated,
-             transportWidget_, &TransportWidget::onPauseButtonReleased);
-     // Looping shortcut
-     QShortcut* loopShortcut = new QShortcut(this);
-     loopShortcut->setKey(Qt::ALT + Qt::Key_L);
-     connect(loopShortcut, &QShortcut::activated,
-             transportWidget_, &TransportWidget::onLoopButtonReleased);
-     // Interpolation shortcut
-     QShortcut* interpolateShortcut = new QShortcut(this);
-     interpolateShortcut->setKey(Qt::ALT + Qt::Key_I);
-     connect(interpolateShortcut, &QShortcut::activated,
-             transportWidget_, &TransportWidget::onInterpolateButtonReleased);
-     // Transport RTZ shortcut
-     QShortcut* rtzShortcut = new QShortcut(this);
-     rtzShortcut->setKey(Qt::Key_Return);
-     connect(rtzShortcut, &QShortcut::activated,
-             playhead_, &PlayHead::onReturnToZero);
+    // Global keyboard shortcuts.
+    // Play/Pause shortcut
+    QShortcut* pauseShortcut = new QShortcut(this);
+    pauseShortcut->setKey(Qt::CTRL + Qt::Key_Space);
+    connect(pauseShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onPauseButtonReleased);
+    // Looping shortcut
+    QShortcut* loopShortcut = new QShortcut(this);
+    loopShortcut->setKey(Qt::CTRL + Qt::Key_L);
+    connect(loopShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onLoopButtonReleased);
+    // Interpolation shortcut
+    QShortcut* interpolateShortcut = new QShortcut(this);
+    interpolateShortcut->setKey(Qt::CTRL + Qt::Key_I);
+    connect(interpolateShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onInterpolateButtonReleased);
+    // Transport RTZ shortcut
+    QShortcut* rtzShortcut = new QShortcut(this);
+    rtzShortcut->setKey(Qt::CTRL + Qt::Key_Return);
+    connect(rtzShortcut, &QShortcut::activated,
+            playhead_, &PlayHead::onReturnToZero);
 
 
 }

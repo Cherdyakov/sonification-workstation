@@ -124,7 +124,6 @@ void PlayHead::onDatasetChanged(Dataset *dataset)
 void PlayHead::onReturnToZero()
 {
     emit cursorPosChanged(0.0f);
-    qDebug() << "RTZ";
 }
 
 void PlayHead::mousePressEvent(QMouseEvent *e)
