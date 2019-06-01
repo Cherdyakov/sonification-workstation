@@ -43,22 +43,6 @@ border: none;
 background: none;
 }
 
-QCheckBox#InterpolateBox::indicator
-{
-height: 28;
-width: 28;
-}
-
-QCheckBox#InterpolateBox::indicator::checked
-{
-image: url(:/images/interpolate-on.svg);
-}
-
-QCheckBox#InterpolateBox::indicator::unchecked
-{
-image: url(:/images/interpolate-off.svg);
-}
-
 QSpinBox#SpeedBox
 {
 height: 20px;
@@ -99,6 +83,13 @@ border-radius: 0px;
 }
 
 QPushButton#LoopButton
+{
+background-image: ;
+border-width: 0px;
+border-radius: 0px;
+}
+
+QPushButton#InterpolateButton
 {
 background-image: ;
 border-width: 0px;

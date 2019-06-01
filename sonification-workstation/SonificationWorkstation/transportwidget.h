@@ -21,6 +21,7 @@ class TransportWidget : public QWidget
 {
     Q_OBJECT
 public:
+
     explicit TransportWidget(QWidget *parent = 0);
     void setTransport(Transport* qtTransport);
     bool interpolate();
@@ -42,7 +43,7 @@ private:
     QIcon interpolateOffIcon_;
     QPushButton* pauseButton_;
     QPushButton* loopButton_;
-    QCheckBox* interpolateBox_;
+    QPushButton* interpolateButton_;
     QSpinBox* speedBox_;
 
 protected:
@@ -57,14 +58,13 @@ signals:
 
 public slots:
     void onSpeedChanged(int speed);
-    void onInterpolateChanged(bool interpolation);
     void onDatasetChanged(sow::Dataset *dataset);
     void onPauseButtonReleased();
+    void onLoopButtonReleased();
+    void onInterpolateButtonReleased();
 
 private slots:
-    void onLoopButtonReleased();
     void onSpeedBoxValueChanged(int speed);
-    void onInterpolateBoxStateChanged(int state);
 };
 
 #endif // TRANSPORTWIDGET_H

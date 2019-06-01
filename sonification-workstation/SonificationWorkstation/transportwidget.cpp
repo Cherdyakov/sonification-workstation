@@ -18,9 +18,9 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     loopButton_ = new QPushButton;
     loopButton_->setObjectName("LoopButton");
     loopButton_->setFocusPolicy(Qt::NoFocus);
-    interpolateBox_ = new QCheckBox;
-    interpolateBox_->setObjectName("InterpolateBox");
-    interpolateBox_->setFocusPolicy(Qt::NoFocus);
+    interpolateButton_ = new QPushButton;
+    interpolateButton_->setObjectName("InterpolateButton");
+    interpolateButton_->setFocusPolicy(Qt::NoFocus);
     speedBox_ = new QSpinBox;
     speedBox_->setObjectName("SpeedBox");
     speedBox_->setFocusPolicy(Qt::ClickFocus);
@@ -31,18 +31,22 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     pauseIcon_.addFile(":/images/pause.svg");
     loopOnIcon_.addFile(":/images/loop-on.svg");
     loopOffIcon_.addFile(":/images/loop-off.svg");
+    interpolateOnIcon_.addFile(":/images/interpolate-on.svg");
+    interpolateOffIcon_.addFile(":/images/interpolate-off.svg");
 
     pauseButton_->setIcon(playIcon_);
     pauseButton_->setIconSize(QSize(this->height() + 20, this->height() + 20));
     loopButton_->setIcon(loopOffIcon_);
     loopButton_->setIconSize(QSize(this->height(), this->height()));
+    interpolateButton_->setIcon(interpolateOffIcon_);
+    interpolateButton_->setIconSize(QSize(this->height(), this->height()));
 
     speedLabel->setText(tr(" Speed:"));
     speedBox_->setValue(1.0);
     speedBox_->setMinimum(0.0);
     speedBox_->setMaximum(constants::SR);
     transportLayout->addWidget(loopButton_);
-    transportLayout->addWidget(interpolateBox_);
+    transportLayout->addWidget(interpolateButton_);
     transportLayout->addWidget(pauseButton_);
     transportLayout->addWidget(speedLabel);
     transportLayout->addWidget(speedBox_);
@@ -62,8 +66,8 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
             this, SLOT(onLoopButtonReleased()));
     connect(speedBox_, SIGNAL(valueChanged(int)),
             this,SLOT(onSpeedBoxValueChanged(int)));
-    connect(interpolateBox_, SIGNAL(stateChanged(int)),
-            this, SLOT(onInterpolateBoxStateChanged(int)));
+    connect(interpolateButton_, SIGNAL(released()),
+            this, SLOT(onInterpolateButtonReleased()));
 }
 
 bool TransportWidget::interpolate()
@@ -105,9 +109,17 @@ void TransportWidget::onSpeedChanged(int speed)
     this->speedBox_->setValue(speed);
 }
 
-void TransportWidget::onInterpolateChanged(bool interpolation)
+void TransportWidget::onInterpolateButtonReleased()
 {
-    this->interpolateBox_->setChecked(interpolation);
+    interpolate_ = !interpolate_;
+    emit interpolateChanged(interpolate_);
+
+    if(interpolate_) {
+        interpolateButton_->setIcon(interpolateOnIcon_);
+    }
+    else {
+        interpolateButton_->setIcon(interpolateOffIcon_);
+    }
 }
 
 void TransportWidget::onPauseButtonReleased()
@@ -142,14 +154,6 @@ void TransportWidget::onSpeedBoxValueChanged(int speed)
     {
         speed_ = speed;
         emit speedChanged(speed_);
-    }
-}
-
-void TransportWidget::onInterpolateBoxStateChanged(int state)
-{
-    if(interpolate_ != state) {
-        interpolate_ = state;
-        emit interpolateChanged(interpolate_);
     }
 }
 

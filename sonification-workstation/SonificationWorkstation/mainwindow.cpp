@@ -188,10 +188,22 @@ void MainWindow::createMenus()
      themeMenu->addAction(simpleThemeAct);
 
      // Global keyboard shortcuts.
+     // Play/Pause shortcut
      QShortcut* pauseShortcut = new QShortcut(this);
      pauseShortcut->setKey(Qt::Key_Space);
      connect(pauseShortcut, &QShortcut::activated,
              transportWidget_, &TransportWidget::onPauseButtonReleased);
+     // Looping shortcut
+     QShortcut* loopShortcut = new QShortcut(this);
+     loopShortcut->setKey(Qt::ALT + Qt::Key_L);
+     connect(loopShortcut, &QShortcut::activated,
+             transportWidget_, &TransportWidget::onLoopButtonReleased);
+     // Interpolation shortcut
+//     QShortcut* interpolateShortcut = new QShortcut(this);
+//     interpolateShortcut->setKey(Qt::ALT + Qt::Key_I);
+//     connect(interpolateShortcut, &QShortcut::activated,
+//             transportWidget_, &TransportWidget::onInterpolateBoxStateChanged);
+
 }
 
 void MainWindow::writeSessionFile()
