@@ -33,8 +33,25 @@ color: #424242;
 background-color: #F5F5F5;
 }
 
-QSplitter::handle {
+QSplitter::handle
+{
 background-color: #FAFAFA;
+}
+
+QSlider::handle#MasterVolume
+{
+height: 10px;
+background: #8DB600;
+}
+
+QSlider::add-page#MasterVolume
+{
+background: #BDBDBD;
+}
+
+QSlider::sub-page#MasterVolume
+{
+background: #8DB600;
 }
 
 QSpinBox#SpeedBox

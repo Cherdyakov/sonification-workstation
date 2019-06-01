@@ -26,9 +26,9 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     speedBox_->setObjectName("SpeedBox");
     speedBox_->setFocusPolicy(Qt::ClickFocus);
     QLabel* speedLabel = new QLabel;
-    masterVolumeDial_ = new QDial(this);
-    masterVolumeDial_->setObjectName("MasterVolumeDial");
-    masterVolumeDial_->setFocusPolicy(Qt::NoFocus);
+    masterVolumeSlider_ = new MasterVolumeSlider(this);
+    masterVolumeSlider_->setObjectName("MasterVolume");
+    masterVolumeSlider_->setFocusPolicy(Qt::NoFocus);
 
     // Button icons.
     playIcon_.addFile(":/images/play.svg");
@@ -49,15 +49,16 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     speedBox_->setValue(1.0);
     speedBox_->setMinimum(0.0);
     speedBox_->setMaximum(constants::SR);
-    masterVolumeDial_->setMinimum(0);
-    masterVolumeDial_->setMaximum(100);
-    masterVolumeDial_->setValue(static_cast<int>(masterVolume_ * 100.0f));
+    masterVolumeSlider_->setMinimum(0);
+    masterVolumeSlider_->setMaximum(100);
+    masterVolumeSlider_->setValue(static_cast<int>(masterVolume_ * 100.0f));
+    masterVolumeSlider_->setOrientation(Qt::Horizontal);
     transportLayout->addWidget(loopButton_);
     transportLayout->addWidget(interpolateButton_);
     transportLayout->addWidget(pauseButton_);
     transportLayout->addWidget(speedLabel);
     transportLayout->addWidget(speedBox_);
-    transportLayout->addWidget(masterVolumeDial_);
+    transportLayout->addWidget(masterVolumeSlider_);
     //set layout of transport
     transportLayout->setAlignment(Qt::AlignHCenter);
     transportLayout->setMargin(0);
@@ -76,7 +77,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
             this,SLOT(onSpeedBoxValueChanged(int)));
     connect(interpolateButton_, SIGNAL(released()),
             this, SLOT(onInterpolateButtonReleased()));
-    connect(masterVolumeDial_, SIGNAL(valueChanged(int)),
+    connect(masterVolumeSlider_, SIGNAL(valueChanged(int)),
             this, SLOT(onMasterVolumeChanged(int)));
 }
 

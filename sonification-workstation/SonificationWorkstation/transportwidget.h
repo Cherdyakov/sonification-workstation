@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QLayout>
 #include <QPushButton>
-#include <QDial>
 #include <QSpinBox>
 #include <QLabel>
 #include <QDebug>
@@ -14,6 +13,7 @@
 #include <QStyleOption>
 
 #include "transport.h"
+#include "mastervolumeslider.h"
 
 using namespace sow;
 
@@ -46,7 +46,7 @@ private:
     QPushButton* loopButton_;
     QPushButton* interpolateButton_;
     QSpinBox* speedBox_;
-    QDial* masterVolumeDial_;
+    MasterVolumeSlider* masterVolumeSlider_;
 
 protected:
 
