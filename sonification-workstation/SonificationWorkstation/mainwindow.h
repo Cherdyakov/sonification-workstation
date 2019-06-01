@@ -31,6 +31,7 @@ private:
 
     Transport* transport_;
     TransportWidget* transportWidget_;
+    PlayHead* playhead_;
     QQuickView* quickView_;
     ThemeManager* themeManager_;
 

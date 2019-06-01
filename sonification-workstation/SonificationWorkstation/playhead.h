@@ -58,6 +58,7 @@ public slots:
     void onPauseChanged(bool pause);
     void onXRangeChanged(QCPRange range);
     void onDatasetChanged(Dataset* dataset);
+    void onReturnToZero();
 
 private slots:
 

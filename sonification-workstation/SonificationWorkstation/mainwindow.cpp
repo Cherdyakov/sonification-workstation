@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setTheme(settings.value("theme").toString());
 
     // Construct the application window.
-    PlayHead* playHead = new PlayHead(this);                                            // Playback cursor
     QWidget *centralWidget = new QWidget;                                               // Application top-level widget
     QHBoxLayout* centralLayout = new QHBoxLayout(this);                                 // Application top-level layout
     QSplitter *splitter = new QSplitter(this);                                          // Application window divided in two
@@ -25,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QVBoxLayout* layoutLeft = new QVBoxLayout(this);                                    // Left side of spliitter layout
     QVBoxLayout* layoutRight = new QVBoxLayout(this);                                   // Right side of splitter layout
     transportWidget_ = new TransportWidget(this);                                       // Transport controls (Play/Pause etc)
+    playhead_ = new PlayHead(this);                                                     // Playback cursor
     quickView_ = new QQuickView;                                                        // Renders Qt Quick patcher interface
     QWidget *quickViewContainer = QWidget::createWindowContainer(quickView_, this);     // Caontainer widget for QQuickView
     TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     trackView->setObjectName("TrackView");
 
     // Setup left side.
-    trackView->setPlayHead(playHead);
+    trackView->setPlayHead(playhead_);
     transportWidget_->setMaximumHeight(50);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(trackView);
@@ -82,11 +82,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(transport_, &Transport::datasetImported,
             transportWidget_, &TransportWidget::onDatasetChanged);
     connect(transport_, &Transport::datasetImported,
-            playHead, &PlayHead::onDatasetChanged);
+            playhead_, &PlayHead::onDatasetChanged);
 
     // Connect Transport < > TransportWidget.
     connect(transport_, &Transport::posChanged,
-            playHead, &PlayHead::onCursorMoved);
+            playhead_, &PlayHead::onCursorMoved);
     connect(transportWidget_, &TransportWidget::speedChanged,
             transport_, &Transport::onSpeedchanged);
     connect(transportWidget_, &TransportWidget::interpolateChanged,
@@ -97,10 +97,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport::onLoopingchanged);
     // Playhead signals.
     connect(transportWidget_, &TransportWidget::pausedChanged,
-            playHead, &PlayHead::onPauseChanged);
-    connect(playHead, &PlayHead::cursorPosChanged,
-            transport_, &Transport::onPoschanged);
-    connect(playHead, &PlayHead::loopPointsChanged,
+            playhead_, &PlayHead::onPauseChanged);
+    connect(playhead_, &PlayHead::cursorPosChanged,
+            transport_, &Transport:: onPoschanged);
+    connect(playhead_, &PlayHead::loopPointsChanged,
             transport_, &Transport::onLoopPointsChanged);
 }
 
@@ -203,6 +203,12 @@ void MainWindow::createMenus()
      interpolateShortcut->setKey(Qt::ALT + Qt::Key_I);
      connect(interpolateShortcut, &QShortcut::activated,
              transportWidget_, &TransportWidget::onInterpolateButtonReleased);
+     // Transport RTZ shortcut
+     QShortcut* rtzShortcut = new QShortcut(this);
+     rtzShortcut->setKey(Qt::Key_Return);
+     connect(rtzShortcut, &QShortcut::activated,
+             playhead_, &PlayHead::onReturnToZero);
+
 
 }
 
