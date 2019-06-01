@@ -199,10 +199,10 @@ void MainWindow::createMenus()
      connect(loopShortcut, &QShortcut::activated,
              transportWidget_, &TransportWidget::onLoopButtonReleased);
      // Interpolation shortcut
-//     QShortcut* interpolateShortcut = new QShortcut(this);
-//     interpolateShortcut->setKey(Qt::ALT + Qt::Key_I);
-//     connect(interpolateShortcut, &QShortcut::activated,
-//             transportWidget_, &TransportWidget::onInterpolateBoxStateChanged);
+     QShortcut* interpolateShortcut = new QShortcut(this);
+     interpolateShortcut->setKey(Qt::ALT + Qt::Key_I);
+     connect(interpolateShortcut, &QShortcut::activated,
+             transportWidget_, &TransportWidget::onInterpolateButtonReleased);
 
 }
 
