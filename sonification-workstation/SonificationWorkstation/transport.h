@@ -77,7 +77,7 @@ signals:
 
 public slots:
 
-    // slots for controlling playback
+    // slots for controlling playback and volume
     void onImportDataset(QString file);
     void onPausechanged(bool p);
     void onPoschanged(float pos);
@@ -85,6 +85,7 @@ public slots:
     void onLoopingchanged(bool looping);
     void onLoopPointsChanged(float begin, float end);
     void onInterpolateChanged(bool interpolate);
+    void onMasterVolumeChanged(float vol);
 
 private slots:
     void updatePos();

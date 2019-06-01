@@ -35,6 +35,7 @@ private:
     bool looping_;
     bool interpolate_;
     float speed_;
+    float masterVolume_;
     QIcon playIcon_;
     QIcon pauseIcon_;
     QIcon loopOnIcon_;
@@ -45,6 +46,7 @@ private:
     QPushButton* loopButton_;
     QPushButton* interpolateButton_;
     QSpinBox* speedBox_;
+    QDial* masterVolumeDial_;
 
 protected:
 
@@ -55,6 +57,7 @@ signals:
     void loopingChanged(bool loop);
     void speedChanged(float speed);
     void interpolateChanged(bool interpolate_);
+    void masterVolumeChanged(float vol);
 
 public slots:
     void onSpeedChanged(int speed);
@@ -65,6 +68,7 @@ public slots:
 
 private slots:
     void onSpeedBoxValueChanged(int speed);
+    void onMasterVolumeChanged(int vol);
 };
 
 #endif // TRANSPORTWIDGET_H

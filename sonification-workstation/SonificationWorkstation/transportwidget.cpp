@@ -8,6 +8,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     looping_ = false;
     interpolate_ = false;
     speed_ = 0.0f;
+    masterVolume_ = 1.0f;
 
     //transport layout
     QHBoxLayout* transportLayout = new QHBoxLayout;
@@ -25,6 +26,9 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     speedBox_->setObjectName("SpeedBox");
     speedBox_->setFocusPolicy(Qt::ClickFocus);
     QLabel* speedLabel = new QLabel;
+    masterVolumeDial_ = new QDial(this);
+    masterVolumeDial_->setObjectName("MasterVolumeDial");
+    masterVolumeDial_->setFocusPolicy(Qt::NoFocus);
 
     // Button icons.
     playIcon_.addFile(":/images/play.svg");
@@ -45,11 +49,15 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     speedBox_->setValue(1.0);
     speedBox_->setMinimum(0.0);
     speedBox_->setMaximum(constants::SR);
+    masterVolumeDial_->setMinimum(0);
+    masterVolumeDial_->setMaximum(100);
+    masterVolumeDial_->setValue(static_cast<int>(masterVolume_ * 100.0f));
     transportLayout->addWidget(loopButton_);
     transportLayout->addWidget(interpolateButton_);
     transportLayout->addWidget(pauseButton_);
     transportLayout->addWidget(speedLabel);
     transportLayout->addWidget(speedBox_);
+    transportLayout->addWidget(masterVolumeDial_);
     //set layout of transport
     transportLayout->setAlignment(Qt::AlignHCenter);
     transportLayout->setMargin(0);
@@ -68,6 +76,8 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
             this,SLOT(onSpeedBoxValueChanged(int)));
     connect(interpolateButton_, SIGNAL(released()),
             this, SLOT(onInterpolateButtonReleased()));
+    connect(masterVolumeDial_, SIGNAL(valueChanged(int)),
+            this, SLOT(onMasterVolumeChanged(int)));
 }
 
 bool TransportWidget::interpolate()
@@ -154,6 +164,16 @@ void TransportWidget::onSpeedBoxValueChanged(int speed)
     {
         speed_ = speed;
         emit speedChanged(speed_);
+    }
+}
+
+void TransportWidget::onMasterVolumeChanged(int vol)
+{
+    float floatVol = static_cast<float>(vol) / 100.0f;
+    if(!qFuzzyCompare(masterVolume_, floatVol))
+    {
+        masterVolume_ = floatVol;
+        emit masterVolumeChanged(masterVolume_);
     }
 }
 

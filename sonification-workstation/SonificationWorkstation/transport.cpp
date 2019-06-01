@@ -107,6 +107,14 @@ void Transport::onInterpolateChanged(bool interpolate)
     transportCommandBuffer_.push(cmd);
 }
 
+void Transport::onMasterVolumeChanged(float vol)
+{
+    if(!qFuzzyCompare(masterVolume_, vol)) {
+        masterVolume_ = vol;
+        qDebug() << vol;
+    }
+}
+
 void Transport::subscribe(SynthItem *item)
 {
     TransportCommand cmd;

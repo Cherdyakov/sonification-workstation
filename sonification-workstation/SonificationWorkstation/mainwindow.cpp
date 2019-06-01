@@ -95,6 +95,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport::onPausechanged);
     connect(transportWidget_, &TransportWidget::loopingChanged,
             transport_, &Transport::onLoopingchanged);
+    connect(transportWidget_, &TransportWidget::masterVolumeChanged,
+            transport_, &Transport::onMasterVolumeChanged);
+
     // Playhead signals.
     connect(transportWidget_, &TransportWidget::pausedChanged,
             playhead_, &PlayHead::onPauseChanged);
@@ -211,8 +214,6 @@ void MainWindow::createMenus()
     rtzShortcut->setKey(Qt::CTRL + Qt::Key_Return);
     connect(rtzShortcut, &QShortcut::activated,
             playhead_, &PlayHead::onReturnToZero);
-
-
 }
 
 void MainWindow::writeSessionFile()
