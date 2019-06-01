@@ -29,7 +29,7 @@ Transport::Transport(QObject *parent) : SynthItem (parent)
     mu_ = 0.0f;
     speed_ = 1;
     returnPos_ = 0.0f;
-    masterVolume_ = 1.0f;
+    masterVolumeTarget_ = masterVolume_ = 1.0f;
     interpolate_ = false;
 }
 
@@ -109,9 +109,8 @@ void Transport::onInterpolateChanged(bool interpolate)
 
 void Transport::onMasterVolumeChanged(float vol)
 {
-    if(!qFuzzyCompare(masterVolume_, vol)) {
-        masterVolume_ = vol;
-        qDebug() << vol;
+    if(!qFuzzyCompare(masterVolumeTarget_, vol)) {
+        masterVolumeTarget_ = vol;
     }
 }
 
@@ -256,6 +255,19 @@ Frame Transport::process()
     // advancing index
     calculateReturnPosition();
     mu_ += speed_ / frameRate_;
+
+    // move masterVolume_ to target if they aren't equal.
+    // Setting over the course of a single sample causes
+    // audible discontinuities (clicks).
+    if(!qFuzzyCompare(masterVolume_, masterVolumeTarget_))
+    {
+        if(masterVolume_ < masterVolumeTarget_)
+        {
+            masterVolume_ += 0.001f;
+        } else {
+            masterVolume_ -= 0.001f;
+        }
+    }
 
     return frame * masterVolume_ * !mute_;
 }
