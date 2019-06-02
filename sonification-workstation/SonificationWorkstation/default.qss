@@ -122,6 +122,13 @@ border-width: 0px;
 border-radius: 0px;
 }
 
+QPushButton#MuteButton
+{
+background-image: ;
+border-width: 0px;
+border-radius: 0px;
+}
+
 QWidget#TrackView
 {
 background-color: #FAFAFA;

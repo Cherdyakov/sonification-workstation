@@ -196,7 +196,7 @@ void MainWindow::createMenus()
     // Global keyboard shortcuts.
     // Play/Pause shortcut
     QShortcut* pauseShortcut = new QShortcut(this);
-    pauseShortcut->setKey(Qt::CTRL + Qt::Key_Space);
+    pauseShortcut->setKey(Qt::CTRL + Qt::Key_P);
     connect(pauseShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onPauseButtonReleased);
     // Looping shortcut

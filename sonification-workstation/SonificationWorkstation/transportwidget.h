@@ -34,6 +34,7 @@ private:
     bool pause_;
     bool looping_;
     bool interpolate_;
+    bool mute_;
     float speed_;
     float masterVolume_;
     QIcon playIcon_;
@@ -42,9 +43,12 @@ private:
     QIcon loopOffIcon_;
     QIcon interpolateOnIcon_;
     QIcon interpolateOffIcon_;
+    QIcon muteOnIcon_;
+    QIcon muteOffIcon_;
     QPushButton* pauseButton_;
     QPushButton* loopButton_;
     QPushButton* interpolateButton_;
+    QPushButton* muteButton_;
     QSpinBox* speedBox_;
     MasterVolumeSlider* masterVolumeSlider_;
 

@@ -7,6 +7,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     pause_ = true;
     looping_ = false;
     interpolate_ = false;
+    mute_ = false;
     speed_ = 0.0f;
     masterVolume_ = 1.0f;
 
@@ -22,6 +23,9 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     interpolateButton_ = new QPushButton;
     interpolateButton_->setObjectName("InterpolateButton");
     interpolateButton_->setFocusPolicy(Qt::NoFocus);
+    muteButton_ = new QPushButton;
+    muteButton_->setObjectName("MuteButton");
+    muteButton_->setFocusPolicy(Qt::NoFocus);
     speedBox_ = new QSpinBox;
     speedBox_->setObjectName("SpeedBox");
     speedBox_->setFocusPolicy(Qt::ClickFocus);
@@ -37,13 +41,20 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     loopOffIcon_.addFile(":/images/loop-off.svg");
     interpolateOnIcon_.addFile(":/images/interpolate-on.svg");
     interpolateOffIcon_.addFile(":/images/interpolate-off.svg");
+    muteOnIcon_.addFile(":/images/speaker-off.svg");
+    muteOffIcon_.addFile(":/images/speaker-on.svg");
 
     pauseButton_->setIcon(playIcon_);
-    pauseButton_->setIconSize(QSize(this->height() + 20, this->height() + 20));
+    pauseButton_->setIconSize(QSize(this->height(), this->height()));
     loopButton_->setIcon(loopOffIcon_);
-    loopButton_->setIconSize(QSize(this->height(), this->height()));
+    loopButton_->setIconSize(QSize(static_cast<int>(this->height() * 0.8f),
+                                   static_cast<int>(this->height() * 0.8f)));
     interpolateButton_->setIcon(interpolateOffIcon_);
-    interpolateButton_->setIconSize(QSize(this->height(), this->height()));
+    interpolateButton_->setIconSize(QSize(static_cast<int>(this->height() * 0.8f),
+                                    static_cast<int>(this->height() * 0.8f)));
+    muteButton_->setIcon(muteOffIcon_);
+    muteButton_->setIconSize(QSize(static_cast<int>(this->height() * 0.8f),
+                                    static_cast<int>(this->height() * 0.8f)));
 
     speedLabel->setText(tr(" Speed:"));
     speedBox_->setValue(1.0);
@@ -59,8 +70,9 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     transportLayout->addWidget(pauseButton_);
     transportLayout->addWidget(speedLabel);
     transportLayout->addWidget(speedBox_);
+    transportLayout->addWidget(muteButton_);
     transportLayout->addWidget(masterVolumeSlider_);
-    //set layout of transport
+    //set size and layout of transport
     transportLayout->setAlignment(Qt::AlignHCenter);
     transportLayout->setMargin(0);
     transportLayout->setContentsMargins(8,0,8,0);
