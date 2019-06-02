@@ -50,5 +50,7 @@
         <file>images/loop-on.svg</file>
         <file>images/AM.png</file>
         <file>images/FM.png</file>
+        <file>images/speaker-off.svg</file>
+        <file>images/speaker-on.svg</file>
     </qresource>
 </RCC>
