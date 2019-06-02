@@ -107,11 +107,20 @@ void Transport::onInterpolateChanged(bool interpolate)
     transportCommandBuffer_.push(cmd);
 }
 
+void Transport::onMuteChanged(bool mute)
+{
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::MUTE;
+    cmd.valueA = mute ? 1.0f : 0.0f;
+    transportCommandBuffer_.push(cmd);
+}
+
 void Transport::onMasterVolumeChanged(float vol)
 {
-    if(!qFuzzyCompare(masterVolumeTarget_, vol)) {
-        masterVolumeTarget_ = vol;
-    }
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::VOLUME;
+    cmd.valueA = vol;
+    transportCommandBuffer_.push(cmd);
 }
 
 void Transport::subscribe(SynthItem *item)
@@ -323,6 +332,12 @@ void Transport::processTransportCommand(TransportCommand cmd)
         break;
     case ENUMS::TRANSPORT_CMD::IMPORT_DATASET:
         processImportDataset();
+        break;
+    case ENUMS::TRANSPORT_CMD::VOLUME:
+        masterVolumeTarget_ = cmd.valueA;
+        break;
+    case ENUMS::TRANSPORT_CMD::MUTE:
+        mute_ = (cmd.valueA == 0.0f) ? false : true;
         break;
     }
 }

@@ -97,6 +97,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport::onLoopingchanged);
     connect(transportWidget_, &TransportWidget::masterVolumeChanged,
             transport_, &Transport::onMasterVolumeChanged);
+    connect(transportWidget_, &TransportWidget::muteChanged,
+            transport_, &Transport::onMuteChanged);
 
     // Playhead signals.
     connect(transportWidget_, &TransportWidget::pausedChanged,

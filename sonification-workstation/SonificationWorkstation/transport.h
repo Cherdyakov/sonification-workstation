@@ -86,6 +86,7 @@ public slots:
     void onLoopingchanged(bool looping);
     void onLoopPointsChanged(float begin, float end);
     void onInterpolateChanged(bool interpolate);
+    void onMuteChanged(bool mute);
     void onMasterVolumeChanged(float vol);
 
 private slots:
