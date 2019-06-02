@@ -38,20 +38,35 @@ QSplitter::handle
 background-color: #FAFAFA;
 }
 
+QSlider#MasterVolume
+{
+height:40px;
+}
+
 QSlider::handle#MasterVolume
 {
-height: 10px;
+height: 22px;
+width: 8px;
+border-radius: 4px;
+background: #8DB600;
+margin: -11px 0px; /* expand outside the groove */
+}
+
+QSlider::groove:horizontal#MasterVolume
+{
+border: 0px solid;
+height: 2px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
+margin: 0px;
+}
+
+QSlider::sub-page#MasterVolume
+{
 background: #8DB600;
 }
 
 QSlider::add-page#MasterVolume
 {
 background: #BDBDBD;
-}
-
-QSlider::sub-page#MasterVolume
-{
-background: #8DB600;
 }
 
 QSpinBox#SpeedBox
