@@ -92,6 +92,8 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
             this, SLOT(onInterpolateButtonReleased()));
     connect(masterVolumeSlider_, SIGNAL(valueChanged(int)),
             this, SLOT(onMasterVolumeChanged(int)));
+    connect(muteButton_, &QPushButton::released,
+            this, &TransportWidget::onMuteButtonReleased);
 }
 
 bool TransportWidget::interpolate()
@@ -143,6 +145,19 @@ void TransportWidget::onInterpolateButtonReleased()
     }
     else {
         interpolateButton_->setIcon(interpolateOffIcon_);
+    }
+}
+
+void TransportWidget::onMuteButtonReleased()
+{
+    mute_ = !mute_;
+    emit muteChanged(mute_);
+
+    if(mute_) {
+        muteButton_->setIcon(muteOnIcon_);
+    }
+    else {
+        muteButton_->setIcon(muteOffIcon_);
     }
 }
 

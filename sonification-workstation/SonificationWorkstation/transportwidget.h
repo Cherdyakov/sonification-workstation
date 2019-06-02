@@ -61,6 +61,7 @@ signals:
     void loopingChanged(bool loop);
     void speedChanged(float speed);
     void interpolateChanged(bool interpolate_);
+    void muteChanged(bool mute);
     void masterVolumeChanged(float vol);
 
 public slots:
@@ -69,6 +70,7 @@ public slots:
     void onPauseButtonReleased();
     void onLoopButtonReleased();
     void onInterpolateButtonReleased();
+    void onMuteButtonReleased();
 
 private slots:
     void onSpeedBoxValueChanged(int speed);
