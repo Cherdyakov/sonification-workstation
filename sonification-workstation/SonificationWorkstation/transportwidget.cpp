@@ -11,9 +11,12 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     speed_ = 0.0f;
     masterVolume_ = 1.0f;
 
-    //transport layout
-    QHBoxLayout* transportLayout = new QHBoxLayout;
-    //transport controls
+    // Widget layouts.
+    QHBoxLayout* leftLayout = new QHBoxLayout;
+    QHBoxLayout* middleLayout = new QHBoxLayout;
+    QHBoxLayout* rightLayout = new QHBoxLayout;
+    QHBoxLayout* centralLayout = new QHBoxLayout;
+    // Transport controls.
     pauseButton_ = new QPushButton;
     pauseButton_->setObjectName("PauseButton");
     pauseButton_->setFocusPolicy(Qt::NoFocus);
@@ -30,6 +33,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     speedBox_->setObjectName("SpeedBox");
     speedBox_->setFocusPolicy(Qt::ClickFocus);
     QLabel* speedLabel = new QLabel;
+    speedLabel->setObjectName("SpeedLabel");
     masterVolumeSlider_ = new MasterVolumeSlider(this);
     masterVolumeSlider_->setObjectName("MasterVolume");
     masterVolumeSlider_->setFocusPolicy(Qt::NoFocus);
@@ -45,16 +49,13 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     muteOffIcon_.addFile(":/images/speaker-on.svg");
 
     pauseButton_->setIcon(playIcon_);
-    pauseButton_->setIconSize(QSize(this->height(), this->height()));
+    pauseButton_->setIconSize(QSize(72, 72));
     loopButton_->setIcon(loopOffIcon_);
-    loopButton_->setIconSize(QSize(static_cast<int>(this->height() * 0.8f),
-                                   static_cast<int>(this->height() * 0.8f)));
+    loopButton_->setIconSize(QSize(40,40));
     interpolateButton_->setIcon(interpolateOffIcon_);
-    interpolateButton_->setIconSize(QSize(static_cast<int>(this->height() * 0.8f),
-                                    static_cast<int>(this->height() * 0.8f)));
+    interpolateButton_->setIconSize(QSize(40,40));
     muteButton_->setIcon(muteOffIcon_);
-    muteButton_->setIconSize(QSize(static_cast<int>(this->height() * 0.8f),
-                                    static_cast<int>(this->height() * 0.8f)));
+    muteButton_->setIconSize(QSize(40,40));
 
     speedLabel->setText(tr(" Speed:"));
     speedBox_->setValue(1.0);
@@ -65,19 +66,36 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     masterVolumeSlider_->setValue(static_cast<int>(masterVolume_ * 100.0f));
     masterVolumeSlider_->setOrientation(Qt::Horizontal);
     masterVolumeSlider_->setMaximumWidth(400);
-    transportLayout->addWidget(loopButton_);
-    transportLayout->addWidget(interpolateButton_);
-    transportLayout->addWidget(pauseButton_);
-    transportLayout->addWidget(speedLabel);
-    transportLayout->addWidget(speedBox_);
-    transportLayout->addWidget(muteButton_);
-    transportLayout->addWidget(masterVolumeSlider_);
+
+    // Setup left side layout
+    speedLabel->setSizePolicy(QSizePolicy::Expanding,
+                              QSizePolicy::Minimum);
+    speedLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    leftLayout->addWidget(speedLabel);
+    leftLayout->addWidget(speedBox_);
+    leftLayout->setAlignment(Qt::AlignRight);
+
+    // Setup center layout
+    middleLayout->addWidget(loopButton_);
+    middleLayout->addWidget(pauseButton_);
+    middleLayout->addWidget(interpolateButton_);
+
+    // Setup right side layout (volume section)
+    rightLayout->addWidget(muteButton_);
+    masterVolumeSlider_->setSizePolicy(QSizePolicy::Expanding,
+                                       QSizePolicy::Expanding);
+    rightLayout->addWidget(masterVolumeSlider_);
     //set size and layout of transport
-    transportLayout->setAlignment(Qt::AlignHCenter);
-    transportLayout->setMargin(0);
-    transportLayout->setContentsMargins(8,0,8,0);
-    transportLayout->setSpacing(8);
-    this->setLayout(transportLayout);
+    centralLayout->addLayout(leftLayout);
+    centralLayout->addSpacing(20);
+    centralLayout->addLayout(middleLayout);
+    centralLayout->addSpacing(20);
+    centralLayout->addLayout(rightLayout);
+    centralLayout->setAlignment(Qt::AlignHCenter);
+    centralLayout->setMargin(0);
+    centralLayout->setContentsMargins(8,0,8,0);
+    centralLayout->setSpacing(8);
+    this->setLayout(centralLayout);
 
     // Styleseet stuff.
     this->setObjectName("TransportWidget");

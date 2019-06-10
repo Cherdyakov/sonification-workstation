@@ -43,14 +43,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->menuBar()->setObjectName("Menu");
     trackView->setObjectName("TrackView");
 
-    // Setup left side.
+    // Setup left side
     trackView->setPlayHead(playhead_);
-    transportWidget_->setMaximumHeight(50);
+    transportWidget_->setMaximumHeight(80);
+    transportWidget_->setMinimumHeight(80);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(trackView);
     layoutLeft->addWidget(scrollArea);
     layoutLeft->addWidget(transportWidget_);
-    layoutLeft->setSpacing(8);
+    layoutLeft->setSpacing(4);
     leftSide->setLayout(layoutLeft);
     // Setup right side.
     rightSide->setLayout(layoutRight);

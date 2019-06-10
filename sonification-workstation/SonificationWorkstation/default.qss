@@ -69,14 +69,23 @@ QSlider::add-page#MasterVolume
 background: #BDBDBD;
 }
 
+QLabel#SpeedLabel
+{
+font: bold 18px;
+color: #8DB600;
+}
+
 QSpinBox#SpeedBox
 {
-height: 20px;
-width: 60px;
+margin: 0px;
+height: 32px;
+width: 64px;
 background-color: #FAFAFA;
-border-width: 1px;
+border-width: 3px;
+border-radius: 6px;
 border-style: solid;
-border-color: #424242;
+border-color: #8DB600;
+font: 18px
 }
 
 QSpinBox#SpeedBox::up-button
