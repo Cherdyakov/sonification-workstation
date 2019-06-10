@@ -217,6 +217,11 @@ void MainWindow::createMenus()
     rtzShortcut->setKey(Qt::CTRL + Qt::Key_Return);
     connect(rtzShortcut, &QShortcut::activated,
             playhead_, &PlayHead::onReturnToZero);
+    // Mute shortcut
+    QShortcut* muteShortcut = new QShortcut(this);
+    muteShortcut->setKey(Qt::CTRL + Qt::Key_M);
+    connect(muteShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onMuteButtonReleased);
 }
 
 void MainWindow::writeSessionFile()
