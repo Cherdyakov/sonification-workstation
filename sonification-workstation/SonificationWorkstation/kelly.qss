@@ -76,12 +76,15 @@ background: none;
 
 QSpinBox#SpeedBox
 {
-height: 20px;
-width: 60px;
 background-color: #424242;
-border-width: 1px;
+margin: 0px;
+height: 32px;
+width: 70px;
+border-width: 3px;
+border-radius: 6px;
 border-style: solid;
-border-color: #202020;
+border-color: #8DB600;
+font: 18px
 }
 
 QSpinBox#SpeedBox::up-button
