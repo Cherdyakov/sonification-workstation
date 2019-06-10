@@ -73,6 +73,8 @@ public slots:
     void onMuteButtonReleased();
     void onSpeedIncrementedUp();
     void onSpeedIncrementedDown();
+    void onLargeSpeedIncrementedUp();
+    void onLargeSpeedIncrementedDown();
     void onVolumeUp();
     void onVolumeDown();
 

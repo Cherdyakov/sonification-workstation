@@ -189,6 +189,16 @@ void TransportWidget::onSpeedIncrementedDown()
     speedBox_->setValue(speedBox_->value() - 1);
 }
 
+void TransportWidget::onLargeSpeedIncrementedUp()
+{
+    speedBox_->setValue(speedBox_->value() + 100);
+}
+
+void TransportWidget::onLargeSpeedIncrementedDown()
+{
+    speedBox_->setValue(speedBox_->value() - 100);
+}
+
 void TransportWidget::onVolumeUp()
 {
     masterVolumeSlider_->setValue(masterVolumeSlider_->value() + 1);

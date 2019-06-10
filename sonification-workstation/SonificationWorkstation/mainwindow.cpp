@@ -232,6 +232,16 @@ void MainWindow::createMenus()
     speedIncrementDownShortcut->setKey(Qt::CTRL + Qt::Key_Comma);
     connect(speedIncrementDownShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onSpeedIncrementedDown);
+    // Larger speed up shortcut
+    QShortcut* largeSpeedIncrementUpShortcut = new QShortcut(this);
+    largeSpeedIncrementUpShortcut->setKey(Qt::CTRL + Qt::Key_Greater);
+    connect(largeSpeedIncrementUpShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onLargeSpeedIncrementedUp);
+    // Larger speed down shortcut
+    QShortcut* largeSpeedIncrementDownShortcut = new QShortcut(this);
+    largeSpeedIncrementDownShortcut->setKey(Qt::CTRL + Qt::Key_Less);
+    connect(largeSpeedIncrementDownShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onLargeSpeedIncrementedDown);
     // Volume up shortcut
     QShortcut* volumeUpShortcut = new QShortcut(this);
     volumeUpShortcut->setKey(Qt::CTRL + Qt::Key_Up);
