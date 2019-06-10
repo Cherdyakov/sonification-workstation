@@ -179,6 +179,26 @@ void TransportWidget::onMuteButtonReleased()
     }
 }
 
+void TransportWidget::onSpeedIncrementedUp()
+{
+    speedBox_->setValue(speedBox_->value() + 1);
+}
+
+void TransportWidget::onSpeedIncrementedDown()
+{
+    speedBox_->setValue(speedBox_->value() - 1);
+}
+
+void TransportWidget::onVolumeUp()
+{
+    masterVolumeSlider_->setValue(masterVolumeSlider_->value() + 1);
+}
+
+void TransportWidget::onVolumeDown()
+{
+    masterVolumeSlider_->setValue(masterVolumeSlider_->value() - 1);
+}
+
 void TransportWidget::onPauseButtonReleased()
 {
     pause_ = !pause_;

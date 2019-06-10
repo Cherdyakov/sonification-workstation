@@ -222,6 +222,26 @@ void MainWindow::createMenus()
     muteShortcut->setKey(Qt::CTRL + Qt::Key_M);
     connect(muteShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onMuteButtonReleased);
+    // Speed up shortcut
+    QShortcut* speedIncrementUpShortcut = new QShortcut(this);
+    speedIncrementUpShortcut->setKey(Qt::CTRL + Qt::Key_Period);
+    connect(speedIncrementUpShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onSpeedIncrementedUp);
+    // Speed down shortcut
+    QShortcut* speedIncrementDownShortcut = new QShortcut(this);
+    speedIncrementDownShortcut->setKey(Qt::CTRL + Qt::Key_Comma);
+    connect(speedIncrementDownShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onSpeedIncrementedDown);
+    // Volume up shortcut
+    QShortcut* volumeUpShortcut = new QShortcut(this);
+    volumeUpShortcut->setKey(Qt::CTRL + Qt::Key_Up);
+    connect(volumeUpShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onVolumeUp);
+    // Volume down shortcut
+    QShortcut* volumeDownShortcut = new QShortcut(this);
+    volumeDownShortcut->setKey(Qt::CTRL + Qt::Key_Down);
+    connect(volumeDownShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onVolumeDown);
 }
 
 void MainWindow::writeSessionFile()

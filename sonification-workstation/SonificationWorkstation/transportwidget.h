@@ -71,6 +71,10 @@ public slots:
     void onLoopButtonReleased();
     void onInterpolateButtonReleased();
     void onMuteButtonReleased();
+    void onSpeedIncrementedUp();
+    void onSpeedIncrementedDown();
+    void onVolumeUp();
+    void onVolumeDown();
 
 private slots:
     void onSpeedBoxValueChanged(int speed);
