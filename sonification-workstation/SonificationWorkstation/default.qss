@@ -79,7 +79,7 @@ QSpinBox#SpeedBox
 {
 margin: 0px;
 height: 32px;
-width: 64px;
+width: 70px;
 background-color: #FAFAFA;
 border-width: 3px;
 border-radius: 6px;

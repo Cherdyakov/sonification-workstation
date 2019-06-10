@@ -57,7 +57,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     muteButton_->setIcon(muteOffIcon_);
     muteButton_->setIconSize(QSize(40,40));
 
-    speedLabel->setText(tr(" Speed:"));
+    speedLabel->setText(tr(""));
     speedBox_->setValue(1.0);
     speedBox_->setMinimum(0.0);
     speedBox_->setMaximum(constants::SR);
@@ -87,9 +87,9 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     rightLayout->addWidget(masterVolumeSlider_);
     //set size and layout of transport
     centralLayout->addLayout(leftLayout);
-    centralLayout->addSpacing(20);
+    centralLayout->addSpacing(40);
     centralLayout->addLayout(middleLayout);
-    centralLayout->addSpacing(20);
+    centralLayout->addSpacing(40);
     centralLayout->addLayout(rightLayout);
     centralLayout->setAlignment(Qt::AlignHCenter);
     centralLayout->setMargin(0);
