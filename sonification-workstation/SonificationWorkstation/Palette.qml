@@ -18,78 +18,63 @@ Rectangle {
 
     Column {
 
-        //        Row {
-
         PaletteItem {
-            id: osc
+            label: "OSC"
             componentFile: "OSC.qml"
-            source: "images/OSC.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: am
-            componentFile: "AM.qml"
-            source: "images/AM.png"
-            onItemCreated: root.itemCreated(item)
-        }
-
-        PaletteItem {
-            id: fm
-            componentFile: "FM.qml"
-            source: "images/FM.png"
-            onItemCreated: root.itemCreated(item)
-        }
-
-        PaletteItem {
-            id: aud
-            componentFile: "AUD.qml"
-            source: "images/AUD.png"
-            onItemCreated: root.itemCreated(item)
-        }
-
-        PaletteItem {
-            id: pan
-            componentFile: "PAN.qml"
-            source: "images/PAN.png"
-            onItemCreated: root.itemCreated(item)
-        }
-        //        }
-
-        //        Row {
-
-        PaletteItem {
-            id: env
-            componentFile: "ENV.qml"
-            source: "images/ENV.png"
-            onItemCreated: root.itemCreated(item)
-        }
-
-        PaletteItem {
-            id: vol
-            componentFile: "VOL.qml"
-            source: "images/VOL.png"
-            onItemCreated: root.itemCreated(item)
-        }
-
-        PaletteItem {
-            id: nse
+            label: "NSE"
             componentFile: "NSE.qml"
-            source: "images/NSE.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: eq
+            label: "AUD"
+            componentFile: "AUD.qml"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
+            label: "AM"
+            componentFile: "AM.qml"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
+            label: "FM"
+            componentFile: "FM.qml"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
+            label: "VOL"
+            componentFile: "VOL.qml"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
+            label: "PAN"
+            componentFile: "PAN.qml"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
+            label: "ENV"
+            componentFile: "ENV.qml"
+            onItemCreated: root.itemCreated(item)
+        }
+
+        PaletteItem {
+            label: "EQ"
             componentFile: "EQ.qml"
-            source: "images/EQ.png"
             onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
-            id: out
+            label: "OUT"
             componentFile: "OUT.qml"
-            source: "images/OUT.png"
             onItemCreated: root.itemCreated(item)
         }
 

@@ -89,7 +89,9 @@ public:
         SUB,
         UNSUB,
         DELETE_ITEM,
-        IMPORT_DATASET
+        IMPORT_DATASET,
+        VOLUME,
+        MUTE
     };
 
 };

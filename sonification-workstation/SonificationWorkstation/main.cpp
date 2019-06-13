@@ -4,6 +4,7 @@
 #include "portaudio.h"
 #include "callback.h"
 #include "transport.h"
+#include "thememanager.h"
 #include "filereader.h"
 #include "Gamma/Sync.h"
 #include "Gamma/AudioIO.h"
@@ -17,9 +18,14 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
+    QCoreApplication::setOrganizationName("Sonification Workstation");
+    QCoreApplication::setOrganizationDomain("sonificationworkstation.org");
+    QCoreApplication::setApplicationName("Sonification Workstation");
+
     QApplication a(argc, argv);
     qmlRegisterType<SynthItem>("SoW", 1, 0, "QtSynthItem");
     qmlRegisterType<Oscillator>("SoW", 1, 0, "QtOscillator");
+    qmlRegisterType<ThemeManager>("SoW", 1, 0, "QtThemeManager");
     qmlRegisterType<Transport>("SoW", 1, 0, "QtTransport");
     qmlRegisterType<ParameterFloatInterface>("SoW", 1, 0, "SowParameter");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");

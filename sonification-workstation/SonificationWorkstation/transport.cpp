@@ -29,7 +29,7 @@ Transport::Transport(QObject *parent) : SynthItem (parent)
     mu_ = 0.0f;
     speed_ = 1;
     returnPos_ = 0.0f;
-    masterVolume_ = 1.0f;
+    masterVolumeTarget_ = masterVolume_ = 1.0f;
     interpolate_ = false;
 }
 
@@ -104,6 +104,22 @@ void Transport::onInterpolateChanged(bool interpolate)
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::INTERPOLATE;
     cmd.valueA = interpolate ? 1.0f : 0.0f;
+    transportCommandBuffer_.push(cmd);
+}
+
+void Transport::onMuteChanged(bool mute)
+{
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::MUTE;
+    cmd.valueA = mute ? 1.0f : 0.0f;
+    transportCommandBuffer_.push(cmd);
+}
+
+void Transport::onMasterVolumeChanged(float vol)
+{
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::VOLUME;
+    cmd.valueA = vol;
     transportCommandBuffer_.push(cmd);
 }
 
@@ -249,6 +265,19 @@ Frame Transport::process()
     calculateReturnPosition();
     mu_ += speed_ / frameRate_;
 
+    // move masterVolume_ to target if they aren't equal.
+    // Setting over the course of a single sample causes
+    // audible discontinuities (clicks).
+    if(!qFuzzyCompare(masterVolume_, masterVolumeTarget_))
+    {
+        if(masterVolume_ < masterVolumeTarget_)
+        {
+            masterVolume_ += 0.001f;
+        } else {
+            masterVolume_ -= 0.001f;
+        }
+    }
+
     return frame * masterVolume_ * !mute_;
 }
 
@@ -303,6 +332,12 @@ void Transport::processTransportCommand(TransportCommand cmd)
         break;
     case ENUMS::TRANSPORT_CMD::IMPORT_DATASET:
         processImportDataset();
+        break;
+    case ENUMS::TRANSPORT_CMD::VOLUME:
+        masterVolumeTarget_ = cmd.valueA;
+        break;
+    case ENUMS::TRANSPORT_CMD::MUTE:
+        mute_ = (cmd.valueA == 0.0f) ? false : true;
         break;
     }
 }

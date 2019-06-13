@@ -6,12 +6,13 @@
 #include <QQuickView>
 #include <QAction>
 #include <QLayout>
+#include <QSettings>
 
 #include "trackview.h"
 #include "transport.h"
 #include "transportwidget.h"
 #include "filereader.h"
-#include "style.h"
+#include "thememanager.h"
 
 using namespace sow;
 
@@ -30,16 +31,18 @@ private:
 
     Transport* transport_;
     TransportWidget* transportWidget_;
+    PlayHead* playhead_;
     QQuickView* quickView_;
+    ThemeManager* themeManager_;
 
     QString datafile_;
     QString sessionfile_;
-    Style style_;
 
     //convenience functions to create and populate menus
     void createActions();
     void createMenus();
     void writeSessionFile();
+    void setTheme(const QString theme);
 
 signals:
 
@@ -52,6 +55,9 @@ private slots:
     void onSaveAs();
     void onOpen();
     void onImportDataset();
+    void onDefaultThemeSet();
+    void onContrastThemeSet();
+    void onSimpleThemeSet();
 
 };
 

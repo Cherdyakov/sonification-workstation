@@ -11,8 +11,6 @@ SynthItem {
     label: qsTr("FM")
     type: ENUMS.FMOD
     output: ENUMS.FM
-    mainColor: Style.fmColor
-    textColor: Style.itemTextColor
 
     Component.onCompleted: {
         create()

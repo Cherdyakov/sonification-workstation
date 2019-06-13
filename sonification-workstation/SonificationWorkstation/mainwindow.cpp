@@ -5,10 +5,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // Set the title and size of the application window.
     this->setWindowTitle("Sonification Workstation");
     resize(QDesktopWidget().availableGeometry(this).size() * 0.8);
-    style_.setStyle();
 
+    // Set application theme (stylesheet).
+    themeManager_ = new ThemeManager(this);
+    QSettings settings;
+    if(!settings.contains("theme"))
+    {
+        settings.setValue("theme", "default");
+    }
+    setTheme(settings.value("theme").toString());
 
-    PlayHead* playHead = new PlayHead(this);                                            // Playback cursor
+    // Construct the application window.
     QWidget *centralWidget = new QWidget;                                               // Application top-level widget
     QHBoxLayout* centralLayout = new QHBoxLayout(this);                                 // Application top-level layout
     QSplitter *splitter = new QSplitter(this);                                          // Application window divided in two
@@ -17,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QVBoxLayout* layoutLeft = new QVBoxLayout(this);                                    // Left side of spliitter layout
     QVBoxLayout* layoutRight = new QVBoxLayout(this);                                   // Right side of splitter layout
     transportWidget_ = new TransportWidget(this);                                       // Transport controls (Play/Pause etc)
+    playhead_ = new PlayHead(this);                                                     // Playback cursor
     quickView_ = new QQuickView;                                                        // Renders Qt Quick patcher interface
     QWidget *quickViewContainer = QWidget::createWindowContainer(quickView_, this);     // Caontainer widget for QQuickView
     TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
@@ -25,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     transport_ = new Transport(this);                                                    // Represents loaded project
 
     quickView_->rootContext()->setContextProperty("transport", transport_);
+    quickView_->rootContext()->setContextProperty("themeManager", themeManager_);
     quickView_->rootContext()->setContextProperty("mainwindow", this);
     quickView_->setSource(QUrl("qrc:/main.qml"));
 
@@ -34,19 +43,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->menuBar()->setObjectName("Menu");
     trackView->setObjectName("TrackView");
 
-
-
-//    leftSide->setObjectName("LeftSide");
-//    leftSide->setStyleSheet("QWidget#LeftSide { background-color:#2800FF }");
-
-    // Setup left side.
-    trackView->setPlayHead(playHead);
-    transportWidget_->setMaximumHeight(50);
+    // Setup left side
+    trackView->setPlayHead(playhead_);
+    transportWidget_->setMaximumHeight(80);
+    transportWidget_->setMinimumHeight(80);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(trackView);
     layoutLeft->addWidget(scrollArea);
     layoutLeft->addWidget(transportWidget_);
-    layoutLeft->setSpacing(8);
+    layoutLeft->setSpacing(4);
     leftSide->setLayout(layoutLeft);
     // Setup right side.
     rightSide->setLayout(layoutRight);
@@ -78,11 +83,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(transport_, &Transport::datasetImported,
             transportWidget_, &TransportWidget::onDatasetChanged);
     connect(transport_, &Transport::datasetImported,
-            playHead, &PlayHead::onDatasetChanged);
+            playhead_, &PlayHead::onDatasetChanged);
 
     // Connect Transport < > TransportWidget.
     connect(transport_, &Transport::posChanged,
-            playHead, &PlayHead::onCursorMoved);
+            playhead_, &PlayHead::onCursorMoved);
     connect(transportWidget_, &TransportWidget::speedChanged,
             transport_, &Transport::onSpeedchanged);
     connect(transportWidget_, &TransportWidget::interpolateChanged,
@@ -91,13 +96,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport::onPausechanged);
     connect(transportWidget_, &TransportWidget::loopingChanged,
             transport_, &Transport::onLoopingchanged);
+    connect(transportWidget_, &TransportWidget::masterVolumeChanged,
+            transport_, &Transport::onMasterVolumeChanged);
+    connect(transportWidget_, &TransportWidget::muteChanged,
+            transport_, &Transport::onMuteChanged);
+
     // Playhead signals.
     connect(transportWidget_, &TransportWidget::pausedChanged,
-            playHead, &PlayHead::onPauseChanged);
-    connect(playHead, &PlayHead::cursorPosChanged,
-            transport_, &Transport::onPoschanged);
-    connect(playHead, &PlayHead::loopPointsChanged,
+            playhead_, &PlayHead::onPauseChanged);
+    connect(playhead_, &PlayHead::cursorPosChanged,
+            transport_, &Transport:: onPoschanged);
+    connect(playhead_, &PlayHead::loopPointsChanged,
             transport_, &Transport::onLoopPointsChanged);
+
+    // For catching keyboard shortcuts.
+    qApp->installEventFilter(this);
 }
 
 MainWindow::~MainWindow()
@@ -135,26 +148,110 @@ void MainWindow::createMenus()
             this, &MainWindow::onSaveAs);
 
     // Import dataset.
-    QAction *importDatasetFileAct = new QAction(tr("Import Dataset"), this);
-    importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    QAction *importDatasetFileAct = new QAction(tr("Dataset Import"), this);
+    importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
     importDatasetFileAct->setStatusTip(tr("Import CSV data into the data window"));
     connect(importDatasetFileAct, &QAction::triggered,
             this, &MainWindow::onImportDataset);
 
     // Quit application.
     QAction *quitAct = new QAction(tr("Quit"), this);
+#ifdef Q_OS_WIN32
+    // There is no default Quit key command on Windows
+    quitAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
+#else
     quitAct->setShortcut(QKeySequence::Quit);
-    quitAct->setStatusTip(tr("Quit") + " " + tr("Sonification Workstation"));
+#endif
+    quitAct->setStatusTip(tr("Quit Sonification Workstation"));
     connect(quitAct, &QAction::triggered,
             this, &MainWindow::onQuit);
 
-    // Create and populate the menus.
+    // Set default theme.
+    QAction *defaultThemeAct = new QAction(tr("Default"), this);
+    connect(defaultThemeAct, &QAction::triggered,
+            this, &MainWindow::onDefaultThemeSet);
+
+    // Set high-contrast (Kelly-color) theme.
+    QAction *kellyThemeAct = new QAction(tr("High Contrast"), this);
+    connect(kellyThemeAct, &QAction::triggered,
+            this, &MainWindow::onContrastThemeSet);
+
+    // Set simple theme.
+    QAction *simpleThemeAct = new QAction(tr("Simple"), this);
+    connect(simpleThemeAct, &QAction::triggered,
+            this, &MainWindow::onSimpleThemeSet);
+
+    // Create and populate File menu.
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
     fileMenu->addAction(openSessionAct);
     fileMenu->addAction(saveSessionAct);
     fileMenu->addAction(saveSessionAsAct);
     fileMenu->addAction(importDatasetFileAct);
     fileMenu->addAction(quitAct);
+
+    // Create and populate Edit menu.
+    QMenu *editMenu = menuBar()->addMenu(tr("Edit"));
+    QMenu *themeMenu = editMenu->addMenu(tr("Set Theme"));
+    themeMenu->addAction(defaultThemeAct);
+    themeMenu->addAction(kellyThemeAct);
+    themeMenu->addAction(simpleThemeAct);
+
+    // Global keyboard shortcuts.
+    // Play/Pause shortcut
+    QShortcut* pauseShortcut = new QShortcut(this);
+    pauseShortcut->setKey(Qt::CTRL + Qt::Key_P);
+    connect(pauseShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onPauseButtonReleased);
+    // Looping shortcut
+    QShortcut* loopShortcut = new QShortcut(this);
+    loopShortcut->setKey(Qt::CTRL + Qt::Key_L);
+    connect(loopShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onLoopButtonReleased);
+    // Interpolation shortcut
+    QShortcut* interpolateShortcut = new QShortcut(this);
+    interpolateShortcut->setKey(Qt::CTRL + Qt::Key_I);
+    connect(interpolateShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onInterpolateButtonReleased);
+    // Transport RTZ shortcut
+    QShortcut* rtzShortcut = new QShortcut(this);
+    rtzShortcut->setKey(Qt::CTRL + Qt::Key_Return);
+    connect(rtzShortcut, &QShortcut::activated,
+            playhead_, &PlayHead::onReturnToZero);
+    // Mute shortcut
+    QShortcut* muteShortcut = new QShortcut(this);
+    muteShortcut->setKey(Qt::CTRL + Qt::Key_M);
+    connect(muteShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onMuteButtonReleased);
+    // Speed up shortcut
+    QShortcut* speedIncrementUpShortcut = new QShortcut(this);
+    speedIncrementUpShortcut->setKey(Qt::CTRL + Qt::Key_Period);
+    connect(speedIncrementUpShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onSpeedIncrementedUp);
+    // Speed down shortcut
+    QShortcut* speedIncrementDownShortcut = new QShortcut(this);
+    speedIncrementDownShortcut->setKey(Qt::CTRL + Qt::Key_Comma);
+    connect(speedIncrementDownShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onSpeedIncrementedDown);
+    // Larger speed up shortcut
+    QShortcut* largeSpeedIncrementUpShortcut = new QShortcut(this);
+    largeSpeedIncrementUpShortcut->setKey(Qt::CTRL + Qt::Key_Greater);
+    connect(largeSpeedIncrementUpShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onLargeSpeedIncrementedUp);
+    // Larger speed down shortcut
+    QShortcut* largeSpeedIncrementDownShortcut = new QShortcut(this);
+    largeSpeedIncrementDownShortcut->setKey(Qt::CTRL + Qt::Key_Less);
+    connect(largeSpeedIncrementDownShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onLargeSpeedIncrementedDown);
+    // Volume up shortcut
+    QShortcut* volumeUpShortcut = new QShortcut(this);
+    volumeUpShortcut->setKey(Qt::CTRL + Qt::Key_Up);
+    connect(volumeUpShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onVolumeUp);
+    // Volume down shortcut
+    QShortcut* volumeDownShortcut = new QShortcut(this);
+    volumeDownShortcut->setKey(Qt::CTRL + Qt::Key_Down);
+    connect(volumeDownShortcut, &QShortcut::activated,
+            transportWidget_, &TransportWidget::onVolumeDown);
 }
 
 void MainWindow::writeSessionFile()
@@ -178,6 +275,16 @@ void MainWindow::writeSessionFile()
     QFile file(sessionfile_);
     file.open(QFile::WriteOnly);
     file.write(sessionDocument.toJson());
+}
+
+void MainWindow::setTheme(const QString theme)
+{
+    // Save for next application launch.
+    QSettings settings;
+    settings.setValue("theme", theme);
+    // Read the stylesheet from disk and apply it.
+    QString path = ":/" + theme + ".qss";
+    themeManager_->loadTheme(path);
 }
 
 void MainWindow::onQuit()
@@ -255,5 +362,21 @@ void MainWindow::onImportDataset()
         transport_->onImportDataset(datafile_);
     }
 }
+
+void MainWindow::onDefaultThemeSet()
+{
+    setTheme("default");
+}
+
+void MainWindow::onContrastThemeSet()
+{
+    setTheme("kelly");
+}
+
+void MainWindow::onSimpleThemeSet()
+{
+    setTheme("simple");
+}
+
 
 

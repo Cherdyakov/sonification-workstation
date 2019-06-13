@@ -121,6 +121,11 @@ void PlayHead::onDatasetChanged(Dataset *dataset)
     dataLoaded_ = dataset->hasData();
 }
 
+void PlayHead::onReturnToZero()
+{
+    emit cursorPosChanged(0.0f);
+}
+
 void PlayHead::mousePressEvent(QMouseEvent *e)
 {
     Qt::MouseButton button = e->button();

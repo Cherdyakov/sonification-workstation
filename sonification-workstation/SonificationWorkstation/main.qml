@@ -1,6 +1,7 @@
 import QtQuick.Controls 2.2
 import QtQuick 2.12
 import QtQuick.Layouts 1.0
+import SoW 1.0
 import ENUMS 1.0
 import "SessionCode.js" as SessionCode
 import "Style.js" as Style
@@ -9,7 +10,7 @@ import "Utils.js" as Utils
 Rectangle
 {
     id: root
-    color: Style.quickViewColor
+    color: themeManager.themeMap["backgroundColor"]
     anchors.fill: parent
 
     // Holds every item in the workspace for iterating.
@@ -67,15 +68,20 @@ Rectangle
         onClicked: {
             workspace.forceActiveFocus()
             if(mouse.button === Qt.RightButton) {
-                if(itemPopup.visible) {
-                    itemPopup.close()
-                }
-                else {
-                    itemPopup.x = mouse.x
-                    itemPopup.y = mouse.y - (itemPopup.height / 2)
-                    palette.spawnX = mouse.x
-                    palette.spawnY = mouse.y
-                    itemPopup.open()
+                // If patching and right c
+                if(patchManager.patching) {
+                    patchManager.patchStop()
+                } else {
+                    if(itemPopup.visible) {
+                        itemPopup.close()
+                    }
+                    else {
+                        itemPopup.x = mouse.x
+                        itemPopup.y = mouse.y - (itemPopup.height / 2)
+                        palette.spawnX = mouse.x
+                        palette.spawnY = mouse.y
+                        itemPopup.open()
+                    }
                 }
             }
             else if(mouse.button === Qt.LeftButton) {
