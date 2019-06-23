@@ -66,6 +66,7 @@ HEADERS = \
    $$PWD/userdata.h \
    $$PWD/utility.h \
    $$PWD/volume.h \
+    aboutmessage.h \
     mastervolumeslider.h \
     thememanager.h
 
@@ -101,6 +102,7 @@ SOURCES = \
    $$PWD/transportwidget.cpp \
    $$PWD/utility.cpp \
    $$PWD/volume.cpp \
+    aboutmessage.cpp \
     mastervolumeslider.cpp \
     thememanager.cpp
 

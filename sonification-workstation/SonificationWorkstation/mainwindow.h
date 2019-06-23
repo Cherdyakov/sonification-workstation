@@ -13,6 +13,7 @@
 #include "transportwidget.h"
 #include "filereader.h"
 #include "thememanager.h"
+#include "aboutmessage.h"
 
 using namespace sow;
 
@@ -37,6 +38,7 @@ private:
 
     QString datafile_;
     QString sessionfile_;
+    AboutMessage about_;
 
     //convenience functions to create and populate menus
     void createActions();
@@ -58,6 +60,7 @@ private slots:
     void onDefaultThemeSet();
     void onContrastThemeSet();
     void onSimpleThemeSet();
+    void onAbout();
 
 };
 

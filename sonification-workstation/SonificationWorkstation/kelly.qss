@@ -3,6 +3,18 @@ MainWindow
 background-color: #424242;
 }
 
+
+QMessageBox
+{
+color: #f9f9f9;
+background-color: #424242;
+}
+
+QMessageBox QPushButton
+{
+background-color: #202020;
+}
+
 QMenuBar
 {
 color: #f9f9f9;
