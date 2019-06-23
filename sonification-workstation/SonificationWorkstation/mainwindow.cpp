@@ -154,6 +154,11 @@ void MainWindow::createMenus()
     connect(importDatasetFileAct, &QAction::triggered,
             this, &MainWindow::onImportDataset);
 
+    // Show about message bos.
+    QAction *aboutAct = new QAction(tr("About Sonification Workstation"), this);
+    connect(aboutAct, &QAction::triggered,
+            this, &MainWindow::onAbout);
+
     // Quit application.
     QAction *quitAct = new QAction(tr("Quit"), this);
 #ifdef Q_OS_WIN32
@@ -166,6 +171,9 @@ void MainWindow::createMenus()
     connect(quitAct, &QAction::triggered,
             this, &MainWindow::onQuit);
 
+    ///
+    /// Actions for setting Themes.
+    ///
     // Set default theme.
     QAction *defaultThemeAct = new QAction(tr("Default"), this);
     connect(defaultThemeAct, &QAction::triggered,
@@ -187,6 +195,7 @@ void MainWindow::createMenus()
     fileMenu->addAction(saveSessionAct);
     fileMenu->addAction(saveSessionAsAct);
     fileMenu->addAction(importDatasetFileAct);
+    fileMenu->addAction(aboutAct);
     fileMenu->addAction(quitAct);
 
     // Create and populate Edit menu.
@@ -376,6 +385,11 @@ void MainWindow::onContrastThemeSet()
 void MainWindow::onSimpleThemeSet()
 {
     setTheme("simple");
+}
+
+void MainWindow::onAbout()
+{
+    about_.exec();
 }
 
 

@@ -3,6 +3,11 @@ MainWindow
 background-color: #FAFAFA;
 }
 
+QMessageBox
+{
+color: #FF0000;
+}
+
 QMenuBar
 {
 color: #424242;
