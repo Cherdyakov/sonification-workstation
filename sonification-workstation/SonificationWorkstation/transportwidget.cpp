@@ -38,7 +38,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     masterVolumeSlider_->setObjectName("MasterVolume");
     masterVolumeSlider_->setFocusPolicy(Qt::NoFocus);
 
-    // Button icons.
+    // Load icon files.
     playIcon_.addFile(":/images/play.svg");
     pauseIcon_.addFile(":/images/pause.svg");
     loopOnIcon_.addFile(":/images/loop-on.svg");
@@ -47,7 +47,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     interpolateOffIcon_.addFile(":/images/interpolate-off.svg");
     muteOnIcon_.addFile(":/images/speaker-off.svg");
     muteOffIcon_.addFile(":/images/speaker-on.svg");
-
+    // Set button icons and sizes.
     pauseButton_->setIcon(playIcon_);
     pauseButton_->setIconSize(QSize(72, 72));
     loopButton_->setIcon(loopOffIcon_);
@@ -56,6 +56,13 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     interpolateButton_->setIconSize(QSize(40,40));
     muteButton_->setIcon(muteOffIcon_);
     muteButton_->setIconSize(QSize(40,40));
+    // Set button tooltips
+    pauseButton_->setToolTip("Play/Pause (Ctrl+P)");
+    loopButton_->setToolTip("Enable looping (Ctrl+L)");
+    interpolateButton_->setToolTip("Enable interpolation (Ctrl+I)");
+    muteButton_->setToolTip("Mute (Ctrl+M)");
+    masterVolumeSlider_->setToolTip("Master Volume (Ctrl+UpArrow/Ctrl+DownArrow");
+    speedBox_->setToolTip("Data samples per second (Ctrl+,/Ctrl+. or Ctrl+</Ctrl+> for larger increment)");
 
     speedLabel->setText(tr(""));
     speedBox_->setValue(1.0);
