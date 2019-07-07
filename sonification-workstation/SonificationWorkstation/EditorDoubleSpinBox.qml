@@ -20,10 +20,6 @@ SpinBox {
     up.indicator.implicitWidth: 16
     down.indicator.implicitWidth: 16
 
-    Component.onCompleted: {
-        console.log(textMetrics.width)
-    }
-
     contentItem: TextInput {
         z: 2
         text: spinbox.textFromValue(spinbox.value, spinbox.locale)
