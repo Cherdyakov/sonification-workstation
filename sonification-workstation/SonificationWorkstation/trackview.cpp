@@ -112,6 +112,7 @@ Track *TrackView::addTrack()
 {
     Track* track = new Track(this);
     TrackPlotter* plotter = new TrackPlotter(track);
+    track->setFixedHeight(140);
     track->setPlotter(plotter);
     plotsLayout_->addWidget(plotter);
     tracksLayout_->addWidget(track);
@@ -122,6 +123,8 @@ Track *TrackView::addTrack()
             track, &Track::onXRangeChanged);
     connect(this, &TrackView::wheelChanged,
             plotter, &TrackPlotter::onWheelChanged);
+    connect(track, &Track::resized,
+            plotter, &TrackPlotter::onResized);
 
     return track;
 }

@@ -133,4 +133,9 @@ void TrackPlotter::onXRangeChanged(QCPRange range)
     emit xRangeChanged(xAxis->range());
 }
 
+void TrackPlotter::onResized(int height)
+{
+    this->setFixedHeight(height);
+}
+
 

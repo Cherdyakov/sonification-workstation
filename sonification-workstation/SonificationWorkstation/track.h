@@ -15,20 +15,22 @@ class Track : public QWidget
 public:
 
     explicit Track(QWidget *parent = nullptr);
-    ~Track();
-
-    static const int TrackHeight = 120;
-    static const int TrackHeaderWidth = 140;
+    ~Track() override;
 
     void setPlotter(TrackPlotter* plotter);
     TrackPlotter* plotter() const;
     void plot(std::vector<float> vec);
     void setTrackNumber(uint num);
 
+protected:
+
+    void resizeEvent(QResizeEvent* e) override;
+
 private:
 
     uint trackNumber_;
     TrackPlotter* plotter_;
+    TrackHeader* header_;
     TrackName* name_;
     QCPRange xRange_;
 
@@ -39,6 +41,7 @@ public slots:
 signals:
 
     void xRangeChanged(QCPRange range);
+    void resized(int height);
 
 };
 
