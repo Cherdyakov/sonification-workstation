@@ -10,11 +10,9 @@ SpinBox {
     to: 20000 * 100
     stepSize: 100
     editable: true
-    padding: 0
     font.pointSize: Style.editorFontSize
     Layout.maximumHeight: Style.editorRowHeight + 2
-    Layout.preferredWidth: Style.editorControlWidth
-
+    padding: 0
 
     property int decimals: 2
     property real realValue: value / 100
@@ -22,21 +20,18 @@ SpinBox {
     up.indicator.implicitWidth: 16
     down.indicator.implicitWidth: 16
 
+    Component.onCompleted: {
+        console.log(textMetrics.width)
+    }
+
     contentItem: TextInput {
-            z: 2
-            text: spinbox.textFromValue(spinbox.value, spinbox.locale)
-
-//            font: spinbox.font
-//            color: "#21be2b"
-            selectionColor: "#21be2b"
-//            selectedTextColor: "#ffffff"
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-
-//            readOnly: !spinbox.editable
-//            validator: spinbox.validator
-//            inputMethodHints: Qt.ImhFormattedNumbersOnly
-        }
+        z: 2
+        text: spinbox.textFromValue(spinbox.value, spinbox.locale)
+        font.pointSize: Style.editorFontSize
+        selectionColor: "#21be2b"
+        horizontalAlignment: Qt.AlignHCenter
+        verticalAlignment: Qt.AlignVCenter
+    }
 
     validator: DoubleValidator {
         bottom: Math.min(spinbox.from, spinbox.to)
