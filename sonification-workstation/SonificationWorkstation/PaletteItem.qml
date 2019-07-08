@@ -13,10 +13,10 @@ Rectangle {
     // Physical properties of this item on the Palette
     property var textColor: themeManager.themeMap["textColor"]
     border.color: textColor
-    border.width: 4
+    border.width: Style.itemBorderWidth * Screen.pixelDensity
     color: themeManager.themeMap[label]
-    width: Style.paletteItemDiameter * Screen.devicePixelRatio
-    height: Style.paletteItemDiameter * Screen.devicePixelRatio
+    width: Style.itemDiameter * Screen.pixelDensity
+    height: Style.itemDiameter * Screen.pixelDensity
     radius: width * 0.5
 
     signal itemCreated(var item)
@@ -24,6 +24,7 @@ Rectangle {
     Text {
         text: label
         color: textColor
+        font.pointSize: Style.editorFontSize
         anchors {
             centerIn: parent
         }

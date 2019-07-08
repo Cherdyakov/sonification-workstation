@@ -8,8 +8,8 @@ Item {
 
     id: root
     z: Style.itemZ + zModifier
-    width: Style.itemDiameter * Screen.devicePixelRatio
-    height: Style.itemDiameter * Screen.devicePixelRatio
+    width: Style.itemDiameter * Screen.pixelDensity
+    height: Style.itemDiameter * Screen.pixelDensity
 
     // Random name for identifying in session files.
     property string name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -109,7 +109,7 @@ Item {
         color: mute ? Style.itemMuteColor : mainColor
         radius: width * 0.5
         border.color: root.activeFocus ? Style.itemActiveFocusColor : textColor
-        border.width: 4
+        border.width: Style.itemBorderWidth * Screen.pixelDensity
         opacity: created ? 1 : 0.4
 
         MouseArea {
@@ -161,6 +161,7 @@ Item {
         Text {
             id: labelText
             text: label
+            font.pointSize: Style.editorFontSize
             color: textColor
             anchors {
                 centerIn: parent

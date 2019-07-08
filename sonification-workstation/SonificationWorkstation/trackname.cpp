@@ -7,7 +7,6 @@ TrackName::TrackName(QWidget *parent) : QWidget(parent)
     // set label properties
     label_ = new QLabel;
     label_->setContentsMargins(2,2,2,2);
-    label_->setFixedHeight(20);
     label_->setStyleSheet("font: 16pt");
 
     this->setAutoFillBackground(true);

@@ -72,7 +72,6 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     masterVolumeSlider_->setMaximum(100);
     masterVolumeSlider_->setValue(static_cast<int>(masterVolume_ * 100.0f));
     masterVolumeSlider_->setOrientation(Qt::Horizontal);
-    masterVolumeSlider_->setMaximumWidth(400);
 
     // Setup left side layout
     speedLabel->setSizePolicy(QSizePolicy::Expanding,

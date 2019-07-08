@@ -62,10 +62,34 @@ void TrackView::setPlayHead(PlayHead *playHead)
 /// \brief TrackView::wheelEvent
 /// \param e
 /// Transmit wheel events to all tracks
-/// so they can set their zoom level
+/// so they can set their zoom level, track height,
+/// or plot view position.
 void TrackView::wheelEvent(QWheelEvent *e)
 {
-    emit wheelChanged(e);
+    // Alt modifier, change track height.
+    if((e->modifiers() & Qt::ShiftModifier) &&
+            e->modifiers() & Qt::CTRL) {
+        QPoint numDegrees = e->angleDelta() / 8;
+
+        if (!numDegrees.isNull()) {
+            QPoint numSteps = numDegrees / 15;
+            emit trackHeightChanged(numSteps.y());
+        }
+    }
+    // Ctrl modifier, change y position.
+    else if(e->modifiers() & Qt::CTRL) {
+        QPoint numDegrees = e->angleDelta() / 8;
+        if (!numDegrees.isNull()) {
+            QPoint numSteps = numDegrees / 15;
+            emit positionChanged(numSteps.y());
+        }
+    }
+    // No modifier, zoom plots.
+    else
+    {
+        emit zoomChanged(e);
+    }
+    e->accept();
 }
 
 void TrackView::plot(sow::Dataset *dataset)
@@ -112,16 +136,23 @@ Track *TrackView::addTrack()
 {
     Track* track = new Track(this);
     TrackPlotter* plotter = new TrackPlotter(track);
+    track->setFixedHeight(140);
     track->setPlotter(plotter);
     plotsLayout_->addWidget(plotter);
     tracksLayout_->addWidget(track);
 
     connect(track, &Track::xRangeChanged,
             this, &TrackView::onXRangeChanged);
+    connect(track, &Track::resized,
+            plotter, &TrackPlotter::onResized);
     connect(this, &TrackView::xRangeChanged,
             track, &Track::onXRangeChanged);
-    connect(this, &TrackView::wheelChanged,
-            plotter, &TrackPlotter::onWheelChanged);
+    connect(this, &TrackView::zoomChanged,
+            plotter, &TrackPlotter::onZoomChanged);
+    connect(this, &TrackView::trackHeightChanged,
+            track, &Track::onTrackHeightChanged);
+    connect(this, &TrackView::positionChanged,
+            plotter, &TrackPlotter::onPositionChanged);
 
     return track;
 }

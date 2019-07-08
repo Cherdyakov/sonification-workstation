@@ -44,7 +44,8 @@ var itemZ = 300
 var itemEditorZ = 400
 
 // SynthItem.qml style
-var itemDiameter = 32
+var itemDiameter = 10
+var itemBorderWidth = 0.5
 var itemRadius = itemDiameter * 0.5
 var itemTextColor = kWhite
 var itemMuteColor = kGrey

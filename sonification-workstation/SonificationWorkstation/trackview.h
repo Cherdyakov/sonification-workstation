@@ -38,7 +38,9 @@ private:
 signals:
 
     void xRangeChanged(QCPRange range);
-    void wheelChanged(QWheelEvent* e);
+    void zoomChanged(QWheelEvent* e);
+    void trackHeightChanged(int steps);
+    void positionChanged(int steps);
 
 public slots:
 

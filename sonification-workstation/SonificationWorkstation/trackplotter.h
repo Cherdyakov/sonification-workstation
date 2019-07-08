@@ -34,7 +34,9 @@ protected:
 
 public slots:
 
-    void onWheelChanged(QWheelEvent* e);
+    void onZoomChanged(QWheelEvent* e);
+    void onPositionChanged(int change);
+    void onResized(int height);
 
 private slots:
 
