@@ -122,9 +122,19 @@ void TrackPlotter::wheelEvent(QWheelEvent *e)
     e->accept();
 }
 
-void TrackPlotter::onWheelChanged(QWheelEvent *e)
+void TrackPlotter::onZoomChanged(QWheelEvent *e)
 {
     wheelEvent(e);
+}
+
+void TrackPlotter::onPositionChanged(int change)
+{
+    QCPRange newRange = xAxis->range();
+    double rangeWidth = newRange.upper - newRange.lower;
+    double changeAmount = change * (rangeWidth / 10.0);
+    newRange.lower += changeAmount;
+    newRange.upper += changeAmount;
+    xAxis->setRange(newRange);
 }
 
 void TrackPlotter::onXRangeChanged(QCPRange range)

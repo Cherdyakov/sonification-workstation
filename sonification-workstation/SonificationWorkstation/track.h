@@ -37,6 +37,7 @@ private:
 public slots:
 
     void onXRangeChanged(QCPRange range);
+    void onTrackHeightChanged(int change);
 
 signals:
 

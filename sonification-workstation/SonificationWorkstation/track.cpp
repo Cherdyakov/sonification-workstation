@@ -26,12 +26,12 @@ Track::~Track()
 
 void Track::setPlotter(TrackPlotter *plotter)
 {
-   if(plotter_ != plotter)
-   {
-       plotter_ = plotter;
-       connect(plotter_, &TrackPlotter::xRangeChanged,
-               this, &Track::onXRangeChanged);
-   }
+    if(plotter_ != plotter)
+    {
+        plotter_ = plotter;
+        connect(plotter_, &TrackPlotter::xRangeChanged,
+                this, &Track::onXRangeChanged);
+    }
 }
 
 TrackPlotter *Track::plotter() const
@@ -63,6 +63,17 @@ void Track::onXRangeChanged(QCPRange range)
         plotter_->replot();
         emit xRangeChanged(xRange_);
     }
+}
+
+void Track::onTrackHeightChanged(int change)
+{
+    int newHeight = this->height() + (change * 10);
+    if(newHeight < 100) {
+        newHeight = 100;
+    } else if(newHeight > 400) {
+        newHeight = 400;
+    }
+    this->setFixedHeight(newHeight);
 }
 
 } // namespace sow
