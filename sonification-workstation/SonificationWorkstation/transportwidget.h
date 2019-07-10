@@ -32,6 +32,7 @@ public:
 private:
 
     bool pause_;
+    bool record_;
     bool looping_;
     bool interpolate_;
     bool mute_;
@@ -61,6 +62,7 @@ protected:
 
 signals:
     void pausedChanged(bool pause);
+    void recordChanged(bool record);
     void loopingChanged(bool loop);
     void speedChanged(float speed);
     void interpolateChanged(bool interpolate_);
@@ -71,6 +73,7 @@ public slots:
     void onSpeedChanged(int speed);
     void onDatasetChanged(sow::Dataset *dataset);
     void onPauseButtonReleased();
+    void onRecordButtonReleased();
     void onLoopButtonReleased();
     void onInterpolateButtonReleased();
     void onMuteButtonReleased();

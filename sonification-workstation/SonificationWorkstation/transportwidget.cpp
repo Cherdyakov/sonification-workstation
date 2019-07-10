@@ -5,6 +5,7 @@
 TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 {
     pause_ = true;
+    record_ = false;
     looping_ = false;
     interpolate_ = false;
     mute_ = false;
@@ -94,7 +95,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     middleLayout->addWidget(loopButton_);
     middleLayout->addWidget(pauseButton_);
     middleLayout->addWidget(interpolateButton_);
-    rightLayout->addWidget(muteButton_);
+    middleLayout->addWidget(muteButton_);
 
     // Setup right side layout (volume section)
     masterVolumeSlider_->setSizePolicy(QSizePolicy::Expanding,
@@ -117,6 +118,8 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 
     connect(pauseButton_, SIGNAL(released()),
             this, SLOT(onPauseButtonReleased()));
+    connect(recordButton_, SIGNAL(released()),
+            this, SLOT(onRecordButtonReleased()));
     connect(loopButton_, SIGNAL(released()),
             this, SLOT(onLoopButtonReleased()));
     connect(speedBox_, SIGNAL(valueChanged(int)),
@@ -234,6 +237,19 @@ void TransportWidget::onPauseButtonReleased()
     }
     else {
         pauseButton_->setIcon(pauseIcon_);
+    }
+}
+
+void TransportWidget::onRecordButtonReleased()
+{
+    record_ = !record_;
+    emit recordChanged(record_);
+
+    if(record_) {
+        recordButton_->setIcon(recordOnIcon_);
+    }
+    else {
+        recordButton_->setIcon(recordOffIcon_);
     }
 }
 
