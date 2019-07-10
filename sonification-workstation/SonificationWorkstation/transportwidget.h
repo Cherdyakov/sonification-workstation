@@ -39,6 +39,8 @@ private:
     float masterVolume_;
     QIcon playIcon_;
     QIcon pauseIcon_;
+    QIcon recordOnIcon_;
+    QIcon recordOffIcon_;
     QIcon loopOnIcon_;
     QIcon loopOffIcon_;
     QIcon interpolateOnIcon_;
@@ -46,6 +48,7 @@ private:
     QIcon muteOnIcon_;
     QIcon muteOffIcon_;
     QPushButton* pauseButton_;
+    QPushButton* recordButton_;
     QPushButton* loopButton_;
     QPushButton* interpolateButton_;
     QPushButton* muteButton_;

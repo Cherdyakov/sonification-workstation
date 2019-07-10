@@ -128,6 +128,13 @@ border-width: 0px;
 border-radius: 0px;
 }
 
+QPushButton#RecordButton
+{
+background-image: ;
+border-width: 0px;
+border-radius: 0px;
+}
+
 QPushButton#LoopButton
 {
 background-image: ;
