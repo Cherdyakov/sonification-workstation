@@ -81,6 +81,7 @@ public:
 
     enum class TRANSPORT_CMD {
         PAUSE,
+        RECORD,
         POS,
         SPEED,
         LOOP,
