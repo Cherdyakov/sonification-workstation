@@ -68,6 +68,7 @@ HEADERS = \
    $$PWD/volume.h \
     aboutmessage.h \
     mastervolumeslider.h \
+    recorder.h \
     thememanager.h
 
 SOURCES = \
@@ -104,6 +105,7 @@ SOURCES = \
    $$PWD/volume.cpp \
     aboutmessage.cpp \
     mastervolumeslider.cpp \
+    recorder.cpp \
     thememanager.cpp
 
 INCLUDEPATH = \
@@ -130,9 +132,10 @@ INCLUDEPATH += $$PWD/../Gamma/external/lib_osx
 DEPENDPATH += $$PWD/../Gamma/external/lib_osx
 
 # LibSndFile (required for Gamma)
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/external/lib_win64/ -llibsndfile-1d
-#else:unix: LIBS += -llibsndfile-1
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -llibsndfile-1
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -llibsndfile-1
+else:unix:!macx: LIBS += -llibsndfile-1
+else:macx: LIBS += -L$$PWD/../Gamma/external/lib_osx/ -llibsndfile-1
 
 DISTFILES += \
     sow.ico

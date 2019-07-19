@@ -89,13 +89,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(transport_, &Transport::posChanged,
             playhead_, &PlayHead::onCursorMoved);
     connect(transportWidget_, &TransportWidget::speedChanged,
-            transport_, &Transport::onSpeedchanged);
+            transport_, &Transport::onSpeedChanged);
     connect(transportWidget_, &TransportWidget::interpolateChanged,
             transport_, &Transport::onInterpolateChanged);
     connect(transportWidget_, &TransportWidget::pausedChanged,
-            transport_, &Transport::onPausechanged);
+            transport_, &Transport::onPauseChanged);
+    connect(transportWidget_, &TransportWidget::recordChanged,
+            transport_, &Transport::onRecordChanged);
     connect(transportWidget_, &TransportWidget::loopingChanged,
-            transport_, &Transport::onLoopingchanged);
+            transport_, &Transport::onLoopingChanged);
     connect(transportWidget_, &TransportWidget::masterVolumeChanged,
             transport_, &Transport::onMasterVolumeChanged);
     connect(transportWidget_, &TransportWidget::muteChanged,
@@ -105,7 +107,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(transportWidget_, &TransportWidget::pausedChanged,
             playhead_, &PlayHead::onPauseChanged);
     connect(playhead_, &PlayHead::cursorPosChanged,
-            transport_, &Transport:: onPoschanged);
+            transport_, &Transport:: onPosChanged);
     connect(playhead_, &PlayHead::loopPointsChanged,
             transport_, &Transport::onLoopPointsChanged);
 
