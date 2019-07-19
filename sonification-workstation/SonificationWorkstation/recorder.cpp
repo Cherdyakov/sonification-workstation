@@ -17,7 +17,7 @@ void Recorder::Start()
 {
     sf_.channels(2);
     sf_.frameRate(constants::SR);
-    sf_.format(gam::SoundFile::AIFF);
+    sf_.format(gam::SoundFile::WAV);
     sf_.path("output.wav");
     sf_.openWrite();
 

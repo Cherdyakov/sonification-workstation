@@ -39,16 +39,6 @@ int main(int argc, char *argv[])
     // Initialize Gamma
     gam::Sync::master().spu(constants::SR);
 
-
-    gam::Recorder rec_;
-    gam::SoundFile sf_;
-
-    sf_.channels(2);
-    sf_.frameRate(constants::SR);
-    sf_.format(gam::SoundFile::AIFF);
-    sf_.path("output.wav");
-    sf_.openWrite();
-
     AudioIO audioIO(
     128,        // block size
     constants::SR,      // sample rate (Hz)
