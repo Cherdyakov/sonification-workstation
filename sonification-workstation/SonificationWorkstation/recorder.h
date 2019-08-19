@@ -3,8 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
-#include "Gamma/Recorder.h"
-#include "Gamma/SoundFile.h"
+#include "../Gamma/external/include/sndfile.h"
 #include "frame.h"
 
 namespace sow {
@@ -17,10 +16,9 @@ public:
     void Start();
     void Stop();
     void Write(Frame frame);
+//    SF_INFO sfinfo;
 
 private:
-    gam::Recorder rec_;
-    gam::SoundFile sf_;
     QTimer copyTimer_;
 
 signals:
