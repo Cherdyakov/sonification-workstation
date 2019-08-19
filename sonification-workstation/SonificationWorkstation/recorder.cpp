@@ -10,7 +10,8 @@ Recorder::Recorder(QObject *parent) : QObject(parent)
     connect(&copyTimer_, &QTimer::timeout,
             this, &Recorder::CopySamples);
 
-    rec_.resize(2, 8192);
+    framesSinceCopy_ = 0;
+    rec_.resize(2, constants::SR * 2);
 }
 
 void Recorder::Start()
@@ -21,7 +22,7 @@ void Recorder::Start()
     sf_.path("output.wav");
     sf_.openWrite();
 
-    copyTimer_.start(10);
+    copyTimer_.start();
 }
 
 void Recorder::Stop()
@@ -33,13 +34,18 @@ void Recorder::Stop()
 void Recorder::Write(Frame frame)
 {
     rec_.write(frame.left, frame.right);
+    framesSinceCopy_++;
 }
 
 void Recorder::CopySamples()
 {
-    float* buf;
-    int n = rec_.read(buf);
-    sf_.write(buf, n);
+    if(framesSinceCopy_ > constants::SR)
+    {
+        framesSinceCopy_ = 0;
+        float* buf;
+        int n = rec_.read(buf);
+        sf_.write(buf, n);
+    }
 }
 
 

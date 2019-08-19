@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QMutex>
 #include "Gamma/Recorder.h"
 #include "Gamma/SoundFile.h"
 #include "frame.h"
@@ -22,6 +23,7 @@ private:
     gam::Recorder rec_;
     gam::SoundFile sf_;
     QTimer copyTimer_;
+    QAtomicInt framesSinceCopy_;
 
 signals:
 
