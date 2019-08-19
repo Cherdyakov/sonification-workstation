@@ -39,7 +39,7 @@ void Recorder::CopySamples()
 {
     float* buf;
     int n = rec_.read(buf);
-    qDebug() << sf_.write(buf, n);
+    sf_.write(buf, n);
 }
 
 

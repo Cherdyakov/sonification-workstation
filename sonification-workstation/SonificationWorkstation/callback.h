@@ -20,7 +20,6 @@ void callback(AudioIOData& io)
 
     while(io()) {
         Frame frame = root->process();
-        frame *= 0.1f;
         io.out(0) = frame.left;
         io.out(1) = frame.right;
     }

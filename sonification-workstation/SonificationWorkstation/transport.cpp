@@ -298,7 +298,7 @@ Frame Transport::process()
         }
     }
 
-    frame = frame * masterVolume_ * !mute_;
+    frame = frame * masterVolume_ * !mute_ + 0.1; // Multiply by 0.1 to prevent full-scale output.
 
     if(record_) {
         recorder_.Write(frame);
