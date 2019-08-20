@@ -15,6 +15,7 @@
 #include "envelope.h"
 #include "noise.h"
 #include "equalizer.h"
+#include "recorder.h"
 
 namespace sow {
 
@@ -42,6 +43,7 @@ private:
     RingBuffer<TransportCommand> transportCommandBuffer_;
     Frame frameBuffer_[4096];
     std::vector<SynthItem*> subscribers_;
+    Recorder recorder_;
     Dataset dataset_;
     QString filepath_;
     QMutex fileMutex_;
@@ -59,6 +61,7 @@ private:
     float loopEnd_;
     bool dataStale_;
     bool pause_;
+    bool record_;
     bool loop_;
     bool interpolate_;
 
@@ -80,10 +83,12 @@ public slots:
 
     // slots for controlling playback and volume
     void onImportDataset(QString file);
-    void onPausechanged(bool p);
-    void onPoschanged(float pos);
-    void onSpeedchanged(float speed);
-    void onLoopingchanged(bool looping);
+    void onPauseChanged(bool pause);
+    void onRecordStart(QString path);
+    void onRecordStop();
+    void onPosChanged(float pos);
+    void onSpeedChanged(float speed);
+    void onLoopingChanged(bool looping);
     void onLoopPointsChanged(float begin, float end);
     void onInterpolateChanged(bool interpolate);
     void onMuteChanged(bool mute);

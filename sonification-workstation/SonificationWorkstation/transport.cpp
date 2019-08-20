@@ -20,6 +20,7 @@ Transport::Transport(QObject *parent) : SynthItem (parent)
     posTimer->start(33);
 
     pause_ = true;
+    record_ = false;
     loop_ = false;
     loopBegin_ = 0.0f;
     loopEnd_ = 0.0f;
@@ -58,7 +59,7 @@ void Transport::onImportDataset(QString file)
     transportCommandBuffer_.push(cmd);
 }
 
-void Transport::onPausechanged(bool pause)
+void Transport::onPauseChanged(bool pause)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::PAUSE;
@@ -66,7 +67,25 @@ void Transport::onPausechanged(bool pause)
     transportCommandBuffer_.push(cmd);
 }
 
-void Transport::onPoschanged(float pos)
+void Transport::onRecordStart(QString path)
+{
+    recorder_.Start(path);
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::RECORD;
+    cmd.valueA = 1.0f;
+    transportCommandBuffer_.push(cmd);
+}
+
+void Transport::onRecordStop()
+{
+    recorder_.Stop();
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::RECORD;
+    cmd.valueA = 0.0f;
+    transportCommandBuffer_.push(cmd);
+}
+
+void Transport::onPosChanged(float pos)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::POS;
@@ -74,7 +93,7 @@ void Transport::onPoschanged(float pos)
     transportCommandBuffer_.push(cmd);
 }
 
-void Transport::onSpeedchanged(float speed)
+void Transport::onSpeedChanged(float speed)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::SPEED;
@@ -82,7 +101,7 @@ void Transport::onSpeedchanged(float speed)
     transportCommandBuffer_.push(cmd);
 }
 
-void Transport::onLoopingchanged(bool looping)
+void Transport::onLoopingChanged(bool looping)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::LOOP;
@@ -205,7 +224,12 @@ Frame Transport::process()
 
     if(pause_)
     {
+        if(record_) {
+            recorder_.Write(frame);
+        }
+
         calculateReturnPosition();
+
         return frame;
     }
 
@@ -278,7 +302,13 @@ Frame Transport::process()
         }
     }
 
-    return frame * masterVolume_ * !mute_;
+    frame = frame * masterVolume_ * !mute_ * 0.1f; // Multiply by 0.1 to prevent full-scale output.
+
+    if(record_) {
+        recorder_.Write(frame);
+    }
+
+    return frame;
 }
 
 void Transport::controlProcess()
@@ -304,6 +334,9 @@ void Transport::processTransportCommand(TransportCommand cmd)
     switch (cmd.type) {
     case ENUMS::TRANSPORT_CMD::PAUSE:
         pause_ = (cmd.valueA == 0.0f) ? false : true;
+        break;
+    case ENUMS::TRANSPORT_CMD::RECORD:
+        record_ = (cmd.valueA == 0.0f) ? false : true;
         break;
     case ENUMS::TRANSPORT_CMD::POS:
         processSetPlaybackPosition(cmd.valueA);

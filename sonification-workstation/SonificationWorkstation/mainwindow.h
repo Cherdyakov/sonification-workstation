@@ -50,6 +50,10 @@ signals:
 
     void saveSession();
 
+public slots:
+
+    void onRecordChanged(bool record);
+
 private slots:
 
     void onQuit();

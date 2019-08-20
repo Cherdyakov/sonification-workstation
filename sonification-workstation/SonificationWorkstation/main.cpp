@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
     AudioIO audioIO(
     128,        // block size
-    44100,      // sample rate (Hz)
+    constants::SR,      // sample rate (Hz)
     callback,   // user-defined callback
     &uData,     // user data
     2,          // input channels to open

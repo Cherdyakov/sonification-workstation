@@ -52,5 +52,7 @@
         <file>images/FM.png</file>
         <file>images/speaker-off.svg</file>
         <file>images/speaker-on.svg</file>
+        <file>images/record-off.svg</file>
+        <file>images/record-on.svg</file>
     </qresource>
 </RCC>

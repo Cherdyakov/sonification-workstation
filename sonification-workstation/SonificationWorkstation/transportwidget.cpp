@@ -5,6 +5,7 @@
 TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 {
     pause_ = true;
+    record_ = false;
     looping_ = false;
     interpolate_ = false;
     mute_ = false;
@@ -20,6 +21,9 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     pauseButton_ = new QPushButton;
     pauseButton_->setObjectName("PauseButton");
     pauseButton_->setFocusPolicy(Qt::NoFocus);
+    recordButton_ = new QPushButton;
+    recordButton_->setObjectName("RecordButton");
+    recordButton_->setFocusPolicy(Qt::NoFocus);
     loopButton_ = new QPushButton;
     loopButton_->setObjectName("LoopButton");
     loopButton_->setFocusPolicy(Qt::NoFocus);
@@ -41,6 +45,8 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     // Load icon files.
     playIcon_.addFile(":/images/play.svg");
     pauseIcon_.addFile(":/images/pause.svg");
+    recordOnIcon_.addFile(":/images/record-on.svg");
+    recordOffIcon_.addFile(":/images/record-off.svg");
     loopOnIcon_.addFile(":/images/loop-on.svg");
     loopOffIcon_.addFile(":/images/loop-off.svg");
     interpolateOnIcon_.addFile(":/images/interpolate-on.svg");
@@ -50,6 +56,8 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     // Set button icons and sizes.
     pauseButton_->setIcon(playIcon_);
     pauseButton_->setIconSize(QSize(72, 72));
+    recordButton_->setIcon(recordOffIcon_);
+    recordButton_->setIconSize(QSize(40,40));
     loopButton_->setIcon(loopOffIcon_);
     loopButton_->setIconSize(QSize(40,40));
     interpolateButton_->setIcon(interpolateOffIcon_);
@@ -58,6 +66,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     muteButton_->setIconSize(QSize(40,40));
     // Set button tooltips
     pauseButton_->setToolTip("Play/Pause (Ctrl+P)");
+    pauseButton_->setToolTip("Record (Ctrl+R)");
     loopButton_->setToolTip("Enable looping (Ctrl+L)");
     interpolateButton_->setToolTip("Enable interpolation (Ctrl+I)");
     muteButton_->setToolTip("Mute (Ctrl+M)");
@@ -82,12 +91,13 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     leftLayout->setAlignment(Qt::AlignRight);
 
     // Setup center layout
+    middleLayout->addWidget(recordButton_);
     middleLayout->addWidget(loopButton_);
     middleLayout->addWidget(pauseButton_);
     middleLayout->addWidget(interpolateButton_);
+    middleLayout->addWidget(muteButton_);
 
     // Setup right side layout (volume section)
-    rightLayout->addWidget(muteButton_);
     masterVolumeSlider_->setSizePolicy(QSizePolicy::Expanding,
                                        QSizePolicy::Expanding);
     rightLayout->addWidget(masterVolumeSlider_);
@@ -108,6 +118,8 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
 
     connect(pauseButton_, SIGNAL(released()),
             this, SLOT(onPauseButtonReleased()));
+    connect(recordButton_, SIGNAL(released()),
+            this, SLOT(onRecordButtonReleased()));
     connect(loopButton_, SIGNAL(released()),
             this, SLOT(onLoopButtonReleased()));
     connect(speedBox_, SIGNAL(valueChanged(int)),
@@ -225,6 +237,19 @@ void TransportWidget::onPauseButtonReleased()
     }
     else {
         pauseButton_->setIcon(pauseIcon_);
+    }
+}
+
+void TransportWidget::onRecordButtonReleased()
+{
+    record_ = !record_;
+    emit recordChanged(record_);
+
+    if(record_) {
+        recordButton_->setIcon(recordOnIcon_);
+    }
+    else {
+        recordButton_->setIcon(recordOffIcon_);
     }
 }
 
