@@ -375,6 +375,8 @@ void MainWindow::onRecordChanged(bool record)
         if(!fileName.isEmpty()  && !fileName.isNull())
         {
             transport_->onRecordStart(fileName);
+        } else {
+            transportWidget_->onRecordButtonReleased();
         }
     }
     else {
