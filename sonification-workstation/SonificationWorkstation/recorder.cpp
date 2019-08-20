@@ -12,14 +12,14 @@ Recorder::Recorder(QObject *parent) : QObject(parent)
 
     framesSinceCopy_ = 0;
     rec_.resize(2, constants::SR * 2);
-}
-
-void Recorder::Start()
-{
     sf_.channels(2);
     sf_.frameRate(constants::SR);
     sf_.format(gam::SoundFile::WAV);
-    sf_.path("output.wav");
+}
+
+void Recorder::Start(const QString path)
+{
+    sf_.path(path.toStdString());
     sf_.openWrite();
 
     copyTimer_.start();
@@ -28,7 +28,7 @@ void Recorder::Start()
 void Recorder::Stop()
 {
     copyTimer_.stop();
-        sf_.close();
+    sf_.close();
 }
 
 void Recorder::Write(Frame frame)

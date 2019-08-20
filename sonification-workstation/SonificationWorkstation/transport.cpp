@@ -67,17 +67,21 @@ void Transport::onPauseChanged(bool pause)
     transportCommandBuffer_.push(cmd);
 }
 
-void Transport::onRecordChanged(bool record)
+void Transport::onRecordStart(QString path)
 {
-    if(record) {
-        recorder_.Start();
-    }
-    else {
-        recorder_.Stop();
-    }
+    recorder_.Start(path);
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::RECORD;
-    cmd.valueA = record ? 1.0f : 0.0f;
+    cmd.valueA = 1.0f;
+    transportCommandBuffer_.push(cmd);
+}
+
+void Transport::onRecordStop()
+{
+    recorder_.Stop();
+    TransportCommand cmd;
+    cmd.type = ENUMS::TRANSPORT_CMD::RECORD;
+    cmd.valueA = 0.0f;
     transportCommandBuffer_.push(cmd);
 }
 
@@ -298,7 +302,7 @@ Frame Transport::process()
         }
     }
 
-    frame = frame * masterVolume_ * !mute_ + 0.1; // Multiply by 0.1 to prevent full-scale output.
+    frame = frame * masterVolume_ * !mute_ * 0.1f; // Multiply by 0.1 to prevent full-scale output.
 
     if(record_) {
         recorder_.Write(frame);

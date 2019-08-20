@@ -77,6 +77,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     createMenus();
 
     ///* CONNECT NON_UI SIGNALS AND SLOTS *///
+    // TransportWidget Record
+    connect(transportWidget_, &TransportWidget::recordChanged,
+            this, &MainWindow::onRecordChanged);
     // Transport Dataset signals.
     connect(transport_, &Transport::datasetImported,
             trackView, &TrackView::onDatasetChanged);
@@ -94,8 +97,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport::onInterpolateChanged);
     connect(transportWidget_, &TransportWidget::pausedChanged,
             transport_, &Transport::onPauseChanged);
-    connect(transportWidget_, &TransportWidget::recordChanged,
-            transport_, &Transport::onRecordChanged);
     connect(transportWidget_, &TransportWidget::loopingChanged,
             transport_, &Transport::onLoopingChanged);
     connect(transportWidget_, &TransportWidget::masterVolumeChanged,
@@ -362,11 +363,32 @@ void MainWindow::onOpen()
     }
 }
 
+void MainWindow::onRecordChanged(bool record)
+{
+    if(record)
+    {
+        QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+        QString documents = docDirs[0];
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Record File"),
+                                                        documents,
+                                                        tr("WAV File (*.wav)"));
+        if(!fileName.isEmpty()  && !fileName.isNull())
+        {
+            transport_->onRecordStart(fileName);
+        }
+    }
+    else {
+        transport_->onRecordStop();
+    }
+}
+
 void MainWindow::onImportDataset()
 {
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
-    datafile_ = QFileDialog::getOpenFileName(this, tr("Import Dataset"), documents, ("csv File(*.csv)"));
+    datafile_ = QFileDialog::getOpenFileName(this, tr("Import Dataset"),
+                                             documents,
+                                             ("CSV File(*.csv)"));
 
     if(!datafile_.isEmpty())
     {

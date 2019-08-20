@@ -15,7 +15,7 @@ class Recorder : public QObject
     Q_OBJECT
 public:
     explicit Recorder(QObject *parent = nullptr);
-    void Start();
+    void Start(const QString path);
     void Stop();
     void Write(Frame frame);
 
@@ -24,10 +24,6 @@ private:
     gam::SoundFile sf_;
     QTimer copyTimer_;
     QAtomicInt framesSinceCopy_;
-
-signals:
-
-public slots:
 
 private slots:
 

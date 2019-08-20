@@ -84,7 +84,8 @@ public slots:
     // slots for controlling playback and volume
     void onImportDataset(QString file);
     void onPauseChanged(bool pause);
-    void onRecordChanged(bool record);
+    void onRecordStart(QString path);
+    void onRecordStop();
     void onPosChanged(float pos);
     void onSpeedChanged(float speed);
     void onLoopingChanged(bool looping);
