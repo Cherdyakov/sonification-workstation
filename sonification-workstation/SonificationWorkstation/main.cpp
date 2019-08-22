@@ -14,6 +14,8 @@ using namespace sow;
 
 int main(int argc, char *argv[])
 {
+    // Import Qt Widgets accessiblity plugin.
+//    Q_IMPORT_PLUGIN(qtaccessiblewidgets)
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -40,12 +42,12 @@ int main(int argc, char *argv[])
     gam::Sync::master().spu(constants::SR);
 
     AudioIO audioIO(
-    128,        // block size
-    constants::SR,      // sample rate (Hz)
-    callback,   // user-defined callback
-    &uData,     // user data
-    2,          // input channels to open
-    2           // output
+    128,            // block size
+    constants::SR,  // sample rate (Hz)
+    callback,       // user-defined callback
+    &uData,         // user data
+    2,              // input channels to open
+    2               // output
     );
     audioIO.start();
 
