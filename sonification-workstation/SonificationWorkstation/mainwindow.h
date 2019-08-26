@@ -14,6 +14,7 @@
 #include "filereader.h"
 #include "thememanager.h"
 #include "aboutmessage.h"
+#include "datasetimportdialog.h"
 
 using namespace sow;
 

@@ -394,7 +394,9 @@ void MainWindow::onImportDataset()
 
     if(!datafile_.isEmpty())
     {
-        transport_->onImportDataset(datafile_);
+        DatasetImportDialog* importDialog = new DatasetImportDialog(datafile_);
+        importDialog->show();
+//        transport_->onImportDataset(datafile_);
     }
 }
 

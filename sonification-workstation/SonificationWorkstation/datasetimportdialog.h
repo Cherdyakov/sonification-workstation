@@ -2,13 +2,21 @@
 #define DATASETIMPORTDIALOG_H
 
 #include <QDialog>
+#include <QLayout>
+#include <QTableWidget>
+#include "filereader.h"
 
 namespace sow {
 
 class DatasetImportDialog : public QDialog
 {
 public:
-    DatasetImportDialog();
+    DatasetImportDialog(QString path);
+
+private:
+
+    QTableWidget* table_;
+
 };
 
 }
