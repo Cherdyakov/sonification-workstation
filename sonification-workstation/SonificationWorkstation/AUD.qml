@@ -12,6 +12,10 @@ SynthItem {
     type: ENUMS.AUDIFIER
     output: ENUMS.AUDIO
 
+    Accessible.role: Accessible.focusable
+    Accessible.name: "Oddifyer. Converts data values directly into amplitudes for audification."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }

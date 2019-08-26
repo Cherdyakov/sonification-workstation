@@ -9,6 +9,10 @@ SynthItem {
     type: ENUMS.TRANSPORT
     implementation: transport
 
+    Accessible.role: Accessible.focusable
+    Accessible.name: "Output. Connected signals are sent to the sound card."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }

@@ -12,6 +12,10 @@ SynthItem {
     type: ENUMS.NOISE_GEN
     output: ENUMS.AUDIO
 
+    Accessible.role: Accessible.focusable
+    Accessible.name: "Noise. Generates white, pink, or brown noise."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }

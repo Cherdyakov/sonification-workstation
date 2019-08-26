@@ -12,6 +12,10 @@ SynthItem {
     type: ENUMS.AMOD
     output: ENUMS.AM
 
+    Accessible.role: Accessible.focusable
+    Accessible.name: "Amplitude modulator. Modulates the amplitude of a signal."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }

@@ -12,6 +12,10 @@ SynthItem {
     type: ENUMS.FMOD
     output: ENUMS.FM
 
+    Accessible.role: Accessible.focusable
+    Accessible.name: "F M. Modulates the frequency of an oscillator or pan object."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }

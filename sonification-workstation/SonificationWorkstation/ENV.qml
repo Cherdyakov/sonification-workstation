@@ -12,6 +12,10 @@ SynthItem {
     type: ENUMS.ENVELOPE
     output: ENUMS.AUDIO
 
+    Accessible.role: Accessible.focusable
+    Accessible.name: "Envelope.  Applies simple attack decay envelope and outputs result."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }
