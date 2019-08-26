@@ -36,6 +36,8 @@ ColumnLayout {
             implicitHeight: Style.editorRowHeight
             implicitWidth: implicitHeight
 
+            Accessible.ignored: true
+
             indicator: Rectangle {
 
                 implicitHeight: Style.editorRowHeight
@@ -61,6 +63,7 @@ ColumnLayout {
 
         EditorDoubleSpinBox {
             id: lowSpinBox
+            Accessible.ignored: true
         }
     }
     RowLayout {
@@ -71,6 +74,7 @@ ColumnLayout {
 
         EditorDoubleSpinBox {
             id: highSpinBox
+            Accessible.ignored: true
         }
     }
     RowLayout {
@@ -81,6 +85,7 @@ ColumnLayout {
 
         EditorDoubleSpinBox {
             id: expSpinBox
+            Accessible.ignored: true
             from: 100
             to: 6400
 //            stepSize: 10

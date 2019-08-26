@@ -12,6 +12,10 @@ SynthItem {
     type: ENUMS.EQUALIZER
     output: ENUMS.AUDIO
 
+    Accessible.role: Accessible.focusable
+    Accessible.name: "Equalizer. Provides a bye-quad audio filter."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }

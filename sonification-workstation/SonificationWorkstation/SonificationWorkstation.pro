@@ -9,6 +9,8 @@ TARGET = "Sonification Workstation"
 
 CONFIG += c++17
 
+QTPLUGIN += qtaccessiblewidgets
+
 # Application icons
 win32: RC_ICONS = sow.ico
 macx: ICON = sow.icns

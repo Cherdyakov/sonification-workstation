@@ -12,6 +12,10 @@ SynthItem {
     type: ENUMS.VOLUME
     output: ENUMS.AUDIO
 
+    Accessible.role: Accessible.focusable
+    Accessible.name: "Volume. Controls the amplitude of a signal."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }

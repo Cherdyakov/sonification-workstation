@@ -12,6 +12,10 @@ SynthItem {
     type: ENUMS.OSCILLATOR
     output: ENUMS.AUDIO
 
+    Accessible.role: Accessible.ignored
+    Accessible.name: "Oscillator. Generates a sine wave."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }

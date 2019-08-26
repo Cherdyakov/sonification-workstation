@@ -20,27 +20,41 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     // Transport controls.
     pauseButton_ = new QPushButton;
     pauseButton_->setObjectName("PauseButton");
-    pauseButton_->setFocusPolicy(Qt::NoFocus);
+    pauseButton_->setAccessibleName("Play button, toggles playback on or off.");
+    pauseButton_->setAccessibleDescription("");
+
     recordButton_ = new QPushButton;
     recordButton_->setObjectName("RecordButton");
-    recordButton_->setFocusPolicy(Qt::NoFocus);
+    recordButton_->setAccessibleName("Record button, start and stop recording to a wave file.");
+    recordButton_->setAccessibleDescription("");
+
     loopButton_ = new QPushButton;
     loopButton_->setObjectName("LoopButton");
-    loopButton_->setFocusPolicy(Qt::NoFocus);
+    loopButton_->setAccessibleName("Looping. Toggles looping playback on or off.");
+    loopButton_->setAccessibleDescription("");
+
     interpolateButton_ = new QPushButton;
     interpolateButton_->setObjectName("InterpolateButton");
-    interpolateButton_->setFocusPolicy(Qt::NoFocus);
+    interpolateButton_->setAccessibleName("Interpolation, toggles data interpolation on or off.");
+    interpolateButton_->setAccessibleDescription("");
+
     muteButton_ = new QPushButton;
     muteButton_->setObjectName("MuteButton");
-    muteButton_->setFocusPolicy(Qt::NoFocus);
+    muteButton_->setAccessibleName("Mute, toggles mute on or off.");
+    muteButton_->setAccessibleDescription("");
+
     speedBox_ = new QSpinBox;
     speedBox_->setObjectName("SpeedBox");
-    speedBox_->setFocusPolicy(Qt::ClickFocus);
+    speedBox_->setAccessibleName("Speed spinbox, sets the playback speed in data points per second");
+    speedBox_->setAccessibleDescription("");
+
     QLabel* speedLabel = new QLabel;
     speedLabel->setObjectName("SpeedLabel");
+
     masterVolumeSlider_ = new MasterVolumeSlider(this);
     masterVolumeSlider_->setObjectName("MasterVolume");
-    masterVolumeSlider_->setFocusPolicy(Qt::NoFocus);
+    masterVolumeSlider_->setAccessibleName("Main volume, sets application master volume.  Range is zero to one hundred");
+    masterVolumeSlider_->setAccessibleDescription("");
 
     // Load icon files.
     playIcon_.addFile(":/images/play.svg");

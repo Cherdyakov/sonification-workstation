@@ -12,6 +12,10 @@ SynthItem {
     type: ENUMS.PANNER
     output: ENUMS.AUDIO
 
+    Accessible.role: Accessible.focusable
+    Accessible.name: "Pan. Pans a signal in stereo."
+    Accessible.description: ""
+
     Component.onCompleted: {
         create()
     }
