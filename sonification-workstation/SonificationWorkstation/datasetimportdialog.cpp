@@ -7,7 +7,11 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     // Set dialog properties.
     setModal(true);
 
-    // Get the CSV preview data and add to QTableWidget.
+    // Create buttons and set button roles.
+    buttonBox_ = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                      QDialogButtonBox::Cancel);
+
+    // Get the CSV preview data and add to QTableWidget for preview.
     FileReader reader;
     QList<QStringList> dataPreview = reader.previewCSV(path);
 
@@ -23,8 +27,12 @@ DatasetImportDialog::DatasetImportDialog(QString path)
         }
     }
 
+    // Layout for dialog box.
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
+
+    // Add widgets
     mainLayout->addWidget(table_);
+    mainLayout->addWidget(buttonBox_);
     setLayout(mainLayout);
 }
 

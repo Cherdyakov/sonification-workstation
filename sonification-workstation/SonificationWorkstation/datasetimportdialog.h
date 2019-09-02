@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QLayout>
+#include <QDialogButtonBox>
 #include <QTableWidget>
 #include "filereader.h"
 
@@ -14,7 +15,7 @@ public:
     DatasetImportDialog(QString path);
 
 private:
-
+    QDialogButtonBox* buttonBox_;
     QTableWidget* table_;
 
 };
