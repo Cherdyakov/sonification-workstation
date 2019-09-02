@@ -1,4 +1,5 @@
 #include "datasetimportdialog.h"
+#include <QHeaderView>
 
 namespace sow {
 
@@ -32,8 +33,9 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     table_ = new QTableWidget(this);
     table_->setRowCount(10);
     table_->setColumnCount(10);
-    table_->setHorizontalHeaderLabels({ "A", "B", "C", "D", "E",
-                                        "F", "G", "H", "I", "J" });
+    table_->setHorizontalHeaderLabels(headers_);
+    table_->setVerticalHeaderLabels(headers_);
+    setColsTracks();
 
     // Get the CSV preview data and add to QTableWidget for preview.
     FileReader reader;
@@ -66,19 +68,14 @@ DatasetImportDialog::DatasetImportDialog(QString path)
 
 void DatasetImportDialog::setRowsTracks()
 {
-    table_->setHorizontalHeaderLabels({ "1", "2", "3", "4", "5",
-                                        "6", "7", "8", "9", "10" });
-    table_->setVerticalHeaderLabels({ "A", "B", "C", "D", "E",
-                                      "F", "G", "H", "I", "J" });
+    table_->horizontalHeader()->hide();
+    table_->verticalHeader()->show();
 }
 
 void DatasetImportDialog::setColsTracks()
 {
-
-    table_->setHorizontalHeaderLabels({ "A", "B", "C", "D", "E",
-                                        "F", "G", "H", "I", "J" });
-    table_->setVerticalHeaderLabels({ "1", "2", "3", "4", "5",
-                                      "6", "7", "8", "9", "10" });
+    table_->verticalHeader()->hide();
+    table_->horizontalHeader()->show();
 }
 
 void DatasetImportDialog::onAccepted()

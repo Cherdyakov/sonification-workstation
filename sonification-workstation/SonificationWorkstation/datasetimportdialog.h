@@ -17,6 +17,10 @@ public:
     DatasetImportDialog(QString path);
 
 private:
+
+    QStringList headers_ = { "A", "B", "C", "D", "E",
+                             "F", "G", "H", "I", "J" };
+
     QDialogButtonBox* buttonBox_;
     QLabel* orientationLabel_;
     QComboBox* orientationComboBox_;
