@@ -39,6 +39,7 @@ private:
 
     QString datafile_;
     QString sessionfile_;
+    bool horizontalData_;
     AboutMessage about_;
 
     //convenience functions to create and populate menus
@@ -62,8 +63,6 @@ private slots:
     void onSaveAs();
     void onOpen();
     void onImportDataset();
-    void onImportDatasetAccepted();
-    void onImportdatasetRejected();
     void onDefaultThemeSet();
     void onContrastThemeSet();
     void onSimpleThemeSet();

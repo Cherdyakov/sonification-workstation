@@ -26,7 +26,7 @@ DatasetImportDialog::DatasetImportDialog(QString path)
 
     // Label for orientation combobox.
     orientationLabel_ = new QLabel(this);
-    orientationLabel_->setText("Data tracks are mapped from csv: ");
+    orientationLabel_->setText("Data tracks are mapped from CSV: ");
 
 
     // TableWidget setup.
@@ -80,7 +80,7 @@ void DatasetImportDialog::setColsTracks()
 
 void DatasetImportDialog::onAccepted()
 {
-    accept();
+    done(orientationComboBox_->currentIndex() + 1);
 }
 
 void DatasetImportDialog::onRejected()
