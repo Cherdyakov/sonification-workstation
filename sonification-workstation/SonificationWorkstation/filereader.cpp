@@ -58,7 +58,7 @@ QList<QStringList> FileReader::previewCSV(const QString filename)
     return preview;
 }
 
-bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
+bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset, const bool horizontal)
 {
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
@@ -97,13 +97,27 @@ bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
     std::vector<float> vec(static_cast<size_t>(rows*cols));
     size_t index = 0;
 
+    // If set to map rows to tracks, instead of columns.
+    if(horizontal)
+    {
+        int temp = rows;
+        rows = cols;
+        cols = temp;
+    }
+
     for(int i = 0; i < rows; i++)
     {
-        QStringList rowData = fileData[i];
         for (int j = 0; j < cols; j++)
         {
             bool isFloat = false;
-            QString temp = rowData[j];
+            QString temp;
+
+            // If set to map rows to tracks, instead of columns.
+            if(horizontal) {
+                temp = fileData[j][i];
+            } else {
+                temp = fileData[i][j];
+            }
             float value = temp.toFloat(&isFloat);
             if(isFloat)
             {
@@ -131,5 +145,5 @@ void FileReader::on_newDatafile(const QString filename, sow::Dataset * const dat
         dataset->clear();
         datasetChanged(dataset);
     }
-    readCSV(filename, dataset);
+    readCSV(filename, dataset, false);
 }

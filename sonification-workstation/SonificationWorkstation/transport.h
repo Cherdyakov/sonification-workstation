@@ -69,7 +69,7 @@ private:
     void processSubscribeItem(SynthItem* item);
     void processUnsubscribeItem(SynthItem* item);
     void processDeleteItem(SynthItem* item);
-    void processImportDataset();
+    void processImportDataset(bool horizontal);
     void processSetPlaybackPosition(float pos);
     void refreshCurrentData();
     void calculateReturnPosition();
@@ -82,7 +82,7 @@ signals:
 public slots:
 
     // slots for controlling playback and volume
-    void onImportDataset(QString file);
+    void onImportDataset(QString file, bool horizontal);
     void onPauseChanged(bool pause);
     void onRecordStart(QString path);
     void onRecordStop();

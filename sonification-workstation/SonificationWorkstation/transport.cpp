@@ -47,7 +47,7 @@ void Transport::deleteItem(SynthItem *item)
 }
 
 
-void Transport::onImportDataset(QString file)
+void Transport::onImportDataset(QString file, bool horizontal)
 {
     if (filepath_ != file) {
         fileMutex_.lock();
@@ -56,6 +56,7 @@ void Transport::onImportDataset(QString file)
     }
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::IMPORT_DATASET;
+    cmd.valueA = horizontal ? 1.0f : 0.0f;
     transportCommandBuffer_.push(cmd);
 }
 
@@ -364,7 +365,7 @@ void Transport::processTransportCommand(TransportCommand cmd)
         utility::removeAll(cmd.item, subscribers_);
         break;
     case ENUMS::TRANSPORT_CMD::IMPORT_DATASET:
-        processImportDataset();
+        processImportDataset( (cmd.valueA == 0.0f) ? false : true);
         break;
     case ENUMS::TRANSPORT_CMD::VOLUME:
         masterVolumeTarget_ = cmd.valueA;
@@ -401,7 +402,7 @@ void Transport::processDeleteItem(SynthItem *item)
     }
 }
 
-void Transport::processImportDataset()
+void Transport::processImportDataset(bool horizontal)
 {
     pause_ = true;
     currentData_.clear();
@@ -411,7 +412,7 @@ void Transport::processImportDataset()
 
     FileReader reader;
     fileMutex_.lock();
-    if(reader.readCSV(filepath_, &dataset_)) {
+    if(reader.readCSV(filepath_, &dataset_, horizontal)) {
         currentData_.resize(dataset_.rows());
         currentData_ = dataset_.getRow(currentIndex_);
     }

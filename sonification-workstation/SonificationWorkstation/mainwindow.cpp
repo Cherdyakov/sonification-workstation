@@ -278,6 +278,7 @@ void MainWindow::writeSessionFile()
     QJsonDocument jsonDocument = QJsonDocument::fromJson(returnedValue.toString().toUtf8());
     QJsonObject jsonObject = jsonDocument.object();
     jsonObject.insert("dataset", datafile_);
+    jsonObject.insert("horizontal", horizontalData_);
     jsonObject.insert("interpolate", transportWidget_->interpolate());
     jsonObject.insert("speed", static_cast<double>(transportWidget_->speed()));
 
@@ -342,9 +343,11 @@ void MainWindow::onOpen()
         QJsonObject jsonObject = jsonDocument.object();
 
         // Load the dataset.
-        QJsonValue value = jsonObject.value("dataset");
-        datafile_ = value.toString();
-        transport_->onImportDataset(datafile_);
+        QJsonValue datafile = jsonObject.value("dataset");
+        QJsonValue horizontalData = jsonObject.value("horizontal");
+        horizontalData_ = horizontalData.toBool();
+        datafile_ = datafile.toString();
+        transport_->onImportDataset(datafile_, horizontalData_);
 
         // Set playback speed.
         float speed = jsonObject.value("speed").toInt();
@@ -395,25 +398,12 @@ void MainWindow::onImportDataset()
     if(!datafile_.isEmpty())
     {
         DatasetImportDialog* importDialog = new DatasetImportDialog(datafile_);
-        connect(importDialog, &DatasetImportDialog::accepted,
-                this, &MainWindow::onImportDatasetAccepted);
-        connect(importDialog, &DatasetImportDialog::rejected,
-                this, &MainWindow::onImportdatasetRejected);
-        if(importDialog->exec())
+        int result = importDialog->exec();
+        if(result)
         {
-           transport_->onImportDataset(datafile_);
+           transport_->onImportDataset(datafile_, result - 1);
         }
     }
-}
-
-void MainWindow::onImportDatasetAccepted()
-{
-
-}
-
-void MainWindow::onImportdatasetRejected()
-{
-
 }
 
 void MainWindow::onDefaultThemeSet()

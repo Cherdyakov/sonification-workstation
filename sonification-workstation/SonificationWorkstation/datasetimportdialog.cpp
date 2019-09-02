@@ -80,7 +80,7 @@ void DatasetImportDialog::setColsTracks()
 
 void DatasetImportDialog::onAccepted()
 {
-    accept();
+    done(orientationComboBox_->currentIndex() + 1);
 }
 
 void DatasetImportDialog::onRejected()
