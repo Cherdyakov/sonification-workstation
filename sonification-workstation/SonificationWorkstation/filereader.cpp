@@ -14,8 +14,8 @@ QList<QStringList> FileReader::previewCSV(const QString filename)
     QTextStream inFile(&file);
 
     QList<QStringList> fileData;
-    // Read the upper left 5x5 corner of the CSV for preevie
-    while (!inFile.atEnd() && fileData.count() < 6) {
+    // Read the upper left 10x10 corner of the CSV for preevie
+    while (!inFile.atEnd() && fileData.count() < 10) {
         QString line = inFile.readLine();
         fileData.append(line.split(","));
     }
