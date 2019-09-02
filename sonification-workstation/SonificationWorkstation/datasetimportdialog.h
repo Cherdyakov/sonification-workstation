@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QLayout>
+#include <QComboBox>
+#include <QLabel>
 #include <QDialogButtonBox>
 #include <QTableWidget>
 #include "filereader.h"
@@ -16,7 +18,12 @@ public:
 
 private:
     QDialogButtonBox* buttonBox_;
+    QLabel* orientationLabel_;
+    QComboBox* orientationComboBox_;
     QTableWidget* table_;
+
+    void setRowsTracks();
+    void setColsTracks();
 
 signals:
 
@@ -26,6 +33,7 @@ private slots:
 
     void onAccepted();
     void onRejected();
+    void onOrientationChanged(int idx);
 
 };
 
