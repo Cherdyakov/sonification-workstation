@@ -18,6 +18,15 @@ private:
     QDialogButtonBox* buttonBox_;
     QTableWidget* table_;
 
+signals:
+
+//    void newDataset(const QString path);
+
+private slots:
+
+    void onAccepted();
+    void onRejected();
+
 };
 
 }

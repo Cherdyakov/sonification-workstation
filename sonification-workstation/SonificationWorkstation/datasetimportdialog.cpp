@@ -11,6 +11,11 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     buttonBox_ = new QDialogButtonBox(QDialogButtonBox::Ok |
                                       QDialogButtonBox::Cancel);
 
+    connect(buttonBox_, &QDialogButtonBox::accepted,
+            this, &DatasetImportDialog::onAccepted);
+    connect(buttonBox_, &QDialogButtonBox::rejected,
+            this, &DatasetImportDialog::onRejected);
+
     // Get the CSV preview data and add to QTableWidget for preview.
     FileReader reader;
     QList<QStringList> dataPreview = reader.previewCSV(path);
@@ -34,6 +39,16 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     mainLayout->addWidget(table_);
     mainLayout->addWidget(buttonBox_);
     setLayout(mainLayout);
+}
+
+void DatasetImportDialog::onAccepted()
+{
+    accept();
+}
+
+void DatasetImportDialog::onRejected()
+{
+    reject();
 }
 
 }

@@ -395,9 +395,25 @@ void MainWindow::onImportDataset()
     if(!datafile_.isEmpty())
     {
         DatasetImportDialog* importDialog = new DatasetImportDialog(datafile_);
-        importDialog->show();
-//        transport_->onImportDataset(datafile_);
+        connect(importDialog, &DatasetImportDialog::accepted,
+                this, &MainWindow::onImportDatasetAccepted);
+        connect(importDialog, &DatasetImportDialog::rejected,
+                this, &MainWindow::onImportdatasetRejected);
+        if(importDialog->exec())
+        {
+           transport_->onImportDataset(datafile_);
+        }
     }
+}
+
+void MainWindow::onImportDatasetAccepted()
+{
+
+}
+
+void MainWindow::onImportdatasetRejected()
+{
+
 }
 
 void MainWindow::onDefaultThemeSet()

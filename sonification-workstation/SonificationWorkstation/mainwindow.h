@@ -62,6 +62,8 @@ private slots:
     void onSaveAs();
     void onOpen();
     void onImportDataset();
+    void onImportDatasetAccepted();
+    void onImportdatasetRejected();
     void onDefaultThemeSet();
     void onContrastThemeSet();
     void onSimpleThemeSet();
