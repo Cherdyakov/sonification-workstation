@@ -32,13 +32,15 @@ DatasetImportDialog::DatasetImportDialog(QString path)
         }
     }
 
-    // Layout for dialog box.
+    // Main layout for this dialog box.
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    table_->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
 
-    // Add widgets
+    // Add widgets to main layout.
     mainLayout->addWidget(table_);
     mainLayout->addWidget(buttonBox_);
     setLayout(mainLayout);
+    this->adjustSize();
 }
 
 void DatasetImportDialog::onAccepted()
