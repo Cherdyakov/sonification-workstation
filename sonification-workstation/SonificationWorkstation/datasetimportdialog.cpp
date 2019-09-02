@@ -5,7 +5,8 @@ namespace sow {
 DatasetImportDialog::DatasetImportDialog(QString path)
 {
     // Set dialog properties.
-    setModal(true);
+    this->setModal(true);
+    this->setWindowTitle("Dataset Import Preview");
 
     // Create buttons and connect signals.
     buttonBox_ = new QDialogButtonBox(QDialogButtonBox::Ok |
