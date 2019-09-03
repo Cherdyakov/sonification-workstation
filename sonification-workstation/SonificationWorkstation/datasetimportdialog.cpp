@@ -25,10 +25,28 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     connect(orientationComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DatasetImportDialog::onOrientationChanged);
 
+    // Create header comboboxes and connect signals.
+    colHeaderComboBox_ = new QComboBox(this);
+    colHeaderComboBox_->addItem("Load as data");
+    colHeaderComboBox_->addItem("Load as header");
+    colHeaderComboBox_->addItem("Strip");
+    connect(colHeaderComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &DatasetImportDialog::onColHeaderComboBoxValueChanged);
+    rowHeaderComboBox_ = new QComboBox(this);
+    rowHeaderComboBox_->addItem("Load as data");
+    rowHeaderComboBox_->addItem("Load as header");
+    rowHeaderComboBox_->addItem("Strip");
+    connect(rowHeaderComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &DatasetImportDialog::onRowHeaderComboBoxValueChanged);
+
     // Label for orientation combobox.
     orientationLabel_ = new QLabel(this);
     orientationLabel_->setText("Data tracks are mapped from CSV: ");
-
+    // Labels for header comboboxes.
+    colHeaderLabel_ = new QLabel(this);
+    colHeaderLabel_->setText("Column header settings: ");
+    rowHeaderLabel_ = new QLabel(this);
+    rowHeaderLabel_->setText("Row header settings: ");
 
     // TableWidget setup.
     table_ = new QTableWidget(this);
@@ -54,14 +72,18 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     table_->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     // Child layouts.
-    QHBoxLayout* orientationLayout = new QHBoxLayout(this);
+    QHBoxLayout* settingsLayout = new QHBoxLayout(this);
     orientationLabel_->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    orientationLayout->addWidget(orientationLabel_);
-    orientationLayout->addWidget(orientationComboBox_);
-    orientationLayout->addStretch();
+    settingsLayout->addWidget(orientationLabel_);
+    settingsLayout->addWidget(orientationComboBox_);
+    settingsLayout->addWidget(colHeaderLabel_);
+    settingsLayout->addWidget(colHeaderComboBox_);
+    settingsLayout->addWidget(rowHeaderLabel_);
+    settingsLayout->addWidget(rowHeaderComboBox_);
+    settingsLayout->addStretch();
 
     // Add widgets to main layout.
-    mainLayout->addLayout(orientationLayout);
+    mainLayout->addLayout(settingsLayout);
     mainLayout->addWidget(table_);
     mainLayout->addWidget(buttonBox_);
     setLayout(mainLayout);
@@ -99,4 +121,21 @@ void DatasetImportDialog::onOrientationChanged(int idx)
     }
 }
 
+void DatasetImportDialog::onColHeaderComboBoxValueChanged(int idx)
+{
+    if(colHeaderAction_ != idx)
+    {
+        colHeaderAction_ = idx;
+    }
 }
+
+void DatasetImportDialog::onRowHeaderComboBoxValueChanged(int idx)
+{
+    if(rowHeaderAction_ != idx)
+    {
+        rowHeaderAction_ = idx;
+    }
+
+}
+
+} // namespace sow

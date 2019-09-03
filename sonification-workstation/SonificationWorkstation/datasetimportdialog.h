@@ -20,9 +20,15 @@ private:
 
     QStringList headers_ = { "A", "B", "C", "D", "E",
                              "F", "G", "H", "I", "J" };
+    int colHeaderAction_;
+    int rowHeaderAction_;
 
     QDialogButtonBox* buttonBox_;
     QLabel* orientationLabel_;
+    QLabel* colHeaderLabel_;
+    QLabel* rowHeaderLabel_;
+    QComboBox* colHeaderComboBox_;
+    QComboBox* rowHeaderComboBox_;
     QComboBox* orientationComboBox_;
     QTableWidget* table_;
 
@@ -38,9 +44,11 @@ private slots:
     void onAccepted();
     void onRejected();
     void onOrientationChanged(int idx);
+    void onColHeaderComboBoxValueChanged(int idx);
+    void onRowHeaderComboBoxValueChanged(int idx);
 
 };
 
-}
+} // namespace sow
 
 #endif // DATASETIMPORTDIALOG_H

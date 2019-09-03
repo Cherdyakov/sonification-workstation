@@ -58,7 +58,11 @@ QList<QStringList> FileReader::previewCSV(const QString filename)
     return preview;
 }
 
-bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset, const bool horizontal)
+bool FileReader::readCSV(const QString filename,
+                         sow::Dataset * const dataset,
+                         const bool horizontal,
+                         const int colHeaders,
+                         const int rowHeaders)
 {
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
@@ -105,9 +109,10 @@ bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset, c
         cols = temp;
     }
 
-    for(int i = 0; i < rows; i++)
+    // Skip any row or column headers.
+    for(int i = rowHeaders; i < rows; i++)
     {
-        for (int j = 0; j < cols; j++)
+        for (int j = colHeaders; j < cols; j++)
         {
             bool isFloat = false;
             QString temp;
