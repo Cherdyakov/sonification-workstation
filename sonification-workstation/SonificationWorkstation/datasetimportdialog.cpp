@@ -31,6 +31,7 @@ DatasetImportDialog::DatasetImportDialog(QString path)
 
     // TableWidget setup.
     table_ = new QTableWidget(this);
+    table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
     table_->setRowCount(10);
     table_->setColumnCount(10);
     table_->setHorizontalHeaderLabels(headers_);
