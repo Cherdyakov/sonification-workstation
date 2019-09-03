@@ -8,6 +8,7 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     // Set dialog properties.
     this->setModal(true);
     this->setWindowTitle("Dataset Import Preview");
+    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     // Create default dialog buttons and connect signals.
     buttonBox_ = new QDialogButtonBox(QDialogButtonBox::Ok |
