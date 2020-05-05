@@ -410,10 +410,17 @@ void MainWindow::onImportDatasetReady()
     {
         DatasetImportDialog* importDialog = new DatasetImportDialog(datafile_);
         int result = importDialog->exec();
+
+        // DEBUG SECTION FOR IMPORT DIALOG RETURN VALUES
+        bool useColumns = static_cast<bool>(result % 2);
+        bool useHeaders = static_cast<bool>(result % 4);
+        qDebug() << "Using Columns: " + QString::number(useColumns);
+        qDebug() << "Using Headers: " + QString::number(useHeaders);
+
         if(result)
         {
             FileReader reader;
-            if(reader.readCSV(datafile_, dataset_, result - 1)) {
+            if(reader.readCSV(datafile_, dataset_, useColumns)) {
                 emit datasetChanged(dataset_);
             }
         }

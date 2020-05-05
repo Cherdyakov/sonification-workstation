@@ -20,15 +20,15 @@ private:
 
     QStringList headers_ = { "A", "B", "C", "D", "E",
                              "F", "G", "H", "I", "J" };
-    int colHeaderAction_;
-    int rowHeaderAction_;
+
+    bool useColumns_ = true;
+    bool useHeaders_ = true;
 
     QDialogButtonBox* buttonBox_;
     QLabel* orientationLabel_;
-    QLabel* colHeaderLabel_;
+    QLabel* headerLabel_;
     QLabel* rowHeaderLabel_;
-    QComboBox* colHeaderComboBox_;
-    QComboBox* rowHeaderComboBox_;
+    QComboBox* headerComboBox_;
     QComboBox* orientationComboBox_;
     QTableWidget* table_;
 
@@ -37,15 +37,13 @@ private:
 
 signals:
 
-//    void newDataset(const QString path);
 
 private slots:
 
     void onAccepted();
     void onRejected();
     void onOrientationChanged(int idx);
-    void onColHeaderComboBoxValueChanged(int idx);
-    void onRowHeaderComboBoxValueChanged(int idx);
+    void onHeaderComboBoxChanged(int idx);
 
 };
 

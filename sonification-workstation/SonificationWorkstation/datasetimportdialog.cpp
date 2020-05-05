@@ -25,28 +25,19 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     connect(orientationComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DatasetImportDialog::onOrientationChanged);
 
-    // Create header comboboxes and connect signals.
-    colHeaderComboBox_ = new QComboBox(this);
-    colHeaderComboBox_->addItem("Load as data");
-    colHeaderComboBox_->addItem("Load as header");
-    colHeaderComboBox_->addItem("Strip");
-    connect(colHeaderComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &DatasetImportDialog::onColHeaderComboBoxValueChanged);
-    rowHeaderComboBox_ = new QComboBox(this);
-    rowHeaderComboBox_->addItem("Load as data");
-    rowHeaderComboBox_->addItem("Load as header");
-    rowHeaderComboBox_->addItem("Strip");
-    connect(rowHeaderComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &DatasetImportDialog::onRowHeaderComboBoxValueChanged);
+    // Create header combobox and connect signals.
+    headerComboBox_ = new QComboBox(this);
+    headerComboBox_->addItem("Load as Headers");
+    headerComboBox_->addItem("Load as Data");
+    connect(headerComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &DatasetImportDialog::onHeaderComboBoxChanged);
 
     // Label for orientation combobox.
     orientationLabel_ = new QLabel(this);
-    orientationLabel_->setText("Data tracks are mapped from CSV: ");
+    orientationLabel_->setText("Tracks mapped from: ");
     // Labels for header comboboxes.
-    colHeaderLabel_ = new QLabel(this);
-    colHeaderLabel_->setText("Column header settings: ");
-    rowHeaderLabel_ = new QLabel(this);
-    rowHeaderLabel_->setText("Row header settings: ");
+    headerLabel_ = new QLabel(this);
+    headerLabel_->setText("Header values: ");
 
     // TableWidget setup.
     table_ = new QTableWidget(this);
@@ -76,10 +67,8 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     orientationLabel_->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     settingsLayout->addWidget(orientationLabel_);
     settingsLayout->addWidget(orientationComboBox_);
-    settingsLayout->addWidget(colHeaderLabel_);
-    settingsLayout->addWidget(colHeaderComboBox_);
-    settingsLayout->addWidget(rowHeaderLabel_);
-    settingsLayout->addWidget(rowHeaderComboBox_);
+    settingsLayout->addWidget(headerLabel_);
+    settingsLayout->addWidget(headerComboBox_);
     settingsLayout->addStretch();
 
     // Add widgets to main layout.
@@ -92,19 +81,25 @@ DatasetImportDialog::DatasetImportDialog(QString path)
 
 void DatasetImportDialog::setRowsTracks()
 {
+    useColumns_ = false;
     table_->horizontalHeader()->hide();
     table_->verticalHeader()->show();
 }
 
 void DatasetImportDialog::setColsTracks()
 {
+    useColumns_ = true;
     table_->verticalHeader()->hide();
     table_->horizontalHeader()->show();
 }
 
 void DatasetImportDialog::onAccepted()
 {
-    done(orientationComboBox_->currentIndex() + 1);
+    int returnCode = 1;
+    returnCode += (useColumns_ * 2);
+    returnCode += (useHeaders_ * 4);
+    qDebug() << returnCode;
+    done(returnCode);
 }
 
 void DatasetImportDialog::onRejected()
@@ -121,21 +116,9 @@ void DatasetImportDialog::onOrientationChanged(int idx)
     }
 }
 
-void DatasetImportDialog::onColHeaderComboBoxValueChanged(int idx)
+void DatasetImportDialog::onHeaderComboBoxChanged(int idx)
 {
-    if(colHeaderAction_ != idx)
-    {
-        colHeaderAction_ = idx;
-    }
-}
-
-void DatasetImportDialog::onRowHeaderComboBoxValueChanged(int idx)
-{
-    if(rowHeaderAction_ != idx)
-    {
-        rowHeaderAction_ = idx;
-    }
-
+    useHeaders_ = static_cast<bool>(idx);
 }
 
 } // namespace sow
