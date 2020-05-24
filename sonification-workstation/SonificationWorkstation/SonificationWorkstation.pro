@@ -11,6 +11,8 @@ CONFIG += c++17
 
 QTPLUGIN += qtaccessiblewidgets
 
+QMAKE_PROJECT_DEPTH = 0
+
 # Application icons
 win32: RC_ICONS = sow.ico
 macx: ICON = sow.icns
