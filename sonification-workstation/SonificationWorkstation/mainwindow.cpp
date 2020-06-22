@@ -412,8 +412,8 @@ void MainWindow::onImportDatasetReady()
         int result = importDialog->exec();
 
         // DEBUG SECTION FOR IMPORT DIALOG RETURN VALUES
-        bool useColumns = static_cast<bool>(result % 2);
-        bool useHeaders = static_cast<bool>(result % 4);
+        bool useColumns = result & constants::COLUMNS_FLAG;
+        bool useHeaders = result & constants::HEADERS_FLAG;
         qDebug() << "Using Columns: " + QString::number(useColumns);
         qDebug() << "Using Headers: " + QString::number(useHeaders);
 

@@ -1,4 +1,4 @@
-#include "datasetimportdialog.h"
+ #include "datasetimportdialog.h"
 #include <QHeaderView>
 
 namespace sow {
@@ -96,8 +96,15 @@ void DatasetImportDialog::setColsTracks()
 void DatasetImportDialog::onAccepted()
 {
     int returnCode = 1;
-    returnCode += (useColumns_ * 2);
-    returnCode += (useHeaders_ * 4);
+
+    if (useColumns_) {
+        returnCode = returnCode | constants::COLUMNS_FLAG;
+    }
+
+    if (useHeaders_) {
+        returnCode = returnCode | constants::HEADERS_FLAG;
+    }
+
     qDebug() << returnCode;
     done(returnCode);
 }

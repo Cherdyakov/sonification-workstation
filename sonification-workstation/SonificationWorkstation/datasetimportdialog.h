@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QDialogButtonBox>
 #include <QTableWidget>
+#include "constants.h"
 #include "filereader.h"
 
 namespace sow {

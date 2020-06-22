@@ -60,7 +60,7 @@ QList<QStringList> FileReader::previewCSV(const QString filename)
 
 bool FileReader::readCSV(const QString filename,
                          sow::Dataset * const dataset,
-                         const bool horizontal,
+                         const bool useColumns,
                          const int colHeaders,
                          const int rowHeaders)
 {
@@ -102,7 +102,7 @@ bool FileReader::readCSV(const QString filename,
     size_t index = 0;
 
     // If set to map rows to tracks, instead of columns.
-    if(horizontal)
+    if(!useColumns)
     {
         int temp = rows;
         rows = cols;
@@ -118,7 +118,7 @@ bool FileReader::readCSV(const QString filename,
             QString temp;
 
             // If set to map rows to tracks, instead of columns.
-            if(horizontal) {
+            if(!useColumns) {
                 temp = fileData[j][i];
             } else {
                 temp = fileData[i][j];
