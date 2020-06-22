@@ -6,8 +6,6 @@
 #include "ringbuffer.h"
 #include "commands.h"
 
-class Dataset;
-
 namespace sow {
 
 class Parameter : public QObject

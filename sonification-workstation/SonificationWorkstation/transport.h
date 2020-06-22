@@ -24,7 +24,7 @@ class Transport : public SynthItem
     Q_OBJECT
 public:
 
-    explicit Transport(QObject *parent = nullptr);
+    explicit Transport(QObject *parent = nullptr, Dataset* dataset = nullptr);
 
     // factory for other SynthItems
     Q_INVOKABLE sow::SynthItem* createItem(ENUMS::ITEM_TYPE type);
@@ -44,7 +44,7 @@ private:
     Frame frameBuffer_[4096];
     std::vector<SynthItem*> subscribers_;
     Recorder recorder_;
-    Dataset dataset_;
+    Dataset* dataset_;
     QString filepath_;
     QMutex fileMutex_;
     std::vector<float> currentData_;
@@ -77,12 +77,12 @@ private:
 
 signals:
     void posChanged(float pos);
-    void datasetImported(Dataset* dataset);
+    void datasetImportReady();
 
 public slots:
 
     // slots for controlling playback and volume
-    void onImportDataset(QString file);
+    void onImportDataset();
     void onPauseChanged(bool pause);
     void onRecordStart(QString path);
     void onRecordStop();

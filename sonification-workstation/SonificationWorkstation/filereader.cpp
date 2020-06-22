@@ -2,7 +2,67 @@
 
 FileReader::FileReader(QObject *parent) : QObject(parent) { }
 
-bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
+QList<QStringList> FileReader::previewCSV(const QString filename)
+{
+    QList<QStringList> preview;
+    QFile file(filename);
+    if (!file.open(QFile::ReadOnly)) {
+        qDebug() << file.errorString();
+        return preview;
+    }
+
+    QTextStream inFile(&file);
+
+    QList<QStringList> fileData;
+    // Read the upper left 10x10 corner of the CSV for preevie
+    while (!inFile.atEnd() && fileData.count() < 10) {
+        QString line = inFile.readLine();
+        fileData.append(line.split(","));
+    }
+
+    // Zero pad any short rows.
+    int rows = fileData.count();
+    int cols = 0;
+
+    // Get number of columns in widest row.
+    for(QStringList list : fileData)
+    {
+        if(list.count() > cols) cols = list.count();
+    }
+
+    // If csv is larger than 10 x 10, limit for the preview
+    rows = rows > 10 ? 10 : rows;
+    cols = cols > 10 ? 10 : cols;
+
+    QList<QStringList>::iterator it;
+
+    // Zero pad any short rows
+    for(it = fileData.begin(); it != fileData.begin() + rows; it++)
+    {
+        while(it->count() < cols)
+        {
+            it->append("");
+        }
+    }
+
+    for(int i = 0; i < rows; i++)
+    {
+        QStringList rowData;
+        for (int j = 0; j < cols; j++)
+        {
+            rowData.append(fileData[i][j]);
+        }
+        preview.append(rowData);
+    }
+
+    return preview;
+}
+
+bool FileReader::readCSV(const QString filename,
+                         sow::Dataset * const dataset,
+                         const bool useColumns,
+                         const int colHeaders,
+                         const int rowHeaders)
 {
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
@@ -41,13 +101,28 @@ bool FileReader::readCSV(const QString filename, sow::Dataset * const dataset)
     std::vector<float> vec(static_cast<size_t>(rows*cols));
     size_t index = 0;
 
-    for(int i = 0; i < rows; i++)
+    // If set to map rows to tracks, instead of columns.
+    if(!useColumns)
     {
-        QStringList rowData = fileData[i];
-        for (int j = 0; j < cols; j++)
+        int temp = rows;
+        rows = cols;
+        cols = temp;
+    }
+
+    // Skip any row or column headers.
+    for(int i = rowHeaders; i < rows; i++)
+    {
+        for (int j = colHeaders; j < cols; j++)
         {
             bool isFloat = false;
-            QString temp = rowData[j];
+            QString temp;
+
+            // If set to map rows to tracks, instead of columns.
+            if(!useColumns) {
+                temp = fileData[j][i];
+            } else {
+                temp = fileData[i][j];
+            }
             float value = temp.toFloat(&isFloat);
             if(isFloat)
             {
@@ -75,5 +150,5 @@ void FileReader::on_newDatafile(const QString filename, sow::Dataset * const dat
         dataset->clear();
         datasetChanged(dataset);
     }
-    readCSV(filename, dataset);
+    readCSV(filename, dataset, false);
 }

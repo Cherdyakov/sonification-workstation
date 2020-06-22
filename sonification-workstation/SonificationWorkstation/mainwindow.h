@@ -14,6 +14,7 @@
 #include "filereader.h"
 #include "thememanager.h"
 #include "aboutmessage.h"
+#include "datasetimportdialog.h"
 
 using namespace sow;
 
@@ -35,12 +36,14 @@ private:
     PlayHead* playhead_;
     QQuickView* quickView_;
     ThemeManager* themeManager_;
+    Dataset* dataset_;
 
     QString datafile_;
     QString sessionfile_;
+    bool horizontalData_;
     AboutMessage about_;
 
-    //convenience functions to create and populate menus
+    // Convenience functions to create and populate menus.
     void createActions();
     void createMenus();
     void writeSessionFile();
@@ -49,10 +52,12 @@ private:
 signals:
 
     void saveSession();
+    void datasetChanged(Dataset* dataset);
 
 public slots:
 
     void onRecordChanged(bool record);
+    void onImportDatasetReady();
 
 private slots:
 

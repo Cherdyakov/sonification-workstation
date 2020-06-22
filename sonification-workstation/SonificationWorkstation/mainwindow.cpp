@@ -15,6 +15,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     }
     setTheme(settings.value("theme").toString());
 
+    // Core components.
+    dataset_ = new Dataset(this);                                                       // Holds data loaded from file
+    transport_ = new Transport(this, dataset_);                                         // Controls playback and synth commands
+
     // Construct the application window.
     QWidget *centralWidget = new QWidget;                                               // Application top-level widget
     QHBoxLayout* centralLayout = new QHBoxLayout(this);                                 // Application top-level layout
@@ -29,8 +33,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QWidget *quickViewContainer = QWidget::createWindowContainer(quickView_, this);     // Caontainer widget for QQuickView
     TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
     QScrollArea* scrollArea = new QScrollArea(this);                                    // Scroll area for the TrackView
-
-    transport_ = new Transport(this);                                                    // Represents loaded project
 
     quickView_->rootContext()->setContextProperty("transport", transport_);
     quickView_->rootContext()->setContextProperty("themeManager", themeManager_);
@@ -77,15 +79,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     createMenus();
 
     ///* CONNECT NON_UI SIGNALS AND SLOTS *///
+    connect(transport_, &Transport::datasetImportReady,
+            this, &MainWindow::onImportDatasetReady);
+
+    ///* CONNECT UI SIGNALS AND SLOTS *///
     // TransportWidget Record
     connect(transportWidget_, &TransportWidget::recordChanged,
             this, &MainWindow::onRecordChanged);
     // Transport Dataset signals.
-    connect(transport_, &Transport::datasetImported,
+    connect(this, &MainWindow::datasetChanged,
             trackView, &TrackView::onDatasetChanged);
-    connect(transport_, &Transport::datasetImported,
+    connect(this, &MainWindow::datasetChanged,
             transportWidget_, &TransportWidget::onDatasetChanged);
-    connect(transport_, &Transport::datasetImported,
+    connect(this, &MainWindow::datasetChanged,
             playhead_, &PlayHead::onDatasetChanged);
 
     // Connect Transport < > TransportWidget.
@@ -278,6 +284,7 @@ void MainWindow::writeSessionFile()
     QJsonDocument jsonDocument = QJsonDocument::fromJson(returnedValue.toString().toUtf8());
     QJsonObject jsonObject = jsonDocument.object();
     jsonObject.insert("dataset", datafile_);
+    jsonObject.insert("horizontal", horizontalData_);
     jsonObject.insert("interpolate", transportWidget_->interpolate());
     jsonObject.insert("speed", static_cast<double>(transportWidget_->speed()));
 
@@ -342,9 +349,11 @@ void MainWindow::onOpen()
         QJsonObject jsonObject = jsonDocument.object();
 
         // Load the dataset.
-        QJsonValue value = jsonObject.value("dataset");
-        datafile_ = value.toString();
-        transport_->onImportDataset(datafile_);
+        QJsonValue datafile = jsonObject.value("dataset");
+        QJsonValue horizontalData = jsonObject.value("horizontal");
+        horizontalData_ = horizontalData.toBool();
+        datafile_ = datafile.toString();
+        transport_->onImportDataset();
 
         // Set playback speed.
         float speed = jsonObject.value("speed").toInt();
@@ -386,6 +395,11 @@ void MainWindow::onRecordChanged(bool record)
 
 void MainWindow::onImportDataset()
 {
+    transport_->onImportDataset();
+}
+
+void MainWindow::onImportDatasetReady()
+{
     QStringList docDirs = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     QString documents = docDirs[0];
     datafile_ = QFileDialog::getOpenFileName(this, tr("Import Dataset"),
@@ -394,7 +408,22 @@ void MainWindow::onImportDataset()
 
     if(!datafile_.isEmpty())
     {
-        transport_->onImportDataset(datafile_);
+        DatasetImportDialog* importDialog = new DatasetImportDialog(datafile_);
+        int result = importDialog->exec();
+
+        // DEBUG SECTION FOR IMPORT DIALOG RETURN VALUES
+        bool useColumns = result & constants::COLUMNS_FLAG;
+        bool useHeaders = result & constants::HEADERS_FLAG;
+        qDebug() << "Using Columns: " + QString::number(useColumns);
+        qDebug() << "Using Headers: " + QString::number(useHeaders);
+
+        if(result)
+        {
+            FileReader reader;
+            if(reader.readCSV(datafile_, dataset_, useColumns)) {
+                emit datasetChanged(dataset_);
+            }
+        }
     }
 }
 

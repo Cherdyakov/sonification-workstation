@@ -75,6 +75,8 @@ void TrackPlotter::plot(QVector<double> data)
     // set bounds based on new data
     xBounds = xAxis->range();
     yBounds = yAxis->range();
+    // Let world know range is final.
+    onXRangeChanged(xAxis->range());
 }
 
 void TrackPlotter::resizeEvent(QResizeEvent *e)

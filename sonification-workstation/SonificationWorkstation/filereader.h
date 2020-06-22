@@ -15,7 +15,11 @@ class FileReader : public QObject
 public:
 
     explicit FileReader(QObject *parent = nullptr);
-    bool readCSV(const QString filename, sow::Dataset * const dataset);
+    bool readCSV(const QString filename, sow::Dataset* const dataset,
+                 const bool useColumns = false,
+                 const int colHeaders = 0,
+                 const int rowHeaders = 0);
+    QList<QStringList> previewCSV(const QString filename);
 
 signals:
 

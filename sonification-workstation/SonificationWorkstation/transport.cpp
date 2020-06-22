@@ -6,7 +6,7 @@
 
 namespace sow {
 
-Transport::Transport(QObject *parent) : SynthItem (parent)
+Transport::Transport(QObject *parent, Dataset *dataset) : SynthItem (parent)
 {  
     type_ = ENUMS::ITEM_TYPE::TRANSPORT;
     acceptedInputs_ = {
@@ -19,6 +19,7 @@ Transport::Transport(QObject *parent) : SynthItem (parent)
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
 
+    dataset_ = dataset;
     pause_ = true;
     record_ = false;
     loop_ = false;
@@ -47,13 +48,8 @@ void Transport::deleteItem(SynthItem *item)
 }
 
 
-void Transport::onImportDataset(QString file)
+void Transport::onImportDataset()
 {
-    if (filepath_ != file) {
-        fileMutex_.lock();
-        filepath_ = file;
-        fileMutex_.unlock();
-    }
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::IMPORT_DATASET;
     transportCommandBuffer_.push(cmd);
@@ -228,6 +224,8 @@ Frame Transport::process()
             recorder_.Write(frame);
         }
 
+        refreshCurrentData();
+
         calculateReturnPosition();
 
         return frame;
@@ -239,7 +237,7 @@ Frame Transport::process()
         mu_ -= 1.0;
         currentIndex_++;
 
-        if((currentIndex_ + 1) > (dataset_.rows()))
+        if((currentIndex_ + 1) > (dataset_->rows()))
         {
             currentIndex_ = 0;
         }
@@ -268,11 +266,7 @@ Frame Transport::process()
         dataStale_ = true;
     }
 
-    if(dataStale_ && dataset_.hasData())
-    {
-        refreshCurrentData();
-        dataStale_ = false;
-    }
+    refreshCurrentData();
 
     if(stepping)
     {
@@ -378,7 +372,7 @@ void Transport::processTransportCommand(TransportCommand cmd)
 void Transport::processSubscribeItem(SynthItem *item)
 {
     utility::insertUnique(item, subscribers_);
-    item->setData(&dataset_, &currentData_);
+    item->setData(dataset_, &currentData_);
 }
 
 void Transport::processUnsubscribeItem(SynthItem *item)
@@ -408,18 +402,8 @@ void Transport::processImportDataset()
     currentIndex_ = 0;
     mu_ = 0.0f;
     calculateReturnPosition();
-
-    FileReader reader;
-    fileMutex_.lock();
-    if(reader.readCSV(filepath_, &dataset_)) {
-        currentData_.resize(dataset_.rows());
-        currentData_ = dataset_.getRow(currentIndex_);
-    }
-    else {
-        dataset_.clear();
-    }
-    fileMutex_.unlock();
-    emit datasetImported(&dataset_);
+    dataStale_ = true;
+    emit datasetImportReady();
 }
 
 
@@ -436,17 +420,19 @@ void Transport::processSetPlaybackPosition(float pos)
 
 void Transport::refreshCurrentData()
 {
+    if(!dataStale_ || !dataset_->hasData()) return;
+
     if(interpolate_)
     {
         int next_index = currentIndex_ + 1;
-        if(next_index >= dataset_.rows())
+        if(next_index >= dataset_->rows())
         {
             next_index = 0;
         }
-        currentData_ = interpolate(dataset_.getRow(currentIndex_), dataset_.getRow(next_index), mu_);
+        currentData_ = interpolate(dataset_->getRow(currentIndex_), dataset_->getRow(next_index), mu_);
     }
     else {
-        currentData_ = dataset_.getRow(currentIndex_);
+        currentData_ = dataset_->getRow(currentIndex_);
     }
 }
 
