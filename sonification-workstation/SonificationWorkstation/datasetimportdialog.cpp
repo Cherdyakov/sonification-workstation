@@ -26,18 +26,18 @@ DatasetImportDialog::DatasetImportDialog(QString path)
             this, &DatasetImportDialog::onOrientationChanged);
 
     // Create header combobox and connect signals.
-    headerComboBox_ = new QComboBox(this);
-    headerComboBox_->addItem("Load as Headers");
-    headerComboBox_->addItem("Load as Data");
-    connect(headerComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &DatasetImportDialog::onHeaderComboBoxChanged);
+//    headerComboBox_ = new QComboBox(this);
+//    headerComboBox_->addItem("Load as Headers");
+//    headerComboBox_->addItem("Load as Data");
+//    connect(headerComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
+//            this, &DatasetImportDialog::onHeaderComboBoxChanged);
 
     // Label for orientation combobox.
     orientationLabel_ = new QLabel(this);
     orientationLabel_->setText("Tracks mapped from: ");
     // Labels for header comboboxes.
-    headerLabel_ = new QLabel(this);
-    headerLabel_->setText("Header values: ");
+//    headerLabel_ = new QLabel(this);
+//    headerLabel_->setText("Header values: ");
 
     // TableWidget setup.
     table_ = new QTableWidget(this);
@@ -67,8 +67,8 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     orientationLabel_->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     settingsLayout->addWidget(orientationLabel_);
     settingsLayout->addWidget(orientationComboBox_);
-    settingsLayout->addWidget(headerLabel_);
-    settingsLayout->addWidget(headerComboBox_);
+//    settingsLayout->addWidget(headerLabel_);
+//    settingsLayout->addWidget(headerComboBox_);
     settingsLayout->addStretch();
 
     // Add widgets to main layout.
@@ -101,9 +101,9 @@ void DatasetImportDialog::onAccepted()
         returnCode = returnCode | constants::COLUMNS_FLAG;
     }
 
-    if (useHeaders_) {
-        returnCode = returnCode | constants::HEADERS_FLAG;
-    }
+//    if (useHeaders_) {
+//        returnCode = returnCode | constants::HEADERS_FLAG;
+//    }
 
     qDebug() << returnCode;
     done(returnCode);
@@ -123,9 +123,9 @@ void DatasetImportDialog::onOrientationChanged(int idx)
     }
 }
 
-void DatasetImportDialog::onHeaderComboBoxChanged(int idx)
-{
-    useHeaders_ = static_cast<bool>(idx);
-}
+//void DatasetImportDialog::onHeaderComboBoxChanged(int idx)
+//{
+//    useHeaders_ = static_cast<bool>(idx);
+//}
 
 } // namespace sow

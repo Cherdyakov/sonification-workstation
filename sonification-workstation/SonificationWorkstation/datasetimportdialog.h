@@ -23,13 +23,13 @@ private:
                              "F", "G", "H", "I", "J" };
 
     bool useColumns_ = true;
-    bool useHeaders_ = true;
+//    bool useHeaders_ = true;
 
     QDialogButtonBox* buttonBox_;
     QLabel* orientationLabel_;
-    QLabel* headerLabel_;
-    QLabel* rowHeaderLabel_;
-    QComboBox* headerComboBox_;
+//    QLabel* headerLabel_;
+//    QLabel* rowHeaderLabel_;
+//    QComboBox* headerComboBox_;
     QComboBox* orientationComboBox_;
     QTableWidget* table_;
 
@@ -44,7 +44,7 @@ private slots:
     void onAccepted();
     void onRejected();
     void onOrientationChanged(int idx);
-    void onHeaderComboBoxChanged(int idx);
+//    void onHeaderComboBoxChanged(int idx);
 
 };
 
