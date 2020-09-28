@@ -20,9 +20,9 @@ public:
 
 private:
 
-    uint trackNumber;
-    QComboBox *procComboBox;
-    QSpinBox *alphaSpinBox;
+    uint trackNumber_;
+    QComboBox *procComboBox_;
+    QSpinBox *alphaSpinBox_;
 
 protected:
 

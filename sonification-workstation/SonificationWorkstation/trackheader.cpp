@@ -5,8 +5,8 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QVBoxLayout *processingLayout = new QVBoxLayout;
-    alphaSpinBox = new QSpinBox;
-    procComboBox = new QComboBox;
+    alphaSpinBox_ = new QSpinBox;
+    procComboBox_ = new QComboBox;
 
     // Data processing section.
     QLabel *procLabel = new QLabel;
@@ -22,21 +22,23 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
 
     QHBoxLayout *alphaLayout = new QHBoxLayout;
     alphaLayout->addWidget(alphaLabel);
-    alphaLayout->addWidget(alphaSpinBox);
+    alphaLayout->addWidget(alphaSpinBox_);
 
-    procComboBox->addItem("None");
-    procComboBox->addItem("Simple Average");
-    procComboBox->addItem("Exponential Average");
+    procComboBox_->setAccessibleName("Data smoothing dropdown, selects smoothing applied to data track during playback.");
+    procComboBox_->setAccessibleDescription("");
+    procComboBox_->addItem("None");
+    procComboBox_->addItem("Simple Average");
+    procComboBox_->addItem("Exponential Average");
     processingLayout->setContentsMargins(4,4,4,4);
     processingLayout->addWidget(procLabel);
-    processingLayout->addWidget(procComboBox);
+    processingLayout->addWidget(procComboBox_);
     processingLayout->addLayout(alphaLayout);
 
     // Stylesheet.
     this->setObjectName("TrackHeader");
     this->setAutoFillBackground(true);
-    alphaSpinBox->setObjectName("AlphaSpinBox");
-    procComboBox->setObjectName("ProcComboBox");
+    alphaSpinBox_->setObjectName("AlphaSpinBox");
+    procComboBox_->setObjectName("ProcComboBox");
     procLabel->setObjectName("ProcLabel");
 
     // Add everything to main layout.
@@ -47,7 +49,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     this->setLayout(mainLayout);
 
     // connect signals and slots
-    connect(procComboBox, SIGNAL(currentIndexChanged(QString)),
+    connect(procComboBox_, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(on_processingChanged(QString)));
 
 }
