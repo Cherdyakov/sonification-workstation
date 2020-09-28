@@ -34,6 +34,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
     QScrollArea* scrollArea = new QScrollArea(this);                                    // Scroll area for the TrackView
 
+    // prevent ambiguous "grouping" message sent to screen reader.
+    scrollArea->setFocusPolicy(Qt::NoFocus);
+
     quickView_->rootContext()->setContextProperty("transport", transport_);
     quickView_->rootContext()->setContextProperty("themeManager", themeManager_);
     quickView_->rootContext()->setContextProperty("mainwindow", this);
