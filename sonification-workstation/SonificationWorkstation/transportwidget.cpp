@@ -51,7 +51,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     QLabel* speedLabel = new QLabel;
     speedLabel->setObjectName("SpeedLabel");
 
-    masterVolumeSlider_ = new MasterVolumeSlider(this);
+    masterVolumeSlider_ = new MasterVolumeSlider;
     masterVolumeSlider_->setObjectName("MasterVolume");
     masterVolumeSlider_->setAccessibleName("Main volume, sets application master volume.  Range is zero to one hundred");
     masterVolumeSlider_->setAccessibleDescription("");
