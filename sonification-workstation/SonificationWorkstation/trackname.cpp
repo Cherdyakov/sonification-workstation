@@ -8,6 +8,7 @@ TrackName::TrackName(QWidget *parent) : QWidget(parent)
     label_ = new QLabel;
     label_->setContentsMargins(2,2,2,2);
     label_->setStyleSheet("font: 16pt");
+    label_->setFocusPolicy(Qt::TabFocus);
 
     this->setAutoFillBackground(true);
     this->setObjectName("TrackName");
@@ -24,6 +25,8 @@ void TrackName::setNumber(unsigned int num)
     std::string alpha = utility::intToAlpha(num);
     QString name = QString::fromStdString(alpha);
     label_->setText(name);
+    label_->setAccessibleName("Track " + name);
+    label_->setAccessibleDescription("");
 }
 
 void TrackName::setText(const QString name)
