@@ -8,6 +8,7 @@ TrackName::TrackName(QWidget *parent) : QWidget(parent)
     label_ = new QLabel;
     label_->setContentsMargins(2,2,2,2);
     label_->setStyleSheet("font: 16pt");
+    label_->setFocusPolicy(Qt::TabFocus);
 
     this->setAutoFillBackground(true);
     this->setObjectName("TrackName");

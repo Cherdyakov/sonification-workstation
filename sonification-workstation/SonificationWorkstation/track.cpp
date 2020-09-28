@@ -5,8 +5,8 @@ namespace sow {
 Track::Track(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *centralLayout = new QVBoxLayout(this);
-    header_ = new TrackHeader(this);
     name_ = new TrackName(this);
+    header_ = new TrackHeader(this);
 
     centralLayout->setContentsMargins(0,0,0,0);
     centralLayout->setSpacing(0);
