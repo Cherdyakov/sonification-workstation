@@ -24,7 +24,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     alphaLayout->addWidget(alphaLabel);
     alphaLayout->addWidget(alphaSpinBox_);
 
-    procComboBox_->setAccessibleName("Data smoothing dropdown, selects smoothing applied to data track during playback.");
+    procComboBox_->setAccessibleName("Data smoothing dropdown. Selects smoothing applied to data track during playback.");
     procComboBox_->setAccessibleDescription("");
     procComboBox_->addItem("None");
     procComboBox_->addItem("Simple Average");
@@ -33,6 +33,9 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     processingLayout->addWidget(procLabel);
     processingLayout->addWidget(procComboBox_);
     processingLayout->addLayout(alphaLayout);
+
+    alphaSpinBox_->setAccessibleName("Smoothing constant. Sets damping factor for exponential average or window size for simple average.");
+    alphaSpinBox_->setAccessibleDescription("");
 
     // Stylesheet.
     this->setObjectName("TrackHeader");
