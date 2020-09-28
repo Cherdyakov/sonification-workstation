@@ -80,7 +80,6 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     muteButton_->setIconSize(QSize(40,40));
     // Set button tooltips
     pauseButton_->setToolTip("Play/Pause (Ctrl+P)");
-    pauseButton_->setToolTip("Record (Ctrl+R)");
     loopButton_->setToolTip("Enable looping (Ctrl+L)");
     interpolateButton_->setToolTip("Enable interpolation (Ctrl+I)");
     muteButton_->setToolTip("Mute (Ctrl+M)");
