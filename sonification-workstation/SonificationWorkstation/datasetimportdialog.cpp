@@ -20,6 +20,9 @@ DatasetImportDialog::DatasetImportDialog(QString path)
 
     // Create orientation combobox and connect signals.
     orientationComboBox_ = new QComboBox(this);
+    orientationComboBox_->setObjectName("OrientationComboBox");
+    orientationComboBox_->setAccessibleName("Orientation dropdown, selects whether Sonification Workstation tracks are mapped from data columns or data rows.");
+    orientationComboBox_->setAccessibleDescription("");
     orientationComboBox_->addItem("Columns");
     orientationComboBox_->addItem("Rows");
     connect(orientationComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -46,6 +49,9 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     table_->setColumnCount(10);
     table_->setHorizontalHeaderLabels(headers_);
     table_->setVerticalHeaderLabels(headers_);
+    // Tab goes to next widget, use arrow keys to navigate inside the table.
+    // Otherwise screen-reader users can't easily navigate out of table.
+    table_->setTabKeyNavigation(false);
     setColsTracks();
 
     // Get the CSV preview data and add to QTableWidget for preview.
