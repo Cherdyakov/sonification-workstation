@@ -2,11 +2,11 @@
 
 namespace sow {
 
-Track::Track(QWidget *parent) : QWidget(parent)
+Track::Track(QWidget *parent, TrackHeader *header) : QWidget(parent)
 {
     QVBoxLayout *centralLayout = new QVBoxLayout(this);
     name_ = new TrackName(this);
-    header_ = new TrackHeader(this);
+    header_ = header;
 
     centralLayout->setContentsMargins(0,0,0,0);
     centralLayout->setSpacing(0);
@@ -51,6 +51,7 @@ void Track::setTrackNumber(uint num)
 
 void Track::resizeEvent(QResizeEvent *e)
 {
+    Q_UNUSED(e);
     emit resized(this->height());
 }
 

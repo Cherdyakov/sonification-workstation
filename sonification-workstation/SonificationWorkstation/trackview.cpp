@@ -134,7 +134,8 @@ void TrackView::clear()
 
 Track *TrackView::addTrack()
 {
-    Track* track = new Track(this);
+    TrackHeader* header = new TrackHeader(this);
+    Track* track = new Track(this, header);
     TrackPlotter* plotter = new TrackPlotter(track);
     track->setFixedHeight(140);
     track->setPlotter(plotter);
@@ -153,6 +154,12 @@ Track *TrackView::addTrack()
             track, &Track::onTrackHeightChanged);
     connect(this, &TrackView::positionChanged,
             plotter, &TrackPlotter::onPositionChanged);
+    connect(header, &TrackHeader::processingTypeChanged,
+            this, &TrackView::onProcessingTypeChanged);
+    connect(header, &TrackHeader::nValChanged,
+            this, &TrackView::onNvalChanged);
+    connect(header, &TrackHeader::alphaChanged,
+            this, &TrackView::onAlphaChanged);
 
     return track;
 }
