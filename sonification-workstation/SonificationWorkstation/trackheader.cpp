@@ -52,8 +52,8 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     this->setLayout(mainLayout);
 
     // connect signals and slots
-    connect(procComboBox_, SIGNAL(currentIndexChanged),
-            this, SLOT(onProcessingTypeChanged));
+    connect(procComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &TrackHeader::onProcessingTypeChanged);
 
 }
 
