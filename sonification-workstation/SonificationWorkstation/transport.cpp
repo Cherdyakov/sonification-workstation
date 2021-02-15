@@ -19,6 +19,7 @@ Transport::Transport(QObject *parent, Dataset *dataset) : SynthItem (parent)
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
 
+    dataProcessor_ = new DataProcessor(this, dataset);
     dataset_ = dataset;
     pause_ = true;
     record_ = false;
@@ -421,19 +422,7 @@ void Transport::processSetPlaybackPosition(float pos)
 void Transport::refreshCurrentData()
 {
     if(!dataStale_ || !dataset_->hasData()) return;
-
-    if(interpolate_)
-    {
-        int next_index = currentIndex_ + 1;
-        if(next_index >= dataset_->rows())
-        {
-            next_index = 0;
-        }
-        currentData_ = interpolate(dataset_->getRow(currentIndex_), dataset_->getRow(next_index), mu_);
-    }
-    else {
-        currentData_ = dataset_->getRow(currentIndex_);
-    }
+    currentData_ = dataProcessor_->getData(currentIndex_);
 }
 
 void Transport::calculateReturnPosition()

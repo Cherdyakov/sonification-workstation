@@ -16,6 +16,7 @@
 #include "noise.h"
 #include "equalizer.h"
 #include "recorder.h"
+#include "dataprocessor.h"
 
 namespace sow {
 
@@ -44,6 +45,7 @@ private:
     std::vector<SynthItem*> subscribers_;
     Recorder recorder_;
     Dataset* dataset_;
+    DataProcessor* dataProcessor_;
     QString filepath_;
     QMutex fileMutex_;
     std::vector<float> currentData_;

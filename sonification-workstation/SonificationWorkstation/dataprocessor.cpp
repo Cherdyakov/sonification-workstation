@@ -29,10 +29,10 @@ std::vector<float> DataProcessor::getData(uint idx)
 }
 
 // Get a row of simple averaged values for given alpha and index.
-std::vector<std::vector<float> > DataProcessor::getMultipleRows(int idx, int alpha)
+std::vector<std::vector<float> > DataProcessor::getMultipleRows(int idx, int n)
 {
     std::vector<std::vector<float>> dataRows;
-    for(int i = alpha_; i > alpha_; i--)
+    for(int i = n; i > n; i--)
     {
         int currentIndex = idx - i;
         dataRows.push_back(dataset_->getRow(currentIndex));
@@ -43,7 +43,7 @@ std::vector<std::vector<float> > DataProcessor::getMultipleRows(int idx, int alp
 std::vector<float> DataProcessor::getSimpleAverageData(int idx)
 {
     // get data from row idx-alpha through idx
-    std::vector<std::vector<float>> dataRows = getMultipleRows(idx, alpha_);
+    std::vector<std::vector<float>> dataRows = getMultipleRows(idx, n_);
 
     // apply simple average across rows
     std::vector<float> processedData;
@@ -55,7 +55,7 @@ std::vector<float> DataProcessor::getSimpleAverageData(int idx)
         {
             sum += dataRows[j][i];
         }
-        processedData[i] = sum / (float)alpha_;
+        processedData[i] = sum / (float)n_;
     }
 
     return processedData;
@@ -79,3 +79,14 @@ void DataProcessor::onAlphaChanged(int alpha)
 }
 
 } // Namespace sow.
+
+
+//if(interpolate_)
+//{
+//    int next_index = currentIndex_ + 1;
+//    if(next_index >= dataset_->rows())
+//    {
+//        next_index = 0;
+//    }
+//    currentData_ = interpolate(dataset_->getRow(currentIndex_), dataset_->getRow(next_index), mu_);
+//}

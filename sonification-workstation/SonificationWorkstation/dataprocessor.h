@@ -19,13 +19,14 @@ public:
 private:
 
     ENUMS::PROCESSING_TYPE procType_;
-    int alpha_;
+    float alpha_;
+    int n_;
     Dataset* dataset_;
 
     std::vector<float> getSimpleAverageData(int idx);
     std::vector<float> getExponentialAverageData(int idx);
 
-    std::vector<std::vector<float>> getMultipleRows(int idx, int alpha);
+    std::vector<std::vector<float>> getMultipleRows(int idx, int n);
 
 signals:
 
