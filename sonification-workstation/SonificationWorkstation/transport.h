@@ -34,7 +34,6 @@ public:
     Q_INVOKABLE void unsubscribe(SynthItem* item);
 
     float pos(); // for polling state from outside
-    void loadDataset(QString file);
     Frame process() override;       // every sample
     void controlProcess() override; // every process block
 
