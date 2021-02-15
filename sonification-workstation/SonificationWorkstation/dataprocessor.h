@@ -2,7 +2,10 @@
 #define DATAPROCESSOR_H
 
 #include <QObject>
+#include "dataset.h"
 #include "enums.h"
+
+namespace sow {
 
 class DataProcessor : public QObject
 {
@@ -17,6 +20,7 @@ private:
 
     ENUMS::PROCESSING_TYPE procType_;
     int alpha_;
+    Dataset* dataset_;
 
     std::vector<float> getSimpleAverageData();
     std::vector<float> getExponentialAverageData();
@@ -30,5 +34,7 @@ public slots:
     void onAlphaChanged(int alpha);
 
 };
+
+} // Namespace sow.
 
 #endif // DATAPROCESSOR_H

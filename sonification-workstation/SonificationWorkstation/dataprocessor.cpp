@@ -1,5 +1,7 @@
 #include "dataprocessor.h"
 
+namespace sow {
+
 DataProcessor::DataProcessor(QObject *parent) : QObject(parent)
 {
     procType_ = ENUMS::PROCESSING_TYPE::NONE;
@@ -45,3 +47,5 @@ void DataProcessor::onAlphaChanged(int alpha)
 {
     alpha_ = alpha;
 }
+
+} // Namespace sow.
