@@ -18,23 +18,25 @@ public:
 
 private:
 
-    ENUMS::PROCESSING_TYPE procType_;
-    float alpha_;
-    int n_;
+    std::vector<ENUMS::PROCESSING_TYPE> procTypes_;
+    std::vector<float> alphas_;
+    std::vector<int> nVals_;
     Dataset* dataset_;
 
+    float getSimpleAverageValue(unsigned int row, unsigned int col, int n);
+    float getExponentialAverageValue(int row, int col, int n, float alpha);
     std::vector<float> getSimpleAverageData(int idx);
     std::vector<float> getExponentialAverageData(int idx);
 
-    std::vector<std::vector<float>> getMultipleRows(int idx, int n);
 
 signals:
 
 public slots:
 
     // slots for data processing settings
-    void onProcessingTypeChanged(ENUMS::PROCESSING_TYPE procType);
-    void onAlphaChanged(int alpha);
+    void onProcessingTypeChanged(std::vector<ENUMS::PROCESSING_TYPE> procTypes);
+    void onAlphaChanged(std::vector<float> alphas);
+    void onNvalChanged( std::vector<int> nVals);
 
 };
 

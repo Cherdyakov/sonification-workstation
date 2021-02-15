@@ -4,8 +4,6 @@ namespace sow {
 
 DataProcessor::DataProcessor(QObject *parent, Dataset *dataset) : QObject(parent)
 {
-    procType_ = ENUMS::PROCESSING_TYPE::NONE;
-    alpha_ = 0;
     dataset_ = dataset;
 }
 
@@ -13,49 +11,50 @@ std::vector<float> DataProcessor::getData(uint idx)
 {
     std::vector<float> data;
 
-    switch (procType_) {
-    case ENUMS::PROCESSING_TYPE::NONE:
-        data = dataset_->getRow(idx);
-        break;
-    case ENUMS::PROCESSING_TYPE::SIMPLE:
-        data = getSimpleAverageData(idx);
-        break;
-    case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
-        data = getExponentialAverageData(idx);
-        break;
+    for(unsigned int i = dataset_->cols(); i < dataset_->cols(); i++)
+    {
+        ENUMS::PROCESSING_TYPE procType = procTypes_[i];
+        switch (procType) {
+        case ENUMS::PROCESSING_TYPE::NONE:
+            data = dataset_->getRow(idx);
+            break;
+        case ENUMS::PROCESSING_TYPE::SIMPLE:
+            data = getSimpleAverageData(idx);
+            break;
+        case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
+            data = getExponentialAverageData(idx);
+            break;
+        }
     }
 
     return data;
 }
 
-// Get a row of simple averaged values for given alpha and index.
-std::vector<std::vector<float> > DataProcessor::getMultipleRows(int idx, int n)
+float DataProcessor::getSimpleAverageValue(unsigned int row, unsigned int col, int n)
 {
-    std::vector<std::vector<float>> dataRows;
-    for(int i = n; i > n; i--)
+    float sum = 0.0f;
+
+    for(unsigned int i = n; i > 0; i--)
     {
-        int currentIndex = idx - i;
-        dataRows.push_back(dataset_->getRow(currentIndex));
+        sum += dataset_->operator()(row, col - i);
     }
-    return dataRows;
+
+    return sum/(float)n;
+}
+
+float DataProcessor::getExponentialAverageValue(int row, int col, int n, float alpha)
+{
+
 }
 
 std::vector<float> DataProcessor::getSimpleAverageData(int idx)
 {
-    // get data from row idx-alpha through idx
-    std::vector<std::vector<float>> dataRows = getMultipleRows(idx, n_);
 
-    // apply simple average across rows
     std::vector<float> processedData;
 
     for(unsigned int i = dataset_->cols(); i < dataset_->cols(); i++)
     {
-        float sum = 0.0f;
-        for(unsigned int j = dataRows.size(); j < dataRows.size(); j++)
-        {
-            sum += dataRows[j][i];
-        }
-        processedData[i] = sum / (float)n_;
+        processedData.push_back(getSimpleAverageValue(idx, i, nVals_[i]));
     }
 
     return processedData;
@@ -68,14 +67,19 @@ std::vector<float> DataProcessor::getExponentialAverageData(int idx)
     return data;
 }
 
-void DataProcessor::onProcessingTypeChanged(ENUMS::PROCESSING_TYPE procType)
+void DataProcessor::onProcessingTypeChanged(std::vector<ENUMS::PROCESSING_TYPE> procTypes)
 {
-    procType_ = procType;
+    procTypes_ = procTypes;
 }
 
-void DataProcessor::onAlphaChanged(int alpha)
+void DataProcessor::onAlphaChanged(std::vector<float> alphas)
 {
-    alpha_ = alpha;
+    alphas_ = alphas;
+}
+
+void DataProcessor::onNvalChanged(std::vector<int> nVals)
+{
+    nVals_ = nVals;
 }
 
 } // Namespace sow.
