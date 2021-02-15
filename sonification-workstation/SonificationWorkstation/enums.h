@@ -95,6 +95,12 @@ public:
         MUTE
     };
 
+    enum class PROCESSING_TYPE {
+        NONE,
+        SIMPLE,
+        EXPONENTIAL
+    };
+
 };
 
 

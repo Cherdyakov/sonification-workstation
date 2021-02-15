@@ -2,6 +2,7 @@
 #define DATAPROCESSOR_H
 
 #include <QObject>
+#include "enums.h"
 
 class DataProcessor : public QObject
 {
