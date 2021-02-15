@@ -17,7 +17,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // Core components.
     dataset_ = new Dataset(this);                                                       // Holds data loaded from file
-    transport_ = new Transport(this, dataset_);                                         // Controls playback and synth commands
+    dataProcessor_ = new DataProcessor(this, dataset_);
+    transport_ = new Transport(this, dataset_, dataProcessor_);                                         // Controls playback and synth commands
 
     // Construct the application window.
     QWidget *centralWidget = new QWidget;                                               // Application top-level widget
@@ -112,6 +113,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport::onMasterVolumeChanged);
     connect(transportWidget_, &TransportWidget::muteChanged,
             transport_, &Transport::onMuteChanged);
+
+    // Track signals > DataProcessor.
+    connect(trackView, &TrackView::processingTypeChanged,
+            dataProcessor_, &DataProcessor::onProcessingTypeChanged);
+    connect(trackView, &TrackView::nValChanged,
+            dataProcessor_, &DataProcessor::onNvalChanged);
+    connect(trackView, &TrackView::alphaChanged,
+            dataProcessor_, &DataProcessor::onAlphaChanged);
 
     // Playhead signals.
     connect(transportWidget_, &TransportWidget::pausedChanged,

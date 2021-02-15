@@ -25,7 +25,7 @@ class Transport : public SynthItem
     Q_OBJECT
 public:
 
-    explicit Transport(QObject *parent = nullptr, Dataset* dataset = nullptr);
+    explicit Transport(QObject *parent = nullptr, Dataset* dataset = nullptr, DataProcessor* processor = nullptr);
 
     // factory for other SynthItems
     Q_INVOKABLE sow::SynthItem* createItem(ENUMS::ITEM_TYPE type);

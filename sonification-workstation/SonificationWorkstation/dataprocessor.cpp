@@ -44,7 +44,7 @@ float DataProcessor::getSimpleAverageValue(unsigned int row, unsigned int col, i
 
 float DataProcessor::getExponentialAverageValue(int row, int col, int n, float alpha)
 {
-
+    return 0.0f;
 }
 
 std::vector<float> DataProcessor::getSimpleAverageData(int idx)
@@ -67,19 +67,19 @@ std::vector<float> DataProcessor::getExponentialAverageData(int idx)
     return data;
 }
 
-void DataProcessor::onProcessingTypeChanged(std::vector<ENUMS::PROCESSING_TYPE> procTypes)
+void DataProcessor::onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type)
 {
-    procTypes_ = procTypes;
+    procTypes_[track] = type;
 }
 
-void DataProcessor::onAlphaChanged(std::vector<float> alphas)
+void DataProcessor::onAlphaChanged(uint track, float alpha)
 {
-    alphas_ = alphas;
+    alphas_[track] = alpha;
 }
 
-void DataProcessor::onNvalChanged(std::vector<int> nVals)
+void DataProcessor::onNvalChanged(uint track, uint n)
 {
-    nVals_ = nVals;
+    nVals_[track] = n;
 }
 
 } // Namespace sow.

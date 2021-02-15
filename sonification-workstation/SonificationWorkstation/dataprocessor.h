@@ -34,9 +34,9 @@ signals:
 public slots:
 
     // slots for data processing settings
-    void onProcessingTypeChanged(std::vector<ENUMS::PROCESSING_TYPE> procTypes);
-    void onAlphaChanged(std::vector<float> alphas);
-    void onNvalChanged( std::vector<int> nVals);
+    void onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
+    void onAlphaChanged(uint track, float alpha);
+    void onNvalChanged(uint track, uint n);
 
 };
 

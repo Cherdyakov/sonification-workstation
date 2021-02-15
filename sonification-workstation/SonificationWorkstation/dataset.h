@@ -24,7 +24,7 @@ public:
     unsigned int cols() const;
     std::vector<float> mins() const;
     std::vector<float> maxes() const;
-    float operator()(unsigned int row, unsigned int col) const;
+    float operator()(int row, int col) const;
     std::vector<float> getCol(const int col) const;
     std::vector<float> getRow(const int row) const;
     // erase all data and reset height, width

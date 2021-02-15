@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <QBitmap>
 #include <QPainter>
+#include "enums.h"
 
 class TrackHeader : public QWidget
 {
@@ -29,11 +30,16 @@ protected:
     void paintEvent(QPaintEvent* event) override;
 
 signals:
+    void processingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
+    void nValChanged(uint track, uint n);
+    void alphaChanged(uint track, float alpha);
 
 public slots:
 
 private slots:
-    void on_processingChanged(QString text);
+    void onProcessingTypeChanged(int idx);
+    void onNvalChanged(int n);
+    void onAlphaChanged(float alpha);
 
 };
 

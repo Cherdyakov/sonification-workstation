@@ -6,7 +6,7 @@
 
 namespace sow {
 
-Transport::Transport(QObject *parent, Dataset *dataset) : SynthItem (parent)
+Transport::Transport(QObject *parent, Dataset *dataset, DataProcessor *processor) : SynthItem (parent)
 {  
     type_ = ENUMS::ITEM_TYPE::TRANSPORT;
     acceptedInputs_ = {
@@ -19,7 +19,7 @@ Transport::Transport(QObject *parent, Dataset *dataset) : SynthItem (parent)
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
 
-    dataProcessor_ = new DataProcessor(this, dataset);
+    dataProcessor_ = processor;
     dataset_ = dataset;
     pause_ = true;
     record_ = false;

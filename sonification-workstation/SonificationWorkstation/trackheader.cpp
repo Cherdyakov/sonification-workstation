@@ -53,19 +53,42 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
 
     // connect signals and slots
     connect(procComboBox_, SIGNAL(currentIndexChanged(QString)),
-            this, SLOT(on_processingChanged(QString)));
+            this, SLOT(onProcessingTypeChanged(QString)));
 
 }
 
 void TrackHeader::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
     QStyleOption opt;
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
-void TrackHeader::on_processingChanged(QString text)
+void TrackHeader::onProcessingTypeChanged(int idx)
 {
+    ENUMS::PROCESSING_TYPE type;
+    switch (idx) {
+    case 0:
+        type = ENUMS::PROCESSING_TYPE::NONE;
+        break;
+    case 1:
+        type = ENUMS::PROCESSING_TYPE::SIMPLE;
+        break;
+    case 2:
+        type = ENUMS::PROCESSING_TYPE::EXPONENTIAL;
+        break;
+    }
+    emit processingTypeChanged(trackNumber_, type);
+}
 
+void TrackHeader::onNvalChanged(int n)
+{
+    emit nValChanged(trackNumber_, n);
+}
+
+void TrackHeader::onAlphaChanged(float alpha)
+{
+    emit alphaChanged(trackNumber_, alpha);
 }

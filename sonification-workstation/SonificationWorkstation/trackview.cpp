@@ -168,4 +168,19 @@ void TrackView::onXRangeChanged(QCPRange range)
     emit xRangeChanged(range);
 }
 
+void TrackView::onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type)
+{
+    emit processingTypeChanged(track, type);
+}
+
+void TrackView::onNvalChanged(uint track, uint n)
+{
+    emit nValChanged(track, n);
+}
+
+void TrackView::onAlphaChanged(uint track, float alpha)
+{
+    emit alphaChanged(track, alpha);
+}
+
 } // namespace sow
