@@ -62,9 +62,18 @@ float Dataset::operator()(const unsigned int row, const unsigned int col) const
 }
 
 // return given col of the dataset
-std::vector<float> Dataset::getCol(const unsigned int col) const {
+std::vector<float> Dataset::getCol(const int col) const {
 
-    if( col >= cols_ )
+    unsigned int unsignedCol;
+
+    // allow for negative indexing similar to Python array
+    if(col < 0) {
+        unsignedCol = cols() + col;
+    } else {
+        unsignedCol = col;
+    }
+
+    if( unsignedCol >= cols_ )
     {
         std::string message("Invalid dataset column requested: " + std::to_string(col));
         throw std::invalid_argument(message);
@@ -73,15 +82,24 @@ std::vector<float> Dataset::getCol(const unsigned int col) const {
     std::vector<float> vec(rows_);
     for(unsigned int row = 0; row < rows_; row++)
     {
-        vec[row] = data_[index(row, col)];
+        vec[row] = data_[index(row, unsignedCol)];
     }
     return vec;
 }
 
 // return given row of the dataset
-std::vector<float> Dataset::getRow(const unsigned int row) const {
+std::vector<float> Dataset::getRow(const int row) const {
 
-    if( row >= rows_ )
+    unsigned int unsignedRow;
+
+    // allow for negative indexing similar to Python array
+    if(row < 0) {
+        unsignedRow = rows() + row;
+    } else {
+        unsignedRow = row;
+    }
+
+    if( unsignedRow >= rows_ )
     {
         std::string message("Invalid dataset row requested: " + std::to_string(row));
         throw std::invalid_argument(message);
