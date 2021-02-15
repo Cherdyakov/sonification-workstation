@@ -50,15 +50,31 @@ std::vector<float> Dataset::maxes() const
 }
 
 // Return data value at given index
-float Dataset::operator()(const unsigned int row, const unsigned int col) const
+float Dataset::operator()(const int row, const int col) const
 {
-    if ( (row >= rows_) || (col >= cols_) )
+    unsigned int unsignedRow;
+    unsigned int unsignedCol;
+
+    // allow for negative indexing similar to Python array
+    if(row < 0) {
+        unsignedRow = rows() + row;
+    } else {
+        unsignedRow = row;
+    }
+    if(col < 0) {
+        unsignedCol = cols() + col;
+    } else {
+        unsignedCol = col;
+    }
+
+
+    if ( (unsignedRow >= rows_) || (unsignedCol >= cols_) )
     {
         std::string message("Invalid dataset index: " + std::to_string(row)
                 + ", " + std::to_string(col));
         throw std::invalid_argument(message);
     }
-    return data_[index(row, col)];
+    return data_[index(unsignedRow, unsignedCol)];
 }
 
 // return given col of the dataset
