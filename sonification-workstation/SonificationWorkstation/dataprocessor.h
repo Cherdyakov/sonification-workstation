@@ -22,8 +22,10 @@ private:
     int alpha_;
     Dataset* dataset_;
 
-    std::vector<float> getSimpleAverageData();
-    std::vector<float> getExponentialAverageData();
+    std::vector<float> getSimpleAverageData(int idx);
+    std::vector<float> getExponentialAverageData(int idx);
+
+    std::vector<std::vector<float>> getMultipleRows(int idx, int alpha);
 
 signals:
 
