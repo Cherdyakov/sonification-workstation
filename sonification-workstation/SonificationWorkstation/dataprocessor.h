@@ -2,8 +2,8 @@
 #define DATAPROCESSOR_H
 
 #include <QObject>
-#include "dataset.h"
 #include "enums.h"
+#include "dataset.h"
 
 namespace sow {
 
@@ -11,7 +11,7 @@ class DataProcessor : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataProcessor(QObject *parent = nullptr);
+    explicit DataProcessor(QObject *parent = nullptr, Dataset* dataset = nullptr);
 
     // Get the next set of data values
     std::vector<float> getData(uint idx);

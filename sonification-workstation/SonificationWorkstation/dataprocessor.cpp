@@ -2,10 +2,11 @@
 
 namespace sow {
 
-DataProcessor::DataProcessor(QObject *parent) : QObject(parent)
+DataProcessor::DataProcessor(QObject *parent, Dataset *dataset) : QObject(parent)
 {
     procType_ = ENUMS::PROCESSING_TYPE::NONE;
     alpha_ = 0;
+    dataset_ = dataset;
 }
 
 std::vector<float> DataProcessor::getData(uint idx)
