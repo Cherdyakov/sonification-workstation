@@ -10,7 +10,24 @@ class DataProcessor : public QObject
 public:
     explicit DataProcessor(QObject *parent = nullptr);
 
+    // Get the next set of data values
+    std::vector<float> getData(uint idx);
+
+private:
+
+    ENUMS::PROCESSING_TYPE procType_;
+    int alpha_;
+
+    std::vector<float> getSimpleAverageData();
+    std::vector<float> getExponentialAverageData();
+
 signals:
+
+public slots:
+
+    // slots for data processing settings
+    void onProcessingTypeChanged(ENUMS::PROCESSING_TYPE procType);
+    void onAlphaChanged(int alpha);
 
 };
 
