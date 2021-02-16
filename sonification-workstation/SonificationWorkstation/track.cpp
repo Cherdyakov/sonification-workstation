@@ -47,6 +47,7 @@ void Track::plot(std::vector<float> vec)
 void Track::setTrackNumber(uint num)
 {
     name_->setNumber(num);
+    header_->setNumber(num);
 }
 
 void Track::resizeEvent(QResizeEvent *e)

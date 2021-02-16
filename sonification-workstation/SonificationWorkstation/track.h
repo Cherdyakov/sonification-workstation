@@ -28,7 +28,6 @@ protected:
 
 private:
 
-    uint trackNumber_;
     TrackPlotter* plotter_;
     TrackHeader* header_;
     TrackName* name_;

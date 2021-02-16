@@ -57,6 +57,11 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
 
 }
 
+void TrackHeader::setNumber(uint num)
+{
+    trackNumber_ = num;
+}
+
 void TrackHeader::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);

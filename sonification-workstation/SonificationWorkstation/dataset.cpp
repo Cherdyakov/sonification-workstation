@@ -55,17 +55,10 @@ float Dataset::operator()(const int row, const int col) const
     unsigned int unsignedRow;
     unsigned int unsignedCol;
 
+
     // allow for negative indexing similar to Python array
-    if(row < 0) {
-        unsignedRow = rows() + row;
-    } else {
-        unsignedRow = row;
-    }
-    if(col < 0) {
-        unsignedCol = cols() + col;
-    } else {
-        unsignedCol = col;
-    }
+    unsignedRow = row >= 0 ? row % rows_ : ((rows_ % row) + row) % row;
+    unsignedCol = col >= 0 ? col % cols_ : ((cols_ % col) + col) % col;
 
 
     if ( (unsignedRow >= rows_) || (unsignedCol >= cols_) )

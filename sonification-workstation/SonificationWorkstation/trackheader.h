@@ -19,6 +19,8 @@ class TrackHeader : public QWidget
 public:
     explicit TrackHeader(QWidget *parent = nullptr);
 
+    void setNumber(uint num);
+
 private:
 
     uint trackNumber_;

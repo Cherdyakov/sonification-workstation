@@ -429,6 +429,7 @@ void Transport::refreshCurrentData()
 {
     if(!dataStale_ || !dataset_->hasData() || importingDataset_ ) return;
     currentData_ = dataProcessor_->getData(currentIndex_);
+    dataStale_ = false;
 }
 
 void Transport::calculateReturnPosition()

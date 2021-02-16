@@ -7,63 +7,45 @@ DataProcessor::DataProcessor(QObject *parent, Dataset *dataset) : QObject(parent
     dataset_ = dataset;
 }
 
-std::vector<float> DataProcessor::getData(uint idx)
+std::vector<float> DataProcessor::getData(uint row)
 {
-    std::vector<float> data;
+    std::vector<float> datarow(dataset_->cols(), 0.0f);
 
-    for(unsigned int i = 0; i < dataset_->cols(); i++)
+    for(unsigned int col = 0; col < dataset_->cols(); col++)
     {
-        ENUMS::PROCESSING_TYPE procType = procTypes_[i];
+        ENUMS::PROCESSING_TYPE procType = procTypes_[col];
         switch (procType) {
         case ENUMS::PROCESSING_TYPE::NONE:
-            data = dataset_->getRow(idx);
+            datarow[col] = dataset_->operator()(row, col);
             break;
         case ENUMS::PROCESSING_TYPE::SIMPLE:
-            data = getSimpleAverageData(idx);
+            datarow[col] = getSimpleAverageValue(row, col);
             break;
         case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
-            data = getExponentialAverageData(idx);
+            datarow[col] = getExponentialAverageValue(row, col);
             break;
         }
     }
 
-    return data;
+    return datarow;
 }
 
-float DataProcessor::getSimpleAverageValue(unsigned int row, unsigned int col, int n)
+float DataProcessor::getSimpleAverageValue(unsigned int row, unsigned int col)
 {
     float sum = 0.0f;
+    int n = nVals_[col] - 1;
 
-    for(unsigned int i = n; i >= 0; i--)
+    for(int i = n; i >= 0; i--)
     {
-        sum += dataset_->operator()(row, col - i);
+        sum += dataset_->operator()(row - i, col);
     }
 
     return sum/(float)n;
 }
 
-float DataProcessor::getExponentialAverageValue(int row, int col, int n, float alpha)
+float DataProcessor::getExponentialAverageValue(int row, int col)
 {
     return 0.0f;
-}
-
-std::vector<float> DataProcessor::getSimpleAverageData(int idx)
-{
-    std::vector<float> processedData;
-
-    for(unsigned int i = dataset_->cols(); i < dataset_->cols(); i++)
-    {
-        processedData.push_back(getSimpleAverageValue(idx, i, nVals_[i]));
-    }
-
-    return processedData;
-}
-
-// Get a row of exponentially averaged values for given alpha and index.
-std::vector<float> DataProcessor::getExponentialAverageData(int idx)
-{
-    std::vector<float> data;
-    return data;
 }
 
 void DataProcessor::onDatasetChanged(Dataset *dataset)
@@ -71,22 +53,22 @@ void DataProcessor::onDatasetChanged(Dataset *dataset)
     Q_UNUSED(dataset);
     procTypes_ = std::vector<ENUMS::PROCESSING_TYPE>(dataset_->cols(), ENUMS::PROCESSING_TYPE::NONE);
     alphas_ = std::vector<float>(dataset_->cols(), 0.0f);
-    nVals_ = std::vector<int>(dataset_->cols(), 1);
+    nVals_ = std::vector<int>(dataset_->cols(), 6);
 }
 
 void DataProcessor::onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type)
 {
-    procTypes_[track] = type;
+    procTypes_[track - 1] = type;
 }
 
 void DataProcessor::onAlphaChanged(uint track, float alpha)
 {
-    alphas_[track] = alpha;
+    alphas_[track - 1] = alpha;
 }
 
 void DataProcessor::onNvalChanged(uint track, uint n)
 {
-    nVals_[track] = n;
+    nVals_[track - 1] = n;
 }
 
 } // Namespace sow.
