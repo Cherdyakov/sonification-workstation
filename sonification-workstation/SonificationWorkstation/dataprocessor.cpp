@@ -11,7 +11,7 @@ std::vector<float> DataProcessor::getData(uint idx)
 {
     std::vector<float> data;
 
-    for(unsigned int i = dataset_->cols(); i < dataset_->cols(); i++)
+    for(unsigned int i = 0; i < dataset_->cols(); i++)
     {
         ENUMS::PROCESSING_TYPE procType = procTypes_[i];
         switch (procType) {
@@ -34,7 +34,7 @@ float DataProcessor::getSimpleAverageValue(unsigned int row, unsigned int col, i
 {
     float sum = 0.0f;
 
-    for(unsigned int i = n; i > 0; i--)
+    for(unsigned int i = n; i >= 0; i--)
     {
         sum += dataset_->operator()(row, col - i);
     }
@@ -49,7 +49,6 @@ float DataProcessor::getExponentialAverageValue(int row, int col, int n, float a
 
 std::vector<float> DataProcessor::getSimpleAverageData(int idx)
 {
-
     std::vector<float> processedData;
 
     for(unsigned int i = dataset_->cols(); i < dataset_->cols(); i++)
@@ -65,6 +64,14 @@ std::vector<float> DataProcessor::getExponentialAverageData(int idx)
 {
     std::vector<float> data;
     return data;
+}
+
+void DataProcessor::onDatasetChanged(Dataset *dataset)
+{
+    Q_UNUSED(dataset);
+    procTypes_ = std::vector<ENUMS::PROCESSING_TYPE>(dataset_->cols(), ENUMS::PROCESSING_TYPE::NONE);
+    alphas_ = std::vector<float>(dataset_->cols(), 0.0f);
+    nVals_ = std::vector<int>(dataset_->cols(), 1);
 }
 
 void DataProcessor::onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type)

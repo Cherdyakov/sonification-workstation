@@ -33,6 +33,7 @@ signals:
 
 public slots:
 
+    void onDatasetChanged(Dataset* dataset);
     // slots for data processing settings
     void onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
     void onAlphaChanged(uint track, float alpha);

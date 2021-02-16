@@ -34,6 +34,7 @@ Transport::Transport(QObject *parent, Dataset *dataset, DataProcessor *processor
     returnPos_ = 0.0f;
     masterVolumeTarget_ = masterVolume_ = 1.0f;
     interpolate_ = false;
+    importingDataset_ = false;
 }
 
 /*
@@ -49,10 +50,11 @@ void Transport::deleteItem(SynthItem *item)
 }
 
 
-void Transport::onImportDataset()
+void Transport::onImportDataset(bool importing)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::IMPORT_DATASET;
+    cmd.valueA = importing ? 1.0f : 0.0f;
     transportCommandBuffer_.push(cmd);
 }
 
@@ -359,6 +361,7 @@ void Transport::processTransportCommand(TransportCommand cmd)
         utility::removeAll(cmd.item, subscribers_);
         break;
     case ENUMS::TRANSPORT_CMD::IMPORT_DATASET:
+        importingDataset_ = (cmd.valueA == 0.0f) ? false : true;
         processImportDataset();
         break;
     case ENUMS::TRANSPORT_CMD::VOLUME:
@@ -398,13 +401,16 @@ void Transport::processDeleteItem(SynthItem *item)
 
 void Transport::processImportDataset()
 {
-    pause_ = true;
-    currentData_.clear();
-    currentIndex_ = 0;
-    mu_ = 0.0f;
-    calculateReturnPosition();
-    dataStale_ = true;
-    emit datasetImportReady();
+    if(importingDataset_)
+    {
+        pause_ = true;
+        currentData_.clear();
+        currentIndex_ = 0;
+        mu_ = 0.0f;
+        calculateReturnPosition();
+        dataStale_ = true;
+        emit datasetImportReady();
+    }
 }
 
 
@@ -421,7 +427,7 @@ void Transport::processSetPlaybackPosition(float pos)
 
 void Transport::refreshCurrentData()
 {
-    if(!dataStale_ || !dataset_->hasData()) return;
+    if(!dataStale_ || !dataset_->hasData() || importingDataset_ ) return;
     currentData_ = dataProcessor_->getData(currentIndex_);
 }
 

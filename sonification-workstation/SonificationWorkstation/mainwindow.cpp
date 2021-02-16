@@ -90,13 +90,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // TransportWidget Record
     connect(transportWidget_, &TransportWidget::recordChanged,
             this, &MainWindow::onRecordChanged);
-    // Transport Dataset signals.
+    // Dataset signals.
     connect(this, &MainWindow::datasetChanged,
             trackView, &TrackView::onDatasetChanged);
     connect(this, &MainWindow::datasetChanged,
             transportWidget_, &TransportWidget::onDatasetChanged);
     connect(this, &MainWindow::datasetChanged,
             playhead_, &PlayHead::onDatasetChanged);
+    connect(this, &MainWindow::datasetChanged,
+            dataProcessor_, &DataProcessor::onDatasetChanged);
 
     // Connect Transport < > TransportWidget.
     connect(transport_, &Transport::posChanged,
@@ -365,7 +367,7 @@ void MainWindow::onOpen()
         QJsonValue horizontalData = jsonObject.value("horizontal");
         horizontalData_ = horizontalData.toBool();
         datafile_ = datafile.toString();
-        transport_->onImportDataset();
+        transport_->onImportDataset(true);
 
         // Set playback speed.
         float speed = jsonObject.value("speed").toInt();
@@ -407,7 +409,7 @@ void MainWindow::onRecordChanged(bool record)
 
 void MainWindow::onImportDataset()
 {
-    transport_->onImportDataset();
+    transport_->onImportDataset(true);
 }
 
 void MainWindow::onImportDatasetReady()
@@ -422,12 +424,7 @@ void MainWindow::onImportDatasetReady()
     {
         DatasetImportDialog* importDialog = new DatasetImportDialog(datafile_);
         int result = importDialog->exec();
-
-        // DEBUG SECTION FOR IMPORT DIALOG RETURN VALUES
         bool useColumns = result & constants::COLUMNS_FLAG;
-        bool useHeaders = result & constants::HEADERS_FLAG;
-        qDebug() << "Using Columns: " + QString::number(useColumns);
-        qDebug() << "Using Headers: " + QString::number(useHeaders);
 
         if(result)
         {
@@ -437,6 +434,7 @@ void MainWindow::onImportDatasetReady()
             }
         }
     }
+    transport_->onImportDataset(false);
 }
 
 void MainWindow::onDefaultThemeSet()
