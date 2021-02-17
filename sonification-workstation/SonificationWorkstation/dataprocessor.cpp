@@ -45,7 +45,22 @@ float DataProcessor::getSimpleAverageValue(unsigned int row, unsigned int col)
 
 float DataProcessor::getExponentialAverageValue(int row, int col)
 {
-    return 0.0f;
+    float currentVal = dataset_->operator()(row, col);
+    float alpha = 2.0f / (dataset_->rows() + 1.0f);
+    float ema;
+
+    if (!emaInitialized_)
+    {
+        ema = currentVal;
+        emaPrevious_ = ema;
+        emaInitialized_ = true;
+    } else {
+        ema = (( currentVal - emaPrevious_)*alpha) + emaPrevious_;
+        //update previous average
+        emaPrevious_ = ema;
+    }
+
+    return ema;
 }
 
 void DataProcessor::onDatasetChanged(Dataset *dataset)

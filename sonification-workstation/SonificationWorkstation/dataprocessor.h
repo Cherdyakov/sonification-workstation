@@ -22,6 +22,8 @@ private:
     std::vector<float> alphas_;
     std::vector<int> nVals_;
     Dataset* dataset_;
+    float emaPrevious_;
+    bool emaInitialized_ = false;
 
     float getSimpleAverageValue(unsigned int row, unsigned int col);
     float getExponentialAverageValue(int row, int col);
