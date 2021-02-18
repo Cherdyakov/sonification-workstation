@@ -2,8 +2,10 @@
 #define DATAPROCESSOR_H
 
 #include <QObject>
+#include <QList>
 #include "enums.h"
 #include "dataset.h"
+#include "ringbuffer.h"
 
 namespace sow {
 
@@ -11,32 +13,35 @@ class DataProcessor : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataProcessor(QObject *parent = nullptr, Dataset* dataset = nullptr);
+    explicit DataProcessor(QObject *parent = nullptr, Dataset* dataset = nullptr, uint size = 0);
 
-    // Get the next set of data values
-    std::vector<float> getData(uint row);
+    // Get the next value
+    float getValue(uint row);
+
+    float alpha() const;
+    void setAlpha(float alpha);
+    uint n() const;
+    void setN(float n);
+    void resize(uint size);
 
 private:
 
-    std::vector<ENUMS::PROCESSING_TYPE> procTypes_;
-    std::vector<float> alphas_;
-    std::vector<int> nVals_;
     Dataset* dataset_;
+    RingBuffer<float>* buffer_;
+    ENUMS::PROCESSING_TYPE processingType_;
+    float alpha_;
+    uint n_;
     float emaPrevious_;
-    bool emaInitialized_ = false;
+    bool initialized_ = false;
 
-    float getSimpleAverageValue(unsigned int row, unsigned int col);
-    float getExponentialAverageValue(int row, int col);
+    float sma(unsigned int row, unsigned int col);
+    float ema(int row, int col);
 
 signals:
 
 public slots:
 
-    void onDatasetChanged(Dataset* dataset);
-    // slots for data processing settings
-    void onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
-    void onAlphaChanged(uint track, float alpha);
-    void onNvalChanged(uint track, uint n);
+
 
 };
 

@@ -2,58 +2,99 @@
 
 namespace sow {
 
-DataProcessor::DataProcessor(QObject *parent, Dataset *dataset) : QObject(parent)
+DataProcessor::DataProcessor(QObject *parent, Dataset *dataset, uint size) : QObject(parent)
 {
     dataset_ = dataset;
+    buffer_ = new RingBuffer<float>(size);
 }
 
-std::vector<float> DataProcessor::getData(uint row)
+float DataProcessor::getValue(uint row)
 {
-    std::vector<float> datarow(dataset_->cols(), 0.0f);
+    float value;
 
     for(unsigned int col = 0; col < dataset_->cols(); col++)
     {
-        ENUMS::PROCESSING_TYPE procType = procTypes_[col];
-        switch (procType) {
+        switch (processingType_) {
         case ENUMS::PROCESSING_TYPE::NONE:
-            datarow[col] = dataset_->operator()(row, col);
+            value = dataset_->operator()(row, col);
             break;
         case ENUMS::PROCESSING_TYPE::SIMPLE:
-            datarow[col] = getSimpleAverageValue(row, col);
+            value = sma(row, col);
             break;
         case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
-            datarow[col] = getExponentialAverageValue(row, col);
+            value = ema(row, col);
             break;
         }
     }
 
-    return datarow;
+    return value;
 }
 
-float DataProcessor::getSimpleAverageValue(unsigned int row, unsigned int col)
+float DataProcessor::alpha() const
 {
-    float sum = 0.0f;
-    int n = nVals_[col] - 1;
+    return alpha_;
+}
 
-    for(int i = n; i >= 0; i--)
+void DataProcessor::setAlpha(float alpha)
+{
+    alpha_ = alpha;
+}
+
+uint DataProcessor::n() const
+{
+ return n_;
+}
+
+void DataProcessor::setN(float n)
+{
+    n_ = n;
+}
+
+void DataProcessor::resize(uint size)
+{
+    buffer_->resize(size);
+}
+
+float DataProcessor::sma(unsigned int row, unsigned int col)
+{
+    float currentVal = dataset_->operator()(row, col);
+    float sma;
+
+    if (!initialized_)
     {
-        sum += dataset_->operator()(row - i, col);
+        sma = currentVal;
+        buffer_->reset();
+        buffer_->push(sma);
+        return sma;
     }
 
-    return sum/(float)n;
+    buffer_->pop();
+    buffer_->push(currentVal);
+
+    float sum = 0.0f;
+    for(uint i = 0; i < buffer_->size(); i++)
+    {
+        float out = 0.0f;
+        buffer_->at(&out, i);
+        sum += out;
+    }
+
+    float divisor = buffer_->size() < n_ ? buffer_->size() : n_;
+
+    return (sum / divisor);
 }
 
-float DataProcessor::getExponentialAverageValue(int row, int col)
+float DataProcessor::ema(int row, int col)
 {
     float currentVal = dataset_->operator()(row, col);
     float alpha = 2.0f / (dataset_->rows() + 1.0f);
     float ema;
 
-    if (!emaInitialized_)
+    if (!initialized_)
     {
         ema = currentVal;
         emaPrevious_ = ema;
-        emaInitialized_ = true;
+        initialized_ = true;
     } else {
         ema = (( currentVal - emaPrevious_)*alpha) + emaPrevious_;
         //update previous average
@@ -61,29 +102,6 @@ float DataProcessor::getExponentialAverageValue(int row, int col)
     }
 
     return ema;
-}
-
-void DataProcessor::onDatasetChanged(Dataset *dataset)
-{
-    Q_UNUSED(dataset);
-    procTypes_ = std::vector<ENUMS::PROCESSING_TYPE>(dataset_->cols(), ENUMS::PROCESSING_TYPE::NONE);
-    alphas_ = std::vector<float>(dataset_->cols(), 0.0f);
-    nVals_ = std::vector<int>(dataset_->cols(), 6);
-}
-
-void DataProcessor::onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type)
-{
-    procTypes_[track - 1] = type;
-}
-
-void DataProcessor::onAlphaChanged(uint track, float alpha)
-{
-    alphas_[track - 1] = alpha;
-}
-
-void DataProcessor::onNvalChanged(uint track, uint n)
-{
-    nVals_[track - 1] = n;
 }
 
 } // Namespace sow.
