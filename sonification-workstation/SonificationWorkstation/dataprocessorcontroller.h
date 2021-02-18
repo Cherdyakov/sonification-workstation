@@ -11,9 +11,14 @@ class DataProcessorController : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataProcessorController(QObject *parent = nullptr);
+    explicit DataProcessorController(QObject *parent = nullptr, Dataset* dataset = nullptr);
+
+    std::vector<float> getData(uint row);
 
 private:
+
+    std::vector<DataProcessor>* processors_;
+    Dataset* dataset_;
 
 signals:
 

@@ -17,8 +17,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // Core components.
     dataset_ = new Dataset(this);                                                       // Holds data loaded from file
-    dataProcessor_ = new DataProcessor(this, dataset_);
-    transport_ = new Transport(this, dataset_, dataProcessor_);                                         // Controls playback and synth commands
+    dataProcessorController_ = new DataProcessorController(this, dataset_);
+    transport_ = new Transport(this, dataset_, dataProcessorController_);                                         // Controls playback and synth commands
 
     // Construct the application window.
     QWidget *centralWidget = new QWidget;                                               // Application top-level widget
@@ -97,8 +97,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transportWidget_, &TransportWidget::onDatasetChanged);
     connect(this, &MainWindow::datasetChanged,
             playhead_, &PlayHead::onDatasetChanged);
-    connect(this, &MainWindow::datasetChanged,
-            dataProcessor_, &DataProcessor::onDatasetChanged);
+//    connect(this, &MainWindow::datasetChanged,
+//            dataProcessor_, &DataProcessor::onDatasetChanged);
 
     // Connect Transport < > TransportWidget.
     connect(transport_, &Transport::posChanged,
@@ -117,12 +117,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport::onMuteChanged);
 
     // Track signals > DataProcessor.
-    connect(trackView, &TrackView::processingTypeChanged,
-            dataProcessor_, &DataProcessor::onProcessingTypeChanged);
-    connect(trackView, &TrackView::nValChanged,
-            dataProcessor_, &DataProcessor::onNvalChanged);
-    connect(trackView, &TrackView::alphaChanged,
-            dataProcessor_, &DataProcessor::onAlphaChanged);
+//    connect(trackView, &TrackView::processingTypeChanged,
+//            dataProcessor_, &DataProcessor::onProcessingTypeChanged);
+//    connect(trackView, &TrackView::nValChanged,
+//            dataProcessor_, &DataProcessor::onNvalChanged);
+//    connect(trackView, &TrackView::alphaChanged,
+//            dataProcessor_, &DataProcessor::onAlphaChanged);
 
     // Playhead signals.
     connect(transportWidget_, &TransportWidget::pausedChanged,

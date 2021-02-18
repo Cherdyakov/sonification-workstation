@@ -2,7 +2,6 @@
 #define DATAPROCESSOR_H
 
 #include <QObject>
-#include <QList>
 #include "enums.h"
 #include "dataset.h"
 #include "ringbuffer.h"
@@ -13,11 +12,13 @@ class DataProcessor : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataProcessor(QObject *parent = nullptr, Dataset* dataset = nullptr, uint size = 0);
+    explicit DataProcessor(QObject *parent = nullptr, Dataset* dataset = nullptr, uint size = 512);
 
     // Get the next value
     float getValue(uint row);
 
+    ENUMS::PROCESSING_TYPE processingType();
+    void setProcessingType(ENUMS::PROCESSING_TYPE type);
     float alpha() const;
     void setAlpha(float alpha);
     uint n() const;

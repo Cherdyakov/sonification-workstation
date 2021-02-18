@@ -16,7 +16,7 @@
 #include "noise.h"
 #include "equalizer.h"
 #include "recorder.h"
-#include "dataprocessor.h"
+#include "dataprocessorcontroller.h"
 
 namespace sow {
 
@@ -25,7 +25,7 @@ class Transport : public SynthItem
     Q_OBJECT
 public:
 
-    explicit Transport(QObject *parent = nullptr, Dataset* dataset = nullptr, DataProcessor* processor = nullptr);
+    explicit Transport(QObject *parent = nullptr, Dataset* dataset = nullptr, DataProcessorController* dataProcessorController = nullptr);
 
     // factory for other SynthItems
     Q_INVOKABLE sow::SynthItem* createItem(ENUMS::ITEM_TYPE type);
@@ -45,7 +45,7 @@ private:
     std::vector<SynthItem*> subscribers_;
     Recorder recorder_;
     Dataset* dataset_;
-    DataProcessor* dataProcessor_;
+    DataProcessorController* dataProcessorController_;
     QString filepath_;
     QMutex fileMutex_;
     std::vector<float> currentData_;

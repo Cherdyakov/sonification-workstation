@@ -30,6 +30,11 @@ float DataProcessor::getValue(uint row)
     return value;
 }
 
+void DataProcessor::setProcessingType(ENUMS::PROCESSING_TYPE type)
+{
+    processingType_ = type;
+}
+
 float DataProcessor::alpha() const
 {
     return alpha_;
@@ -42,7 +47,7 @@ void DataProcessor::setAlpha(float alpha)
 
 uint DataProcessor::n() const
 {
- return n_;
+    return n_;
 }
 
 void DataProcessor::setN(float n)

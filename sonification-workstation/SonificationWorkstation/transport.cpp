@@ -6,7 +6,7 @@
 
 namespace sow {
 
-Transport::Transport(QObject *parent, Dataset *dataset, DataProcessor *processor) : SynthItem (parent)
+Transport::Transport(QObject *parent, Dataset *dataset, DataProcessorController *dataProcessorController) : SynthItem (parent)
 {  
     type_ = ENUMS::ITEM_TYPE::TRANSPORT;
     acceptedInputs_ = {
@@ -19,7 +19,7 @@ Transport::Transport(QObject *parent, Dataset *dataset, DataProcessor *processor
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
 
-    dataProcessor_ = processor;
+    dataProcessorController_ = dataProcessorController;
     dataset_ = dataset;
     pause_ = true;
     record_ = false;
@@ -428,7 +428,7 @@ void Transport::processSetPlaybackPosition(float pos)
 void Transport::refreshCurrentData()
 {
     if(!dataStale_ || !dataset_->hasData() || importingDataset_ ) return;
-    currentData_ = dataProcessor_->getData(currentIndex_);
+    currentData_ = dataProcessorController_->getData(currentIndex_);
     dataStale_ = false;
 }
 
