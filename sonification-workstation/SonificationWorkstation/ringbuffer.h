@@ -17,6 +17,7 @@ public:
 
     bool push(T item);
     bool pop(T* item);
+    bool at(T* item, uint idx) const;
 
     bool empty() const;
     bool full() const;
@@ -97,6 +98,22 @@ bool RingBuffer<T>::pop(T* item)
     tail++;
     currentSize--;
     return true;
+}
+
+template<class T>
+bool RingBuffer<T>::at(T* item, uint idx) const
+{
+    // invalid index
+    if(idx > currentSize)
+    {
+        return false;
+    }
+    // tail has caught up to head
+    if(empty())
+    {
+        return false;
+    }
+    *item = array[idx];
 }
 
 template<class T>
