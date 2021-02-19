@@ -17,8 +17,10 @@ public:
 
 private:
 
-    std::vector<DataProcessor>* processors_;
+    std::vector<DataProcessor*> processors_;
     Dataset* dataset_;
+
+    void resize(uint size);
 
 signals:
 
