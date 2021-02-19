@@ -5,7 +5,8 @@ namespace sow {
 DataProcessor::DataProcessor(QObject *parent, Dataset *dataset, uint size) : QObject(parent)
 {
     dataset_ = dataset;
-    buffer_ = new RingBuffer<float>(size);
+    n_ = size;
+    buffer_ = new RingBuffer<float>(n_);
 }
 
 float DataProcessor::getValue(uint row, uint col)
@@ -30,6 +31,7 @@ float DataProcessor::getValue(uint row, uint col)
 void DataProcessor::setProcessingType(ENUMS::PROCESSING_TYPE type)
 {
     processingType_ = type;
+    initialized_ = false;
 }
 
 float DataProcessor::alpha() const
@@ -49,12 +51,17 @@ uint DataProcessor::n() const
 
 void DataProcessor::setN(float n)
 {
-    n_ = n;
+    if(n_ != n)
+    {
+        n_ = n;
+        delete buffer_;
+        buffer_ = new RingBuffer<float>(n_);
+    }
 }
 
-void DataProcessor::resize(uint size)
+void DataProcessor::flush()
 {
-    buffer_->resize(size);
+    initialized_ = false;
 }
 
 float DataProcessor::sma(unsigned int row, unsigned int col)
@@ -67,10 +74,14 @@ float DataProcessor::sma(unsigned int row, unsigned int col)
         sma = currentVal;
         buffer_->reset();
         buffer_->push(sma);
+        initialized_ = true;
         return sma;
     }
 
-    buffer_->pop();
+    if(buffer_->full())
+    {
+        buffer_->pop();
+    }
     buffer_->push(currentVal);
 
     float sum = 0.0f;
@@ -81,7 +92,7 @@ float DataProcessor::sma(unsigned int row, unsigned int col)
         sum += out;
     }
 
-    float divisor = buffer_->size() < n_ ? buffer_->size() : n_;
+    float divisor = buffer_->size();
 
     return (sum / divisor);
 }

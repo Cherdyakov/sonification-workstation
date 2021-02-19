@@ -96,6 +96,7 @@ public:
     };
 
     enum class DATA_PROCESSOR_CMD {
+        FLUSH,
         PROC_TYPE,
         INTERPOLATE,
         ALPHA,

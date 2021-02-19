@@ -30,6 +30,9 @@ void DataProcessorController::processDataProcessorControllerCommand(DataProcesso
 {
     cmd.track -= 1;
     switch (cmd.type) {
+    case ENUMS::DATA_PROCESSOR_CMD::FLUSH:
+        flush();
+        break;
     case ENUMS::DATA_PROCESSOR_CMD::PROC_TYPE:
         processors_[cmd.track]->setProcessingType(cmd.procType);
         break;
@@ -50,8 +53,16 @@ void DataProcessorController::resize(uint size)
     processors_.clear();
     for (uint i = 0; i < size; i++)
     {
-        DataProcessor* p = new DataProcessor(this, dataset_);
+        DataProcessor* p = new DataProcessor(this, dataset_, 2);
         processors_.push_back(p);
+    }
+}
+
+void DataProcessorController::flush()
+{
+    for (int i = 0; i < processors_.size(); i ++)
+    {
+        processors_[i]->flush();
     }
 }
 
@@ -89,6 +100,11 @@ void DataProcessorController::onNvalChanged(uint track, uint n)
     cmd.track = track;
     cmd.value = n;
     dataProcessorControllerCommandBuffer_.push(cmd);
+}
+
+void DataProcessorController::onPauseChanged()
+{
+    flush();
 }
 
 } // Namespace sow.

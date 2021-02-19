@@ -116,15 +116,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(transportWidget_, &TransportWidget::muteChanged,
             transport_, &Transport::onMuteChanged);
 
-    // Track signals > DataProcessor.
+    // DataProcessor slots.
     connect(trackView, &TrackView::processingTypeChanged,
             dataProcessorController_, &DataProcessorController::onProcessingTypeChanged);
     connect(trackView, &TrackView::nValChanged,
             dataProcessorController_, &DataProcessorController::onNvalChanged);
     connect(trackView, &TrackView::alphaChanged,
             dataProcessorController_, &DataProcessorController::onAlphaChanged);
+    connect(transportWidget_, &TransportWidget::pausedChanged,
+            dataProcessorController_, &DataProcessorController::onPauseChanged);
 
-    // Playhead signals.
+    // Playhead slots.
     connect(transportWidget_, &TransportWidget::pausedChanged,
             playhead_, &PlayHead::onPauseChanged);
     connect(playhead_, &PlayHead::cursorPosChanged,

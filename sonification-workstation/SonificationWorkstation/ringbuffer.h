@@ -75,7 +75,7 @@ void RingBuffer<T>::resize(uint size)
 template<class T>
 uint RingBuffer<T>::size()
 {
-    return capacity;
+    return currentSize;
 }
 
 template<class T>
@@ -140,6 +140,7 @@ bool RingBuffer<T>::pop()
     return true;
 }
 
+// ACCESSES RAW ARRAY CONTENTS
 template<class T>
 bool RingBuffer<T>::at(T* item, const uint idx) const
 {

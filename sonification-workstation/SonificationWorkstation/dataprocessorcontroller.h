@@ -25,6 +25,7 @@ private:
 
     void processDataProcessorControllerCommand(DataProcessorControllerCommand cmd);
     void resize(uint size);
+    void flush();
 
 signals:
 
@@ -35,6 +36,7 @@ public slots:
     void onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
     void onAlphaChanged(uint track, float alpha);
     void onNvalChanged(uint track, uint n);
+    void onPauseChanged();
 
 };
 

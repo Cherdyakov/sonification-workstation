@@ -23,15 +23,15 @@ public:
     void setAlpha(float alpha);
     uint n() const;
     void setN(float n);
-    void resize(uint size);
+    void flush();
 
 private:
 
     Dataset* dataset_;
     RingBuffer<float>* buffer_;
     ENUMS::PROCESSING_TYPE processingType_ = ENUMS::PROCESSING_TYPE::NONE;
-    float alpha_;
-    uint n_;
+    float alpha_ = 0.5f;
+    uint n_ = 2;
     float emaPrevious_;
     bool initialized_ = false;
 
