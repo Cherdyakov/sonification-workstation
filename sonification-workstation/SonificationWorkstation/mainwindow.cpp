@@ -97,8 +97,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transportWidget_, &TransportWidget::onDatasetChanged);
     connect(this, &MainWindow::datasetChanged,
             playhead_, &PlayHead::onDatasetChanged);
-//    connect(this, &MainWindow::datasetChanged,
-//            dataProcessor_, &DataProcessor::onDatasetChanged);
+    connect(this, &MainWindow::datasetChanged,
+            dataProcessorController_, &DataProcessorController::onDatasetChanged);
 
     // Connect Transport < > TransportWidget.
     connect(transport_, &Transport::posChanged,
@@ -117,12 +117,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport::onMuteChanged);
 
     // Track signals > DataProcessor.
-//    connect(trackView, &TrackView::processingTypeChanged,
-//            dataProcessor_, &DataProcessor::onProcessingTypeChanged);
-//    connect(trackView, &TrackView::nValChanged,
-//            dataProcessor_, &DataProcessor::onNvalChanged);
-//    connect(trackView, &TrackView::alphaChanged,
-//            dataProcessor_, &DataProcessor::onAlphaChanged);
+    connect(trackView, &TrackView::processingTypeChanged,
+            dataProcessorController_, &DataProcessorController::onProcessingTypeChanged);
+    connect(trackView, &TrackView::nValChanged,
+            dataProcessorController_, &DataProcessorController::onNvalChanged);
+    connect(trackView, &TrackView::alphaChanged,
+            dataProcessorController_, &DataProcessorController::onAlphaChanged);
 
     // Playhead signals.
     connect(transportWidget_, &TransportWidget::pausedChanged,
