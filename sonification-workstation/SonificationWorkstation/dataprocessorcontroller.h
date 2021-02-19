@@ -4,6 +4,7 @@
 #include <QObject>
 #include "dataprocessor.h"
 #include "dataset.h"
+#include "commands.h"
 
 namespace sow {
 
@@ -13,13 +14,16 @@ class DataProcessorController : public QObject
 public:
     explicit DataProcessorController(QObject *parent = nullptr, Dataset* dataset = nullptr);
 
-    std::vector<float> getData(uint row);
+    std::vector<float> getData(uint row); // called every new data value (step)
+    void controlProcess(); // called every process block
 
 private:
 
+    RingBuffer<DataProcessorControllerCommand> dataProcessorControllerCommandBuffer_;
     std::vector<DataProcessor*> processors_;
     Dataset* dataset_;
 
+    void processDataProcessorControllerCommand(DataProcessorControllerCommand cmd);
     void resize(uint size);
 
 signals:

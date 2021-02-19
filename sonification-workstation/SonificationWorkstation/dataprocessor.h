@@ -15,7 +15,7 @@ public:
     explicit DataProcessor(QObject *parent = nullptr, Dataset* dataset = nullptr, uint size = 512);
 
     // Get the next value
-    float getValue(uint row);
+    float getValue(uint row, uint col);
 
     ENUMS::PROCESSING_TYPE processingType();
     void setProcessingType(ENUMS::PROCESSING_TYPE type);
@@ -29,7 +29,7 @@ private:
 
     Dataset* dataset_;
     RingBuffer<float>* buffer_;
-    ENUMS::PROCESSING_TYPE processingType_;
+    ENUMS::PROCESSING_TYPE processingType_ = ENUMS::PROCESSING_TYPE::NONE;
     float alpha_;
     uint n_;
     float emaPrevious_;

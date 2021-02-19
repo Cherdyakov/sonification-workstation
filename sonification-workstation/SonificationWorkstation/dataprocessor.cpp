@@ -8,23 +8,20 @@ DataProcessor::DataProcessor(QObject *parent, Dataset *dataset, uint size) : QOb
     buffer_ = new RingBuffer<float>(size);
 }
 
-float DataProcessor::getValue(uint row)
+float DataProcessor::getValue(uint row, uint col)
 {
     float value;
 
-    for(unsigned int col = 0; col < dataset_->cols(); col++)
-    {
-        switch (processingType_) {
-        case ENUMS::PROCESSING_TYPE::NONE:
-            value = dataset_->operator()(row, col);
-            break;
-        case ENUMS::PROCESSING_TYPE::SIMPLE:
-            value = sma(row, col);
-            break;
-        case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
-            value = ema(row, col);
-            break;
-        }
+    switch (processingType_) {
+    case ENUMS::PROCESSING_TYPE::NONE:
+        value = dataset_->operator()(row, col);
+        break;
+    case ENUMS::PROCESSING_TYPE::SIMPLE:
+        value = sma(row, col);
+        break;
+    case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
+        value = ema(row, col);
+        break;
     }
 
     return value;

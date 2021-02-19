@@ -323,6 +323,8 @@ void Transport::controlProcess()
         SynthItem* item = subscribers_[i];
         item->controlProcess();
     }
+    // Trigger DataProcessorController to process commands
+    dataProcessorController_->controlProcess();
 }
 
 void Transport::processTransportCommand(TransportCommand cmd)
