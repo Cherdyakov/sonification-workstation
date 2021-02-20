@@ -19,8 +19,6 @@ public:
 
     ENUMS::PROCESSING_TYPE processingType();
     void setProcessingType(ENUMS::PROCESSING_TYPE type);
-    float alpha() const;
-    void setAlpha(float alpha);
     uint n() const;
     void setN(float n);
     void flush();
@@ -30,7 +28,6 @@ private:
     Dataset* dataset_;
     RingBuffer<float>* buffer_;
     ENUMS::PROCESSING_TYPE processingType_ = ENUMS::PROCESSING_TYPE::NONE;
-    float alpha_ = 0.5f;
     uint n_ = 2;
     float emaPrevious_;
     bool initialized_ = false;

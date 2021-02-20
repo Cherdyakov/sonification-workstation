@@ -121,8 +121,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             dataProcessorController_, &DataProcessorController::onProcessingTypeChanged);
     connect(trackView, &TrackView::nValChanged,
             dataProcessorController_, &DataProcessorController::onNvalChanged);
-    connect(trackView, &TrackView::alphaChanged,
-            dataProcessorController_, &DataProcessorController::onAlphaChanged);
     connect(transportWidget_, &TransportWidget::pausedChanged,
             dataProcessorController_, &DataProcessorController::onPauseChanged);
 

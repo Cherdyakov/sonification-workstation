@@ -34,16 +34,6 @@ void DataProcessor::setProcessingType(ENUMS::PROCESSING_TYPE type)
     initialized_ = false;
 }
 
-float DataProcessor::alpha() const
-{
-    return alpha_;
-}
-
-void DataProcessor::setAlpha(float alpha)
-{
-    alpha_ = alpha;
-}
-
 uint DataProcessor::n() const
 {
     return n_;
@@ -100,7 +90,7 @@ float DataProcessor::sma(unsigned int row, unsigned int col)
 float DataProcessor::ema(int row, int col)
 {
     float currentVal = dataset_->operator()(row, col);
-    float alpha = 2.0f / (dataset_->rows() + 1.0f);
+    float alpha = 2.0f / (n_ + 1.0f);
     float ema;
 
     if (!initialized_)

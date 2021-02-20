@@ -158,8 +158,6 @@ Track *TrackView::addTrack()
             this, &TrackView::onProcessingTypeChanged);
     connect(header, &TrackHeader::nValChanged,
             this, &TrackView::onNvalChanged);
-    connect(header, &TrackHeader::alphaChanged,
-            this, &TrackView::onAlphaChanged);
 
     return track;
 }

@@ -5,7 +5,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QVBoxLayout *processingLayout = new QVBoxLayout;
-    alphaSpinBox_ = new QSpinBox;
+    nSpinBox_ = new QSpinBox;
     procComboBox_ = new QComboBox;
 
     // Data processing section.
@@ -22,7 +22,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
 
     QHBoxLayout *alphaLayout = new QHBoxLayout;
     alphaLayout->addWidget(alphaLabel);
-    alphaLayout->addWidget(alphaSpinBox_);
+    alphaLayout->addWidget(nSpinBox_);
 
     procComboBox_->setAccessibleName("Data smoothing dropdown. Selects smoothing applied to data track during playback.");
     procComboBox_->setAccessibleDescription("");
@@ -34,13 +34,13 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     processingLayout->addWidget(procComboBox_);
     processingLayout->addLayout(alphaLayout);
 
-    alphaSpinBox_->setAccessibleName("Smoothing constant. Sets damping factor for exponential average or window size for simple average.");
-    alphaSpinBox_->setAccessibleDescription("");
+    nSpinBox_->setAccessibleName("Smoothing constant. Sets damping factor for exponential average or window size for simple average.");
+    nSpinBox_->setAccessibleDescription("");
 
     // Stylesheet.
     this->setObjectName("TrackHeader");
     this->setAutoFillBackground(true);
-    alphaSpinBox_->setObjectName("AlphaSpinBox");
+    nSpinBox_->setObjectName("AlphaSpinBox");
     procComboBox_->setObjectName("ProcComboBox");
     procLabel->setObjectName("ProcLabel");
 
@@ -54,6 +54,12 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     // connect signals and slots
     connect(procComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &TrackHeader::onProcessingTypeChanged);
+    connect(nSpinBox_, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &TrackHeader::onNvalChanged);
+
+    // Initialize
+    nSpinBox_->setMaximum(2048);
+    nSpinBox_->setValue(2);
 
 }
 
@@ -91,9 +97,4 @@ void TrackHeader::onProcessingTypeChanged(int idx)
 void TrackHeader::onNvalChanged(int n)
 {
     emit nValChanged(trackNumber_, n);
-}
-
-void TrackHeader::onAlphaChanged(float alpha)
-{
-    emit alphaChanged(trackNumber_, alpha);
 }

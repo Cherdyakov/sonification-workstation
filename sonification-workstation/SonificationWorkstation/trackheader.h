@@ -25,7 +25,7 @@ private:
 
     uint trackNumber_;
     QComboBox *procComboBox_;
-    QSpinBox *alphaSpinBox_;
+    QSpinBox *nSpinBox_;
 
 protected:
 
@@ -34,14 +34,12 @@ protected:
 signals:
     void processingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
     void nValChanged(uint track, uint n);
-    void alphaChanged(uint track, float alpha);
 
 public slots:
 
 private slots:
     void onProcessingTypeChanged(int idx);
     void onNvalChanged(int n);
-    void onAlphaChanged(float alpha);
 
 };
 

@@ -39,9 +39,6 @@ void DataProcessorController::processDataProcessorControllerCommand(DataProcesso
     case ENUMS::DATA_PROCESSOR_CMD::INTERPOLATE:
 //        processors_[cmd.track]->setProcessingType(type);
         break;
-    case ENUMS::DATA_PROCESSOR_CMD::ALPHA:
-        processors_[cmd.track]->setAlpha(cmd.value);
-        break;
     case ENUMS::DATA_PROCESSOR_CMD::N_VAL:
         processors_[cmd.track]->setN(static_cast<int>(cmd.value));
         break;
@@ -81,15 +78,6 @@ void DataProcessorController::onProcessingTypeChanged(uint track, ENUMS::PROCESS
     cmd.type = ENUMS::DATA_PROCESSOR_CMD::PROC_TYPE;
     cmd.track = track;
     cmd.procType = type;
-    dataProcessorControllerCommandBuffer_.push(cmd);
-}
-
-void DataProcessorController::onAlphaChanged(uint track, float alpha)
-{
-    DataProcessorControllerCommand cmd;
-    cmd.type = ENUMS::DATA_PROCESSOR_CMD::ALPHA;
-    cmd.track = track;
-    cmd.value = alpha;
     dataProcessorControllerCommandBuffer_.push(cmd);
 }
 
