@@ -11,17 +11,17 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     // Data processing section.
     QLabel *procLabel = new QLabel;
     procLabel->setText("Data smoothing:");
-    QLabel *alphaLabel = new QLabel;
+    QLabel *nuLabel = new QLabel;
     QPixmap pixmap;
     if (!pixmap.load( ":/images/nu.png" )) {
         qDebug("Failed to load images/nu.png");
     }
-    alphaLabel->setPixmap(pixmap);
-    alphaLabel->setScaledContents(true);
-    alphaLabel->setFixedSize(18, 18);
+    nuLabel->setPixmap(pixmap);
+    nuLabel->setScaledContents(true);
+    nuLabel->setFixedSize(18, 18);
 
     QHBoxLayout *alphaLayout = new QHBoxLayout;
-    alphaLayout->addWidget(alphaLabel);
+    alphaLayout->addWidget(nuLabel);
     alphaLayout->addWidget(nSpinBox_);
 
     procComboBox_->setAccessibleName("Data smoothing dropdown. Selects smoothing applied to data track during playback.");

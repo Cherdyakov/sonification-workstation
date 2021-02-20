@@ -176,7 +176,7 @@ QWidget#TrackHeader
 background-color: #888888;
 }
 
-QSpinBox#AlphaSpinBox
+QSpinBox#NuSpinBox
 {
 color: #202020;
 }
