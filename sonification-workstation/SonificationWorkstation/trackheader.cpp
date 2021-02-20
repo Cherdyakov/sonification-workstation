@@ -13,12 +13,12 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     procLabel->setText("Data smoothing:");
     QLabel *alphaLabel = new QLabel;
     QPixmap pixmap;
-    if (!pixmap.load( ":/images/alpha.png" )) {
-        qDebug("Failed to load images/target.png");
+    if (!pixmap.load( ":/images/nu.png" )) {
+        qDebug("Failed to load images/nu.png");
     }
     alphaLabel->setPixmap(pixmap);
     alphaLabel->setScaledContents(true);
-    alphaLabel->setFixedSize(14, 14);
+    alphaLabel->setFixedSize(18, 18);
 
     QHBoxLayout *alphaLayout = new QHBoxLayout;
     alphaLayout->addWidget(alphaLabel);

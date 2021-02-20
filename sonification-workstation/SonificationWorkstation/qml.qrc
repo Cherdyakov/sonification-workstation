@@ -54,5 +54,6 @@
         <file>images/speaker-on.svg</file>
         <file>images/record-off.svg</file>
         <file>images/record-on.svg</file>
+        <file>images/nu.png</file>
     </qresource>
 </RCC>
