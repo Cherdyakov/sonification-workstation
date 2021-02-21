@@ -20,9 +20,9 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     nuLabel->setScaledContents(true);
     nuLabel->setFixedSize(18, 18);
 
-    QHBoxLayout *alphaLayout = new QHBoxLayout;
-    alphaLayout->addWidget(nuLabel);
-    alphaLayout->addWidget(nSpinBox_);
+    QHBoxLayout *nuLayout = new QHBoxLayout;
+    nuLayout->addWidget(nuLabel);
+    nuLayout->addWidget(nSpinBox_);
 
     procComboBox_->setAccessibleName("Data smoothing dropdown. Selects smoothing applied to data track during playback.");
     procComboBox_->setAccessibleDescription("");
@@ -32,7 +32,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     processingLayout->setContentsMargins(4,4,4,4);
     processingLayout->addWidget(procLabel);
     processingLayout->addWidget(procComboBox_);
-    processingLayout->addLayout(alphaLayout);
+    processingLayout->addLayout(nuLayout);
 
     nSpinBox_->setAccessibleName("Smoothing constant. Sets damping factor for exponential average or window size for simple average.");
     nSpinBox_->setAccessibleDescription("");
@@ -40,7 +40,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     // Stylesheet.
     this->setObjectName("TrackHeader");
     this->setAutoFillBackground(true);
-    nSpinBox_->setObjectName("AlphaSpinBox");
+    nSpinBox_->setObjectName("NuSpinBox");
     procComboBox_->setObjectName("ProcComboBox");
     procLabel->setObjectName("ProcLabel");
 
