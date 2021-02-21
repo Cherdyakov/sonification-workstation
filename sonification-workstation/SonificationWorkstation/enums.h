@@ -95,6 +95,20 @@ public:
         MUTE
     };
 
+    enum class DATA_PROCESSOR_CMD {
+        FLUSH,
+        PROC_TYPE,
+        INTERPOLATE,
+        ALPHA,
+        N_VAL
+    };
+
+    enum class PROCESSING_TYPE {
+        NONE,
+        SIMPLE,
+        EXPONENTIAL
+    };
+
 };
 
 

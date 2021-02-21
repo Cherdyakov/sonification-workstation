@@ -1,33 +1,48 @@
 #ifndef DATAPROCESSOR_H
 #define DATAPROCESSOR_H
 
-#include <vector>
+#include <QObject>
+#include "enums.h"
+#include "dataset.h"
+#include "ringbuffer.h"
 
 namespace sow {
 
-class DataProcessor
+class DataProcessor : public QObject
 {
+    Q_OBJECT
 public:
-    DataProcessor();
+    explicit DataProcessor(QObject *parent = nullptr, Dataset* dataset = nullptr, uint size = 512);
 
-    enum class PROCESSING_TYPE {
-        SIMPLE_AVERAGE,
-        EXPONENTIAL_AVERAGE,
-        CUMULATIVE_AVERAGE
-    };
+    // Get the next value
+    float getValue(uint row, uint col);
 
-    std::vector<double> get_processed_column(unsigned int col, PROCESSING_TYPE proc);
-    void reset();
+    ENUMS::PROCESSING_TYPE processingType();
+    void setProcessingType(ENUMS::PROCESSING_TYPE type);
+    uint n() const;
+    void setN(float n);
+    void flush();
 
 private:
 
-    std::vector<double> get_column(unsigned int col);
-    std::vector<double> get_simple_average(unsigned int col, unsigned int alpha);
-    std::vector<double> get_exponential_average(unsigned int col, unsigned int alpha);
-    std::vector<double> get_cumulative_average(unsigned int col);
+    Dataset* dataset_;
+    RingBuffer<float>* buffer_;
+    ENUMS::PROCESSING_TYPE processingType_ = ENUMS::PROCESSING_TYPE::NONE;
+    uint n_ = 2;
+    float emaPrevious_;
+    bool initialized_ = false;
+
+    float sma(unsigned int row, unsigned int col);
+    float ema(int row, int col);
+
+signals:
+
+public slots:
+
+
 
 };
 
-} // namespace sow
+} // Namespace sow.
 
 #endif // DATAPROCESSOR_H

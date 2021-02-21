@@ -14,7 +14,7 @@ class Track : public QWidget
 
 public:
 
-    explicit Track(QWidget *parent = nullptr);
+    explicit Track(QWidget *parent = nullptr, TrackHeader *header = nullptr);
     ~Track() override;
 
     void setPlotter(TrackPlotter* plotter);
@@ -28,7 +28,6 @@ protected:
 
 private:
 
-    uint trackNumber_;
     TrackPlotter* plotter_;
     TrackHeader* header_;
     TrackName* name_;

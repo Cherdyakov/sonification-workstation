@@ -28,6 +28,13 @@ struct TransportCommand {
     float valueB;
 };
 
+struct DataProcessorControllerCommand {
+    ENUMS::DATA_PROCESSOR_CMD type;
+    ENUMS::PROCESSING_TYPE procType;
+    uint track;
+    float value;
+};
+
 } // End namespace sow.
 
 #endif // COMMANDS_H

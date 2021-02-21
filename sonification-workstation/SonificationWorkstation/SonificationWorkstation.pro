@@ -71,6 +71,8 @@ HEADERS = \
    $$PWD/utility.h \
    $$PWD/volume.h \
     aboutmessage.h \
+    dataprocessor.h \
+    dataprocessorcontroller.h \
     datasetimportdialog.h \
     mastervolumeslider.h \
     recorder.h \
@@ -109,6 +111,8 @@ SOURCES = \
    $$PWD/utility.cpp \
    $$PWD/volume.cpp \
     aboutmessage.cpp \
+    dataprocessor.cpp \
+    dataprocessorcontroller.cpp \
     datasetimportdialog.cpp \
     mastervolumeslider.cpp \
     recorder.cpp \

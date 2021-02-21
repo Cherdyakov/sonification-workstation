@@ -134,7 +134,8 @@ void TrackView::clear()
 
 Track *TrackView::addTrack()
 {
-    Track* track = new Track(this);
+    TrackHeader* header = new TrackHeader(this);
+    Track* track = new Track(this, header);
     TrackPlotter* plotter = new TrackPlotter(track);
     track->setFixedHeight(140);
     track->setPlotter(plotter);
@@ -153,6 +154,10 @@ Track *TrackView::addTrack()
             track, &Track::onTrackHeightChanged);
     connect(this, &TrackView::positionChanged,
             plotter, &TrackPlotter::onPositionChanged);
+    connect(header, &TrackHeader::processingTypeChanged,
+            this, &TrackView::onProcessingTypeChanged);
+    connect(header, &TrackHeader::nValChanged,
+            this, &TrackView::onNvalChanged);
 
     return track;
 }
@@ -166,6 +171,21 @@ void TrackView::onDatasetChanged(sow::Dataset* dataset)
 void TrackView::onXRangeChanged(QCPRange range)
 {
     emit xRangeChanged(range);
+}
+
+void TrackView::onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type)
+{
+    emit processingTypeChanged(track, type);
+}
+
+void TrackView::onNvalChanged(uint track, uint n)
+{
+    emit nValChanged(track, n);
+}
+
+void TrackView::onAlphaChanged(uint track, float alpha)
+{
+    emit alphaChanged(track, alpha);
 }
 
 } // namespace sow

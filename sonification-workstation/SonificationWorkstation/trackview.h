@@ -41,11 +41,17 @@ signals:
     void zoomChanged(QWheelEvent* e);
     void trackHeightChanged(int steps);
     void positionChanged(int steps);
+    void processingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
+    void nValChanged(uint track, uint n);
+    void alphaChanged(uint track, float alpha);
 
 public slots:
 
     void onDatasetChanged(sow::Dataset *dataset);
     void onXRangeChanged(QCPRange range);
+    void onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
+    void onNvalChanged(uint track, uint n);
+    void onAlphaChanged(uint track, float alpha);
 
 };
 

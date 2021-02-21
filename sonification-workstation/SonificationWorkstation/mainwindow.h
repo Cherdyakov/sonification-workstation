@@ -37,6 +37,7 @@ private:
     QQuickView* quickView_;
     ThemeManager* themeManager_;
     Dataset* dataset_;
+    DataProcessorController* dataProcessorController_;
 
     QString datafile_;
     QString sessionfile_;

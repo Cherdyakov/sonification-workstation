@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <QBitmap>
 #include <QPainter>
+#include "enums.h"
 
 class TrackHeader : public QWidget
 {
@@ -18,22 +19,27 @@ class TrackHeader : public QWidget
 public:
     explicit TrackHeader(QWidget *parent = nullptr);
 
+    void setNumber(uint num);
+
 private:
 
     uint trackNumber_;
     QComboBox *procComboBox_;
-    QSpinBox *alphaSpinBox_;
+    QSpinBox *nSpinBox_;
 
 protected:
 
     void paintEvent(QPaintEvent* event) override;
 
 signals:
+    void processingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
+    void nValChanged(uint track, uint n);
 
 public slots:
 
 private slots:
-    void on_processingChanged(QString text);
+    void onProcessingTypeChanged(int idx);
+    void onNvalChanged(int n);
 
 };
 

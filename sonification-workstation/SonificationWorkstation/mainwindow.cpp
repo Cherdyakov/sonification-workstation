@@ -17,7 +17,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // Core components.
     dataset_ = new Dataset(this);                                                       // Holds data loaded from file
-    transport_ = new Transport(this, dataset_);                                         // Controls playback and synth commands
+    dataProcessorController_ = new DataProcessorController(this, dataset_);
+    transport_ = new Transport(this, dataset_, dataProcessorController_);                                         // Controls playback and synth commands
 
     // Construct the application window.
     QWidget *centralWidget = new QWidget;                                               // Application top-level widget
@@ -89,13 +90,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // TransportWidget Record
     connect(transportWidget_, &TransportWidget::recordChanged,
             this, &MainWindow::onRecordChanged);
-    // Transport Dataset signals.
+    // Dataset signals.
     connect(this, &MainWindow::datasetChanged,
             trackView, &TrackView::onDatasetChanged);
     connect(this, &MainWindow::datasetChanged,
             transportWidget_, &TransportWidget::onDatasetChanged);
     connect(this, &MainWindow::datasetChanged,
             playhead_, &PlayHead::onDatasetChanged);
+    connect(this, &MainWindow::datasetChanged,
+            dataProcessorController_, &DataProcessorController::onDatasetChanged);
 
     // Connect Transport < > TransportWidget.
     connect(transport_, &Transport::posChanged,
@@ -113,7 +116,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(transportWidget_, &TransportWidget::muteChanged,
             transport_, &Transport::onMuteChanged);
 
-    // Playhead signals.
+    // DataProcessor slots.
+    connect(trackView, &TrackView::processingTypeChanged,
+            dataProcessorController_, &DataProcessorController::onProcessingTypeChanged);
+    connect(trackView, &TrackView::nValChanged,
+            dataProcessorController_, &DataProcessorController::onNvalChanged);
+    connect(transportWidget_, &TransportWidget::pausedChanged,
+            dataProcessorController_, &DataProcessorController::onPauseChanged);
+
+    // Playhead slots.
     connect(transportWidget_, &TransportWidget::pausedChanged,
             playhead_, &PlayHead::onPauseChanged);
     connect(playhead_, &PlayHead::cursorPosChanged,
@@ -356,7 +367,7 @@ void MainWindow::onOpen()
         QJsonValue horizontalData = jsonObject.value("horizontal");
         horizontalData_ = horizontalData.toBool();
         datafile_ = datafile.toString();
-        transport_->onImportDataset();
+        transport_->onImportDataset(true);
 
         // Set playback speed.
         float speed = jsonObject.value("speed").toInt();
@@ -398,7 +409,7 @@ void MainWindow::onRecordChanged(bool record)
 
 void MainWindow::onImportDataset()
 {
-    transport_->onImportDataset();
+    transport_->onImportDataset(true);
 }
 
 void MainWindow::onImportDatasetReady()
@@ -413,12 +424,7 @@ void MainWindow::onImportDatasetReady()
     {
         DatasetImportDialog* importDialog = new DatasetImportDialog(datafile_);
         int result = importDialog->exec();
-
-        // DEBUG SECTION FOR IMPORT DIALOG RETURN VALUES
         bool useColumns = result & constants::COLUMNS_FLAG;
-        bool useHeaders = result & constants::HEADERS_FLAG;
-        qDebug() << "Using Columns: " + QString::number(useColumns);
-        qDebug() << "Using Headers: " + QString::number(useHeaders);
 
         if(result)
         {
@@ -428,6 +434,7 @@ void MainWindow::onImportDatasetReady()
             }
         }
     }
+    transport_->onImportDataset(false);
 }
 
 void MainWindow::onDefaultThemeSet()

@@ -16,6 +16,7 @@
 #include "noise.h"
 #include "equalizer.h"
 #include "recorder.h"
+#include "dataprocessorcontroller.h"
 
 namespace sow {
 
@@ -24,7 +25,7 @@ class Transport : public SynthItem
     Q_OBJECT
 public:
 
-    explicit Transport(QObject *parent = nullptr, Dataset* dataset = nullptr);
+    explicit Transport(QObject *parent = nullptr, Dataset* dataset = nullptr, DataProcessorController* dataProcessorController = nullptr);
 
     // factory for other SynthItems
     Q_INVOKABLE sow::SynthItem* createItem(ENUMS::ITEM_TYPE type);
@@ -34,7 +35,6 @@ public:
     Q_INVOKABLE void unsubscribe(SynthItem* item);
 
     float pos(); // for polling state from outside
-    void loadDataset(QString file);
     Frame process() override;       // every sample
     void controlProcess() override; // every process block
 
@@ -45,6 +45,7 @@ private:
     std::vector<SynthItem*> subscribers_;
     Recorder recorder_;
     Dataset* dataset_;
+    DataProcessorController* dataProcessorController_;
     QString filepath_;
     QMutex fileMutex_;
     std::vector<float> currentData_;
@@ -64,6 +65,7 @@ private:
     bool record_;
     bool loop_;
     bool interpolate_;
+    bool importingDataset_;
 
     void processTransportCommand(TransportCommand cmd);
     void processSubscribeItem(SynthItem* item);
@@ -82,7 +84,7 @@ signals:
 public slots:
 
     // slots for controlling playback and volume
-    void onImportDataset();
+    void onImportDataset(bool importing);
     void onPauseChanged(bool pause);
     void onRecordStart(QString path);
     void onRecordStop();

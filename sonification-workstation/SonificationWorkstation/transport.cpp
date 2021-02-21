@@ -6,7 +6,7 @@
 
 namespace sow {
 
-Transport::Transport(QObject *parent, Dataset *dataset) : SynthItem (parent)
+Transport::Transport(QObject *parent, Dataset *dataset, DataProcessorController *dataProcessorController) : SynthItem (parent)
 {  
     type_ = ENUMS::ITEM_TYPE::TRANSPORT;
     acceptedInputs_ = {
@@ -19,6 +19,7 @@ Transport::Transport(QObject *parent, Dataset *dataset) : SynthItem (parent)
     connect(posTimer, SIGNAL(timeout()), this, SLOT(updatePos()));
     posTimer->start(33);
 
+    dataProcessorController_ = dataProcessorController;
     dataset_ = dataset;
     pause_ = true;
     record_ = false;
@@ -33,6 +34,7 @@ Transport::Transport(QObject *parent, Dataset *dataset) : SynthItem (parent)
     returnPos_ = 0.0f;
     masterVolumeTarget_ = masterVolume_ = 1.0f;
     interpolate_ = false;
+    importingDataset_ = false;
 }
 
 /*
@@ -48,10 +50,11 @@ void Transport::deleteItem(SynthItem *item)
 }
 
 
-void Transport::onImportDataset()
+void Transport::onImportDataset(bool importing)
 {
     TransportCommand cmd;
     cmd.type = ENUMS::TRANSPORT_CMD::IMPORT_DATASET;
+    cmd.valueA = importing ? 1.0f : 0.0f;
     transportCommandBuffer_.push(cmd);
 }
 
@@ -320,6 +323,8 @@ void Transport::controlProcess()
         SynthItem* item = subscribers_[i];
         item->controlProcess();
     }
+    // Trigger DataProcessorController to process commands
+    dataProcessorController_->controlProcess();
 }
 
 void Transport::processTransportCommand(TransportCommand cmd)
@@ -358,6 +363,7 @@ void Transport::processTransportCommand(TransportCommand cmd)
         utility::removeAll(cmd.item, subscribers_);
         break;
     case ENUMS::TRANSPORT_CMD::IMPORT_DATASET:
+        importingDataset_ = (cmd.valueA == 0.0f) ? false : true;
         processImportDataset();
         break;
     case ENUMS::TRANSPORT_CMD::VOLUME:
@@ -397,13 +403,16 @@ void Transport::processDeleteItem(SynthItem *item)
 
 void Transport::processImportDataset()
 {
-    pause_ = true;
-    currentData_.clear();
-    currentIndex_ = 0;
-    mu_ = 0.0f;
-    calculateReturnPosition();
-    dataStale_ = true;
-    emit datasetImportReady();
+    if(importingDataset_)
+    {
+        pause_ = true;
+        currentData_.clear();
+        currentIndex_ = 0;
+        mu_ = 0.0f;
+        calculateReturnPosition();
+        dataStale_ = true;
+        emit datasetImportReady();
+    }
 }
 
 
@@ -420,20 +429,9 @@ void Transport::processSetPlaybackPosition(float pos)
 
 void Transport::refreshCurrentData()
 {
-    if(!dataStale_ || !dataset_->hasData()) return;
-
-    if(interpolate_)
-    {
-        int next_index = currentIndex_ + 1;
-        if(next_index >= dataset_->rows())
-        {
-            next_index = 0;
-        }
-        currentData_ = interpolate(dataset_->getRow(currentIndex_), dataset_->getRow(next_index), mu_);
-    }
-    else {
-        currentData_ = dataset_->getRow(currentIndex_);
-    }
+    if(!dataStale_ || !dataset_->hasData() || importingDataset_ ) return;
+    currentData_ = dataProcessorController_->getData(currentIndex_);
+    dataStale_ = false;
 }
 
 void Transport::calculateReturnPosition()

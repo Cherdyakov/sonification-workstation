@@ -14,15 +14,20 @@ public:
     ~RingBuffer();
 
     void reset();
+    void resize(const uint size);
+    uint size();
 
     bool push(T item);
     bool pop(T* item);
+    bool pop();
+    bool at(T* item, const uint idx) const;
 
     bool empty() const;
     bool full() const;
 
 private:
 
+    QAtomicInt maxCapacity;
     QAtomicInt currentSize;
     QAtomicInt capacity;
     QAtomicInt head;
@@ -38,7 +43,7 @@ RingBuffer<T>::RingBuffer(int cap)
     head = 0;
     tail = 0;
     currentSize = 0;
-    capacity = cap;
+    capacity = maxCapacity = cap;
     array = new T[capacity];
 }
 
@@ -54,6 +59,23 @@ void RingBuffer<T>::reset()
     head = 0;
     tail = 0;
     currentSize = 0;
+}
+
+template<class T>
+void RingBuffer<T>::resize(uint size)
+{
+    reset();
+    if (size > maxCapacity)
+    {
+        size = maxCapacity;
+    }
+    capacity = size;
+}
+
+template<class T>
+uint RingBuffer<T>::size()
+{
+    return currentSize;
 }
 
 template<class T>
@@ -97,6 +119,42 @@ bool RingBuffer<T>::pop(T* item)
     tail++;
     currentSize--;
     return true;
+}
+
+template<class T>
+bool RingBuffer<T>::pop()
+{
+    //bounds check
+    if(tail > capacity - 1)
+    {
+        tail = 0;
+    }
+    //tail has caught up to head
+    if(empty())
+    {
+        return false;
+    }
+
+    tail++;
+    currentSize--;
+    return true;
+}
+
+// ACCESSES RAW ARRAY CONTENTS
+template<class T>
+bool RingBuffer<T>::at(T* item, const uint idx) const
+{
+    // invalid index
+    if(idx > currentSize)
+    {
+        return false;
+    }
+    // tail has caught up to head
+    if(empty())
+    {
+        return false;
+    }
+    *item = array[idx];
 }
 
 template<class T>
