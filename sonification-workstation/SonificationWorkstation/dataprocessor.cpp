@@ -9,7 +9,7 @@ DataProcessor::DataProcessor(QObject *parent, Dataset *dataset, uint size) : QOb
     buffer_ = new RingBuffer<float>(n_);
 }
 
-float DataProcessor::getValue(uint row, uint col)
+float DataProcessor::getValue(uint row, uint col, float mu)
 {
     float value;
 
@@ -25,6 +25,27 @@ float DataProcessor::getValue(uint row, uint col)
         break;
     }
 
+    if(interpolate_)
+    {
+        float nextValue;
+        uint nextRow = mu < 0 ? row - 1 : row + 1;
+        if(nextRow > dataset_->rows()) nextRow = 0;
+
+        switch (processingType_) {
+        case ENUMS::PROCESSING_TYPE::NONE:
+            nextValue = dataset_->operator()(nextRow, col);
+            break;
+        case ENUMS::PROCESSING_TYPE::SIMPLE:
+            nextValue = sma(nextRow, col);
+            break;
+        case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
+            nextValue = ema(nextRow, col);
+            break;
+        }
+        value = interpolate(value, nextValue, mu);
+    }
+
+    valuePrevious_ = value;
     return value;
 }
 
@@ -52,6 +73,16 @@ void DataProcessor::setN(float n)
 void DataProcessor::flush()
 {
     initialized_ = false;
+}
+
+bool DataProcessor::interpolate()
+{
+    return interpolate_;
+}
+
+void DataProcessor::setInterpolate(bool interpolate)
+{
+    interpolate_ = interpolate;
 }
 
 float DataProcessor::sma(unsigned int row, unsigned int col)
@@ -105,6 +136,12 @@ float DataProcessor::ema(int row, int col)
     }
 
     return ema;
+}
+
+float DataProcessor::interpolate(float first, float second, float mu)
+{
+    float value = ((1 - mu) * first) + (mu * second);
+    return value;
 }
 
 } // Namespace sow.

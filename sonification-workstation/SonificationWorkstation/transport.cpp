@@ -33,7 +33,6 @@ Transport::Transport(QObject *parent, Dataset *dataset, DataProcessorController 
     speed_ = 1;
     returnPos_ = 0.0f;
     masterVolumeTarget_ = masterVolume_ = 1.0f;
-    interpolate_ = false;
     importingDataset_ = false;
 }
 
@@ -114,14 +113,6 @@ void Transport::onLoopPointsChanged(float begin, float end)
     cmd.type = ENUMS::TRANSPORT_CMD::LOOP_PTS;
     cmd.valueA = begin;
     cmd.valueB = end;
-    transportCommandBuffer_.push(cmd);
-}
-
-void Transport::onInterpolateChanged(bool interpolate)
-{
-    TransportCommand cmd;
-    cmd.type = ENUMS::TRANSPORT_CMD::INTERPOLATE;
-    cmd.valueA = interpolate ? 1.0f : 0.0f;
     transportCommandBuffer_.push(cmd);
 }
 
@@ -240,7 +231,7 @@ Frame Transport::process()
         mu_ -= 1.0;
         currentIndex_++;
 
-        if((currentIndex_ + 1) > (dataset_->rows()))
+        if((currentIndex_ + 1) > ((int)dataset_->rows()))
         {
             currentIndex_ = 0;
         }
@@ -264,7 +255,7 @@ Frame Transport::process()
         }
     }
 
-    if(interpolate_)
+    if(dataProcessorController_->interpolate())
     {
         dataStale_ = true;
     }
@@ -276,7 +267,7 @@ Frame Transport::process()
         step();
     }
 
-    for (int i = 0; i < children_.size(); ++i)
+    for (uint i = 0; i < children_.size(); ++i)
     {
         SynthItem* item = children_[i];
         frame += item->process();
@@ -318,7 +309,7 @@ void Transport::controlProcess()
     // Do the usual for controlProcess
     SynthItem::controlProcess();
     // Trigger subscribed SynthItems to do the same
-    for (int i = 0; i < subscribers_.size(); ++i)
+    for (uint i = 0; i < subscribers_.size(); ++i)
     {
         SynthItem* item = subscribers_[i];
         item->controlProcess();
@@ -349,9 +340,6 @@ void Transport::processTransportCommand(TransportCommand cmd)
     case ENUMS::TRANSPORT_CMD::LOOP_PTS:
         loopBegin_ = cmd.valueA;
         loopEnd_ = cmd.valueB;
-        break;
-    case ENUMS::TRANSPORT_CMD::INTERPOLATE:
-        interpolate_ = (cmd.valueA == 0.0f) ? false : true;
         break;
     case ENUMS::TRANSPORT_CMD::DELETE_ITEM:
         processDeleteItem(cmd.item);
@@ -430,7 +418,7 @@ void Transport::processSetPlaybackPosition(float pos)
 void Transport::refreshCurrentData()
 {
     if(!dataStale_ || !dataset_->hasData() || importingDataset_ ) return;
-    currentData_ = dataProcessorController_->getData(currentIndex_);
+    currentData_ = dataProcessorController_->getData(currentIndex_, mu_);
     dataStale_ = false;
 }
 
@@ -439,23 +427,6 @@ void Transport::calculateReturnPosition()
     // FIXME not on every callback
     double pos = ((double)currentIndex_ + mu_);
     returnPos_.store(pos, std::memory_order_relaxed);
-}
-
-std::vector<float> Transport::interpolate(std::vector<float> first, std::vector<float> second, float mu)
-{
-    std::vector<float> vec;
-    if(first.size() != second.size())
-    {
-        return vec;
-    }
-    for(int i = 0; i < first.size(); i++)
-    {
-        float val_first = first[i];
-        float val_second = second[i];
-        float interpolated_val = ((1 - mu) * val_first) + (mu * val_second);
-        vec.push_back(interpolated_val);
-    }
-    return vec;
 }
 
 void Transport::updatePos()

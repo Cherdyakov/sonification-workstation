@@ -14,8 +14,9 @@ class DataProcessorController : public QObject
 public:
     explicit DataProcessorController(QObject *parent = nullptr, Dataset* dataset = nullptr);
 
-    std::vector<float> getData(uint row); // called every new data value (step)
+    std::vector<float> getData(uint row, float mu); // called every new data value (step)
     void controlProcess(); // called every process block
+    bool interpolate();
 
 private:
 
@@ -35,6 +36,7 @@ public slots:
     // slots for data processing settings
     void onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
     void onNvalChanged(uint track, uint n);
+    void onInterpolateChanged(uint track, bool interpolate);
     void onPauseChanged();
 
 };

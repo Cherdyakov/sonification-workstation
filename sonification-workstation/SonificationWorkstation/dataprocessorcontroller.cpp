@@ -7,12 +7,12 @@ DataProcessorController::DataProcessorController(QObject *parent, Dataset* datas
     dataset_ = dataset;
 }
 
-std::vector<float> DataProcessorController::getData(uint row)
+std::vector<float> DataProcessorController::getData(uint row, float mu)
 {
     std::vector<float> dataRow;
     for (uint i = 0; i < processors_.size(); i++)
     {
-        dataRow.push_back(processors_[i]->getValue(row, i));
+        dataRow.push_back(processors_[i]->getValue(row, i, mu));
     }
     return dataRow;
 }
@@ -26,6 +26,15 @@ void DataProcessorController::controlProcess()
     }
 }
 
+bool DataProcessorController::interpolate()
+{
+    for(uint i = 0; i < processors_.size(); i++)
+    {
+        if(processors_[i]->interpolate()) return true;
+    }
+    return false;
+}
+
 void DataProcessorController::processDataProcessorControllerCommand(DataProcessorControllerCommand cmd)
 {
     cmd.track -= 1;
@@ -37,7 +46,7 @@ void DataProcessorController::processDataProcessorControllerCommand(DataProcesso
         processors_[cmd.track]->setProcessingType(cmd.procType);
         break;
     case ENUMS::DATA_PROCESSOR_CMD::INTERPOLATE:
-//        processors_[cmd.track]->setProcessingType(type);
+        processors_[cmd.track]->setInterpolate(cmd.value == 0.0f ? false : true);
         break;
     case ENUMS::DATA_PROCESSOR_CMD::N_VAL:
         processors_[cmd.track]->setN(static_cast<int>(cmd.value));
@@ -57,7 +66,7 @@ void DataProcessorController::resize(uint size)
 
 void DataProcessorController::flush()
 {
-    for (int i = 0; i < processors_.size(); i ++)
+    for (uint i = 0; i < processors_.size(); i ++)
     {
         processors_[i]->flush();
     }
@@ -87,6 +96,15 @@ void DataProcessorController::onNvalChanged(uint track, uint n)
     cmd.type = ENUMS::DATA_PROCESSOR_CMD::N_VAL;
     cmd.track = track;
     cmd.value = n;
+    dataProcessorControllerCommandBuffer_.push(cmd);
+}
+
+void DataProcessorController::onInterpolateChanged(uint track, bool interpolate)
+{
+    DataProcessorControllerCommand cmd;
+    cmd.type = ENUMS::DATA_PROCESSOR_CMD::INTERPOLATE;
+    cmd.track = track;
+    cmd.value = interpolate ? 1.0f : 0.0f;
     dataProcessorControllerCommandBuffer_.push(cmd);
 }
 
