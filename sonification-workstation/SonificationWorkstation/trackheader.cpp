@@ -25,6 +25,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     interpolateButton_->setCheckable(true);
     interpolateButton_->setChecked(false);
     interpolateButton_->setObjectName("InterpolateButton");
+    interpolateButton_->setStyleSheet("border-color:#9E9E9E");
 
     QHBoxLayout *nuLayout = new QHBoxLayout;
     nuLayout->addWidget(nuLabel);

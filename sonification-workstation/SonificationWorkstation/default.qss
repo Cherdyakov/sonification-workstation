@@ -160,7 +160,7 @@ background-color: #E0E0E0;
 
 QSpinBox#NuSpinBox
 {
-border: 1px solid #9E9E9E;
+border: 1px solid #BDBDBD;
 
 }
 
@@ -180,11 +180,10 @@ width: 8px;
 padding: 1px;
 }
 
-
 QComboBox#ProcComboBox
 {
 background-color: white;
-border: 1px solid #9E9E9E;
+border: 1px solid #BDBDBD;
 }
 
 QComboBox#ProcComboBox::drop-down:button
