@@ -187,7 +187,7 @@ void TrackView::onNvalChanged(uint track, uint n)
 
 void TrackView::onInterpolateChanged(uint track, bool interpolate)
 {
-    emit nValChanged(track, interpolate);
+    emit interpolateChanged(track, interpolate);
 }
 
 } // namespace sow

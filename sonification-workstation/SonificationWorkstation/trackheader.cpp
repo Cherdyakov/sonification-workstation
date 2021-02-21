@@ -19,7 +19,6 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     }
     nuLabel->setPixmap(pixmap);
     nuLabel->setScaledContents(true);
-    nuLabel->setFixedSize(10, 10);
 
     // Interpolate button.
     interpolateButton_->setText("Interpolate");
@@ -41,16 +40,17 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     processingLayout->addWidget(procLabel);
     processingLayout->addWidget(procComboBox_);
     processingLayout->addLayout(nuLayout);
+    procComboBox_->setObjectName("ProcComboBox");
+    procLabel->setObjectName("ProcLabel");
 
     nuSpinBox->setAccessibleName("Smoothing constant. Sets damping factor for exponential average or window size for simple average.");
     nuSpinBox->setAccessibleDescription("");
+    nuSpinBox->setObjectName("NuSpinBox");
+    nuLabel->setFixedSize(10,10);
 
-    // Stylesheet.
+    // Main stylesheet.
     this->setObjectName("TrackHeader");
     this->setAutoFillBackground(true);
-    nuSpinBox->setObjectName("NuSpinBox");
-    procComboBox_->setObjectName("ProcComboBox");
-    procLabel->setObjectName("ProcLabel");
 
     // Add everything to main layout.
     mainLayout->setContentsMargins(1,1,1,1);

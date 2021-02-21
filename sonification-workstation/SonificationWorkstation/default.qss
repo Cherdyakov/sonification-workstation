@@ -180,10 +180,6 @@ width: 8px;
 padding: 1px;
 }
 
-QPushButton#InterpolateButton
-{
-border: 1px solid #9E9E9E;
-}
 
 QComboBox#ProcComboBox
 {
