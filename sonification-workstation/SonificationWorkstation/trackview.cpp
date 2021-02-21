@@ -158,6 +158,8 @@ Track *TrackView::addTrack()
             this, &TrackView::onProcessingTypeChanged);
     connect(header, &TrackHeader::nValChanged,
             this, &TrackView::onNvalChanged);
+    connect(header, &TrackHeader::onInterpolateChanged,
+            this, &TrackView::onInterpolateChanged);
 
     return track;
 }
@@ -183,9 +185,9 @@ void TrackView::onNvalChanged(uint track, uint n)
     emit nValChanged(track, n);
 }
 
-void TrackView::onAlphaChanged(uint track, float alpha)
+void TrackView::onInterpolateChanged(uint track, bool interpolate)
 {
-    emit alphaChanged(track, alpha);
+    emit nValChanged(track, interpolate);
 }
 
 } // namespace sow

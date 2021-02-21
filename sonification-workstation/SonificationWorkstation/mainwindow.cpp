@@ -105,8 +105,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             playhead_, &PlayHead::onCursorMoved);
     connect(transportWidget_, &TransportWidget::speedChanged,
             transport_, &Transport::onSpeedChanged);
-//    connect(transportWidget_, &TransportWidget::interpolateChanged,
-//            transport_, &Transport::onInterpolateChanged);
     connect(transportWidget_, &TransportWidget::pausedChanged,
             transport_, &Transport::onPauseChanged);
     connect(transportWidget_, &TransportWidget::loopingChanged,
@@ -123,6 +121,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             dataProcessorController_, &DataProcessorController::onNvalChanged);
     connect(transportWidget_, &TransportWidget::pausedChanged,
             dataProcessorController_, &DataProcessorController::onPauseChanged);
+    connect(trackView, &TrackView::interpolateChanged,
+            dataProcessorController_, &DataProcessorController::onInterpolateChanged);
 
     // Playhead slots.
     connect(transportWidget_, &TransportWidget::pausedChanged,
