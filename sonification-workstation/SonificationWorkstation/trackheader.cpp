@@ -19,7 +19,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     }
     nuLabel->setPixmap(pixmap);
     nuLabel->setScaledContents(true);
-    nuLabel->setFixedSize(12, 12);
+    nuLabel->setFixedSize(10, 10);
 
     // Interpolate button.
     interpolateButton_->setText("Interpolate");
@@ -53,8 +53,8 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     procLabel->setObjectName("ProcLabel");
 
     // Add everything to main layout.
-    mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(2);
+    mainLayout->setContentsMargins(1,1,1,1);
+    mainLayout->setSpacing(3);
     mainLayout->addLayout(processingLayout);
     mainLayout->addStretch();
     this->setLayout(mainLayout);
