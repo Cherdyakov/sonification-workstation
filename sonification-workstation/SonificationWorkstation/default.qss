@@ -131,13 +131,6 @@ border-width: 0px;
 border-radius: 0px;
 }
 
-QPushButton#InterpolateButton
-{
-background-image: ;
-border-width: 0px;
-border-radius: 0px;
-}
-
 QPushButton#MuteButton
 {
 background-image: ;
@@ -167,12 +160,43 @@ background-color: #E0E0E0;
 
 QSpinBox#NuSpinBox
 {
-color: #424242;
+border: 1px solid #9E9E9E;
+
+}
+
+QSpinBox#NuSpinBox::up-button
+{
+image: url(:/images/up-arrow-black.svg);
+height: 8px;
+width: 8px;
+padding: 1px;
+}
+
+QSpinBox#NuSpinBox::down-button
+{
+image: url(:/images/down-arrow-black.svg);
+height: 8px;
+width: 8px;
+padding: 1px;
+}
+
+QPushButton#InterpolateButton
+{
+border: 1px solid #9E9E9E;
 }
 
 QComboBox#ProcComboBox
 {
-color: #424242;
+background-color: white;
+border: 1px solid #9E9E9E;
+}
+
+QComboBox#ProcComboBox::drop-down:button
+{
+image: url(:/images/down-arrow-black.svg);
+height: 8px;
+width: 8px;
+padding: 4px 1px;
 }
 
 QLabel#ProcLabel
