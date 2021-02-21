@@ -24,8 +24,6 @@ public:
 
     explicit TransportWidget(QWidget *parent = 0);
     void setTransport(Transport* qtTransport);
-    bool interpolate();
-    void setInterpolate(bool interpolate);
     float speed();
     void setSpeed(float speed);
 
@@ -34,7 +32,6 @@ private:
     bool pause_;
     bool record_;
     bool looping_;
-    bool interpolate_;
     bool mute_;
     float speed_;
     float masterVolume_;
@@ -44,14 +41,11 @@ private:
     QIcon recordOffIcon_;
     QIcon loopOnIcon_;
     QIcon loopOffIcon_;
-    QIcon interpolateOnIcon_;
-    QIcon interpolateOffIcon_;
     QIcon muteOnIcon_;
     QIcon muteOffIcon_;
     QPushButton* pauseButton_;
     QPushButton* recordButton_;
     QPushButton* loopButton_;
-    QPushButton* interpolateButton_;
     QPushButton* muteButton_;
     QSpinBox* speedBox_;
     MasterVolumeSlider* masterVolumeSlider_;
@@ -65,7 +59,6 @@ signals:
     void recordChanged(bool record);
     void loopingChanged(bool loop);
     void speedChanged(float speed);
-    void interpolateChanged(bool interpolate_);
     void muteChanged(bool mute);
     void masterVolumeChanged(float vol);
 
@@ -75,7 +68,6 @@ public slots:
     void onPauseButtonReleased();
     void onRecordButtonReleased();
     void onLoopButtonReleased();
-    void onInterpolateButtonReleased();
     void onMuteButtonReleased();
     void onSpeedIncrementedUp();
     void onSpeedIncrementedDown();
