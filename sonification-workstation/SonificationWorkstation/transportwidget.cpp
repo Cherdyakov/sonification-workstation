@@ -7,13 +7,12 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     pause_ = true;
     record_ = false;
     looping_ = false;
-    interpolate_ = false;
     mute_ = false;
     speed_ = 0.0f;
     masterVolume_ = 1.0f;
 
     // Widget layouts.
-    QHBoxLayout* leftLayout = new QHBoxLayout;
+//    QHBoxLayout* leftLayout = new QHBoxLayout;
     QHBoxLayout* middleLayout = new QHBoxLayout;
     QHBoxLayout* rightLayout = new QHBoxLayout;
     QHBoxLayout* centralLayout = new QHBoxLayout;
@@ -33,11 +32,6 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     loopButton_->setAccessibleName("Looping. Toggles looping playback on or off.");
     loopButton_->setAccessibleDescription("");
 
-    interpolateButton_ = new QPushButton;
-    interpolateButton_->setObjectName("InterpolateButton");
-    interpolateButton_->setAccessibleName("Interpolation, toggles data interpolation on or off.");
-    interpolateButton_->setAccessibleDescription("");
-
     muteButton_ = new QPushButton;
     muteButton_->setObjectName("MuteButton");
     muteButton_->setAccessibleName("Mute, toggles mute on or off.");
@@ -47,9 +41,6 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     speedBox_->setObjectName("SpeedBox");
     speedBox_->setAccessibleName("Speed spinbox, sets the playback speed in data points per second");
     speedBox_->setAccessibleDescription("");
-
-    QLabel* speedLabel = new QLabel;
-    speedLabel->setObjectName("SpeedLabel");
 
     masterVolumeSlider_ = new MasterVolumeSlider;
     masterVolumeSlider_->setObjectName("MasterVolume");
@@ -63,8 +54,6 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     recordOffIcon_.addFile(":/images/record-off.svg");
     loopOnIcon_.addFile(":/images/loop-on.svg");
     loopOffIcon_.addFile(":/images/loop-off.svg");
-    interpolateOnIcon_.addFile(":/images/interpolate-on.svg");
-    interpolateOffIcon_.addFile(":/images/interpolate-off.svg");
     muteOnIcon_.addFile(":/images/speaker-off.svg");
     muteOffIcon_.addFile(":/images/speaker-on.svg");
     // Set button icons and sizes.
@@ -74,19 +63,15 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     recordButton_->setIconSize(QSize(40,40));
     loopButton_->setIcon(loopOffIcon_);
     loopButton_->setIconSize(QSize(40,40));
-    interpolateButton_->setIcon(interpolateOffIcon_);
-    interpolateButton_->setIconSize(QSize(40,40));
     muteButton_->setIcon(muteOffIcon_);
     muteButton_->setIconSize(QSize(40,40));
     // Set button tooltips
     pauseButton_->setToolTip("Play/Pause (Ctrl+P)");
     loopButton_->setToolTip("Enable looping (Ctrl+L)");
-    interpolateButton_->setToolTip("Enable interpolation (Ctrl+I)");
     muteButton_->setToolTip("Mute (Ctrl+M)");
     masterVolumeSlider_->setToolTip("Master Volume (Ctrl+UpArrow/Ctrl+DownArrow");
     speedBox_->setToolTip("Data samples per second (Ctrl+,/Ctrl+. or Ctrl+</Ctrl+> for larger increment)");
 
-    speedLabel->setText(tr(""));
     speedBox_->setValue(1.0);
     speedBox_->setMinimum(0.0);
     speedBox_->setMaximum(constants::SR);
@@ -95,19 +80,11 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     masterVolumeSlider_->setValue(static_cast<int>(masterVolume_ * 100.0f));
     masterVolumeSlider_->setOrientation(Qt::Horizontal);
 
-    // Setup left side layout
-    speedLabel->setSizePolicy(QSizePolicy::Expanding,
-                              QSizePolicy::Minimum);
-    speedLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    leftLayout->addWidget(speedLabel);
-    leftLayout->addWidget(speedBox_);
-    leftLayout->setAlignment(Qt::AlignRight);
-
     // Setup center layout
+    middleLayout->addWidget(pauseButton_);
+    middleLayout->addWidget(speedBox_);
     middleLayout->addWidget(recordButton_);
     middleLayout->addWidget(loopButton_);
-    middleLayout->addWidget(pauseButton_);
-    middleLayout->addWidget(interpolateButton_);
     middleLayout->addWidget(muteButton_);
 
     // Setup right side layout (volume section)
@@ -115,7 +92,6 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
                                        QSizePolicy::Expanding);
     rightLayout->addWidget(masterVolumeSlider_);
     //set size and layout of transport
-    centralLayout->addLayout(leftLayout);
     centralLayout->addSpacing(40);
     centralLayout->addLayout(middleLayout);
     centralLayout->addSpacing(40);
@@ -137,25 +113,10 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
             this, SLOT(onLoopButtonReleased()));
     connect(speedBox_, SIGNAL(valueChanged(int)),
             this,SLOT(onSpeedBoxValueChanged(int)));
-    connect(interpolateButton_, SIGNAL(released()),
-            this, SLOT(onInterpolateButtonReleased()));
     connect(masterVolumeSlider_, SIGNAL(valueChanged(int)),
             this, SLOT(onMasterVolumeChanged(int)));
     connect(muteButton_, &QPushButton::released,
             this, &TransportWidget::onMuteButtonReleased);
-}
-
-bool TransportWidget::interpolate()
-{
-    return interpolate_;
-}
-
-void TransportWidget::setInterpolate(bool interpolate)
-{
-    if(interpolate_ != interpolate) {
-        interpolate_ = interpolate;
-        emit interpolateChanged(interpolate_);
-    }
 }
 
 float TransportWidget::speed()
@@ -182,19 +143,6 @@ void TransportWidget::paintEvent(QPaintEvent *event)
 void TransportWidget::onSpeedChanged(int speed)
 {
     this->speedBox_->setValue(speed);
-}
-
-void TransportWidget::onInterpolateButtonReleased()
-{
-    interpolate_ = !interpolate_;
-    emit interpolateChanged(interpolate_);
-
-    if(interpolate_) {
-        interpolateButton_->setIcon(interpolateOnIcon_);
-    }
-    else {
-        interpolateButton_->setIcon(interpolateOffIcon_);
-    }
 }
 
 void TransportWidget::onMuteButtonReleased()

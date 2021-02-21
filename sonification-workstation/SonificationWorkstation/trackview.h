@@ -43,7 +43,7 @@ signals:
     void positionChanged(int steps);
     void processingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
     void nValChanged(uint track, uint n);
-    void alphaChanged(uint track, float alpha);
+    void interpolateChanged(uint track, bool interpolate);
 
 public slots:
 
@@ -51,7 +51,7 @@ public slots:
     void onXRangeChanged(QCPRange range);
     void onProcessingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
     void onNvalChanged(uint track, uint n);
-    void onAlphaChanged(uint track, float alpha);
+    void onInterpolateChanged(uint track, bool interpolate);
 
 };
 

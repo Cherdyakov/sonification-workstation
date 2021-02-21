@@ -105,8 +105,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             playhead_, &PlayHead::onCursorMoved);
     connect(transportWidget_, &TransportWidget::speedChanged,
             transport_, &Transport::onSpeedChanged);
-    connect(transportWidget_, &TransportWidget::interpolateChanged,
-            transport_, &Transport::onInterpolateChanged);
     connect(transportWidget_, &TransportWidget::pausedChanged,
             transport_, &Transport::onPauseChanged);
     connect(transportWidget_, &TransportWidget::loopingChanged,
@@ -123,6 +121,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             dataProcessorController_, &DataProcessorController::onNvalChanged);
     connect(transportWidget_, &TransportWidget::pausedChanged,
             dataProcessorController_, &DataProcessorController::onPauseChanged);
+    connect(trackView, &TrackView::interpolateChanged,
+            dataProcessorController_, &DataProcessorController::onInterpolateChanged);
 
     // Playhead slots.
     connect(transportWidget_, &TransportWidget::pausedChanged,
@@ -239,11 +239,6 @@ void MainWindow::createMenus()
     loopShortcut->setKey(Qt::CTRL + Qt::Key_L);
     connect(loopShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onLoopButtonReleased);
-    // Interpolation shortcut
-    QShortcut* interpolateShortcut = new QShortcut(this);
-    interpolateShortcut->setKey(Qt::CTRL + Qt::Key_I);
-    connect(interpolateShortcut, &QShortcut::activated,
-            transportWidget_, &TransportWidget::onInterpolateButtonReleased);
     // Transport RTZ shortcut
     QShortcut* rtzShortcut = new QShortcut(this);
     rtzShortcut->setKey(Qt::CTRL + Qt::Key_Return);
@@ -299,7 +294,6 @@ void MainWindow::writeSessionFile()
     QJsonObject jsonObject = jsonDocument.object();
     jsonObject.insert("dataset", datafile_);
     jsonObject.insert("horizontal", horizontalData_);
-    jsonObject.insert("interpolate", transportWidget_->interpolate());
     jsonObject.insert("speed", static_cast<double>(transportWidget_->speed()));
 
     QJsonDocument sessionDocument;
@@ -372,10 +366,6 @@ void MainWindow::onOpen()
         // Set playback speed.
         float speed = jsonObject.value("speed").toInt();
         transportWidget_->setSpeed(speed);
-
-        // Set interpolation state.
-        bool interpolate = jsonObject.value("interpolate").toBool();
-        transportWidget_->setInterpolate(interpolate);
 
         // Re-construct the Synth Tree.
         QJsonValue synthTree = jsonObject.value("synthItems");

@@ -5,8 +5,9 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QVBoxLayout *processingLayout = new QVBoxLayout;
-    nSpinBox_ = new QSpinBox;
+    nuSpinBox = new QSpinBox;
     procComboBox_ = new QComboBox;
+    interpolateButton_ = new QPushButton;
 
     // Data processing section.
     QLabel *procLabel = new QLabel;
@@ -18,11 +19,17 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     }
     nuLabel->setPixmap(pixmap);
     nuLabel->setScaledContents(true);
-    nuLabel->setFixedSize(18, 18);
 
-    QHBoxLayout *alphaLayout = new QHBoxLayout;
-    alphaLayout->addWidget(nuLabel);
-    alphaLayout->addWidget(nSpinBox_);
+    // Interpolate button.
+    interpolateButton_->setText("Interpolate");
+    interpolateButton_->setCheckable(true);
+    interpolateButton_->setChecked(false);
+    interpolateButton_->setObjectName("InterpolateButton");
+    interpolateButton_->setStyleSheet("border-color:#9E9E9E");
+
+    QHBoxLayout *nuLayout = new QHBoxLayout;
+    nuLayout->addWidget(nuLabel);
+    nuLayout->addWidget(nuSpinBox);
 
     procComboBox_->setAccessibleName("Data smoothing dropdown. Selects smoothing applied to data track during playback.");
     procComboBox_->setAccessibleDescription("");
@@ -30,23 +37,25 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     procComboBox_->addItem("Simple Average");
     procComboBox_->addItem("Exponential Average");
     processingLayout->setContentsMargins(4,4,4,4);
+    processingLayout->addWidget(interpolateButton_);
     processingLayout->addWidget(procLabel);
     processingLayout->addWidget(procComboBox_);
-    processingLayout->addLayout(alphaLayout);
-
-    nSpinBox_->setAccessibleName("Smoothing constant. Sets damping factor for exponential average or window size for simple average.");
-    nSpinBox_->setAccessibleDescription("");
-
-    // Stylesheet.
-    this->setObjectName("TrackHeader");
-    this->setAutoFillBackground(true);
-    nSpinBox_->setObjectName("AlphaSpinBox");
+    processingLayout->addLayout(nuLayout);
     procComboBox_->setObjectName("ProcComboBox");
     procLabel->setObjectName("ProcLabel");
 
+    nuSpinBox->setAccessibleName("Smoothing constant. Sets damping factor for exponential average or window size for simple average.");
+    nuSpinBox->setAccessibleDescription("");
+    nuSpinBox->setObjectName("NuSpinBox");
+    nuLabel->setFixedSize(10,10);
+
+    // Main stylesheet.
+    this->setObjectName("TrackHeader");
+    this->setAutoFillBackground(true);
+
     // Add everything to main layout.
-    mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(2);
+    mainLayout->setContentsMargins(1,1,1,1);
+    mainLayout->setSpacing(3);
     mainLayout->addLayout(processingLayout);
     mainLayout->addStretch();
     this->setLayout(mainLayout);
@@ -54,12 +63,14 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     // connect signals and slots
     connect(procComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &TrackHeader::onProcessingTypeChanged);
-    connect(nSpinBox_, QOverload<int>::of(&QSpinBox::valueChanged),
+    connect(nuSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &TrackHeader::onNvalChanged);
+    connect(interpolateButton_, &QPushButton::clicked,
+            this, &TrackHeader::onInterpolateClicked);
 
     // Initialize
-    nSpinBox_->setMaximum(2048);
-    nSpinBox_->setValue(2);
+    nuSpinBox->setMaximum(2048);
+    nuSpinBox->setValue(2);
 
 }
 
@@ -91,10 +102,18 @@ void TrackHeader::onProcessingTypeChanged(int idx)
         type = ENUMS::PROCESSING_TYPE::EXPONENTIAL;
         break;
     }
+//    procComboBox_->setStyleSheet(idx == 0 ? "background-color:#9E9E9E" : "background-color:#FFFFFF" );
+
     emit processingTypeChanged(trackNumber_, type);
 }
 
 void TrackHeader::onNvalChanged(int n)
 {
     emit nValChanged(trackNumber_, n);
+}
+
+void TrackHeader::onInterpolateClicked()
+{
+    interpolate_ = !interpolate_;
+    emit onInterpolateChanged(trackNumber_, interpolate_);
 }

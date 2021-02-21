@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <QBitmap>
 #include <QPainter>
+#include <QDebug>
 #include "enums.h"
 
 class TrackHeader : public QWidget
@@ -24,8 +25,12 @@ public:
 private:
 
     uint trackNumber_;
+    uint n_;
+    bool interpolate_ = false;
+    QPushButton *interpolateButton_;
     QComboBox *procComboBox_;
-    QSpinBox *nSpinBox_;
+    QSpinBox *nuSpinBox;
+
 
 protected:
 
@@ -34,12 +39,14 @@ protected:
 signals:
     void processingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
     void nValChanged(uint track, uint n);
+    void onInterpolateChanged(uint track, bool interpolate);
 
 public slots:
 
 private slots:
     void onProcessingTypeChanged(int idx);
     void onNvalChanged(int n);
+    void onInterpolateClicked();
 
 };
 

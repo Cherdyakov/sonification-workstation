@@ -86,7 +86,6 @@ public:
         SPEED,
         LOOP,
         LOOP_PTS,
-        INTERPOLATE,
         SUB,
         UNSUB,
         DELETE_ITEM,
@@ -99,7 +98,6 @@ public:
         FLUSH,
         PROC_TYPE,
         INTERPOLATE,
-        ALPHA,
         N_VAL
     };
 

@@ -64,7 +64,6 @@ private:
     bool pause_;
     bool record_;
     bool loop_;
-    bool interpolate_;
     bool importingDataset_;
 
     void processTransportCommand(TransportCommand cmd);
@@ -75,7 +74,6 @@ private:
     void processSetPlaybackPosition(float pos);
     void refreshCurrentData();
     void calculateReturnPosition();
-    std::vector<float> interpolate(std::vector<float> first, std::vector<float> second, float mu);
 
 signals:
     void posChanged(float pos);
@@ -92,7 +90,6 @@ public slots:
     void onSpeedChanged(float speed);
     void onLoopingChanged(bool looping);
     void onLoopPointsChanged(float begin, float end);
-    void onInterpolateChanged(bool interpolate);
     void onMuteChanged(bool mute);
     void onMasterVolumeChanged(float vol);
 
