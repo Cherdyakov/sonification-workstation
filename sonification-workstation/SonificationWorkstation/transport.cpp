@@ -385,7 +385,7 @@ void Transport::processDeleteItem(SynthItem *item)
     item->controlProcess();
     SynthItem::controlProcess();
     if(item != this) {
-        delete item;
+        item->deleteLater();
     }
 }
 
