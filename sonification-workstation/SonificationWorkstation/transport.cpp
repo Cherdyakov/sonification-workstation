@@ -265,6 +265,7 @@ Frame Transport::process()
     if(stepping)
     {
         step();
+        dataProcessorController_->step();
     }
 
     for (uint i = 0; i < children_.size(); ++i)

@@ -10,11 +10,32 @@ DataProcessorController::DataProcessorController(QObject *parent, Dataset* datas
 std::vector<float> DataProcessorController::getData(uint row, float mu)
 {
     std::vector<float> dataRow;
+    std::vector<float> nextDataRow;
+    uint nextRow = row + 1 > dataset_->rows() ? 0 : row + 1;
+
     for (uint i = 0; i < processors_.size(); i++)
     {
-        dataRow.push_back(processors_[i]->getValue(row, i, mu));
+        dataRow.push_back(processors_[i]->getValue(row, i));
+        nextDataRow.push_back(nextValueProcessors_[i]->getValue(nextRow, i));
     }
+
+    for (uint i = 0; i < interpolateFlags_.size(); i++)
+    {
+        if(interpolateFlags_[i]) {
+            dataRow[i] = interpolateValue(dataRow[i], nextDataRow[i], mu);
+        }
+    }
+
     return dataRow;
+}
+
+void DataProcessorController::step()
+{
+    for (uint i = 0; i < processors_.size(); i++)
+    {
+        processors_[i]->step();
+        nextValueProcessors_[i]->step();
+    }
 }
 
 void DataProcessorController::controlProcess()
@@ -28,9 +49,9 @@ void DataProcessorController::controlProcess()
 
 bool DataProcessorController::interpolate()
 {
-    for(uint i = 0; i < processors_.size(); i++)
+    for(uint i = 0; i < interpolateFlags_.size(); i++)
     {
-        if(processors_[i]->interpolate()) return true;
+        if(interpolateFlags_[i]) return true;
     }
     return false;
 }
@@ -44,12 +65,14 @@ void DataProcessorController::processDataProcessorControllerCommand(DataProcesso
         break;
     case ENUMS::DATA_PROCESSOR_CMD::PROC_TYPE:
         processors_[cmd.track]->setProcessingType(cmd.procType);
+        nextValueProcessors_[cmd.track]->setProcessingType(cmd.procType);
         break;
     case ENUMS::DATA_PROCESSOR_CMD::INTERPOLATE:
-        processors_[cmd.track]->setInterpolate(cmd.value == 0.0f ? false : true);
+        interpolateFlags_[cmd.track] = (cmd.value == 0.0f) ? false : true;
         break;
     case ENUMS::DATA_PROCESSOR_CMD::N_VAL:
         processors_[cmd.track]->setN(static_cast<int>(cmd.value));
+        nextValueProcessors_[cmd.track]->setN(static_cast<int>(cmd.value));
         break;
     }
 }
@@ -57,11 +80,16 @@ void DataProcessorController::processDataProcessorControllerCommand(DataProcesso
 void DataProcessorController::resize(uint size)
 {
     processors_.clear();
+    nextValueProcessors_.clear();
+    interpolateFlags_.clear();
     for (uint i = 0; i < size; i++)
     {
         DataProcessor* p = new DataProcessor(this, dataset_, 2);
+        DataProcessor* np = new DataProcessor(this, dataset_, 2);
         processors_.push_back(p);
+        nextValueProcessors_.push_back(np);
     }
+    interpolateFlags_.resize(processors_.size());
 }
 
 void DataProcessorController::flush()
@@ -69,6 +97,7 @@ void DataProcessorController::flush()
     for (uint i = 0; i < processors_.size(); i ++)
     {
         processors_[i]->flush();
+        nextValueProcessors_[i]->flush();
     }
 }
 
@@ -97,6 +126,12 @@ void DataProcessorController::onNvalChanged(uint track, uint n)
     cmd.track = track;
     cmd.value = n;
     dataProcessorControllerCommandBuffer_.push(cmd);
+}
+
+float DataProcessorController::interpolateValue(const float first, const float second, const float mu)
+{
+    float value = ((1 - mu) * first) + (mu * second);
+    return value;
 }
 
 void DataProcessorController::onInterpolateChanged(uint track, bool interpolate)

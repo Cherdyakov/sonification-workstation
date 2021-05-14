@@ -15,6 +15,7 @@ public:
     explicit DataProcessorController(QObject *parent = nullptr, Dataset* dataset = nullptr);
 
     std::vector<float> getData(uint row, float mu); // called every new data value (step)
+    void step();
     void controlProcess(); // called every process block
     bool interpolate();
 
@@ -22,11 +23,14 @@ private:
 
     RingBuffer<DataProcessorControllerCommand> dataProcessorControllerCommandBuffer_;
     std::vector<DataProcessor*> processors_;
+    std::vector<DataProcessor*> nextValueProcessors_;
+    std::vector<bool> interpolateFlags_;
     Dataset* dataset_;
 
     void processDataProcessorControllerCommand(DataProcessorControllerCommand cmd);
     void resize(uint size);
     void flush();
+    float interpolateValue(const float first, const float second, const float mu);
 
 signals:
 
