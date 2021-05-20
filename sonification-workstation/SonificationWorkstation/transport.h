@@ -60,7 +60,6 @@ private:
     float speed_;
     float loopBegin_;
     float loopEnd_;
-    bool dataStale_;
     bool pause_;
     bool record_;
     bool loop_;

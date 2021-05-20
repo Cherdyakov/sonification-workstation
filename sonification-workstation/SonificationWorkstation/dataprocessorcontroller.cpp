@@ -1,4 +1,5 @@
 #include "dataprocessorcontroller.h"
+#include <QDebug>
 
 namespace sow {
 
@@ -9,33 +10,28 @@ DataProcessorController::DataProcessorController(QObject *parent, Dataset* datas
 
 std::vector<float> DataProcessorController::getData(uint row, float mu)
 {
-    std::vector<float> dataRow;
-    std::vector<float> nextDataRow;
     uint nextRow = row + 1 > dataset_->rows() ? 0 : row + 1;
-
     for (uint i = 0; i < processors_.size(); i++)
     {
-        dataRow.push_back(processors_[i]->getValue(row, i));
-        nextDataRow.push_back(nextValueProcessors_[i]->getValue(nextRow, i));
+        rowData[i] = processors_[i]->getValue(row, i);
+        nextRowData[i] = nextValueProcessors_[i]->getValue(nextRow, i);
     }
+
+    std::vector<float> returnData =  rowData;
 
     for (uint i = 0; i < interpolateFlags_.size(); i++)
     {
         if(interpolateFlags_[i]) {
-            dataRow[i] = interpolateValue(dataRow[i], nextDataRow[i], mu);
+            returnData[i] = interpolateValue(rowData[i], nextRowData[i], mu);
         }
     }
 
-    return dataRow;
+    return returnData;
 }
 
 void DataProcessorController::step()
 {
-    for (uint i = 0; i < processors_.size(); i++)
-    {
-        processors_[i]->step();
-        nextValueProcessors_[i]->step();
-    }
+    qDebug() << "Current C: " << rowData[2] << ", Next C: " << nextRowData[2];
 }
 
 void DataProcessorController::controlProcess()
@@ -84,12 +80,14 @@ void DataProcessorController::resize(uint size)
     interpolateFlags_.clear();
     for (uint i = 0; i < size; i++)
     {
-        DataProcessor* p = new DataProcessor(this, dataset_, 2);
-        DataProcessor* np = new DataProcessor(this, dataset_, 2);
+        DataProcessor* p = new DataProcessor(this, dataset_);
+        DataProcessor* np = new DataProcessor(this, dataset_);
         processors_.push_back(p);
         nextValueProcessors_.push_back(np);
     }
-    interpolateFlags_.resize(processors_.size());
+    interpolateFlags_.resize(size);
+    rowData.resize(size);
+    nextRowData.resize(size);
 }
 
 void DataProcessorController::flush()
@@ -136,6 +134,7 @@ float DataProcessorController::interpolateValue(const float first, const float s
 
 void DataProcessorController::onInterpolateChanged(uint track, bool interpolate)
 {
+
     DataProcessorControllerCommand cmd;
     cmd.type = ENUMS::DATA_PROCESSOR_CMD::INTERPOLATE;
     cmd.track = track;
@@ -145,7 +144,7 @@ void DataProcessorController::onInterpolateChanged(uint track, bool interpolate)
 
 void DataProcessorController::onPauseChanged()
 {
-    flush();
+//    flush();
 }
 
 } // Namespace sow.

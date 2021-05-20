@@ -74,8 +74,10 @@ HEADERS = \
     dataprocessor.h \
     dataprocessorcontroller.h \
     datasetimportdialog.h \
+    emafilter.h \
     mastervolumeslider.h \
     recorder.h \
+    smafilter.h \
     thememanager.h
 
 SOURCES = \
@@ -114,8 +116,10 @@ SOURCES = \
     dataprocessor.cpp \
     dataprocessorcontroller.cpp \
     datasetimportdialog.cpp \
+    emafilter.cpp \
     mastervolumeslider.cpp \
     recorder.cpp \
+    smafilter.cpp \
     thememanager.cpp
 
 INCLUDEPATH = \
