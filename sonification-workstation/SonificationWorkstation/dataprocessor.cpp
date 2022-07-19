@@ -54,9 +54,9 @@ void DataProcessor::flush()
     initialized_ = false;
 }
 
-void DataProcessor::step()
-{
+//void DataProcessor::step()
+//{
 
-}
+//}
 
 } // Namespace sow.

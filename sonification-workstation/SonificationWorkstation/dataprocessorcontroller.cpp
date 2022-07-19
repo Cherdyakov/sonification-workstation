@@ -31,7 +31,7 @@ std::vector<float> DataProcessorController::getData(uint row, float mu)
 
 void DataProcessorController::step()
 {
-    qDebug() << "Current C: " << rowData[2] << ", Next C: " << nextRowData[2];
+
 }
 
 void DataProcessorController::controlProcess()
