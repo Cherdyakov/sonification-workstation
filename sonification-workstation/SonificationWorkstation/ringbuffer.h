@@ -81,12 +81,6 @@ uint RingBuffer<T>::size()
 template<class T>
 bool RingBuffer<T>::push(T item)
 {
-    //values written all the way to end
-    if(head > capacity - 1)
-    {
-        head = 0;
-    }
-
     //buffer size at max
     if(full())
     {
@@ -97,17 +91,18 @@ bool RingBuffer<T>::push(T item)
 
     head++;
     currentSize++;
+
+    //bounds check
+    if(head > capacity - 1)
+    {
+        head = 0;
+    }
     return true;
 }
 
 template<class T>
 bool RingBuffer<T>::pop(T* item)
 {
-    //bounds check
-    if(tail > capacity - 1)
-    {
-        tail = 0;
-    }
     //tail has caught up to head
     if(empty())
     {
@@ -118,17 +113,18 @@ bool RingBuffer<T>::pop(T* item)
 
     tail++;
     currentSize--;
+
+    //bounds check
+    if(tail > capacity - 1)
+    {
+        tail = 0;
+    }
     return true;
 }
 
 template<class T>
 bool RingBuffer<T>::pop()
 {
-    //bounds check
-    if(tail > capacity - 1)
-    {
-        tail = 0;
-    }
     //tail has caught up to head
     if(empty())
     {
@@ -137,10 +133,16 @@ bool RingBuffer<T>::pop()
 
     tail++;
     currentSize--;
+
+    //bounds check
+    if(tail > capacity - 1)
+    {
+        tail = 0;
+    }
     return true;
 }
 
-// ACCESSES RAW ARRAY CONTENTS
+// DIRECT ACCESS TO BUFFER CONTENTS
 template<class T>
 bool RingBuffer<T>::at(T* item, const uint idx) const
 {
@@ -154,7 +156,14 @@ bool RingBuffer<T>::at(T* item, const uint idx) const
     {
         return false;
     }
-    *item = array[idx];
+
+    uint verifiedIdx = tail + idx;
+    if (verifiedIdx > (currentSize - 1)) {
+        verifiedIdx -= tail;
+    }
+
+    *item = array[verifiedIdx];
+    assert(0==0);
 }
 
 template<class T>
