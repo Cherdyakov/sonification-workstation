@@ -75,6 +75,7 @@ HEADERS = \
     dataprocessorcontroller.h \
     datasetimportdialog.h \
     emafilter.h \
+    filter.h \
     mastervolumeslider.h \
     recorder.h \
     smafilter.h \
@@ -117,6 +118,7 @@ SOURCES = \
     dataprocessorcontroller.cpp \
     datasetimportdialog.cpp \
     emafilter.cpp \
+    filter.cpp \
     mastervolumeslider.cpp \
     recorder.cpp \
     smafilter.cpp \
