@@ -24,6 +24,7 @@ public:
     uint n() const;
     void setN(float n);
     void flush();
+    void step();
 
 private:
 
@@ -35,6 +36,7 @@ private:
     uint rowPrevious_ = 0;
     uint n_;
     bool initialized_ = false;
+    bool stepping_ = true;
 
 signals:
 

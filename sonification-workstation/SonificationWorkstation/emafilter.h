@@ -1,23 +1,23 @@
 #ifndef EMAFILTER_H
 #define EMAFILTER_H
 
-#include <QObject>
+#include "filter.h"
 
 namespace sow {
 
-class EmaFilter : public QObject
+class EmaFilter : public filter
 {
     Q_OBJECT
 public:
     explicit EmaFilter(QObject *parent = nullptr);
-    float ema(float value);
-    void setN(float n);
-    void flush();
+    virtual void push(float value) override;
+    virtual float value() override;
+    virtual void setN(float n) override;
+    virtual void flush() override;
 
 private:
-    uint n_ = 2;
-    float valuePrevious_;
-    bool initialized_ = false;
+    float currentVal_;
+    float previousVal_;
 
 signals:
 

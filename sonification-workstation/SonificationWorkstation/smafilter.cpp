@@ -2,27 +2,28 @@
 
 namespace sow {
 
-SmaFilter::SmaFilter(QObject *parent) : QObject(parent)
+SmaFilter::SmaFilter(QObject *parent) : filter(parent)
 {
     buffer_ = new RingBuffer<float>(n_);
 }
 
-float SmaFilter::sma(float value)
+void SmaFilter::push(float value)
 {
     if (!initialized_)
     {
         buffer_->reset();
         buffer_->push(value);
         initialized_ = true;
-        return value;
     }
-
-    if (buffer_->full())
+    else if (buffer_->full())
     {
         buffer_->pop();
     }
     buffer_->push(value);
+}
 
+float SmaFilter::value()
+{
     float sum = 0.0f;
     for(uint i = 0; i < buffer_->size(); i++)
     {
@@ -34,11 +35,6 @@ float SmaFilter::sma(float value)
     float divisor = buffer_->size();
 
     return (sum / divisor);
-}
-
-uint SmaFilter::n() const
-{
-    return n_;
 }
 
 void SmaFilter::setN(float n)

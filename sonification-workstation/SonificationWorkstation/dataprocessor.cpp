@@ -10,18 +10,22 @@ DataProcessor::DataProcessor(QObject *parent, Dataset *dataset) : QObject(parent
 float DataProcessor::getValue(uint row, uint col)
 {
 
-    float value = dataset_->operator()(row, col);
-
+    float value = dataset_->operator()(row, col);;
     float returnValue;
+    if(stepping_) {
+        smaFilter_.push(value);
+        emaFilter_.push(value);
+    }
+
     switch (processingType_) {
     case ENUMS::PROCESSING_TYPE::NONE:
         returnValue = value;
         break;
     case ENUMS::PROCESSING_TYPE::SIMPLE:
-        returnValue = smaFilter_.sma(value);
+        returnValue = smaFilter_.value();
         break;
     case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
-        returnValue = emaFilter_.ema(value);
+        returnValue = emaFilter_.value();
         break;
     }
 
@@ -52,6 +56,11 @@ void DataProcessor::setN(float n)
 void DataProcessor::flush()
 {
     initialized_ = false;
+}
+
+void DataProcessor::step()
+{
+
 }
 
 //void DataProcessor::step()

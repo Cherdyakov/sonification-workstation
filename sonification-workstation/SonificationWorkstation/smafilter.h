@@ -1,26 +1,24 @@
 #ifndef SMAFILTER_H
 #define SMAFILTER_H
 
-#include <QObject>
+#include "filter.h"
 #include "ringbuffer.h"
 
 namespace sow {
 
-class SmaFilter : public QObject
+class SmaFilter : public filter
 {
     Q_OBJECT
 public:
     explicit SmaFilter(QObject *parent = nullptr);
-    float sma(float value);
-    uint n() const;
-    void setN(float n);
-    void flush();
+    virtual void push(float value) override;
+    virtual float value() override;
+    virtual void setN(float n) override;
+    virtual void flush() override;
 
 private:
 
     RingBuffer<float>* buffer_;
-    bool initialized_ = false;
-    uint n_ = 2;
 
 signals:
 
