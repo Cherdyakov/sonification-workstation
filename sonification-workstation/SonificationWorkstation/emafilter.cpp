@@ -32,11 +32,6 @@ float EmaFilter::value()
     return ema;
 }
 
-void EmaFilter::setN(float n)
-{
-    n_ = n;
-}
-
 void EmaFilter::flush()
 {
     initialized_ = false;

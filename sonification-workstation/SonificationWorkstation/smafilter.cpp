@@ -4,7 +4,7 @@ namespace sow {
 
 SmaFilter::SmaFilter(QObject *parent) : filter(parent)
 {
-    buffer_ = new RingBuffer<float>(n_);
+    buffer_ = new RingBuffer<float>(256);
 }
 
 void SmaFilter::push(float value)
@@ -37,11 +37,10 @@ float SmaFilter::value()
     return (sum / divisor);
 }
 
-void SmaFilter::setN(float n)
+void SmaFilter::setN(uint n)
 {
-    n_ = n;
-    delete buffer_;
-    buffer_ = new RingBuffer<float>(n_);
+    n >= 256 ? n_ = 256 : n_ = n;
+    buffer_->resize(n_);
 }
 
 void SmaFilter::flush()

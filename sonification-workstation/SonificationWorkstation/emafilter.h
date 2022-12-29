@@ -12,7 +12,6 @@ public:
     explicit EmaFilter(QObject *parent = nullptr);
     virtual void push(float value) override;
     virtual float value() override;
-    virtual void setN(float n) override;
     virtual void flush() override;
 
 private:

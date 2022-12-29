@@ -8,6 +8,11 @@ filter::filter(QObject *parent)
 
 }
 
+void filter::setN(uint n)
+{
+    n_ = n;
+}
+
 uint filter::n()
 {
     return n_;
