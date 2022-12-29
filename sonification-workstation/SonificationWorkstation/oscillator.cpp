@@ -49,7 +49,9 @@ Frame Oscillator::process()
     }
 
     //set frequency of generator
-    gen_.freq(freq);
+    if(!std::isnan(freq)){
+        gen_.freq(freq);
+    }
 
     //Generate frame.
     frame = gen_();
