@@ -36,7 +36,7 @@ private:
     uint rowPrevious_ = 0;
     uint n_;
     bool initialized_ = false;
-    bool stepping_ = true;
+    bool step_ = true;
 
 signals:
 

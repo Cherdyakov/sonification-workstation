@@ -12,9 +12,10 @@ float DataProcessor::getValue(uint row, uint col)
 
     float value = dataset_->operator()(row, col);;
     float returnValue;
-    if(stepping_) {
+    if(step_) {
         smaFilter_.push(value);
         emaFilter_.push(value);
+        step_ = false;
     }
 
     switch (processingType_) {
@@ -60,7 +61,7 @@ void DataProcessor::flush()
 
 void DataProcessor::step()
 {
-
+    step_ = true;
 }
 
 //void DataProcessor::step()

@@ -31,7 +31,10 @@ std::vector<float> DataProcessorController::getData(uint row, float mu)
 
 void DataProcessorController::step()
 {
-
+    for (uint i = 0; i < processors_.size(); i++)
+    {
+        processors_[i]->step();
+    }
 }
 
 void DataProcessorController::controlProcess()
