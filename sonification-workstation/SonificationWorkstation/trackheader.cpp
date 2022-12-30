@@ -47,6 +47,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     nuSpinBox->setAccessibleName("Smoothing constant. Sets damping factor for exponential average or window size for simple average.");
     nuSpinBox->setAccessibleDescription("");
     nuSpinBox->setObjectName("NuSpinBox");
+    nuSpinBox->setRange(1,256);
     nuLabel->setFixedSize(10,10);
 
     // Main stylesheet.
