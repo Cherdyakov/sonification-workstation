@@ -32,7 +32,7 @@ private:
     QAtomicInt capacity_;
     QAtomicInt head_;
     QAtomicInt tail_;
-    bool full_;
+    bool full_ = false;
     T* array_;
 
 };
