@@ -46,7 +46,8 @@ int main(int argc, char *argv[])
     constants::SR,  // sample rate (Hz)
     callback,       // user-defined callback
     &uData,         // user data
-    2              // output channels to open
+    2,              // output channels to open
+    0               // input channels to open
     );
     audioIO.start();
 
