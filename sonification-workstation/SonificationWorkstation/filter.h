@@ -10,11 +10,9 @@ class filter : public QObject
     Q_OBJECT
 public:
     explicit filter(QObject *parent = nullptr);
-    virtual void push(float value) = 0;
-    virtual float value() = 0;
-    virtual void flush() = 0;
+    virtual float value(float in) = 0;
+    virtual void reset();
     virtual void setN(uint n);
-    uint n();
 
 protected:
    bool initialized_ = false;

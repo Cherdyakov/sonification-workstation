@@ -10,13 +10,11 @@ class EmaFilter : public filter
     Q_OBJECT
 public:
     explicit EmaFilter(QObject *parent = nullptr);
-    virtual void push(float value) override;
-    virtual float value() override;
-    virtual void flush() override;
+    virtual float value(float in) override;
 
 private:
     float currentVal_;
-    float previousVal_;
+    float ema_;
 
 signals:
 

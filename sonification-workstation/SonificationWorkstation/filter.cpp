@@ -10,12 +10,15 @@ filter::filter(QObject *parent)
 
 void filter::setN(uint n)
 {
-    n_ = n;
+    if(n_ != n)
+    {
+        n_ = n;
+    }
 }
 
-uint filter::n()
+void filter::reset()
 {
-    return n_;
+    initialized_ = false;
 }
 
 } //namespace sow

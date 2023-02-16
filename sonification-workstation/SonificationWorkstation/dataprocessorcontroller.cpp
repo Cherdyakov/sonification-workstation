@@ -10,19 +10,22 @@ DataProcessorController::DataProcessorController(QObject *parent, Dataset* datas
 
 std::vector<float> DataProcessorController::getData(uint row, float mu)
 {
-    uint nextRow = row + 1 > dataset_->rows() ? 0 : row + 1;
-    for (uint i = 0; i < processors_.size(); i++)
-    {
-        rowData[i] = processors_[i]->getValue(row, i);
-        nextRowData[i] = nextValueProcessors_[i]->getValue(nextRow, i);
+    if(stepping_) {
+        uint nextRow = row + 1 > dataset_->rows() ? 0 : row + 1;
+        for (uint i = 0; i < processors_.size(); i++)
+        {
+            currentRowData_[i] = processors_[i]->getValue(row, i);
+            nextRowData_[i] = nextValueProcessors_[i]->getValue(nextRow, i);
+        }
+        stepping_ = false;
     }
 
-    std::vector<float> returnData =  rowData;
+    std::vector<float> returnData =  currentRowData_;
 
     for (uint i = 0; i < interpolateFlags_.size(); i++)
     {
         if(interpolateFlags_[i]) {
-            returnData[i] = interpolateValue(rowData[i], nextRowData[i], mu);
+            returnData[i] = interpolateValue(currentRowData_[i], nextRowData_[i], mu);
         }
     }
 
@@ -31,10 +34,7 @@ std::vector<float> DataProcessorController::getData(uint row, float mu)
 
 void DataProcessorController::step()
 {
-    for (uint i = 0; i < processors_.size(); i++)
-    {
-        processors_[i]->step();
-    }
+    stepping_ = true;
 }
 
 void DataProcessorController::controlProcess()
@@ -60,7 +60,7 @@ void DataProcessorController::processDataProcessorControllerCommand(DataProcesso
     cmd.track -= 1;
     switch (cmd.type) {
     case ENUMS::DATA_PROCESSOR_CMD::FLUSH:
-        flush();
+        reset();
         break;
     case ENUMS::DATA_PROCESSOR_CMD::PROC_TYPE:
         processors_[cmd.track]->setProcessingType(cmd.procType);
@@ -89,16 +89,16 @@ void DataProcessorController::resize(uint size)
         nextValueProcessors_.push_back(np);
     }
     interpolateFlags_.resize(size);
-    rowData.resize(size);
-    nextRowData.resize(size);
+    currentRowData_.resize(size);
+    nextRowData_.resize(size);
 }
 
-void DataProcessorController::flush()
+void DataProcessorController::reset()
 {
     for (uint i = 0; i < processors_.size(); i ++)
     {
-        processors_[i]->flush();
-        nextValueProcessors_[i]->flush();
+        processors_[i]->reset();
+        nextValueProcessors_[i]->reset();
     }
 }
 

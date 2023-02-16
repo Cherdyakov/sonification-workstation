@@ -10,23 +10,18 @@ DataProcessor::DataProcessor(QObject *parent, Dataset *dataset) : QObject(parent
 float DataProcessor::getValue(uint row, uint col)
 {
 
-    float value = dataset_->operator()(row, col);;
+    float dataVal = dataset_->operator()(row, col);;
     float returnValue;
-    if(step_) {
-        smaFilter_.push(value);
-        emaFilter_.push(value);
-        step_ = false;
-    }
 
     switch (processingType_) {
     case ENUMS::PROCESSING_TYPE::NONE:
-        returnValue = value;
+        returnValue = dataVal;
         break;
     case ENUMS::PROCESSING_TYPE::SIMPLE:
-        returnValue = smaFilter_.value();
+        returnValue = smaFilter_.value(dataVal);
         break;
     case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
-        returnValue = emaFilter_.value();
+        returnValue = emaFilter_.value(dataVal);
         break;
     }
 
@@ -51,22 +46,14 @@ void DataProcessor::setN(float n)
         n_ = n;
         smaFilter_.setN(n_);
         emaFilter_.setN(n_);
+        initialized_ = false;
     }
 }
 
-void DataProcessor::flush()
+void DataProcessor::reset()
 {
-    initialized_ = false;
+    smaFilter_.reset();
+    emaFilter_.reset();
 }
-
-void DataProcessor::step()
-{
-    step_ = true;
-}
-
-//void DataProcessor::step()
-//{
-
-//}
 
 } // Namespace sow.

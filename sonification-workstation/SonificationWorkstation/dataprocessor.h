@@ -23,8 +23,7 @@ public:
     void setProcessingType(ENUMS::PROCESSING_TYPE type);
     uint n() const;
     void setN(float n);
-    void flush();
-    void step();
+    void reset();
 
 private:
 

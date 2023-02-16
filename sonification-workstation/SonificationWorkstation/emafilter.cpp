@@ -1,4 +1,5 @@
 #include "emafilter.h"
+#include "qobject.h"
 
 namespace sow {
 
@@ -7,34 +8,18 @@ EmaFilter::EmaFilter(QObject *parent) : filter(parent)
 
 }
 
-void EmaFilter::push(float value)
+float EmaFilter::value(float in)
 {
     if (!initialized_)
     {
-        previousVal_ = currentVal_ = value;
+        ema_ = in;
         initialized_ = true;
     } else {
-        previousVal_ = currentVal_;
-        currentVal_ = value;
+        float alpha = 2.0f / (n_ + 1.0f);
+        ema_ = (( in - ema_)*alpha) + ema_;
     }
-}
 
-
-float EmaFilter::value()
-{
-    float alpha = 2.0f / (n_ + 1.0f);
-    float ema;
-
-    ema = (( currentVal_ - previousVal_)*alpha) + previousVal_;
-
-    previousVal_ = ema;
-
-    return ema;
-}
-
-void EmaFilter::flush()
-{
-    initialized_ = false;
+    return ema_;
 }
 
 }

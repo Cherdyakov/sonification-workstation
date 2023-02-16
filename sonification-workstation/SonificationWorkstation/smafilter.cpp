@@ -7,18 +7,18 @@ SmaFilter::SmaFilter(QObject *parent) : filter(parent)
     buffer_ = new RingBuffer<float>;
 }
 
-void SmaFilter::push(float value)
-{
-    if (!initialized_)
-    {
-        buffer_->reset();
-        buffer_->push(value);
-        initialized_ = true;
-    }
-    buffer_->push(value);
-}
+//void SmaFilter::push(float value)
+//{
+//    if (!initialized_)
+//    {
+//        buffer_->reset();
+//        buffer_->push(value);
+//        initialized_ = true;
+//    }
+//    buffer_->push(value);
+//}
 
-float SmaFilter::value()
+float SmaFilter::value(float in)
 {
     float sum = 0.0f;
     for(uint i = 0; i < buffer_->size(); i++)
@@ -38,11 +38,6 @@ float SmaFilter::value()
 void SmaFilter::setN(uint n)
 {
     buffer_->resize(n);
-    initialized_ = false;
-}
-
-void SmaFilter::flush()
-{
     initialized_ = false;
 }
 

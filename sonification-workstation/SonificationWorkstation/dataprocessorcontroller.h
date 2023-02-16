@@ -22,17 +22,17 @@ public:
 private:
 
     RingBuffer<DataProcessorControllerCommand> dataProcessorControllerCommandBuffer_;
-    std::vector<float> rowData;
-    std::vector<float> nextRowData;
+    std::vector<float> currentRowData_;
+    std::vector<float> nextRowData_;
     std::vector<DataProcessor*> processors_;
     std::vector<DataProcessor*> nextValueProcessors_;
     std::vector<bool> interpolateFlags_;
     Dataset* dataset_;
-    bool step_ = true;
+    bool stepping_ = true;
 
     void processDataProcessorControllerCommand(DataProcessorControllerCommand cmd);
     void resize(uint size);
-    void flush();
+    void reset();
     float interpolateValue(const float first, const float second, const float mu);
 
 signals:
