@@ -67,7 +67,6 @@ void RingBuffer<T>::resize(uint n)
 {
     if((n < 1) || (n > max_)) throw std::invalid_argument("Buffer size out of range");
     reset();
-    if (n > max_) n = max_;
     capacity_ = n;
 }
 
