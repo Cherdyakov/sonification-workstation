@@ -4,19 +4,8 @@ namespace sow {
 
 SmaFilter::SmaFilter(QObject *parent) : filter(parent)
 {
-    buffer_ = new RingBuffer<float>;
+    buffer_ = new RingBuffer<float>(n_);
 }
-
-//void SmaFilter::push(float value)
-//{
-//    if (!initialized_)
-//    {
-//        buffer_->reset();
-//        buffer_->push(value);
-//        initialized_ = true;
-//    }
-//    buffer_->push(value);
-//}
 
 float SmaFilter::value(float in)
 {
