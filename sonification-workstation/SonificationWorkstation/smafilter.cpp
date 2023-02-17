@@ -4,14 +4,14 @@ namespace sow {
 
 SmaFilter::SmaFilter(QObject *parent) : filter(parent)
 {
-    buffer_ = new RingBuffer<float>(n_);
+    buffer_ = new RingBuffer<float>();
 }
 
 float SmaFilter::value(float in)
 {
     if(!initialized_)
     {
-        buffer_->reset();
+        buffer_->resize(n_);
         initialized_ = true;
     }
 
@@ -34,8 +34,11 @@ float SmaFilter::value(float in)
 
 void SmaFilter::setN(uint n)
 {
-    buffer_->resize(n);
-    initialized_ = false;
+    if (n_ != n)
+    {
+        n_ = n;     
+        buffer_->resize(n_);
+    }
 }
 
 } // Namespace sow.
