@@ -5,6 +5,8 @@
 #include "enums.h"
 #include "dataset.h"
 #include "ringbuffer.h"
+#include "emafilter.h"
+#include "smafilter.h"
 
 namespace sow {
 
@@ -12,32 +14,28 @@ class DataProcessor : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataProcessor(QObject *parent = nullptr, Dataset* dataset = nullptr, uint size = 512);
+    explicit DataProcessor(QObject *parent = nullptr, Dataset* dataset = nullptr);
 
     // Get the next value
-    float getValue(uint row, uint col, float mu);
+    float getValue(uint row, uint col);
 
     ENUMS::PROCESSING_TYPE processingType();
     void setProcessingType(ENUMS::PROCESSING_TYPE type);
     uint n() const;
     void setN(float n);
-    void flush();
-    bool interpolate();
-    void setInterpolate(bool interpolate);
+    void reset();
 
 private:
 
     Dataset* dataset_;
-    RingBuffer<float>* buffer_;
+    EmaFilter emaFilter_;
+    SmaFilter smaFilter_;
+
     ENUMS::PROCESSING_TYPE processingType_ = ENUMS::PROCESSING_TYPE::NONE;
-    uint n_ = 2;
-    float emaPrevious_;
-    float valuePrevious_;
+    uint rowPrevious_ = 0;
+    uint n_;
     bool initialized_ = false;
-    bool interpolate_ = false;
-    float sma(unsigned int row, unsigned int col);
-    float ema(int row, int col);
-    float interpolate(float first, float second, float mu);
+    bool step_ = true;
 
 signals:
 

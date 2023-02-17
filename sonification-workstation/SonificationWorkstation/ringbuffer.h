@@ -2,6 +2,7 @@
 #define RingBuffer_H
 
 #include <QAtomicInt>
+#include <stdexcept>
 
 namespace sow
 {
@@ -10,163 +11,170 @@ template <class T>
 class RingBuffer
 {
 public:
-    RingBuffer(int cap = 512);
+    RingBuffer(int max = 512);
     ~RingBuffer();
 
     void reset();
-    void resize(const uint size);
-    uint size();
+    void resize(uint n);
+    size_t size();
 
-    bool push(T item);
+    void push(T item);
     bool pop(T* item);
     bool pop();
-    bool at(T* item, const uint idx) const;
+    bool at(T* item, const size_t idx) const;
 
     bool empty() const;
     bool full() const;
 
 private:
 
-    QAtomicInt maxCapacity;
-    QAtomicInt currentSize;
-    QAtomicInt capacity;
-    QAtomicInt head;
-    QAtomicInt tail;
-    T* array;
+    QAtomicInt max_;
+    QAtomicInt capacity_;
+    QAtomicInt head_;
+    QAtomicInt tail_;
+    bool full_ = false;
+    T* array_;
 
 };
 
 // Function implementations
 template <class T>
-RingBuffer<T>::RingBuffer(int cap)
+RingBuffer<T>::RingBuffer(int max)
 {
-    head = 0;
-    tail = 0;
-    currentSize = 0;
-    capacity = maxCapacity = cap;
-    array = new T[capacity];
+    if(max < 1) throw std::invalid_argument("Buffer max size cannot be less than 1");
+    head_ = 0;
+    tail_ = 0;
+    max_ = max;
+    capacity_ = max_;
+    array_ = new T[max_];
 }
 
 template<class T>
 RingBuffer<T>::~RingBuffer()
 {
-    delete[] array;
+    delete[] array_;
 }
 
 template<class T>
 void RingBuffer<T>::reset()
 {
-    head = 0;
-    tail = 0;
-    currentSize = 0;
+    head_ = tail_ = 0;
+    full_ = false;
 }
 
 template<class T>
-void RingBuffer<T>::resize(uint size)
+void RingBuffer<T>::resize(uint n)
 {
+    if((n < 1) || (n > max_)) throw std::invalid_argument("Buffer size out of range");
     reset();
-    if (size > maxCapacity)
-    {
-        size = maxCapacity;
-    }
-    capacity = size;
+    capacity_ = n;
 }
 
 template<class T>
-uint RingBuffer<T>::size()
+size_t RingBuffer<T>::size()
 {
-    return currentSize;
+    size_t size = capacity_;
+    if(!full_)
+    {
+        if(head_ >= tail_)
+        {
+            size = head_ - tail_;
+        }
+        else
+        {
+            size = capacity_ + head_ - tail_;
+        }
+    }
+    return size;
 }
 
 template<class T>
-bool RingBuffer<T>::push(T item)
+void RingBuffer<T>::push(T item)
 {
-    //values written all the way to end
-    if(head > capacity - 1)
+    array_[head_] = item;
+
+    if(full_)
     {
-        head = 0;
+        if(++tail_ > (capacity_ - 1))
+        {
+            tail_ -= capacity_;
+        }
     }
 
-    //buffer size at max
-    if(full())
+    if(++head_ > (capacity_ - 1))
     {
-        return false;
+        head_ -= capacity_;
     }
 
-    array[head] = item;
-
-    head++;
-    currentSize++;
-    return true;
+    full_ = head_ == tail_;
 }
 
 template<class T>
 bool RingBuffer<T>::pop(T* item)
 {
-    //bounds check
-    if(tail > capacity - 1)
-    {
-        tail = 0;
-    }
     //tail has caught up to head
     if(empty())
     {
         return false;
     }
 
-    *item = array[tail];
+    *item = array_[tail_];
+    full_ = false;
+    if(++tail_ >= capacity_)
+    {
+        tail_ -= capacity_;
+    }
 
-    tail++;
-    currentSize--;
     return true;
 }
 
 template<class T>
 bool RingBuffer<T>::pop()
 {
-    //bounds check
-    if(tail > capacity - 1)
-    {
-        tail = 0;
-    }
     //tail has caught up to head
     if(empty())
     {
         return false;
     }
 
-    tail++;
-    currentSize--;
+    //bounds check
+    if(++tail_ >= capacity_)
+    {
+        tail_ -= capacity_;
+    }
+
     return true;
 }
 
-// ACCESSES RAW ARRAY CONTENTS
+// DIRECT ACCESS TO BUFFER CONTENTS
 template<class T>
-bool RingBuffer<T>::at(T* item, const uint idx) const
+bool RingBuffer<T>::at(T* item, const size_t idx) const
 {
-    // invalid index
-    if(idx > currentSize)
-    {
-        return false;
-    }
     // tail has caught up to head
     if(empty())
     {
         return false;
     }
-    *item = array[idx];
+
+    size_t verifiedIdx = tail_ + idx;
+    if (verifiedIdx > (capacity_ - 1)) {
+        verifiedIdx -= capacity_;
+    }
+
+    *item = array_[verifiedIdx];
+    return true;
 }
 
 template<class T>
 bool RingBuffer<T>::empty() const
 {
-    return(currentSize == 0);
+    return(!full_ && (head_ == tail_));
 }
 
 template<class T>
 bool RingBuffer<T>::full() const
 {
-    return(currentSize == capacity);
+    return full_;
 }
 
 } //namespace sow

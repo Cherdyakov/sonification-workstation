@@ -42,12 +42,12 @@ int main(int argc, char *argv[])
     gam::Sync::master().spu(constants::SR);
 
     AudioIO audioIO(
-    128,            // block size
+    512,            // block size
     constants::SR,  // sample rate (Hz)
     callback,       // user-defined callback
     &uData,         // user data
-    2,              // input channels to open
-    2               // output
+    2,              // output channels to open
+    0               // input channels to open
     );
     audioIO.start();
 

@@ -69,7 +69,7 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
             this, &TrackHeader::onInterpolateClicked);
 
     // Initialize
-    nuSpinBox->setMaximum(2048);
+    nuSpinBox->setRange(1,256);
     nuSpinBox->setValue(2);
 
 }

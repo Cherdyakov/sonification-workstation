@@ -26,7 +26,6 @@ Transport::Transport(QObject *parent, Dataset *dataset, DataProcessorController 
     loop_ = false;
     loopBegin_ = 0.0f;
     loopEnd_ = 0.0f;
-    dataStale_ = false;
     frameRate_ = constants::SR;
     currentIndex_ = 0;
     mu_ = 0.0f;
@@ -235,7 +234,6 @@ Frame Transport::process()
         {
             currentIndex_ = 0;
         }
-        dataStale_ = true;
         stepping = true;
     }
 
@@ -245,19 +243,12 @@ Frame Transport::process()
         {
             currentIndex_ = (int)loopBegin_;
             mu_ = (loopBegin_ - currentIndex_);
-            dataStale_ = true;
         }
         else if(((double)currentIndex_ + mu_) < loopBegin_)
         {
             currentIndex_ = (int)loopBegin_;
             mu_ = (loopBegin_ - currentIndex_);
-            dataStale_ = true;
         }
-    }
-
-    if(dataProcessorController_->interpolate())
-    {
-        dataStale_ = true;
     }
 
     refreshCurrentData();
@@ -265,6 +256,7 @@ Frame Transport::process()
     if(stepping)
     {
         step();
+        dataProcessorController_->step();
     }
 
     for (uint i = 0; i < children_.size(); ++i)
@@ -398,7 +390,6 @@ void Transport::processImportDataset()
         currentIndex_ = 0;
         mu_ = 0.0f;
         calculateReturnPosition();
-        dataStale_ = true;
         emit datasetImportReady();
     }
 }
@@ -409,7 +400,6 @@ void Transport::processSetPlaybackPosition(float pos)
     int newIdx = static_cast<int>(pos);
     if(currentIndex_ != newIdx)
     {
-        dataStale_ = true;
         currentIndex_ = newIdx;
     }
     mu_ = (pos - currentIndex_);
@@ -417,9 +407,8 @@ void Transport::processSetPlaybackPosition(float pos)
 
 void Transport::refreshCurrentData()
 {
-    if(!dataStale_ || !dataset_->hasData() || importingDataset_ ) return;
+    if(!dataset_->hasData() || importingDataset_ ) return;
     currentData_ = dataProcessorController_->getData(currentIndex_, mu_);
-    dataStale_ = false;
 }
 
 void Transport::calculateReturnPosition()
