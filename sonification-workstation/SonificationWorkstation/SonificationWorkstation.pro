@@ -151,7 +151,7 @@ DEPENDPATH += $$PWD/../Gamma/external/lib_osx
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -llibsndfile-1
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -llibsndfile-1
 else:unix:!macx: LIBS += -llibsndfile-1
-else:macx: LIBS += -L$$PWD/../Gamma/external/lib_osx/ -llibsndfile-1
+else:macx: LIBS += -L$$PWD/../Gamma/external/lib_osx/ -lsndfile.1
 
 DISTFILES += \
     sow.ico
