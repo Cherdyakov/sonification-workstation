@@ -16,6 +16,9 @@ ui_*.h
 *.qmlc
 *.jsc
 Makefile*
+
+# Output files
+build/
 *build-*
 
 # Qt unit tests
