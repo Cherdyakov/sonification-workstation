@@ -34,7 +34,7 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
 
     // set background color
     QPalette* pal = new QPalette;
-    pal->setColor(QPalette::Background, QColor("light grey"));
+    pal->setColor(QPalette::Window, QColor("light grey"));
     this->setAutoFillBackground(true);
     this->setPalette(*pal);
 }
