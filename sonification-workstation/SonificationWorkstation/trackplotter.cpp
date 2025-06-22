@@ -106,7 +106,7 @@ void TrackPlotter::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
 
 void TrackPlotter::wheelEvent(QWheelEvent *e)
 {
-    QPoint localPt = mapFromGlobal(e->globalPosition());
+    QPoint localPt = mapFromGlobal(e->globalPosition()).toPoint();
 
     QWheelEvent newEvent(localPt,
                          e->globalPosition(),
