@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
 
     // Launch the GUI
     main_window.show();
+    main_window.setGeometry(a.primaryScreen()->availableGeometry());
 
     // Place cleanup code after a.exec, before returning exit code
     const int ret = a.exec();
