@@ -33,7 +33,7 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
 
-        onPressed: {
+        onPressed: (mouse)=> {
             var item = Code.startDrag(mouse)
             itemCreated(item)
         }
