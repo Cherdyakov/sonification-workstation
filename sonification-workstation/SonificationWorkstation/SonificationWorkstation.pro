@@ -139,7 +139,7 @@ DEPENDPATH += $$PWD/../Gamma
 # PortAudio (required for Gamma)
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -lportaudio_x64
-else:unix:!macx: LIBS += -lportaudio
+else:unix:!macx: LIBS += -L$$PWD/../Gamma/external/lib_linux/ -lportaudio
 else:macx: LIBS += -L$$PWD/../Gamma/external/lib_osx/ -lportaudio.2
 
 INCLUDEPATH += $$PWD/../Gamma/external/lib_win64
@@ -150,7 +150,7 @@ DEPENDPATH += $$PWD/../Gamma/external/lib_osx
 # LibSndFile (required for Gamma)
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -llibsndfile-1
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Gamma/external/lib_win64/ -llibsndfile-1
-else:unix:!macx: LIBS += -llibsndfile-1
+else:unix:!macx: LIBS += -L$$PWD/../Gamma/external/lib_linux/ -lsndfile
 else:macx: LIBS += -L$$PWD/../Gamma/external/lib_osx/ -lsndfile.1
 
 DISTFILES += \
