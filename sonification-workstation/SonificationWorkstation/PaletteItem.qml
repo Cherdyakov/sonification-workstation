@@ -33,11 +33,15 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
 
-        onPressed: (mouse)=> {
+        onPressed: (mouse) => {
             var item = Code.startDrag(mouse)
             itemCreated(item)
         }
-        onPositionChanged: Code.continueDrag(mouse)
-        onReleased: Code.endDrag(mouse)
+        onPositionChanged: (mouse) => {
+            Code.continueDrag(mouse)
+        }
+        onReleased: (mouse) => {
+            Code.endDrag(mouse)
+        }
     }
 }
