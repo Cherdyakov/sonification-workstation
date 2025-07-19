@@ -64,7 +64,7 @@ void ThemeManager::setQmlTheme(QString style)
         QString searchString = key + ":";
         top = style.indexOf(searchString) + searchString.length();
         tail = style.indexOf(";", top);
-        QStringView value = style.slice(top, tail - top);
+        QStringView value = style.sliced(top, tail - top);
         themeMap_.insert(key, value.toString());
     }
 
