@@ -14,68 +14,56 @@ Rectangle {
     property int spawnX: 0
     property  int spawnY: 0
 
-    signal itemCreated(var item)
-
     Column {
 
         PaletteItem {
             label: "OSC"
             componentFile: "OSC.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             label: "NSE"
             componentFile: "NSE.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             label: "AUD"
             componentFile: "AUD.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             label: "AM"
             componentFile: "AM.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             label: "FM"
             componentFile: "FM.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             label: "VOL"
             componentFile: "VOL.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             label: "PAN"
             componentFile: "PAN.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             label: "ENV"
             componentFile: "ENV.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             label: "EQ"
             componentFile: "EQ.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
         PaletteItem {
             label: "OUT"
             componentFile: "OUT.qml"
-            onItemCreated: root.itemCreated(item)
         }
 
     }

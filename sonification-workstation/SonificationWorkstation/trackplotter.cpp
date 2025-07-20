@@ -23,9 +23,7 @@ TrackPlotter::TrackPlotter(QWidget *parent) : QCustomPlot (parent)
 
 void TrackPlotter::plot(std::vector<float> data)
 {
-    std::vector<double> doubleData(data.begin(), data.end());
-    QVector<double> qData = QVector<double>::fromStdVector(doubleData);
-    plot(qData);
+    plot(QVector<double>(data.begin(), data.end()));
 }
 
 void TrackPlotter::plot(QVector<double> data)
@@ -108,10 +106,10 @@ void TrackPlotter::rangeBounder(QCPAxis *axis, QCPRange range, QCPRange bounds)
 
 void TrackPlotter::wheelEvent(QWheelEvent *e)
 {
-    QPoint localPt = mapFromGlobal(e->globalPos());
+    QPoint localPt = mapFromGlobal(e->globalPosition()).toPoint();
 
     QWheelEvent newEvent(localPt,
-                         e->globalPos(),
+                         e->globalPosition(),
                          e->pixelDelta(),
                          e->angleDelta(),
                          e->buttons(),

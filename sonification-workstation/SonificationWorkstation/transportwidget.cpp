@@ -97,7 +97,6 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     centralLayout->addSpacing(40);
     centralLayout->addLayout(rightLayout);
     centralLayout->setAlignment(Qt::AlignHCenter);
-    centralLayout->setMargin(0);
     centralLayout->setContentsMargins(8,0,8,0);
     centralLayout->setSpacing(8);
     this->setLayout(centralLayout);
@@ -135,7 +134,7 @@ void TransportWidget::setSpeed(float speed)
 void TransportWidget::paintEvent(QPaintEvent *event)
 {
     QStyleOption opt;
-    opt.init(this);
+    opt.initFrom(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }

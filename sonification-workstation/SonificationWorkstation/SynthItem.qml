@@ -129,7 +129,7 @@ Item {
                 mouseArea.Drag.drop()
             }
 
-            onClicked: {
+            onClicked: (mouse) => {
                 // Left clicked.
                 if(mouse.button & Qt.LeftButton) {
                     root.forceActiveFocus()
