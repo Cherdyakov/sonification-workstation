@@ -193,24 +193,6 @@ void MainWindow::createMenus()
     connect(quitAct, &QAction::triggered,
             this, &MainWindow::onQuit);
 
-    ///
-    /// Actions for setting Themes.
-    ///
-    // Set default theme.
-    QAction *defaultThemeAct = new QAction(tr("Default"), this);
-    connect(defaultThemeAct, &QAction::triggered,
-            this, &MainWindow::onDefaultThemeSet);
-
-    // Set high-contrast (Kelly-color) theme.
-    QAction *kellyThemeAct = new QAction(tr("High Contrast"), this);
-    connect(kellyThemeAct, &QAction::triggered,
-            this, &MainWindow::onContrastThemeSet);
-
-    // Set simple theme.
-    QAction *simpleThemeAct = new QAction(tr("Simple"), this);
-    connect(simpleThemeAct, &QAction::triggered,
-            this, &MainWindow::onSimpleThemeSet);
-
     // Create and populate File menu.
     QMenu *fileMenu = menuBar()->addMenu(tr("File"));
     fileMenu->addAction(openSessionAct);
@@ -219,13 +201,6 @@ void MainWindow::createMenus()
     fileMenu->addAction(importDatasetFileAct);
     fileMenu->addAction(aboutAct);
     fileMenu->addAction(quitAct);
-
-    // Create and populate Edit menu.
-    QMenu *editMenu = menuBar()->addMenu(tr("Edit"));
-    QMenu *themeMenu = editMenu->addMenu(tr("Set Theme"));
-    themeMenu->addAction(defaultThemeAct);
-    themeMenu->addAction(kellyThemeAct);
-    themeMenu->addAction(simpleThemeAct);
 
     // Global keyboard shortcuts.
     // Play/Pause shortcut
@@ -424,21 +399,6 @@ void MainWindow::onImportDatasetReady()
         }
     }
     transport_->onImportDataset(false);
-}
-
-void MainWindow::onDefaultThemeSet()
-{
-    setTheme("default");
-}
-
-void MainWindow::onContrastThemeSet()
-{
-    setTheme("kelly");
-}
-
-void MainWindow::onSimpleThemeSet()
-{
-    setTheme("simple");
 }
 
 void MainWindow::onAbout()
