@@ -66,15 +66,13 @@ DatasetImportDialog::DatasetImportDialog(QString path)
     }
 
     // Main layout for this dialog box.
-    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    QVBoxLayout* mainLayout = new QVBoxLayout;
     table_->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     // Child layouts.
-    QHBoxLayout* settingsLayout = new QHBoxLayout(this);
+    QHBoxLayout* settingsLayout = new QHBoxLayout;
     orientationLabel_->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     settingsLayout->addWidget(orientationLabel_);
     settingsLayout->addWidget(orientationComboBox_);
-//    settingsLayout->addWidget(headerLabel_);
-//    settingsLayout->addWidget(headerComboBox_);
     settingsLayout->addStretch();
 
     // Add widgets to main layout.

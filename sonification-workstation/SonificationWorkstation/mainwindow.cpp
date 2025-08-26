@@ -8,16 +8,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // Core components.
     dataset_ = new Dataset(this);                                                       // Holds data loaded from file
     dataProcessorController_ = new DataProcessorController(this, dataset_);
-    transport_ = new Transport(this, dataset_, dataProcessorController_);                                         // Controls playback and synth commands
+    transport_ = new Transport(this, dataset_, dataProcessorController_);               // Controls playback and synth commands
 
     // Construct the application window.
     QWidget *centralWidget = new QWidget;                                               // Application top-level widget
-    QHBoxLayout* centralLayout = new QHBoxLayout(this);                                 // Application top-level layout
+    QHBoxLayout* centralLayout = new QHBoxLayout;                                       // Application top-level layout
+    QVBoxLayout* layoutLeft = new QVBoxLayout;                                          // Left side of spliitter layout
+    QVBoxLayout* layoutRight = new QVBoxLayout;                                         // Right side of splitter layout
     QSplitter *splitter = new QSplitter(this);                                          // Application window divided in two
     QWidget *leftSide = new QWidget(this);                                              // Container for left side of splitter
     QWidget *rightSide = new QWidget(this);                                             // Container for right side of splitter
-    QVBoxLayout* layoutLeft = new QVBoxLayout(this);                                    // Left side of spliitter layout
-    QVBoxLayout* layoutRight = new QVBoxLayout(this);                                   // Right side of splitter layout
     transportWidget_ = new TransportWidget(this);                                       // Transport controls (Play/Pause etc)
     playhead_ = new PlayHead(this);                                                     // Playback cursor
     quickView_ = new QQuickView;                                                        // Renders Qt Quick patcher interface
