@@ -25,7 +25,6 @@ TrackHeader::TrackHeader(QWidget *parent) : QWidget(parent)
     interpolateButton_->setCheckable(true);
     interpolateButton_->setChecked(false);
     interpolateButton_->setObjectName("InterpolateButton");
-    interpolateButton_->setStyleSheet("border-color:#9E9E9E");
 
     QHBoxLayout *nuLayout = new QHBoxLayout;
     nuLayout->addWidget(nuLabel);
@@ -79,15 +78,6 @@ void TrackHeader::setNumber(uint num)
     trackNumber_ = num;
 }
 
-void TrackHeader::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
-    QStyleOption opt;
-    opt.initFrom(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-}
-
 void TrackHeader::onProcessingTypeChanged(int idx)
 {
     ENUMS::PROCESSING_TYPE type;
@@ -102,8 +92,6 @@ void TrackHeader::onProcessingTypeChanged(int idx)
         type = ENUMS::PROCESSING_TYPE::EXPONENTIAL;
         break;
     }
-//    procComboBox_->setStyleSheet(idx == 0 ? "background-color:#9E9E9E" : "background-color:#FFFFFF" );
-
     emit processingTypeChanged(trackNumber_, type);
 }
 

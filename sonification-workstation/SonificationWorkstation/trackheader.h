@@ -31,11 +31,6 @@ private:
     QComboBox *procComboBox_;
     QSpinBox *nuSpinBox;
 
-
-protected:
-
-    void paintEvent(QPaintEvent* event) override;
-
 signals:
     void processingTypeChanged(uint track, ENUMS::PROCESSING_TYPE type);
     void nValChanged(uint track, uint n);

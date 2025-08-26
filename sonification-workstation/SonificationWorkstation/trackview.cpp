@@ -33,10 +33,10 @@ TrackView::TrackView(QWidget *parent) : QWidget(parent)
     this->setLayout(centralLayout);
 
     // set background color
-    QPalette* pal = new QPalette;
-    pal->setColor(QPalette::Window, QColor("light grey"));
-    this->setAutoFillBackground(true);
-    this->setPalette(*pal);
+    // QPalette* pal = new QPalette;
+    // pal->setColor(QPalette::Window, QColor("light grey"));
+    // this->setAutoFillBackground(true);
+    // this->setPalette(*pal);
 }
 
 void TrackView::setPlayHead(PlayHead *playHead)
