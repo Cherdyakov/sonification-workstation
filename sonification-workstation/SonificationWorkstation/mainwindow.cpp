@@ -5,15 +5,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // Set the title and size of the application window.
     this->setWindowTitle("Sonification Workstation");
 
-    // Set application theme (stylesheet).
-    themeManager_ = new ThemeManager(this);
-    QSettings settings;
-    if(!settings.contains("theme"))
-    {
-        settings.setValue("theme", "default");
-    }
-    setTheme(settings.value("theme").toString());
-
     // Core components.
     dataset_ = new Dataset(this);                                                       // Holds data loaded from file
     dataProcessorController_ = new DataProcessorController(this, dataset_);
@@ -33,6 +24,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QWidget *quickViewContainer = QWidget::createWindowContainer(quickView_, this);     // Caontainer widget for QQuickView
     TrackView* trackView = new TrackView(this);                                         // Contains Tracks and PlayHead
     QScrollArea* scrollArea = new QScrollArea(this);                                    // Scroll area for the TrackView
+
+    // Set application theme (stylesheet).
+    themeManager_ = new ThemeManager(quickView_);
+    QSettings settings;
+    if(!settings.contains("theme"))
+    {
+        settings.setValue("theme", "default");
+    }
+    setTheme(settings.value("theme").toString());
 
     // prevent ambiguous "grouping" message sent to screen reader.
     scrollArea->setFocusPolicy(Qt::NoFocus);

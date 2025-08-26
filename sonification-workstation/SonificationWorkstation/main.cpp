@@ -25,9 +25,9 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Sonification Workstation");
 
     QApplication a(argc, argv);
+    qmlRegisterType<ThemeManager>("SoW", 1, 0, "QtThemeManager");
     qmlRegisterType<SynthItem>("SoW", 1, 0, "QtSynthItem");
     qmlRegisterType<Oscillator>("SoW", 1, 0, "QtOscillator");
-    qmlRegisterType<ThemeManager>("SoW", 1, 0, "QtThemeManager");
     qmlRegisterType<Transport>("SoW", 1, 0, "QtTransport");
     qmlRegisterType<ParameterFloatInterface>("SoW", 1, 0, "SowParameter");
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
