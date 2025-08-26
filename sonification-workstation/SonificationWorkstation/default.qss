@@ -156,16 +156,24 @@ color: #424242;
 
 SynthItemColors
 {
-OSC: #58b5e1;
-AM: #52ef99;
-FM: #5e904e;
-AUD: #45817f;
-PAN: #a2676f;
-ENV: #f2a966;
-VOL: #de4f86;
-NSE: #78b4c6;
-EQ: #f3c011;
-OUT: #444444;
+OSC: #26619c;
+NSE: #26619c;
+AUD: #26619c;
+AM: #33a1c9;
+FM: #33a1c9;
+PAN: #005f6a;
+ENV: #005f6a;
+VOL: #005f6a;
+EQ: #005f6a;
+OUT: #8db600;
 textColor: #F2F3F4;
 backgroundColor: #BDBDBD;
 }
+
+/*
+#26619c	(38,97,156)
+#33a1c9	(51,161,201)
+#8db600	(141,182,0)
+#005f6a	(0,95,106)
+#90e4c1
+*/
