@@ -15,7 +15,7 @@ public:
     ~RingBuffer();
 
     void reset();
-    void resize(uint n);
+    void resize(int n);
     size_t size();
 
     void push(T item);
@@ -63,7 +63,7 @@ void RingBuffer<T>::reset()
 }
 
 template<class T>
-void RingBuffer<T>::resize(uint n)
+void RingBuffer<T>::resize(int n)
 {
     if((n < 1) || (n > max_)) throw std::invalid_argument("Buffer size out of range");
     reset();
