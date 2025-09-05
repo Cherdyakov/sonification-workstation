@@ -133,6 +133,7 @@ void TransportWidget::setSpeed(float speed)
 
 void TransportWidget::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
     QStyleOption opt;
     opt.initFrom(this);
     QPainter p(this);
