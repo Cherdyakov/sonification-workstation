@@ -12,7 +12,7 @@ class SmaFilter : public filter
 public:
     explicit SmaFilter(QObject *parent = nullptr);
     virtual float value(float in) override;
-    virtual void setN(uint n) override;
+    virtual void setN(int n) override;
 
 private:
 

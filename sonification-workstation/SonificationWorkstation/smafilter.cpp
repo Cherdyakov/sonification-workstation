@@ -32,7 +32,7 @@ float SmaFilter::value(float in)
     return (sum / divisor);
 }
 
-void SmaFilter::setN(uint n)
+void SmaFilter::setN(int n)
 {
     if (n_ != n)
     {
