@@ -82,14 +82,14 @@ void TrackHeader::onProcessingTypeChanged(int idx)
 {
     ENUMS::PROCESSING_TYPE type;
     switch (idx) {
-    case 0:
-        type = ENUMS::PROCESSING_TYPE::NONE;
-        break;
-    case 1:
+     case 1:
         type = ENUMS::PROCESSING_TYPE::SIMPLE;
         break;
     case 2:
         type = ENUMS::PROCESSING_TYPE::EXPONENTIAL;
+        break;
+    default:
+        type = ENUMS::PROCESSING_TYPE::NONE;
         break;
     }
     emit processingTypeChanged(trackNumber_, type);
