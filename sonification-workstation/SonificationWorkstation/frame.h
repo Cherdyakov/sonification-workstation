@@ -12,6 +12,11 @@ struct Frame {
         right = r;
     }
 
+    Frame(const Frame& in) {
+        this->left = in.left;
+        this->right = in.right;
+    }
+
     Frame& operator=(const Frame& rhs) {
         this->left = rhs.left;
         this->right = rhs.right;
