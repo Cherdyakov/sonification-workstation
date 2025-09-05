@@ -1,11 +1,9 @@
 #include <QApplication>
 #include <QQmlContext>
 #include "mainwindow.h"
-#include "portaudio.h"
 #include "callback.h"
 #include "transport.h"
 #include "thememanager.h"
-#include "filereader.h"
 #include "Gamma/Sync.h"
 #include "Gamma/AudioIO.h"
 #include "constants.h"
@@ -16,9 +14,6 @@ int main(int argc, char *argv[])
 {
     // Import Qt Widgets accessiblity plugin.
 //    Q_IMPORT_PLUGIN(qtaccessiblewidgets)
-
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QCoreApplication::setOrganizationName("Sonification Workstation");
     QCoreApplication::setOrganizationDomain("sonificationworkstation.org");
