@@ -3,11 +3,9 @@
 
 #include <algorithm>
 #include <QDebug>
-#include <tuple>
 #include "external/exprtk/exprtk.hpp"
 #include "utility.h"
 #include "dataset.h"
-#include "commands.h"
 
 namespace sow {
 
@@ -34,6 +32,7 @@ public:
     void setData(const Dataset *dataset, const std::vector<T> *currentData);
     bool compileExpression(const std::string expressionStr);
     bool testCompileExpression(const std::string expressionStr);
+    void calculateMinMax();
     T value();
     T scaledValue(T outLow, T outHigh, T exp);
 
@@ -53,7 +52,6 @@ private:
 
     std::vector<MapVariable<T>> createVariables(const std::string expression);
     T calculateValue();
-    void calculateMinMax();
 
 };
 
@@ -120,7 +118,9 @@ void MapEvaluator<T>::calculateMinMax()
     minMaxSymbolTable.add_constants();
     minMaxExpression.register_symbol_table(minMaxSymbolTable);
     // Attempt compilation and return success.
-    bool success = minMaxParser.compile(currentExpressionString_, minMaxExpression);
+    if (!minMaxParser.compile(currentExpressionString_, minMaxExpression)) {
+        throw std::invalid_argument("Unable to calculate Min/Max with given expression.");
+    }
 
     expressionMin_ = expressionMax_ = minMaxExpression.value();
 
@@ -181,13 +181,7 @@ bool MapEvaluator<T>::compileExpression(const std::string expressionStr) {
     symbolTable_->add_constants();
     expression_->register_symbol_table(*symbolTable_);
     // Attempt compilation and return success.
-    bool success = parser_.compile(currentExpressionString_, *expression_);
-
-    if(success) {
-        calculateMinMax();
-    }
-
-    return success;
+    return parser_.compile(currentExpressionString_, *expression_);
 }
 
 template<class T>

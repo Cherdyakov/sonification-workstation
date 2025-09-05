@@ -5,13 +5,13 @@ namespace sow {
 TrackView::TrackView(QWidget *parent) : QWidget(parent)
 {
 
-    QHBoxLayout* centralLayout = new QHBoxLayout(this); // Top-level layout for this widget
-    QWidget* plotsContainer = new QWidget(this);        // Widget for TrackPlotters layout
-    QWidget* tracksContainer = new QWidget(this);       // Widget for Tracks layout (headers)
-    QWidget* stackedContainer = new QWidget(this);      // Widget for StackedLayouts of TrackPlotters and PlayHead
-    stackedLayout_ = new QStackedLayout(this);          // Layout with TrackPlotters behind PlayHead
-    plotsLayout_ = new QVBoxLayout(this);               // Layout for the TrackPlotters
-    tracksLayout_ = new QVBoxLayout(this);              // Layout for the Tracks (headers)
+    QHBoxLayout* centralLayout = new QHBoxLayout;   // Top-level layout for this widget
+    stackedLayout_ = new QStackedLayout;            // Layout with TrackPlotters behind PlayHead
+    plotsLayout_ = new QVBoxLayout;                 // Layout for the TrackPlotters
+    tracksLayout_ = new QVBoxLayout;                // Layout for the Tracks (headers)
+    QWidget* plotsContainer = new QWidget(this);    // Widget for TrackPlotters layout
+    QWidget* tracksContainer = new QWidget(this);   // Widget for Tracks layout (headers)
+    QWidget* stackedContainer = new QWidget(this);  // Widget for StackedLayouts of TrackPlotters and PlayHead
 
     stackedLayout_->setStackingMode(QStackedLayout::StackingMode::StackAll);
 
@@ -46,7 +46,7 @@ void TrackView::setPlayHead(PlayHead *playHead)
             playHead_, &PlayHead::onXRangeChanged);
     // Create a layout and container for the PlayHead
     QWidget* container = new QWidget(this);
-    playheadLayout_ = new QHBoxLayout(this);
+    playheadLayout_ = new QHBoxLayout;
     // Margin to the left ensures Playheead lines up
     // with the start of the track plot, not the header
     playheadLayout_->setContentsMargins(0, 0, 0, 0);
@@ -94,7 +94,7 @@ void TrackView::wheelEvent(QWheelEvent *e)
 
 void TrackView::plot(sow::Dataset *dataset)
 {
-    for(int i = 0; i < dataset->cols(); i++)
+    for(uint i = 0; i < dataset->cols(); i++)
     {
         // add tracks
         Track* track = addTrack();

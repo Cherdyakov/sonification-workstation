@@ -70,7 +70,9 @@ void ParameterFloat::processCommand(const ParameterCommand cmd)
 
 void ParameterFloat::processSetMap(std::string expression)
 {
-    mapEvaluator_.compileExpression(expression);
+    if(mapEvaluator_.compileExpression(expression)) {
+        mapEvaluator_.calculateMinMax();
+    }
 }
 
 } // namespace sow

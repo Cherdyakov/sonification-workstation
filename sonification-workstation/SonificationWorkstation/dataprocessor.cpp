@@ -14,14 +14,14 @@ float DataProcessor::getValue(uint row, uint col)
     float returnValue;
 
     switch (processingType_) {
-    case ENUMS::PROCESSING_TYPE::NONE:
-        returnValue = dataVal;
-        break;
     case ENUMS::PROCESSING_TYPE::SIMPLE:
         returnValue = smaFilter_.value(dataVal);
         break;
     case ENUMS::PROCESSING_TYPE::EXPONENTIAL:
         returnValue = emaFilter_.value(dataVal);
+        break;
+    default:
+        returnValue = dataVal;
         break;
     }
 

@@ -41,7 +41,7 @@ void TrackPlotter::plot(QVector<double> data)
 
     QPen pen;
     QColor color;
-    color.setNamedColor("#0000FF");
+    QColor(0x0000FF);
     pen.setColor(color);
 
     // set pen width

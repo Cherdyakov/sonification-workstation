@@ -16,7 +16,7 @@ ColumnLayout {
     // Force map re-evaluation on new Dataset.
     Connections {
         target: transport
-        function ondatasetImportReady() {
+        function onDatasetImportReady() {
             var tempMap = map
             map = ""
             map = tempMap

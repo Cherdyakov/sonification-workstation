@@ -12,11 +12,11 @@ public:
     explicit filter(QObject *parent = nullptr);
     virtual float value(float in) = 0;
     virtual void reset();
-    virtual void setN(uint n);
+    virtual void setN(int n);
 
 protected:
    bool initialized_ = false;
-   uint n_ = 2;
+   int n_ = 2;
 
 signals:
 

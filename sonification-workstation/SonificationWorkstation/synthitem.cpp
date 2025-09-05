@@ -96,16 +96,16 @@ Frame SynthItem::process()
 // Every new data value
 void SynthItem::step()
 {
-    foreach (SynthItem* child, children_) {
-        child->step();
+    for (size_t i = 0; i < children_.size(); i++) {
+        children_[i]->step();
     }
 }
 
 // Process any buffered commands
 void SynthItem::controlProcess()
 {
-    foreach (Parameter* parameter, parameters_) {
-        parameter->controlProcess();
+    for (size_t i = 0; i < parameters_.size(); i++){
+        parameters_[i]->controlProcess();
     }
     ItemCommand currentCommand;
     while(commandBuffer_.pop(&currentCommand)) {
@@ -165,11 +165,11 @@ void SynthItem::processDisconnect(SynthItem *other) {
 // Disconnect all child and parent SynthItems
 void SynthItem::processDisconnectAll()
 {
-    foreach (SynthItem* child, children_) {
-        child->disconnect(this);
+    for (size_t i = 0; i < children_.size(); i++) {
+        children_[i]->disconnect(this);
     }
-    foreach (SynthItem* parent, parents_) {
-        parent->disconnect(this);
+    for (size_t i = 0; i < parents_.size(); i++) {
+        parents_[i]->disconnect(this);
     }
     children_.clear();
     parents_.clear();

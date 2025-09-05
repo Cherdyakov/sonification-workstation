@@ -169,7 +169,7 @@ Item {
         }
     } // rect
 
-    Keys.onPressed: {
+    Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Backspace || event.key === Qt.Key_Delete) {
             deleteThis()
             event.accepted = true

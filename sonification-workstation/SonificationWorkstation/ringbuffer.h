@@ -15,7 +15,7 @@ public:
     ~RingBuffer();
 
     void reset();
-    void resize(uint n);
+    void resize(size_t n);
     size_t size();
 
     void push(T item);
@@ -28,10 +28,10 @@ public:
 
 private:
 
-    QAtomicInt max_;
-    QAtomicInt capacity_;
-    QAtomicInt head_;
-    QAtomicInt tail_;
+    QAtomicInteger<uint> max_;
+    QAtomicInteger<uint> capacity_;
+    QAtomicInteger<uint> head_;
+    QAtomicInteger<uint> tail_;
     bool full_ = false;
     T* array_;
 
@@ -63,7 +63,7 @@ void RingBuffer<T>::reset()
 }
 
 template<class T>
-void RingBuffer<T>::resize(uint n)
+void RingBuffer<T>::resize(size_t n)
 {
     if((n < 1) || (n > max_)) throw std::invalid_argument("Buffer size out of range");
     reset();

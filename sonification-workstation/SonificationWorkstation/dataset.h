@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <vector>
-#include <stdexcept>
 
 #define MAX_DATASET_WIDTH 128
 
