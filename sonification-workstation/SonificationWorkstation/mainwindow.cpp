@@ -171,7 +171,7 @@ void MainWindow::createMenus()
 
     // Import dataset.
     QAction *importDatasetFileAct = new QAction(tr("Dataset Import"), this);
-    importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    importDatasetFileAct->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
     importDatasetFileAct->setStatusTip(tr("Import CSV data into the data window"));
     connect(importDatasetFileAct, &QAction::triggered,
             this, &MainWindow::onImportDataset);
@@ -185,7 +185,7 @@ void MainWindow::createMenus()
     QAction *quitAct = new QAction(tr("Quit"), this);
 #ifdef Q_OS_WIN32
     // There is no default Quit key command on Windows
-    quitAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
+    quitAct->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
 #else
     quitAct->setShortcut(QKeySequence::Quit);
 #endif
@@ -205,52 +205,52 @@ void MainWindow::createMenus()
     // Global keyboard shortcuts.
     // Play/Pause shortcut
     QShortcut* pauseShortcut = new QShortcut(this);
-    pauseShortcut->setKey(Qt::CTRL + Qt::Key_P);
+    pauseShortcut->setKey(Qt::CTRL | Qt::Key_P);
     connect(pauseShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onPauseButtonReleased);
     // Looping shortcut
     QShortcut* loopShortcut = new QShortcut(this);
-    loopShortcut->setKey(Qt::CTRL + Qt::Key_L);
+    loopShortcut->setKey(Qt::CTRL | Qt::Key_L);
     connect(loopShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onLoopButtonReleased);
     // Transport RTZ shortcut
     QShortcut* rtzShortcut = new QShortcut(this);
-    rtzShortcut->setKey(Qt::CTRL + Qt::Key_Return);
+    rtzShortcut->setKey(Qt::CTRL | Qt::Key_Return);
     connect(rtzShortcut, &QShortcut::activated,
             playhead_, &PlayHead::onReturnToZero);
     // Mute shortcut
     QShortcut* muteShortcut = new QShortcut(this);
-    muteShortcut->setKey(Qt::CTRL + Qt::Key_M);
+    muteShortcut->setKey(Qt::CTRL | Qt::Key_M);
     connect(muteShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onMuteButtonReleased);
     // Speed up shortcut
     QShortcut* speedIncrementUpShortcut = new QShortcut(this);
-    speedIncrementUpShortcut->setKey(Qt::CTRL + Qt::Key_Period);
+    speedIncrementUpShortcut->setKey(Qt::CTRL | Qt::Key_Period);
     connect(speedIncrementUpShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onSpeedIncrementedUp);
     // Speed down shortcut
     QShortcut* speedIncrementDownShortcut = new QShortcut(this);
-    speedIncrementDownShortcut->setKey(Qt::CTRL + Qt::Key_Comma);
+    speedIncrementDownShortcut->setKey(Qt::CTRL | Qt::Key_Comma);
     connect(speedIncrementDownShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onSpeedIncrementedDown);
     // Larger speed up shortcut
     QShortcut* largeSpeedIncrementUpShortcut = new QShortcut(this);
-    largeSpeedIncrementUpShortcut->setKey(Qt::CTRL + Qt::Key_Greater);
+    largeSpeedIncrementUpShortcut->setKey(Qt::CTRL | Qt::Key_Greater);
     connect(largeSpeedIncrementUpShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onLargeSpeedIncrementedUp);
     // Larger speed down shortcut
     QShortcut* largeSpeedIncrementDownShortcut = new QShortcut(this);
-    largeSpeedIncrementDownShortcut->setKey(Qt::CTRL + Qt::Key_Less);
+    largeSpeedIncrementDownShortcut->setKey(Qt::CTRL | Qt::Key_Less);
     connect(largeSpeedIncrementDownShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onLargeSpeedIncrementedDown);
     // Volume up shortcut
     QShortcut* volumeUpShortcut = new QShortcut(this);
-    volumeUpShortcut->setKey(Qt::CTRL + Qt::Key_Up);
+    volumeUpShortcut->setKey(Qt::CTRL | Qt::Key_Up);
     connect(volumeUpShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onVolumeUp);
     // Volume down shortcut
     QShortcut* volumeDownShortcut = new QShortcut(this);
-    volumeDownShortcut->setKey(Qt::CTRL + Qt::Key_Down);
+    volumeDownShortcut->setKey(Qt::CTRL | Qt::Key_Down);
     connect(volumeDownShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onVolumeDown);
 }
