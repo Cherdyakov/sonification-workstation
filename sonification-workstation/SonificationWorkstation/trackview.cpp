@@ -94,7 +94,7 @@ void TrackView::wheelEvent(QWheelEvent *e)
 
 void TrackView::plot(sow::Dataset *dataset)
 {
-    for(int i = 0; i < dataset->cols(); i++)
+    for(uint i = 0; i < dataset->cols(); i++)
     {
         // add tracks
         Track* track = addTrack();
