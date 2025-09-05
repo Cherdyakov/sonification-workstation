@@ -41,6 +41,7 @@ QString TrackName::text() const
 
 void TrackName::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
     QStyleOption opt;
     opt.initFrom(this);
     QPainter p(this);
