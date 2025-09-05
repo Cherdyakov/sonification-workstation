@@ -8,7 +8,7 @@ filter::filter(QObject *parent)
 
 }
 
-void filter::setN(uint n)
+void filter::setN(int n)
 {
     if(n_ != n)
     {
