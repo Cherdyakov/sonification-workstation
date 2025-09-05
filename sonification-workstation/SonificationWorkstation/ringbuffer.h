@@ -28,10 +28,10 @@ public:
 
 private:
 
-    QAtomicInt max_;
-    QAtomicInt capacity_;
-    QAtomicInt head_;
-    QAtomicInt tail_;
+    QAtomicInteger<uint> max_;
+    QAtomicInteger<uint> capacity_;
+    QAtomicInteger<uint> head_;
+    QAtomicInteger<uint> tail_;
     bool full_ = false;
     T* array_;
 
