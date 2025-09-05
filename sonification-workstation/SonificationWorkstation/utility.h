@@ -70,7 +70,6 @@ inline size_t alphaToInt(const std::string str) {
     std::string alphas("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
     for (auto rit = str.crbegin(); rit != str.crend(); ++rit) {
-        char c = *rit;
         size_t alphaVal = alphas.find(*rit);
         size_t place = rit - str.rbegin();
         size_t factor = pow(26, place);
