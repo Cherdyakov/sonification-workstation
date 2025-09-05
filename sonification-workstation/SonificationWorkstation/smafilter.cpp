@@ -18,7 +18,7 @@ float SmaFilter::value(float in)
     buffer_->push(in);
     float sum = 0.0f;
 
-    for(uint i = 0; i < buffer_->size(); i++)
+    for(size_t i = 0; i < buffer_->size(); i++)
     {
         float out = 0.0f;
         if(buffer_->at(&out, i))
