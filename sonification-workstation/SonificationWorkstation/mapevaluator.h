@@ -3,11 +3,9 @@
 
 #include <algorithm>
 #include <QDebug>
-#include <tuple>
 #include "external/exprtk/exprtk.hpp"
 #include "utility.h"
 #include "dataset.h"
-#include "commands.h"
 
 namespace sow {
 
