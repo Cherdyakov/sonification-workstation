@@ -66,7 +66,6 @@ Rectangle
         onMouseYChanged: if(patchManager.patching) { canvas.requestPaint() }
 
         onClicked: (mouse)=> {
-            workspace.forceActiveFocus()
             if(mouse.button === Qt.RightButton) {
                 // If patching in progress during right click
                 if(patchManager.patching) {
