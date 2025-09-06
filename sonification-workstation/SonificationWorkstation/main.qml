@@ -120,7 +120,7 @@ Rectangle
         z: 0
         anchors.fill: workspace
 
-        // Actually tracks and holds patches between SynthItems.
+        // Tracks and holds patches between SynthItems.
         PatchManager {
             id: patchManager
             anchors.fill: parent
