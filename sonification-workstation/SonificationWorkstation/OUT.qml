@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick
 import ENUMS 1.0
 import "Style.js" as Style
 

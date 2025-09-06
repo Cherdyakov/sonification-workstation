@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick
 import QtQuick.Window 2.12
 import "ItemCreation.js" as Code
 import "Style.js" as Style
