@@ -13,7 +13,7 @@ Rectangle
     color: themeManager.themeMap["backgroundColor"]
     anchors.fill: parent
 
-    // Holds every item in the workspace for iterating.
+    // Holds every SyntItem in the workspace for iterating.
     property var synthItems: []
     // Canvas for drawing patches.
     property alias canvas: canvas
@@ -68,7 +68,7 @@ Rectangle
         onClicked: (mouse)=> {
             workspace.forceActiveFocus()
             if(mouse.button === Qt.RightButton) {
-                // If patching and right c
+                // If patching in progress during right click
                 if(patchManager.patching) {
                     patchManager.patchStop()
                 } else {
