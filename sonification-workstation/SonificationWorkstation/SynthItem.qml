@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Window 2.12
 import SoW 1.0
 import ENUMS 1.0
 import "Style.js" as Style
