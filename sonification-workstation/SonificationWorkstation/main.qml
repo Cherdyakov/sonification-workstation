@@ -13,7 +13,7 @@ Rectangle
     color: themeManager.themeMap["backgroundColor"]
     anchors.fill: parent
 
-    // Holds every SyntItem in the workspace for iterating.
+    // Holds every SynthItem in the workspace for iterating.
     property var synthItems: []
     // Canvas for drawing patches.
     property alias canvas: canvas
