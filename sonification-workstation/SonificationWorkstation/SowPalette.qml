@@ -16,52 +16,52 @@ Rectangle {
 
     Column {
 
-        PaletteItem {
+        SowPaletteItem {
             label: "OSC"
             componentFile: "OSC.qml"
         }
 
-        PaletteItem {
+        SowPaletteItem {
             label: "NSE"
             componentFile: "NSE.qml"
         }
 
-        PaletteItem {
+        SowPaletteItem {
             label: "AUD"
             componentFile: "AUD.qml"
         }
 
-        PaletteItem {
+        SowPaletteItem {
             label: "AM"
             componentFile: "AM.qml"
         }
 
-        PaletteItem {
+        SowPaletteItem {
             label: "FM"
             componentFile: "FM.qml"
         }
 
-        PaletteItem {
+        SowPaletteItem {
             label: "VOL"
             componentFile: "VOL.qml"
         }
 
-        PaletteItem {
+        SowPaletteItem {
             label: "PAN"
             componentFile: "PAN.qml"
         }
 
-        PaletteItem {
+        SowPaletteItem {
             label: "ENV"
             componentFile: "ENV.qml"
         }
 
-        PaletteItem {
+        SowPaletteItem {
             label: "EQ"
             componentFile: "EQ.qml"
         }
 
-        PaletteItem {
+        SowPaletteItem {
             label: "OUT"
             componentFile: "OUT.qml"
         }

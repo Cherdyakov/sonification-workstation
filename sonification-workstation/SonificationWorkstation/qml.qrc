@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>PaletteItem.qml</file>
+        <file>SowPaletteItem.qml</file>
         <file>ItemCreation.js</file>
         <file>PatchManager.qml</file>
         <file>OUT.qml</file>
@@ -21,7 +21,7 @@
         <file>VOL.qml</file>
         <file>NSE.qml</file>
         <file>EditorMenu.qml</file>
-        <file>Palette.qml</file>
+        <file>SowPalette.qml</file>
         <file>images/NSE.png</file>
         <file>images/VOL.png</file>
         <file>images/PAN.png</file>

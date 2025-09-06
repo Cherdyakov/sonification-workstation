@@ -105,7 +105,7 @@ Rectangle
                 opacity: 0
             }
 
-            Palette {
+            SowPalette {
                 id: palette
                 height: childrenRect.height
                 width: childrenRect.width
