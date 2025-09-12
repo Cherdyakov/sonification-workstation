@@ -24,7 +24,6 @@ SpinBox {
         z: 2
         text: spinbox.textFromValue(spinbox.value, spinbox.locale)
         font.pointSize: Style.editorFontSize
-        selectionColor: "#21be2b"
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
     }

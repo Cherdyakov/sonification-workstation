@@ -18,10 +18,4 @@ ColumnLayout {
         Layout.maximumHeight: Style.editorRowHeight
         Layout.fillWidth: true
     }
-    EditorComboBox {
-        id: comboBox
-        model: [qsTr("First"), qsTr("Second"), qsTr("Third")]
-        Layout.maximumHeight: Style.editorRowHeight
-        Layout.fillWidth: true
-    }
 }

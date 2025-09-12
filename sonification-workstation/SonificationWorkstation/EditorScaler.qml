@@ -37,21 +37,6 @@ ColumnLayout {
             implicitWidth: implicitHeight
 
             Accessible.ignored: true
-
-            indicator: Rectangle {
-
-                implicitHeight: Style.editorRowHeight
-                implicitWidth: implicitHeight
-
-                Rectangle {
-                    width: parent.width - 4
-                    height: parent.height - 4
-                    x: 2
-                    y: 2
-                    color: checkBox.down ? "grey" : "black"
-                    visible: checkBox.checked
-                }
-            }
         }
     }
 

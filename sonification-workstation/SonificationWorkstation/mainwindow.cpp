@@ -205,7 +205,7 @@ void MainWindow::createMenus()
     // Global keyboard shortcuts.
     // Play/Pause shortcut
     QShortcut* pauseShortcut = new QShortcut(this);
-    pauseShortcut->setKey(Qt::CTRL | Qt::Key_P);
+    pauseShortcut->setKey(Qt::CTRL | Qt::Key_Space);
     connect(pauseShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onPauseButtonReleased);
     // Looping shortcut
@@ -225,22 +225,22 @@ void MainWindow::createMenus()
             transportWidget_, &TransportWidget::onMuteButtonReleased);
     // Speed up shortcut
     QShortcut* speedIncrementUpShortcut = new QShortcut(this);
-    speedIncrementUpShortcut->setKey(Qt::CTRL | Qt::Key_Period);
+    speedIncrementUpShortcut->setKey(Qt::CTRL | Qt::Key_Right);
     connect(speedIncrementUpShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onSpeedIncrementedUp);
     // Speed down shortcut
     QShortcut* speedIncrementDownShortcut = new QShortcut(this);
-    speedIncrementDownShortcut->setKey(Qt::CTRL | Qt::Key_Comma);
+    speedIncrementDownShortcut->setKey(Qt::CTRL | Qt::Key_Left);
     connect(speedIncrementDownShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onSpeedIncrementedDown);
     // Larger speed up shortcut
     QShortcut* largeSpeedIncrementUpShortcut = new QShortcut(this);
-    largeSpeedIncrementUpShortcut->setKey(Qt::CTRL | Qt::Key_Greater);
+    largeSpeedIncrementUpShortcut->setKey(Qt::CTRL | Qt::SHIFT | Qt::Key_Right);
     connect(largeSpeedIncrementUpShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onLargeSpeedIncrementedUp);
     // Larger speed down shortcut
     QShortcut* largeSpeedIncrementDownShortcut = new QShortcut(this);
-    largeSpeedIncrementDownShortcut->setKey(Qt::CTRL | Qt::Key_Less);
+    largeSpeedIncrementDownShortcut->setKey(Qt::CTRL | Qt::SHIFT | Qt::Key_Left);
     connect(largeSpeedIncrementDownShortcut, &QShortcut::activated,
             transportWidget_, &TransportWidget::onLargeSpeedIncrementedDown);
     // Volume up shortcut
