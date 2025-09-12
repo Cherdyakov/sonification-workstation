@@ -57,5 +57,6 @@
         <file>images/nu.png</file>
         <file>images/down-arrow-black.svg</file>
         <file>images/up-arrow-black.svg</file>
+        <file>Patch.js</file>
     </qresource>
 </RCC>
