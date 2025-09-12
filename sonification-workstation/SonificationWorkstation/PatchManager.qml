@@ -1,5 +1,6 @@
 import QtQuick
 import "Style.js" as Style
+import "Patch.js" as Patch
 
 Item {
 
@@ -8,11 +9,12 @@ Item {
     property var patchingChild: null
     property var selectedPatch: null
     property var patches: []
-    property int selectionErrorMargin: 1 + (Style.patchWidth / 2) // distance from patch considered "clicked"
+    property int selectionErrorMargin: 1 + (Style.patchWidth
+                                            / 2) // distance from patch considered "clicked"
     property bool patching: patchingChild ? true : false
 
     onActiveFocusChanged: {
-        if(root.activeFocus === false) {
+        if (root.activeFocus === false) {
             selectedPatch = null
         }
         canvas.requestPaint()
@@ -23,11 +25,12 @@ Item {
         deletePatch(selectedPatch)
         selectedPatch = null
         canvas.requestPaint()
+        console.log(patches.length)
     }
 
     function click(point) {
         selectedPatch = selectPatch(point)
-        if(selectedPatch !== null) {
+        if (selectedPatch !== null) {
             root.forceActiveFocus()
         }
     }
@@ -37,9 +40,10 @@ Item {
     function selectPatch(point) {
         var selectedPatch = null
         var distance = Number.MAX_VALUE
-        for(var i = 0; i < patches.length; i++) {
+        for (var i = 0; i < patches.length; i++) {
             var currentDistance = distanceToPatch(point, patches[i])
-            if( (currentDistance < distance) && (currentDistance < selectionErrorMargin) ) {
+            if ((currentDistance < distance)
+                    && (currentDistance < selectionErrorMargin)) {
                 distance = currentDistance
                 selectedPatch = patches[i]
             }
@@ -50,38 +54,33 @@ Item {
     // Start the process of pathing an item.
     function patchBegin(item) {
         // Not currently patching, start one.
-        if(patchingChild === null) {
-            if(item.type !== 0) { // Item is OUT (Transport), which cannot have parents.
+        if (patchingChild === null) {
+            if (item.type !== 0) {
+                // Item is OUT (Transport), which cannot have parents.
                 patchingChild = item
             }
-        }
-        else {
+        } else {
             // Clicked again on the item at the start of
             // the patch, cancel patching.
             if (patchingChild === item) {
                 patchingChild = null
-            }
-            else {
+            } else {
                 // Clicked on a second item. Connect first
                 // item as synthChild of second.
-                if(item.connectChild(patchingChild)) {
+                var newPatch = new Patch.Patch(item, patchingChild)
 
-                    var patch = {
-                        parent: item,
-                        child: patchingChild
-                    }
-
-                    patches.push(patch)
+                if (patches.findIndex(patch => patch.equals(newPatch)) < 0) {
+                    item.connectChild(patchingChild)
+                    patches.push(newPatch)
                 }
-                // Stop patching and paint.
-                patchingChild = null
-                canvas.requestPaint()
             }
+            // Stop patching and paint.
+            patchingChild = null
+            canvas.requestPaint()
         }
     }
 
-    function patchStop()
-    {
+    function patchStop() {
         patchingChild = null
         canvas.requestPaint()
     }
@@ -90,12 +89,12 @@ Item {
     // Used by main.qml to draw the patches on screen.
     function getPatchPoints() {
         var patchPoints = []
-        for(var i = 0; i < patches.length; i++) {
+        for (var i = 0; i < patches.length; i++) {
             var patch = patches[i]
-            var pointPair =  pointsFromPatch(patch)
+            var pointPair = pointsFromPatch(patch)
             patchPoints.push(pointPair)
         }
-        if(patchingChild !== null) {
+        if (patchingChild !== null) {
             var inProgressPoints = getPatchInProgressPoints()
             patchPoints.push(inProgressPoints)
         }
@@ -111,12 +110,9 @@ Item {
         selectedPatch = null
         // Iterate all SynthItems passed and add
         // all the patches found.
-        items.forEach(function(childItem) {
-            childItem.synthParents.forEach(function(parentItem) {
-                var patch = {
-                    parent: parentItem,
-                    child: childItem
-                }
+        items.forEach(function (childItem) {
+            childItem.synthParents.forEach(function (parentItem) {
+                var patch = new Patch(parentItem, childItem)
                 patches.push(patch)
             })
         })
@@ -124,34 +120,34 @@ Item {
 
     // Returns points for any patch that is currenlty being created.
     function getPatchInProgressPoints() {
-        if(patchingChild !== null) {
+        if (patchingChild !== null) {
             var childPoint = centerPoint(patchingChild)
-            var mousePoint = mapToItem(canvas, workspaceMouseArea.mouseX, workspaceMouseArea.mouseY)
+            var mousePoint = mapToItem(canvas, workspaceMouseArea.mouseX,
+                                       workspaceMouseArea.mouseY)
         }
         return {
-            child: childPoint,
-            parent: mousePoint
+            "child": childPoint,
+            "parent": mousePoint
         }
     }
 
     // Returns pair of points for given patch.
-    function pointsFromPatch(patch)
-    {
+    function pointsFromPatch(patch) {
         var childPoint = centerPoint(patch.child)
         var parentPoint = centerPoint(patch.parent)
 
         return {
-            child: childPoint,
-            parent: parentPoint
+            "child": childPoint,
+            "parent": parentPoint
         }
     }
 
     // Return point at center of item.
-    function centerPoint(item)
-    {
+    function centerPoint(item) {
         var xCentered = item.x + item.width / 2
         var yCentered = item.y + item.height / 2
-        var mappedPoint = mapFromItem(workspace.contentItem, xCentered, yCentered)
+        var mappedPoint = mapFromItem(workspace.contentItem, xCentered,
+                                      yCentered)
         return mappedPoint
     }
 
@@ -161,7 +157,7 @@ Item {
     function itemDeleted(item) {
         for (var i = patches.length - 1; i >= 0; i--) {
             var patch = patches[i]
-            if(patch.parent === item || patch.child === item) {
+            if (patch.parent === item || patch.child === item) {
                 deletePatch(patch)
             }
         }
@@ -177,10 +173,12 @@ Item {
     }
 
     // Delete an existing patch (does not disconnect).
-    function deletePatch(patch) {
-        while(patches.indexOf(patch) > -1) {
-            patches.splice(patches.indexOf(patch), 1)
-        }
+    function deletePatch(delPatch) {
+        patches.forEach((patch, idx) => {
+                            if (patch.equals(delPatch)) {
+                                patches.splice(idx, 1)
+                            }
+                        })
     }
 
     // The distance from given point to a given patch.
@@ -197,11 +195,14 @@ Item {
 
     function distToSegmentSquared(p, v, w) {
         var l2 = dist2(v, w)
-        if (l2 === 0) return dist2(p, v)
+        if (l2 === 0)
+            return dist2(p, v)
         var t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2
         t = Math.max(0, Math.min(1, t))
-        return dist2(p, { x: v.x + t * (w.x - v.x),
-                         y: v.y + t * (w.y - v.y) })
+        return dist2(p, {
+                         "x": v.x + t * (w.x - v.x),
+                         "y": v.y + t * (w.y - v.y)
+                     })
     }
 
     function sqr(x) {
@@ -211,5 +212,4 @@ Item {
     function dist2(v, w) {
         return sqr(v.x - w.x) + sqr(v.y - w.y)
     }
-
 }
