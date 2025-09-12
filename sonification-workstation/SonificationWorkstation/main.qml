@@ -84,7 +84,6 @@ Rectangle {
                                   || (mouse.button === Qt.MiddleButton)) {
                            lastMousePos = Qt.point(mouse.x, mouse.y)
                            mouse.accepted = true
-                           console.log("lastMousePos: " + lastMousePos)
                        } else if (mouse.button === Qt.LeftButton) {
                            var point = {
                                "x": mouse.x,
@@ -102,7 +101,6 @@ Rectangle {
                                         && (mouse.modifiers & Qt.ControlModifier))
                                         || (mouse.buttons & Qt.MiddleButton)) {
 
-                                   console.log("Before:" + lastMousePos)
                                    var deltaX = mouse.x - lastMousePos.x
                                    var deltaY = mouse.y - lastMousePos.y
 
@@ -110,7 +108,6 @@ Rectangle {
                                    workspace.contentY -= deltaY
 
                                    lastMousePos = Qt.point(mouse.x, mouse.y)
-                                   console.log("After:" + lastMousePos)
                                }
                            }
 

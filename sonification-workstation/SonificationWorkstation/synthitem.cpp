@@ -15,10 +15,7 @@ SynthItem::~SynthItem() {}
 // Set the mute value
 void SynthItem::setMute(const bool mute)
 {
-    qDebug() << type_ << mute;
     if (iMute_ != mute) {
-
-        qDebug() << type_ << "mute changed";
         iMute_ = mute;
         emit muteChanged();
         ItemCommand cmd;

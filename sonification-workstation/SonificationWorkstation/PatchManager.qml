@@ -26,7 +26,6 @@ Item {
     }
 
     function click(point) {
-        console.log("CLICK")
         selectedPatch = selectPatch(point)
         if(selectedPatch !== null) {
             root.forceActiveFocus()
