@@ -79,8 +79,9 @@ Rectangle {
                                    itemPopup.open()
                                }
                            }
-                       } else if ((mouse.button === Qt.LeftButton)
-                                  && (mouse.modifiers & Qt.ControlModifier)) {
+                       } else if (((mouse.button === Qt.LeftButton)
+                                  && (mouse.modifiers & Qt.ControlModifier))
+                                  || (mouse.button === Qt.MiddleButton)) {
                            lastMousePos = Qt.point(mouse.x, mouse.y)
                            mouse.accepted = true
                            console.log("lastMousePos: " + lastMousePos)
@@ -97,8 +98,9 @@ Rectangle {
                                if (patchManager.patching) {
                                    canvas.requestPaint()
                                } // scroll the workspace
-                               else if ((mouse.buttons & Qt.LeftButton)
-                                        && (mouse.modifiers & Qt.ControlModifier)) {
+                               else if (((mouse.buttons & Qt.LeftButton)
+                                        && (mouse.modifiers & Qt.ControlModifier))
+                                        || (mouse.buttons & Qt.MiddleButton)) {
 
                                    console.log("Before:" + lastMousePos)
                                    var deltaX = mouse.x - lastMousePos.x
