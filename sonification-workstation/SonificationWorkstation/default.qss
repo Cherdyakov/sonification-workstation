@@ -93,6 +93,11 @@ border-width: 0px;
 border-radius: 0px;
 }
 
+QWidget#TrackView
+{
+background-color: #FAFAFA;
+}
+
 SynthItemColors
 {
 OSC: #26619c;
