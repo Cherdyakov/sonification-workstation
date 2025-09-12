@@ -30,5 +30,4 @@ Item {
             id: scaler
         }
     }
-
 }

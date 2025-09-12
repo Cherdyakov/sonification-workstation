@@ -11,7 +11,7 @@ ColumnLayout {
     property alias textColor: textInput.color
     property string map: ""
 
-    onMapChanged: textInput.text = map;
+    onMapChanged: textInput.text = map
 
     // Force map re-evaluation on new Dataset.
     Connections {
@@ -24,9 +24,15 @@ ColumnLayout {
     }
 
     Rectangle {
+
+        SystemPalette {
+            id: myPalette
+            colorGroup: SystemPalette.Active
+        }
+
         id: textInputRect
-        color: Style.editorTextInputColor
-        height:Style.editorRowHeight
+        color: myPalette.light
+        height: Style.editorRowHeight
         width: Style.editorRowWidth
         Layout.fillWidth: true
 
@@ -47,4 +53,3 @@ ColumnLayout {
         } // textInput
     } // textInputRect
 } // root
-
