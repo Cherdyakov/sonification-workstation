@@ -1,19 +1,18 @@
-import QtQuick.Controls 2.2
-import QtQuick 2.12
-import QtQuick.Layouts 1.0
+import QtQuick.Controls
+import QtQuick
+import QtQuick.Layouts
 import SoW 1.0
 import ENUMS 1.0
 import "SessionCode.js" as SessionCode
 import "Style.js" as Style
 import "Utils.js" as Utils
 
-Rectangle
-{
+Rectangle {
     id: root
     color: themeManager.themeMap["backgroundColor"]
     anchors.fill: parent
 
-    // Holds every item in the workspace for iterating.
+    // Holds every SynthItem in the workspace for iterating.
     property var synthItems: []
     // Canvas for drawing patches.
     property alias canvas: canvas
@@ -25,6 +24,7 @@ Rectangle
         z: Style.workspaceZ
         clip: true
         boundsBehavior: Flickable.DragAndOvershootBounds
+        interactive: false
         anchors {
             top: root.top
             left: root.left
@@ -61,37 +61,58 @@ Rectangle
         anchors.fill: parent
         hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton
+        property point lastMousePos: Qt.point(0, 0)
 
-        onMouseXChanged: if(patchManager.patching) { canvas.requestPaint() }
-        onMouseYChanged: if(patchManager.patching) { canvas.requestPaint() }
+        onPressed: mouse => {
+                       if (mouse.button === Qt.RightButton) {
+                           // If patching in progress during right click
+                           if (patchManager.patching) {
+                               patchManager.patchStop()
+                           } else {
+                               if (itemPopup.visible) {
+                                   itemPopup.close()
+                               } else {
+                                   itemPopup.x = mouse.x
+                                   itemPopup.y = mouse.y - (itemPopup.height / 2)
+                                   palette.spawnX = mouse.x
+                                   palette.spawnY = mouse.y
+                                   itemPopup.open()
+                               }
+                           }
+                       } else if (((mouse.button === Qt.LeftButton)
+                                  && (mouse.modifiers & Qt.ControlModifier))
+                                  || (mouse.button === Qt.MiddleButton)) {
+                           lastMousePos = Qt.point(mouse.x, mouse.y)
+                           mouse.accepted = true
+                           console.log("lastMousePos: " + lastMousePos)
+                       } else if (mouse.button === Qt.LeftButton) {
+                           var point = {
+                               "x": mouse.x,
+                               "y": mouse.y
+                           }
+                           patchManager.click(point)
+                       }
+                   }
 
-        onClicked: (mouse)=> {
-            workspace.forceActiveFocus()
-            if(mouse.button === Qt.RightButton) {
-                // If patching and right c
-                if(patchManager.patching) {
-                    patchManager.patchStop()
-                } else {
-                    if(itemPopup.visible) {
-                        itemPopup.close()
-                    }
-                    else {
-                        itemPopup.x = mouse.x
-                        itemPopup.y = mouse.y - (itemPopup.height / 2)
-                        palette.spawnX = mouse.x
-                        palette.spawnY = mouse.y
-                        itemPopup.open()
-                    }
-                }
-            }
-            else if(mouse.button === Qt.LeftButton) {
-                var point = {
-                    x: mouse.x,
-                    y: mouse.y
-                }
-                patchManager.click(point)
-            }
-        }
+        onPositionChanged: mouse => {
+                               if (patchManager.patching) {
+                                   canvas.requestPaint()
+                               } // scroll the workspace
+                               else if (((mouse.buttons & Qt.LeftButton)
+                                        && (mouse.modifiers & Qt.ControlModifier))
+                                        || (mouse.buttons & Qt.MiddleButton)) {
+
+                                   console.log("Before:" + lastMousePos)
+                                   var deltaX = mouse.x - lastMousePos.x
+                                   var deltaY = mouse.y - lastMousePos.y
+
+                                   workspace.contentX -= deltaX
+                                   workspace.contentY -= deltaY
+
+                                   lastMousePos = Qt.point(mouse.x, mouse.y)
+                                   console.log("After:" + lastMousePos)
+                               }
+                           }
 
         // Popup menu of SynthItems, drag and drop from the menu
         // into workspace to instantiate.
@@ -105,13 +126,12 @@ Rectangle
                 opacity: 0
             }
 
-            Palette {
+            SowPalette {
                 id: palette
                 height: childrenRect.height
                 width: childrenRect.width
             }
         } // itemPopup
-
     } // workspaceMouseArea
 
     // Canvas on which patches between synthItems are drawn.
@@ -120,7 +140,7 @@ Rectangle
         z: 0
         anchors.fill: workspace
 
-        // Actually tracks and holds patches between SynthItems.
+        // Tracks and holds patches between SynthItems.
         PatchManager {
             id: patchManager
             anchors.fill: parent
@@ -134,15 +154,15 @@ Rectangle
 
             var patchPoints = patchManager.getPatchPoints()
 
-            for (var i = 0; i < patchPoints.length; i++)
-            {
+            for (var i = 0; i < patchPoints.length; i++) {
                 var points = patchPoints[i]
                 drawPatch(ctx, points, false)
             }
 
             // Draw the currently selected patch in a different color.
-            if(patchManager.selectedPatch !== null) {
-                points = patchManager.pointsFromPatch(patchManager.selectedPatch)
+            if (patchManager.selectedPatch !== null) {
+                points = patchManager.pointsFromPatch(
+                            patchManager.selectedPatch)
                 drawPatch(ctx, points, true)
             }
         }
@@ -153,11 +173,10 @@ Rectangle
             var inColor
 
             // Draw the currently selected patch in a different color.
-            if(selected) {
+            if (selected) {
                 outColor = Style.patchSelectedOutColor
                 inColor = Style.patchSelectedInColor
-            }
-            else {
+            } else {
                 outColor = Style.patchOutColor
                 inColor = Style.patchInColor
             }
@@ -167,9 +186,9 @@ Rectangle
             var x1 = points.parent.x
             var y1 = points.parent.y
 
-            var gradient = ctx.createLinearGradient(x0, y0, x1, y1);
-            gradient.addColorStop(Style.patchInColorStop, outColor);
-            gradient.addColorStop(Style.patchOutColorStop, inColor);
+            var gradient = ctx.createLinearGradient(x0, y0, x1, y1)
+            gradient.addColorStop(Style.patchInColorStop, outColor)
+            gradient.addColorStop(Style.patchOutColorStop, inColor)
             // set color
             ctx.strokeStyle = gradient
             ctx.lineWidth = Style.patchWidth
@@ -194,10 +213,10 @@ Rectangle
 
     // Get the SynthTree as json and return to C++.
     function readTree() {
-        var synthTree = {};
+        var synthTree = {}
         synthTree.synthItems = []
 
-        synthItems.forEach(function(item) {
+        synthItems.forEach(function (item) {
             var json = item.toEssence()
             synthTree.synthItems.push(json)
         })
@@ -210,16 +229,19 @@ Rectangle
     // one from a json object.
     function generateTree(array) {
 
-        for(var i = synthItems.length -1; i >= 0; i--) {
+        for (var i = synthItems.length - 1; i >= 0; i--) {
             synthItems[i].deleteThis()
         }
 
         var newSynthItems = {}
 
-        array.forEach(function(essence) {
+        array.forEach(function (essence) {
             var synthItem = createItem(essence["type"])
             synthItem.fromEssence(essence)
-            newSynthItems[essence["name"]] = { "item" : synthItem, "parentNames" :essence["parentNames"] }
+            newSynthItems[essence["name"]] = {
+                "item": synthItem,
+                "parentNames": essence["parentNames"]
+            }
         })
 
         connectTree(newSynthItems)
@@ -232,7 +254,7 @@ Rectangle
     function connectTree(newSynthItems) {
         for (var childName in newSynthItems) {
             var parents = newSynthItems[childName]["parentNames"]
-            if(parents) {
+            if (parents) {
                 for (var key in parents) {
                     var parentName = parents[key]
                     var parentSynthItem = newSynthItems[parentName]["item"]
@@ -245,7 +267,7 @@ Rectangle
 
     function createItem(type) {
         var componentFile
-        switch(type) {
+        switch (type) {
         case ENUMS.OSCILLATOR:
             componentFile = "OSC.qml"
             break
@@ -280,12 +302,10 @@ Rectangle
             console.log("Invalid Item Created")
             return null
         }
-        var component = Qt.createComponent(componentFile);
-        if(component.status === Component.Ready) {
+        var component = Qt.createComponent(componentFile)
+        if (component.status === Component.Ready) {
             var item = component.createObject(root)
         }
         return item
     }
-
 } // root
-

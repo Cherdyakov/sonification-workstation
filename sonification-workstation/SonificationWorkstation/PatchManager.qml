@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick
 import "Style.js" as Style
 
 Item {
@@ -26,6 +26,7 @@ Item {
     }
 
     function click(point) {
+        console.log("CLICK")
         selectedPatch = selectPatch(point)
         if(selectedPatch !== null) {
             root.forceActiveFocus()

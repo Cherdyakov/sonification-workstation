@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtQuick.Layouts 1.11
+import QtQuick
+import QtQuick.Layouts
 import "Style.js" as Style
 
 Text {

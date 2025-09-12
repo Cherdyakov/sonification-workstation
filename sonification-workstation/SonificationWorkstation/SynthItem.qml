@@ -1,5 +1,4 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
+import QtQuick
 import SoW 1.0
 import ENUMS 1.0
 import "Style.js" as Style
@@ -7,7 +6,7 @@ import "Style.js" as Style
 Item {
 
     id: root
-    z: Style.itemZ + zModifier
+    z: Style.itemZ
     width: Style.itemDiameter * Screen.pixelDensity
     height: Style.itemDiameter * Screen.pixelDensity
 
@@ -24,7 +23,7 @@ Item {
     property string mainColor: themeManager.themeMap[label]
     property string textColor: themeManager.themeMap["textColor"]
     property QtSynthItem implementation: null // the CPP implementation of this SynthItem
-    property var zModifier: root.activeFocus === true ? 10 : 0
+
 
     property alias radius: rect.radius
 
@@ -64,7 +63,7 @@ Item {
                 target: root
                 width: editor.width + Style.editorMargin
                 height: editor.height + Style.editorMargin
-                z: Style.itemEditorZ + zModifier
+                z: Style.itemEditorZ + 10
             }
             PropertyChanges {
                 target: rect
