@@ -28,10 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // Set application theme (stylesheet).
     themeManager_ = new ThemeManager(quickView_);
     QSettings settings;
-    if(!settings.contains("theme"))
-    {
-        settings.setValue("theme", "default");
-    }
+    settings.setValue("theme", "default");
     setTheme(settings.value("theme").toString());
 
     // prevent ambiguous "grouping" message sent to screen reader.
