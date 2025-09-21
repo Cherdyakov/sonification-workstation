@@ -31,7 +31,7 @@ Transport::Transport(QObject *parent, Dataset *dataset, DataProcessorController 
     mu_ = 0.0f;
     speed_ = 1;
     returnPos_ = 0.0f;
-    masterVolumeTarget_ = masterVolume_ = 1.0f;
+    mainVolumeTarget_ = mainVolume_ = 1.0f;
     importingDataset_ = false;
 }
 
@@ -269,20 +269,20 @@ Frame Transport::process()
     calculateReturnPosition();
     mu_ += speed_ / frameRate_;
 
-    // move masterVolume_ to target if they aren't equal.
+    // move mainVolume_ to target if they aren't equal.
     // Setting over the course of a single sample causes
     // audible discontinuities (clicks).
-    if(!qFuzzyCompare(masterVolume_, masterVolumeTarget_))
+    if(!qFuzzyCompare(mainVolume_, mainVolumeTarget_))
     {
-        if(masterVolume_ < masterVolumeTarget_)
+        if(mainVolume_ < mainVolumeTarget_)
         {
-            masterVolume_ += 0.001f;
+            mainVolume_ += 0.001f;
         } else {
-            masterVolume_ -= 0.001f;
+            mainVolume_ -= 0.001f;
         }
     }
 
-    frame = frame * masterVolume_ * !mute_ * 0.1f; // Multiply by 0.1 to prevent full-scale output.
+    frame = frame * mainVolume_ * !mute_ * 0.1f; // Multiply by 0.1 to prevent full-scale output.
 
     if(record_) {
         recorder_.Write(frame);
@@ -347,7 +347,7 @@ void Transport::processTransportCommand(TransportCommand cmd)
         processImportDataset();
         break;
     case ENUMS::TRANSPORT_CMD::VOLUME:
-        masterVolumeTarget_ = cmd.valueA;
+        mainVolumeTarget_ = cmd.valueA;
         break;
     case ENUMS::TRANSPORT_CMD::MUTE:
         mute_ = (cmd.valueA == 0.0f) ? false : true;

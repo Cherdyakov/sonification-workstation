@@ -52,8 +52,8 @@ private:
     std::vector<float> dataMinValues_;
     std::vector<float> dataMaxValues_;
     std::atomic<float> returnPos_;
-    float masterVolume_;
-    float masterVolumeTarget_;
+    float mainVolume_;
+    float mainVolumeTarget_;
     int frameRate_;
     int currentIndex_;
     float mu_;

@@ -11,9 +11,9 @@
 #include <QCheckBox>
 #include <QPainter>
 #include <QStyleOption>
+#include <QSlider>
 
 #include "transport.h"
-#include "mastervolumeslider.h"
 
 using namespace sow;
 
@@ -34,7 +34,7 @@ private:
     bool looping_;
     bool mute_;
     float speed_;
-    float masterVolume_;
+    float mainVolume_;
     QIcon playIcon_;
     QIcon pauseIcon_;
     QIcon recordOnIcon_;
@@ -48,7 +48,7 @@ private:
     QPushButton* loopButton_;
     QPushButton* muteButton_;
     QSpinBox* speedBox_;
-    MasterVolumeSlider* masterVolumeSlider_;
+    QSlider* mainVolumeSlider_;
 
 protected:
 
@@ -60,7 +60,7 @@ signals:
     void loopingChanged(bool loop);
     void speedChanged(float speed);
     void muteChanged(bool mute);
-    void masterVolumeChanged(float vol);
+    void mainVolumeChanged(float vol);
 
 public slots:
     void onSpeedChanged(int speed);
@@ -78,7 +78,7 @@ public slots:
 
 private slots:
     void onSpeedBoxValueChanged(int speed);
-    void onMasterVolumeChanged(int vol);
+    void onMainVolumeChanged(int vol);
 };
 
 #endif // TRANSPORTWIDGET_H
