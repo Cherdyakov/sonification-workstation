@@ -47,8 +47,7 @@ int main(int argc, char *argv[])
     audioIO.start();
 
     // Launch the GUI
-    main_window.show();
-    main_window.setGeometry(a.primaryScreen()->availableGeometry());
+    main_window.showMaximized();
 
     // Place cleanup code after a.exec, before returning exit code
     const int ret = a.exec();
