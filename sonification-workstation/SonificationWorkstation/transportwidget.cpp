@@ -9,7 +9,7 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     looping_ = false;
     mute_ = false;
     speed_ = 0.0f;
-    masterVolume_ = 1.0f;
+    mainVolume_ = 1.0f;
 
     // Widget layouts.
 //    QHBoxLayout* leftLayout = new QHBoxLayout;
@@ -42,10 +42,10 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     speedBox_->setAccessibleName("Speed spinbox, sets the playback speed in data points per second");
     speedBox_->setAccessibleDescription("");
 
-    masterVolumeSlider_ = new MasterVolumeSlider;
-    masterVolumeSlider_->setObjectName("MasterVolume");
-    masterVolumeSlider_->setAccessibleName("Main volume, sets application master volume.  Range is zero to one hundred");
-    masterVolumeSlider_->setAccessibleDescription("");
+    mainVolumeSlider_ = new MasterVolumeSlider;
+    mainVolumeSlider_->setObjectName("MainVolume");
+    mainVolumeSlider_->setAccessibleName("Main volume, sets application master volume.  Range is zero to one hundred");
+    mainVolumeSlider_->setAccessibleDescription("");
 
     // Load icon files.
     playIcon_.addFile(":/images/play.svg");
@@ -69,16 +69,16 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     pauseButton_->setToolTip("Play/Pause (Ctrl+P)");
     loopButton_->setToolTip("Enable looping (Ctrl+L)");
     muteButton_->setToolTip("Mute (Ctrl+M)");
-    masterVolumeSlider_->setToolTip("Master Volume (Ctrl+UpArrow/Ctrl+DownArrow");
+    mainVolumeSlider_->setToolTip("Main Volume (Ctrl+UpArrow/Ctrl+DownArrow");
     speedBox_->setToolTip("Data samples per second (Ctrl+,/Ctrl+. or Ctrl+</Ctrl+> for larger increment)");
 
     speedBox_->setValue(1.0);
     speedBox_->setMinimum(0.0);
     speedBox_->setMaximum(constants::SR);
-    masterVolumeSlider_->setMinimum(0);
-    masterVolumeSlider_->setMaximum(100);
-    masterVolumeSlider_->setValue(static_cast<int>(masterVolume_ * 100.0f));
-    masterVolumeSlider_->setOrientation(Qt::Horizontal);
+    mainVolumeSlider_->setMinimum(0);
+    mainVolumeSlider_->setMaximum(100);
+    mainVolumeSlider_->setValue(static_cast<int>(mainVolume_ * 100.0f));
+    mainVolumeSlider_->setOrientation(Qt::Horizontal);
 
     // Setup center layout
     middleLayout->addWidget(pauseButton_);
@@ -88,9 +88,9 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     middleLayout->addWidget(muteButton_);
 
     // Setup right side layout (volume section)
-    masterVolumeSlider_->setSizePolicy(QSizePolicy::Expanding,
+    mainVolumeSlider_->setSizePolicy(QSizePolicy::Expanding,
                                        QSizePolicy::Expanding);
-    rightLayout->addWidget(masterVolumeSlider_);
+    rightLayout->addWidget(mainVolumeSlider_);
     //set size and layout of transport
     centralLayout->addSpacing(40);
     centralLayout->addLayout(middleLayout);
@@ -112,8 +112,8 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
             this, SLOT(onLoopButtonReleased()));
     connect(speedBox_, SIGNAL(valueChanged(int)),
             this,SLOT(onSpeedBoxValueChanged(int)));
-    connect(masterVolumeSlider_, SIGNAL(valueChanged(int)),
-            this, SLOT(onMasterVolumeChanged(int)));
+    connect(mainVolumeSlider_, SIGNAL(valueChanged(int)),
+            this, SLOT(onMainVolumeChanged(int)));
     connect(muteButton_, &QPushButton::released,
             this, &TransportWidget::onMuteButtonReleased);
 }
@@ -180,12 +180,12 @@ void TransportWidget::onLargeSpeedIncrementedDown()
 
 void TransportWidget::onVolumeUp()
 {
-    masterVolumeSlider_->setValue(masterVolumeSlider_->value() + 1);
+    mainVolumeSlider_->setValue(mainVolumeSlider_->value() + 1);
 }
 
 void TransportWidget::onVolumeDown()
 {
-    masterVolumeSlider_->setValue(masterVolumeSlider_->value() - 1);
+    mainVolumeSlider_->setValue(mainVolumeSlider_->value() - 1);
 }
 
 void TransportWidget::onPauseButtonReleased()
@@ -236,13 +236,13 @@ void TransportWidget::onSpeedBoxValueChanged(int speed)
     }
 }
 
-void TransportWidget::onMasterVolumeChanged(int vol)
+void TransportWidget::onMainVolumeChanged(int vol)
 {
     float floatVol = static_cast<float>(vol) / 100.0f;
-    if(!qFuzzyCompare(masterVolume_, floatVol))
+    if(!qFuzzyCompare(mainVolume_, floatVol))
     {
-        masterVolume_ = floatVol;
-        emit masterVolumeChanged(masterVolume_);
+        mainVolume_ = floatVol;
+        emit mainVolumeChanged(mainVolume_);
     }
 }
 

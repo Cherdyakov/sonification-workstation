@@ -105,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             transport_, &Transport::onPauseChanged);
     connect(transportWidget_, &TransportWidget::loopingChanged,
             transport_, &Transport::onLoopingChanged);
-    connect(transportWidget_, &TransportWidget::masterVolumeChanged,
+    connect(transportWidget_, &TransportWidget::mainVolumeChanged,
             transport_, &Transport::onMasterVolumeChanged);
     connect(transportWidget_, &TransportWidget::muteChanged,
             transport_, &Transport::onMuteChanged);
