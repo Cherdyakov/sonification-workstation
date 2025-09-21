@@ -11,9 +11,9 @@
 #include <QCheckBox>
 #include <QPainter>
 #include <QStyleOption>
+#include <QSlider>
 
 #include "transport.h"
-#include "mastervolumeslider.h"
 
 using namespace sow;
 
@@ -48,7 +48,7 @@ private:
     QPushButton* loopButton_;
     QPushButton* muteButton_;
     QSpinBox* speedBox_;
-    MasterVolumeSlider* mainVolumeSlider_;
+    QSlider* mainVolumeSlider_;
 
 protected:
 

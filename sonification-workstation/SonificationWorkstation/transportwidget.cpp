@@ -42,9 +42,9 @@ TransportWidget::TransportWidget(QWidget *parent) : QWidget(parent)
     speedBox_->setAccessibleName("Speed spinbox, sets the playback speed in data points per second");
     speedBox_->setAccessibleDescription("");
 
-    mainVolumeSlider_ = new MasterVolumeSlider;
+    mainVolumeSlider_ = new QSlider;
     mainVolumeSlider_->setObjectName("MainVolume");
-    mainVolumeSlider_->setAccessibleName("Main volume, sets application master volume.  Range is zero to one hundred");
+    mainVolumeSlider_->setAccessibleName("Main volume, sets application  volume.  Range is zero to one hundred");
     mainVolumeSlider_->setAccessibleDescription("");
 
     // Load icon files.

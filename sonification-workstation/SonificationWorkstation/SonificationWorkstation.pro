@@ -76,7 +76,6 @@ HEADERS = \
     datasetimportdialog.h \
     emafilter.h \
     filter.h \
-    mastervolumeslider.h \
     recorder.h \
     smafilter.h \
     thememanager.h
@@ -119,7 +118,6 @@ SOURCES = \
     datasetimportdialog.cpp \
     emafilter.cpp \
     filter.cpp \
-    mastervolumeslider.cpp \
     recorder.cpp \
     smafilter.cpp \
     thememanager.cpp
