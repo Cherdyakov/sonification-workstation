@@ -1,9 +1,9 @@
-QSlider#MasterVolume
+QSlider#MainVolume
 {
 height:40px;
 }
 
-QSlider::handle#MasterVolume
+QSlider::handle#MainVolume
 {
 height: 22px;
 width: 8px;
@@ -12,19 +12,19 @@ background: #8DB600;
 margin: -11px 0px;
 }
 
-QSlider::groove:horizontal#MasterVolume
+QSlider::groove:horizontal#MainVolume
 {
 border: 0px solid;
 height: 2px;
 margin: 0px;
 }
 
-QSlider::sub-page#MasterVolume
+QSlider::sub-page#MainVolume
 {
 background: #8DB600;
 }
 
-QSlider::add-page#MasterVolume
+QSlider::add-page#MainVolume
 {
 background: #BDBDBD;
 }
