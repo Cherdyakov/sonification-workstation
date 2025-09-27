@@ -41,7 +41,7 @@ ColumnLayout {
             anchors.fill: parent
             font.pixelSize: 14
             onEditingFinished: {
-                map = text
+                map = text.toUpperCase()
             }
 
             MouseArea {
